@@ -121,7 +121,7 @@ def decision_label_report(data: PerturbationSet, model: GANDecision, *, seed: in
     target = profiles[target_index]
     label = ((outcome - target).norm(dim=-1) < (control - target).norm(dim=-1)).float()
     with torch.no_grad():
-        noul = model.decision(control, embedding, target)
+        noul = model.score_moves_toward(control, embedding, target)
     accuracy = float(((noul >= 0.5) == (label >= 0.5)).float().mean())
     brier = float(((noul - label) ** 2).mean())
     return {

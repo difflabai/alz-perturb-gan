@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/ml2/altgan/real-data-run-1/src/alz_perturb_gan/real_data.py", line 368, in <module>
+    main()
+  File "/ml2/altgan/real-data-run-1/src/alz_perturb_gan/real_data.py", line 286, in main
+    device, hardware = select_device(args.device)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/ml2/altgan/real-data-run-1/src/alz_perturb_gan/real_data.py", line 171, in select_device
+    raise RuntimeError("GPU selection failed: " + json.dumps(status))
+RuntimeError: GPU selection failed: {"nvidia_smi_returncode": 9, "nvidia_smi": "NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running."}

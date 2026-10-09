@@ -113,6 +113,12 @@ Combinations are represented on the synthetic set (member names on a `Perturbati
 
 ## Current results
 
+The real Arc-data comparison, exact commands, split, and limitations are in
+[RESULTS.md](RESULTS.md). Run the bounded-memory benchmark with
+`python -m alz_perturb_gan.real_data --help`. Its default device is CUDA; it
+selects the GPU with the most free memory and caps its PyTorch allocator at
+19 GiB. A CPU run must be requested explicitly with `--device cpu`.
+
 Synthetic set, seed 0: 16 genes, 6 singles, 4 combinations, noise 0.02, 1 held-out single and 2 held-out combinations (3 eval profiles, 10 library candidates). ParticleGAN decision model: 40 updates. HyperGAN develop bridge: 80 updates. Command: `python -m alz_perturb_gan.smoke`. Full numbers are in `results/smoke_results.json`.
 
 | model | MAE | Pearson delta | DES overlap | PDS | phenocopy top-1 | MRR |
@@ -134,6 +140,7 @@ These numbers are a toy CPU smoke. They are not evidence about Alzheimer's biolo
 | Path | Role |
 | --- | --- |
 | `src/alz_perturb_gan/data.py` | `PerturbationSet`, synthetic simulator, h5ad loader |
+| `src/alz_perturb_gan/real_data.py` | streamed real-data benchmark, seeded identity holdout, GPU selection, Arc metrics |
 | `src/alz_perturb_gan/baselines.py` | no-change, mean effect, additive, linear |
 | `src/alz_perturb_gan/gan.py` | ParticleGAN recipe loop and decision-head loss |
 | `src/alz_perturb_gan/models.py` | generator, critic, decision head |
