@@ -1,0 +1,206 @@
+{
+  "cell_eval": {
+    "available": false,
+    "cli": "cell-eval run -ap pred.h5ad -ar real.h5ad --profile full",
+    "install": "pip install cell-eval",
+    "reason": "cell_eval is not installed in this environment."
+  },
+  "dataset": "synthetic",
+  "decision_train_check": {
+    "accuracy": 0.7142857313156128,
+    "brier": 0.19322910904884338,
+    "mean_noul": 0.5807052850723267,
+    "n": 28,
+    "note": "In-sample check only. It is not evidence the probability is calibrated on held-out biology.",
+    "positive_rate": 0.6071428656578064,
+    "split": "train_cells_reshuffled_targets"
+  },
+  "gan_final": {
+    "d_loss": 0.6492030620574951,
+    "g_loss": 0.26775991916656494,
+    "j_loss": 0.813317060470581,
+    "real_accuracy": 0.625
+  },
+  "gan_steps": 40,
+  "hypergan": {
+    "probe": {
+      "commit": "01a3aaec45f49923922787b0412a30fd71a2c897",
+      "rc2": {
+        "develop_commit": "01a3aaec45f49923922787b0412a30fd71a2c897",
+        "develop_reason": "1.0.0-rc2 cannot be imported on Python 3.12. The develop branch is the rebuild whose training loop uses ParticleGAN 0.8.0. It is not a PyPI release.",
+        "develop_version": "2.0.0a1",
+        "errors": [
+          "ModuleNotFoundError: No module named 'hyperchamber' (hypergan/layers/operation.py); no install_requires; classifiers list Python 3.4-3.6",
+          "ModuleNotFoundError: No module named 'PIL' (hypergan/samplers/base_sampler.py) after hyperchamber==0.3.1",
+          "ModuleNotFoundError: No module named 'torchvision' (hypergan/configurable_component.py) once Pillow is present"
+        ],
+        "git_tag": "1.0.0-rc2",
+        "importable_here": false,
+        "published": "2020-08-09",
+        "pypi_version": "1.0.6"
+      },
+      "status": "develop",
+      "version": "2.0.0a1"
+    },
+    "steps": 80,
+    "train": {
+      "config": "/workspace/runs/hypergan-smoke-config/config.toml",
+      "expression": {
+        "des_overlap": 0.3799533799533799,
+        "l2": 1.978291928768158,
+        "mae": 0.43471118807792664,
+        "n_profiles": 3.0,
+        "pds": 0.5,
+        "pearson_delta": 0.4405735954642296
+      },
+      "hypergan": "2.0.0a1",
+      "run_dir": "/workspace/runs/hypergan-smoke",
+      "status": "complete",
+      "steps": 80,
+      "summary_keys": [
+        "attempt_dir",
+        "attempt_id",
+        "attempt_index",
+        "bundle_path",
+        "checkpoint_every",
+        "checkpoint_path",
+        "config",
+        "config_sha256",
+        "data_identity",
+        "durable_event_boundary",
+        "evaluation_schedule",
+        "global_batch_size"
+      ]
+    }
+  },
+  "hypergan_rc2": {
+    "develop_commit": "01a3aaec45f49923922787b0412a30fd71a2c897",
+    "develop_reason": "1.0.0-rc2 cannot be imported on Python 3.12. The develop branch is the rebuild whose training loop uses ParticleGAN 0.8.0. It is not a PyPI release.",
+    "develop_version": "2.0.0a1",
+    "errors": [
+      "ModuleNotFoundError: No module named 'hyperchamber' (hypergan/layers/operation.py); no install_requires; classifiers list Python 3.4-3.6",
+      "ModuleNotFoundError: No module named 'PIL' (hypergan/samplers/base_sampler.py) after hyperchamber==0.3.1",
+      "ModuleNotFoundError: No module named 'torchvision' (hypergan/configurable_component.py) once Pillow is present"
+    ],
+    "git_tag": "1.0.0-rc2",
+    "importable_here": false,
+    "published": "2020-08-09",
+    "pypi_version": "1.0.6"
+  },
+  "metadata": {
+    "cells_per": 4,
+    "effect": "linear in the embedding; combinations add",
+    "emb_dim": 4,
+    "holdout_combos": 2,
+    "holdout_singles": 1,
+    "n_combo": 4,
+    "n_genes": 16,
+    "n_single": 6,
+    "noise": 0.02,
+    "seed": 0
+  },
+  "models": [
+    {
+      "expression": {
+        "des_overlap": 0.0,
+        "l2": 1.9778961737950642,
+        "mae": 0.39944371581077576,
+        "n_profiles": 3.0,
+        "pds": 0.5,
+        "pearson_delta": null
+      },
+      "model": "no_change",
+      "phenocopy": {
+        "mrr": 0.1818181818181818,
+        "n_queries": 3.0,
+        "recall_at_3": 0.0,
+        "top1": 0.0
+      }
+    },
+    {
+      "expression": {
+        "des_overlap": 0.3737373737373737,
+        "l2": 1.8556260069211323,
+        "mae": 0.41292060414950055,
+        "n_profiles": 3.0,
+        "pds": 0.5,
+        "pearson_delta": 0.43681883563597995
+      },
+      "model": "mean_effect",
+      "phenocopy": {
+        "mrr": 0.1818181818181818,
+        "n_queries": 3.0,
+        "recall_at_3": 0.0,
+        "top1": 0.0
+      }
+    },
+    {
+      "expression": {
+        "des_overlap": 0.7777777777777778,
+        "l2": 1.0787037933866184,
+        "mae": 0.23737654214104018,
+        "n_profiles": 3.0,
+        "pds": 0.6666666666666666,
+        "pearson_delta": 0.6802162701884905
+      },
+      "model": "additive",
+      "phenocopy": {
+        "mrr": 0.75,
+        "n_queries": 3.0,
+        "recall_at_3": 0.6666666666666666,
+        "top1": 0.6666666666666666
+      }
+    },
+    {
+      "expression": {
+        "des_overlap": 0.7925925925925926,
+        "l2": 0.942317267258962,
+        "mae": 0.17412239064772925,
+        "n_profiles": 3.0,
+        "pds": 1.0,
+        "pearson_delta": 0.9105148712793986
+      },
+      "model": "linear",
+      "phenocopy": {
+        "mrr": 1.0,
+        "n_queries": 3.0,
+        "recall_at_3": 1.0,
+        "top1": 1.0
+      }
+    },
+    {
+      "expression": {
+        "des_overlap": 0.46262626262626255,
+        "l2": 1.759210189183553,
+        "mae": 0.38487163186073303,
+        "n_profiles": 3.0,
+        "pds": 0.5,
+        "pearson_delta": 0.49080289403597516
+      },
+      "model": "gan_generator",
+      "phenocopy": {
+        "mrr": 0.6666666666666666,
+        "n_queries": 3.0,
+        "recall_at_3": 1.0,
+        "top1": 0.3333333333333333
+      }
+    },
+    {
+      "expression": null,
+      "model": "decision_noul",
+      "phenocopy": {
+        "mrr": 0.14484126984126985,
+        "n_queries": 3.0,
+        "recall_at_3": 0.0,
+        "top1": 0.0
+      },
+      "question": "does_perturbation_move_cell_state_toward_target"
+    }
+  ],
+  "n_eval": 3,
+  "n_genes": 16,
+  "n_train": 7,
+  "package_version": "0.1.0",
+  "paired_cells": true,
+  "source": "synthetic"
+}
