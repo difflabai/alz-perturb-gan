@@ -1,0 +1,777 @@
+{
+  "completed_utc": "2026-10-13T21:11:36.614075+00:00",
+  "device": "cuda:0",
+  "hardware": {
+    "nvidia_smi_returncode": 0,
+    "nvidia_smi": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47, NVIDIA RTX A6000, 19271, 49140\nGPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69, NVIDIA RTX A6000, 31355, 49140",
+    "selected_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+    "selected_name": "NVIDIA RTX A6000",
+    "free_mib_before_run": 31355,
+    "allocator_limit_gib": 19
+  },
+  "dataset": {
+    "notes": "Seeded identity holdout of the public training release; all genes; unpaired cells. Embeddings are one-hot over perturbation names in this file. A linear model fit on them cannot transfer to an identity that was absent from training.",
+    "split_seed": 42,
+    "cell_seed": 43,
+    "train_names": [
+      "ACVR1B",
+      "ATM",
+      "ATP1B1",
+      "ATP6V0B",
+      "ATP6V0C",
+      "BIRC2",
+      "BRD9",
+      "C1QBP",
+      "CALM3",
+      "CAMSAP2",
+      "CASP2",
+      "CASP3",
+      "CAST",
+      "CDCA2",
+      "CENPO",
+      "CHMP3",
+      "CLDN7",
+      "CREG1",
+      "DAXX",
+      "DLG5",
+      "DNMT1",
+      "DZIP3",
+      "EID2",
+      "EIF4B",
+      "EPB41L2",
+      "ETV4",
+      "EWSR1",
+      "FDPS",
+      "GSK3B",
+      "HAT1",
+      "HIRA",
+      "HMGB2",
+      "HMGN1",
+      "HSBP1",
+      "IDE",
+      "IGF2R",
+      "IKBKG",
+      "INSIG1",
+      "IRF3",
+      "KAT2A",
+      "KDM1A",
+      "KDM2B",
+      "KDR",
+      "KIF1B",
+      "KIF20A",
+      "KLF10",
+      "LAD1",
+      "LRPPRC",
+      "LZTR1",
+      "MAP1B",
+      "MAP3K7",
+      "MAPKAPK2",
+      "MAST2",
+      "MAU2",
+      "MBTPS1",
+      "MED1",
+      "MED12",
+      "MED13",
+      "MED13L",
+      "MED24",
+      "METTL17",
+      "METTL3",
+      "MKI67",
+      "MTA1",
+      "NCK2",
+      "NDUFB4",
+      "NDUFB6",
+      "NRAS",
+      "OXCT1",
+      "PAGR1",
+      "PHF10",
+      "PLCB3",
+      "PMEL",
+      "PRCP",
+      "PRDM14",
+      "PRR12",
+      "PTPN1",
+      "RAB3B",
+      "RAF1",
+      "RNF2",
+      "RNF20",
+      "RRM1",
+      "SAFB",
+      "SALL4",
+      "SDC1",
+      "SEC62",
+      "SIN3B",
+      "SIX4",
+      "SLC25A3",
+      "SLC39A6",
+      "SMAGP",
+      "SMARCA5",
+      "SNCA",
+      "SOX2",
+      "SRC",
+      "SSBP1",
+      "STAG2",
+      "STAT1",
+      "STAT6",
+      "SUPT4H1",
+      "SV2A",
+      "TCF3",
+      "TET1",
+      "TMBIM6",
+      "TMSB10",
+      "TMSB4X",
+      "TRAPPC6A",
+      "TSC22D4",
+      "TWF2",
+      "TXNDC9",
+      "UBE3C",
+      "UQCRQ",
+      "USP22",
+      "WFS1",
+      "XRCC4",
+      "ZNF286A",
+      "ZNF426",
+      "ZNF562",
+      "ZNF593",
+      "ZNF714"
+    ],
+    "eval_names": [
+      "ACAT2",
+      "AKT2",
+      "ANTXR1",
+      "ARID1A",
+      "CLDN6",
+      "DHCR24",
+      "DHX36",
+      "DNAJA3",
+      "EPHB4",
+      "FOXH1",
+      "METTL14",
+      "NISCH",
+      "NIT1",
+      "NREP",
+      "OXA1L",
+      "PBX1",
+      "PHF14",
+      "PMS1",
+      "POLB",
+      "SHPRH",
+      "SMARCA4",
+      "STX4",
+      "TADA1",
+      "TAF13",
+      "TARBP2",
+      "TAZ",
+      "TFAM",
+      "TGFBR2",
+      "TRAM2",
+      "WSB2"
+    ],
+    "n_cells_source": 221273,
+    "n_genes": 18080,
+    "counts_by_perturbation": {
+      "non-targeting": 38176,
+      "ACAT2": 1765,
+      "ACVR1B": 1400,
+      "AKT2": 938,
+      "ANTXR1": 1448,
+      "ARID1A": 1256,
+      "ATM": 455,
+      "ATP1B1": 2121,
+      "ATP6V0B": 245,
+      "ATP6V0C": 33,
+      "BIRC2": 1116,
+      "BRD9": 67,
+      "C1QBP": 711,
+      "CALM3": 681,
+      "CAMSAP2": 1750,
+      "CASP2": 1590,
+      "CASP3": 1037,
+      "CAST": 2252,
+      "CDCA2": 1717,
+      "CENPO": 1193,
+      "CHMP3": 1168,
+      "CLDN6": 864,
+      "CLDN7": 1303,
+      "CREG1": 1703,
+      "DAXX": 1332,
+      "DHCR24": 1420,
+      "DHX36": 1392,
+      "DLG5": 864,
+      "DNAJA3": 65,
+      "DNMT1": 893,
+      "DZIP3": 447,
+      "EID2": 1167,
+      "EIF4B": 1585,
+      "EPB41L2": 219,
+      "EPHB4": 241,
+      "ETV4": 263,
+      "EWSR1": 538,
+      "FDPS": 154,
+      "FOXH1": 1967,
+      "GSK3B": 1059,
+      "HAT1": 1025,
+      "HIRA": 3407,
+      "HMGB2": 1487,
+      "HMGN1": 2004,
+      "HSBP1": 166,
+      "IDE": 2248,
+      "IGF2R": 3109,
+      "IKBKG": 790,
+      "INSIG1": 1363,
+      "IRF3": 985,
+      "KAT2A": 2120,
+      "KDM1A": 352,
+      "KDM2B": 2142,
+      "KDR": 2056,
+      "KIF1B": 2407,
+      "KIF20A": 183,
+      "KLF10": 1932,
+      "LAD1": 1361,
+      "LRPPRC": 1053,
+      "LZTR1": 1381,
+      "MAP1B": 784,
+      "MAP3K7": 2019,
+      "MAPKAPK2": 2196,
+      "MAST2": 1029,
+      "MAU2": 1021,
+      "MBTPS1": 626,
+      "MED1": 407,
+      "MED12": 2766,
+      "MED13": 2787,
+      "MED13L": 2469,
+      "MED24": 455,
+      "METTL14": 468,
+      "METTL17": 790,
+      "METTL3": 498,
+      "MKI67": 968,
+      "MTA1": 1434,
+      "NCK2": 2929,
+      "NDUFB4": 1413,
+      "NDUFB6": 863,
+      "NISCH": 2101,
+      "NIT1": 1287,
+      "NRAS": 1172,
+      "NREP": 352,
+      "OXA1L": 63,
+      "OXCT1": 740,
+      "PAGR1": 1953,
+      "PBX1": 2313,
+      "PHF10": 450,
+      "PHF14": 899,
+      "PLCB3": 1110,
+      "PMEL": 356,
+      "PMS1": 1100,
+      "POLB": 1905,
+      "PRCP": 4331,
+      "PRDM14": 359,
+      "PRR12": 1286,
+      "PTPN1": 2195,
+      "RAB3B": 594,
+      "RAF1": 791,
+      "RNF2": 1844,
+      "RNF20": 47,
+      "RRM1": 638,
+      "SAFB": 827,
+      "SALL4": 180,
+      "SDC1": 215,
+      "SEC62": 286,
+      "SHPRH": 241,
+      "SIN3B": 586,
+      "SIX4": 642,
+      "SLC25A3": 805,
+      "SLC39A6": 178,
+      "SMAGP": 788,
+      "SMARCA4": 1015,
+      "SMARCA5": 1795,
+      "SNCA": 386,
+      "SOX2": 806,
+      "SRC": 2403,
+      "SSBP1": 905,
+      "STAG2": 1573,
+      "STAT1": 2493,
+      "STAT6": 858,
+      "STX4": 1249,
+      "SUPT4H1": 364,
+      "SV2A": 580,
+      "TADA1": 4035,
+      "TAF13": 138,
+      "TARBP2": 2032,
+      "TAZ": 749,
+      "TCF3": 1343,
+      "TET1": 2428,
+      "TFAM": 1105,
+      "TGFBR2": 1474,
+      "TMBIM6": 505,
+      "TMSB10": 872,
+      "TMSB4X": 4760,
+      "TRAM2": 1756,
+      "TRAPPC6A": 589,
+      "TSC22D4": 1970,
+      "TWF2": 1008,
+      "TXNDC9": 514,
+      "UBE3C": 1590,
+      "UQCRQ": 1161,
+      "USP22": 2491,
+      "WFS1": 2043,
+      "WSB2": 712,
+      "XRCC4": 591,
+      "ZNF286A": 1059,
+      "ZNF426": 1132,
+      "ZNF562": 418,
+      "ZNF593": 797,
+      "ZNF714": 852
+    },
+    "train_cells_sampled": 15123,
+    "train_cells_cap": 128,
+    "eval_cells_cap": 128,
+    "input_scale": "counts",
+    "expression_scale": "log1p(normalize_total(counts, 10000))",
+    "evaluation": "local pseudobulks use ALL held-out cells; cell-eval uses the fixed sampled cells",
+    "embedding": "one-hot identity; no pretrained gene features; unseen columns receive no training signal",
+    "control": "all non-targeting cells contribute to shared control mean; sampled controls are available to all models"
+  },
+  "models": [
+    {
+      "model": "no_change",
+      "expression": {
+        "mae": 0.014078695901359121,
+        "l2": 3.9480691134929655,
+        "pearson_delta": null,
+        "des_overlap": 0.0,
+        "pds": 0.5,
+        "n_profiles": 30.0
+      },
+      "phenocopy": {
+        "top1": 0.0,
+        "mrr": 0.01324503311258279,
+        "recall_at_3": 0.0,
+        "n_queries": 30.0
+      }
+    },
+    {
+      "model": "mean_effect",
+      "expression": {
+        "mae": 0.01433333350966374,
+        "l2": 3.9765973528226217,
+        "pearson_delta": 0.16130913952365517,
+        "des_overlap": 0.028884302258915258,
+        "pds": 0.5,
+        "n_profiles": 30.0
+      },
+      "phenocopy": {
+        "top1": 0.0,
+        "mrr": 0.01324503311258279,
+        "recall_at_3": 0.0,
+        "n_queries": 30.0
+      }
+    },
+    {
+      "model": "additive",
+      "expression": {
+        "mae": 0.01433333350966374,
+        "l2": 3.9765973528226217,
+        "pearson_delta": 0.16130913952365517,
+        "des_overlap": 0.028884302258915258,
+        "pds": 0.5,
+        "n_profiles": 30.0
+      },
+      "phenocopy": {
+        "top1": 0.0,
+        "mrr": 0.045935464691037584,
+        "recall_at_3": 0.0,
+        "n_queries": 30.0
+      }
+    },
+    {
+      "model": "linear",
+      "expression": {
+        "mae": 0.014333333338921268,
+        "l2": 3.976597372690837,
+        "pearson_delta": 0.1613091263299187,
+        "des_overlap": 0.028884302258915258,
+        "pds": 0.5,
+        "n_profiles": 30.0
+      },
+      "phenocopy": {
+        "top1": 0.0,
+        "mrr": 0.023880575161435387,
+        "recall_at_3": 0.0,
+        "n_queries": 30.0
+      }
+    },
+    {
+      "model": "gan_generator",
+      "expression": {
+        "mae": 0.01442959476262331,
+        "l2": 3.9813800851504006,
+        "pearson_delta": 0.15655565833052,
+        "des_overlap": 0.028884302258915258,
+        "pds": 0.5,
+        "n_profiles": 30.0
+      },
+      "phenocopy": {
+        "top1": 0.0,
+        "mrr": 0.0193597462182667,
+        "recall_at_3": 0.0,
+        "n_queries": 30.0
+      }
+    },
+    {
+      "model": "decision_noul",
+      "expression": null,
+      "phenocopy": {
+        "top1": 0.03333333333333333,
+        "mrr": 0.05342238483115994,
+        "recall_at_3": 0.03333333333333333,
+        "n_queries": 30.0
+      },
+      "question": "is_candidate_perturbation_the_source_of_target_pseudobulk"
+    }
+  ],
+  "cell_eval": {
+    "no_change": [
+      {
+        "statistic": "count",
+        "overlap_at_N": 30.0,
+        "mae": 30.0,
+        "discrimination_score_l1": 30.0
+      },
+      {
+        "statistic": "null_count",
+        "overlap_at_N": 0.0,
+        "mae": 0.0,
+        "discrimination_score_l1": 0.0
+      },
+      {
+        "statistic": "mean",
+        "overlap_at_N": 0.0026505488993383377,
+        "mae": 0.01785672443608443,
+        "discrimination_score_l1": 0.5188888888888888
+      },
+      {
+        "statistic": "std",
+        "overlap_at_N": 0.009712489789976715,
+        "mae": 0.011190893175879638,
+        "discrimination_score_l1": 0.2936992666985386
+      },
+      {
+        "statistic": "min",
+        "overlap_at_N": 0.0,
+        "mae": 0.00931631401181221,
+        "discrimination_score_l1": 0.033333333333333326
+      },
+      {
+        "statistic": "25%",
+        "overlap_at_N": 0.0,
+        "mae": 0.010345612652599812,
+        "discrimination_score_l1": 0.2666666666666667
+      },
+      {
+        "statistic": "50%",
+        "overlap_at_N": 0.0,
+        "mae": 0.013982980512082577,
+        "discrimination_score_l1": 0.5333333333333333
+      },
+      {
+        "statistic": "75%",
+        "overlap_at_N": 0.0,
+        "mae": 0.020855974406003952,
+        "discrimination_score_l1": 0.7666666666666666
+      },
+      {
+        "statistic": "max",
+        "overlap_at_N": 0.048150213794385575,
+        "mae": 0.052705783396959305,
+        "discrimination_score_l1": 1.0
+      }
+    ],
+    "mean_effect": [
+      {
+        "statistic": "count",
+        "overlap_at_N": 30.0,
+        "mae": 30.0,
+        "discrimination_score_l1": 30.0
+      },
+      {
+        "statistic": "null_count",
+        "overlap_at_N": 0.0,
+        "mae": 0.0,
+        "discrimination_score_l1": 0.0
+      },
+      {
+        "statistic": "mean",
+        "overlap_at_N": 0.002254690635319462,
+        "mae": 0.01778971841558814,
+        "discrimination_score_l1": 0.5244444444444445
+      },
+      {
+        "statistic": "std",
+        "overlap_at_N": 0.008541890513994435,
+        "mae": 0.010684378127700987,
+        "discrimination_score_l1": 0.2999276200467741
+      },
+      {
+        "statistic": "min",
+        "overlap_at_N": 0.0,
+        "mae": 0.010206621140241623,
+        "discrimination_score_l1": 0.033333333333333326
+      },
+      {
+        "statistic": "25%",
+        "overlap_at_N": 0.0,
+        "mae": 0.010813042521476746,
+        "discrimination_score_l1": 0.2666666666666667
+      },
+      {
+        "statistic": "50%",
+        "overlap_at_N": 0.0,
+        "mae": 0.014329400844871998,
+        "discrimination_score_l1": 0.5333333333333333
+      },
+      {
+        "statistic": "75%",
+        "overlap_at_N": 0.0,
+        "mae": 0.02046041749417782,
+        "discrimination_score_l1": 0.7666666666666666
+      },
+      {
+        "statistic": "max",
+        "overlap_at_N": 0.04257296895333705,
+        "mae": 0.052615463733673096,
+        "discrimination_score_l1": 1.0
+      }
+    ],
+    "additive": [
+      {
+        "statistic": "count",
+        "overlap_at_N": 30.0,
+        "mae": 30.0,
+        "discrimination_score_l1": 30.0
+      },
+      {
+        "statistic": "null_count",
+        "overlap_at_N": 0.0,
+        "mae": 0.0,
+        "discrimination_score_l1": 0.0
+      },
+      {
+        "statistic": "mean",
+        "overlap_at_N": 0.002254690635319462,
+        "mae": 0.01778971841558814,
+        "discrimination_score_l1": 0.5244444444444445
+      },
+      {
+        "statistic": "std",
+        "overlap_at_N": 0.008541890513994435,
+        "mae": 0.010684378127700987,
+        "discrimination_score_l1": 0.2999276200467741
+      },
+      {
+        "statistic": "min",
+        "overlap_at_N": 0.0,
+        "mae": 0.010206621140241623,
+        "discrimination_score_l1": 0.033333333333333326
+      },
+      {
+        "statistic": "25%",
+        "overlap_at_N": 0.0,
+        "mae": 0.010813042521476746,
+        "discrimination_score_l1": 0.2666666666666667
+      },
+      {
+        "statistic": "50%",
+        "overlap_at_N": 0.0,
+        "mae": 0.014329400844871998,
+        "discrimination_score_l1": 0.5333333333333333
+      },
+      {
+        "statistic": "75%",
+        "overlap_at_N": 0.0,
+        "mae": 0.02046041749417782,
+        "discrimination_score_l1": 0.7666666666666666
+      },
+      {
+        "statistic": "max",
+        "overlap_at_N": 0.04257296895333705,
+        "mae": 0.052615463733673096,
+        "discrimination_score_l1": 1.0
+      }
+    ],
+    "linear": [
+      {
+        "statistic": "count",
+        "overlap_at_N": 30.0,
+        "mae": 30.0,
+        "discrimination_score_l1": 30.0
+      },
+      {
+        "statistic": "null_count",
+        "overlap_at_N": 0.0,
+        "mae": 0.0,
+        "discrimination_score_l1": 0.0
+      },
+      {
+        "statistic": "mean",
+        "overlap_at_N": 0.002254690635319462,
+        "mae": 0.017789718539764483,
+        "discrimination_score_l1": 0.5244444444444445
+      },
+      {
+        "statistic": "std",
+        "overlap_at_N": 0.008541890513994435,
+        "mae": 0.010684377875095854,
+        "discrimination_score_l1": 0.2999276200467741
+      },
+      {
+        "statistic": "min",
+        "overlap_at_N": 0.0,
+        "mae": 0.010206621140241623,
+        "discrimination_score_l1": 0.033333333333333326
+      },
+      {
+        "statistic": "25%",
+        "overlap_at_N": 0.0,
+        "mae": 0.010813042521476746,
+        "discrimination_score_l1": 0.2666666666666667
+      },
+      {
+        "statistic": "50%",
+        "overlap_at_N": 0.0,
+        "mae": 0.014329401776194572,
+        "discrimination_score_l1": 0.5333333333333333
+      },
+      {
+        "statistic": "75%",
+        "overlap_at_N": 0.0,
+        "mae": 0.02046041749417782,
+        "discrimination_score_l1": 0.7666666666666666
+      },
+      {
+        "statistic": "max",
+        "overlap_at_N": 0.04257296895333705,
+        "mae": 0.052615463733673096,
+        "discrimination_score_l1": 1.0
+      }
+    ],
+    "gan_generator": [
+      {
+        "statistic": "count",
+        "overlap_at_N": 30.0,
+        "mae": 30.0,
+        "discrimination_score_l1": 30.0
+      },
+      {
+        "statistic": "null_count",
+        "overlap_at_N": 0.0,
+        "mae": 0.0,
+        "discrimination_score_l1": 0.0
+      },
+      {
+        "statistic": "mean",
+        "overlap_at_N": 0.0034409304670417105,
+        "mae": 0.017836736639340718,
+        "discrimination_score_l1": 0.5244444444444445
+      },
+      {
+        "statistic": "std",
+        "overlap_at_N": 0.011684702173640657,
+        "mae": 0.01069726879553911,
+        "discrimination_score_l1": 0.2990320698511936
+      },
+      {
+        "statistic": "min",
+        "overlap_at_N": 0.0,
+        "mae": 0.010252634063363075,
+        "discrimination_score_l1": 0.033333333333333326
+      },
+      {
+        "statistic": "25%",
+        "overlap_at_N": 0.0,
+        "mae": 0.010894977487623692,
+        "discrimination_score_l1": 0.2666666666666667
+      },
+      {
+        "statistic": "50%",
+        "overlap_at_N": 0.0,
+        "mae": 0.014394999481737614,
+        "discrimination_score_l1": 0.5333333333333333
+      },
+      {
+        "statistic": "75%",
+        "overlap_at_N": 0.0,
+        "mae": 0.020499849691987038,
+        "discrimination_score_l1": 0.7666666666666666
+      },
+      {
+        "statistic": "max",
+        "overlap_at_N": 0.05428518311953895,
+        "mae": 0.05270857736468315,
+        "discrimination_score_l1": 1.0
+      }
+    ]
+  },
+  "runtime": {
+    "load_seconds": 1167.4204959229974,
+    "no_change_seconds": 0.12241377700411249,
+    "mean_effect_seconds": 0.06584389500494581,
+    "additive_seconds": 0.06467960399459116,
+    "linear_seconds": 0.7603946629969869,
+    "gan_train_seconds": 1819.458072606998,
+    "gan_eval_seconds": 0.436419678007951,
+    "cell_eval_no_change_seconds": 17.186059027997544,
+    "cell_eval_mean_effect_seconds": 7.021536667991313,
+    "cell_eval_additive_seconds": 7.350727822005865,
+    "cell_eval_linear_seconds": 7.429272635999951,
+    "cell_eval_gan_generator_seconds": 13.151719863002654,
+    "hash_seconds": 43.643263003992615,
+    "total_seconds": 3087.210208731005
+  },
+  "data_sha256": "a09977104fefb622368ca74b50c9d3c1e891733e6c83db07acfca49b0219c02b",
+  "decision_heldout": {
+    "split": "eval_targets",
+    "label": "candidate perturbation == target perturbation",
+    "n_targets": 30,
+    "n_candidates": 150,
+    "full_positive_rate": 0.006666666828095913,
+    "full_auroc": 0.5331692695617676,
+    "full_mean_noul_pos": 0.3751816749572754,
+    "full_mean_noul_neg": 0.3464357554912567,
+    "balanced_positive_rate": 0.5,
+    "balanced_accuracy": 0.5,
+    "balanced_brier": 0.3185092806816101,
+    "balanced_auroc": 0.5055555701255798,
+    "note": "label = (candidate == target perturbation); candidates are generator-averaged profiles."
+  },
+  "training_summary": {
+    "d_loss": {
+      "mean": 0.6930540618862957,
+      "last": 0.6931339502334595
+    },
+    "g_loss": {
+      "mean": 0.09891528506092727,
+      "last": 0.09782026708126068
+    },
+    "j_loss": {
+      "mean": 0.295494205249846,
+      "last": 0.23399677872657776
+    },
+    "real_accuracy": {
+      "mean": 0.9958419921875,
+      "last": 1.0
+    },
+    "real_positive_rate": {
+      "mean": 0.5002748046875,
+      "last": 0.52734375
+    }
+  },
+  "versions": {
+    "torch": "2.6.0+cu124",
+    "particlegan": "0.8.0",
+    "anndata": "0.12.19",
+    "numpy": "2.4.6",
+    "cell-eval": "0.8.2"
+  },
+  "peak_gpu_allocated_gib": 1.4690427780151367,
+  "peak_gpu_reserved_gib": 2.697265625
+}

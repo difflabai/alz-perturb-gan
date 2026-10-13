@@ -84,8 +84,8 @@ def evaluate_gan(data: PerturbationSet, model: GANDecision, *, n_draws: int = 8)
     eval_pred = torch.stack([by_name[name] for name in eval_names])
 
     def decision_scores(control, target, library):
-        embedding = torch.stack([item.embedding for item in library])
-        return model.score_moves_toward(control, embedding, target)
+        profiles = torch.stack([by_name[item.name] for item in library])
+        return model.score_candidates(control, profiles, target)
 
     return {
         "gan_generator": {
@@ -102,37 +102,75 @@ def evaluate_gan(data: PerturbationSet, model: GANDecision, *, n_draws: int = 8)
     }
 
 
-def decision_label_report(data: PerturbationSet, model: GANDecision, *, seed: int = 0) -> dict:
-    """Accuracy of the noul on held-out cells is not available.
+def _auroc(scores: torch.Tensor, labels: torch.Tensor) -> float:
+    pos, neg = scores[labels > 0.5], scores[labels <= 0.5]
+    if len(pos) == 0 or len(neg) == 0:
+        return math.nan
+    greater = (pos[:, None] > neg[None, :]).float().mean()
+    ties = (pos[:, None] == neg[None, :]).float().mean()
+    return float(greater + 0.5 * ties)
 
-    Eval cells are not stored. This report scores training cells against a
-    fresh draw of training targets, which is an in-sample calibration check,
-    not a test-set claim.
+
+def decision_pair_report(
+    data: PerturbationSet,
+    model: GANDecision,
+    targets: list,
+    predicted_by_name: dict,
+    *,
+    seed: int = 0,
+    split: str = "",
+) -> dict:
+    """Score the well-posed label for each target T against every library candidate P.
+
+    label(P, T) = 1 iff P is T's perturbation. Candidate profiles are the
+    generator's averaged predictions. Reports both the full-library pairs
+    (positive rate 1/L, AUROC) and a balanced set of one positive plus one
+    seeded random negative per target (positive rate 0.5, accuracy, Brier).
     """
-    if data.cell_control.shape[0] == 0:
-        return {"n": 0}
-    generator = torch.Generator().manual_seed(seed)
-    names, profiles = data.train_profiles()
-    index = torch.randint(data.cell_control.shape[0], (data.cell_control.shape[0],), generator=generator)
-    target_index = torch.randint(len(names), (index.shape[0],), generator=generator)
-    control = data.cell_control[index]
-    outcome = data.cell_outcome[index]
-    embedding = data.cell_embedding[index]
-    target = profiles[target_index]
-    label = ((outcome - target).norm(dim=-1) < (control - target).norm(dim=-1)).float()
-    with torch.no_grad():
-        noul = model.decision(control, embedding, target)
-    accuracy = float(((noul >= 0.5) == (label >= 0.5)).float().mean())
-    brier = float(((noul - label) ** 2).mean())
+    library = [item.name for item in data.named()]
+    profiles = torch.stack([predicted_by_name[name] for name in library])
+    rng = torch.Generator().manual_seed(seed)
+    all_scores, all_labels, bal_scores, bal_labels = [], [], [], []
+    for target in targets:
+        scores = model.score_candidates(data.control_mean, profiles, target.profile)
+        labels = torch.tensor([1.0 if name == target.name else 0.0 for name in library])
+        all_scores.append(scores)
+        all_labels.append(labels)
+        true_index = library.index(target.name)
+        offset = int(torch.randint(1, len(library), (1,), generator=rng))
+        neg_index = (true_index + offset) % len(library)
+        bal_scores.extend([scores[true_index], scores[neg_index]])
+        bal_labels.extend([1.0, 0.0])
+    if not targets:
+        return {"split": split, "n_targets": 0}
+    scores = torch.cat(all_scores)
+    labels = torch.cat(all_labels)
+    bal_s = torch.stack(bal_scores)
+    bal_l = torch.tensor(bal_labels)
     return {
-        "split": "train_cells_reshuffled_targets",
-        "n": int(label.shape[0]),
-        "accuracy": accuracy,
-        "brier": brier,
-        "mean_noul": float(noul.mean()),
-        "positive_rate": float(label.mean()),
-        "note": "In-sample check only. It is not evidence the probability is calibrated on held-out biology.",
+        "split": split,
+        "label": "candidate perturbation == target perturbation",
+        "n_targets": len(targets),
+        "n_candidates": len(library),
+        "full_positive_rate": float(labels.mean()),
+        "full_auroc": _auroc(scores, labels),
+        "full_mean_noul_pos": float(scores[labels > 0.5].mean()),
+        "full_mean_noul_neg": float(scores[labels <= 0.5].mean()),
+        "balanced_positive_rate": float(bal_l.mean()),
+        "balanced_accuracy": float(((bal_s >= 0.5) == (bal_l >= 0.5)).float().mean()),
+        "balanced_brier": float(((bal_s - bal_l) ** 2).mean()),
+        "balanced_auroc": _auroc(bal_s, bal_l),
     }
+
+
+def decision_label_report(data: PerturbationSet, model: GANDecision, *, seed: int = 0, n_draws: int = 8) -> dict:
+    """In-sample check on training targets; not a held-out claim."""
+    library = [item.name for item in data.named()]
+    predicted = model.predict_profiles(data, library, n_draws=n_draws)
+    by_name = dict(zip(library, predicted))
+    report = decision_pair_report(data, model, data.named("train"), by_name, seed=seed, split="train_targets")
+    report["note"] = "In-sample check only. It is not evidence the probability is calibrated on held-out biology."
+    return report
 
 
 def compare_all(data: PerturbationSet, baselines: dict, gan: GANDecision | None = None, *, n_draws: int = 8) -> dict:
@@ -142,7 +180,7 @@ def compare_all(data: PerturbationSet, baselines: dict, gan: GANDecision | None 
         judged = evaluate_gan(data, gan, n_draws=n_draws)
         rows.append(judged["gan_generator"])
         rows.append(judged["decision_noul"])
-        extra = {"decision_train_check": decision_label_report(data, gan)}
+        extra = {"decision_train_check": decision_label_report(data, gan, n_draws=n_draws)}
     return {"dataset": data.name, "source": data.source, "models": rows, **extra}
 
 

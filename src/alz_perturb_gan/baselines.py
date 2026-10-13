@@ -105,27 +105,28 @@ class LinearModel(Baseline):
 
     name = "linear"
 
-    def __init__(self, n_components: int = 4, ridge: float = 0.1):
+    def __init__(self, n_components: int = 4, ridge: float = 0.1, device: str = "cpu"):
         if n_components < 1:
             raise ValueError("n_components must be positive")
         if ridge < 0:
             raise ValueError("ridge must be nonnegative")
         self.n_components = n_components
         self.ridge = ridge
+        self.device = device
 
     def fit(self, data: PerturbationSet) -> "LinearModel":
         names, profiles = data.train_profiles()
-        y = profiles.T.double()  # [genes, perts]
+        y = profiles.T.to(self.device).double()  # [genes, perts]
         b = y.mean(dim=1)
         centered = y - b.unsqueeze(1)
         _u, _s, _vh = torch.linalg.svd(centered, full_matrices=False)
         k = min(self.n_components, _u.shape[1], centered.shape[1])
         g = _u[:, :k]
-        p = torch.stack([data.by_name()[name].embedding for name in names]).double()
+        p = torch.stack([data.by_name()[name].embedding for name in names]).to(self.device).double()
         gram_g = g.T @ g
         gram_p = p.T @ p
-        eye_g = torch.eye(gram_g.shape[0], dtype=torch.float64)
-        eye_p = torch.eye(gram_p.shape[0], dtype=torch.float64)
+        eye_g = torch.eye(gram_g.shape[0], dtype=torch.float64, device=self.device)
+        eye_p = torch.eye(gram_p.shape[0], dtype=torch.float64, device=self.device)
         middle = g.T @ centered @ p
         left = torch.linalg.solve(gram_g + self.ridge * eye_g, middle)
         weight = torch.linalg.solve(gram_p + self.ridge * eye_p, left.T).T
@@ -136,9 +137,9 @@ class LinearModel(Baseline):
 
     def predict(self, data: PerturbationSet, names: list[str]) -> torch.Tensor:
         lookup = data.by_name()
-        p = torch.stack([lookup[name].embedding for name in names]).double()
+        p = torch.stack([lookup[name].embedding for name in names]).to(self.device).double()
         y = self.gene_basis @ self.weight @ p.T + self.bias.unsqueeze(1)
-        return y.T.float()
+        return y.T.float().cpu()
 
 
 def fit_baselines(data: PerturbationSet, *, n_components: int = 4, ridge: float = 0.1) -> dict[str, Baseline]:

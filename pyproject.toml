@@ -28,6 +28,9 @@ hypergan = [
 vcc = [
     "anndata>=0.10",
 ]
+eval = [
+    "cell-eval==0.8.2",
+]
 dev = [
     "pytest>=8",
     "anndata>=0.10",
@@ -35,6 +38,7 @@ dev = [
 
 [project.scripts]
 alz-perturb-smoke = "alz_perturb_gan.smoke:main"
+alz-perturb-real = "alz_perturb_gan.real_data:main"
 
 [project.urls]
 Repository = "https://github.com/difflabai/alz-perturb-gan"

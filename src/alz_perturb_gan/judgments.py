@@ -18,4 +18,6 @@ class NoulJudgment:
         return {"type": "noul", "question": self.question, "noul": float(self.noul)}
 
 
-MOVES_TOWARD = "does_perturbation_move_cell_state_toward_target"
+# Kept under the historical constant name; the question is now well posed:
+# "is candidate perturbation P the one whose effect produced target pseudobulk T?"
+MOVES_TOWARD = "is_candidate_perturbation_the_source_of_target_pseudobulk"
