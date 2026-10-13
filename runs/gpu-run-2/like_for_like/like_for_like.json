@@ -1,0 +1,33 @@
+{
+  "checkpoint": "/ml2/altgan/runs/gpu-run-2/main/checkpoint.pt",
+  "draws": 64,
+  "seed": 45,
+  "train": {
+    "split": "train_targets",
+    "label": "candidate perturbation == target perturbation",
+    "n_targets": 120,
+    "n_candidates": 150,
+    "full_positive_rate": 0.006666666828095913,
+    "full_auroc": 0.8954697847366333,
+    "full_mean_noul_pos": 0.72477787733078,
+    "full_mean_noul_neg": 0.3648573160171509,
+    "balanced_positive_rate": 0.5,
+    "balanced_accuracy": 0.8041666746139526,
+    "balanced_brier": 0.14362627267837524,
+    "balanced_auroc": 0.8934027552604675
+  },
+  "eval": {
+    "split": "eval_targets",
+    "label": "candidate perturbation == target perturbation",
+    "n_targets": 30,
+    "n_candidates": 150,
+    "full_positive_rate": 0.006666666828095913,
+    "full_auroc": 0.534325122833252,
+    "full_mean_noul_pos": 0.3759760558605194,
+    "full_mean_noul_neg": 0.34695783257484436,
+    "balanced_positive_rate": 0.5,
+    "balanced_accuracy": 0.5166666507720947,
+    "balanced_brier": 0.31808921694755554,
+    "balanced_auroc": 0.5122222304344177
+  }
+}
