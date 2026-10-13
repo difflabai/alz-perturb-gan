@@ -41,7 +41,7 @@ Official cell-eval (vcc profile, mean): GAN overlap_at_N 0.0034 vs 0.0023 for me
 
 ## Read
 
-The label is now well posed. Both classes appear in training (positive rate 0.50) and in evaluation, so the numbers measure something. On training perturbations the head separates the identities almost perfectly (accuracy 0.996). On held-out perturbations it sits at chance: AUROC 0.53 and balanced accuracy 0.50. Its MRR of 0.053 is only slightly above random (0.037) and the additive baseline (0.046), and that is based on one top-1 hit out of 30. This is consistent with the bottleneck: candidates are scored through the generator's predicted profiles. The generator is no better than the mean-effect baseline (MAE 0.0144 vs 0.0143), because unseen perturbations have one-hot embeddings with no training signal, so the generator predicts roughly the same shift for every held-out gene. Next lever (outside this PR's scope): informative perturbation features, so the generator can tell held-out perturbations apart.
+The label is now well posed. Both classes appear in training (positive rate 0.50) and in evaluation, so the numbers measure something. On training perturbations the head separates the identities almost perfectly (accuracy 0.996). On held-out perturbations it sits at chance: AUROC 0.53 and balanced accuracy 0.50. Its MRR of 0.053 is only slightly above random (0.037) and the additive baseline (0.046), and that is based on one top-1 hit out of 30. Candidates are scored through the generator's predicted profiles. On held-out expression the generator is no better than the mean-effect baseline (MAE 0.0144 vs 0.0143), and unseen perturbations have one-hot embeddings that received no training signal. These are observations, not a causal attribution. The like-for-like section below bounds what can be concluded.
 
 ## Like-for-like: training vs held-out targets, same inputs and metric
 
@@ -59,4 +59,15 @@ Raw output is in `runs/gpu-run-2/like_for_like/`.
 
 The held-out row reproduces the GPU run's in-run report (AUROC 0.533, balanced accuracy 0.50). The small differences come from CPU instead of GPU generator sampling.
 
-**Read:** the generator is the main bottleneck. With the same generator-averaged inputs, the head still separates training identities well (AUROC 0.90, even though it was trained on real-cell means). It falls to chance only when the generator has to predict for unseen one-hot identities, which received no training signal. These numbers don't rule out some overfitting by the head, but the 0.90 → 0.53 drop follows from the generator's inputs collapsing for unseen identities.
+**Read:** with identical generator-averaged inputs and the same metric, AUROC is 0.895470 on training targets vs 0.534325 on held-out targets. This supports only a generalization gap in the joint generator-plus-head pipeline. It does not show that the generator alone causes the gap, and it does not rule out the head memorizing training identities: training targets are perturbations the head saw during training, and held-out targets are not. Separating the two would need further experiments, which this PR does not run.
+
+## Provenance limits
+
+- **(a) Not a zero-update evaluation.** `scripts/like_for_like.py` builds its modules by calling `train_gan_decision(..., steps=1)` before loading the run-2 checkpoint. That one throwaway optimizer step updates freshly initialized weights, and `load_state_dict` then overwrites the generator, critic, decision head, and prior. The throwaway step does still consume and advance the process RNG state before the evaluator reseeds with `torch.manual_seed(45)`. So the evaluation is not a strict zero-update, checkpoint-only procedure.
+- **(b) Missing records.** The following are **not committed** and do **not exist** on pop-os under `/ml2/altgan/runs/gpu-run-2/like_for_like/` or the run dir:
+  - the per-candidate scores for each target
+  - the explicit training and held-out target lists as evaluated (`runs/gpu-run-2/split.json` holds the seeded `train_names`/`eval_names` the split produced, not an evaluator-emitted list)
+  - the perturbation dictionary, meaning the library order and the name → embedding/index map used for scoring
+  - an invocation manifest with the exact command line, environment, code SHA, and checkpoint hash for the like-for-like run
+
+  The only like-for-like outputs are `runs/gpu-run-2/like_for_like/like_for_like.json` and `like_for_like.log`, both already committed. Nothing new was generated for this note.
