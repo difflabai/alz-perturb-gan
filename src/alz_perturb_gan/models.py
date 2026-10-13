@@ -48,20 +48,30 @@ class ConditionalCritic(nn.Module):
 
 
 class DecisionModel(nn.Module):
-    """P(perturbation moves control toward target), a single noul."""
+    """P(candidate perturbation P is the one that produced target T), a single noul.
 
-    def __init__(self, n_genes: int, emb_dim: int, hidden: int = 64):
+    Inputs are pseudobulk-level: the control mean, an aggregated profile for the
+    candidate P (a mean of real cells in training, the generator's averaged
+    prediction at evaluation), and the target pseudobulk T. Features are the
+    candidate and target deltas from control plus their product, so the head
+    scores whether P's predicted shift matches T's shift. There is no identity
+    embedding input, so held-out perturbations are scored through the generator.
+    """
+
+    def __init__(self, n_genes: int, hidden: int = 64):
         super().__init__()
         self.question = MOVES_TOWARD
-        self.net = _mlp(n_genes + n_genes + emb_dim, hidden, 1)
+        self.net = _mlp(3 * n_genes, hidden, 1)
 
-    def forward(self, control: torch.Tensor, embedding: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-        logits = self.net(torch.cat([control, embedding, target], dim=-1)).squeeze(-1)
+    def forward(self, control: torch.Tensor, profile: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+        p_delta = profile - control
+        t_delta = target - control
+        logits = self.net(torch.cat([p_delta, t_delta, p_delta * t_delta], dim=-1)).squeeze(-1)
         return torch.sigmoid(logits)
 
-    def judge(self, control: torch.Tensor, embedding: torch.Tensor, target: torch.Tensor) -> NoulJudgment:
+    def judge(self, control: torch.Tensor, profile: torch.Tensor, target: torch.Tensor) -> NoulJudgment:
         if control.ndim != 1:
-            raise ValueError("judge expects one control, one embedding, and one target")
+            raise ValueError("judge expects one control, one candidate profile, and one target")
         with torch.no_grad():
-            probability = float(self.forward(control.unsqueeze(0), embedding.unsqueeze(0), target.unsqueeze(0))[0])
+            probability = float(self.forward(control.unsqueeze(0), profile.unsqueeze(0), target.unsqueeze(0))[0])
         return NoulJudgment(question=self.question, noul=probability)

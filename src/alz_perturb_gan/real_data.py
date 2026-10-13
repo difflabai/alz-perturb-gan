@@ -24,7 +24,7 @@ import torch
 from .baselines import Additive, LinearModel, MeanEffect, NoChange
 from .data import perturbation_set_from_groups
 from .gan import train_gan_decision
-from .harness import evaluate_baseline, evaluate_gan
+from .harness import decision_pair_report, evaluate_baseline, evaluate_gan
 
 
 def transform_expression(block, input_scale: str):
@@ -243,23 +243,19 @@ def prediction_anndata(data, real, profiles, gan=None, *, cells_per=128):
         var=pd.DataFrame(index=data.gene_names))
 
 
-def decision_heldout_report(data, real, gan, seed):
-    """Fresh held-out cells and held-out targets; no training-cell accuracy claim."""
-    keep = real.obs.target_gene != "non-targeting"
-    outcome = torch.from_numpy(real.X[keep])
-    lookup = data.by_name()
-    embedding = torch.stack([lookup[name].embedding for name in real.obs.target_gene[keep]])
-    targets = torch.stack([item.profile for item in data.named("eval")])
-    rng = torch.Generator().manual_seed(seed)
-    target = targets[torch.randint(len(targets), (len(outcome),), generator=rng)]
-    label = ((outcome - target).norm(dim=-1) < (data.control_mean - target).norm(dim=-1)).float()
-    probability = torch.cat([gan.score_moves_toward(data.control_mean, embedding[start:start+128], target[start:start+128])
-                             for start in range(0, len(outcome), 128)])
-    return {"n": len(label), "seed": seed, "positive_rate": float(label.mean()),
-            "accuracy": float(((probability >= .5) == (label >= .5)).float().mean()),
-            "brier": float(((probability-label)**2).mean()),
-            "mean_probability": float(probability.mean()),
-            "note": "One seeded held-out pseudobulk target per held-out single cell; both identities unseen in fitting."}
+def decision_heldout_report(data, gan, seed, *, n_draws=8):
+    """Held-out pseudobulk targets vs every library candidate, scored on predicted profiles.
+
+    Targets are eval perturbations' pseudobulks (all their cells); their
+    identities and cells were never used in fitting.
+    """
+    library = [item.name for item in data.named()]
+    torch.manual_seed(seed)
+    predicted = gan.predict_profiles(data, library, n_draws=n_draws)
+    report = decision_pair_report(data, gan, data.named("eval"), dict(zip(library, predicted)),
+                                  seed=seed, split="eval_targets")
+    report["note"] = "label = (candidate == target perturbation); candidates are generator-averaged profiles."
+    return report
 
 
 def main():
@@ -326,7 +322,7 @@ def main():
     tick = time.perf_counter()
     torch.manual_seed(args.seed + 2)
     judged = evaluate_gan(data, gan, n_draws=args.draws)
-    decision_report = decision_heldout_report(data, real, gan, args.seed + 3)
+    decision_report = decision_heldout_report(data, gan, args.seed + 3, n_draws=args.draws)
     models.extend(judged.values())
     predictions["gan_generator"] = dict(zip(names, gan.predict_profiles(data, names, n_draws=args.draws)))
     runtime["gan_eval_seconds"] = time.perf_counter() - tick
