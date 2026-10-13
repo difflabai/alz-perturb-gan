@@ -1,12 +1,12 @@
 # Real-data run 2: decision-label fix (GPU, pop-os)
 
-Run 2 used the same command, data, split (seed 42), and cell caps as run 1. The only change is the decision-head label and inputs from this branch. It ran 20,000 steps on an RTX A6000, with a peak of 1.47 GiB allocated. The run took 51 min in total: load 19.5 min and GAN training 30.3 min. Training was about 2.5× slower than run 1 because the decision step now pushes 8 generator draws per candidate through the model.
+**What ran.** The exact command is in `runs/gpu-run-2/launch.sh`, and the raw artifacts are in `runs/gpu-run-2/` (command.json, hardware.json, split.json, results.json, cell-eval results, and the full main.log). It ran on pop-os on 2026-10-13, starting about 14:20 MT, from `decision-label-fix` at d5f7da5. It used 20,000 steps, batch size 256, hidden 128, lr 2e-4, seed 42, 128 training and 128 eval cells per perturbation, eval fraction 0.2, 64 draws, `--device cuda` (RTX A6000), and `--cell-eval`. The code was imported via `PYTHONPATH=/ml2/altgan/decision-label-fix/src`. The shared venv has no `pip`, and its editable install points at `real-data-run-1`. A first launch without PYTHONPATH, which imported the old code, was killed during data loading and its outputs were deleted. Peak GPU memory was 1.47 GiB allocated. The run took 51 min in total: load 19.5 min and GAN training 30.3 min, about 2.5× slower per step than gpu-run-1 because the decision step now runs 8 generator draws per candidate.
 
-The code was imported via `PYTHONPATH=/ml2/altgan/decision-label-fix/src`. The shared venv has no `pip`, so `pip install -e` was impossible, and its editable install still points at real-data-run-1.
+**Which "run 1".** The "r1" columns below are **gpu-run-1** (`/ml2/altgan/runs/gpu-run-1`). That is an unpublished 20,000-step GPU run on `real-data-run-1`. Its saved command (`runs/gpu-run-1/command.json`) is identical to run 2's except for `run_dir`. It is **not** the run documented in RESULTS.md and `results/real_data_run_1/`. That one was a 2,000-step **CPU** run with batch size 64 (`results/real_data_run_1/command.json`), and its GAN was weaker: MAE 0.0172, DE overlap 0.0273, decision MRR 0.0132, decision positive rate 0.0. Run 2 differs from the saved CPU run 1 config in device (cuda vs cpu), steps (20,000 vs 2,000), and batch size (256 vs 64). All data, split, cell-cap, hidden, lr, and draw settings are the same.
 
 ## Held-out phenocopy ranking (30 held-out targets × 150 library candidates)
 
-| model | top-1 r1 | top-1 r2 | MRR r1 | MRR r2 | recall@3 r1 | recall@3 r2 |
+| model (r1 = gpu-run-1) | top-1 r1 | top-1 r2 | MRR r1 | MRR r2 | recall@3 r1 | recall@3 r2 |
 |---|---|---|---|---|---|---|
 | no_change | 0 | 0 | 0.0132 | 0.0132 | 0 | 0 |
 | mean_effect | 0 | 0 | 0.0132 | 0.0132 | 0 | 0 |
@@ -19,15 +19,15 @@ Random ranking among 150 candidates gives MRR ≈ 0.037 and recall@3 = 0.02.
 
 ## Decision-label diagnostics
 
-| | run 1 (old geometric label) | run 2 (identity label) |
+| | gpu-run-1 (old geometric label) | run 2 (identity label) |
 |---|---|---|
 | held-out positive rate | **0.000** (degenerate) | full library 0.0067 (1/150); balanced 0.50 |
 | held-out accuracy | 1.000 (meaningless) | balanced 0.50 |
 | held-out AUROC | n/a (one class) | full 0.533; balanced 0.506 |
 | held-out Brier | 1e-14 | balanced 0.319 |
 | mean noul, positives vs negatives | n/a | 0.375 vs 0.346 |
-| train-batch positive rate (mean) | ~0 | 0.500 |
-| train-batch accuracy (mean) | ~1.0 (trivial) | 0.996 |
+| train-batch positive rate (mean; real-cell candidates) | not recorded here | 0.500 |
+| train-batch accuracy (mean; real-cell candidates) | not recorded here | 0.996 |
 
 ## Expression (local pseudobulk, held-out)
 
