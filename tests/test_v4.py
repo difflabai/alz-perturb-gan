@@ -135,3 +135,71 @@ def test_explore_refuses_outside_scope(tmp_path, root):
 def test_rule_has_stable_hash():
     assert gene_analysis.RULE_SHA256 == hashlib.sha256(gene_analysis.RULE.encode()).hexdigest()
     assert 'G_frozen' not in gene_analysis.CANDIDATES
+
+
+# ---- in-memory withholding and output scoping ------------------------------------------------
+def test_evaluate_returns_no_exploratory_metrics_in_memory(tmp_path):
+    s = cal_study(); m = build_models(ModelConfig(4, 12, hidden=8, z_dim=2, particles=8, seed=1, steps=1, batch_size=4))
+    for out in (None, tmp_path / 'ev'):
+        r = evaluate(m, s, output=out)
+        ex = r['summary']['splits']['exploratory']
+        assert ex['withheld'] and set(ex) == {'sealed', 'withheld', 'target_tensor_sha256', 'sealed_sha256'}
+        assert 'exploratory' not in r['pairs']
+        assert ex['sealed'] == (out is not None) and bool(ex['sealed_sha256']) == (out is not None)
+
+def test_evaluate_output_must_be_in_scope(tmp_path, monkeypatch):
+    s = cal_study(); m = build_models(ModelConfig(4, 12, hidden=8, z_dim=2, particles=8, seed=1, steps=1, batch_size=4))
+    inner = tmp_path / 'scope'; inner.mkdir(); monkeypatch.setenv('ALZ_SCOPE_ROOT', str(inner))
+    with pytest.raises(ScopeError): evaluate(m, s, output=tmp_path / 'outside')
+    (inner / 'esc').symlink_to(tmp_path)
+    with pytest.raises(ScopeError): evaluate(m, s, output=inner / 'esc' / 'new')
+    assert not (tmp_path / 'outside').exists() and not (tmp_path / 'new').exists()
+    r = evaluate(m, s, output=inner / 'a' / 'b')
+    assert (inner / 'a' / 'b' / 'metrics' / 'summary.json').stat().st_mode & 0o777 == 0o444
+
+
+# ---- end-to-end select / explore on synthetic runs ------------------------------------------
+def _synthetic_cohort(base):
+    s = cal_study(); runs = {}
+    for seed in (42, 43, 44):
+        run = base / f'seed{seed}'; run.mkdir(parents=True)
+        (run / 'grant.json').write_text(json.dumps({'bundle_sha256': 'synthetic-bundle', 'seeds': [seed]}))
+        m = build_models(ModelConfig(4, 12, hidden=8, z_dim=2, particles=8, seed=seed, steps=1, batch_size=4))
+        for arm in gene_analysis.ARMS:
+            (run / arm).mkdir()
+            evaluate(m, s, output=run / arm / 'evaluation')
+            (run / arm / 'checkpoint.pt').write_bytes(f'{seed}-{arm}'.encode())
+            hist = [{'step': st, 'realness_weight_mean': 0.5} for st in (1000, 2000)]
+            (run / arm / 'training.json').write_text(json.dumps({'history': hist}))
+        runs[seed] = str(run)
+    rec = base / 'supervisor_receipt.json'
+    rec.write_text(json.dumps({'arms': [{'seed': sd, 'arm': a, 'status': 'ok'} for sd in runs for a in gene_analysis.ARMS]}))
+    return runs, str(rec)
+
+def test_select_then_explore_end_to_end(tmp_path):
+    runs, rec = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'; out.mkdir()
+    path, digest, doc = gene_analysis.select(runs, rec, str(out), expected_seeds=[42, 43, 44])
+    assert hashlib.sha256(Path(path).read_bytes()).hexdigest() == digest
+    assert doc['split'] == 'inner' and doc['preconditions'] == {'all_seeds_complete': True, 'gate_ok': True}
+    assert doc['selected'] == {'G': False, 'H': False, 'GH': False}       # identical models: zero deltas
+    assert doc['wording'] == 'selection criterion unmet; evidence inconclusive'
+    assert 'exploratory' not in json.dumps(doc['inner_deltas']) and doc['bindings']['rule_sha256'] == gene_analysis.RULE_SHA256
+    assert set(doc['bindings']['runs']['42']['arms']['G']['sealed_sha256']) == {'exploratory.json', 'exploratory.pt', 'exploratory.jsonl'}
+    rp, rd, rep = gene_analysis.explore(str(path), digest, str(out))
+    assert rep['header'].startswith('POST-SELECTION, NON-CONFIRMATORY') and set(rep['exploratory_head']) == {'42', '43', '44'}
+    events = [json.loads(l)['event'] for l in (out / 'ledger.jsonl').read_text().splitlines()]
+    assert events == ['select', 'explore']
+
+def test_select_requires_all_seeds_and_explore_detects_tampering(tmp_path):
+    runs, rec = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'; out.mkdir()
+    with pytest.raises(ValueError): gene_analysis.select({42: runs[42]}, rec, str(out), expected_seeds=[42, 43, 44])
+    path, digest, _ = gene_analysis.select(runs, rec, str(out), expected_seeds=[42, 43, 44])
+    sealed = Path(runs[43]) / 'H' / 'evaluation' / 'sealed' / 'exploratory.json'
+    sealed.chmod(0o644); sealed.write_text(sealed.read_text() + ' ')
+    with pytest.raises(PermissionError): gene_analysis.explore(str(path), digest, str(out))
+
+def test_select_gate_failure_blocks_selection(tmp_path):
+    runs, rec = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'; out.mkdir()
+    (Path(runs[44]) / 'G' / 'training.json').write_text(json.dumps({'history': [{'step': 1000, 'realness_weight_mean': 0.9}]}))
+    _, _, doc = gene_analysis.select(runs, rec, str(out), expected_seeds=[42, 43, 44])
+    assert doc['preconditions']['gate_ok'] is False and not any(doc['selected'].values())

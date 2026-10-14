@@ -76,6 +76,29 @@ def pids_in_group(pgid):
     return found
 
 
+def children_of(ppid):
+    out = []
+    for d in os.listdir("/proc"):
+        if not d.isdigit(): continue
+        try:
+            f = open(f"/proc/{d}/stat").read().rsplit(")", 1)[1].split()
+            if int(f[1]) == ppid: out.append(int(d))
+        except (OSError, IndexError, ValueError): pass
+    return sorted(out)
+
+
+def inner_process(wrapper_pid, until):
+    """The harness process exec'd by the `timeout` wrapper: its direct child. Polls until `until` (monotonic)."""
+    while True:
+        kids = children_of(wrapper_pid)
+        if kids:
+            info = proc_info(kids[0])
+            if info["starttime"] is not None:
+                return dict(info, ppid=wrapper_pid, all_children=kids)
+        if time.monotonic() >= until: return {"pid": None, "ppid": wrapper_pid, "reason": "no child seen before poll limit"}
+        time.sleep(0.02)
+
+
 def llama_servers():
     out = []
     for d in os.listdir("/proc"):
@@ -240,6 +263,8 @@ class Supervisor:
         pgid = p.pid
         self.active[pgid] = {"arm": arm, "leader": proc_info(p.pid)}; self.history.append(pgid)
         entry["pgid"], entry["leader"] = pgid, self.active[pgid]["leader"]
+        # v4 (4): the leader is the `timeout` wrapper; also record the inner harness process (pid + /proc start time).
+        entry["inner"] = inner_process(p.pid, time.monotonic() + min(self.clock.s(PROBE_MAX), max(0.1, self.left())))
         kill_at = t_start + slot - self.clock.s(KILL_GRACE)
         reason, minfree = None, None
         self.current = (entry, pgid)

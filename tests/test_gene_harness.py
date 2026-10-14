@@ -203,11 +203,12 @@ def test_negative_identity_rule_is_order_independent_and_auc_ties_are_correct(st
 
 def test_paired_uncertainty_keeps_all_seeds_and_target_units(study):
     scored={s:evaluate(build_models(cfg(seed=s)),study)['summary'] for s in (42,43,44)}
-    report=paired_delta(scored[42],scored[42],'exploratory',draws=20)
+    assert all('head' not in v['splits']['exploratory'] for v in scored.values())  # v4: never returned in memory
+    report=paired_delta(scored[42],scored[42],'inner',draws=20)
     assert report['mean_delta']==0 and report['ci95']==[0.,0.]
-    all_seeds=all_seed_deltas(scored,scored,'exploratory',expected_seeds=[42,43,44],draws=20)
+    all_seeds=all_seed_deltas(scored,scored,'inner',expected_seeds=[42,43,44],draws=20)
     assert len(all_seeds['per_seed'])==3 and all_seeds['hierarchical_ci95']==[0.,0.] and all_seeds['selected_seed'] is None
-    with pytest.raises(ValueError):all_seed_deltas({42:scored[42]},scored,'exploratory',expected_seeds=[42,43,44],draws=20)
+    with pytest.raises(ValueError):all_seed_deltas({42:scored[42]},scored,'inner',expected_seeds=[42,43,44],draws=20)
 
 
 def test_tau_packet_adapter_reorders_by_stable_id_and_admits_only_valid_string(tmp_path,study):
@@ -302,13 +303,14 @@ def test_gpu_grant_rejects_timezone_ambiguous_expiry(study,monkeypatch):
     with pytest.raises(PermissionError,match='timezone'):validate_grant(grant,study,cfg(),'cuda:0','train',10)
 
 
-def test_missing_coverage_is_reported_and_oracle_is_not_paired_to_generated(study,table):
+def test_missing_coverage_is_reported_and_oracle_is_not_paired_to_generated(tmp_path,study,table):
     models=build_models(cfg('G'),table,data_kind='synthetic')
-    generated=evaluate(models,study)['summary'];oracle=evaluate(models,study,profile_mode='independent_real_oracle')['summary']
-    strata=generated['splits']['exploratory']['coverage_strata']
+    generated=evaluate(models,study,output=tmp_path/'gen')['summary'];oracle=evaluate(models,study,profile_mode='independent_real_oracle')['summary']
+    assert 'coverage_strata' not in generated['splits']['exploratory']
+    strata=json.loads((tmp_path/'gen/sealed/exploratory.json').read_text())['coverage_strata']
     assert strata['observed_feature']['target_count']==1 and strata['missing_feature']['target_count']==1
     assert strata['missing_feature']['head']['candidate_count']==6
-    with pytest.raises(ValueError,match='profile mode'):paired_delta(oracle,generated,'exploratory')
+    with pytest.raises(ValueError,match='profile mode'):paired_delta(oracle,generated,'inner')
 
 
 def test_serializing_untrained_model_cannot_create_fitted_probe_source(tmp_path,study,table):

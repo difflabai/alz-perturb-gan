@@ -7,7 +7,7 @@ import torch
 import torch.nn.functional as F
 from particlegan import scale_learning_rates
 from .gene_checkpoint import model_hashes
-from .gene_calibration import calibration_split, split_hash, relativistic_realness
+from .gene_calibration import split_hash, relativistic_realness
 
 
 @contextmanager

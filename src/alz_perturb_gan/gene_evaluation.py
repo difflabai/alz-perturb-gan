@@ -17,7 +17,7 @@ from .gene_checkpoint import model_hashes, state_hash, zero_update_guard
 from .gene_features import file_sha256, json_hash
 from .metrics import phenocopy_rank, expression_report
 from .gene_calibration import split_hash, row_softmax, calibrator_sha, reliability, crossfit_report
-from .paths import create_new_unscoped
+from .paths import create_new, scoped, scoped_new_dir
 
 
 def _tensor_hash(x):
@@ -230,9 +230,23 @@ def evaluate(models, study, *, output=None, profile_mode='generated', fixed_inpu
                   candidate_tensor_sha256=_tensor_hash(inputs['candidates']), wall_seconds=time.monotonic() - started,
                   parameter_counts=models.counts(), magnitude_heuristic={'auroc': .65, 'is_success_rule': False})
     check_budget()
-    if output is not None: _write_groups(Path(output), models, study, inputs, pairs, result, invocation or {})
+    if output is not None:
+        result, pairs = _write_groups(output, models, study, inputs, pairs, result, invocation or {})
+    else:
+        result, pairs = _withhold_exploratory(result, pairs)
     check_budget()
+    # v4 (2): only sealed hashes / stubs come back in memory; exploratory metrics are never returned.
     return {'summary': result, 'inputs': inputs, 'pairs': pairs}
+
+
+def _withhold_exploratory(result, pairs, sealed=None):
+    result = dict(result, splits=dict(result['splits'])); pairs = {k: v for k, v in pairs.items() if k != 'exploratory'}
+    ex = result['splits'].pop('exploratory', None)
+    if ex is not None:
+        result['splits']['exploratory'] = {'sealed': sealed is not None, 'withheld': True,
+                                           'target_tensor_sha256': ex['target_tensor_sha256'], 'sealed_sha256': sealed or {}}
+    result['sealed'] = {'exploratory': sealed or {}, 'rule': 'read only via gene_analysis explore with a bound selection hash'}
+    return result, pairs
 
 
 def _clean(value):
@@ -247,14 +261,15 @@ def _json(path, value):
 
 
 def _write_groups(output, models, study, inputs, pairs, result, invocation):
-    if output.exists(): raise FileExistsError('new output directory required; never overwrite baseline receipts')
-    output.mkdir(parents=True)
-    for group in ('inputs', 'pairs', 'metrics', 'provenance', 'sealed'): (output / group).mkdir()
+    # v4 (3): output dir is created under the scope root via scoped(); receipts are created exclusively via create_new.
+    if Path(output).exists(): raise FileExistsError('new output directory required; never overwrite baseline receipts')
+    output = scoped_new_dir(output)
+    for group in ('inputs', 'pairs', 'metrics', 'provenance', 'sealed'): os.mkdir(output / group)
     # v4 section 4: exploratory summary metrics, pair matrices and score rows are sealed; unsealed outputs keep hashes only.
-    result = dict(result, splits=dict(result['splits'])); pairs = dict(pairs); sealed = {}
+    sealed = {}
     if 'exploratory' in result['splits']:
         import io
-        ex_summary = result['splits'].pop('exploratory'); ex_pairs = pairs.pop('exploratory')
+        ex_summary = result['splits']['exploratory']; ex_pairs = pairs['exploratory']
         buf = io.BytesIO(); torch.save({'exploratory': ex_pairs}, buf)
         rows = ''.join(json.dumps({'split':'exploratory', 'target':name, 'candidate':cand, 'label':int(name==cand),
                     'head_logit':float(ex_pairs['head_logits'][r,c]), 'head_prob':float(ex_pairs['head_scores'][r,c]),
@@ -262,11 +277,9 @@ def _write_groups(output, models, study, inputs, pairs, result, invocation):
                     for r, name in enumerate(ex_pairs['targets']) for c, cand in enumerate(study.protocol.library))
         for fname, data in (('exploratory.json', (json.dumps(_clean(ex_summary), indent=2, sort_keys=True)+'\n').encode()),
                             ('exploratory.pt', buf.getvalue()), ('exploratory.jsonl', rows.encode())):
-            create_new_unscoped(output / 'sealed', fname, data)
+            create_new(output / 'sealed', fname, data)
             sealed[fname] = hashlib.sha256(data).hexdigest()
-        result['splits']['exploratory'] = {'sealed': True, 'target_tensor_sha256': ex_summary['target_tensor_sha256'],
-                                           'sealed_sha256': sealed}
-    result['sealed'] = {'exploratory': sealed, 'rule': 'read only via gene_analysis explore with a bound selection hash'}
+    result, pairs = _withhold_exploratory(result, pairs, sealed if 'exploratory' in result['splits'] else None)
     torch.save(inputs, output / 'inputs/scored_tensors.pt')
     _json(output / 'inputs/protocol.json', asdict(study.protocol))
     _json(output / 'inputs/perturbation_dictionary.json', {'names': list(study.protocol.library), 'gene_ids': list(study.protocol.gene_ids),
@@ -282,7 +295,7 @@ def _write_groups(output, models, study, inputs, pairs, result, invocation):
                     stream.write(json.dumps({'split':split, 'target':name, 'candidate':candidate, 'label':int(name==candidate),
                         'head_logit':float(block['head_logits'][row,col]), 'head_score':float(block['head_scores'][row,col]),
                         'l2_score':float(block['l2_scores'][row,col])})+'\n')
-    create_new_unscoped(output / 'metrics', 'summary.json', (json.dumps(_clean(result), indent=2, sort_keys=True, allow_nan=False)+'\n').encode())
+    create_new(output / 'metrics', 'summary.json', (json.dumps(_clean(result), indent=2, sort_keys=True, allow_nan=False)+'\n').encode())
     import alz_perturb_gan, particlegan, numpy
     root = Path(__file__).resolve().parents[2]
     lease_fds = tuple(int(x) for x in os.environ.get('ALZ_LEASE_FDS','').split(',') if x)
@@ -301,6 +314,7 @@ def _write_groups(output, models, study, inputs, pairs, result, invocation):
         'groups':['inputs','pairs','metrics','provenance']}
     _json(output/'provenance/manifest.json', manifest)
     _json(output/'provenance/file_hashes.json', {str(p.relative_to(output)):file_sha256(p) for p in sorted(output.rglob('*')) if p.is_file()})
+    return result, pairs
 
 
 def paired_delta(candidate, baseline, split, *, metric='auroc', draws=1000, seed=800):

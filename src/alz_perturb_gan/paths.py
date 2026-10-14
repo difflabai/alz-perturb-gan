@@ -103,18 +103,20 @@ def create_new(directory, name, data: bytes, *, root=None, mode=0o444):
     return d / name
 
 
-def create_new_unscoped(directory, name, data: bytes, *, mode=0o444):
-    """Same directory-handle creation without root containment (harness outputs in caller-chosen dirs)."""
-    check_name(name)
-    dfd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
-    try:
-        fd = os.open(name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, mode, dir_fd=dfd)
-        try:
-            view = memoryview(data)
-            while view:
-                view = view[os.write(fd, view):]
-        finally:
-            os.close(fd)
-    finally:
-        os.close(dfd)
-    return Path(directory) / name
+def scoped_new_dir(p, *, root=None):
+    """Create a NEW directory (and missing parents) strictly under root; refuses an existing final dir.
+
+    The nearest existing ancestor is canonicalized and contained first; each new component is a validated
+    single name created with mkdir (never following a symlink, since it did not exist), then re-verified.
+    """
+    s = str(p) if p is not None else ''
+    scoped_lex = Path(os.path.normpath(s)) if s and os.path.isabs(s) else None
+    if scoped_lex is None: scoped(s, root=root)  # raises the right ScopeError for empty, tilde or relative input
+    anc, todo = scoped_lex, []
+    while not os.path.lexists(anc):
+        todo.append(anc.name); anc = anc.parent
+    base = scoped(str(anc), root=root)
+    if not todo: raise FileExistsError(f'directory already exists: {s!r}')
+    for name in reversed(todo):
+        check_name(name); os.mkdir(base / name, 0o755); base = scoped(str(base / name), root=root)
+    return base
