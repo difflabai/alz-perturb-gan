@@ -25,7 +25,7 @@ Two coverage checks were actually run for this plan (2026-10-13):
 - **Gene2vec: 149/150.** Exact symbol match against `gene2vec_dim_200_iter_9.txt`; the only miss is `ZNF714`.
 - **STRING: 150/150.** All 150 resolve via the STRING API `get_string_ids` (species 9606).
 
-All other coverage figures below are **unverified expectations**. Step 0 of the experiment (§4) computes them exactly.
+The remaining sources were checked in step 0 (2026-10-13); see `docs/feature-coverage.md`. Those results supersede the "unverified" entries in the tables below.
 
 Licenses were checked by a quick web search on 2026-10-13 and should be re-checked before any redistribution.
 
@@ -44,7 +44,7 @@ Licenses were checked by a quick web search on 2026-10-13 and should be re-check
 | feature | what it is | how to get it | license (checked) | dim | coverage |
 |---|---|---|---|---|---|
 | **GO annotations** | binary gene × GO-term matrix (BP/MF/CC), filtered to terms with ≥ k genes among the 150 or a larger background, optionally SVD-reduced | geneontology.org downloads (`goa_human.gaf`); pin a release date / Zenodo DOI | CC BY 4.0 (data); attribution and release citation required | raw ~10³–10⁴ terms → SVD 64–256 | expected high; unverified |
-| **Pathways (Reactome)** | binary gene × pathway membership | reactome.org downloads | check before use (believed CC BY 4.0; **not verified here**) | ~10³ → SVD 64 | unverified |
+| **Pathways (Reactome)** | binary gene × pathway membership | reactome.org downloads | data CC0 (verified 2026-10-13) | ~10³ → SVD 64 | 125/150 (see feature-coverage.md) |
 | **STRING network** | node2vec / spectral embedding of the STRING human PPI graph (combined score ≥ 700), or a row of adjacency to training genes | string-db.org downloads (`9606.protein.links.v12.0`) or API | CC BY 4.0 | 64–128 (embedding) | **150/150 verified** to map |
 
 The network option has a useful property for this task: "a held-out gene's neighbours among the 120 training genes" is a direct, interpretable bridge between the splits.
@@ -86,7 +86,24 @@ Design rules:
 
 ## 4. Experiment design
 
-**Step 0 (no training): feature audit.** For each candidate source, record exact coverage of the 150 genes, the missing list, dimension, file checksum and licence. Also compute a cheap, model-free sanity check: whether a held-out gene's nearest training neighbours in feature space have more similar true pseudobulk deltas than random training genes do. A source that fails this has little chance and can be dropped early.
+**Step 0 (no training): feature audit. Coverage part DONE 2026-10-13; see `docs/feature-coverage.md`.**
+
+Results (Ensembl-ID mapping where supported):
+
+| source | coverage |
+|---|---|
+| Geneformer | 150/150 |
+| scGPT vocab | 150/150 |
+| ESM-2 (Swiss-Prot) | 150/150 |
+| GO | 150/150 |
+| STRING | 150/150 |
+| Gene2vec | 149/150 (ZNF714) |
+| GenePT | 150/150, proxy only; pickle not downloaded |
+| Reactome | **125/150** |
+
+Licenses confirmed. Reactome data is CC0, not CC BY. **Mapping rule:** key on the dataset's `var["gene_id"]`. `TAZ` is ENSG00000102125 (TAFAZZIN) and must never be resolved through the alias shared with WWTR1.
+
+Still to do: the model-free sanity check, which needs the feature vectors. Check whether a held-out gene's nearest training neighbours in feature space have more similar true pseudobulk deltas than random training genes do. A source that fails this has little chance and can be dropped early.
 
 **Main grid.** Fix one feature source per grid (start with Gene2vec or STRING, which are verified and cheap). Then run these arms on the same split (seed 42), the same cell caps and the same step budget:
 
