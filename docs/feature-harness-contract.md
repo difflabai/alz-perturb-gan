@@ -1,0 +1,29 @@
+# Gene-feature harness contract for Tau (schema 1)
+
+Implementation source base: PR3 aad3271a8993cf318c42be79a9e210e45a0a280d. Feature files remain owned by Tau. This contract does not acquire data or grant GPU capacity.
+
+Provide one frozen JSON manifest per source, plus a float32/float64 NumPy matrix [150,F] (no pickle) and order JSON. The runtime canonical order is the original 120 train names followed by the original 30 exploratory names; no source may exclude a row or change the scoring library. Tau's aggregate packet remains immutable in its sorted Ensembl order; the read-only adapter reorders by verified symbol/stable-ID pairs and records the permutation. The order JSON must contain parallel `names`, `gene_ids` (dataset Ensembl IDs), `source_ids`, and `missing` boolean arrays. TAZ maps to ENSG00000102125 (tafazzin), not WWTR1. Missing source IDs must be null and missing feature rows must be zero. Runtime uses zero plus a missing-indicator bit; it never silently excludes a gene.
+
+Manifest required fields:
+
+- `schema_version: 1`, `status: frozen`, `coverage_kind: usable_vectors`, `species: 9606`.
+- `source: {name, revision, url}`: exact source/database/model revision; ESM must identify the checkpoint, layer/pooling and verified dimension. STRING API resolution is not vector coverage in a filtered graph.
+- `matrix: {path, sha256}` and `order: {path, sha256}`: paths relative to the manifest; byte hashes frozen before handoff.
+- `dimension`: original vector dimension F. No outcome-dependent source selection.
+- `transform: {kind, fit_scope, fit_names, uses_expression_outcomes}`: `fit_scope` is `fit_only` for cohort-fitted SVD/PCA/term filtering, with the exact inner-FIT names; or `external_frozen` for an upstream pretrained artifact independent of this cohort. Whole-150 local SVD is not strict FIT-only; re-fit it on the specified inner-FIT identities or explicitly request a separately declared transductive protocol. Raw GO/STRING rows can be handed off to avoid committing to a split prematurely.
+- `license: {asset_class, license_id, license_url, license_revision, license_sha256, citation, local_research_reviewed, code_license}`. Distinguish supplied tables/weights, generated outputs and public annotations. Model code licensing does not establish weight rights. State model-use restrictions differ from its output exception; supplied tables are not automatically outputs. This field records a source review, not blanket legal/redistribution clearance.
+
+The cohort protocol must additionally freeze the SHA256 of the manifest itself. Draft or changing files are rejected. The harness checks matrix/order hashes, dimensions, finite values, complete stable-ID alignment, missing rows and transform FIT scope before consuming a table. It standardizes features using observed inner-FIT rows only, then learns projection inside the model forward. Raw features are buffers, never parameters.
+
+Source/arm selection uses training-only inner validation. The inspected 30 outcomes are exploratory validation; there is no untouched final-test claim. All seeds and paired B0 deltas are reported, with no best-of-seed success rule. Matching inputs means fixed target tensors, candidate order, negative identities and evaluation draw seed; generated candidates differ between models as intended but are shared across target splits within each evaluation.
+
+Initial cohort remains unarmed. Prefer diagnostic validation of zero-update loading/scoring, disjoint real-oracle candidate/query cells, head-independent scores and a frozen-generator/head probe before five full 20k-step runs. Any later training cohort must preserve matched B0, real versus shuffled active capacity and the frozen probe, predeclare inner-validation decisions, report the exploratory outcomes without selecting on them, and receive explicit resource/ownership/capacity confirmation. 11–14 GPU hours and concurrent GPU use are not accepted budgets.
+
+
+## Verified initial packet and remaining preparation evidence
+
+Packet `/ml2/altgan/features/manifest.json`, SHA256 `d6d501f7b5ca7af2920502537582d0d6401359b5ae2cb6f12271891c8895d844`, is accepted by the initial read-only adapter for `string_spectral` only. Its 150x64 float32 matrix has SHA256 `6a428429b6556f30bc690d252cb6d7910665cb52755d76a9d0795cfcf15c90f5`. It derives from the full 16,201-protein human graph, with score >=700, symmetric normalized adjacency, U*S spectral features and a fixed sign convention. It uses no cohort expression outcomes. The missing rows are ZNF426, NREP, ZNF714, SMAGP and ZNF286A: 145 usable vectors, a common 150-candidate library, zero plus indicator for missing rows. Missing and observed target strata are reported separately.
+
+Tau should supplement, without replacing the packet, the per-row STRING protein ID chosen by the Ensembl-to-first-protein rule and a hash-bound primary license/citation receipt. Graph and alias input hashes are present but their upstream bytes were not independently rehashed here. STRING describes CC BY 4.0 and attribution on its [primary access page](https://string-db.org/cgi/access). This is sufficient provenance for a local research diagnostic, with the mapping limitation retained, not a redistribution clearance.
+
+GO's annotation TF-IDF/SVD was fitted on the 150 gene-only annotation rows, with unpinned live MyGene annotations. It is outcome-free but transductive and unversioned; it needs a separately declared/refitted contract. It does not block STRING. ESM, gene2vec and GenePT require their own reviewed canonical contract before this CLI consumes them. No extraction or acquisition was duplicated. Tau's screening metrics use only the original train120 indices but different usable subsets by source; the 1,000 row permutations and source/metric multiplicity make that an exploratory training-data screen, not confirmatory efficacy or independent inner validation.
