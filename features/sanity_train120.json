@@ -1,0 +1,81 @@
+{
+ "protocol": "Model-free sanity check on the 120 TRAINING perturbations only (held-out 30 never touched).\n\ndelta_i = pseudobulk(pert i, all cells) - non-targeting mean, log1p(normalize_total 1e4), all 18,080 genes\nminus the 150 knockdown-target columns. Delta similarity: cosine. Feature similarity: cosine.\n(1) Spearman between pairwise feature and delta similarity over usable training pairs.\n(2) Inner 5-fold CV: each query's feature-nearest neighbour is searched among the other folds' genes only;\n    hit@k if that neighbour is in the query's top-k by delta similarity within the same reference set.\nShuffled control: permute feature rows among usable training genes (1000 permutations, seed 0).\n",
+ "results": {
+  "gene2vec": {
+   "n_train_usable": 119,
+   "spearman": -0.00499364633359686,
+   "spearman_shuffle_mean": 0.0001277235099222855,
+   "spearman_shuffle_p": 0.5884115884115884,
+   "hit@1": 0.008403361344537815,
+   "hit@5": 0.09243697478991597,
+   "hit@10": 0.12605042016806722,
+   "hit@1_shuffle_mean": 0.010781512605042017,
+   "hit@5_shuffle_mean": 0.05342857142857143,
+   "hit@10_shuffle_mean": 0.10617647058823529,
+   "hit@1_shuffle_p": 0.7172827172827173,
+   "hit@5_shuffle_p": 0.07592407592407592,
+   "hit@10_shuffle_p": 0.3016983016983017
+  },
+  "go_svd": {
+   "n_train_usable": 118,
+   "spearman": 0.05190465315175693,
+   "spearman_shuffle_mean": -3.045689677787032e-05,
+   "spearman_shuffle_p": 0.003996003996003996,
+   "hit@1": 0.05084745762711865,
+   "hit@5": 0.1271186440677966,
+   "hit@10": 0.1864406779661017,
+   "hit@1_shuffle_mean": 0.010381355932203391,
+   "hit@5_shuffle_mean": 0.05299152542372881,
+   "hit@10_shuffle_mean": 0.10569491525423728,
+   "hit@1_shuffle_p": 0.004995004995004995,
+   "hit@5_shuffle_p": 0.003996003996003996,
+   "hit@10_shuffle_p": 0.007992007992007992
+  },
+  "string_spectral": {
+   "n_train_usable": 116,
+   "spearman": 0.02490682094378893,
+   "spearman_shuffle_mean": -0.001000932657201833,
+   "spearman_shuffle_p": 0.14385614385614387,
+   "hit@1": 0.0603448275862069,
+   "hit@5": 0.1896551724137931,
+   "hit@10": 0.23275862068965517,
+   "hit@1_shuffle_mean": 0.010974137931034484,
+   "hit@5_shuffle_mean": 0.05532758620689655,
+   "hit@10_shuffle_mean": 0.10906896551724136,
+   "hit@1_shuffle_p": 0.001998001998001998,
+   "hit@5_shuffle_p": 0.000999000999000999,
+   "hit@10_shuffle_p": 0.000999000999000999
+  },
+  "esm2_35m": {
+   "n_train_usable": 120,
+   "spearman": 0.03583324601288139,
+   "spearman_shuffle_mean": -0.002478533522544871,
+   "spearman_shuffle_p": 0.12887112887112886,
+   "hit@1": 0.058333333333333334,
+   "hit@5": 0.11666666666666667,
+   "hit@10": 0.16666666666666666,
+   "hit@1_shuffle_mean": 0.010791666666666666,
+   "hit@5_shuffle_mean": 0.0525,
+   "hit@10_shuffle_mean": 0.10451666666666666,
+   "hit@1_shuffle_p": 0.000999000999000999,
+   "hit@5_shuffle_p": 0.007992007992007992,
+   "hit@10_shuffle_p": 0.03896103896103896
+  },
+  "genept_ada": {
+   "n_train_usable": 119,
+   "spearman": 0.012912790210915771,
+   "spearman_shuffle_mean": 9.672158408941508e-05,
+   "spearman_shuffle_p": 0.2997002997002997,
+   "hit@1": 0.04201680672268908,
+   "hit@5": 0.12605042016806722,
+   "hit@10": 0.16806722689075632,
+   "hit@1_shuffle_mean": 0.010310924369747898,
+   "hit@5_shuffle_mean": 0.052596638655462186,
+   "hit@10_shuffle_mean": 0.10473109243697479,
+   "hit@1_shuffle_p": 0.00999000999000999,
+   "hit@5_shuffle_p": 0.003996003996003996,
+   "hit@10_shuffle_p": 0.027972027972027972
+  }
+ },
+ "heldout_reported": false
+}

@@ -103,7 +103,7 @@ Results (Ensembl-ID mapping where supported):
 
 Licenses confirmed. Reactome data is CC0, not CC BY. **Mapping rule:** key on the dataset's `var["gene_id"]`. `TAZ` is ENSG00000102125 (TAFAZZIN) and must never be resolved through the alias shared with WWTR1.
 
-Still to do: the model-free sanity check, which needs the feature vectors. Check whether a held-out gene's nearest training neighbours in feature space have more similar true pseudobulk deltas than random training genes do. A source that fails this has little chance and can be dropped early.
+**Step 0 is now complete:** frozen feature matrices and the train-only sanity check are in `docs/feature-freeze-packet.md`. Original text of the sanity-check step, kept for reference: the model-free sanity check, which needs the feature vectors. Check whether a held-out gene's nearest training neighbours in feature space have more similar true pseudobulk deltas than random training genes do. A source that fails this has little chance and can be dropped early.
 
 **Main grid.** Fix one feature source per grid (start with Gene2vec or STRING, which are verified and cheap). Then run these arms on the same split (seed 42), the same cell caps and the same step budget:
 
