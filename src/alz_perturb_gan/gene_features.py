@@ -21,6 +21,58 @@ def json_hash(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
 
 
+def _tau_supplements(packet_path, packet_hash, entry, symbols, stable, zeros,
+                     mapping_path, mapping_hash, license_path, license_hash):
+    expected = {'manifest_sha256':packet_hash, 'source_key':'string_spectral', 'matrix_sha256':entry['sha256']}
+    checked = {}
+    for label, asset, digest, kind in (
+            ('mapping',mapping_path,mapping_hash,'tau_string_row_mapping_addon'),
+            ('license',license_path,license_hash,'tau_string_license_receipt_addon')):
+        if not asset or not digest: raise ValueError('hash-bound STRING mapping and license supplements required')
+        asset = Path(asset).resolve()
+        if not asset.is_relative_to(packet_path.parent) or file_sha256(asset) != digest:
+            raise ValueError('STRING supplement path/hash mismatch')
+        body = json.loads(asset.read_text())
+        if body.get('schema_version') != 1 or body.get('status') != 'frozen' or body.get('kind') != kind:
+            raise ValueError('STRING supplement is not the frozen supported contract')
+        if any(body.get('applies_to',{}).get(k) != v for k,v in expected.items()):
+            raise ValueError('STRING supplement belongs to another packet/matrix')
+        checked[label] = {'path':str(asset), 'sha256':digest, 'content':body}
+    mapping, license = checked['mapping']['content'], checked['license']['content']
+    if mapping.get('alias_input_sha256') != entry['fit']['id_map_sha256'] or mapping.get('links_input_sha256') != entry['fit']['input_sha256'] or not mapping.get('rule'):
+        raise ValueError('STRING mapping input provenance differs')
+    rows = mapping.get('rows', [])
+    if len(rows) != len(symbols) or [(r.get('symbol'),r.get('gene_id')) for r in rows] != list(zip(symbols,stable)):
+        raise ValueError('STRING per-protein mapping identity/order differs')
+    for row in rows:
+        missing = row['symbol'] in zeros
+        if row.get('missing') is not missing or row.get('feature_row_zero') is not missing:
+            raise ValueError('STRING mapping missing status differs from matrix bytes')
+        pid = row.get('string_protein_id'); edges = row.get('edges_ge_700')
+        if not missing and (not pid or not str(pid).startswith('9606.') or not isinstance(edges,int) or edges < 1):
+            raise ValueError('usable STRING row lacks a human protein/graph edge')
+        if missing and (not row.get('missing_reason') or edges not in (0,None)):
+            raise ValueError('missing STRING vector lacks an exclusion reason')
+    required = ('asset_class','license_url','license_revision','license_text_sha256','source_license_statement_url',
+                'source_license_statement_page_sha256','source_license_statement_fetched_utc','citation',
+                'attribution_and_modification_notice','code_license')
+    if license.get('license_id') != 'CC-BY-4.0' or license.get('local_research_reviewed') is not True or not all(license.get(k) for k in required):
+        raise ValueError('STRING asset-specific reviewed license receipt is incomplete')
+    source = license.get('source', {})
+    if source.get('name') != 'STRING' or source.get('revision') != 'v12.0' or source.get('url') != entry.get('url'):
+        raise ValueError('STRING license source revision differs')
+    if not str(license['asset_class']).startswith('public annotation/network data'):
+        raise ValueError('STRING license receipt describes a different asset class')
+    for name, key in (('cc_by_4.0_legalcode.txt','license_text_sha256'),('string_access_page.html','source_license_statement_page_sha256')):
+        asset = Path(checked['license']['path']).parent / name
+        if file_sha256(asset) != license[key]: raise ValueError('saved STRING primary license bytes differ')
+        checked['license'].setdefault('primary_assets',{})[name] = {'path':str(asset), 'sha256':license[key]}
+    for label in checked:
+        if file_sha256(checked[label]['path']) != checked[label]['sha256']:
+            raise ValueError('STRING supplement changed during reading')
+    return checked
+
+
 @dataclass
 class FeatureTable:
     names: tuple[str, ...]
@@ -118,7 +170,8 @@ class FeatureTable:
         return table
 
     @classmethod
-    def load_tau_packet(cls, manifest_path, expected_manifest_sha256, *, source_key, names, gene_ids, fit_names):
+    def load_tau_packet(cls, manifest_path, expected_manifest_sha256, *, source_key, names, gene_ids, fit_names,
+                        mapping_path=None, expected_mapping_sha256=None, license_path=None, expected_license_sha256=None):
         """Read Tau's immutable aggregate packet; never rewrite/re-extract assets.
 
         Initial admissible source is STRING's outcome-free full-human graph.
@@ -152,13 +205,17 @@ class FeatureTable:
         zeros = {symbols[i] for i in range(len(symbols)) if not np.any(raw[i])}
         if zeros != set(entry['all_zero_rows']) or zeros != set(entry['missing']):
             raise ValueError('STRING missing-vector evidence disagrees with bytes')
+        supplements = _tau_supplements(path,expected_manifest_sha256,entry,symbols,stable,zeros,
+            mapping_path,expected_mapping_sha256,license_path,expected_license_sha256)
         permutation = [symbols.index(n) for n in names]
         info = {'manifest_path':str(path), 'manifest_sha256':expected_manifest_sha256, 'source_key':source_key,
                 'source':entry, 'source_order':symbols, 'source_row_permutation':permutation,
                 'missing_policy':'zero_plus_indicator', 'asset_class':'annotation_data',
                 'transform_scope':'external_graph_outcome_free',
                 'license_scope':'CC-BY-4.0 source data; local research; preserve attribution; no blanket redistribution clearance',
-                'mapping_limit':'Ensembl-to-first-STRING-protein rule and input hashes recorded; per-protein row IDs not supplied'}
+                'supplements':supplements, 'gene_order_sha256':json_hash(order),
+                'source_ids':[supplements['mapping']['content']['rows'][i]['string_protein_id'] for i in permutation],
+                'mapping_checked':'per-row stable gene/protein identity, source order, graph membership and missing reasons verified; upstream graph bytes not rehashed'}
         table = cls.from_array(names, gene_ids, raw[permutation], [n in zeros for n in names], fit_names, info, verified=True)
         if file_sha256(matrix_path) != entry['sha256'] or file_sha256(path) != expected_manifest_sha256:
             raise ValueError('Tau artifacts changed while being read')

@@ -212,12 +212,13 @@ def test_tau_packet_adapter_reorders_by_stable_id_and_admits_only_valid_string(t
     source_names=list(reversed(study.protocol.library));source_ids=list(reversed(study.protocol.gene_ids))
     a=np.arange(18,dtype=np.float32).reshape(6,3)+1;a[0]=0;np.save(tmp_path/'string.npy',a)
     packet={'gene_order':{'symbols':source_names,'ensembl':source_ids},'sources':{'string_spectral':{
-        'file':'string.npy','sha256':file_sha256(tmp_path/'string.npy'),'shape':[6,3],'dim':3,
+        'url':'https://example.test/string-v12','file':'string.npy','sha256':file_sha256(tmp_path/'string.npy'),'shape':[6,3],'dim':3,
         'version':'STRING v12.0','license_model_or_data':'CC BY 4.0','all_zero_rows':['F'],'missing':['F'],
         'fit':{'gene_universe':'all 10 human proteins','score_threshold':'combined_score >= 700',
                'input_sha256':'graph-digest','id_map_sha256':'alias-digest'}}}}
     path=tmp_path/'manifest.json';path.write_text(json.dumps(packet));digest=file_sha256(path)
-    t=FeatureTable.load_tau_packet(path,digest,source_key='string_spectral',names=study.protocol.library,gene_ids=study.protocol.gene_ids,fit_names=study.protocol.fit)
+    supplements=_tau_addons(tmp_path,path,packet)
+    t=FeatureTable.load_tau_packet(path,digest,source_key='string_spectral',names=study.protocol.library,gene_ids=study.protocol.gene_ids,fit_names=study.protocol.fit,**supplements)
     assert t.names==study.protocol.library and t.missing[-1] and t.verified
     assert t.provenance['transform_scope']=='external_graph_outcome_free'
     with pytest.raises(ValueError):FeatureTable.load_tau_packet(path,digest,source_key='go_svd',names=study.protocol.library,gene_ids=study.protocol.gene_ids,fit_names=study.protocol.fit)
@@ -322,3 +323,126 @@ def test_fixed_control_and_cell_partition_cannot_misdescribe_scores(study):
     with pytest.raises(ValueError,match='control'):evaluate(models,study,fixed_inputs=wrong)
     wrong=copy.deepcopy(first['inputs']);wrong['candidate_cell_ids']['A']=tuple(reversed(wrong['candidate_cell_ids']['A']))
     with pytest.raises(ValueError,match='partition'):evaluate(models,study,fixed_inputs=wrong)
+
+
+def _tau_addons(tmp,path,packet):
+    entry=packet['sources']['string_spectral'];order=packet['gene_order']
+    target={'manifest_sha256':file_sha256(path),'matrix_sha256':entry['sha256'],'source_key':'string_spectral'}
+    mapping={'schema_version':1,'status':'frozen','kind':'tau_string_row_mapping_addon','applies_to':target,
+             'alias_input_sha256':entry['fit']['id_map_sha256'],'links_input_sha256':entry['fit']['input_sha256'],
+             'rule':'first listed Ensembl alias','rows':[{'symbol':n,'gene_id':g,'string_protein_id':'9606.TEST_'+n,
+             'missing':n in entry['missing'],'feature_row_zero':n in entry['missing'],
+             'edges_ge_700':0 if n in entry['missing'] else 1,'missing_reason':'no_edge' if n in entry['missing'] else None}
+             for n,g in zip(order['symbols'],order['ensembl'])]}
+    (tmp/'cc_by_4.0_legalcode.txt').write_text('synthetic license fixture')
+    (tmp/'string_access_page.html').write_text('synthetic primary page fixture')
+    license={'schema_version':1,'status':'frozen','kind':'tau_string_license_receipt_addon','applies_to':target,
+             'source':{'name':'STRING','revision':'v12.0','url':entry['url']},'asset_class':'public annotation/network data (supplied table)',
+             'license_id':'CC-BY-4.0','local_research_reviewed':True,'license_url':'https://example.test/license','license_revision':'4.0',
+             'license_text_sha256':file_sha256(tmp/'cc_by_4.0_legalcode.txt'),'source_license_statement_url':'https://example.test/source',
+             'source_license_statement_page_sha256':file_sha256(tmp/'string_access_page.html'),'source_license_statement_fetched_utc':'2026-10-14T00:00:00Z',
+             'citation':'synthetic fixture','attribution_and_modification_notice':'synthetic fixture','code_license':'n/a'}
+    mp=tmp/'mapping.json';lp=tmp/'license.json';mp.write_text(json.dumps(mapping));lp.write_text(json.dumps(license))
+    return {'mapping_path':mp,'expected_mapping_sha256':file_sha256(mp),'license_path':lp,'expected_license_sha256':file_sha256(lp)}
+
+
+def _real_bundle_fixture(tmp,study):
+    import h5py
+    real=copy.deepcopy(study);real.protocol=dataclasses.replace(real.protocol,data_kind='real')
+    symbols=['A','B','C','D'];gene_ids=list(real.protocol.gene_ids[:4]);raw=tmp/'raw.h5ad'
+    with h5py.File(raw,'w') as f:
+        var=f.create_group('var');var.attrs['_index']='_index'
+        var.create_dataset('_index',data=symbols,dtype=h5py.string_dtype());var.create_dataset('gene_id',data=gene_ids,dtype=h5py.string_dtype())
+        obs=f.create_group('obs');obs.attrs['_index']='_index'
+        ids=[c for n in real.protocol.library for c in real.cell_ids[n]]+['control-id']
+        labels=[n for n in real.protocol.library for c in real.cell_ids[n]]+['non-targeting']
+        obs.create_dataset('_index',data=ids,dtype=h5py.string_dtype());obs.create_dataset('target_gene',data=labels,dtype=h5py.string_dtype())
+    # Perturbation E/F identities must also occur in the expression namespace.
+    # Expand the synthetic expression fixture to the six-symbol source namespace.
+    real.control=torch.ones(6);real.cells={n:torch.cat([x,torch.zeros(len(x),2)],1) for n,x in real.cells.items()}
+    with h5py.File(raw,'a') as f:
+        del f['var/_index'];del f['var/gene_id']
+        f['var'].create_dataset('_index',data=list(real.protocol.library),dtype=h5py.string_dtype())
+        f['var'].create_dataset('gene_id',data=list(real.protocol.gene_ids),dtype=h5py.string_dtype())
+    split=tmp/'split.json';split.write_text(json.dumps({'train_names':list(real.protocol.fit+real.protocol.inner),'eval_names':list(real.protocol.exploratory)}))
+    real.source_provenance={'protocol_sha256':real.protocol.fingerprint,'source':{'path':str(raw),'sha256':file_sha256(raw)},
+            'split_source':{'path':str(split),'sha256':file_sha256(split)},'expression_gene_ids':list(real.protocol.gene_ids),
+            'expression_gene_symbols':list(real.protocol.library),'control':{'cell_ids':['control-id']}}
+    return StudyData.partition(real.protocol,real.control,real.cells,real.cell_ids,source_provenance=real.source_provenance)
+
+
+def test_real_bundle_binds_protocol_namespace_and_source_cell_labels(tmp_path,study):
+    from alz_perturb_gan.gene_harness import save_study_bundle,load_study_bundle
+    real=_real_bundle_fixture(tmp_path,study);p=tmp_path/'bundle.pt';digest=save_study_bundle(p,real)
+    loaded=load_study_bundle(p,digest,expected_protocol_sha256=real.protocol.fingerprint)
+    assert loaded.source_provenance['identity_contract']['raw_source_metadata_verified']
+    with pytest.raises(ValueError,match='granted'):load_study_bundle(p,digest,expected_protocol_sha256='wrong')
+    blob=torch.load(p,weights_only=True);blob['source_provenance']['expression_gene_ids'].reverse();torch.save(blob,p)
+    with pytest.raises(ValueError,match='gene order'):load_study_bundle(p,file_sha256(p))
+
+
+@pytest.mark.parametrize('fault',['duplicate_partition','empty_partition','wrong_cell_identity','wrong_stable_id','wrong_original_order'])
+def test_real_bundle_contract_rejects_identity_partition_faults(tmp_path,study,fault):
+    from alz_perturb_gan.gene_harness import save_study_bundle,load_study_bundle
+    real=_real_bundle_fixture(tmp_path,study);p=tmp_path/'bundle.pt';save_study_bundle(p,real);blob=torch.load(p,weights_only=True)
+    if fault=='duplicate_partition':blob['partition']['candidate_ids']['A']+=blob['partition']['candidate_ids']['A'][:1]
+    if fault=='empty_partition':blob['partition']['query_ids']['A']=()
+    if fault=='wrong_cell_identity':blob['cell_ids']['A']=tuple(blob['cell_ids']['B'])
+    if fault=='wrong_stable_id':
+        blob['protocol']['gene_ids']=('WRONG',)+blob['protocol']['gene_ids'][1:]
+        from alz_perturb_gan.gene_features import json_hash
+        blob['source_provenance']['protocol_sha256']=json_hash(blob['protocol'])
+    if fault=='wrong_original_order':
+        sp=Path(blob['source_provenance']['split_source']['path']);d=json.loads(sp.read_text());d['train_names'].reverse();sp.write_text(json.dumps(d))
+        blob['source_provenance']['split_source']['sha256']=file_sha256(sp)
+    torch.save(blob,p)
+    with pytest.raises(ValueError):load_study_bundle(p,file_sha256(p))
+
+
+def test_grant_bound_cuda_cap_is_applied_without_gpu_execution(monkeypatch):
+    from alz_perturb_gan.gene_harness import apply_cuda_allocator_cap
+    calls=[]
+    monkeypatch.setattr(torch.cuda,'get_device_properties',lambda n:type('Props',(),{'total_memory':16*1024**3})())
+    monkeypatch.setattr(torch.cuda,'set_per_process_memory_fraction',lambda fraction,device:calls.append((fraction,device)))
+    apply_cuda_allocator_cap('cuda:0',4,{'cuda_allocator_cap_gib':4})
+    assert calls==[(.25,0)]
+    with pytest.raises(PermissionError):apply_cuda_allocator_cap('cuda:0',4,{'cuda_allocator_cap_gib':2})
+    with pytest.raises(PermissionError):apply_cuda_allocator_cap('cpu',4,{'cuda_allocator_cap_gib':4})
+
+
+@pytest.mark.parametrize('fault',['packet_binding','row_order','stable_id','missing_mask','license_review','license_bytes','supplement_hash'])
+def test_string_supplements_fail_closed_on_essential_bindings(tmp_path,study,fault):
+    names=list(study.protocol.library);ids=list(study.protocol.gene_ids)
+    matrix=np.ones((6,3),dtype=np.float32);matrix[-1]=0;np.save(tmp_path/'string.npy',matrix)
+    packet={'gene_order':{'symbols':names,'ensembl':ids},'sources':{'string_spectral':{
+        'url':'https://example.test/string-v12','file':'string.npy','sha256':file_sha256(tmp_path/'string.npy'),
+        'shape':[6,3],'dim':3,'version':'STRING v12.0','license_model_or_data':'CC BY 4.0',
+        'all_zero_rows':['F'],'missing':['F'],'fit':{'gene_universe':'all 10 human proteins','score_threshold':'combined_score >= 700',
+        'input_sha256':'graph','id_map_sha256':'alias'}}}}
+    path=tmp_path/'manifest.json';path.write_text(json.dumps(packet));extras=_tau_addons(tmp_path,path,packet)
+    asset=extras['license_path'] if fault in ('license_review','license_bytes') else extras['mapping_path']
+    body=json.loads(asset.read_text())
+    if fault=='packet_binding':body['applies_to']['matrix_sha256']='different'
+    if fault=='row_order':body['rows'].reverse()
+    if fault=='stable_id':body['rows'][0]['gene_id']='WRONG'
+    if fault=='missing_mask':body['rows'][-1]['missing']=False
+    if fault=='license_review':body['local_research_reviewed']=False
+    if fault=='license_bytes':(tmp_path/'cc_by_4.0_legalcode.txt').write_text('changed')
+    if fault=='supplement_hash':extras['expected_mapping_sha256']='0'*64
+    asset.write_text(json.dumps(body))
+    if fault!='supplement_hash':extras['expected_license_sha256' if asset==extras['license_path'] else 'expected_mapping_sha256']=file_sha256(asset)
+    with pytest.raises(ValueError):FeatureTable.load_tau_packet(path,file_sha256(path),source_key='string_spectral',names=names,gene_ids=ids,fit_names=study.protocol.fit,**extras)
+
+
+def test_provenance_git_children_receive_owned_lease_fds(tmp_path,study,monkeypatch):
+    import os
+    import alz_perturb_gan.gene_evaluation as ev
+    fd=os.open(tmp_path/'fake-owner-fd',os.O_CREAT|os.O_RDONLY,0o600)
+    seen=[];original=ev.subprocess.run
+    def capture(*args,**kwargs):
+        seen.append(kwargs.get('pass_fds'));return original(*args,**kwargs)
+    try:
+        monkeypatch.setenv('ALZ_LEASE_FDS',str(fd));monkeypatch.setattr(ev.subprocess,'run',capture)
+        evaluate(build_models(cfg()),study,output=tmp_path/'evaluation')
+        assert seen==[(fd,),(fd,)]
+    finally:os.close(fd)

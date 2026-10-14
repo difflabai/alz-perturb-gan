@@ -64,6 +64,7 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
     Synthetic unit checks need no grant. A real cohort requires explicit parent
     authorization/capacity; this function does not discover/reserve GPUs.
     """
+    started = time.monotonic()
     cfg = models.config
     models.validate_study(study)
     if max_wall_seconds <= 0: raise ValueError('positive wall budget required')
@@ -98,7 +99,7 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
     latent_g = torch.Generator(device=device).manual_seed(cfg.seed + 203)
     latent_j = torch.Generator(device=device).manual_seed(cfg.seed + 204)
     digests = {k: hashlib.sha256() for k in ('cell_batch', 'pairs', 'g_latents', 'j_latents')}
-    history = []; started = time.monotonic(); steps = 0
+    history = []; steps = 0
     for step in range(cfg.steps):
         if time.monotonic() - started > max_wall_seconds: raise TimeoutError('fixed training budget exhausted; no extension')
         row = {'step': step + 1}

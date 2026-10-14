@@ -233,10 +233,11 @@ def _write_groups(output, models, study, inputs, pairs, result, invocation):
     _json(output / 'metrics/summary.json', result)
     import alz_perturb_gan, particlegan, numpy
     root = Path(__file__).resolve().parents[2]
-    git = subprocess.run(['git','rev-parse','HEAD'],cwd=root,text=True,capture_output=True)
-    status = subprocess.run(['git','status','--porcelain'],cwd=root,text=True,capture_output=True)
+    lease_fds = tuple(int(x) for x in os.environ.get('ALZ_LEASE_FDS','').split(',') if x)
+    git = subprocess.run(['git','rev-parse','HEAD'],cwd=root,text=True,capture_output=True,pass_fds=lease_fds)
+    status = subprocess.run(['git','status','--porcelain'],cwd=root,text=True,capture_output=True,pass_fds=lease_fds)
     files = {str(p.relative_to(root)):file_sha256(p) for p in (root/'src/alz_perturb_gan').glob('*.py')}
-    safe_env = {k:os.environ.get(k) for k in ('PYTHONPATH','CUDA_VISIBLE_DEVICES','OMP_NUM_THREADS','MKL_NUM_THREADS','OPENBLAS_NUM_THREADS','NUMEXPR_NUM_THREADS','PYTHONDONTWRITEBYTECODE')}
+    safe_env = {k:os.environ.get(k) for k in ('PYTHONPATH','CUDA_VISIBLE_DEVICES','OMP_NUM_THREADS','MKL_NUM_THREADS','OPENBLAS_NUM_THREADS','NUMEXPR_NUM_THREADS','PYTHONDONTWRITEBYTECODE','ALZ_LEASE_FDS')}
     manifest = {'schema_version':1, 'completed_utc':datetime.now(timezone.utc).isoformat(), 'argv':list(sys.argv),
         'invocation':invocation, 'environment':safe_env, 'git_sha':git.stdout.strip(), 'git_status':status.stdout.splitlines(),
         'source_sha256':files, 'imports':{'alz_perturb_gan':alz_perturb_gan.__file__, 'particlegan':particlegan.__file__, 'numpy':numpy.__file__, 'torch':torch.__file__},
