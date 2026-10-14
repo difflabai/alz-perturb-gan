@@ -446,3 +446,44 @@ def test_provenance_git_children_receive_owned_lease_fds(tmp_path,study,monkeypa
         evaluate(build_models(cfg()),study,output=tmp_path/'evaluation')
         assert seen==[(fd,),(fd,)]
     finally:os.close(fd)
+
+
+# ---- calibration fix (docs/calibration-fix-plan.md) ----
+def test_relativistic_gate_and_row_softmax_are_offset_invariant():
+    from alz_perturb_gan.gene_calibration import relativistic_realness, row_softmax
+    g = torch.Generator().manual_seed(0)
+    fake, real = torch.randn(5, 8, generator=g), torch.randn(5, 8, generator=g)
+    for c in (-7.0, 0.3, 12.0):
+        assert torch.allclose(relativistic_realness(fake + c, real + c), relativistic_realness(fake, real))
+    logits = torch.randn(4, 150, generator=g)
+    p = row_softmax(logits)
+    assert torch.allclose(p.sum(1), torch.ones(4), atol=1e-6)
+    assert torch.allclose(row_softmax(logits + torch.randn(4, 1, generator=g) * 9), p, atol=1e-6)
+    assert torch.equal(row_softmax(logits, 3.).argsort(1), logits.argsort(1))
+
+
+def test_calibration_split_deterministic_disjoint_and_sized():
+    from alz_perturb_gan.gene_calibration import calibration_split, split_hash
+    fit = tuple(f'F{i}' for i in range(96))
+    a, b = calibration_split(fit), calibration_split(fit)
+    assert a == b and len(a) == 16 and set(a) <= set(fit) and split_hash(a) == split_hash(b)
+    assert calibration_split(fit, seed=1730) != a
+    assert calibration_split(('A', 'B', 'C')) == ()
+
+
+def test_training_tensors_exclude_calibration_identities(study):
+    fit = study.protocol.fit
+    t = study.training_tensors(exclude=(fit[0],))
+    assert study.protocol.library.index(fit[0]) not in set(t['ids'].tolist())
+    assert study.protocol.library.index(fit[0]) not in set(t['fit_ids'].tolist())
+
+
+def test_temperature_fit_uses_only_given_rows_and_beats_uniform():
+    from alz_perturb_gan.gene_calibration import fit_temperature, reliability, row_softmax
+    g = torch.Generator().manual_seed(1)
+    logits = torch.randn(16, 150, generator=g); pos = torch.randint(150, (16,), generator=g)
+    logits[torch.arange(16), pos] += 2.0
+    cal = fit_temperature(logits, pos)
+    assert cal['nll'] <= cal['uniform_nll'] + 1e-9 and cal['fitted_rows'] == 16
+    rel = reliability(row_softmax(logits, cal['temperature']), pos)
+    assert 0 <= rel['ece'] <= 1 and rel['full_brier'] >= 0

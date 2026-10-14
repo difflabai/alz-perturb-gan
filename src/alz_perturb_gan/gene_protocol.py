@@ -94,8 +94,9 @@ class StudyData:
         return cls(protocol, control.detach().float().cpu(), cells, cell_ids, source_provenance or {},
                    candidates, candidate_ids, targets, query_ids)
 
-    def training_tensors(self):
-        names = self.protocol.fit
+    def training_tensors(self, exclude=()):
+        # Calibration identities (gene_calibration) are excluded from G, D and J training.
+        names = tuple(n for n in self.protocol.fit if n not in set(exclude))
         x = torch.cat([self.cells[n].detach().float().cpu() for n in names])
         ids = torch.cat([torch.full((len(self.cells[n]),), self.protocol.library.index(n), dtype=torch.long) for n in names])
         # Query target means and real candidate pools are disjoint within each FIT identity.

@@ -16,6 +16,7 @@ import torch
 from .gene_checkpoint import model_hashes, state_hash, zero_update_guard
 from .gene_features import file_sha256, json_hash
 from .metrics import phenocopy_rank, expression_report
+from .gene_calibration import calibration_split, split_hash, row_softmax, fit_temperature, calibrator_sha, reliability
 
 
 def _tensor_hash(x):
@@ -59,7 +60,7 @@ def score_summary(scores, target_names, library, negatives, *, probabilities):
         if neg == pos: raise ValueError('negative identity equals its target')
         row = {'target': name, 'positive': library[pos], 'negative': library[neg],
                'auroc': _auc(scores[i], pos), **phenocopy_rank(scores[i], pos)}
-        if probabilities:
+        if probabilities is True:
             pair = scores[i, [pos, neg]]; truth = torch.tensor([1., 0.])
             row.update(balanced_accuracy=float(((pair >= .5) == (truth >= .5)).float().mean()),
                        balanced_brier=float((pair - truth).square().mean()))
@@ -68,7 +69,12 @@ def score_summary(scores, target_names, library, negatives, *, probabilities):
            'macro_auroc': sum(r['auroc'] for r in rows) / len(rows),
            **{k: sum(r[k] for r in rows) / len(rows) for k in ('top1', 'mrr', 'recall_at_3')},
            'target_count': len(rows), 'candidate_count': len(library), 'full_positive_prior': 1 / len(library)}
-    if probabilities:
+    if probabilities == 'softmax':
+        if bool(((scores < 0) | (scores > 1)).any()): raise ValueError('invalid head probability')
+        rel = reliability(scores, positives)
+        out.update(full_brier=rel['full_brier'], ece=rel['ece'], full_constant_prior_brier=rel['base_rate_brier'],
+                   calibration_bins=rel['bins'], probability_status='row softmax over library, temperature from held-out FIT calibration split')
+    elif probabilities:
         if bool(((scores < 0) | (scores > 1)).any()): raise ValueError('invalid head probability')
         out.update(balanced_accuracy=sum(r['balanced_accuracy'] for r in rows) / len(rows),
                    balanced_brier=sum(r['balanced_brier'] for r in rows) / len(rows),
@@ -162,20 +168,40 @@ def evaluate(models, study, *, output=None, profile_mode='generated', fixed_inpu
                 raise ValueError('fixed scoring target changed')
         candidates = inputs['candidates']; device = models.device
         pairs = {}
-        for split, names in study.protocol.groups().items():
-            queries = torch.stack([inputs['queries'][n] for n in names])
-            matrix = []
-            for query in queries:
+        library = list(study.protocol.library)
+        def head_logits(names):
+            rows = []
+            for name in names:
                 check_budget()
                 count = len(candidates)
-                matrix.append(models.decision(study.control.to(device).expand(count, -1), candidates.to(device),
-                    query.to(device).expand(count, -1), torch.arange(count, device=device)).cpu())
-            scores = torch.stack(matrix)
+                rows.append(models.decision.logits(study.control.to(device).expand(count, -1), candidates.to(device),
+                    inputs['queries'][name].to(device).expand(count, -1), torch.arange(count, device=device)).cpu())
+            return torch.stack(rows)
+        # Option B: temperature fitted only on held-out FIT identities (never inner/exploratory), then frozen.
+        cal_names = calibration_split(study.protocol.fit)
+        if cal_names:
+            cal_logits = head_logits(cal_names); cal_pos = [library.index(n) for n in cal_names]
+            calibrator = fit_temperature(cal_logits, cal_pos)
+            calibrator.update(calibration_identities=list(cal_names), calibration_split_sha256=split_hash(cal_names))
+            calibrator['sha256'] = calibrator_sha(calibrator)
+            cal_probs = row_softmax(cal_logits, calibrator['temperature'])
+            result['calibration'] = {'calibrator': calibrator, 'split': score_summary(cal_probs, list(cal_names), library,
+                negative_indices(library, list(cal_names), study.protocol.negative_seed), probabilities='softmax'),
+                'uncalibrated_t1': reliability(row_softmax(cal_logits), cal_pos)}
+            pairs['calibration'] = {'head_logits': cal_logits, 'targets': list(cal_names)}
+        else:
+            calibrator = {'method': 'none_small_protocol', 'temperature': 1.0, 'calibration_identities': []}
+            calibrator['sha256'] = calibrator_sha(calibrator); result['calibration'] = {'calibrator': calibrator}
+        result['scoring'] = 'row_softmax(head_logits / T); raw sigmoid never used as probability'
+        for split, names in study.protocol.groups().items():
+            queries = torch.stack([inputs['queries'][n] for n in names])
+            logits = head_logits(names)
+            scores = row_softmax(logits, calibrator['temperature'])
             distances = -torch.cdist(queries, candidates)
             negatives = negative_indices(list(study.protocol.library), list(names), study.protocol.negative_seed)
-            pairs[split] = {'head_scores': scores, 'l2_scores': distances, 'negative_indices': negatives,
+            pairs[split] = {'head_scores': scores, 'head_logits': logits, 'l2_scores': distances, 'negative_indices': negatives,
                             'targets': list(names)}
-            result['splits'][split] = {'head': score_summary(scores, list(names), list(study.protocol.library), negatives, probabilities=True),
+            result['splits'][split] = {'head': score_summary(scores, list(names), list(study.protocol.library), negatives, probabilities='softmax'),
                                       'l2': score_summary(distances, list(names), list(study.protocol.library), negatives, probabilities=False),
                                       'target_tensor_sha256': _tensor_hash(queries),
                                       'negative_identities': [study.protocol.library[i] for i in negatives.tolist()],
@@ -188,7 +214,7 @@ def evaluate(models, study, *, output=None, profile_mode='generated', fixed_inpu
                     coverage[label] = {'target_count':len(selected)}
                     if selected:
                         subset = [names[i] for i in selected]
-                        coverage[label].update(head=score_summary(scores[selected],subset,list(study.protocol.library),negatives[selected],probabilities=True),
+                        coverage[label].update(head=score_summary(scores[selected],subset,list(study.protocol.library),negatives[selected],probabilities='softmax'),
                                                l2=score_summary(distances[selected],subset,list(study.protocol.library),negatives[selected],probabilities=False))
                 result['splits'][split]['coverage_strata'] = coverage
     after = model_hashes(models)
@@ -222,10 +248,11 @@ def _write_groups(output, models, study, inputs, pairs, result, invocation):
     _json(output / 'inputs/perturbation_dictionary.json', {'names': list(study.protocol.library), 'gene_ids': list(study.protocol.gene_ids),
         'index': {n:i for i,n in enumerate(study.protocol.library)}, 'features': models.feature_provenance})
     torch.save(pairs, output / 'pairs/matrices.pt')
-    negatives = {split:result['splits'][split]['negative_identities'] for split in pairs}
+    negatives = {split:result['splits'][split]['negative_identities'] for split in pairs if split in result['splits']}
     _json(output / 'pairs/negative_identities.json', negatives)
     with (output / 'pairs/scores.jsonl').open('w') as stream:
         for split, block in pairs.items():
+            if 'head_scores' not in block: continue  # calibration logits are saved in matrices.pt only
             for row, name in enumerate(block['targets']):
                 for col, candidate in enumerate(study.protocol.library):
                     stream.write(json.dumps({'split':split, 'target':name, 'candidate':candidate, 'label':int(name==candidate),

@@ -7,6 +7,7 @@ import torch
 import torch.nn.functional as F
 from particlegan import scale_learning_rates
 from .gene_checkpoint import model_hashes
+from .gene_calibration import calibration_split, split_hash, relativistic_realness
 
 
 @contextmanager
@@ -72,7 +73,8 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
         from .gene_protocol import validate_grant
         validate_grant(grant or {},study,cfg,str(models.device),'train',max_wall_seconds)
     if decision_cells < 1: raise ValueError('decision_cells must be positive')
-    t = study.training_tensors(); device = models.device
+    held_out = calibration_split(study.protocol.fit)
+    t = study.training_tensors(exclude=held_out); device = models.device
     g, d, j, prior, recipe = models.generator, models.critic, models.decision, models.prior, models.recipe
     probe = cfg.arm == 'G_frozen'
     if probe:
@@ -155,10 +157,16 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
             digests['j_latents'].update(ix.cpu().numpy().tobytes())
             generated_cells = g(z, many_ctrl, many_ids)
             generated = generated_cells.reshape(cfg.batch_size, decision_cells, -1).mean(1)
+            raw_gate = 1.
             if probe: realness = torch.ones(cfg.batch_size, device=device)
             else:
                 cond = torch.cat([many_ctrl, g.onehot[many_ids]], -1)
-                realness = d(generated_cells, cond).sigmoid().reshape(cfg.batch_size, decision_cells).mean(1)
+                # Relativistic gate: RpGAN logits have a free shared offset, so only D(gen)-D(real) is meaningful.
+                real_cells = t['real_candidates'][rows].reshape(-1, t['real_candidates'].shape[-1]).to(device)
+                fake_d_j = d(generated_cells, cond).reshape(cfg.batch_size, decision_cells)
+                real_d_j = d(real_cells, cond).reshape(cfg.batch_size, decision_cells)
+                realness = relativistic_realness(fake_d_j, real_d_j).mean(1)
+                raw_gate = float(fake_d_j.sigmoid().mean())  # diagnostic only: old offset-dependent gate
         fake_logits = j.logits(control, generated, target, ids)
         # Stable logits BCE fixes numerical saturation; weights/objective are declared for every matched arm.
         jloss = F.binary_cross_entropy_with_logits(real_logits, labels)
@@ -170,7 +178,7 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
             row.update(j_projection_grad_norm=_norm(j.encoder) if j.encoder is not None else 0.,
                        j_real_saturation_fraction=float((real_logits.detach().abs()>4.595).float().mean()),
                        j_fake_saturation_fraction=float((fake_logits.detach().abs()>4.595).float().mean()),
-                       realness_weight_mean=float(realness.mean()), realness_weight_min=float(realness.min()),
+                       realness_weight_mean=float(realness.mean()), realness_weight_min=float(realness.min()), raw_sigmoid_gate_mean=raw_gate,
                        generated_within_candidate_variance=float(generated_cells.reshape(cfg.batch_size,decision_cells,-1).var(1,unbiased=False).mean()))
         opt_j.step(); history.append(row); steps += 1
     if probe:
@@ -182,7 +190,10 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
             'wall_seconds': time.monotonic() - started, 'parameter_counts': models.counts(),
             'objective': 'single-cell MSE + .1 GAN; independent candidate/query pools; stable logits BCE',
             'diagnostics_interval':1000, 'update_ratio':'1D:1G:1J; frozen probe 1J only',
-            'selection_scoring_during_fit': False, 'frozen_generator_probe': probe}
+            'selection_scoring_during_fit': False, 'frozen_generator_probe': probe,
+            'gate': 'constant_1_frozen_probe' if probe else 'relativistic_sigmoid(D(gen)-D(real_matched))',
+            'calibration_identities': list(held_out), 'calibration_split_sha256': split_hash(held_out),
+            'excluded_from': ['generator', 'critic', 'decision_head'] if held_out else []}
 
 
 def train_arm(models, study, **kwargs):
