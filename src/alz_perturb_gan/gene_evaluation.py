@@ -50,7 +50,8 @@ def negative_indices(library, target_names, seed):
     return torch.tensor(output)
 
 
-def score_summary(scores, target_names, library, negatives, *, probabilities):
+def score_summary(scores, target_names, library, negatives, *, probabilities, probs=None):
+    """Rank metrics use `scores` (head logits in softmax mode); probability metrics use `probs` (calibrated row softmax)."""
     if scores.shape != (len(target_names), len(library)) or not bool(torch.isfinite(scores).all()):
         raise ValueError('finite scored pairs must align to the common library')
     positives = torch.tensor([library.index(n) for n in target_names]); labels = torch.zeros_like(scores, dtype=torch.bool)
@@ -70,8 +71,9 @@ def score_summary(scores, target_names, library, negatives, *, probabilities):
            **{k: sum(r[k] for r in rows) / len(rows) for k in ('top1', 'mrr', 'recall_at_3')},
            'target_count': len(rows), 'candidate_count': len(library), 'full_positive_prior': 1 / len(library)}
     if probabilities == 'softmax':
-        if bool(((scores < 0) | (scores > 1)).any()): raise ValueError('invalid head probability')
-        rel = reliability(scores, positives)
+        if probs is None or probs.shape != scores.shape: raise ValueError('softmax mode needs calibrated probabilities aligned to scores')
+        if bool(((probs < 0) | (probs > 1)).any()): raise ValueError('invalid head probability')
+        rel = reliability(probs, positives)
         out.update(full_brier=rel['full_brier'], ece=rel['ece'], full_constant_prior_brier=rel['base_rate_brier'],
                    calibration_bins=rel['bins'], probability_status='row softmax over library, temperature from held-out FIT calibration split')
     elif probabilities:
@@ -185,8 +187,8 @@ def evaluate(models, study, *, output=None, profile_mode='generated', fixed_inpu
             calibrator.update(calibration_identities=list(cal_names), calibration_split_sha256=split_hash(cal_names))
             calibrator['sha256'] = calibrator_sha(calibrator)
             cal_probs = row_softmax(cal_logits, calibrator['temperature'])
-            result['calibration'] = {'calibrator': calibrator, 'split': score_summary(cal_probs, list(cal_names), library,
-                negative_indices(library, list(cal_names), study.protocol.negative_seed), probabilities='softmax'),
+            result['calibration'] = {'calibrator': calibrator, 'split': score_summary(cal_logits, list(cal_names), library,
+                negative_indices(library, list(cal_names), study.protocol.negative_seed), probabilities='softmax', probs=cal_probs),
                 'uncalibrated_t1': reliability(row_softmax(cal_logits), cal_pos)}
             pairs['calibration'] = {'head_logits': cal_logits, 'targets': list(cal_names)}
         else:
@@ -201,7 +203,7 @@ def evaluate(models, study, *, output=None, profile_mode='generated', fixed_inpu
             negatives = negative_indices(list(study.protocol.library), list(names), study.protocol.negative_seed)
             pairs[split] = {'head_scores': scores, 'head_logits': logits, 'l2_scores': distances, 'negative_indices': negatives,
                             'targets': list(names)}
-            result['splits'][split] = {'head': score_summary(scores, list(names), list(study.protocol.library), negatives, probabilities='softmax'),
+            result['splits'][split] = {'head': score_summary(logits, list(names), list(study.protocol.library), negatives, probabilities='softmax', probs=scores),
                                       'l2': score_summary(distances, list(names), list(study.protocol.library), negatives, probabilities=False),
                                       'target_tensor_sha256': _tensor_hash(queries),
                                       'negative_identities': [study.protocol.library[i] for i in negatives.tolist()],
@@ -214,7 +216,7 @@ def evaluate(models, study, *, output=None, profile_mode='generated', fixed_inpu
                     coverage[label] = {'target_count':len(selected)}
                     if selected:
                         subset = [names[i] for i in selected]
-                        coverage[label].update(head=score_summary(scores[selected],subset,list(study.protocol.library),negatives[selected],probabilities='softmax'),
+                        coverage[label].update(head=score_summary(logits[selected],subset,list(study.protocol.library),negatives[selected],probabilities='softmax',probs=scores[selected]),
                                                l2=score_summary(distances[selected],subset,list(study.protocol.library),negatives[selected],probabilities=False))
                 result['splits'][split]['coverage_strata'] = coverage
     after = model_hashes(models)

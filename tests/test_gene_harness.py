@@ -457,7 +457,7 @@ def test_relativistic_gate_and_row_softmax_are_offset_invariant():
         assert torch.allclose(relativistic_realness(fake + c, real + c), relativistic_realness(fake, real))
     logits = torch.randn(4, 150, generator=g)
     p = row_softmax(logits)
-    assert torch.allclose(p.sum(1), torch.ones(4), atol=1e-6)
+    assert torch.allclose(p.sum(1), torch.ones(4, dtype=p.dtype), atol=1e-6)
     assert torch.allclose(row_softmax(logits + torch.randn(4, 1, generator=g) * 9), p, atol=1e-6)
     assert torch.equal(row_softmax(logits, 3.).argsort(1), logits.argsort(1))
 
@@ -487,3 +487,13 @@ def test_temperature_fit_uses_only_given_rows_and_beats_uniform():
     assert cal['nll'] <= cal['uniform_nll'] + 1e-9 and cal['fitted_rows'] == 16
     rel = reliability(row_softmax(logits, cal['temperature']), pos)
     assert 0 <= rel['ece'] <= 1 and rel['full_brier'] >= 0
+
+
+def test_softmax_summary_ranks_on_logits_even_at_huge_temperature():
+    from alz_perturb_gan.gene_calibration import row_softmax
+    from alz_perturb_gan.gene_evaluation import score_summary
+    lib = [f'L{i}' for i in range(150)]; g = torch.Generator().manual_seed(2)
+    logits = torch.randn(3, 150, generator=g); names = ['L0', 'L1', 'L2']; neg = torch.tensor([5, 6, 7])
+    a = score_summary(logits, names, lib, neg, probabilities='softmax', probs=row_softmax(logits, 1e4))
+    b = score_summary(logits, names, lib, neg, probabilities=False)
+    assert [r['rank'] for r in a['per_target']] == [r['rank'] for r in b['per_target']]

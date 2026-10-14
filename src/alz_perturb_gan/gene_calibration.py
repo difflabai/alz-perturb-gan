@@ -28,7 +28,7 @@ def split_hash(names, seed=CALIBRATION_SEED):
 
 def row_softmax(logits, temperature=1.0):
     """Per-target distribution over candidates; invariant to any per-row offset."""
-    return torch.softmax(logits.double() / temperature, dim=-1).float()
+    return torch.softmax(logits.double() / temperature, dim=-1)  # float64: huge T must not create rank ties
 
 
 def relativistic_realness(fake_logits, real_logits):
