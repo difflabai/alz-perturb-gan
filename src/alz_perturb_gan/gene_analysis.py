@@ -8,11 +8,12 @@ explore : refuses unless the selection file's sha is supplied and matches, a led
 Limits: the ledger and mtimes are writable and are an audit aid, not independent proof of chronology.
 """
 from __future__ import annotations
-import argparse, hashlib, json, os, sys, time
+import argparse, hashlib, json, os, stat, sys, time
 from datetime import datetime, timezone
 from pathlib import Path
 from .gene_evaluation import paired_delta, all_seed_deltas
 from .gene_features import file_sha256, json_hash
+from .gene_calibration import calibrator_sha
 from .paths import scoped, create_new, check_name
 
 ARMS = ('B0', 'G', 'H', 'GH', 'shuffle', 'G_frozen')
@@ -33,28 +34,64 @@ def _arm_dir(run, arm):
     return scoped(Path(scoped(run)) / arm)
 
 
-def bindings(runs, receipt):
-    """Every hash the selection depends on, recomputed from current artifacts."""
-    receipt = scoped(receipt)
+class BindingError(PermissionError):
+    pass
+
+
+def _need(cond, msg):
+    if not cond: raise BindingError(msg)
+
+
+def _verify_provenance(eval_dir):
+    """Every file listed in provenance/file_hashes.json must exist (scoped) and match; nothing unlisted but the list."""
+    listed = _load(eval_dir / 'provenance' / 'file_hashes.json')
+    for rel, want in listed.items():
+        _need(file_sha256(scoped(eval_dir / rel)) == want, f'provenance hash mismatch: {eval_dir / rel}')
+    present = {str(p.relative_to(eval_dir)) for p in Path(eval_dir).rglob('*') if p.is_file()}
+    _need(present - set(listed) <= {'provenance/file_hashes.json'}, f'unlisted files in {eval_dir}: {sorted(present - set(listed))}')
+    return file_sha256(scoped(eval_dir / 'provenance' / 'file_hashes.json'))
+
+
+def bindings(runs, receipt, *, expected_seeds, bundle_sha256, protocol_sha256):
+    """Every input the selection depends on, recomputed and cross-checked from current artifacts."""
+    receipt = scoped(receipt); R = json.loads(Path(receipt).read_text())
+    _need(str(R.get('schema', '')).startswith('supervisor_receipt_v4'), 'unexpected supervisor receipt schema')
+    _need(R.get('rc') == 0 and R.get('stop_reason') is None, 'supervisor receipt does not record a clean run')
+    _need(sorted(R.get('seeds', [])) == sorted(expected_seeds) == sorted(runs), 'seeds differ between receipt, runs and expectation')
+    _need(all(any(x.get('seed') == sd and x.get('arm') == a and x.get('status') == 'ok' for x in R.get('arms', []))
+              for sd in expected_seeds for a in ARMS), 'receipt does not show every seed x arm completed ok')
     out = {'supervisor_receipt': {'path': str(receipt), 'sha256': file_sha256(receipt)}, 'rule_sha256': RULE_SHA256,
-           'scoring_mode': 'raw_logit_ranks', 'runs': {}}
-    protocols, bundles = set(), set()
-    for seed, run in sorted(runs.items()):
-        grant = scoped(Path(scoped(run)) / 'grant.json') if (Path(run) / 'grant.json').exists() else None
-        g = json.loads(Path(grant).read_text()) if grant else {}
-        bundles.add(g.get('bundle_sha256'))
+           'analysis_code_sha256': file_sha256(__file__), 'expected_seeds': sorted(expected_seeds),
+           'scoring_mode': 'raw_logit_ranks', 'bundle_sha256': bundle_sha256, 'protocol_sha256': protocol_sha256,
+           'harness_commit': R.get('static_checks', {}).get('harness_commit'), 'runs': {}}
+    for seed in sorted(runs):
+        run = scoped(runs[seed]); rr = R.get('runs', {}).get(str(seed), {})
+        _need(rr.get('path') and scoped(rr['path']) == run, f'seed {seed}: run path is not the one in the receipt')
+        _need(run.parent == Path(receipt).parent, f'seed {seed}: run is not in the receipt cohort')
+        grant_p = scoped(run / 'grant.json'); gsha = file_sha256(grant_p); g = json.loads(Path(grant_p).read_text())
+        _need(gsha == rr.get('grant_sha256'), f'seed {seed}: grant hash differs from the receipt')
+        _need(g.get('bundle_sha256') == bundle_sha256 and g.get('protocol_sha256') == protocol_sha256, f'seed {seed}: grant bundle/protocol differ')
+        _need(g.get('seeds') == [seed] and g.get('harness_commit') == out['harness_commit'], f'seed {seed}: grant seed/commit differ')
         arms = {}
         for arm in ARMS:
-            d = _arm_dir(run, arm); sp = scoped(d / 'evaluation' / 'metrics' / 'summary.json'); s = json.loads(Path(sp).read_text())
-            protocols.add(s['protocol_sha256'])
-            if s.get('scoring', {}).get('mode') != 'raw_logit_ranks': raise ValueError(f'{arm} seed {seed}: scoring mode is not raw_logit_ranks')
+            d = _arm_dir(run, arm); ev = scoped(d / 'evaluation'); sp = scoped(ev / 'metrics' / 'summary.json')
+            s = json.loads(Path(sp).read_text())
+            _need(s.get('seed') == seed and s.get('arm') == arm, f'seed {seed} {arm}: summary seed/arm differ')
+            _need(s.get('protocol_sha256') == protocol_sha256, f'seed {seed} {arm}: protocol differs')
+            _need(s.get('profile_mode') == 'generated', f'seed {seed} {arm}: profile mode is not generated')
+            _need(s.get('scoring', {}).get('mode') == 'raw_logit_ranks', f'seed {seed} {arm}: scoring mode is not raw_logit_ranks')
             cal = s.get('calibration', {}).get('calibrator', {})
-            arms[arm] = {'summary_sha256': file_sha256(sp), 'checkpoint_sha256': file_sha256(scoped(d / 'checkpoint.pt')),
-                         'calibrator_sha256': cal.get('sha256'), 'calibration_split_sha256': cal.get('calibration_split_sha256'),
-                         'sealed_sha256': s.get('sealed', {}).get('exploratory', {})}
-        out['runs'][str(seed)] = {'path': str(scoped(run)), 'grant_sha256': file_sha256(grant) if grant else None, 'arms': arms}
-    if len(protocols) != 1 or len(bundles) != 1: raise ValueError('runs disagree on protocol or bundle')
-    out['protocol_sha256'], out['bundle_sha256'] = protocols.pop(), bundles.pop()
+            _need(cal.get('sha256') and calibrator_sha(cal) == cal['sha256'], f'seed {seed} {arm}: calibrator hash does not verify')
+            sealed = s.get('sealed', {}).get('exploratory') or {}
+            _need(set(sealed) == {'exploratory.json', 'exploratory.pt', 'exploratory.jsonl'}, f'seed {seed} {arm}: sealed outputs missing')
+            for fname, h in sealed.items():
+                _need(file_sha256(scoped(ev / 'sealed' / fname)) == h, f'seed {seed} {arm}: sealed {fname} changed')
+            arms[arm] = {'summary_sha256': file_sha256(sp), 'provenance_file_hashes_sha256': _verify_provenance(ev),
+                         'checkpoint_sha256': file_sha256(scoped(d / 'checkpoint.pt')),
+                         'training_json_sha256': file_sha256(scoped(d / 'training.json')),
+                         'calibrator_sha256': cal['sha256'], 'calibration_split_sha256': cal.get('calibration_split_sha256'),
+                         'calibration_status': cal.get('status'), 'sealed_sha256': sealed}
+        out['runs'][str(seed)] = {'path': str(run), 'grant_sha256': gsha, 'arms': arms}
     return out
 
 
@@ -69,15 +106,50 @@ def _gate(run):
     return ok, gates
 
 
-def select(runs, receipt, out_dir, *, expected_seeds):
-    if sorted(runs) != sorted(expected_seeds): raise ValueError('all pre-declared seeds are required')
-    rec = _load(receipt)
-    complete = all(any(x.get('seed') == s and x['arm'] == a and x.get('status') == 'ok' for x in rec.get('arms', []))
-                   for s in expected_seeds for a in ARMS) if rec.get('arms') and 'seed' in rec['arms'][0] else \
-               all((Path(scoped(runs[s])) / a / 'evaluation' / 'metrics' / 'summary.json').exists() for s in expected_seeds for a in ARMS)
+LEDGER = 'ledger.jsonl'
+
+
+def _open_ledger(out_dir, *, flags, expect=None, create=False):
+    """Open the ledger relative to a no-follow directory handle and validate what was opened:
+    regular file, owned by us, single link, same dev/inode as the directory entry, and (if given) the identity
+    recorded in the selection. Returns (fd, identity)."""
+    d = scoped(out_dir); dfd = os.open(d, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        try:
+            try:
+                fd = os.open(LEDGER, flags | os.O_NOFOLLOW, dir_fd=dfd)
+            except FileNotFoundError:
+                if not create: raise BindingError('ledger missing')
+                fd = os.open(LEDGER, os.O_WRONLY | os.O_APPEND | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644, dir_fd=dfd)
+        except BindingError:
+            raise
+        except OSError as e:  # ELOOP from O_NOFOLLOW on a symlink, EEXIST race, etc.
+            raise BindingError(f'ledger rejected: {e.strerror}')
+        st = os.fstat(fd); entry = os.stat(LEDGER, dir_fd=dfd, follow_symlinks=False)
+        ident = {'dev': st.st_dev, 'ino': st.st_ino}
+        problems = [m for c, m in ((stat.S_ISREG(st.st_mode), 'not a regular file'), (st.st_uid == os.geteuid(), 'not owned by us'),
+                                   (st.st_nlink == 1, 'has extra hard links'),
+                                   ((entry.st_dev, entry.st_ino) == (st.st_dev, st.st_ino), 'directory entry changed during open'),
+                                   (expect is None or expect == ident, 'dev/inode differs from the identity bound in the selection')) if not c]
+        if problems:
+            os.close(fd); raise BindingError('ledger rejected: ' + ', '.join(problems))
+        return fd, ident
+    finally:
+        os.close(dfd)
+
+
+def _append(fd, entry):
+    data = (json.dumps(entry, sort_keys=True) + '\n').encode()
+    _need(os.write(fd, data) == len(data), 'short ledger write')
+    os.fsync(fd)
+
+
+def select(runs, receipt, out_dir, *, expected_seeds, bundle_sha256, protocol_sha256):
+    _need(sorted(runs) == sorted(expected_seeds), 'all pre-declared seeds are required')
+    b = bindings(runs, receipt, expected_seeds=expected_seeds, bundle_sha256=bundle_sha256, protocol_sha256=protocol_sha256)
     summaries = {s: {a: _load(_arm_dir(runs[s], a) / 'evaluation' / 'metrics' / 'summary.json') for a in ARMS} for s in expected_seeds}
     gate = {s: _gate(runs[s]) for s in expected_seeds}
-    pre = {'all_seeds_complete': bool(complete), 'gate_ok': all(g[0] for g in gate.values())}
+    pre = {'all_seeds_complete': True, 'gate_ok': all(g[0] for g in gate.values())}
     deltas, selected = {}, {}
     for arm in (*CANDIDATES, 'G_frozen'):
         for ref in ('B0', 'shuffle'):
@@ -89,48 +161,48 @@ def select(runs, receipt, out_dir, *, expected_seeds):
         selected[arm] = bool(all(pre.values()) and all(
             all(d['mean'] > 0 for d in deltas[f'{arm}_vs_{ref}']['per_seed'].values()) and deltas[f'{arm}_vs_{ref}']['pooled_ci95'][0] > 0
             for ref in ('B0', 'shuffle')))
-    calib = {str(s): {a: summaries[s][a].get('calibration', {}).get('report', {}).get('status') for a in ARMS} for s in expected_seeds}
-    doc = {'schema': 'selection_frozen_v4', 'rule': RULE, 'rule_sha256': RULE_SHA256, 'split': 'inner',
-           'created_utc': datetime.now(timezone.utc).isoformat(), 'preconditions': pre,
-           'gate': {str(s): g[1] for s, g in gate.items()}, 'inner_deltas': deltas, 'selected': selected,
-           'calibration_status_reported_not_veto': calib, 'bindings': bindings(runs, receipt),
-           'wording': 'selected on inner; not confirmed' if any(selected.values()) else 'selection criterion unmet; evidence inconclusive'}
-    data = (json.dumps(doc, indent=1, sort_keys=True) + '\n').encode(); digest = hashlib.sha256(data).hexdigest()
-    name = f'selection_frozen_{digest[:12]}.json'
-    path = create_new(out_dir, name, data)
-    _ledger(out_dir, {'event': 'select', 'selection': str(path), 'sha256': digest, 'utc': doc['created_utc']})
-    return path, digest, doc
-
-
-def _ledger(out_dir, entry):
-    d = scoped(out_dir); dfd = os.open(d, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    calib = {str(s): {a: b['runs'][str(s)]['arms'][a]['calibration_status'] for a in ARMS} for s in expected_seeds}
+    fd, lid = _open_ledger(out_dir, flags=os.O_WRONLY | os.O_APPEND, create=True)
     try:
-        fd = os.open('ledger.jsonl', os.O_WRONLY | os.O_APPEND | os.O_CREAT | os.O_NOFOLLOW, 0o644, dir_fd=dfd)
-        try: os.write(fd, (json.dumps(entry, sort_keys=True) + '\n').encode())
-        finally: os.close(fd)
-    finally: os.close(dfd)
+        doc = {'schema': 'selection_frozen_v4_2', 'rule': RULE, 'rule_sha256': RULE_SHA256, 'split': 'inner',
+               'created_utc': datetime.now(timezone.utc).isoformat(), 'preconditions': pre,
+               'gate': {str(s): g[1] for s, g in gate.items()}, 'inner_deltas': deltas, 'selected': selected,
+               'calibration_status_reported_not_veto': calib, 'bindings': b, 'ledger_identity': lid,
+               'wording': 'selected on inner; not confirmed' if any(selected.values()) else 'selection criterion unmet; evidence inconclusive'}
+        data = (json.dumps(doc, indent=1, sort_keys=True) + '\n').encode(); digest = hashlib.sha256(data).hexdigest()
+        path = create_new(out_dir, f'selection_frozen_{digest[:12]}.json', data)
+        _append(fd, {'event': 'select', 'selection': str(path), 'sha256': digest, 'utc': doc['created_utc']})
+    finally:
+        os.close(fd)
+    return path, digest, doc
 
 
 def explore(selection, selection_sha256, out_dir):
     path = scoped(selection)
-    if not selection_sha256 or file_sha256(path) != selection_sha256:
+    if not selection_sha256 or file_sha256(path) != str(selection_sha256).lower():
         raise PermissionError('explore refused: selection file missing or its sha256 does not match')
+    _need(scoped(out_dir) == Path(path).parent, 'explore refused: out-dir must be the selection directory (ledger lives there)')
     doc = json.loads(Path(path).read_text())
-    ledger = scoped(Path(path).parent / 'ledger.jsonl')
-    if not any(json.loads(l).get('sha256') == selection_sha256 and json.loads(l).get('event') == 'select'
-               for l in Path(ledger).read_text().splitlines() if l.strip()):
-        raise PermissionError('explore refused: no ledger entry for this selection')
+    _need(doc.get('schema') == 'selection_frozen_v4_2' and 'ledger_identity' in doc, 'explore refused: selection schema/ledger identity missing')
+    fd, _ = _open_ledger(out_dir, flags=os.O_RDONLY, expect=doc['ledger_identity'])
+    try:
+        text = b''
+        while chunk := os.read(fd, 1 << 20): text += chunk
+    finally:
+        os.close(fd)
+    _need(any(json.loads(l).get('sha256') == selection_sha256 and json.loads(l).get('event') == 'select'
+              for l in text.decode().splitlines() if l.strip()), 'explore refused: no ledger entry for this selection')
     b = doc['bindings']; runs = {int(s): v['path'] for s, v in b['runs'].items()}
-    now = bindings(runs, b['supervisor_receipt']['path'])
-    if now != b: raise PermissionError('explore refused: bound artifacts changed since selection was frozen')
+    try:
+        now = bindings(runs, b['supervisor_receipt']['path'], expected_seeds=b['expected_seeds'],
+                       bundle_sha256=b['bundle_sha256'], protocol_sha256=b['protocol_sha256'])
+    except BindingError as e:
+        raise BindingError(f'explore refused: {e}')
+    _need(now == b, 'explore refused: bound artifacts changed since selection was frozen')
     sealed = {}
     for s, run in runs.items():
         for arm in ARMS:
-            want = b['runs'][str(s)]['arms'][arm]['sealed_sha256']
-            if not want: raise PermissionError(f'explore refused: seed {s} {arm} has no sealed exploratory outputs')
             sd = _arm_dir(run, arm) / 'evaluation' / 'sealed'
-            for fname, h in want.items():
-                if file_sha256(scoped(sd / fname)) != h: raise PermissionError(f'explore refused: sealed {fname} changed')
             summ = _load(_arm_dir(run, arm) / 'evaluation' / 'metrics' / 'summary.json')
             sealed.setdefault(s, {})[arm] = dict(summ, splits={'exploratory': _load(sd / 'exploratory.json')})
     seeds = sorted(runs)
@@ -144,11 +216,15 @@ def explore(selection, selection_sha256, out_dir):
             deltas[f'{arm}_vs_{ref}'] = {'pooled_mean': r['all_seed_mean_delta'], 'pooled_ci95': r['hierarchical_ci95']}
     out = {'header': 'POST-SELECTION, NON-CONFIRMATORY exploratory report; never confirmation; selection was frozen first',
            'selection_sha256': selection_sha256, 'selected': doc['selected'], 'exploratory_head': table, 'deltas': deltas,
-           'chronology_limit': 'ledger and mtimes are writable; not independent proof of chronology'}
+           'chronology_limit': 'ledger and mtimes are writable by the owner; not independent proof of chronology'}
     data = (json.dumps(out, indent=1, sort_keys=True) + '\n').encode(); digest = hashlib.sha256(data).hexdigest()
-    p = create_new(out_dir, f'exploratory_report_{digest[:12]}.json', data)
-    _ledger(out_dir, {'event': 'explore', 'selection_sha256': selection_sha256, 'report': str(p), 'sha256': digest,
-                      'utc': datetime.now(timezone.utc).isoformat()})
+    fd, _ = _open_ledger(out_dir, flags=os.O_WRONLY | os.O_APPEND, expect=doc['ledger_identity'])
+    try:
+        p = create_new(out_dir, f'exploratory_report_{digest[:12]}.json', data)
+        _append(fd, {'event': 'explore', 'selection_sha256': selection_sha256, 'report': str(p), 'sha256': digest,
+                     'utc': datetime.now(timezone.utc).isoformat()})
+    finally:
+        os.close(fd)
     return p, digest, out
 
 
@@ -157,12 +233,14 @@ def main(argv=None):
     s = sub.add_parser('select'); s.add_argument('--run', action='append', required=True, help='SEED=/abs/run/dir')
     s.add_argument('--receipt', required=True); s.add_argument('--out-dir', required=True)
     s.add_argument('--seeds', default='42,43,44')
+    s.add_argument('--bundle-sha256', required=True); s.add_argument('--protocol-sha256', required=True)
     e = sub.add_parser('explore'); e.add_argument('--selection', required=True); e.add_argument('--selection-sha256', required=True)
     e.add_argument('--out-dir', required=True)
     a = ap.parse_args(argv)
     if a.cmd == 'select':
         runs = {int(k): v for k, v in (x.split('=', 1) for x in a.run)}
-        p, d, doc = select(runs, a.receipt, a.out_dir, expected_seeds=[int(x) for x in a.seeds.split(',')])
+        p, d, doc = select(runs, a.receipt, a.out_dir, expected_seeds=[int(x) for x in a.seeds.split(',')],
+                           bundle_sha256=a.bundle_sha256, protocol_sha256=a.protocol_sha256)
         print(json.dumps({'selection': str(p), 'sha256': d, 'selected': doc['selected'], 'wording': doc['wording']}))
     else:
         p, d, _ = explore(a.selection, a.selection_sha256, a.out_dir)

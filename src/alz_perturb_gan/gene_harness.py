@@ -68,6 +68,9 @@ def apply_cuda_allocator_cap(device, cap_gib, grant):
     torch.cuda.set_per_process_memory_fraction(float(requested / total), 0)
 
 
+from .paths import check_new_target, scoped_new_dir, create_new
+
+
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('phase',choices=['train','evaluate'])
@@ -87,7 +90,9 @@ def main(argv=None):
     p.add_argument('--profile-mode',default='generated',choices=['generated','independent_real_oracle'])
     a=p.parse_args(argv)
     deadline = time.monotonic() + a.max_wall_seconds
+    # v4.2 blocker 3: containment is checked before ANY work or write (training included).
     if a.output.exists():raise FileExistsError('new output required; do not overwrite receipts')
+    a.output = check_new_target(a.output)
     if file_sha256(a.grant)!=a.grant_sha256:raise PermissionError('cohort grant hash changed')
     grant=json.loads(a.grant.read_text())
     if grant.get('bundle_sha256') is not None and grant['bundle_sha256'] != a.bundle_sha256:
@@ -124,9 +129,9 @@ def main(argv=None):
         if frozen is not None: frozen.to(a.device)
         receipt=train_arm(models,study,max_wall_seconds=remaining(),grant=grant,frozen_source=frozen)
         # Run root keeps model/training records separate; evaluation itself has exactly four groups.
-        a.output.mkdir(parents=True)
-        digest=save_checkpoint(a.output/'checkpoint.pt',models,study.protocol,table,training_receipt=receipt)
-        (a.output/'training.json').write_text(json.dumps(receipt,indent=2)+'\n')
+        out=scoped_new_dir(a.output)  # re-verified at creation time
+        digest=save_checkpoint(out/'checkpoint.pt',models,study.protocol,table,training_receipt=receipt)
+        create_new(out,'training.json',(json.dumps(receipt,indent=2)+'\n').encode())
         models=load_checkpoint(a.output/'checkpoint.pt',digest)
         validate_grant(grant,study,models.config,a.device,'evaluate',a.max_wall_seconds)
         models.to(a.device)

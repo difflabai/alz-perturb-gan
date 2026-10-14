@@ -159,47 +159,122 @@ def test_evaluate_output_must_be_in_scope(tmp_path, monkeypatch):
 
 
 # ---- end-to-end select / explore on synthetic runs ------------------------------------------
+BUNDLE = 'synthetic-bundle'
+
 def _synthetic_cohort(base):
-    s = cal_study(); runs = {}
+    s = cal_study(); base.mkdir(parents=True); runs, rruns = {}, {}
     for seed in (42, 43, 44):
-        run = base / f'seed{seed}'; run.mkdir(parents=True)
-        (run / 'grant.json').write_text(json.dumps({'bundle_sha256': 'synthetic-bundle', 'seeds': [seed]}))
-        m = build_models(ModelConfig(4, 12, hidden=8, z_dim=2, particles=8, seed=seed, steps=1, batch_size=4))
+        run = base / f'seed{seed}'; run.mkdir()
+        (run / 'grant.json').write_text(json.dumps({'bundle_sha256': BUNDLE, 'protocol_sha256': s.protocol.fingerprint,
+                                                    'seeds': [seed], 'harness_commit': 'c' * 40}))
         for arm in gene_analysis.ARMS:
+            m = build_models(ModelConfig(4, 12, hidden=8, z_dim=2, particles=8, seed=seed, steps=1, batch_size=4))
+            m.config = dataclasses.replace(m.config, arm=arm)
             (run / arm).mkdir()
             evaluate(m, s, output=run / arm / 'evaluation')
             (run / arm / 'checkpoint.pt').write_bytes(f'{seed}-{arm}'.encode())
             hist = [{'step': st, 'realness_weight_mean': 0.5} for st in (1000, 2000)]
             (run / arm / 'training.json').write_text(json.dumps({'history': hist}))
-        runs[seed] = str(run)
+        runs[seed] = str(run); rruns[str(seed)] = {'path': str(run), 'grant_sha256': hashlib.sha256((run / 'grant.json').read_bytes()).hexdigest()}
     rec = base / 'supervisor_receipt.json'
-    rec.write_text(json.dumps({'arms': [{'seed': sd, 'arm': a, 'status': 'ok'} for sd in runs for a in gene_analysis.ARMS]}))
-    return runs, str(rec)
+    rec.write_text(json.dumps({'schema': 'supervisor_receipt_v4_2', 'rc': 0, 'stop_reason': None, 'seeds': [42, 43, 44],
+                               'static_checks': {'harness_commit': 'c' * 40}, 'runs': rruns,
+                               'arms': [{'seed': sd, 'arm': a, 'status': 'ok'} for sd in runs for a in gene_analysis.ARMS]}))
+    return runs, str(rec), s.protocol.fingerprint
 
-def test_select_then_explore_end_to_end(tmp_path):
-    runs, rec = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'; out.mkdir()
-    path, digest, doc = gene_analysis.select(runs, rec, str(out), expected_seeds=[42, 43, 44])
+def _sel(runs, rec, out, proto, **kw):
+    return gene_analysis.select(runs, rec, str(out), expected_seeds=[42, 43, 44], bundle_sha256=kw.get('bundle', BUNDLE),
+                                protocol_sha256=kw.get('protocol', proto))
+
+@pytest.fixture
+def cohort(tmp_path):
+    runs, rec, proto = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'; out.mkdir()
+    return runs, rec, proto, out
+
+def test_select_then_explore_end_to_end(cohort):
+    runs, rec, proto, out = cohort
+    path, digest, doc = _sel(runs, rec, out, proto)
     assert hashlib.sha256(Path(path).read_bytes()).hexdigest() == digest
     assert doc['split'] == 'inner' and doc['preconditions'] == {'all_seeds_complete': True, 'gate_ok': True}
-    assert doc['selected'] == {'G': False, 'H': False, 'GH': False}       # identical models: zero deltas
+    assert doc['selected'] == {'G': False, 'H': False, 'GH': False}
     assert doc['wording'] == 'selection criterion unmet; evidence inconclusive'
-    assert 'exploratory' not in json.dumps(doc['inner_deltas']) and doc['bindings']['rule_sha256'] == gene_analysis.RULE_SHA256
-    assert set(doc['bindings']['runs']['42']['arms']['G']['sealed_sha256']) == {'exploratory.json', 'exploratory.pt', 'exploratory.jsonl'}
+    b = doc['bindings']
+    assert b['bundle_sha256'] == BUNDLE and b['protocol_sha256'] == proto and b['analysis_code_sha256'] and b['harness_commit'] == 'c' * 40
+    arm = b['runs']['42']['arms']['G']
+    assert {'training_json_sha256', 'provenance_file_hashes_sha256', 'checkpoint_sha256', 'calibrator_sha256'} <= set(arm)
     rp, rd, rep = gene_analysis.explore(str(path), digest, str(out))
     assert rep['header'].startswith('POST-SELECTION, NON-CONFIRMATORY') and set(rep['exploratory_head']) == {'42', '43', '44'}
-    events = [json.loads(l)['event'] for l in (out / 'ledger.jsonl').read_text().splitlines()]
-    assert events == ['select', 'explore']
+    assert [json.loads(l)['event'] for l in (out / 'ledger.jsonl').read_text().splitlines()] == ['select', 'explore']
 
-def test_select_requires_all_seeds_and_explore_detects_tampering(tmp_path):
-    runs, rec = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'; out.mkdir()
-    with pytest.raises(ValueError): gene_analysis.select({42: runs[42]}, rec, str(out), expected_seeds=[42, 43, 44])
-    path, digest, _ = gene_analysis.select(runs, rec, str(out), expected_seeds=[42, 43, 44])
-    sealed = Path(runs[43]) / 'H' / 'evaluation' / 'sealed' / 'exploratory.json'
-    sealed.chmod(0o644); sealed.write_text(sealed.read_text() + ' ')
+@pytest.mark.parametrize('fault', ['bundle', 'protocol', 'receipt_rc', 'receipt_arm', 'receipt_path', 'grant', 'summary', 'unlisted', 'sealed', 'seed_missing'])
+def test_select_refuses_binding_gaps(cohort, fault):
+    runs, rec, proto, out = cohort; kw = {}
+    R = json.loads(Path(rec).read_text())
+    if fault == 'bundle': kw['bundle'] = 'other'
+    if fault == 'protocol': kw['protocol'] = 'f' * 64
+    if fault == 'receipt_rc': R['rc'] = 3
+    if fault == 'receipt_arm': R['arms'][4]['status'] = 'error_rc7'
+    if fault == 'receipt_path': R['runs']['43']['path'] = runs[44]
+    if fault == 'grant':
+        g = Path(runs[42]) / 'grant.json'; g.write_text(g.read_text().replace(BUNDLE, 'other'))
+    if fault == 'summary':
+        f = Path(runs[43]) / 'H' / 'evaluation' / 'metrics' / 'summary.json'; f.chmod(0o644); f.write_text(f.read_text() + ' ')
+    if fault == 'unlisted': (Path(runs[44]) / 'GH' / 'evaluation' / 'metrics' / 'extra.json').write_text('{}')
+    if fault == 'sealed':
+        f = Path(runs[42]) / 'B0' / 'evaluation' / 'sealed' / 'exploratory.jsonl'; f.chmod(0o644); f.write_text('')
+    Path(rec).write_text(json.dumps(R))
+    if fault == 'seed_missing':
+        with pytest.raises(PermissionError): gene_analysis.select({42: runs[42]}, rec, str(out), expected_seeds=[42, 43, 44], bundle_sha256=BUNDLE, protocol_sha256=proto)
+        return
+    with pytest.raises(PermissionError): _sel(runs, rec, out, proto, **kw)
+    assert not list(out.glob('selection_frozen_*'))
+
+@pytest.mark.parametrize('fault', ['training', 'grant', 'receipt', 'sealed'])
+def test_explore_refuses_when_bound_inputs_change(cohort, fault):
+    runs, rec, proto, out = cohort
+    path, digest, _ = _sel(runs, rec, out, proto)
+    if fault == 'training': (Path(runs[44]) / 'G' / 'training.json').write_text('{"history": []}')
+    if fault == 'grant': g = Path(runs[43]) / 'grant.json'; g.write_text(g.read_text() + ' ')
+    if fault == 'receipt': Path(rec).write_text(Path(rec).read_text() + ' ')
+    if fault == 'sealed':
+        f = Path(runs[43]) / 'H' / 'evaluation' / 'sealed' / 'exploratory.json'; f.chmod(0o644); f.write_text(f.read_text() + ' ')
     with pytest.raises(PermissionError): gene_analysis.explore(str(path), digest, str(out))
 
-def test_select_gate_failure_blocks_selection(tmp_path):
-    runs, rec = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'; out.mkdir()
+@pytest.mark.parametrize('fault', ['symlink', 'replaced', 'hardlink', 'missing', 'other_dir'])
+def test_explore_validates_ledger_reopen(cohort, tmp_path, fault):
+    runs, rec, proto, out = cohort
+    path, digest, _ = _sel(runs, rec, out, proto)
+    led = out / 'ledger.jsonl'; text = led.read_text()
+    if fault == 'symlink':
+        real = tmp_path / 'elsewhere.jsonl'; real.write_text(text); led.unlink(); led.symlink_to(real)
+    if fault == 'replaced': led.rename(tmp_path / 'old-ledger.jsonl'); led.write_text(text)   # same content, new inode (old kept alive)
+    if fault == 'hardlink': os.link(led, tmp_path / 'second-link')
+    if fault == 'missing': led.unlink()
+    target = str(out)
+    if fault == 'other_dir': target = str(tmp_path / 'cohort')
+    with pytest.raises(PermissionError): gene_analysis.explore(str(path), digest, target)
+
+def test_select_gate_failure_blocks_selection(cohort):
+    runs, rec, proto, out = cohort
     (Path(runs[44]) / 'G' / 'training.json').write_text(json.dumps({'history': [{'step': 1000, 'realness_weight_mean': 0.9}]}))
-    _, _, doc = gene_analysis.select(runs, rec, str(out), expected_seeds=[42, 43, 44])
+    _, _, doc = _sel(runs, rec, out, proto)
     assert doc['preconditions']['gate_ok'] is False and not any(doc['selected'].values())
+
+
+# ---- harness: containment before training ---------------------------------------------------
+def test_harness_checks_output_containment_before_any_work(tmp_path, monkeypatch):
+    from alz_perturb_gan import gene_harness
+    inner = tmp_path / 'scope'; inner.mkdir(); monkeypatch.setenv('ALZ_SCOPE_ROOT', str(inner))
+    called = []
+    monkeypatch.setattr(gene_harness, 'train_arm', lambda *a, **k: called.append(1))
+    monkeypatch.setattr(gene_harness, 'load_study_bundle', lambda *a, **k: called.append(2))
+    g = inner / 'grant.json'; g.write_text('{}')
+    for bad in (tmp_path / 'outside', inner / '..' / 'escape', Path('relative/out')):
+        with pytest.raises(ScopeError):
+            gene_harness.main(['train', '--bundle', str(g), '--bundle-sha256', '0', '--output', str(bad), '--max-wall-seconds', '5',
+                               '--grant', str(g), '--grant-sha256', '0'])
+    (inner / 'esc').symlink_to(tmp_path)
+    with pytest.raises(ScopeError):
+        gene_harness.main(['train', '--bundle', str(g), '--bundle-sha256', '0', '--output', str(inner / 'esc' / 'x'), '--max-wall-seconds', '5',
+                           '--grant', str(g), '--grant-sha256', '0'])
+    assert not called and not (tmp_path / 'outside').exists() and not (tmp_path / 'x').exists()

@@ -120,3 +120,19 @@ def scoped_new_dir(p, *, root=None):
     for name in reversed(todo):
         check_name(name); os.mkdir(base / name, 0o755); base = scoped(str(base / name), root=root)
     return base
+
+
+def check_new_target(p, *, root=None):
+    """Validate, WITHOUT creating anything, that `p` is a not-yet-existing path under root.
+
+    Used before any work is done so that nothing (training included) runs for an out-of-scope output.
+    """
+    s = str(p) if p is not None else ''
+    if not s or not os.path.isabs(s): scoped(s, root=root)
+    lex = Path(os.path.normpath(s)); anc, todo = lex, []
+    while not os.path.lexists(anc):
+        todo.append(anc.name); anc = anc.parent
+    base = scoped(str(anc), root=root)
+    if not todo: raise FileExistsError(f'output already exists: {s!r}')
+    for name in todo: check_name(name)
+    return base.joinpath(*reversed(todo))

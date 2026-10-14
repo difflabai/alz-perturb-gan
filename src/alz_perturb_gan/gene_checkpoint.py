@@ -55,7 +55,10 @@ def save_checkpoint(path, models, protocol, table=None, *, training_receipt=None
                'state': {k: m.state_dict() for k, m in models.modules().items()},
                'feature_provenance': models.feature_provenance, 'training_receipt': training_receipt or {},
                'training_protocol_sha256':models.training_protocol_sha256}
-    torch.save(payload, Path(path))
+    import io
+    from .paths import create_new
+    buf = io.BytesIO(); torch.save(payload, buf)
+    path = create_new(Path(path).parent, Path(path).name, buf.getvalue())  # scoped dir, exclusive, no-follow
     return file_sha256(path)
 
 
