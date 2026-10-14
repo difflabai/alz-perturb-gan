@@ -16,7 +16,8 @@ import torch
 from .gene_checkpoint import model_hashes, state_hash, zero_update_guard
 from .gene_features import file_sha256, json_hash
 from .metrics import phenocopy_rank, expression_report
-from .gene_calibration import calibration_split, split_hash, row_softmax, fit_temperature, calibrator_sha, reliability
+from .gene_calibration import split_hash, row_softmax, calibrator_sha, reliability, crossfit_report
+from .paths import create_new_unscoped
 
 
 def _tensor_hash(x):
@@ -180,21 +181,25 @@ def evaluate(models, study, *, output=None, profile_mode='generated', fixed_inpu
                     inputs['queries'][name].to(device).expand(count, -1), torch.arange(count, device=device)).cpu())
             return torch.stack(rows)
         # Option B: temperature fitted only on held-out FIT identities (never inner/exploratory), then frozen.
-        cal_names = calibration_split(study.protocol.fit)
+        # v4: identities come from protocol.calibration only (disjoint from FIT; never trained on).
+        cal_names = tuple(study.protocol.calibration)
         if cal_names:
             cal_logits = head_logits(cal_names); cal_pos = [library.index(n) for n in cal_names]
-            calibrator = fit_temperature(cal_logits, cal_pos)
-            calibrator.update(calibration_identities=list(cal_names), calibration_split_sha256=split_hash(cal_names))
+            report, final = crossfit_report(cal_logits, cal_pos, list(cal_names))
+            calibrator = dict(final, calibration_identities=list(cal_names), calibration_split_sha256=split_hash(cal_names),
+                              fold_assignment_sha256=report['fold_assignment_sha256'], status=report['status'])
             calibrator['sha256'] = calibrator_sha(calibrator)
             cal_probs = row_softmax(cal_logits, calibrator['temperature'])
-            result['calibration'] = {'calibrator': calibrator, 'split': score_summary(cal_logits, list(cal_names), library,
+            result['calibration'] = {'calibrator': calibrator, 'report': report, 'split_in_sample': score_summary(cal_logits, list(cal_names), library,
                 negative_indices(library, list(cal_names), study.protocol.negative_seed), probabilities='softmax', probs=cal_probs),
                 'uncalibrated_t1': reliability(row_softmax(cal_logits), cal_pos)}
             pairs['calibration'] = {'head_logits': cal_logits, 'targets': list(cal_names)}
         else:
             calibrator = {'method': 'none_small_protocol', 'temperature': 1.0, 'calibration_identities': []}
             calibrator['sha256'] = calibrator_sha(calibrator); result['calibration'] = {'calibrator': calibrator}
-        result['scoring'] = 'row_softmax(head_logits / T); raw sigmoid never used as probability'
+        result['scoring'] = {'ranks': 'raw_head_logits (per-row and micro AUROC, MRR, top-1)',
+                             'probabilities': 'row_softmax(head_logits / T_all16); raw sigmoid never used as probability',
+                             'mode': 'raw_logit_ranks'}
         for split, names in study.protocol.groups().items():
             queries = torch.stack([inputs['queries'][n] for n in names])
             logits = head_logits(names)
@@ -244,7 +249,24 @@ def _json(path, value):
 def _write_groups(output, models, study, inputs, pairs, result, invocation):
     if output.exists(): raise FileExistsError('new output directory required; never overwrite baseline receipts')
     output.mkdir(parents=True)
-    for group in ('inputs', 'pairs', 'metrics', 'provenance'): (output / group).mkdir()
+    for group in ('inputs', 'pairs', 'metrics', 'provenance', 'sealed'): (output / group).mkdir()
+    # v4 section 4: exploratory summary metrics, pair matrices and score rows are sealed; unsealed outputs keep hashes only.
+    result = dict(result, splits=dict(result['splits'])); pairs = dict(pairs); sealed = {}
+    if 'exploratory' in result['splits']:
+        import io
+        ex_summary = result['splits'].pop('exploratory'); ex_pairs = pairs.pop('exploratory')
+        buf = io.BytesIO(); torch.save({'exploratory': ex_pairs}, buf)
+        rows = ''.join(json.dumps({'split':'exploratory', 'target':name, 'candidate':cand, 'label':int(name==cand),
+                    'head_logit':float(ex_pairs['head_logits'][r,c]), 'head_prob':float(ex_pairs['head_scores'][r,c]),
+                    'l2_score':float(ex_pairs['l2_scores'][r,c])})+'\n'
+                    for r, name in enumerate(ex_pairs['targets']) for c, cand in enumerate(study.protocol.library))
+        for fname, data in (('exploratory.json', (json.dumps(_clean(ex_summary), indent=2, sort_keys=True)+'\n').encode()),
+                            ('exploratory.pt', buf.getvalue()), ('exploratory.jsonl', rows.encode())):
+            create_new_unscoped(output / 'sealed', fname, data)
+            sealed[fname] = hashlib.sha256(data).hexdigest()
+        result['splits']['exploratory'] = {'sealed': True, 'target_tensor_sha256': ex_summary['target_tensor_sha256'],
+                                           'sealed_sha256': sealed}
+    result['sealed'] = {'exploratory': sealed, 'rule': 'read only via gene_analysis explore with a bound selection hash'}
     torch.save(inputs, output / 'inputs/scored_tensors.pt')
     _json(output / 'inputs/protocol.json', asdict(study.protocol))
     _json(output / 'inputs/perturbation_dictionary.json', {'names': list(study.protocol.library), 'gene_ids': list(study.protocol.gene_ids),
@@ -258,8 +280,9 @@ def _write_groups(output, models, study, inputs, pairs, result, invocation):
             for row, name in enumerate(block['targets']):
                 for col, candidate in enumerate(study.protocol.library):
                     stream.write(json.dumps({'split':split, 'target':name, 'candidate':candidate, 'label':int(name==candidate),
-                        'head_score':float(block['head_scores'][row,col]), 'l2_score':float(block['l2_scores'][row,col])})+'\n')
-    _json(output / 'metrics/summary.json', result)
+                        'head_logit':float(block['head_logits'][row,col]), 'head_score':float(block['head_scores'][row,col]),
+                        'l2_score':float(block['l2_scores'][row,col])})+'\n')
+    create_new_unscoped(output / 'metrics', 'summary.json', (json.dumps(_clean(result), indent=2, sort_keys=True, allow_nan=False)+'\n').encode())
     import alz_perturb_gan, particlegan, numpy
     root = Path(__file__).resolve().parents[2]
     lease_fds = tuple(int(x) for x in os.environ.get('ALZ_LEASE_FDS','').split(',') if x)

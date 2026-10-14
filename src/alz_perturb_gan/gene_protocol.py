@@ -15,6 +15,7 @@ class StudyProtocol:
     inner: tuple[str, ...]
     exploratory: tuple[str, ...]
     final: tuple[str, ...] = ()
+    calibration: tuple[str, ...] = ()  # held-out FIT identities; never trained on (plan v4 §1)
     split_seed: int = 1729
     evaluation_seed: int = 45
     negative_seed: int = 46
@@ -25,16 +26,18 @@ class StudyProtocol:
     def __post_init__(self):
         if len(set(self.library)) != len(self.library) or len(self.gene_ids) != len(self.library) or len(set(self.gene_ids)) != len(self.gene_ids):
             raise ValueError('common library and stable IDs must be unique and aligned')
-        groups = (self.fit, self.inner, self.exploratory, self.final)
+        groups = (self.fit, self.calibration, self.inner, self.exploratory, self.final)
         joined = [n for g in groups for n in g]
         if len(joined) != len(set(joined)) or set(joined) != set(self.library) or not self.fit or not self.inner:
-            raise ValueError('FIT/inner/exploratory/final must partition the fixed library')
+            raise ValueError('FIT/calibration/inner/exploratory/final must partition the fixed library')
         if self.selection_split != 'inner' or self.draws < 1:
             raise ValueError('only training-only inner validation may select sources/arms')
 
     @property
     def fingerprint(self):
-        return json_hash(asdict(self))
+        d = asdict(self)
+        if not d['calibration']: d.pop('calibration')  # protocols without a calibration group keep their historical hash
+        return json_hash(d)
 
     def groups(self):
         return {k: getattr(self, k) for k in ('fit', 'inner', 'exploratory', 'final') if getattr(self, k)}
@@ -95,8 +98,10 @@ class StudyData:
                    candidates, candidate_ids, targets, query_ids)
 
     def training_tensors(self, exclude=()):
-        # Calibration identities (gene_calibration) are excluded from G, D and J training.
+        # FIT only; protocol.calibration is disjoint from FIT by construction (plan v4 §1). `exclude` is a
+        # legacy guard for 96-FIT protocols and must not be needed for v2 bundles.
         names = tuple(n for n in self.protocol.fit if n not in set(exclude))
+        if set(names) & set(self.protocol.calibration): raise ValueError('calibration identity in training tensors')
         x = torch.cat([self.cells[n].detach().float().cpu() for n in names])
         ids = torch.cat([torch.full((len(self.cells[n]),), self.protocol.library.index(n), dtype=torch.long) for n in names])
         # Query target means and real candidate pools are disjoint within each FIT identity.

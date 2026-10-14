@@ -73,8 +73,11 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
         from .gene_protocol import validate_grant
         validate_grant(grant or {},study,cfg,str(models.device),'train',max_wall_seconds)
     if decision_cells < 1: raise ValueError('decision_cells must be positive')
-    held_out = calibration_split(study.protocol.fit)
-    t = study.training_tensors(exclude=held_out); device = models.device
+    # v4: calibration identities come only from the protocol (never recomputed); FIT is already disjoint.
+    held_out = tuple(study.protocol.calibration)
+    t = study.training_tensors(); device = models.device
+    if set(t['fit_ids'].tolist()) & {study.protocol.library.index(n) for n in held_out}:
+        raise ValueError('calibration identity reached G/D/J/prior training')
     g, d, j, prior, recipe = models.generator, models.critic, models.decision, models.prior, models.recipe
     probe = cfg.arm == 'G_frozen'
     if probe:

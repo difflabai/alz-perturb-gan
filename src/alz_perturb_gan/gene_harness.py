@@ -28,7 +28,7 @@ def load_study_bundle(path, expected_sha256, *, expected_protocol_sha256=None):
     if file_sha256(path)!=expected_sha256: raise ValueError('data bundle hash mismatch')
     blob=torch.load(path,map_location='cpu',weights_only=True)
     if blob.get('schema_version')!=1: raise ValueError('unsupported study bundle')
-    protocol=StudyProtocol(**{k:tuple(v) if k in ('library','gene_ids','fit','inner','exploratory','final') else v for k,v in blob['protocol'].items()})
+    protocol=StudyProtocol(**{k:tuple(v) if k in ('library','gene_ids','fit','inner','exploratory','final','calibration') else v for k,v in blob['protocol'].items()})
     if expected_protocol_sha256 is not None and protocol.fingerprint != expected_protocol_sha256:
         raise ValueError('bundle protocol differs from granted protocol')
     identity = {}

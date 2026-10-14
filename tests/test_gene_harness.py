@@ -171,12 +171,14 @@ def test_checkpoint_restore_is_zero_update_and_hash_bound(tmp_path,study,table,m
 def test_evaluation_records_exact_inputs_pairs_four_groups_and_no_updates(tmp_path,study):
     models=build_models(cfg());before=model_hashes(models);out=tmp_path/'audit'
     scored=evaluate(models,study,output=out,invocation={'checkpoint_sha256':'synthetic mock'})
-    assert set(p.name for p in out.iterdir())=={'inputs','pairs','metrics','provenance'}
+    assert set(p.name for p in out.iterdir())=={'inputs','pairs','metrics','provenance','sealed'}
     assert before==model_hashes(models) and scored['summary']['optimizer_step_calls']==0
     tensors=torch.load(out/'inputs/scored_tensors.pt',weights_only=True)
     assert tensors['candidates'].shape==(6,4) and torch.equal(tensors['candidates'],scored['inputs']['candidates'])
     pairs=torch.load(out/'pairs/matrices.pt',weights_only=True)
-    assert pairs['exploratory']['head_scores'].shape==(2,6)
+    assert 'exploratory' not in pairs  # v4: sealed
+    sealed=torch.load(out/'sealed/exploratory.pt',weights_only=True)
+    assert sealed['exploratory']['head_scores'].shape==(2,6)
     hashes=json.loads((out/'provenance/file_hashes.json').read_text())
     assert all(file_sha256(out/k)==v for k,v in hashes.items())
     assert json.loads((out/'provenance/manifest.json').read_text())['zero_optimizer_step_calls']==0

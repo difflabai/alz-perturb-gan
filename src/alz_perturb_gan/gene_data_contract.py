@@ -36,7 +36,7 @@ def validate_real_bundle_identity(protocol, control, cell_ids, provenance):
     import json
     original = json.loads(Path(split['path']).read_text())
     train, exploratory = original['train_names'], original['eval_names']
-    if tuple(train + exploratory) != protocol.library or tuple(exploratory) != protocol.exploratory or set(protocol.fit + protocol.inner) != set(train):
+    if tuple(train + exploratory) != protocol.library or tuple(exploratory) != protocol.exploratory or set(protocol.fit + protocol.calibration + protocol.inner) != set(train):
         raise ValueError('library order/identity groups differ from original split')
     source_path = Path(source['path'])
     with h5py.File(source_path, 'r') as raw:
