@@ -14,6 +14,8 @@ from pathlib import Path
 from .gene_evaluation import paired_delta, all_seed_deltas
 from .gene_features import file_sha256, json_hash
 from .gene_calibration import calibrator_sha
+import math
+import torch
 from .paths import scoped, create_new, check_name
 
 ARMS = ('B0', 'G', 'H', 'GH', 'shuffle', 'G_frozen')
@@ -52,6 +54,56 @@ def _verify_provenance(eval_dir):
     return file_sha256(scoped(eval_dir / 'provenance' / 'file_hashes.json'))
 
 
+
+def _state_hashes(state):
+    """Same digest as gene_checkpoint.state_hash, computed from the saved state dicts (no model construction)."""
+    out = {}
+    for name, sd in state.items():
+        h = hashlib.sha256()
+        for k, v in sorted(sd.items()):
+            h.update(k.encode()); h.update(str(v.dtype).encode()); h.update(str(tuple(v.shape)).encode())
+            h.update(v.detach().cpu().contiguous().numpy().tobytes())
+        out[name] = h.hexdigest()
+    return out
+
+
+def _verify_checkpoint(ck_path, tj_path, *, seed, arm, protocol_sha256, grant, summary):
+    """HOLD 2: the checkpoint must be a real trained schema-1 checkpoint that traces to its training.json
+    (embedded receipt identical), with arm/seed/steps/protocol consistent with the grant and the evaluation."""
+    where = f'seed {seed} {arm}'
+    want = file_sha256(scoped(ck_path))
+    try:
+        blob = torch.load(scoped(ck_path), map_location='cpu', weights_only=True)
+    except Exception as e:  # noqa: BLE001 - dummy bytes, truncated or foreign files
+        raise BindingError(f'{where}: checkpoint is not a loadable checkpoint ({type(e).__name__})')
+    _need(file_sha256(scoped(ck_path)) == want, f'{where}: checkpoint changed while reading')
+    _need(isinstance(blob, dict) and blob.get('schema_version') == 1, f'{where}: checkpoint schema is not 1')
+    cfg, state = blob.get('config') or {}, blob.get('state') or {}
+    _need(set(state) == {'generator', 'critic', 'decision', 'prior'}, f'{where}: checkpoint state is incomplete')
+    tensors = [v for sd in state.values() for v in sd.values() if torch.is_tensor(v) and v.is_floating_point()]
+    _need(tensors and all(bool(torch.isfinite(v).all()) for v in tensors), f'{where}: checkpoint has non-finite or no weights')
+    _need(any(float(v.std()) > 0 for v in tensors if v.numel() > 1), f'{where}: checkpoint weights are constant (dummy)')
+    _need(blob.get('training_protocol_sha256') == protocol_sha256 == json_hash(blob.get('protocol')),
+          f'{where}: checkpoint was not trained under the bound protocol (untrained or foreign)')
+    t = json.loads(Path(scoped(tj_path)).read_text())
+    _need(blob.get('training_receipt') == t, f'{where}: training.json differs from the receipt embedded in the checkpoint')
+    _need(cfg.get('arm') == arm == t.get('arm'), f'{where}: arm differs between directory, checkpoint and training.json')
+    _need(cfg.get('seed') == seed, f'{where}: seed differs between run and checkpoint')
+    steps = t.get('steps')
+    _need(isinstance(steps, int) and steps > 0 and steps == cfg.get('steps') == grant.get('max_steps_per_arm'),
+          f'{where}: training steps differ between training.json, checkpoint config and the grant')
+    hist = t.get('history') or []
+    _need([r.get('step') for r in hist] == list(range(1, steps + 1)), f'{where}: training history does not cover steps 1..{steps}')
+    _need(all(isinstance(r.get('j_loss'), (int, float)) and math.isfinite(r['j_loss']) for r in hist),
+          f'{where}: training history lacks finite decision-head updates')
+    hashes = _state_hashes(state)
+    _need(summary.get('model_hashes_before') == hashes == summary.get('model_hashes_after'),
+          f'{where}: evaluation was not run on this checkpoint')
+    _need(summary.get('selection_eligible') is True, f'{where}: evaluation marks the checkpoint as not selection-eligible')
+    return {'checkpoint_sha256': want, 'training_json_sha256': file_sha256(scoped(tj_path)), 'steps': steps,
+            'state_hashes': hashes}
+
+
 def bindings(runs, receipt, *, expected_seeds, bundle_sha256, protocol_sha256):
     """Every input the selection depends on, recomputed and cross-checked from current artifacts."""
     receipt = scoped(receipt); R = json.loads(Path(receipt).read_text())
@@ -86,9 +138,11 @@ def bindings(runs, receipt, *, expected_seeds, bundle_sha256, protocol_sha256):
             _need(set(sealed) == {'exploratory.json', 'exploratory.pt', 'exploratory.jsonl'}, f'seed {seed} {arm}: sealed outputs missing')
             for fname, h in sealed.items():
                 _need(file_sha256(scoped(ev / 'sealed' / fname)) == h, f'seed {seed} {arm}: sealed {fname} changed')
+            ck = _verify_checkpoint(d / 'checkpoint.pt', d / 'training.json', seed=seed, arm=arm,
+                                    protocol_sha256=protocol_sha256, grant=g, summary=s)
             arms[arm] = {'summary_sha256': file_sha256(sp), 'provenance_file_hashes_sha256': _verify_provenance(ev),
-                         'checkpoint_sha256': file_sha256(scoped(d / 'checkpoint.pt')),
-                         'training_json_sha256': file_sha256(scoped(d / 'training.json')),
+                         'checkpoint_sha256': ck['checkpoint_sha256'], 'training_json_sha256': ck['training_json_sha256'],
+                         'training_steps': ck['steps'], 'state_hashes': ck['state_hashes'],
                          'calibrator_sha256': cal['sha256'], 'calibration_split_sha256': cal.get('calibration_split_sha256'),
                          'calibration_status': cal.get('status'), 'sealed_sha256': sealed}
         out['runs'][str(seed)] = {'path': str(run), 'grant_sha256': gsha, 'arms': arms}

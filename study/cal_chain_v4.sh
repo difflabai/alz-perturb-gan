@@ -2,8 +2,11 @@
 # Plan v4.2 chain: one supervisor process (all seeds, no aggregate time cap), then the post-run probe.
 # The harness commit, bundle and protocol are HARD-PINNED below (the deployed copy has the commit filled in);
 # they are never taken from the command line. Exits nonzero if the supervisor or the probe fails.
-# Usage: cal_chain_v4_2.sh --dry-run
-#        cal_chain_v4_2.sh <authorization-ref> <ownership-ref> <lease-valid-until ISO-8601 with tz> [--arm-timeout S] [--total-timeout S]
+# Usage: cal_chain_v4_3.sh --dry-run
+#        cal_chain_v4_3.sh <authorization-ref> <ownership-ref> <lease-valid-until ISO-8601 with tz> [--arm-timeout S] [--total-timeout S] [--teardown-timeout S]
+# Extra args are ALLOWLISTED: only the three timeout flags, each at most once, as '--flag N' with N a positive number.
+# Anything else (including any pinned option such as --harness-commit/--bundle/--bundle-sha256/--protocol-sha256/--seeds,
+# '--flag=value' forms, duplicates, or extras in --dry-run) is rejected before the supervisor starts.
 set -euo pipefail
 shopt -s nullglob
 umask 022
@@ -14,7 +17,7 @@ CACHE=/ml2/altgan/.cache
 PINNED_COMMIT=@PINNED_COMMIT@
 PINNED_BUNDLE_SHA=60d5f71a60c47489febf4b0060ec6eed525b5b9b82a9c1e3c3cc7b1140f42686
 PINNED_PROTOCOL_SHA=8db7d79597ac7311741349b968bb467337eb53e21d4a7fdf46ce9f80beafdd2a
-SUPERVISOR_NAME=supervise_v4_2.py
+SUPERVISOR_NAME=supervise_v4_3.py
 in_scope() { local r; r=$(realpath -e -- "$1") || return 1; [[ "$r" == "$SCOPE" || "$r" == "$SCOPE"/* ]] || { echo "out of scope: $1" >&2; return 1; }; printf '%s\n' "$r"; }
 [[ "$PINNED_COMMIT" =~ ^[0-9a-f]{40}$ ]] || { echo "commit is not pinned in this copy" >&2; exit 2; }
 [[ $# -ge 1 ]] || { echo "usage: $0 --dry-run | AUTH OWN LEASE [extra supervisor timeout flags]" >&2; exit 2; }
@@ -26,12 +29,23 @@ echo "== v4.2 chain $(date --iso-8601=seconds) commit $PINNED_COMMIT supervisor 
 PIN=(--harness-commit "$PINNED_COMMIT" --bundle "$BUNDLE" --bundle-sha256 "$PINNED_BUNDLE_SHA" --protocol-sha256 "$PINNED_PROTOCOL_SHA")
 RC=0
 if [[ "$1" == "--dry-run" ]]; then
+  [[ $# -eq 1 ]] || { echo "--dry-run takes no extra arguments" >&2; exit 2; }
   OUT=$("$PY" "$SUP" --dry-run --seeds 42,43,44 "${PIN[@]}") || RC=$?
 else
   [[ $# -ge 3 ]] || { echo "need AUTH OWN LEASE" >&2; exit 2; }
   AUTH=$1; OWN=$2; LEASE=$3; shift 3
+  EXTRA=(); SEEN=" "
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --arm-timeout|--total-timeout|--teardown-timeout) ;;
+      *) echo "rejected argument: $1 (only --arm-timeout/--total-timeout/--teardown-timeout N are allowed)" >&2; exit 2 ;;
+    esac
+    [[ "$SEEN" != *" $1 "* ]] || { echo "duplicate argument: $1" >&2; exit 2; }
+    [[ $# -ge 2 && "$2" =~ ^[0-9]+([.][0-9]+)?$ && ! "$2" =~ ^0+([.]0+)?$ ]] || { echo "$1 needs a positive number" >&2; exit 2; }
+    SEEN="$SEEN$1 "; EXTRA+=("$1" "$2"); shift 2
+  done
   unset CUDA_VISIBLE_DEVICES
-  OUT=$("$PY" "$SUP" --seeds 42,43,44 "${PIN[@]}" --authorization-reference "$AUTH" --ownership-reference "$OWN" --lease-valid-until "$LEASE" "$@") || RC=$?
+  OUT=$("$PY" "$SUP" --seeds 42,43,44 "${PIN[@]}" --authorization-reference "$AUTH" --ownership-reference "$OWN" --lease-valid-until "$LEASE" "${EXTRA[@]}") || RC=$?
 fi
 echo "supervisor rc=$RC"
 printf '%s\n' "$OUT"

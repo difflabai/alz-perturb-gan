@@ -91,16 +91,21 @@ def group_members(pgid):
     return out
 
 
-def group_ownership(pgid, leader):
-    """('ours'|'empty'|'reused', members). Uses the recorded leader identity, never the number alone."""
+def group_ownership(pgid, leader, known=()):
+    """('ours'|'empty'|'reused'|'unverified', members).
+
+    'ours' ONLY if at least one live member of the group is a process whose recorded identity (pid AND
+    /proc start time) we captured ourselves: the group leader or the inner harness process. A group whose
+    pid==pgid process has a different start time is 'reused'. Members exist but none is a recorded
+    identity -> 'unverified' (never signalled)."""
     members = group_members(pgid)
     if not members: return "empty", []
+    ids = [r for r in (leader, *known) if r and r.get("pid") is not None and r.get("starttime") is not None]
     holder = proc_info(pgid)
-    if holder["starttime"] is not None and holder["state"] != "Z":
-        return ("ours" if holder["starttime"] == leader["starttime"] else "reused"), members
-    # leader exited: a pid cannot be reused while its process group still has members, so the group is ours,
-    # provided every member started no earlier than our leader.
-    return ("ours" if all(m["starttime"] >= leader["starttime"] for m in members) else "reused"), members
+    if holder["starttime"] is not None and holder["state"] != "Z" and holder["starttime"] != leader.get("starttime"):
+        return "reused", members
+    verified = [m for m in members if any(m["pid"] == r["pid"] and m["starttime"] == r["starttime"] for r in ids)]
+    return ("ours" if verified else "unverified"), members
 
 
 def children_of(ppid):
@@ -154,6 +159,24 @@ def proc_lock_holders(st):
     return out, None
 
 
+def backstop_schedule(slot, scale):
+    """The independent `timeout -k K D` schedule used by arm_cmd, in real seconds after spawn."""
+    grace = KILL_GRACE * scale
+    hard = max(1, int(slot - grace)); k = max(1, int(grace / 2)); d = max(1, hard - int(grace / 2))
+    return {"term_after_s": d, "kill_after_s": d + k}
+
+
+BACKSTOP_TOLERANCE_S = 0.5   # process start/exit latency around the backstop's own clock
+
+
+def classify_exit(returncode, *, elapsed, schedule):
+    """rc 124 (TERM by timeout) / 137 (KILL by timeout -k) count as a timeout only at or after the scheduled backstop."""
+    if returncode == 0: return "ok"
+    if returncode == 124 and elapsed >= schedule["term_after_s"] - BACKSTOP_TOLERANCE_S: return "timeout"
+    if returncode == 137 and elapsed >= schedule["kill_after_s"] - BACKSTOP_TOLERANCE_S: return "timeout"
+    return f"error_rc{returncode}"
+
+
 class Clock:
     def __init__(self, scale): self.scale, self.t0 = scale, time.monotonic()
     def wall(self): return dt.datetime.now(DEN)
@@ -187,20 +210,23 @@ class Supervisor:
         g = self.groups.get(pgid)
         if g is None: self.refused.append({"pgid": pgid, "reason": "not_created_by_us"}); return False
         grace = max(0.2, min(self.clock.s(KILL_GRACE) / 2, (until - time.monotonic()) / 2))
+        known = [g.get("inner")]
         for sig in (signal.SIGTERM, signal.SIGKILL):
-            state, members = group_ownership(pgid, g["leader"])
+            state, members = group_ownership(pgid, g["leader"], known)
             if state == "empty": return True
-            if state == "reused":
-                self.refused.append({"pgid": pgid, "reason": "identity_mismatch", "members": [ident(m) for m in members]}); return False
+            if state in ("reused", "unverified"):
+                self.refused.append({"pgid": pgid, "signal_withheld": signal.Signals(sig).name,
+                                     "reason": "identity_mismatch" if state == "reused" else "unverified_identity",
+                                     "members": [ident(m) for m in members]}); return False
             self.signals_sent.append({"pgid": pgid, "signal": signal.Signals(sig).name, "leader": g["leader"],
                                       "members": [ident(m) for m in members], "at": self.clock.wall().isoformat()})
             try: os.killpg(pgid, sig)
             except ProcessLookupError: return True
             end = time.monotonic() + grace
             while time.monotonic() < end:
-                if group_ownership(pgid, g["leader"])[0] == "empty": return True
+                if group_ownership(pgid, g["leader"], known)[0] == "empty": return True
                 time.sleep(0.05)
-        return group_ownership(pgid, g["leader"])[0] == "empty"
+        return group_ownership(pgid, g["leader"], known)[0] == "empty"
 
     def static_checks(self):
         out = {"script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}  # own file, read as executed
@@ -257,8 +283,8 @@ class Supervisor:
         return p, sha(p)
 
     def arm_cmd(self, arm, seed, run, slot, grant, gsha):
-        hard = max(1, int(slot - self.clock.s(KILL_GRACE)))
-        wd = ["timeout", "-k", str(max(1, int(self.clock.s(KILL_GRACE) / 2))), str(max(1, hard - int(self.clock.s(KILL_GRACE) / 2)))]
+        sch = backstop_schedule(slot, self.clock.scale)
+        wd = ["timeout", "-k", str(sch["kill_after_s"] - sch["term_after_s"]), str(sch["term_after_s"])]
         if self.dry:
             rc = 7 if arm == self.a.dry_fail_arm else 0
             return wd + ["bash", "-c", f"sleep {self.a.dry_arm_seconds} & wait; echo fake {arm} seed {seed} fds=$ALZ_LEASE_FDS; exit {rc}"]
@@ -296,7 +322,7 @@ class Supervisor:
         self.groups[pgid] = {"arm": arm, "seed": seed, "leader": leader, "popen": p}
         entry["pgid"], entry["leader"] = pgid, leader
         entry["inner"] = inner_process(p.pid, time.monotonic() + min(2.0, max(0.1, slot / 2)))  # real seconds, not scaled
-        self.groups[pgid]["inner"] = entry["inner"]
+        self.groups[pgid]["inner"] = entry["inner"] if entry["inner"].get("pid") else None
         self.current = (entry, pgid)
         kill_at = t_start + slot - self.clock.s(KILL_GRACE)
         reason, minfree = None, None
@@ -308,9 +334,11 @@ class Supervisor:
             try: p.wait(timeout=max(0.02, min(self.clock.s(POLL_S), kill_at - time.monotonic())))
             except subprocess.TimeoutExpired: pass
         entry["min_free_mib"] = minfree
-        if reason is None and p.returncode in (124, 137) and time.monotonic() >= t_start + slot - self.clock.s(KILL_GRACE) - 1.5:
-            reason = "timeout"; entry["killed_by"] = "timeout_wrapper"   # the independent `timeout -k` backstop fired first
-        entry["status"] = reason or ("ok" if p.returncode == 0 else f"error_rc{p.returncode}")
+        entry["backstop"] = sch = backstop_schedule(slot, self.clock.scale)
+        if reason is None:
+            reason = classify_exit(p.returncode, elapsed=time.monotonic() - t_start, schedule=sch)
+            if reason == "timeout": entry["killed_by"] = "timeout_wrapper"   # the independent backstop fired first
+        entry["status"] = reason
         entry["group_killed_clean"] = self.kill_group(pgid, t_start + slot)
         try: p.wait(timeout=0.5)
         except subprocess.TimeoutExpired: pass
@@ -400,12 +428,21 @@ class Supervisor:
             for g in self.groups.values():
                 try: g["popen"].wait(timeout=max(0.01, min(0.5, t_end - time.monotonic())))
                 except subprocess.TimeoutExpired: pass
-            survivors = {str(pg): {"leader_alive": alive_same(g["leader"]), "inner_alive": alive_same(g.get("inner")),
-                                   "group": group_ownership(pg, g["leader"])[0]} for pg, g in self.groups.items()}
-            gone = all(not v["leader_alive"] and not v["inner_alive"] and v["group"] != "ours" for v in survivors.values())
+            def survey():
+                v = {str(pg): {"leader_alive": alive_same(g["leader"]), "inner_alive": alive_same(g.get("inner")),
+                               "group": group_ownership(pg, g["leader"], [g.get("inner")])[0]} for pg, g in self.groups.items()}
+                return {k: x for k, x in v.items() if x["leader_alive"] or x["inner_alive"] or x["group"] == "ours"}
+            before = survey()
+            # Final wait (holding the lock FDs) for owned descendants, bounded by the teardown budget,
+            # BEFORE the receipt is written so the receipt states the true end state.
+            w0 = time.monotonic(); after = before
+            while after and time.monotonic() < t_end:
+                time.sleep(0.2); after = survey()
+            gone = not after
+            R["final_wait"] = {"survivors_before": before, "survivors_after": after, "waited_s": round(time.monotonic() - w0, 3),
+                               "ended_by": "all_gone" if gone else "teardown_budget"}
             R["cleanup"] = {"owned_groups": [{"pgid": pg, "leader": g["leader"], "inner": g.get("inner")} for pg, g in self.groups.items()],
-                            "survivors": {k: v for k, v in survivors.items() if v["leader_alive"] or v["inner_alive"] or v["group"] == "ours"},
-                            "all_children_gone": gone, "refused_signals": self.refused,
+                            "survivors": after, "all_children_gone": gone, "refused_signals": self.refused,
                             "teardown_within_budget": time.monotonic() <= t_end}
             R["signals_sent"] = self.signals_sent
             R["llama_server_after"] = llama_servers()
@@ -414,15 +451,11 @@ class Supervisor:
             R["end"] = self.clock.wall().isoformat()
             R["elapsed_s"] = round((time.monotonic() - start_mono) / self.clock.scale, 1)
             R["past_operator_deadline"] = self.deadline is not None and time.monotonic() > self.deadline
-            if not gone and rc == 0: rc = 7
+            if not gone: rc = 7 if rc == 0 else rc
             R["rc"] = rc
             p = create_new(cohort, "supervisor_receipt.json", jbytes(R))
             print(json.dumps({"receipt": str(p), "sha256": sha(p), "rc": rc, "stop_reason": R["stop_reason"],
                               "arms": [(x["seed"], x["arm"], x["status"]) for x in R["arms"]], "cleanup_ok": gone}), flush=True)
-            if not gone:   # hold lock FDs while owned descendants live, bounded by the teardown budget
-                while time.monotonic() < t_end and any(alive_same(g["leader"]) or alive_same(g.get("inner")) for g in self.groups.values()):
-                    time.sleep(0.2)
-                rc = 7
         return rc
 
 
@@ -443,7 +476,7 @@ def post_run_probe(receipt_path, want_sha, probe_timeout):
         i = proc_info(pid)
         if any(r["pid"] == pid and r["starttime"] == i["starttime"] for r in recorded): return True
         for g in groups:
-            if i["pgid"] == g["pgid"] and group_ownership(g["pgid"], g["leader"])[0] == "ours": return True
+            if i["pgid"] == g["pgid"] and group_ownership(g["pgid"], g["leader"], [g.get("inner")])[0] == "ours": return True
         return False
     for L in R.get("locks", []):
         e = {"path": L["path"]}; P["locks"].append(e)
@@ -469,13 +502,18 @@ def post_run_probe(receipt_path, want_sha, probe_timeout):
     P["nvidia_smi_apps"] = {"rows": apps, "error": err2}
     P["free_mib_per_gpu"] = {r[0]: int(r[1]) for r in rows} if rows else None
     P["recorded_identities_alive"] = [r for r in recorded if alive_same(r)]
-    P["owned_groups_live"] = [g["pgid"] for g in groups if group_ownership(g["pgid"], g["leader"])[0] == "ours"]
+    P["owned_groups_live"] = [g["pgid"] for g in groups if group_ownership(g["pgid"], g["leader"], [g.get("inner")])[0] == "ours"]
+    P["unverified_groups_live"] = [g["pgid"] for g in groups if group_ownership(g["pgid"], g["leader"], [g.get("inner")])[0] == "unverified"]
+    # HOLD 1: any failed / timed-out / empty GPU query, or our GPU missing from the answer, means NOT clean.
+    P["gpu_query_ok"] = (err is None and err2 is None and rows is not None and apps is not None
+                         and any(r and r[0] == GPU_UUID for r in rows))
     P["owned_pids_on_gpu"] = [r for r in (apps or []) if r[1].isdigit() and is_ours(int(r[1]))]
     now_llama = llama_servers()
     P["llama_server_before"], P["llama_server_now"] = R.get("llama_server_before"), now_llama
     P["llama_server_unchanged"] = R.get("llama_server_before") == now_llama
     P["within_probe_budget"] = left() > 0
-    P["verdict"] = ("clean" if not P["recorded_identities_alive"] and not P["owned_groups_live"] and not P["owned_pids_on_gpu"]
+    P["verdict"] = ("clean" if P["gpu_query_ok"] and not P["recorded_identities_alive"] and not P["owned_groups_live"]
+                    and not P["unverified_groups_live"] and not P["owned_pids_on_gpu"]
                     and P["llama_server_unchanged"] and P["within_probe_budget"]
                     and all(l.get("state") == "free" or l.get("owner") == "other_owner" for l in P["locks"]) else "attention")
     p = create_new(Path(receipt_path).parent, "post_run_receipt.json", jbytes(P))

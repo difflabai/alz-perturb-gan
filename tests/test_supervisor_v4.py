@@ -145,7 +145,9 @@ def _fake_chain(tmp_path, sup_rc, probe_rc, pinned=True):
     for d in (study, cache): d.mkdir(parents=True)
     (study / 'study_bundle_v2.pt').write_bytes(b'x')
     rec = root / 'rec'; rec.mkdir(); (rec / 'supervisor_receipt.json').write_text('{}')
-    (study / 'supervise_v4_2.py').write_text(
+    import re
+    name = re.search(r'^SUPERVISOR_NAME=(\S+)$', CHAIN.read_text(), re.M).group(1)
+    (study / name).write_text(
         'import json,sys\n'
         f'if "--post-run-probe" in sys.argv: print(json.dumps({{"verdict": "x"}})); sys.exit({probe_rc})\n'
         f'print(json.dumps({{"receipt": "{rec / "supervisor_receipt.json"}"}})); sys.exit({sup_rc})\n')

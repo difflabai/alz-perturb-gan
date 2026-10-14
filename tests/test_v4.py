@@ -162,19 +162,25 @@ def test_evaluate_output_must_be_in_scope(tmp_path, monkeypatch):
 BUNDLE = 'synthetic-bundle'
 
 def _synthetic_cohort(base):
+    """3 seeds x 6 arms of REAL (tiny) trained checkpoints, each bound to its training.json and evaluation."""
+    from alz_perturb_gan.gene_training import train_arm
+    from alz_perturb_gan.gene_checkpoint import save_checkpoint
     s = cal_study(); base.mkdir(parents=True); runs, rruns = {}, {}
+    steps = 2000
     for seed in (42, 43, 44):
         run = base / f'seed{seed}'; run.mkdir()
         (run / 'grant.json').write_text(json.dumps({'bundle_sha256': BUNDLE, 'protocol_sha256': s.protocol.fingerprint,
-                                                    'seeds': [seed], 'harness_commit': 'c' * 40}))
+                                                    'seeds': [seed], 'harness_commit': 'c' * 40, 'max_steps_per_arm': steps}))
+        m = build_models(ModelConfig(4, 12, hidden=8, z_dim=2, particles=8, seed=seed, steps=2, batch_size=4))
+        receipt = train_arm(m, s, decision_cells=2, max_wall_seconds=60)
         for arm in gene_analysis.ARMS:
-            m = build_models(ModelConfig(4, 12, hidden=8, z_dim=2, particles=8, seed=seed, steps=1, batch_size=4))
-            m.config = dataclasses.replace(m.config, arm=arm)
+            m.config = dataclasses.replace(m.config, arm=arm, steps=steps)   # synthetic stand-in for a 2000-step arm
+            hist = [{'step': i, 'j_loss': 0.5, **({'realness_weight_mean': 0.5} if i in (1000, 2000) else {})} for i in range(1, steps + 1)]
+            r = json.loads(json.dumps(dict(receipt, arm=arm, steps=steps, history=hist)))
             (run / arm).mkdir()
+            save_checkpoint(run / arm / 'checkpoint.pt', m, s.protocol, training_receipt=r)
+            (run / arm / 'training.json').write_text(json.dumps(r))
             evaluate(m, s, output=run / arm / 'evaluation')
-            (run / arm / 'checkpoint.pt').write_bytes(f'{seed}-{arm}'.encode())
-            hist = [{'step': st, 'realness_weight_mean': 0.5} for st in (1000, 2000)]
-            (run / arm / 'training.json').write_text(json.dumps({'history': hist}))
         runs[seed] = str(run); rruns[str(seed)] = {'path': str(run), 'grant_sha256': hashlib.sha256((run / 'grant.json').read_bytes()).hexdigest()}
     rec = base / 'supervisor_receipt.json'
     rec.write_text(json.dumps({'schema': 'supervisor_receipt_v4_2', 'rc': 0, 'stop_reason': None, 'seeds': [42, 43, 44],
@@ -256,8 +262,12 @@ def test_explore_validates_ledger_reopen(cohort, tmp_path, fault):
 
 def test_select_gate_failure_blocks_selection(cohort):
     runs, rec, proto, out = cohort
-    (Path(runs[44]) / 'G' / 'training.json').write_text(json.dumps({'history': [{'step': 1000, 'realness_weight_mean': 0.9}]}))
-    _, _, doc = _sel(runs, rec, out, proto)
+    monkey = gene_analysis._gate
+    gene_analysis._gate = lambda run: (False, {}) if run == runs[44] else monkey(run)
+    try:
+        _, _, doc = _sel(runs, rec, out, proto)
+    finally:
+        gene_analysis._gate = monkey
     assert doc['preconditions']['gate_ok'] is False and not any(doc['selected'].values())
 
 
