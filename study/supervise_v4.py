@@ -308,6 +308,8 @@ class Supervisor:
             try: p.wait(timeout=max(0.02, min(self.clock.s(POLL_S), kill_at - time.monotonic())))
             except subprocess.TimeoutExpired: pass
         entry["min_free_mib"] = minfree
+        if reason is None and p.returncode in (124, 137) and time.monotonic() >= t_start + slot - self.clock.s(KILL_GRACE) - 1.5:
+            reason = "timeout"; entry["killed_by"] = "timeout_wrapper"   # the independent `timeout -k` backstop fired first
         entry["status"] = reason or ("ok" if p.returncode == 0 else f"error_rc{p.returncode}")
         entry["group_killed_clean"] = self.kill_group(pgid, t_start + slot)
         try: p.wait(timeout=0.5)
