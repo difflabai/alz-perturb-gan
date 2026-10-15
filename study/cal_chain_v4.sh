@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Plan v4.5 chain: one supervisor process (all seeds, no aggregate time cap), then the post-run probe.
+# Plan v4.6 chain: one supervisor process (all seeds, no aggregate time cap), then the post-run probe.
 # The harness commit, bundle and protocol are HARD-PINNED below (the deployed copy has the commit filled in);
 # they are never taken from the command line. Exits nonzero if the supervisor or the probe fails.
-# Usage: setsid cal_chain_v4_5.sh --dry-run   (or under systemd-run --user)
-#        cal_chain_v4_5.sh <authorization-ref> <ownership-ref> <lease-valid-until ISO-8601 with tz> [--arm-timeout S] [--total-timeout S] [--teardown-timeout S]
+# Usage: setsid cal_chain_v4_6.sh --dry-run   (or under systemd-run --user)
+#        cal_chain_v4_6.sh <authorization-ref> <ownership-ref> <lease-valid-until ISO-8601 with tz> [--arm-timeout S] [--total-timeout S] [--teardown-timeout S]
 # Extra args are ALLOWLISTED: only the three timeout flags, each at most once, as '--flag N' with N a positive number.
 # Anything else (including any pinned option such as --harness-commit/--bundle/--bundle-sha256/--protocol-sha256/--seeds,
 # '--flag=value' forms, duplicates, or extras in --dry-run) is rejected before the supervisor starts.
@@ -35,7 +35,7 @@ CACHE=/ml2/altgan/.cache
 PINNED_COMMIT=@PINNED_COMMIT@
 PINNED_BUNDLE_SHA=60d5f71a60c47489febf4b0060ec6eed525b5b9b82a9c1e3c3cc7b1140f42686
 PINNED_PROTOCOL_SHA=8db7d79597ac7311741349b968bb467337eb53e21d4a7fdf46ce9f80beafdd2a
-SUPERVISOR_NAME=supervise_v4_5.py
+SUPERVISOR_NAME=supervise_v4_6.py
 in_scope() { local r; r=$(realpath -e -- "$1") || return 1; [[ "$r" == "$SCOPE" || "$r" == "$SCOPE"/* ]] || { echo "out of scope: $1" >&2; return 1; }; printf '%s\n' "$r"; }
 [[ "$PINNED_COMMIT" =~ ^[0-9a-f]{40}$ ]] || { echo "commit is not pinned in this copy" >&2; exit 2; }
 [[ $# -ge 1 ]] || { echo "usage: $0 --dry-run | AUTH OWN LEASE [extra supervisor timeout flags]" >&2; exit 2; }
@@ -43,7 +43,7 @@ SUP=$(in_scope "$S/$SUPERVISOR_NAME")
 BUNDLE=$(in_scope "$S/study_bundle_v2.pt")
 cd -- "$(in_scope "$CACHE")"
 export CUDA_VISIBLE_DEVICES= TMPDIR="$CACHE" XDG_CACHE_HOME="$CACHE" PYTHONDONTWRITEBYTECODE=1
-echo "== v4.5 chain $(date --iso-8601=seconds) commit $PINNED_COMMIT supervisor sha $(sha256sum -- "$SUP" | cut -c1-64) launch=$LAUNCH"
+echo "== v4.6 chain $(date --iso-8601=seconds) commit $PINNED_COMMIT supervisor sha $(sha256sum -- "$SUP" | cut -c1-64) launch=$LAUNCH"
 PIN=(--harness-commit "$PINNED_COMMIT" --bundle "$BUNDLE" --bundle-sha256 "$PINNED_BUNDLE_SHA" --protocol-sha256 "$PINNED_PROTOCOL_SHA")
 RC=0
 if [[ "$1" == "--dry-run" ]]; then
@@ -81,15 +81,18 @@ REASON=""
 [[ $RC -eq 0 ]] || REASON+="supervisor_rc=$RC "
 [[ $RC -ne 137 ]] || REASON+="supervisor_sigkill(manual_or_oom_kill;cause_unknown) "
 PRC=0
+# v4.6: act on a received TERM BEFORE the probe: the probe itself must label the run incomplete.
+STOPARG=()
+[[ -z "$GOT_TERM" ]] || { STOPARG=(--stop-requested wrapper_sigterm); echo "wrapper received SIGTERM: probing with --stop-requested"; }
 if [[ "$KIND" == R ]]; then
   REC=$(in_scope "$WHERE")
   RSHA=$(sha256sum -- "$REC" | cut -c1-64)
-  "$PY" "$SUP" --post-run-probe --supervisor-receipt "$REC" --sha256 "$RSHA" || PRC=$?
+  "$PY" "$SUP" --post-run-probe --supervisor-receipt "$REC" --sha256 "$RSHA" "${STOPARG[@]}" || PRC=$?
   DIR=$(dirname -- "$REC")
 elif [[ "$KIND" == C ]]; then
   REASON+="no_supervisor_receipt "
   DIR=$(in_scope "$WHERE")
-  "$PY" "$SUP" --post-run-probe --cohort "$DIR" || PRC=$?
+  "$PY" "$SUP" --post-run-probe --cohort "$DIR" "${STOPARG[@]}" || PRC=$?
 else
   REASON+="no_supervisor_receipt no_cohort "; DIR=""
 fi

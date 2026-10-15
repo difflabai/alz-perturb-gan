@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Supervisor v4.5: no aggregate time ceiling (Mikkel, 2026-10-14); per-arm timeouts, cancellation, cleanup.
+"""Supervisor v4.6: no aggregate time ceiling (Mikkel, 2026-10-14); per-arm timeouts, cancellation, cleanup.
 
 Time: there is NO fixed cohort budget. An aggregate deadline exists only if the operator passes
 --total-timeout and/or --lease-valid-until (real runs require a lease; the lease is an ownership safeguard,
@@ -31,6 +31,8 @@ oom_kill counter moved) or survivors is "incomplete". The post-run probe reports
 verdict is "clean" ONLY for a complete run with clean residue (exit 0); "incomplete" exits 8; "attention" 6.
 Without a supervisor receipt (supervisor SIGKILLed / OOM-killed), --post-run-probe --cohort DIR probes from the
 lease receipt and can only answer "incomplete" (lease known) or "unknown" (no lease).
+v4.6: --stop-requested REASON (passed by the chain wrapper when IT received SIGTERM, e.g. systemctl stop) makes the
+probe itself label the run incomplete (exit 8, or 6 for residue), even if the supervisor finished with rc 0.
 """
 from __future__ import annotations
 import argparse, datetime as dt, fcntl, hashlib, json, math, os, signal, subprocess, sys, time
@@ -598,8 +600,14 @@ def _probe_gpu(P, left):
     return apps
 
 
-def _finish_probe(P, directory):
-    """Write post_run_receipt.json exclusively; verdict 'clean' ONLY for a complete run with clean residue."""
+def _finish_probe(P, directory, stop_requested=None):
+    """Write post_run_receipt.json exclusively; verdict 'clean' ONLY for a complete run with clean residue.
+    v4.6: a stop requested of the chain (wrapper got SIGTERM) means the run is never complete."""
+    P["stop_requested"] = stop_requested
+    if stop_requested:
+        why = f"stop requested of the chain ({stop_requested})"
+        if P["run_status"] == "complete": P["run_status"], P["run_status_reason"] = "incomplete", why
+        else: P["run_status_reason"] = f"{P.get('run_status_reason')}; {why}"
     P["verdict"] = ("attention" if P["residue"] == "attention" else
                     "clean" if P["run_status"] == "complete" and P["residue"] == "clean" else
                     P["run_status"] if P["run_status"] != "complete" else "unknown")
@@ -609,7 +617,7 @@ def _finish_probe(P, directory):
     return {"clean": 0, "attention": 6}.get(P["verdict"], 8)
 
 
-def post_run_probe(receipt_path, want_sha, probe_timeout):
+def post_run_probe(receipt_path, want_sha, probe_timeout, stop_requested=None):
     """Separate process after the supervisor exited; bounded by its own probe_timeout, independent of the run.
     Exit 0 clean (complete run, clean residue), 6 attention (residue), 8 incomplete run with clean residue."""
     t_end = time.monotonic() + probe_timeout
@@ -648,10 +656,10 @@ def post_run_probe(receipt_path, want_sha, probe_timeout):
                 and all(x.get("status") == "ok" for x in R["arms"]) and R.get("completeness", "complete") == "complete")
     P["run_status"] = "complete" if complete else "incomplete"
     P["run_status_reason"] = None if complete else (R.get("incomplete_reason") or R.get("stop_reason") or f"rc={R.get('rc')}")
-    return _finish_probe(P, Path(receipt_path).parent)
+    return _finish_probe(P, Path(receipt_path).parent, stop_requested)
 
 
-def post_run_probe_no_receipt(cohort, probe_timeout):
+def post_run_probe_no_receipt(cohort, probe_timeout, stop_requested=None):
     """Probe a cohort whose supervisor left NO receipt (SIGKILL, kernel OOM kill, crash). Never 'clean':
     the run is 'incomplete' (lease receipt present) or 'unknown' (no lease receipt). Exit 8, or 6 for residue."""
     t_end = time.monotonic() + probe_timeout
@@ -679,7 +687,7 @@ def post_run_probe_no_receipt(cohort, probe_timeout):
     P["within_probe_budget"] = left() > 0
     P["residue"] = ("unknown" if not lease else "clean" if P["gpu_query_ok"] and not P["supervisor_alive"] and P["within_probe_budget"]
                     and all(l.get("state") == "free" for l in P["locks"]) else "attention")
-    return _finish_probe(P, cohort)
+    return _finish_probe(P, cohort, stop_requested)
 
 
 def parse(argv=None):
@@ -701,16 +709,18 @@ def parse(argv=None):
     ap.add_argument("--post-run-probe", action="store_true"); ap.add_argument("--supervisor-receipt"); ap.add_argument("--sha256")
     ap.add_argument("--cohort", help="probe a cohort that has NO supervisor receipt (supervisor killed); result is never clean")
     ap.add_argument("--probe-timeout", type=float, default=30)
+    ap.add_argument("--stop-requested", choices=["wrapper_sigterm"], help="probe: the chain wrapper received a stop; never clean")
     return ap.parse_args(argv)
 
 
 def main(argv=None):
     a = parse(argv)
     if a.post_run_probe:
-        if a.cohort and not (a.supervisor_receipt or a.sha256): return post_run_probe_no_receipt(a.cohort, a.probe_timeout)
+        if a.cohort and not (a.supervisor_receipt or a.sha256): return post_run_probe_no_receipt(a.cohort, a.probe_timeout, a.stop_requested)
         if a.cohort or not (a.supervisor_receipt and a.sha256):
             print("ABORT: --post-run-probe needs --supervisor-receipt and --sha256, or only --cohort"); return 2
-        return post_run_probe(a.supervisor_receipt, a.sha256, a.probe_timeout)
+        return post_run_probe(a.supervisor_receipt, a.sha256, a.probe_timeout, a.stop_requested)
+    if a.stop_requested: print("ABORT: --stop-requested is a probe option"); return 2
     if not a.dry_run:
         bad = [k for k in ("dry_dir", "dry_fail_arm", "dry_skip_static_checks", "dry_no_pdeathsig", "dry_no_parent_poll",
                            "dry_arm_term_ignoring_child") if getattr(a, k)]

@@ -1,4 +1,4 @@
-"""Arm-side parent watch (v4.5): if its supervisor dies, an arm exits and releases the lock FDs it inherited.
+"""Arm-side parent watch (v4.6): if its supervisor dies, an arm exits and releases the lock FDs it inherited.
 
 Two independent layers:
 1. arm_preexec_factory() runs in the arm group leader (`timeout`) between fork and exec. It sets
@@ -18,6 +18,12 @@ Two independent layers:
    It never signals a group that is the supervisor's (or in the supervisor's session), and never a group whose
    identity it cannot verify. In those cases it terminates only the recorded inner process, if that identity still
    matches.
+v4.6: just before escalating to SIGKILL the watcher re-checks every recorded identity against the snapshot it took
+before SIGTERM (same rule as the supervisor's teardown): the group leader (pid == pgid) must not have a different
+start time, no pid from the snapshot or the recorded leader/inner/known identities may now have a different start
+time, and at least one snapshot member must still be present (continuity: the group never emptied, so its pgid was
+not reused). Members that appeared after SIGTERM alongside a surviving snapshot member are killed (same group).
+If anything changed, SIGKILL is withheld, the change is logged, and the watcher exits 98.
 Watcher exit codes: 0 group empty, 98 refused (group not verifiably ours), 99 members survived SIGKILL.
 """
 from __future__ import annotations
@@ -119,9 +125,13 @@ def cleanup_group(arm_pgid, leader, inner, sup, *, grace=5.0, known=()):
     if not any((pid, st) in ids for pid, st in members):
         _log(f'refusing to signal group {arm_pgid}: no member matches a recorded identity'); return 98
     # From here on the group has members, so its pgid cannot have been reused; it is the group we recorded.
+    snap = dict(members)                                              # pid -> start time, taken before SIGTERM
     os.killpg(arm_pgid, signal.SIGTERM); _log(f'sent SIGTERM to arm group {arm_pgid} ({len(members)} members)')
     left = _wait_empty(arm_pgid, grace)
     if left:
+        changed = kill_recheck(arm_pgid, leader, ids, snap, left)
+        if changed:
+            _log(f'refusing SIGKILL to group {arm_pgid}: identity changed since SIGTERM: {changed}'); return 98
         try: os.killpg(arm_pgid, signal.SIGKILL)
         except ProcessLookupError: left = []
         else: _log(f'sent SIGKILL to arm group {arm_pgid} ({len(left)} members ignored SIGTERM)')
@@ -129,6 +139,25 @@ def cleanup_group(arm_pgid, leader, inner, sup, *, grace=5.0, known=()):
     if left:
         _log(f'arm group {arm_pgid} NOT EMPTY after SIGKILL: {left}'); return 99
     _log(f'arm group {arm_pgid} verified empty'); return 0
+
+
+def kill_recheck(arm_pgid, leader, ids, snap, now):
+    """v4.6: re-verify, just before SIGKILL, every recorded identity against the pre-SIGTERM snapshot.
+    Returns a list of human-readable changes; empty means the group is still verifiably the one we signalled."""
+    changed = []
+    holder = starttime(arm_pgid)
+    if holder is not None and holder != leader[1]:
+        changed.append(f'leader {arm_pgid} start {holder} != recorded {leader[1]}')
+    if holder is not None and arm_pgid in snap and holder != snap[arm_pgid]:
+        changed.append(f'leader {arm_pgid} start {holder} != pre-TERM {snap[arm_pgid]}')
+    rec = {}
+    for pid, st in ids: rec.setdefault(pid, set()).add(st)
+    for pid, st in now:
+        if pid in snap and snap[pid] != st: changed.append(f'member {pid} start {st} != pre-TERM {snap[pid]}')
+        elif pid in rec and st not in rec[pid]: changed.append(f'member {pid} start {st} != recorded {sorted(rec[pid])}')
+    if not any(snap.get(pid) == st for pid, st in now):
+        changed.append('no pre-TERM member is still present (group may have emptied and been reused)')
+    return changed
 
 
 def watch(sup, arm_pgid, leader, inner, *, interval, grace):
