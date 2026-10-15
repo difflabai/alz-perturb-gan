@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Supervisor v4.4: no aggregate time ceiling (Mikkel, 2026-10-14); per-arm timeouts, cancellation, cleanup.
+"""Supervisor v4.5: no aggregate time ceiling (Mikkel, 2026-10-14); per-arm timeouts, cancellation, cleanup.
 
 Time: there is NO fixed cohort budget. An aggregate deadline exists only if the operator passes
 --total-timeout and/or --lease-valid-until (real runs require a lease; the lease is an ownership safeguard,
@@ -16,13 +16,21 @@ Post-run probe (--post-run-probe): separate process with its own bounded --probe
 receipt sha256; per lock: open without O_CREAT, fstat dev/inode, flock NB then close (no LOCK_UN); a busy
 lock is labelled ours / other_owner / unknown_owner from /proc/locks against the RECORDED identities;
 nvidia-smi bounded; owned identities gone; llama-server identities unchanged; post_run_receipt.json created
-exclusively. Exit codes: 0 ok, 2 usage, 3 stopped, 5 incomplete, 6 probe attention, 7 descendants survived.
+exclusively. Exit codes: 0 ok, 2 usage, 3 stopped, 5 incomplete, 6 probe attention, 7 descendants survived,
+8 probe: run incomplete or unknown (never clean).
 --dry-run: CPU only, test locks in --dry-dir (default /ml2/altgan/.cache/supervisor-dryrun), fake arms.
 v4.4 hangup/parent death: SIGHUP is handled exactly like SIGTERM (identity-based teardown, receipt still written).
 TERM/INT/HUP/ALRM are blocked from cohort creation until the try block and around each spawn, so a signal can
 neither skip the receipt nor leave a spawned arm unregistered. Each arm leader gets PR_SET_PDEATHSIG(SIGTERM)
 with a parent re-check, and the arm's inner process polls the supervisor's recorded identity (ALZ_SUPERVISOR_IDENT).
 If the supervisor dies, the arm group exits, which releases the lock FDs it inherited.
+v4.5: the arm-side watcher is a separate process in its own session (never inside the group it signals): TERM,
+wait, KILL, verify empty. Completeness is labelled everywhere: a receipt is "complete" only for rc 0; any
+stop, interruption, external SIGKILL (manual or kernel OOM kill; cause recorded as unknown unless the system
+oom_kill counter moved) or survivors is "incomplete". The post-run probe reports residue separately and its
+verdict is "clean" ONLY for a complete run with clean residue (exit 0); "incomplete" exits 8; "attention" 6.
+Without a supervisor receipt (supervisor SIGKILLed / OOM-killed), --post-run-probe --cohort DIR probes from the
+lease receipt and can only answer "incomplete" (lease known) or "unknown" (no lease).
 """
 from __future__ import annotations
 import argparse, datetime as dt, fcntl, hashlib, json, math, os, signal, subprocess, sys, time
@@ -55,7 +63,13 @@ ARMS = ["B0", "G", "H", "GH", "shuffle", "G_frozen"]
 BLOCK = frozenset({signal.SIGTERM, signal.SIGINT, signal.SIGHUP, signal.SIGALRM})
 DRY_ARM = ("import os, sys, time\n"
            "if sys.argv[5] == '1':\n"
-           "    from alz_perturb_gan import parent_watch; parent_watch.start(interval=0.2)\n"
+           "    from alz_perturb_gan import parent_watch; parent_watch.start(interval=0.2, grace=1.0)\n"
+           "if sys.argv[6] == '1':\n"
+           "    import subprocess\n"
+           "    fds = tuple(int(x) for x in os.environ.get('ALZ_LEASE_FDS', '').split(',') if x)\n"
+           "    c = subprocess.Popen([sys.executable, '-c', 'import signal, sys, time; signal.signal(signal.SIGTERM, signal.SIG_IGN); '\n"
+           "                          'print(\"ignoring SIGTERM\", flush=True); time.sleep(600)'], pass_fds=fds, stdout=subprocess.PIPE, text=True)\n"
+           "    print('term-ignoring child', c.pid, c.stdout.readline().strip(), flush=True)\n"
            "time.sleep(float(sys.argv[3]))\n"
            "print('fake', sys.argv[1], 'seed', sys.argv[2], 'fds=' + os.environ.get('ALZ_LEASE_FDS', ''), flush=True)\n"
            "sys.exit(int(sys.argv[4]))\n")
@@ -183,11 +197,41 @@ BACKSTOP_TOLERANCE_S = 0.5   # process start/exit latency around the backstop's 
 
 
 def classify_exit(returncode, *, elapsed, schedule):
-    """rc 124 (TERM by timeout) / 137 (KILL by timeout -k) count as a timeout only at or after the scheduled backstop."""
+    """rc 124 (TERM by timeout) / 137 (KILL by timeout -k) count as a timeout only at or after the scheduled backstop.
+    v4.5: death by a signal we did not send (negative rc; or 137 before the backstop) is "killed_<sig>"; for SIGKILL
+    that covers both a manual kill and a kernel OOM kill (the cause is recorded separately, never assumed)."""
     if returncode == 0: return "ok"
     if returncode == 124 and elapsed >= schedule["term_after_s"] - BACKSTOP_TOLERANCE_S: return "timeout"
     if returncode == 137 and elapsed >= schedule["kill_after_s"] - BACKSTOP_TOLERANCE_S: return "timeout"
+    if returncode == 137: return "killed_sigkill"
+    if returncode is not None and returncode < 0:
+        try: return "killed_" + signal.Signals(-returncode).name.lower()
+        except ValueError: return f"killed_sig{-returncode}"
     return f"error_rc{returncode}"
+
+
+def oom_kill_count():
+    """System-wide kernel OOM-kill counter (/proc/vmstat oom_kill), or None if unavailable."""
+    try:
+        for line in open("/proc/vmstat"):
+            if line.startswith("oom_kill "): return int(line.split()[1])
+    except (OSError, ValueError): pass
+    return None
+
+
+def watchers_for(pgids):
+    """Live arm watchers (python -m alz_perturb_gan.parent_watch --arm-pgid N) of ours for the given arm groups."""
+    out, pgids = [], set(pgids)
+    for d in os.listdir("/proc"):
+        if not d.isdigit(): continue
+        try: argv = open(f"/proc/{d}/cmdline", "rb").read().split(b"\0")
+        except OSError: continue
+        if b"alz_perturb_gan.parent_watch" not in argv or b"--arm-pgid" not in argv: continue
+        try: pg = int(argv[argv.index(b"--arm-pgid") + 1])
+        except (IndexError, ValueError): continue
+        i = proc_info(int(d))
+        if pg in pgids and i["uid"] == os.getuid() and i["state"] not in (None, "Z"): out.append(dict(ident(i), arm_pgid=pg))
+    return out
 
 
 class Clock:
@@ -227,6 +271,12 @@ class Supervisor:
         for sig in (signal.SIGTERM, signal.SIGKILL):
             state, members = group_ownership(pgid, g["leader"], known)
             if state == "empty": return True
+            if sig == signal.SIGKILL and state == "unverified" and any(
+                    (m["pid"], m["starttime"]) in snap for m in members):
+                # v4.5: a member seen before our SIGTERM is still in the group, so it never emptied and the pgid was
+                # not reused: the remaining members (e.g. a descendant that ignores SIGTERM) are this arm's.
+                state = "ours"; known = known + [ident(m) for m in members if (m["pid"], m["starttime"]) in snap]
+            if sig == signal.SIGTERM: snap = {(m["pid"], m["starttime"]) for m in members}
             if state in ("reused", "unverified"):
                 self.refused.append({"pgid": pgid, "signal_withheld": signal.Signals(sig).name,
                                      "reason": "identity_mismatch" if state == "reused" else "unverified_identity",
@@ -301,7 +351,8 @@ class Supervisor:
         if self.dry:
             rc = 7 if arm == self.a.dry_fail_arm else 0
             poll = "0" if self.a.dry_no_parent_poll else "1"
-            return wd + [PY, "-c", DRY_ARM, arm, str(seed), str(self.a.dry_arm_seconds), str(rc), poll]
+            ign = "1" if self.a.dry_arm_term_ignoring_child else "0"
+            return wd + [PY, "-c", DRY_ARM, arm, str(seed), str(self.a.dry_arm_seconds), str(rc), poll, ign]
         mw = int(slot - self.clock.s(KILL_RESERVE))
         cmd = [PY, "-u", "-m", "alz_perturb_gan.gene_harness", "train", "--bundle", str(self.bundle), "--bundle-sha256", self.a.bundle_sha256,
                "--output", str(run / arm), "--arm", arm, "--seed", str(seed), "--steps", str(STEPS), "--max-wall-seconds", str(mw),
@@ -324,7 +375,7 @@ class Supervisor:
         free = self.free_mib(); entry["free_mib_at_spawn"] = free
         if free < MIN_RUN_MIB: entry["status"] = "not_started_low_memory"; raise Stop("capacity")
         cmd = self.arm_cmd(arm, seed, run, slot, grant, gsha)
-        entry.update(command=cmd, started=self.clock.wall().isoformat())
+        entry.update(command=cmd, started=self.clock.wall().isoformat(), oom_kill_at_spawn=oom_kill_count())
         dfd = os.open(scoped(run), os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
         try: lfd = os.open(f"{arm}.log", os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644, dir_fd=dfd)
         finally: os.close(dfd)
@@ -359,6 +410,12 @@ class Supervisor:
             reason = classify_exit(p.returncode, elapsed=time.monotonic() - t_start, schedule=sch)
             if reason == "timeout": entry["killed_by"] = "timeout_wrapper"   # the independent backstop fired first
         entry["status"] = reason
+        if reason.startswith("killed_"):
+            oom1 = oom_kill_count(); entry["oom_kill_counter"] = {"at_spawn": entry.get("oom_kill_at_spawn"), "at_exit": oom1}
+            moved = None if oom1 is None or entry.get("oom_kill_at_spawn") is None else oom1 > entry["oom_kill_at_spawn"]
+            entry["kill_cause"] = ("unknown: external signal" if reason != "killed_sigkill" else
+                                   "unknown: external SIGKILL or kernel OOM kill" + ("" if moved is None else
+                                   "; system oom_kill counter " + ("increased (OOM kill likely)" if moved else "unchanged")))
         entry["group_killed_clean"] = self.kill_group(pgid, t_start + slot)
         try: p.wait(timeout=0.5)
         except subprocess.TimeoutExpired: pass
@@ -377,6 +434,15 @@ class Supervisor:
         return entry["status"] == "ok"
 
     def main(self):
+        # v4.5: restore the caller's signal dispositions afterwards, so an in-process call (tests) does not leave
+        # SIGTERM/SIGHUP/SIGINT ignored for the caller and for every process it starts later.
+        saved = {s: signal.getsignal(s) for s in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP, signal.SIGALRM)}
+        try: return self._main()
+        finally:
+            for s, h in saved.items():
+                if h is not None: signal.signal(s, h)
+
+    def _main(self):
         a, rc = self.a, 5
         for s in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP, signal.SIGALRM): signal.signal(s, self.on_signal)
         start_wall, start_mono = self.clock.wall(), time.monotonic()
@@ -402,7 +468,7 @@ class Supervisor:
         base = scoped(self.dry_dir if self.dry else ROOT / "runs")
         cohort = base / tag; os.mkdir(cohort, 0o755)
         seeds = [int(x) for x in a.seeds.split(",")]
-        R = {"schema": "supervisor_receipt_v4_4", "dry_run": self.dry, "gpu_uuid": GPU_UUID, "seeds": seeds,
+        R = {"schema": "supervisor_receipt_v4_5", "dry_run": self.dry, "gpu_uuid": GPU_UUID, "seeds": seeds,
              "supervisor": ident(proc_info(os.getpid())), "start": start_wall.isoformat(), "aggregate_time_cap": None,
              "total_timeout_s": a.total_timeout, "lease_valid_until": a.lease_valid_until, "arm_timeout_s": a.arm_timeout,
              "teardown_timeout_s": a.teardown_timeout, "operator_deadline_epoch": None if self.deadline is None else time.time() + self.left(),
@@ -412,6 +478,9 @@ class Supervisor:
         if self.dry: R["real_lock_files_exist"] = {p: os.path.exists(p) for p in REAL_LOCKS}
         try:
             signal.pthread_sigmask(signal.SIG_UNBLOCK, BLOCK)
+            try:   # lets the wrapper probe the cohort even if this process is later SIGKILLed (no receipt possible then)
+                print(json.dumps({"event": "start", "cohort": str(cohort), "supervisor": R["supervisor"]}), flush=True)
+            except OSError: pass
             R["static_checks"] = statics = self.static_checks()
             R["llama_server_before"] = llama_servers()
             R["locks"] = locks = self.acquire(self.lock_paths())
@@ -457,9 +526,11 @@ class Supervisor:
                 try: g["popen"].wait(timeout=max(0.01, min(0.5, t_end - time.monotonic())))
                 except subprocess.TimeoutExpired: pass
             def survey():
+                w = watchers_for(self.groups)
                 v = {str(pg): {"leader_alive": alive_same(g["leader"]), "inner_alive": alive_same(g.get("inner")),
-                               "group": group_ownership(pg, g["leader"], [g.get("inner")])[0]} for pg, g in self.groups.items()}
-                return {k: x for k, x in v.items() if x["leader_alive"] or x["inner_alive"] or x["group"] == "ours"}
+                               "group": group_ownership(pg, g["leader"], [g.get("inner")])[0],
+                               "watchers": [x for x in w if x["arm_pgid"] == pg]} for pg, g in self.groups.items()}
+                return {k: x for k, x in v.items() if x["leader_alive"] or x["inner_alive"] or x["group"] == "ours" or x["watchers"]}
             before = survey()
             # Final wait (holding the lock FDs) for owned descendants, bounded by the teardown budget,
             # BEFORE the receipt is written so the receipt states the true end state.
@@ -481,36 +552,21 @@ class Supervisor:
             R["past_operator_deadline"] = self.deadline is not None and time.monotonic() > self.deadline
             if not gone: rc = 7 if rc == 0 else rc
             R["rc"] = rc
+            R["completeness"] = "complete" if rc == 0 else "incomplete"
+            R["incomplete_reason"] = (None if rc == 0 else R["stop_reason"] or ("descendants_survived" if not gone else "not_all_arms_ok"))
             p = create_new(cohort, "supervisor_receipt.json", jbytes(R))
             try:   # the receipt exists either way; a vanished stdout (hangup) must not turn into a traceback
-                print(json.dumps({"receipt": str(p), "sha256": sha(p), "rc": rc, "stop_reason": R["stop_reason"],
+                print(json.dumps({"receipt": str(p), "sha256": sha(p), "rc": rc, "completeness": R["completeness"], "stop_reason": R["stop_reason"],
                                   "arms": [(x["seed"], x["arm"], x["status"]) for x in R["arms"]], "cleanup_ok": gone}), flush=True)
             except OSError:
                 pass
         return rc
 
 
-def post_run_probe(receipt_path, want_sha, probe_timeout):
-    """Separate process after the supervisor exited; bounded by its own probe_timeout, independent of the run."""
-    t_end = time.monotonic() + probe_timeout
-    def left(): return t_end - time.monotonic()
-    receipt_path = scoped(receipt_path)
-    if sha(receipt_path) != want_sha: print("ABORT: supervisor receipt sha256 mismatch"); return 2
-    R = json.loads(Path(receipt_path).read_text())
-    sup = R["supervisor"]
-    groups = R["cleanup"]["owned_groups"]
-    recorded = [sup] + [g["leader"] for g in groups] + [g["inner"] for g in groups if g.get("inner") and g["inner"].get("pid")]
-    P = {"schema": "post_run_receipt_v2", "supervisor_receipt": str(receipt_path), "supervisor_receipt_sha256": want_sha,
-         "prober": ident(proc_info(os.getpid())), "at": dt.datetime.now(DEN).isoformat(), "probe_timeout_s": probe_timeout,
-         "supervisor_alive": alive_same(sup), "locks": []}
-    def is_ours(pid):
-        i = proc_info(pid)
-        if any(r["pid"] == pid and r["starttime"] == i["starttime"] for r in recorded): return True
-        for g in groups:
-            if i["pgid"] == g["pgid"] and group_ownership(g["pgid"], g["leader"], [g.get("inner")])[0] == "ours": return True
-        return False
-    for L in R.get("locks", []):
-        e = {"path": L["path"]}; P["locks"].append(e)
+def _probe_locks(locks, is_ours, left):
+    out = []
+    for L in locks:
+        e = {"path": L["path"]}; out.append(e)
         if left() <= 0: e["state"] = "not_probed_timeout"; continue
         try: fd = os.open(scoped(L["path"]), os.O_RDONLY | os.O_NOFOLLOW)
         except FileNotFoundError: e["state"] = "missing"; continue
@@ -527,30 +583,103 @@ def post_run_probe(receipt_path, want_sha, probe_timeout):
                     e["owner"] = ("ours" if all(is_ours(x) for x in pids) else
                                   "other_owner" if all(proc_info(x)["starttime"] is not None for x in pids) else "unknown_owner")
         finally: os.close(fd)
+    return out
+
+
+def _probe_gpu(P, left):
     rows, err = nvidia_smi(["--query-gpu=uuid,memory.free,memory.used"], min(PROBE_MAX, left()))
     P["nvidia_smi_gpu"] = {"rows": rows, "error": err}
     apps, err2 = nvidia_smi(["--query-compute-apps=gpu_uuid,pid,used_memory"], min(PROBE_MAX, left()))
     P["nvidia_smi_apps"] = {"rows": apps, "error": err2}
     P["free_mib_per_gpu"] = {r[0]: int(r[1]) for r in rows} if rows else None
-    P["recorded_identities_alive"] = [r for r in recorded if alive_same(r)]
-    P["owned_groups_live"] = [g["pgid"] for g in groups if group_ownership(g["pgid"], g["leader"], [g.get("inner")])[0] == "ours"]
-    P["unverified_groups_live"] = [g["pgid"] for g in groups if group_ownership(g["pgid"], g["leader"], [g.get("inner")])[0] == "unverified"]
     # HOLD 1: any failed / timed-out / empty GPU query, or our GPU missing from the answer, means NOT clean.
     P["gpu_query_ok"] = (err is None and err2 is None and rows is not None and apps is not None
                          and any(r and r[0] == GPU_UUID for r in rows))
+    return apps
+
+
+def _finish_probe(P, directory):
+    """Write post_run_receipt.json exclusively; verdict 'clean' ONLY for a complete run with clean residue."""
+    P["verdict"] = ("attention" if P["residue"] == "attention" else
+                    "clean" if P["run_status"] == "complete" and P["residue"] == "clean" else
+                    P["run_status"] if P["run_status"] != "complete" else "unknown")
+    p = create_new(directory, "post_run_receipt.json", jbytes(P))
+    print(json.dumps({"post_run_receipt": str(p), "sha256": sha(p), "verdict": P["verdict"], "run_status": P["run_status"],
+                      "residue": P["residue"], "locks": [(l["path"], l.get("state"), l.get("owner")) for l in P["locks"]]}), flush=True)
+    return {"clean": 0, "attention": 6}.get(P["verdict"], 8)
+
+
+def post_run_probe(receipt_path, want_sha, probe_timeout):
+    """Separate process after the supervisor exited; bounded by its own probe_timeout, independent of the run.
+    Exit 0 clean (complete run, clean residue), 6 attention (residue), 8 incomplete run with clean residue."""
+    t_end = time.monotonic() + probe_timeout
+    def left(): return t_end - time.monotonic()
+    receipt_path = scoped(receipt_path)
+    if sha(receipt_path) != want_sha: print("ABORT: supervisor receipt sha256 mismatch"); return 2
+    R = json.loads(Path(receipt_path).read_text())
+    sup = R["supervisor"]
+    groups = R["cleanup"]["owned_groups"]
+    recorded = [sup] + [g["leader"] for g in groups] + [g["inner"] for g in groups if g.get("inner") and g["inner"].get("pid")]
+    P = {"schema": "post_run_receipt_v3", "mode": "with_supervisor_receipt", "supervisor_receipt": str(receipt_path),
+         "supervisor_receipt_sha256": want_sha, "prober": ident(proc_info(os.getpid())), "at": dt.datetime.now(DEN).isoformat(),
+         "probe_timeout_s": probe_timeout, "supervisor_alive": alive_same(sup)}
+    def is_ours(pid):
+        i = proc_info(pid)
+        if any(r["pid"] == pid and r["starttime"] == i["starttime"] for r in recorded): return True
+        for g in groups:
+            if i["pgid"] == g["pgid"] and group_ownership(g["pgid"], g["leader"], [g.get("inner")])[0] == "ours": return True
+        return False
+    P["locks"] = _probe_locks(R.get("locks", []), is_ours, left)
+    apps = _probe_gpu(P, left)
+    P["recorded_identities_alive"] = [r for r in recorded if alive_same(r)]
+    P["owned_groups_live"] = [g["pgid"] for g in groups if group_ownership(g["pgid"], g["leader"], [g.get("inner")])[0] == "ours"]
+    P["unverified_groups_live"] = [g["pgid"] for g in groups if group_ownership(g["pgid"], g["leader"], [g.get("inner")])[0] == "unverified"]
+    P["watchers_alive"] = watchers_for([g["pgid"] for g in groups])
     P["owned_pids_on_gpu"] = [r for r in (apps or []) if r[1].isdigit() and is_ours(int(r[1]))]
     now_llama = llama_servers()
     P["llama_server_before"], P["llama_server_now"] = R.get("llama_server_before"), now_llama
     P["llama_server_unchanged"] = R.get("llama_server_before") == now_llama
     P["within_probe_budget"] = left() > 0
-    P["verdict"] = ("clean" if P["gpu_query_ok"] and not P["recorded_identities_alive"] and not P["owned_groups_live"]
-                    and not P["unverified_groups_live"] and not P["owned_pids_on_gpu"]
+    P["residue"] = ("clean" if P["gpu_query_ok"] and not P["recorded_identities_alive"] and not P["owned_groups_live"]
+                    and not P["unverified_groups_live"] and not P["owned_pids_on_gpu"] and not P["watchers_alive"]
                     and P["llama_server_unchanged"] and P["within_probe_budget"]
                     and all(l.get("state") == "free" or l.get("owner") == "other_owner" for l in P["locks"]) else "attention")
-    p = create_new(Path(receipt_path).parent, "post_run_receipt.json", jbytes(P))
-    print(json.dumps({"post_run_receipt": str(p), "sha256": sha(p), "verdict": P["verdict"],
-                      "locks": [(l["path"], l.get("state"), l.get("owner")) for l in P["locks"]]}), flush=True)
-    return 0 if P["verdict"] == "clean" else 6
+    complete = (R.get("rc") == 0 and R.get("stop_reason") is None and bool(R.get("arms"))
+                and all(x.get("status") == "ok" for x in R["arms"]) and R.get("completeness", "complete") == "complete")
+    P["run_status"] = "complete" if complete else "incomplete"
+    P["run_status_reason"] = None if complete else (R.get("incomplete_reason") or R.get("stop_reason") or f"rc={R.get('rc')}")
+    return _finish_probe(P, Path(receipt_path).parent)
+
+
+def post_run_probe_no_receipt(cohort, probe_timeout):
+    """Probe a cohort whose supervisor left NO receipt (SIGKILL, kernel OOM kill, crash). Never 'clean':
+    the run is 'incomplete' (lease receipt present) or 'unknown' (no lease receipt). Exit 8, or 6 for residue."""
+    t_end = time.monotonic() + probe_timeout
+    def left(): return t_end - time.monotonic()
+    cohort = scoped(cohort)
+    if not cohort.is_dir(): print("ABORT: --cohort is not a directory"); return 2
+    if (cohort / "supervisor_receipt.json").exists():
+        print("ABORT: cohort has a supervisor receipt; probe it with --supervisor-receipt/--sha256"); return 2
+    lease_path = cohort / "lease_receipt.json"
+    lease = json.loads(lease_path.read_text()) if lease_path.is_file() and not lease_path.is_symlink() else None
+    sup = (lease or {}).get("holder")
+    P = {"schema": "post_run_receipt_v3", "mode": "no_supervisor_receipt", "cohort": str(cohort), "supervisor_receipt": None,
+         "lease_receipt": str(lease_path) if lease else None, "lease_receipt_sha256": sha(lease_path) if lease else None,
+         "prober": ident(proc_info(os.getpid())), "at": dt.datetime.now(DEN).isoformat(), "probe_timeout_s": probe_timeout,
+         "supervisor_alive": alive_same(sup) if sup else None,
+         "run_status": "incomplete" if lease else "unknown",
+         "run_status_reason": "supervisor exited without a receipt (external SIGKILL, kernel OOM kill or crash; cause not determined)",
+         "arm_identities": "unknown: not recorded without a supervisor receipt"}
+    def is_ours(pid):
+        i = proc_info(pid)
+        return bool(sup) and pid == sup["pid"] and i["starttime"] == sup["starttime"]
+    P["locks"] = _probe_locks((lease or {}).get("locks", []), is_ours, left)
+    _probe_gpu(P, left)
+    P["llama_server_now"] = llama_servers()
+    P["within_probe_budget"] = left() > 0
+    P["residue"] = ("unknown" if not lease else "clean" if P["gpu_query_ok"] and not P["supervisor_alive"] and P["within_probe_budget"]
+                    and all(l.get("state") == "free" for l in P["locks"]) else "attention")
+    return _finish_probe(P, cohort)
 
 
 def parse(argv=None):
@@ -568,7 +697,9 @@ def parse(argv=None):
     ap.add_argument("--dry-skip-static-checks", action="store_true")
     ap.add_argument("--dry-no-pdeathsig", action="store_true", help="test only: disable layer 1 of the parent watch")
     ap.add_argument("--dry-no-parent-poll", action="store_true", help="test only: disable layer 2 of the parent watch")
+    ap.add_argument("--dry-arm-term-ignoring-child", action="store_true", help="test only: each fake arm starts a child that ignores SIGTERM")
     ap.add_argument("--post-run-probe", action="store_true"); ap.add_argument("--supervisor-receipt"); ap.add_argument("--sha256")
+    ap.add_argument("--cohort", help="probe a cohort that has NO supervisor receipt (supervisor killed); result is never clean")
     ap.add_argument("--probe-timeout", type=float, default=30)
     return ap.parse_args(argv)
 
@@ -576,10 +707,13 @@ def parse(argv=None):
 def main(argv=None):
     a = parse(argv)
     if a.post_run_probe:
-        if not (a.supervisor_receipt and a.sha256): print("ABORT: --post-run-probe needs --supervisor-receipt and --sha256"); return 2
+        if a.cohort and not (a.supervisor_receipt or a.sha256): return post_run_probe_no_receipt(a.cohort, a.probe_timeout)
+        if a.cohort or not (a.supervisor_receipt and a.sha256):
+            print("ABORT: --post-run-probe needs --supervisor-receipt and --sha256, or only --cohort"); return 2
         return post_run_probe(a.supervisor_receipt, a.sha256, a.probe_timeout)
     if not a.dry_run:
-        bad = [k for k in ("dry_dir", "dry_fail_arm", "dry_skip_static_checks", "dry_no_pdeathsig", "dry_no_parent_poll") if getattr(a, k)]
+        bad = [k for k in ("dry_dir", "dry_fail_arm", "dry_skip_static_checks", "dry_no_pdeathsig", "dry_no_parent_poll",
+                           "dry_arm_term_ignoring_child") if getattr(a, k)]
         if bad: print(f"ABORT: dry-only options in a real run: {bad}"); return 2
         for k in ("authorization_reference", "ownership_reference", "lease_valid_until"):
             if not getattr(a, k): print(f"ABORT: --{k.replace('_', '-')} is required"); return 2

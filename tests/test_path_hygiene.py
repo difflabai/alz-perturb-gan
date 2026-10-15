@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
-ALLOWED_PREFIXES = ('/ml2/altgan', '/proc/locks', '/proc/<', '/proc/{', '/usr/bin/nvidia-smi', '/dev/null',
+ALLOWED_PREFIXES = ('/ml2/altgan', '/proc/locks', '/proc/vmstat', '/proc/<', '/proc/{', '/usr/bin/nvidia-smi', '/dev/null',
                     '/tmp/ember-pg-20261012-slots/gpu1-slot0.lock', '/tmp/ember-pg-20261012-slots/gpu1-slot1.lock')
 LIT = re.compile(r"""['"](/[A-Za-z~][^'"\s]*)""")
 SOURCES = sorted((REPO / 'src').rglob('*.py')) + sorted((REPO / 'study').glob('*v[24]*.py'))

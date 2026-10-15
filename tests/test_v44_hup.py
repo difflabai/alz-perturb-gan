@@ -99,7 +99,8 @@ def test_v44_sighup_mid_arm_writes_receipt_releases_locks_no_orphans(tmp_path):
         pr = subprocess.run([sys.executable, str(SUP), '--post-run-probe', '--supervisor-receipt', str(rec), '--sha256', h,
                              '--probe-timeout', '20'], capture_output=True, text=True, timeout=60, env=_env(tmp_path))
         P = json.loads((rec.parent / 'post_run_receipt.json').read_text())
-        assert pr.returncode == 0 and P['verdict'] == 'clean' and all(l['state'] == 'free' for l in P['locks'])
+        assert pr.returncode == 8 and P['verdict'] == 'incomplete' and P['residue'] == 'clean'   # v4.5: interrupted -> incomplete
+        assert all(l['state'] == 'free' for l in P['locks'])
     finally:
         if p.poll() is None: p.kill(); p.wait()
         _reap_test_arm(arm)
@@ -116,14 +117,15 @@ def test_v44_parent_death_arm_exits_and_releases_inherited_locks(tmp_path, layer
         assert _wait(lambda: not _members(arm['pgid']), 20), f'arm group {arm["pgid"]} outlived its supervisor'
         assert _stat(arm['inner']) is None and _locks_free(locks), 'inherited lock FDs were not released'
         log = next((tmp_path / 'dry').glob('dry-v4-*/seed42/B0.log')).read_text()
-        if layers == 'poll_only': assert 'parent_watch: supervisor' in log, log
+        if layers == 'poll_only': assert 'gone; cleaning up arm group' in log and 'verified empty' in log, log   # v4.5 watcher process
     finally:
         if p.poll() is None: p.kill(); p.wait()
         _reap_test_arm(arm)
 
 
 def test_v44_parent_watch_refuses_to_signal_a_group_it_does_not_lead(tmp_path):
-    """Layer 2 never signals a group outside its own arm session: here it shares the test's group and must exit alone."""
+    """Layer 2 never signals a group outside its own arm session: here the arm shares the test's group, so the (separate)
+    watcher refuses the group and terminates only the recorded inner process (v4.5)."""
     sup = subprocess.Popen(['sleep', '30'])
     try:
         ident = f"{sup.pid}:{_stat(sup.pid)['starttime']}:{os.getpgid(sup.pid)}:{os.getsid(sup.pid)}"
@@ -133,7 +135,7 @@ def test_v44_parent_watch_refuses_to_signal_a_group_it_does_not_lead(tmp_path):
         assert arm.stdout.readline().strip() == 'watching'
         sup.kill(); sup.wait()
         _, err = arm.communicate(timeout=20)
-        assert arm.returncode == 98 and 'exiting alone' in err
+        assert arm.returncode == -signal.SIGTERM and 'refusing to signal group' in err, (arm.returncode, err)
     finally:
         if sup.poll() is None: sup.kill(); sup.wait()
 

@@ -71,7 +71,7 @@ def test_cancellation_mid_arm_tears_down_by_identity(tmp_path):
     assert sent and sent[0]['signal'] == 'SIGTERM' and sent[0]['leader'] == g['leader']
     assert not _alive(g['leader']) and not _alive(g['inner'])
     prc, P = _probe(tmp_path, out['receipt'])
-    assert prc == 0 and P['verdict'] == 'clean'
+    assert prc == 8 and P['verdict'] == 'incomplete' and P['residue'] == 'clean'   # v4.5: a stopped run is never 'clean'
 
 
 def test_operator_deadline_bounds_arm_then_teardown_and_probe_run_after_it(tmp_path):
@@ -83,7 +83,7 @@ def test_operator_deadline_bounds_arm_then_teardown_and_probe_run_after_it(tmp_p
     assert R['cleanup']['all_children_gone'] and R['cleanup']['teardown_within_budget'] and not _alive(R['arms'][0]['inner'])
     time.sleep(max(0, R['operator_deadline_epoch'] - time.time()) + 0.5)
     prc, P = _probe(tmp_path, out['receipt'])
-    assert prc == 0 and P['verdict'] == 'clean'
+    assert prc == 8 and P['verdict'] == 'incomplete' and P['residue'] == 'clean'   # v4.5: a stopped run is never 'clean'
 
 
 def test_arm_error_propagates_and_stops(tmp_path):
