@@ -156,7 +156,7 @@ def _fake_chain(tmp_path, sup_rc, probe_rc, pinned=True):
         text = text.replace(f'\n{k}=/ml2/altgan' + {'SCOPE': '', 'S': '/studies/gene-feature-20261014', 'PY': '/.venv/bin/python', 'CACHE': '/.cache'}[k] + '\n', f'\n{k}={v}\n')
     if pinned: text = text.replace('@PINNED_COMMIT@', 'a' * 40)
     sh = tmp_path / 'chain.sh'; sh.write_text(text); sh.chmod(0o755)
-    return subprocess.run(['bash', str(sh), '--dry-run'], capture_output=True, text=True, timeout=60)
+    return subprocess.run(['bash', str(sh), '--dry-run'], capture_output=True, text=True, timeout=60, start_new_session=True)
 
 
 @pytest.mark.parametrize('sup_rc,probe_rc,want', [(0, 0, 0), (3, 0, 3), (5, 0, 5), (0, 6, 6), (3, 6, 3)])

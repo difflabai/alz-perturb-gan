@@ -41,7 +41,7 @@ def test_hold2_select_refuses_ineligible_checkpoint(tmp_path, fault):
     from test_v4 import _synthetic_cohort, _sel, cal_study
     from alz_perturb_gan.gene_models import ModelConfig, build_models
     from alz_perturb_gan.gene_checkpoint import save_checkpoint
-    runs, rec, proto = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'; out.mkdir()
+    runs, rec, proto = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'   # select creates it (v4.4)
     d = Path(runs[43]) / 'GH'; ck = d / 'checkpoint.pt'; tj = d / 'training.json'
     if fault == 'dummy_bytes':
         ck.chmod(0o644); ck.write_bytes(b'not a checkpoint')
@@ -109,7 +109,7 @@ def _fake_chain(tmp_path, args):
         text = re.sub(rf'^{k}=/ml2/altgan\S*$', f'{k}={v}', text, count=1, flags=re.M)
     text = text.replace('@PINNED_COMMIT@', 'a' * 40)
     sh = tmp_path / 'chain.sh'; sh.write_text(text)
-    p = subprocess.run(['bash', str(sh), *args], capture_output=True, text=True, timeout=60)
+    p = subprocess.run(['bash', str(sh), *args], capture_output=True, text=True, timeout=60, start_new_session=True)
     return p, (json.loads(marker.read_text()) if marker.exists() else None)
 
 REAL = ['auth-ref', 'owner-ref', '2026-10-14T12:00:00-06:00']

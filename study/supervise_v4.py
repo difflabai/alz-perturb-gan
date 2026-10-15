@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Supervisor v4.2: no aggregate time ceiling (Mikkel, 2026-10-14); per-arm timeouts, cancellation, cleanup.
+"""Supervisor v4.4: no aggregate time ceiling (Mikkel, 2026-10-14); per-arm timeouts, cancellation, cleanup.
 
 Time: there is NO fixed cohort budget. An aggregate deadline exists only if the operator passes
 --total-timeout and/or --lease-valid-until (real runs require a lease; the lease is an ownership safeguard,
@@ -18,6 +18,11 @@ lock is labelled ours / other_owner / unknown_owner from /proc/locks against the
 nvidia-smi bounded; owned identities gone; llama-server identities unchanged; post_run_receipt.json created
 exclusively. Exit codes: 0 ok, 2 usage, 3 stopped, 5 incomplete, 6 probe attention, 7 descendants survived.
 --dry-run: CPU only, test locks in --dry-dir (default /ml2/altgan/.cache/supervisor-dryrun), fake arms.
+v4.4 hangup/parent death: SIGHUP is handled exactly like SIGTERM (identity-based teardown, receipt still written).
+TERM/INT/HUP/ALRM are blocked from cohort creation until the try block and around each spawn, so a signal can
+neither skip the receipt nor leave a spawned arm unregistered. Each arm leader gets PR_SET_PDEATHSIG(SIGTERM)
+with a parent re-check, and the arm's inner process polls the supervisor's recorded identity (ALZ_SUPERVISOR_IDENT).
+If the supervisor dies, the arm group exits, which releases the lock FDs it inherited.
 """
 from __future__ import annotations
 import argparse, datetime as dt, fcntl, hashlib, json, math, os, signal, subprocess, sys, time
@@ -27,6 +32,7 @@ from zoneinfo import ZoneInfo
 REPO = Path("/ml2/altgan/gene-feature-harness-20261014")
 sys.path.insert(0, str(REPO / "src"))
 from alz_perturb_gan.paths import scoped, create_new  # noqa: E402
+from alz_perturb_gan import parent_watch  # noqa: E402
 
 DEN = ZoneInfo("America/Denver")
 STEPS = 2000
@@ -46,6 +52,13 @@ FEATURES = {
 }
 ALLOC_CAP_GIB = 4
 ARMS = ["B0", "G", "H", "GH", "shuffle", "G_frozen"]
+BLOCK = frozenset({signal.SIGTERM, signal.SIGINT, signal.SIGHUP, signal.SIGALRM})
+DRY_ARM = ("import os, sys, time\n"
+           "if sys.argv[5] == '1':\n"
+           "    from alz_perturb_gan import parent_watch; parent_watch.start(interval=0.2)\n"
+           "time.sleep(float(sys.argv[3]))\n"
+           "print('fake', sys.argv[1], 'seed', sys.argv[2], 'fds=' + os.environ.get('ALZ_LEASE_FDS', ''), flush=True)\n"
+           "sys.exit(int(sys.argv[4]))\n")
 
 
 class Stop(Exception): pass
@@ -193,7 +206,7 @@ class Supervisor:
 
     def on_signal(self, signum, _f):
         if self.cleaning: return
-        raise Stop({signal.SIGTERM: "sigterm", signal.SIGINT: "sigint", signal.SIGALRM: "outer_watchdog"}[signum])
+        raise Stop({signal.SIGTERM: "sigterm", signal.SIGINT: "sigint", signal.SIGHUP: "sighup", signal.SIGALRM: "outer_watchdog"}[signum])
 
     def left(self): return math.inf if self.deadline is None else self.deadline - time.monotonic()
 
@@ -287,7 +300,8 @@ class Supervisor:
         wd = ["timeout", "-k", str(sch["kill_after_s"] - sch["term_after_s"]), str(sch["term_after_s"])]
         if self.dry:
             rc = 7 if arm == self.a.dry_fail_arm else 0
-            return wd + ["bash", "-c", f"sleep {self.a.dry_arm_seconds} & wait; echo fake {arm} seed {seed} fds=$ALZ_LEASE_FDS; exit {rc}"]
+            poll = "0" if self.a.dry_no_parent_poll else "1"
+            return wd + [PY, "-c", DRY_ARM, arm, str(seed), str(self.a.dry_arm_seconds), str(rc), poll]
         mw = int(slot - self.clock.s(KILL_RESERVE))
         cmd = [PY, "-u", "-m", "alz_perturb_gan.gene_harness", "train", "--bundle", str(self.bundle), "--bundle-sha256", self.a.bundle_sha256,
                "--output", str(run / arm), "--arm", arm, "--seed", str(seed), "--steps", str(STEPS), "--max-wall-seconds", str(mw),
@@ -315,11 +329,17 @@ class Supervisor:
         try: lfd = os.open(f"{arm}.log", os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644, dir_fd=dfd)
         finally: os.close(dfd)
         self.current = (entry, None)
-        p = subprocess.Popen(cmd, cwd=str(REPO), env=env, stdout=lfd, stderr=subprocess.STDOUT, start_new_session=True, pass_fds=tuple(self.fds))
-        os.close(lfd)
-        pgid = p.pid
-        leader = ident(proc_info(p.pid))
-        self.groups[pgid] = {"arm": arm, "seed": seed, "leader": leader, "popen": p}
+        pre = parent_watch.arm_preexec_factory(os.getpid(), pdeathsig=not (self.dry and self.a.dry_no_pdeathsig), unblock=BLOCK)
+        old_mask = signal.pthread_sigmask(signal.SIG_BLOCK, BLOCK)   # spawn + registration cannot be split by a signal
+        try:
+            p = subprocess.Popen(cmd, cwd=str(REPO), env=env, stdout=lfd, stderr=subprocess.STDOUT, start_new_session=True,
+                                 pass_fds=tuple(self.fds), preexec_fn=pre)
+            os.close(lfd)
+            pgid = p.pid
+            leader = ident(proc_info(p.pid))
+            self.groups[pgid] = {"arm": arm, "seed": seed, "leader": leader, "popen": p}
+        finally:
+            signal.pthread_sigmask(signal.SIG_SETMASK, old_mask)
         entry["pgid"], entry["leader"] = pgid, leader
         entry["inner"] = inner_process(p.pid, time.monotonic() + min(2.0, max(0.1, slot / 2)))  # real seconds, not scaled
         self.groups[pgid]["inner"] = entry["inner"] if entry["inner"].get("pid") else None
@@ -358,7 +378,7 @@ class Supervisor:
 
     def main(self):
         a, rc = self.a, 5
-        for s in (signal.SIGTERM, signal.SIGINT, signal.SIGALRM): signal.signal(s, self.on_signal)
+        for s in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP, signal.SIGALRM): signal.signal(s, self.on_signal)
         start_wall, start_mono = self.clock.wall(), time.monotonic()
         self.lease_until = None
         limit = math.inf
@@ -372,6 +392,8 @@ class Supervisor:
             limit = min(limit, (lv - start_wall).total_seconds() / self.clock.scale)
         if limit <= 0: print("ABORT: lease already expired"); return 2
         self.deadline = None if math.isinf(limit) else start_mono + self.clock.s(limit)
+        # Held until the try block: a signal from here on is delivered inside it, so the receipt is always written.
+        signal.pthread_sigmask(signal.SIG_BLOCK, BLOCK)
         if self.deadline is not None:
             # backstop only: arm slots are already cut to the deadline; fire after the in-slot kill grace has elapsed
             signal.setitimer(signal.ITIMER_REAL, max(0.1, self.left() + self.clock.s(KILL_GRACE)))
@@ -380,13 +402,16 @@ class Supervisor:
         base = scoped(self.dry_dir if self.dry else ROOT / "runs")
         cohort = base / tag; os.mkdir(cohort, 0o755)
         seeds = [int(x) for x in a.seeds.split(",")]
-        R = {"schema": "supervisor_receipt_v4_2", "dry_run": self.dry, "gpu_uuid": GPU_UUID, "seeds": seeds,
+        R = {"schema": "supervisor_receipt_v4_4", "dry_run": self.dry, "gpu_uuid": GPU_UUID, "seeds": seeds,
              "supervisor": ident(proc_info(os.getpid())), "start": start_wall.isoformat(), "aggregate_time_cap": None,
              "total_timeout_s": a.total_timeout, "lease_valid_until": a.lease_valid_until, "arm_timeout_s": a.arm_timeout,
              "teardown_timeout_s": a.teardown_timeout, "operator_deadline_epoch": None if self.deadline is None else time.time() + self.left(),
-             "time_scale": self.clock.scale, "arms": [], "runs": {}, "stop_reason": None}
+             "time_scale": self.clock.scale, "arms": [], "runs": {}, "stop_reason": None,
+             "signals_handled": ["SIGTERM", "SIGINT", "SIGHUP", "SIGALRM"],
+             "parent_watch": {"pdeathsig": not (self.dry and a.dry_no_pdeathsig), "parent_poll": not (self.dry and a.dry_no_parent_poll)}}
         if self.dry: R["real_lock_files_exist"] = {p: os.path.exists(p) for p in REAL_LOCKS}
         try:
+            signal.pthread_sigmask(signal.SIG_UNBLOCK, BLOCK)
             R["static_checks"] = statics = self.static_checks()
             R["llama_server_before"] = llama_servers()
             R["locks"] = locks = self.acquire(self.lock_paths())
@@ -401,6 +426,8 @@ class Supervisor:
             env = dict(os.environ, CUDA_VISIBLE_DEVICES=("" if self.dry else GPU_UUID), PYTHONPATH=str(REPO / "src"),
                        ALZ_LEASE_FDS=",".join(map(str, self.fds)), TMPDIR=str(CACHE), XDG_CACHE_HOME=str(CACHE),
                        MPLCONFIGDIR=str(CACHE / "matplotlib"), NUMBA_CACHE_DIR=str(CACHE / "numba"), PYTHONDONTWRITEBYTECODE="1")
+            env.pop(parent_watch.ENV, None)
+            if not (self.dry and a.dry_no_parent_poll): env[parent_watch.ENV] = parent_watch.identity_env()
             out_of_time = False
             for seed in seeds:
                 run = cohort / f"seed{seed}"; os.mkdir(run, 0o755)
@@ -421,7 +448,8 @@ class Supervisor:
         finally:
             self.cleaning = True
             signal.setitimer(signal.ITIMER_REAL, 0)
-            for s in (signal.SIGTERM, signal.SIGINT): signal.signal(s, signal.SIG_IGN)
+            for s in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP): signal.signal(s, signal.SIG_IGN)
+            signal.pthread_sigmask(signal.SIG_UNBLOCK, BLOCK)
             # Teardown has its own budget: it runs even if the operator deadline has already passed.
             t_end = time.monotonic() + self.clock.s(a.teardown_timeout)
             for pgid in list(self.groups): self.kill_group(pgid, t_end)
@@ -454,8 +482,11 @@ class Supervisor:
             if not gone: rc = 7 if rc == 0 else rc
             R["rc"] = rc
             p = create_new(cohort, "supervisor_receipt.json", jbytes(R))
-            print(json.dumps({"receipt": str(p), "sha256": sha(p), "rc": rc, "stop_reason": R["stop_reason"],
-                              "arms": [(x["seed"], x["arm"], x["status"]) for x in R["arms"]], "cleanup_ok": gone}), flush=True)
+            try:   # the receipt exists either way; a vanished stdout (hangup) must not turn into a traceback
+                print(json.dumps({"receipt": str(p), "sha256": sha(p), "rc": rc, "stop_reason": R["stop_reason"],
+                                  "arms": [(x["seed"], x["arm"], x["status"]) for x in R["arms"]], "cleanup_ok": gone}), flush=True)
+            except OSError:
+                pass
         return rc
 
 
@@ -535,6 +566,8 @@ def parse(argv=None):
     ap.add_argument("--dry-dir"); ap.add_argument("--time-scale", type=float, default=0.05)
     ap.add_argument("--dry-arm-seconds", type=float, default=2.0); ap.add_argument("--dry-fail-arm")
     ap.add_argument("--dry-skip-static-checks", action="store_true")
+    ap.add_argument("--dry-no-pdeathsig", action="store_true", help="test only: disable layer 1 of the parent watch")
+    ap.add_argument("--dry-no-parent-poll", action="store_true", help="test only: disable layer 2 of the parent watch")
     ap.add_argument("--post-run-probe", action="store_true"); ap.add_argument("--supervisor-receipt"); ap.add_argument("--sha256")
     ap.add_argument("--probe-timeout", type=float, default=30)
     return ap.parse_args(argv)
@@ -546,7 +579,7 @@ def main(argv=None):
         if not (a.supervisor_receipt and a.sha256): print("ABORT: --post-run-probe needs --supervisor-receipt and --sha256"); return 2
         return post_run_probe(a.supervisor_receipt, a.sha256, a.probe_timeout)
     if not a.dry_run:
-        bad = [k for k in ("dry_dir", "dry_fail_arm") if getattr(a, k)] + (["dry_skip_static_checks"] if a.dry_skip_static_checks else [])
+        bad = [k for k in ("dry_dir", "dry_fail_arm", "dry_skip_static_checks", "dry_no_pdeathsig", "dry_no_parent_poll") if getattr(a, k)]
         if bad: print(f"ABORT: dry-only options in a real run: {bad}"); return 2
         for k in ("authorization_reference", "ownership_reference", "lease_valid_until"):
             if not getattr(a, k): print(f"ABORT: --{k.replace('_', '-')} is required"); return 2

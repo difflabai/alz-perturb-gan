@@ -69,6 +69,7 @@ def apply_cuda_allocator_cap(device, cap_gib, grant):
 
 
 from .paths import check_new_target, scoped_new_dir, create_new
+from . import parent_watch
 
 
 def main(argv=None):
@@ -89,6 +90,7 @@ def main(argv=None):
     p.add_argument('--frozen-source',type=Path);p.add_argument('--frozen-source-sha256');p.add_argument('--frozen-generator-arm',default='G')
     p.add_argument('--profile-mode',default='generated',choices=['generated','independent_real_oracle'])
     a=p.parse_args(argv)
+    parent_watch.start()   # v4.4: no-op unless launched by the supervisor (ALZ_SUPERVISOR_IDENT)
     deadline = time.monotonic() + a.max_wall_seconds
     # v4.2 blocker 3: containment is checked before ANY work or write (training included).
     if a.output.exists():raise FileExistsError('new output required; do not overwrite receipts')

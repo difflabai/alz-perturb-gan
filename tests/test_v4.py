@@ -194,7 +194,7 @@ def _sel(runs, rec, out, proto, **kw):
 
 @pytest.fixture
 def cohort(tmp_path):
-    runs, rec, proto = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'; out.mkdir()
+    runs, rec, proto = _synthetic_cohort(tmp_path / 'cohort'); out = tmp_path / 'analysis'   # select creates it (v4.4)
     return runs, rec, proto, out
 
 def test_select_then_explore_end_to_end(cohort):

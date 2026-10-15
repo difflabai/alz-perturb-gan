@@ -16,7 +16,7 @@ from .gene_features import file_sha256, json_hash
 from .gene_calibration import calibrator_sha
 import math
 import torch
-from .paths import scoped, create_new, check_name
+from .paths import scoped, create_new, check_name, check_new_target
 
 ARMS = ('B0', 'G', 'H', 'GH', 'shuffle', 'G_frozen')
 CANDIDATES = ('G', 'H', 'GH')            # A2: G_frozen is a diagnostic probe, never selectable
@@ -198,7 +198,41 @@ def _append(fd, entry):
     os.fsync(fd)
 
 
+def _check_analysis_target(out_dir):
+    """Validate (create nothing) a NEW analysis directory: scoped, not existing (a symlink counts as existing),
+    and its parent must already exist. Returns (canonical parent, name)."""
+    s = str(out_dir) if out_dir is not None else ''
+    if s and os.path.isabs(s) and os.path.lexists(os.path.normpath(s)):   # lexical: a (dangling) symlink also exists
+        raise FileExistsError(f'analysis directory already exists: {s!r}')
+    target = check_new_target(out_dir)                                     # scope, names; creates nothing
+    parent_lex = Path(os.path.normpath(s)).parent
+    _need(os.path.lexists(parent_lex), 'analysis directory parent must already exist (only the final directory is created)')
+    parent = scoped(str(parent_lex))
+    _need(target.parent == parent, 'analysis directory parent must already exist (only the final directory is created)')
+    check_name(target.name)
+    return parent, target.name
+
+
+def _create_analysis_dir(out_dir):
+    """Create the analysis directory itself: exclusive mkdir relative to a no-follow handle on the canonical parent,
+    then reopen it no-follow and check it is a directory we own."""
+    parent, name = _check_analysis_target(out_dir)
+    pfd = os.open(parent, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        os.mkdir(name, 0o755, dir_fd=pfd)          # EEXIST for any existing entry, symlinks included
+        dfd = os.open(name, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=pfd)
+        try:
+            st = os.fstat(dfd)
+            _need(stat.S_ISDIR(st.st_mode) and st.st_uid == os.geteuid(), 'analysis directory is not a directory we own')
+        finally:
+            os.close(dfd)
+    finally:
+        os.close(pfd)
+    return scoped(str(parent / name))
+
+
 def select(runs, receipt, out_dir, *, expected_seeds, bundle_sha256, protocol_sha256):
+    _check_analysis_target(out_dir)   # v4.4: refuse an unsafe or existing out-dir before any binding work
     _need(sorted(runs) == sorted(expected_seeds), 'all pre-declared seeds are required')
     b = bindings(runs, receipt, expected_seeds=expected_seeds, bundle_sha256=bundle_sha256, protocol_sha256=protocol_sha256)
     summaries = {s: {a: _load(_arm_dir(runs[s], a) / 'evaluation' / 'metrics' / 'summary.json') for a in ARMS} for s in expected_seeds}
@@ -216,6 +250,7 @@ def select(runs, receipt, out_dir, *, expected_seeds, bundle_sha256, protocol_sh
             all(d['mean'] > 0 for d in deltas[f'{arm}_vs_{ref}']['per_seed'].values()) and deltas[f'{arm}_vs_{ref}']['pooled_ci95'][0] > 0
             for ref in ('B0', 'shuffle')))
     calib = {str(s): {a: b['runs'][str(s)]['arms'][a]['calibration_status'] for a in ARMS} for s in expected_seeds}
+    out_dir = _create_analysis_dir(out_dir)
     fd, lid = _open_ledger(out_dir, flags=os.O_WRONLY | os.O_APPEND, create=True)
     try:
         doc = {'schema': 'selection_frozen_v4_2', 'rule': RULE, 'rule_sha256': RULE_SHA256, 'split': 'inner',
@@ -285,7 +320,8 @@ def explore(selection, selection_sha256, out_dir):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__); sub = ap.add_subparsers(dest='cmd', required=True)
     s = sub.add_parser('select'); s.add_argument('--run', action='append', required=True, help='SEED=/abs/run/dir')
-    s.add_argument('--receipt', required=True); s.add_argument('--out-dir', required=True)
+    s.add_argument('--receipt', required=True)
+    s.add_argument('--out-dir', required=True, help='NEW directory, created by select (parent must exist)')
     s.add_argument('--seeds', default='42,43,44')
     s.add_argument('--bundle-sha256', required=True); s.add_argument('--protocol-sha256', required=True)
     e = sub.add_parser('explore'); e.add_argument('--selection', required=True); e.add_argument('--selection-sha256', required=True)
