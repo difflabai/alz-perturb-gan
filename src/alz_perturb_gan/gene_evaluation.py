@@ -72,11 +72,11 @@ def score_summary(scores, target_names, library, negatives, *, probabilities, pr
            **{k: sum(r[k] for r in rows) / len(rows) for k in ('top1', 'mrr', 'recall_at_3')},
            'target_count': len(rows), 'candidate_count': len(library), 'full_positive_prior': 1 / len(library)}
     if probabilities == 'softmax':
-        if probs is None or probs.shape != scores.shape: raise ValueError('softmax mode needs calibrated probabilities aligned to scores')
+        if probs is None or probs.shape != scores.shape: raise ValueError('softmax diagnostics need transformed scores aligned to logits')
         if bool(((probs < 0) | (probs > 1)).any()): raise ValueError('invalid head probability')
         rel = reliability(probs, positives)
         out.update(full_brier=rel['full_brier'], ece=rel['ece'], full_constant_prior_brier=rel['base_rate_brier'],
-                   calibration_bins=rel['bins'], probability_status='row softmax over library, temperature from held-out FIT calibration split')
+                   calibration_bins=rel['bins'], probability_status='diagnostic row softmax with held-out temperature; not validated multiclass probabilities')
     elif probabilities:
         if bool(((scores < 0) | (scores > 1)).any()): raise ValueError('invalid head probability')
         out.update(balanced_accuracy=sum(r['balanced_accuracy'] for r in rows) / len(rows),
@@ -198,7 +198,9 @@ def evaluate(models, study, *, output=None, profile_mode='generated', fixed_inpu
             calibrator = {'method': 'none_small_protocol', 'temperature': 1.0, 'calibration_identities': []}
             calibrator['sha256'] = calibrator_sha(calibrator); result['calibration'] = {'calibrator': calibrator}
         result['scoring'] = {'ranks': 'raw_head_logits (per-row and micro AUROC, MRR, top-1)',
-                             'probabilities': 'row_softmax(head_logits / T_all16); raw sigmoid never used as probability',
+                             'probabilities': 'row_softmax(head_logits / T_all16); diagnostic transform, not validated multiclass probabilities',
+                             'claim_scope': 'same-assay perturbation-source retrieval; no intervention utility or therapeutic claim',
+                             'calibration_role': 'diagnostic only; no selection veto',
                              'mode': 'raw_logit_ranks'}
         for split, names in study.protocol.groups().items():
             queries = torch.stack([inputs['queries'][n] for n in names])

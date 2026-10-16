@@ -1,8 +1,8 @@
-"""Training-only calibration split, row-softmax scoring and a frozen temperature calibrator.
+"""Frozen temperature transform for diagnostic reporting on held-out identities.
 
-The relativistic critic and the 50/50-trained head have no meaningful absolute level, so
-scores are only ever compared within a target row (softmax over the common library).
-Probabilities/Brier are reported only after a temperature fitted on held-out FIT identities.
+Balanced binary BCE does not establish a multiclass probability model. Row
+softmax and fitted temperature are retained as diagnostics only; ranking and
+selection use raw logits. This transform makes no intervention-utility claim.
 """
 from __future__ import annotations
 import math

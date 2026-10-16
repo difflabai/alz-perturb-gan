@@ -126,6 +126,10 @@ def validate_grant(grant, study, config, device, phase, max_wall_seconds):
         raise PermissionError('cohort protocol/arm/seed is outside the grant')
     if config.steps>grant.get('max_steps_per_arm',0) or max_wall_seconds>grant.get('max_wall_seconds_per_arm',0):
         raise PermissionError('fixed resource budget exceeded')
+    if config.trainer != 'ka2' or 'particle_trainer' in grant:
+        from .particle_integration import PARTICLEGAN_COMMIT
+        if grant.get('particle_trainer') != config.trainer or grant.get('particlegan_commit') != PARTICLEGAN_COMMIT:
+            raise PermissionError('ParticleGAN trainer/source is outside the grant')
     if device!='cpu':
         required=('gpu_uuid','capacity_receipt_sha256','ownership_reference','lease_receipt','capacity_valid_until')
         if not all(grant.get(k) for k in required):raise PermissionError('GPU capacity, ownership and shared lease evidence required')

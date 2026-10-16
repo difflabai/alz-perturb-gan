@@ -8,6 +8,7 @@ import hashlib
 import torch
 from .gene_features import FeatureTable, file_sha256, json_hash
 from .gene_models import ModelConfig, build_models
+from .gene_protocol import StudyProtocol
 
 
 def state_hash(module):
@@ -45,13 +46,22 @@ def zero_update_guard():
             raise RuntimeError('an optimizer call was attempted during evaluation')
 
 
+def serving_law(protocol):
+    return {'weights':'live', 'output_noise_std':0., 'prior_sampling':'public prior.sample',
+            'aggregation':'arithmetic mean over draws', 'draws':protocol.draws,
+            'evaluation_seed':protocol.evaluation_seed}
+
+
 def save_checkpoint(path, models, protocol, table=None, *, training_receipt=None):
     if models.training_protocol_sha256 and models.training_protocol_sha256 != protocol.fingerprint:
         raise ValueError('cannot save fitted state under a different protocol')
     feature = None
     if table is not None:
         feature = {k: getattr(table, k) for k in ('names', 'gene_ids', 'values', 'missing', 'fit_names', 'mean', 'scale', 'provenance', 'verified')}
-    payload = {'schema_version': 1, 'config': asdict(models.config), 'protocol': asdict(protocol), 'feature': feature,
+    from .particle_integration import receipt
+    integration = receipt(models.recipe)
+    payload = {'schema_version': 2, 'particle_integration': integration,
+               'resolved_recipe': integration['recipe'], 'serving_law': serving_law(protocol), 'config': asdict(models.config), 'protocol': asdict(protocol), 'feature': feature,
                'state': {k: m.state_dict() for k, m in models.modules().items()},
                'feature_provenance': models.feature_provenance, 'training_receipt': training_receipt or {},
                'training_protocol_sha256':models.training_protocol_sha256}
@@ -66,31 +76,24 @@ def load_checkpoint(path, expected_sha256, *, device='cpu'):
     if file_sha256(path) != expected_sha256: raise ValueError('checkpoint hash mismatch')
     with zero_update_guard():
         blob = torch.load(path, map_location='cpu', weights_only=True)
-        if blob.get('schema_version') == 1:
+        if blob.get('schema_version') != 2:
+            raise ValueError('historical checkpoint requires its original ALZ loader and ParticleGAN environment; recipe identity was not stored')
+        if blob.get('schema_version') == 2:
+            from .particle_integration import PARTICLEGAN_COMMIT
+            if blob.get('particle_integration',{}).get('commit') != PARTICLEGAN_COMMIT:
+                raise ValueError('checkpoint ParticleGAN dependency identity differs')
+            if blob.get('serving_law') != serving_law(StudyProtocol(**blob['protocol'])):
+                raise ValueError('checkpoint serving law differs')
             cfg = ModelConfig(**blob['config'])
             feature = blob.get('feature')
             table = FeatureTable(**feature) if feature is not None else None
             kind = blob['protocol']['data_kind']
-            models = build_models(cfg, table, data_kind=kind)
+            models = build_models(cfg, table, data_kind=kind, resolved_recipe=blob['resolved_recipe'])
             for name, state in blob['state'].items(): getattr(models, name).load_state_dict(state, strict=True)
             models.feature_provenance = blob['feature_provenance']
             models.training_protocol_sha256 = blob.get('training_protocol_sha256')
-            if models.training_protocol_sha256 and models.training_protocol_sha256 != json_hash(blob['protocol']):
+            if models.training_protocol_sha256 and models.training_protocol_sha256 != StudyProtocol(**blob['protocol']).fingerprint:
                 raise ValueError('checkpoint training protocol disagrees with stored split')
-        else:
-            # Existing run-2 checkpoint: plain modules, no trainer/optimizer construction.
-            args = blob['args']; genes = blob['generator']['net.4.weight'].shape[0]
-            particles, zdim = blob['prior']['z'].shape
-            library = blob['generator']['net.0.weight'].shape[1] - genes - zdim
-            cfg = ModelConfig(genes, library, hidden=args['hidden'], z_dim=zdim, particles=particles,
-                              seed=args['seed'], steps=args['steps'], batch_size=args['batch_size'], lr=args['lr'])
-            models = build_models(cfg)
-            models.generator.backbone.load_state_dict(blob['generator'], strict=True)
-            models.critic.load_state_dict(blob['critic'], strict=True)
-            models.decision.backbone.load_state_dict(blob['decision'], strict=True)
-            models.prior.load_state_dict(blob['prior'], strict=True)
-            models.feature_provenance = {'source': 'legacy_onehot', 'checkpoint_args': args,
-                                         'evaluation_only': True, 'training_receipt_missing': True}
         models.checkpoint_provenance = {'path':str(Path(path).resolve()), 'sha256':expected_sha256,
                                          'schema_version':blob.get('schema_version','legacy')}
         models.to(device)

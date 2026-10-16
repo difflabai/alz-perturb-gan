@@ -81,28 +81,38 @@ REASON=""
 [[ $RC -eq 0 ]] || REASON+="supervisor_rc=$RC "
 [[ $RC -ne 137 ]] || REASON+="supervisor_sigkill(manual_or_oom_kill;cause_unknown) "
 PRC=0
-# v4.6: act on a received TERM BEFORE the probe: the probe itself must label the run incomplete.
-STOPARG=()
-[[ -z "$GOT_TERM" ]] || { STOPARG=(--stop-requested wrapper_sigterm); echo "wrapper received SIGTERM: probing with --stop-requested"; }
+# v4.7: perform potentially slow probes and hashing while TERM is still accepted.
+# The probe writes only a provisional observation, never a clean terminal receipt.
 if [[ "$KIND" == R ]]; then
   REC=$(in_scope "$WHERE")
   RSHA=$(sha256sum -- "$REC" | cut -c1-64)
-  "$PY" "$SUP" --post-run-probe --supervisor-receipt "$REC" --sha256 "$RSHA" "${STOPARG[@]}" || PRC=$?
+  "$PY" "$SUP" --post-run-probe --supervisor-receipt "$REC" --sha256 "$RSHA" --defer-probe-finalization || PRC=$?
   DIR=$(dirname -- "$REC")
 elif [[ "$KIND" == C ]]; then
   REASON+="no_supervisor_receipt "
   DIR=$(in_scope "$WHERE")
-  "$PY" "$SUP" --post-run-probe --cohort "$DIR" "${STOPARG[@]}" || PRC=$?
+  "$PY" "$SUP" --post-run-probe --cohort "$DIR" --defer-probe-finalization || PRC=$?
 else
   REASON+="no_supervisor_receipt no_cohort "; DIR=""
+fi
+OBS=""; OSHA=""
+if [[ -n "$DIR" ]]; then
+  FILES=("$DIR"/*.json)
+  [[ ${#FILES[@]} -eq 0 ]] || sha256sum -- "${FILES[@]}"
+  OBS=$(in_scope "$DIR/post_run_probe_observation.json") || { [[ $PRC -ne 0 ]] || PRC=8; }
+  [[ -z "$OBS" ]] || OSHA=$(sha256sum -- "$OBS" | cut -c1-64)
+fi
+# Cancellation commit boundary: all accepted TERM signals are now recorded.
+# Later signals concern an already finalized chain. No slow probe runs below.
+trap '' TERM
+STOPARG=()
+[[ -z "$GOT_TERM" ]] || STOPARG=(--stop-requested wrapper_sigterm)
+if [[ -n "$OBS" && -n "$OSHA" && $PRC -eq 0 ]]; then
+  "$PY" "$SUP" --finalize-probe --probe-observation "$OBS" --sha256 "$OSHA" "${STOPARG[@]}" || PRC=$?
 fi
 echo "probe rc=$PRC"
 [[ $PRC -eq 0 ]] || REASON+="probe_rc=$PRC "
 [[ -z "$GOT_TERM" ]] || REASON+="wrapper_sigterm(stop_requested) "
-if [[ -n "$DIR" ]]; then
-  FILES=("$DIR"/*.json)
-  [[ ${#FILES[@]} -eq 0 ]] || sha256sum -- "${FILES[@]}"
-fi
 if [[ -n "$REASON" ]]; then
   echo "CHAIN_INCOMPLETE supervisor=$RC probe=$PRC reason=${REASON% }"
   echo "CHAIN_INCOMPLETE supervisor=$RC probe=$PRC reason=${REASON% }" >&2

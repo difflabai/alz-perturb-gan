@@ -2,6 +2,8 @@
 
 # alz-perturb-gan
 
+Current source pins, checkpoint compatibility, review hold and launch status: [develop API upgrade](docs/develop-api-upgrade-20261016.md). Archived results below retain their original environments and scientific limits.
+
 A small, swappable experiment in scoring cell perturbations before the [Prima Mente Alzheimer's Translation Challenge](https://www.primamente.com/challenges/) data exists.
 
 In spring 2027 that challenge plans to release an atlas of about 150 million neurons, astrocytes, and microglia under combinatorial chemical and genetic perturbations, with multimodal readouts. Stage one scores models on a set of evals, including general benchmarks and phenocopy (finding perturbations that reproduce a target cell state). Stage two asks shortlisted entries for one therapeutic hypothesis. Registration opened in October 2026. This repo is practice for that shape of problem. It does not produce a therapeutic hypothesis, and it must not be read as one.
@@ -74,11 +76,11 @@ python -m alz_perturb_gan.smoke
 
 That release is not on the training path. The failure is recorded in `src/alz_perturb_gan/hypergan_bridge.py` and in the smoke JSON.
 
-The develop branch is a 2026 rebuild, package version `2.0.0a1`, and it is not a PyPI release. This experiment pins commit `01a3aaec45f49923922787b0412a30fd71a2c897`. Its training loop uses ParticleGAN 0.8.0. The bridge keeps that dependency isolated: `gan.py` does not import HyperGAN. The bridge writes a conditional recipe whose data factory reads the same training cells as the other models, then calls `hypergan.training.train`.
+The develop branch is a 2026 rebuild, package version `2.0.0a1`, and it is not a PyPI release. New installations pin API-upgrade commit `e7278140a72f56bb4fe42cc4379a40be1122221e` (HyperGAN draft PR392), based on develop `f6c2603b`. Archived runs retain their earlier source binding. Its upgraded training loop pins ParticleGAN develop `6189649b` and the explicit BCAP recipe. The bridge keeps that dependency isolated: `gan.py` does not import HyperGAN. The bridge writes a conditional recipe whose data factory reads the same training cells as the other models, then calls `hypergan.training.train`.
 
 ```bash
-python -m pip install 'hndl>=0.8.0' \
-  'hypergan @ git+https://github.com/HyperGAN/HyperGAN.git@01a3aaec45f49923922787b0412a30fd71a2c897'
+python -m pip install 'hndl>=0.8.2' \
+  'hypergan @ git+https://github.com/HyperGAN/HyperGAN.git@e7278140a72f56bb4fe42cc4379a40be1122221e'
 ```
 
 `pip install -e '.[hypergan]'` is the same pin. Short smokes set `training.ema = 0` so sampling uses the live generator. The develop default decay of 0.995 does not move in a few dozen updates, and sampling reads the EMA copy.

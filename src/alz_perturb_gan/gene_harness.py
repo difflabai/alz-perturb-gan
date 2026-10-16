@@ -80,6 +80,7 @@ def main(argv=None):
     p.add_argument('--seed',type=int,default=42);p.add_argument('--steps',type=int,default=20000)
     p.add_argument('--batch-size',type=int,default=256);p.add_argument('--hidden',type=int,default=128)
     p.add_argument('--z-dim',type=int,default=16);p.add_argument('--particles',type=int,default=256)
+    p.add_argument('--trainer', choices=['ka2','k3p','bcap','bispf'], default='ka2')
     p.add_argument('--lr',type=float,default=.0002);p.add_argument('--max-wall-seconds',type=int,required=True)
     p.add_argument('--cuda-allocator-cap-gib',type=float)
     p.add_argument('--device',default='cpu');p.add_argument('--grant',type=Path,required=True);p.add_argument('--grant-sha256',required=True)
@@ -101,7 +102,7 @@ def main(argv=None):
         raise PermissionError('bundle differs from approved cohort')
     study=load_study_bundle(a.bundle,a.bundle_sha256,expected_protocol_sha256=grant.get('protocol_sha256'))
     config=ModelConfig(len(study.control),len(study.protocol.library),hidden=a.hidden,z_dim=a.z_dim,particles=a.particles,
-                       seed=a.seed,steps=a.steps,batch_size=a.batch_size,lr=a.lr,arm=a.arm,frozen_generator_arm=a.frozen_generator_arm)
+                       seed=a.seed,steps=a.steps,batch_size=a.batch_size,lr=a.lr,arm=a.arm,frozen_generator_arm=a.frozen_generator_arm,trainer=a.trainer)
     validate_grant(grant,study,config,a.device,a.phase,a.max_wall_seconds)
     def remaining():
         seconds = deadline - time.monotonic()

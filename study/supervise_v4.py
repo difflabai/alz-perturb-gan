@@ -39,19 +39,21 @@ import argparse, datetime as dt, fcntl, hashlib, json, math, os, signal, subproc
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-REPO = Path("/ml2/altgan/gene-feature-harness-20261014")
+REPO = Path(os.environ.get("ALZ_HARNESS_REPO", "/ml2/altgan/gene-feature-harness-20261014")).resolve(strict=True)
 sys.path.insert(0, str(REPO / "src"))
 from alz_perturb_gan.paths import scoped, create_new  # noqa: E402
 from alz_perturb_gan import parent_watch  # noqa: E402
 
 DEN = ZoneInfo("America/Denver")
 STEPS = 2000
+TRAINER = "bcap"
+PARTICLEGAN_COMMIT = "6a91a49910568720b2fdfd040ee5891c7d2bde46"
 MIN_START_MIB, MIN_RUN_MIB = 9 * 1024, 4 * 1024
 POLL_S, MIN_ARM_S, KILL_RESERVE, KILL_GRACE, PROBE_MAX = 5, 120, 30, 10, 5
 GPU_UUID = "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69"
 REAL_LOCKS = ["/tmp/ember-pg-20261012-slots/gpu1-slot0.lock", "/tmp/ember-pg-20261012-slots/gpu1-slot1.lock"]
 ROOT = Path("/ml2/altgan/studies/gene-feature-20261014")
-PY, CACHE = "/ml2/altgan/.venv/bin/python", Path("/ml2/altgan/.cache")
+PY, CACHE = os.environ.get("ALZ_PYTHON", "/ml2/altgan/.venv/bin/python"), Path("/ml2/altgan/.cache")
 DEFAULT_DRY_DIR = CACHE / "supervisor-dryrun"
 F = Path("/ml2/altgan/features")
 FEATURES = {
@@ -340,6 +342,7 @@ class Supervisor:
                  "bundle_sha256": statics["bundle"], **{f"{k}_sha256": statics[k] for k in FEATURES},
                  "harness_commit": statics["harness_commit"], "supervisor_sha256": statics["script_sha256"],
                  "cuda_allocator_cap_gib": ALLOC_CAP_GIB, "max_steps_per_arm": STEPS, "max_wall_seconds_per_arm": self.a.arm_timeout,
+                 "particle_trainer": TRAINER, "particlegan_commit": PARTICLEGAN_COMMIT,
                  "aggregate_time_cap": None, "total_timeout_s": self.a.total_timeout,
                  "gpu_uuid": GPU_UUID, "lease_receipt": str(lease_path), "lease_receipt_sha256": lease_sha,
                  "capacity_receipt_sha256": cap_sha, "capacity_valid_until": valid_until if valid_until else "DRY-RUN: no lease",
@@ -357,7 +360,7 @@ class Supervisor:
             return wd + [PY, "-c", DRY_ARM, arm, str(seed), str(self.a.dry_arm_seconds), str(rc), poll, ign]
         mw = int(slot - self.clock.s(KILL_RESERVE))
         cmd = [PY, "-u", "-m", "alz_perturb_gan.gene_harness", "train", "--bundle", str(self.bundle), "--bundle-sha256", self.a.bundle_sha256,
-               "--output", str(run / arm), "--arm", arm, "--seed", str(seed), "--steps", str(STEPS), "--max-wall-seconds", str(mw),
+               "--output", str(run / arm), "--trainer", TRAINER, "--arm", arm, "--seed", str(seed), "--steps", str(STEPS), "--max-wall-seconds", str(mw),
                "--device", "cuda:0", "--cuda-allocator-cap-gib", str(ALLOC_CAP_GIB), "--grant", str(grant), "--grant-sha256", gsha,
                "--feature-manifest", str(FEATURES["feature_manifest"][0]), "--feature-manifest-sha256", FEATURES["feature_manifest"][1],
                "--tau-source", "string_spectral",
@@ -471,7 +474,8 @@ class Supervisor:
         cohort = base / tag; os.mkdir(cohort, 0o755)
         seeds = [int(x) for x in a.seeds.split(",")]
         R = {"schema": "supervisor_receipt_v4_5", "dry_run": self.dry, "gpu_uuid": GPU_UUID, "seeds": seeds,
-             "supervisor": ident(proc_info(os.getpid())), "start": start_wall.isoformat(), "aggregate_time_cap": None,
+             "supervisor": ident(proc_info(os.getpid())), "start": start_wall.isoformat(), "particle_trainer": TRAINER, "particlegan_commit": PARTICLEGAN_COMMIT,
+                 "aggregate_time_cap": None,
              "total_timeout_s": a.total_timeout, "lease_valid_until": a.lease_valid_until, "arm_timeout_s": a.arm_timeout,
              "teardown_timeout_s": a.teardown_timeout, "operator_deadline_epoch": None if self.deadline is None else time.time() + self.left(),
              "time_scale": self.clock.scale, "arms": [], "runs": {}, "stop_reason": None,
@@ -600,9 +604,17 @@ def _probe_gpu(P, left):
     return apps
 
 
-def _finish_probe(P, directory, stop_requested=None):
+def _finish_probe(P, directory, stop_requested=None, defer=False):
     """Write post_run_receipt.json exclusively; verdict 'clean' ONLY for a complete run with clean residue.
     v4.6: a stop requested of the chain (wrapper got SIGTERM) means the run is never complete."""
+    if defer:
+        # An observation is deliberately not a terminal verdict. The wrapper
+        # closes cancellation acceptance before publishing the final receipt.
+        P["publication"] = "provisional"
+        p = create_new(directory, "post_run_probe_observation.json", jbytes(P))
+        print(json.dumps({"probe_observation": str(p), "sha256": sha(p)}), flush=True)
+        return 0
+    P["publication"] = "final"
     P["stop_requested"] = stop_requested
     if stop_requested:
         why = f"stop requested of the chain ({stop_requested})"
@@ -617,7 +629,7 @@ def _finish_probe(P, directory, stop_requested=None):
     return {"clean": 0, "attention": 6}.get(P["verdict"], 8)
 
 
-def post_run_probe(receipt_path, want_sha, probe_timeout, stop_requested=None):
+def post_run_probe(receipt_path, want_sha, probe_timeout, stop_requested=None, defer=False):
     """Separate process after the supervisor exited; bounded by its own probe_timeout, independent of the run.
     Exit 0 clean (complete run, clean residue), 6 attention (residue), 8 incomplete run with clean residue."""
     t_end = time.monotonic() + probe_timeout
@@ -656,10 +668,10 @@ def post_run_probe(receipt_path, want_sha, probe_timeout, stop_requested=None):
                 and all(x.get("status") == "ok" for x in R["arms"]) and R.get("completeness", "complete") == "complete")
     P["run_status"] = "complete" if complete else "incomplete"
     P["run_status_reason"] = None if complete else (R.get("incomplete_reason") or R.get("stop_reason") or f"rc={R.get('rc')}")
-    return _finish_probe(P, Path(receipt_path).parent, stop_requested)
+    return _finish_probe(P, Path(receipt_path).parent, stop_requested, defer)
 
 
-def post_run_probe_no_receipt(cohort, probe_timeout, stop_requested=None):
+def post_run_probe_no_receipt(cohort, probe_timeout, stop_requested=None, defer=False):
     """Probe a cohort whose supervisor left NO receipt (SIGKILL, kernel OOM kill, crash). Never 'clean':
     the run is 'incomplete' (lease receipt present) or 'unknown' (no lease receipt). Exit 8, or 6 for residue."""
     t_end = time.monotonic() + probe_timeout
@@ -687,7 +699,7 @@ def post_run_probe_no_receipt(cohort, probe_timeout, stop_requested=None):
     P["within_probe_budget"] = left() > 0
     P["residue"] = ("unknown" if not lease else "clean" if P["gpu_query_ok"] and not P["supervisor_alive"] and P["within_probe_budget"]
                     and all(l.get("state") == "free" for l in P["locks"]) else "attention")
-    return _finish_probe(P, cohort, stop_requested)
+    return _finish_probe(P, cohort, stop_requested, defer)
 
 
 def parse(argv=None):
@@ -706,6 +718,9 @@ def parse(argv=None):
     ap.add_argument("--dry-no-pdeathsig", action="store_true", help="test only: disable layer 1 of the parent watch")
     ap.add_argument("--dry-no-parent-poll", action="store_true", help="test only: disable layer 2 of the parent watch")
     ap.add_argument("--dry-arm-term-ignoring-child", action="store_true", help="test only: each fake arm starts a child that ignores SIGTERM")
+    ap.add_argument("--defer-probe-finalization", action="store_true")
+    ap.add_argument("--finalize-probe", action="store_true")
+    ap.add_argument("--probe-observation")
     ap.add_argument("--post-run-probe", action="store_true"); ap.add_argument("--supervisor-receipt"); ap.add_argument("--sha256")
     ap.add_argument("--cohort", help="probe a cohort that has NO supervisor receipt (supervisor killed); result is never clean")
     ap.add_argument("--probe-timeout", type=float, default=30)
@@ -715,11 +730,22 @@ def parse(argv=None):
 
 def main(argv=None):
     a = parse(argv)
+    if a.finalize_probe:
+        if a.post_run_probe or a.defer_probe_finalization or not (a.probe_observation and a.sha256):
+            print("ABORT: finalization needs only --probe-observation/--sha256 and optional --stop-requested"); return 2
+        observation = scoped(a.probe_observation)
+        if sha(observation) != a.sha256: raise ValueError("probe observation hash mismatch")
+        P = json.loads(observation.read_text())
+        if P.get("publication") != "provisional" or "verdict" in P: raise ValueError("not a provisional observation")
+        P["observation_sha256"] = a.sha256
+        return _finish_probe(P, observation.parent, a.stop_requested)
+    if a.probe_observation or (a.defer_probe_finalization and not a.post_run_probe):
+        print("ABORT: probe-only options"); return 2
     if a.post_run_probe:
-        if a.cohort and not (a.supervisor_receipt or a.sha256): return post_run_probe_no_receipt(a.cohort, a.probe_timeout, a.stop_requested)
+        if a.cohort and not (a.supervisor_receipt or a.sha256): return post_run_probe_no_receipt(a.cohort, a.probe_timeout, a.stop_requested, a.defer_probe_finalization)
         if a.cohort or not (a.supervisor_receipt and a.sha256):
             print("ABORT: --post-run-probe needs --supervisor-receipt and --sha256, or only --cohort"); return 2
-        return post_run_probe(a.supervisor_receipt, a.sha256, a.probe_timeout, a.stop_requested)
+        return post_run_probe(a.supervisor_receipt, a.sha256, a.probe_timeout, a.stop_requested, a.defer_probe_finalization)
     if a.stop_requested: print("ABORT: --stop-requested is a probe option"); return 2
     if not a.dry_run:
         bad = [k for k in ("dry_dir", "dry_fail_arm", "dry_skip_static_checks", "dry_no_pdeathsig", "dry_no_parent_poll",

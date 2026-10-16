@@ -105,7 +105,7 @@ def test_v46_wrapper_only_sigterm_probe_itself_reports_incomplete(tmp_path):
     (study / name).write_text(                       # shim: real supervisor in dry mode, real probe
         'import os, sys\n'
         f'REAL, READY, DRY = {str(SUP)!r}, {str(ready)!r}, {str(dry)!r}\n'
-        'if "--post-run-probe" in sys.argv: os.execv(sys.executable, [sys.executable, REAL] + sys.argv[1:])\n'
+        'if "--post-run-probe" in sys.argv or "--finalize-probe" in sys.argv: os.execv(sys.executable, [sys.executable, REAL] + sys.argv[1:])\n'
         'open(READY, "w").write("1")\n'
         'os.execv(sys.executable, [sys.executable, REAL, "--dry-run", "--dry-skip-static-checks", "--dry-dir", DRY,\n'
         '                          "--seeds", "42", "--time-scale", "0.01", "--dry-arm-seconds", "1.0"])\n')
