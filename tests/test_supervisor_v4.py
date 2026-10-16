@@ -137,7 +137,7 @@ def test_grant_carries_lease_receipt_and_capacity_valid_until(tmp_path, monkeypa
     g = json.loads(Path(p).read_text())
     assert g['lease_receipt'] == str(tmp_path / 'lease_receipt.json') and g['capacity_valid_until'] == s.lease_until.isoformat()
     monkeypatch.setenv('CUDA_VISIBLE_DEVICES', m.GPU_UUID)
-    validate_grant(g, study, ModelConfig(4, 12, seed=42, steps=10, arm='G'), 'cuda:0', 'train', 100)
+    validate_grant(g, study, ModelConfig(4, 12, seed=42, steps=10, arm='G', trainer=m.TRAINER), 'cuda:0', 'train', 100)
 
 
 def _fake_chain(tmp_path, sup_rc, probe_rc, pinned=True):
@@ -149,7 +149,8 @@ def _fake_chain(tmp_path, sup_rc, probe_rc, pinned=True):
     name = re.search(r'^SUPERVISOR_NAME=(\S+)$', CHAIN.read_text(), re.M).group(1)
     (study / name).write_text(
         'import json,sys\n'
-        f'if "--post-run-probe" in sys.argv: print(json.dumps({{"verdict": "x"}})); sys.exit({probe_rc})\n'
+        f'if "--post-run-probe" in sys.argv: open({str(rec / "post_run_probe_observation.json")!r}, "w").write("{{}}"); sys.exit(0)\n'
+        f'if "--finalize-probe" in sys.argv: print(json.dumps({{"verdict": "x"}})); sys.exit({probe_rc})\n'
         f'print(json.dumps({{"receipt": "{rec / "supervisor_receipt.json"}"}})); sys.exit({sup_rc})\n')
     text = CHAIN.read_text()
     for k, v in (('SCOPE', root), ('S', study), ('PY', sys.executable), ('CACHE', cache)):

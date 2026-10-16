@@ -198,7 +198,9 @@ def evaluate(models, study, *, output=None, profile_mode='generated', fixed_inpu
             calibrator = {'method': 'none_small_protocol', 'temperature': 1.0, 'calibration_identities': []}
             calibrator['sha256'] = calibrator_sha(calibrator); result['calibration'] = {'calibrator': calibrator}
         result['scoring'] = {'ranks': 'raw_head_logits (per-row and micro AUROC, MRR, top-1)',
-                             'probabilities': 'row_softmax(head_logits / T_all16); raw sigmoid never used as probability',
+                             'probabilities': 'row_softmax(head_logits / T_all16); diagnostic transform, not validated multiclass probabilities',
+                             'claim_scope': 'same-assay perturbation-source retrieval; no intervention utility or therapeutic claim',
+                             'calibration_role': 'diagnostic only; no selection veto',
                              'mode': 'raw_logit_ranks'}
         for split, names in study.protocol.groups().items():
             queries = torch.stack([inputs['queries'][n] for n in names])

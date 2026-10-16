@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, asdict, field
 import torch
 from torch import nn
-from particlegan import get_recipe
+from .particle_integration import make_recipe
 from .models import ConditionalGenerator, ConditionalCritic, DecisionModel
 from .gene_features import FeatureProjector
 
@@ -24,6 +24,8 @@ class ModelConfig:
     arm: str = 'B0'
     shuffle_seed: int = 142
     frozen_generator_arm: str = "G"
+    trainer: str = "ka2"  # legacy checkpoints omitted this field
+
 
     def __post_init__(self):
         if self.frozen_generator_arm not in ('B0','G'): raise ValueError('invalid frozen-generator source arm')
@@ -106,15 +108,28 @@ class GeneModels:
                     'trainable': sum(p.numel() for p in m.parameters() if p.requires_grad)} for k, m in self.modules().items()}
 
 
-def build_models(config, table=None, *, data_kind='real'):
+def build_models(config, table=None, *, data_kind='real', resolved_recipe=None):
     needs = config.arm in ('G','H','GH','shuffle') or (config.arm == 'G_frozen' and config.frozen_generator_arm == 'G')
     if needs and (table is None or (not table.verified and data_kind != 'synthetic')):
         raise ValueError('real feature arms require a frozen verified table')
     if table is not None and len(table.names) != config.library_size:
         raise ValueError('feature library size mismatch')
     if config.arm == 'shuffle': table = table.shuffled(config.shuffle_seed)
-    recipe = get_recipe('gan', total_steps=config.steps, batch_size=config.batch_size, z_dim=config.z_dim,
-                        num_particles=config.particles, lr=config.lr, d_lr_mult=1., prior_lr_mult=1.)
+    if resolved_recipe is None:
+        recipe = make_recipe(config.trainer, total_steps=config.steps, batch_size=config.batch_size, z_dim=config.z_dim,
+                            num_particles=config.particles, lr=config.lr, d_lr_mult=1., prior_lr_mult=1.)
+    else:
+        from particlegan import Recipe
+        from dataclasses import fields
+        from .particle_integration import verify_source
+        verify_source()
+        if set(resolved_recipe) != {f.name for f in fields(Recipe)}:
+            raise ValueError('checkpoint must store every resolved recipe field')
+        recipe = Recipe(**resolved_recipe)
+        if (recipe.z_dim, recipe.num_particles, recipe.batch_size, recipe.total_steps, recipe.lr,
+            recipe.critic_formulation) != (config.z_dim, config.particles, config.batch_size, config.steps,
+                                          config.lr, config.trainer):
+            raise ValueError('resolved checkpoint recipe differs from model config')
     generator = GeneGenerator(config, table)
     critic = _seeded(config.seed + 1, lambda: ConditionalCritic(config.n_genes, config.n_genes + config.library_size, config.hidden))
     decision = GeneHead(config, table)

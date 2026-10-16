@@ -13,7 +13,7 @@ license-files = ["LICENSE"]
 authors = [{name = "Differential AI Lab"}]
 dependencies = [
     "numpy>=1.26,<3",
-    "particlegan==0.8.0",
+    "particlegan @ git+https://github.com/255BITS/ParticleGAN.git@6a91a49910568720b2fdfd040ee5891c7d2bde46",
     "torch>=2.6,<3",
 ]
 
@@ -22,8 +22,8 @@ dependencies = [
 # The develop commit below is the rebuild that actually trains. It is not a
 # PyPI release. See README.
 hypergan = [
-    "hndl>=0.8.0",
-    "hypergan @ git+https://github.com/HyperGAN/HyperGAN.git@01a3aaec45f49923922787b0412a30fd71a2c897",
+    "hndl>=0.8.2",
+    "hypergan @ git+https://github.com/HyperGAN/HyperGAN.git@3bb8b251b1760c3c4ef2bc3dcd53c3e4d745ec94",
 ]
 vcc = [
     "anndata>=0.10",

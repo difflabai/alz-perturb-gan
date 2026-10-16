@@ -17,13 +17,14 @@ import on this Python 3.12 stack. The failure, checked in this environment, is:
    `torch.onnx.export(..., device='cuda')`.
 
 Training therefore uses the develop branch, which is a rebuild rather than a
-release. The commit pinned here is `01a3aaec45f49923922787b0412a30fd71a2c897`
+release. The develop base is `f6c2603b9e9858ee695c819dc18d19108c8ef5af`
 (package version 2.0.0a1). It trains a conditional generator with ParticleGAN
-0.8.0 inside HyperGAN's own loop. Install it only if you want this bridge:
+develop inside HyperGAN's own loop; the bridge pins the reviewed upgrade branch below. Install it only if you want this bridge:
 
-    pip install 'hndl>=0.8.0' \\
-      'hypergan @ git+https://github.com/HyperGAN/HyperGAN.git@01a3aaec45f49923922787b0412a30fd71a2c897'
+    pip install 'hndl>=0.8.2' \\
+      'hypergan @ git+https://github.com/HyperGAN/HyperGAN.git@3bb8b251b1760c3c4ef2bc3dcd53c3e4d745ec94'
 
+The pinned API-upgrade draft is HyperGAN PR392, based on that develop head.
 The decision-model loop in `gan.py` does not import this module.
 """
 
@@ -36,7 +37,8 @@ import torch
 
 from .data import PerturbationSet
 
-DEVELOP_COMMIT = "01a3aaec45f49923922787b0412a30fd71a2c897"
+DEVELOP_COMMIT = "f6c2603b9e9858ee695c819dc18d19108c8ef5af"
+INTEGRATION_COMMIT = "3bb8b251b1760c3c4ef2bc3dcd53c3e4d745ec94"
 DEVELOP_VERSION = "2.0.0a1"
 
 RC2_FINDINGS = {
@@ -122,11 +124,29 @@ def describe_hypergan() -> dict:
             "rc2": RC2_FINDINGS,
         }
     version = getattr(hypergan, "__version__", None)
+    try:
+        from hypergan.provenance import hypergan_source
+    except ImportError:
+        return {'status':'unexpected','version':version,'rc2':RC2_FINDINGS,
+                'error':'HyperGAN bridge requires the pinned develop integration with source provenance'}
+    source = hypergan_source()
+    actual = source.get('hypergan_commit')
+    if actual is None:
+        import importlib.metadata
+        try:
+            direct = json.loads(importlib.metadata.distribution('hypergan').read_text('direct_url.json') or '{}')
+            actual = direct.get('vcs_info',{}).get('commit_id')
+        except importlib.metadata.PackageNotFoundError:
+            pass
+    if actual != INTEGRATION_COMMIT or source.get('hypergan_dirty'):
+        return {'status':'unexpected','version':version,'commit':actual,'rc2':RC2_FINDINGS,
+                'error':f'HyperGAN bridge requires clean source {INTEGRATION_COMMIT}, got {actual}'}
     if version == DEVELOP_VERSION or (isinstance(version, str) and version.startswith("2.")):
         return {
             "status": "develop",
             "version": version,
-            "commit": DEVELOP_COMMIT,
+            "commit": actual,
+            "develop_base_commit": DEVELOP_COMMIT,
             "rc2": RC2_FINDINGS,
         }
     return {
@@ -148,6 +168,7 @@ def write_recipe(directory: str | Path, data: PerturbationSet, *, steps: int = 5
     # The path is absolute so HyperGAN can load the factory from any cwd.
     recipe = f'''# Learning-experiment conditional perturbation GAN. Not a qualified image recipe.
 schema_version = 1
+particlegan_trainer = "bcap"
 name = "alz-perturb-gan/condition"
 
 [data]
