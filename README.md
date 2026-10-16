@@ -76,11 +76,11 @@ python -m alz_perturb_gan.smoke
 
 That release is not on the training path. The failure is recorded in `src/alz_perturb_gan/hypergan_bridge.py` and in the smoke JSON.
 
-The develop branch is a 2026 rebuild, package version `2.0.0a1`, and it is not a PyPI release. New installations pin API-upgrade commit `3bb8b251b1760c3c4ef2bc3dcd53c3e4d745ec94` (HyperGAN draft PR392), based on develop `f6c2603b`. Archived runs retain their earlier source binding. Its training loop uses ParticleGAN 0.8.0. The bridge keeps that dependency isolated: `gan.py` does not import HyperGAN. The bridge writes a conditional recipe whose data factory reads the same training cells as the other models, then calls `hypergan.training.train`.
+The develop branch is a 2026 rebuild, package version `2.0.0a1`, and it is not a PyPI release. New installations pin API-upgrade commit `ce6b67e04f1d1e93e6ab417f4bae843bb761c1a0` (HyperGAN draft PR392), based on develop `f6c2603b`. Archived runs retain their earlier source binding. Its training loop uses ParticleGAN 0.8.0. The bridge keeps that dependency isolated: `gan.py` does not import HyperGAN. The bridge writes a conditional recipe whose data factory reads the same training cells as the other models, then calls `hypergan.training.train`.
 
 ```bash
 python -m pip install 'hndl>=0.8.2' \
-  'hypergan @ git+https://github.com/HyperGAN/HyperGAN.git@3bb8b251b1760c3c4ef2bc3dcd53c3e4d745ec94'
+  'hypergan @ git+https://github.com/HyperGAN/HyperGAN.git@ce6b67e04f1d1e93e6ab417f4bae843bb761c1a0'
 ```
 
 `pip install -e '.[hypergan]'` is the same pin. Short smokes set `training.ema = 0` so sampling uses the live generator. The develop default decay of 0.995 does not move in a few dozen updates, and sampling reads the EMA copy.
