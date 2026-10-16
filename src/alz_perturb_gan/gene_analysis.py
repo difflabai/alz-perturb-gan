@@ -83,10 +83,9 @@ def _verify_checkpoint(ck_path, tj_path, *, seed, arm, protocol_sha256, grant, s
     if blob.get('schema_version') == 2:
         from .particle_integration import PARTICLEGAN_COMMIT
         from .gene_checkpoint import serving_law
-        from .gene_protocol import StudyProtocol
         integration = blob.get('particle_integration',{})
         _need(integration.get('commit') == PARTICLEGAN_COMMIT, f'{where}: checkpoint dependency identity differs')
-        _need(blob.get('resolved_recipe') == integration.get('recipe'), f'{where}: resolved recipe differs')
+        _need(isinstance(blob.get('resolved_recipe'), dict) and blob.get('resolved_recipe') == integration.get('recipe'), f'{where}: resolved recipe differs')
         _need(blob.get('serving_law') == serving_law(StudyProtocol(**blob['protocol'])), f'{where}: serving law differs')
     _need(set(state) == {'generator', 'critic', 'decision', 'prior'}, f'{where}: checkpoint state is incomplete')
     tensors = [v for sd in state.values() for v in sd.values() if torch.is_tensor(v) and v.is_floating_point()]
