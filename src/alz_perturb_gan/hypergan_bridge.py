@@ -22,7 +22,7 @@ release. The develop base is `f6c2603b9e9858ee695c819dc18d19108c8ef5af`
 develop inside HyperGAN's own loop; the bridge pins the reviewed upgrade branch below. Install it only if you want this bridge:
 
     pip install 'hndl>=0.8.2' \\
-      'hypergan @ git+https://github.com/HyperGAN/HyperGAN.git@499a24cdac980ff473e422335ed213c992d32ef3'
+      'hypergan @ git+https://github.com/HyperGAN/HyperGAN.git@e7278140a72f56bb4fe42cc4379a40be1122221e'
 
 The pinned API-upgrade draft is HyperGAN PR392, based on that develop head.
 The decision-model loop in `gan.py` does not import this module.
@@ -38,7 +38,7 @@ import torch
 from .data import PerturbationSet
 
 DEVELOP_COMMIT = "f6c2603b9e9858ee695c819dc18d19108c8ef5af"
-INTEGRATION_COMMIT = "499a24cdac980ff473e422335ed213c992d32ef3"
+INTEGRATION_COMMIT = "e7278140a72f56bb4fe42cc4379a40be1122221e"
 DEVELOP_VERSION = "2.0.0a1"
 
 RC2_FINDINGS = {
