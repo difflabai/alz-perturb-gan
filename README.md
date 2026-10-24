@@ -4,6 +4,11 @@
 
 Current source pins, checkpoint compatibility, review hold and launch status: [develop API upgrade](docs/develop-api-upgrade-20261016.md). Archived results below retain their original environments and scientific limits.
 
+The separate [Norman CPU evaluation harness](docs/norman-evaluation.md) provides
+reproducible five-fold label and whole-gene holdouts, train-fitted baselines,
+local Systema-style metrics, paired intervals and hash-bound provenance. It
+does not change the archived Arc experiment below.
+
 A small, swappable experiment in scoring cell perturbations before the [Prima Mente Alzheimer's Translation Challenge](https://www.primamente.com/challenges/) data exists.
 
 In spring 2027 that challenge plans to release an atlas of about 150 million neurons, astrocytes, and microglia under combinatorial chemical and genetic perturbations, with multimodal readouts. Stage one scores models on a set of evals, including general benchmarks and phenocopy (finding perturbations that reproduce a target cell state). Stage two asks shortlisted entries for one therapeutic hypothesis. Registration opened in October 2026. This repo is practice for that shape of problem. It does not produce a therapeutic hypothesis, and it must not be read as one.
