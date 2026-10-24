@@ -36,6 +36,7 @@ def test_reproducible_row_order_invariant_folds(packet, protocol):
     for f in folds:
         assert f["sha256"] == digest({k: v for k, v in f.items() if k != "sha256"})
         assert f["audit"]["passed"]
+        assert "alias/stable-ID equivalence not verified" in f["audit"]["gene_identity_namespace"]
         if protocol == "whole_gene":
             assert not f["audit"]["perturbed_gene_overlap"]
             assert all(f["audit"]["novelty"][p]["n_unseen_genes"] == len(members(p))
@@ -202,7 +203,8 @@ def manifest(tmp_path, packet):
     np.savez(target, Dt=packet.target_delta, targets=packet.target_genes, perts=packet.labels)
     m = {"schema_version": 1, "status": "frozen", "dataset": "synthetic fixture",
          "normalization": "fixture", "controls": {"fixture": True},
-         "source": {"sha256": "fixture"}, "preparation": {"code_sha256": "fixture"},
+         "source": {"sha256": digest("synthetic source")},
+         "preparation": {"code_sha256": digest("synthetic preparation")},
          "terms": {"status": "synthetic"}, "limitations": ["unit tests only"],
          "outcome_transform_scope": "per_label_only",
          "gene_selection": {"fit_scope": "controls_only"},
@@ -273,4 +275,34 @@ def test_target_row_embedded_order_and_raw_source_hash_guards(manifest, tmp_path
     m["target_deltas"]["sha256"] = file_hash(target)
     path.write_text(json.dumps(m))
     with pytest.raises(ValueError, match="misaligned"):
+        load_packet(path)
+
+
+@pytest.mark.parametrize("field,value", [
+    ("sha256", "efde6f53…31affc"), ("sha256", "z" * 64),
+    ("sha256", None), ("md5", "c870e696…cd6"), ("md5", "a" * 31),
+])
+def test_source_identifiers_must_be_complete(manifest, field, value):
+    path, m = manifest
+    m["source"][field] = value
+    path.write_text(json.dumps(m))
+    with pytest.raises(ValueError, match="complete"):
+        load_packet(path)
+
+
+def test_source_md5_verified_and_preparation_hash_required(manifest, tmp_path):
+    path, m = manifest
+    raw = tmp_path / "raw.bin"
+    raw.write_bytes(b"synthetic raw bytes")
+    m["source"] = {"path": raw.name, "sha256": file_hash(raw),
+                   "md5": file_hash(raw, algorithm="md5")}
+    path.write_text(json.dumps(m))
+    assert load_packet(path).provenance["source_verification"] == "sha256_and_md5_verified"
+    m["source"]["md5"] = "0" * 32
+    path.write_text(json.dumps(m))
+    with pytest.raises(ValueError, match="MD5 mismatch"):
+        load_packet(path)
+    m["preparation"]["code_sha256"] = "unknown"
+    path.write_text(json.dumps(m))
+    with pytest.raises(ValueError, match="preparation.code_sha256"):
         load_packet(path)

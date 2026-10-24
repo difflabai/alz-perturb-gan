@@ -12,6 +12,7 @@ import itertools
 import json
 from pathlib import Path
 import platform
+import re
 import subprocess
 from typing import Any
 
@@ -25,12 +26,17 @@ def digest(value: Any) -> str:
                                      allow_nan=False).encode()).hexdigest()
 
 
-def file_hash(path: Path) -> str:
-    h = hashlib.sha256()
+def file_hash(path: Path, *, algorithm: str = "sha256") -> str:
+    h = hashlib.new(algorithm)
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             h.update(block)
     return h.hexdigest()
+
+
+def require_full_hash(value: Any, field: str, length: int = 64) -> None:
+    if not isinstance(value, str) or re.fullmatch(rf"[0-9a-f]{{{length}}}", value) is None:
+        raise ValueError(f"{field} requires a complete lowercase {length}-digit hex hash")
 
 
 def array_hash(value: np.ndarray) -> str:
@@ -94,6 +100,7 @@ def leakage_audit(labels: list[str], split: dict[str, Any]) -> dict[str, Any]:
     elif split["protocol"] != "perturbation_label" or ex:
         raise ValueError("unknown protocol or excluded label in label holdout")
     return {"passed": True, "scope": "perturbation membership; cell/donor/batch independence not established",
+            "gene_identity_namespace": "reported label symbols; alias/stable-ID equivalence not verified",
             "label_overlap": [], "perturbed_gene_overlap": overlap,
             "n_train": len(tr), "n_test": len(te), "n_excluded": len(ex),
             "novelty": {p: novelty(p, sorted(tr)) for p in sorted(te)}}
@@ -184,6 +191,10 @@ def load_packet(manifest_path: str | Path) -> Packet:
                 "source", "preparation", "terms", "limitations", "target_row_labels")
     if any(k not in manifest or not manifest[k] for k in required):
         raise ValueError("missing packet preparation/provenance fields")
+    require_full_hash(manifest["source"].get("sha256"), "source.sha256")
+    require_full_hash(manifest["preparation"].get("code_sha256"), "preparation.code_sha256")
+    if "md5" in manifest["source"]:
+        require_full_hash(manifest["source"]["md5"], "source.md5", length=32)
     # All expression summaries must be independently per label. Transform fitting
     # on whole-cohort outcomes is not accepted as a leakage-safe packet.
     if manifest.get("outcome_transform_scope") != "per_label_only":
@@ -194,6 +205,7 @@ def load_packet(manifest_path: str | Path) -> Packet:
     hashes = {}
     for key in ("pseudobulk", "target_deltas"):
         spec = manifest[key]
+        require_full_hash(spec.get("sha256"), f"{key}.sha256")
         artifact = scoped(str((path.parent / spec["path"]).absolute()))
         sha = file_hash(artifact)
         if sha != spec["sha256"]:
@@ -217,6 +229,10 @@ def load_packet(manifest_path: str | Path) -> Packet:
         if file_hash(raw) != source["sha256"]:
             raise ValueError("raw source hash mismatch")
         source_verification = "sha256_verified"
+        if "md5" in source:
+            if file_hash(raw, algorithm="md5") != source["md5"]:
+                raise ValueError("raw source MD5 mismatch")
+            source_verification = "sha256_and_md5_verified"
     packet = Packet(labels, bulk["genes"].tolist(), bulk["D"].astype(np.float64),
                     target["targets"].tolist(), target["Dt"].astype(np.float64),
                     {"manifest": manifest, "manifest_sha256": file_hash(path),

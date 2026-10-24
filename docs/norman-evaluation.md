@@ -21,7 +21,7 @@ Predeclare at least three distinct split seeds (defaults: 20261022, 20261023,
 * `whole_gene`: shuffle the sorted union of targeted genes and round-robin it
   into five blocks. For each block, train only labels whose members are all
   outside it, test only labels wholly inside it, and exclude bridging doubles.
-  No targeted gene occurs in both train and test. Singles get one out-of-fold
+  No reported targeted-gene symbol occurs in both train and test. Singles get one out-of-fold
   prediction; doubles in different blocks get none for that seed. Full coverage
   of every double and five disjoint gene blocks cannot both be claimed. Coverage
   and all excluded identities are reported per seed. These metrics concern a
@@ -35,6 +35,11 @@ means unseen **targeted identities**; a target gene's measured expression may
 still occur in the training transcriptome. It does not hold out expression
 columns, donors, guides, batches or cell contexts. The membership audit makes
 these limits explicit. Raw cell/guide/donor provenance needs a preparer receipt.
+The identity namespace is the reported label symbols. Without a reviewed alias
+and stable-ID map, symbol disjointness does not establish disjoint biological
+genes under every historical alias. No alias is silently repaired. The
+[existing-source provenance audit](norman-provenance-audit.md) distinguishes
+verified observations from unresolved preparation and source-history claims.
 
 This predicts measured expression and retrieves the perturbation's recorded
 identity. It does not create expression-distance-derived positive phenocopy
@@ -139,6 +144,11 @@ if supplied, is rehashed and checked; otherwise its claimed SHA is recorded as
 `not_rehashed`. The manifest is itself hashed. Terms fields record evidence,
 not blanket permission or a substitute for source review. Do not acquire new
 data or use new unreviewed sources to satisfy this contract.
+Source, preparation-code and archive SHA256 identifiers must be complete
+lowercase 64-digit hexadecimal strings. Optional source `md5` must be a complete
+32-digit identifier and is also checked when the raw source path is available.
+Abbreviated identifiers and unknown placeholders are refused, even when the raw
+source is unavailable. An unknown source remains a handoff gap.
 
 For a fully auditable real-data handoff, Tau must supply the frozen manifest,
 both archives and their byte hashes, embedded labels or row-alignment receipt,
