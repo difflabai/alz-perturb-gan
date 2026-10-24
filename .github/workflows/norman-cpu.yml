@@ -1,0 +1,17 @@
+name: Norman CPU harness
+on: [push, pull_request]
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
+      OPENBLAS_NUM_THREADS: '1'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install numpy==2.4.6 pytest==9.1.1
+      - run: python -m pytest tests/test_norman_eval.py
