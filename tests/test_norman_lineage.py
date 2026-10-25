@@ -21,7 +21,8 @@ def case():
                 "source": {"sha256": digest("fixture source")}},
                 "artifact_sha256": {"pseudobulk": digest("bulk"), "target_deltas": digest("target")}},
                "data_content_sha256": digest("fixture data"),
-               "runs": [{"split": s, "reference_sha256": digest(s["sha256"])} for s in splits],
+               "runs": [{"split": s, "reference_sha256": digest(s["sha256"]),
+                         "fit": {"missing_target_genes_zero_embedding": []}} for s in splits],
                "rows": rows}
     observations, groups, memberships = [], {}, []
     for p in labels:
@@ -39,7 +40,8 @@ def case():
                             "control_groups": [f"control:{p}"]})
     adapter = {"observations": observations, "memberships": {"granularity": "aggregate",
                 "cell_groups": groups, "rows": memberships},
-               "identity_scope": {"namespace": "fixture physical capture", "status": "canonical_physical_namespace"},
+               "identity_scope": {"namespace": "fixture physical capture", "status": "canonical_physical_namespace",
+                                  "guide_namespace": "fixture guide catalog"},
                "provenance_kind": "producer_attested", "manifest_status": "frozen",
                "control_use": ["response_construction"], "evidence": {"missing_bindings": []}}
     return receipt, adapter
@@ -49,11 +51,14 @@ def codes(result, category="findings"):
     return {x["code"] for x in result[category]}
 
 
-def test_complete_many_to_one_lineage_and_exact_splits(case):
+def test_many_to_one_lineage_is_not_independently_attested(case):
     receipt, adapter = case
     result = audit(receipt, adapter, policy="group_disjoint")
-    assert result["policy_result"] == "pass"
-    assert not result["findings"] and not result["missing_evidence"]
+    assert result["policy_result"] == "unknown"
+    assert not result["findings"]
+    assert codes(result, "missing_evidence") == {"producer_attestations_not_independently_verified"}
+    assert result["evidence_status"] == "partial"
+    assert not result["claims"]["producer_attestations_independently_verified"]
     assert len(result["evaluation_row_links"]) == len(receipt["rows"])
     assert len(result["folds"]) == 10
     assert {f["seed"] for f in result["folds"]} == {17}
@@ -95,7 +100,7 @@ def test_group_sharing_is_a_separate_policy_not_target_leakage(case):
     for obs in adapter["observations"]:
         obs["gemgroup"] = "shared batch"
     result = audit(receipt, adapter, policy="source_disjoint")
-    assert result["policy_result"] == "pass"
+    assert result["policy_result"] == "unknown"
     assert all(f["source_cell_overlap"]["any_source_cell"]["n_unique_shared"] == 0 for f in result["folds"])
     assert all(f["batch_sharing"]["all_contributors"]["n_unique_shared"] == 1 for f in result["folds"])
     assert audit(receipt, adapter, policy="group_disjoint")["policy_result"] == "fail"
@@ -114,7 +119,7 @@ def test_library_scopes_cells_and_groups_not_export_hash(case):
             old = ref[1].split(":")
             ref[:] = [old[1], old[0] + old[2]]
     result = audit(receipt, adapter, policy="group_disjoint")
-    assert result["policy_result"] == "pass" and not result["findings"]
+    assert result["policy_result"] == "unknown" and not result["findings"]
 
 
 def test_missing_adapter_is_unknown_not_clean(case):
@@ -208,7 +213,8 @@ def test_missing_aggregate_and_role_coverage(case):
     result = audit(receipt, adapter)
     assert "aggregate_row_missing" in codes(result, "missing_evidence")
     assert "contributors_missing" in codes(result, "missing_evidence")
-    assert result["evidence_status"] == "partial"
+    assert result["evidence_status"] == "invalid"  # unreferenced source cells are also present
+    assert result["evidence_completeness"] == "partial"
 
 
 @pytest.mark.parametrize("part", ["observations", "memberships"])
@@ -216,7 +222,7 @@ def test_missing_artifact_never_passes(case, part):
     receipt, adapter = case
     adapter[part] = None
     result = audit(receipt, adapter, policy="source_disjoint")
-    assert result["policy_result"] != "pass" and result["evidence_status"] == "partial"
+    assert result["policy_result"] != "pass" and result["evidence_completeness"] == "partial"
     expected = "source_observations_missing" if part == "observations" else "aggregate_memberships_missing"
     assert expected in codes(result, "missing_evidence")
 
@@ -243,7 +249,10 @@ def test_declared_exclusion_is_not_an_orphan(case):
     receipt, adapter = case
     adapter["observations"].append({**adapter["observations"][0], "cell_id": "excluded"})
     adapter["memberships"]["excluded_cells"] = [{"library_id": "capture1", "cell_id": "excluded", "reason": "predeclared QC"}]
-    assert audit(receipt, adapter, policy="group_disjoint")["policy_result"] == "pass"
+    result = audit(receipt, adapter, policy="group_disjoint")
+    assert result["policy_result"] == "unknown"
+    assert result["coverage"]["n_valid_declared_exclusions"] == 1
+    assert result["coverage"]["n_orphan_source_cells"] == 0
 
 
 @pytest.fixture
@@ -271,7 +280,10 @@ def test_hashed_adapter_and_receipt_guards(files, tmp_path):
     rp, path, manifest = files
     receipt, ref = read_receipt(rp)
     assert ref["sha256"] == file_hash(rp)
-    assert audit(receipt, read_adapter(path, receipt), policy="group_disjoint")["policy_result"] == "pass"
+    result = audit(receipt, read_adapter(path, receipt), policy="group_disjoint")
+    assert result["policy_result"] == "unknown"
+    assert result["evidence"]["missing_bindings"] == []
+    assert result["evidence_status"] == "partial"  # byte integrity is not producer verification
     bad = copy.deepcopy(manifest)
     bad["bindings"]["source_sha256"] = digest("different dataset")
     path.write_text(json.dumps(bad))
@@ -289,10 +301,10 @@ def test_hashed_adapter_and_receipt_guards(files, tmp_path):
 def test_cli_opt_in_policies_missingness_ledger_and_no_overwrite(files, tmp_path):
     rp, path, _ = files
     args = ["--evaluation-receipt", str(rp), "--lineage-manifest", str(path),
-            "--policy", "group_disjoint", "--output", str(tmp_path / "clean")]
+            "--policy", "report", "--output", str(tmp_path / "reported")]
     before = rp.read_bytes()
     assert main(args) == 0
-    result_path = tmp_path / "clean/lineage-audit.json"
+    result_path = tmp_path / "reported/lineage-audit.json"
     result = json.loads(result_path.read_text())
     claim = result.pop("result_content_sha256")
     assert digest(result) == claim
@@ -318,3 +330,130 @@ def test_missing_evaluation_provenance_refused(case, field):
     else: receipt["data_content_sha256"] = "abbreviated"
     with pytest.raises(ValueError, match="complete"):
         audit(receipt, adapter)
+
+
+def test_invalid_evidence_not_masked_by_incompleteness(case):
+    receipt, adapter = case
+    adapter["manifest_status"] = "partial"
+    adapter["observations"].append(copy.deepcopy(adapter["observations"][0]))
+    result = audit(receipt, adapter, policy="report")
+    assert result["evidence_status"] == result["evidence_validity"] == "invalid"
+    assert result["evidence_completeness"] == "partial"
+    assert result["policy_result"] == "not_enforced"
+    assert not result["claims"]["report_exit_zero_means_evidence_accepted"]
+    assert audit(receipt, adapter, policy="source_disjoint")["policy_result"] == "fail"
+
+
+def test_report_exit_zero_emits_invalid_not_acceptance(files, tmp_path):
+    rp, path, manifest = files
+    observations = tmp_path / "observations.jsonl"
+    first = observations.read_text().splitlines()[0]
+    with observations.open("a") as stream: stream.write(first + "\n")
+    manifest["observations"]["sha256"] = file_hash(observations)
+    manifest["status"] = "partial"
+    path.write_text(json.dumps(manifest))
+    args = ["--evaluation-receipt", str(rp), "--lineage-manifest", str(path)]
+    assert main(args + ["--output", str(tmp_path / "invalid-report")]) == 0
+    result = json.loads((tmp_path / "invalid-report/lineage-audit.json").read_text())
+    assert result["evidence_status"] == "invalid" and result["evidence_completeness"] == "partial"
+    assert result["policy_result"] == "not_enforced"
+    assert main(args + ["--policy", "source_disjoint", "--output", str(tmp_path / "invalid-strict")]) == 2
+
+
+def test_same_guide_across_libraries_and_captures_is_counted(case):
+    receipt, adapter = case
+    for obs in adapter["observations"]:
+        label = obs["cell_id"].split(":")[1]
+        obs["namespace"] = "capture namespace:" + label
+        obs["library_id"] = label
+        obs["guide_id"] = "canonical-shared-guide"
+    for refs in adapter["memberships"]["cell_groups"].values():
+        for ref in refs:
+            label = ref[1].split(":")[1]
+            ref[:] = ["capture namespace:" + label, label, ref[1]]
+    result = audit(receipt, adapter)
+    assert not result["findings"]
+    assert all(f["guide_sharing_treatment_only"]["n_unique_shared"] == 1 for f in result["folds"])
+    assert all(f["batch_sharing"]["treatment_only"]["n_unique_shared"] == 0 for f in result["folds"])
+    # Same textual guide ID from different declared catalogs is not assumed equal.
+    for obs in adapter["observations"]:
+        obs["guide_namespace"] = "catalog:" + obs["library_id"]
+    result = audit(receipt, adapter)
+    assert all(f["guide_sharing_treatment_only"]["n_unique_shared"] == 0 for f in result["folds"])
+
+
+def test_missing_guide_catalog_is_unverified(case):
+    receipt, adapter = case
+    adapter["identity_scope"].pop("guide_namespace")
+    result = audit(receipt, adapter)
+    assert "guide_namespace_unverified" in codes(result, "missing_evidence")
+    assert result["evidence_status"] == "partial"
+
+
+def test_capture_namespace_disambiguates_cell_keys(case):
+    receipt, adapter = case
+    first, second = adapter["observations"][:2]
+    original_second_id = second["cell_id"]
+    first["namespace"], second["namespace"] = "capture A", "capture B"
+    second["cell_id"] = first["cell_id"]
+    for refs in adapter["memberships"]["cell_groups"].values():
+        for ref in refs:
+            if ref[1] == first["cell_id"]: ref[:] = ["capture A", ref[0], ref[1]]
+            elif ref[1] == original_second_id: ref[:] = ["capture B", ref[0], first["cell_id"]]
+    result = audit(receipt, adapter)
+    assert not result["findings"]
+    assert result["coverage"]["n_duplicate_source_identities"] == 0
+    assert result["aggregate_trace"]["G0"]["treatment"]["n_unique_contributors"] == 2
+
+
+@pytest.mark.parametrize("field,value", [("cell_id", " id"), ("library_id", "library\n"),
+                                         ("namespace", ""), ("namespace", "bad\x00namespace")])
+def test_identity_strings_are_validated(case, field, value):
+    receipt, adapter = case
+    adapter["observations"][0][field] = value
+    result = audit(receipt, adapter)
+    assert "invalid_source_identity" in codes(result)
+    assert result["evidence_status"] == "invalid"
+
+
+def test_invalid_exclusion_does_not_hide_orphan(case):
+    receipt, adapter = case
+    obs = {**adapter["observations"][0], "cell_id": "unreferenced"}
+    adapter["observations"].append(obs)
+    adapter["memberships"]["excluded_cells"] = [{"library_id": obs["library_id"],
+        "cell_id": obs["cell_id"], "reason": "   "}]
+    result = audit(receipt, adapter)
+    assert "invalid_declared_exclusion" in codes(result)
+    assert "orphan_source_observations" in codes(result)
+    assert result["coverage"]["n_orphan_source_cells"] == 1
+    assert result["coverage"]["n_valid_declared_exclusions"] == 0
+
+
+def test_explicit_unmapped_targets_and_missing_mapping_receipt(case):
+    receipt, adapter = case
+    for run in receipt["runs"]:
+        run["fit"]["missing_target_genes_zero_embedding"] = ["G0"]
+    result = audit(receipt, adapter)
+    assert result["gene_mapping"]["recorded_unmapped_symbols"] == ["G0"]
+    assert "unmapped_target_symbols" in codes(result, "missing_evidence")
+    assert result["aggregate_trace"]["G0"]["unmapped_target_symbols"] == ["G0"]
+    assert any(f["n_eval_aggregates_with_unmapped_targets"] for f in result["folds"])
+    receipt["runs"][0].pop("fit")
+    result = audit(receipt, adapter)
+    assert result["gene_mapping"]["n_runs_without_mapping_evidence"] == 1
+    assert "target_mapping_evidence_missing" in codes(result, "missing_evidence")
+
+
+def test_multi_group_pool_cache_preserves_repeat_edge_detection(case):
+    receipt, adapter = case
+    original = adapter["memberships"]["cell_groups"]["control:G0"]
+    adapter["memberships"]["cell_groups"]["control:G0:a"] = original[:1]
+    adapter["memberships"]["cell_groups"]["control:G0:b"] = original[1:]
+    row = adapter["memberships"]["rows"][0]
+    row["control_groups"] = ["control:G0:a", "control:G0:b"]
+    result = audit(receipt, adapter)
+    assert result["aggregate_trace"]["G0"]["control"]["n_unique_contributors"] == 2
+    assert not result["findings"]
+    row["control_groups"] += ["control:G0:a"]
+    result = audit(receipt, adapter)
+    assert "duplicate_within_aggregate_role" in codes(result)

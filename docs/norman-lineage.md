@@ -46,13 +46,26 @@ optional hash-bound artifacts:
 Each observation JSONL row has nonempty strings `cell_id`, `library_id`,
 `label`, `guide_id` and `gemgroup`. `label` is a packet label or `control`.
 Absent guide/group metadata must remain absent or null, never an invented ID.
-Cell keys are scoped by physical namespace/library and barcode. Gemgroups and
-guide IDs are also scoped by namespace/library. Different exports can contain
+Cell keys contain `(namespace, library_id, cell_id)`. An observation may supply
+its own `namespace`; otherwise the adapter's namespace is used. Group member
+references may be `[library_id, cell_id]` (adapter namespace) or
+`[namespace, library_id, cell_id]`. Identity strings must be nonempty, trimmed,
+and free of control characters. Gemgroups remain scoped by namespace/library.
+Guide IDs use `(guide_namespace, guide_id)` **without a library component**, so
+a declared guide reused across captures/libraries is still counted. A
+`guide_namespace` may be supplied per observation or in `identity_scope`.
+Absent guide namespaces fall back to the cell namespace for descriptive
+counts and are explicitly unverified/partial. No sequence/alias equivalence
+is inferred from matching names. Different exports can contain
 the same physical cells: an export checksum is **not** a physical-cell
-namespace. Only a producer-supported physical capture/library map warrants
-`identity_scope.status: canonical_physical_namespace`. An unresolved namespace
-or library map yields partial evidence even if within-file IDs are unique.
-This does not resolve gene aliases or guide-sequence equivalence.
+namespace. `canonical_physical_namespace`, `producer_attested` and `frozen`
+are retained as producer declarations, never independently verified facts.
+Changing those strings cannot produce complete evidence or a clean policy
+pass. Artifact hashes verify the supplied bytes and binding to the evaluated
+data; they do not authenticate the producer or establish production history.
+This adapter has no independent attestation trust anchor, and reports that gap
+even when every declaration and byte hash is present. No canonical lineage
+manifest currently exists for the legacy packet.
 
 Membership JSON uses explicit treatment/control roles:
 
@@ -101,9 +114,25 @@ the separate reported-symbol/alias contract.
 * `group_disjoint`: additionally require no scoped gemgroup sharing.
 
 The stronger policies return exit code 2 for either a failed condition or
-unknown/partial evidence. The report distinguishes `fail` from `unknown` and
+unknown/partial evidence. Without an independently verified producer history,
+even fully populated declarations with no observed overlap remain `unknown`.
+The report distinguishes `fail` from `unknown` and
 preserves all missingness alongside observed overlaps. No policy certifies
 biological independence, licensing, unseen guide sequences or canonical genes.
+`evidence_validity` and `evidence_completeness` are separate. The headline
+`evidence_status` prioritizes `invalid` whenever structural defects exist;
+missing fields cannot mask invalidity. Report mode exits zero after emitting
+the report even for invalid evidence: zero means **report produced**, not
+evidence accepted. Invalid byte/split hashes are refused before reporting.
+Invalid exclusions never suppress orphan counts. Repeated role pools,
+including pools composed of multiple groups, reuse cached contributor sets
+and digests without changing duplicate-edge detection.
+
+Unmapped targets are read from the exact saved fit receipts, not guessed from
+symbols. Known holes (C19orf26, C3orf72 and KIAA1804 in the legacy packet) are
+explicit missing evidence, attached to affected aggregate/fold rows. Missing
+fit mapping receipts are separately unknown. No aliases or embeddings are
+changed and the original score remains untouched.
 
 Shared gemgroups limit batch-generalization claims but do **not** automatically
 constitute target leakage. A shared fixed reference can also be legitimate for
@@ -158,3 +187,33 @@ policies. Existing-data reconstruction remains partial until Tau supplies the
 canonical producer manifest, physical namespace/mappings and aggregation
 lineage. Record-level CC BY 4.0 evidence does not replace the complete
 source-to-derived attribution receipt; no terms are accepted by this audit.
+
+## Test scopes and the earlier 86 count
+
+At PR8's initial `d9159e0` head, the minimal NumPy/pytest suite was **69 tests**:
+28 in `test_norman_eval.py` and 41 in `test_norman_lineage.py`. That is the
+GitHub workflow and the scope Tau reproduced. The previously reported **86**
+was that same suite plus 17 existing regressions: 5 baselines, 5 metrics,
+3 data and 4 path-hygiene tests. It was not 86 NumPy-only tests.
+
+The full command used the already-existing local environment, without adding
+packages or launching a GPU job:
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+MKL_NUM_THREADS=1 PYTHONPATH=src /ml2/altgan/.venv/bin/python -m pytest \
+  -p no:cacheprovider --basetemp=/tmp/norman-lineage-publish-20261025 \
+  tests/test_norman_lineage.py tests/test_norman_eval.py \
+  tests/test_baselines.py tests/test_metrics.py tests/test_data.py \
+  tests/test_path_hygiene.py
+```
+
+That environment had Python 3.11.15, NumPy 2.4.6, pytest 9.1.1, Torch
+2.6.0+cu124, pandas 2.3.3, AnnData 0.12.19 and h5py 3.16.0. The extra
+baseline/metric/data tests need existing Torch/AnnData dependencies; the
+NumPy-only CI suite does not. No new installation is required for review.
+The repaired minimal suite is **81 tests** (28 evaluator, 53 lineage). The
+same 17 existing regressions bring the optional extended local scope to
+**98 distinct tests**. CI runs the 81-test NumPy/pytest scope; it does not
+require installing Torch, pandas or AnnData. These counts are not added across
+repeated runs.

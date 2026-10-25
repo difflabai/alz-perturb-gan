@@ -74,6 +74,18 @@ def _overlap(left, right):
             "examples": shared[:5]}
 
 
+def _identifier(value):
+    return (isinstance(value, str) and bool(value) and value == value.strip()
+            and not any(ord(char) < 32 or ord(char) == 127 for char in value))
+
+
+def _cell_reference(ref, default_namespace):
+    if not isinstance(ref, (list, tuple)) or len(ref) not in (2, 3):
+        return None
+    key = (default_namespace, *ref) if len(ref) == 2 else tuple(ref)
+    return tuple(key) if all(_identifier(value) for value in key) else None
+
+
 def audit(receipt, adapter=None, *, policy="report"):
     """Audit exact stored splits and evaluation keys; do not regenerate folds.
 
@@ -88,7 +100,7 @@ def audit(receipt, adapter=None, *, policy="report"):
     findings, missing = [], []
     def issue(code, **details):
         findings.append({"code": code, **details})
-    splits = {}
+    splits, unmapped, mapping_runs_missing = {}, set(), 0
     for run in receipt["runs"]:
         require_full_hash(run.get("reference_sha256"), "evaluation.run.reference_sha256")
         split = run["split"]
@@ -101,6 +113,16 @@ def audit(receipt, adapter=None, *, policy="report"):
             raise ValueError("stored split hash mismatch")
         leakage_audit(labels, split)
         splits[key] = split
+        recorded = run.get("fit", {}).get("missing_target_genes_zero_embedding")
+        if not isinstance(recorded, list) or not all(_identifier(g) for g in recorded):
+            mapping_runs_missing += 1
+        else:
+            unmapped.update(recorded)
+    if mapping_runs_missing:
+        missing.append({"code": "target_mapping_evidence_missing", "n_runs": mapping_runs_missing})
+    if unmapped:
+        missing.append({"code": "unmapped_target_symbols", "symbols": sorted(unmapped),
+                        "source": "exact saved fit receipts; no alias substitution"})
     seen_eval, evaluation_links = set(), []
     arms = {row["arm"] for row in receipt["rows"]}
     evaluated = Counter()
@@ -133,12 +155,16 @@ def audit(receipt, adapter=None, *, policy="report"):
     membership = adapter.get("memberships")
     scope = adapter.get("identity_scope", {})
     namespace = scope.get("namespace")
-    if not namespace or scope.get("status") != "canonical_physical_namespace":
+    if not _identifier(namespace) or scope.get("status") != "canonical_physical_namespace":
         missing.append({"code": "physical_cell_namespace_unverified"})
     if adapter.get("provenance_kind") != "producer_attested":
         missing.append({"code": "aggregation_lineage_not_producer_attested"})
     if adapter.get("manifest_status") != "frozen":
         missing.append({"code": "lineage_manifest_not_frozen"})
+    # Declaration fields and artifact hashes do not independently establish
+    # production history or physical identity equivalence. No trust anchor is
+    # supplied by this interface, so hand-flipping these strings cannot certify.
+    missing.append({"code": "producer_attestations_not_independently_verified"})
     if adapter.get("evidence", {}).get("missing_bindings"):
         missing.append({"code": "incomplete_data_bindings",
                         "fields": adapter["evidence"]["missing_bindings"]})
@@ -152,32 +178,37 @@ def audit(receipt, adapter=None, *, policy="report"):
     # IDs are scoped by physical capture namespace and library, not by export
     # checksum: two exports may contain the same physical cells.
     cells, ambiguous, counts = {}, set(), Counter()
+    if namespace is not None and not _identifier(namespace):
+        issue("invalid_identity_namespace")
     for obs in observations:
         cell_id, library = obs.get("cell_id"), obs.get("library_id")
-        if not isinstance(cell_id, str) or not cell_id or not isinstance(library, str) or not library:
+        cell_namespace = obs.get("namespace", namespace)
+        if not all(_identifier(v) for v in (cell_namespace, cell_id, library)):
             issue("invalid_source_identity")
             continue
-        key = (library, cell_id)
+        key = (cell_namespace, library, cell_id)
         counts[key] += 1
         if key in cells:
             ambiguous.add(key)
         cells[key] = obs
     for key in sorted(ambiguous):
-        issue("duplicate_source_identity", library_id=key[0], cell_id=key[1], n_rows=counts[key])
+        issue("duplicate_source_identity", namespace=key[0], library_id=key[1], cell_id=key[2], n_rows=counts[key])
     for key in ambiguous:
         del cells[key]  # never silently select one conflicting observation
+    invalid_fields = {key: tuple(field for field in ("label", "guide_id", "gemgroup")
+                                 if not _identifier(obs.get(field))) for key, obs in cells.items()}
     groups = membership.get("cell_groups", {})
     resolved_groups = {}
     for name, refs in groups.items():
         keys = []
         for ref in refs:
-            if not isinstance(ref, list) or len(ref) != 2 or not all(isinstance(x, str) and x for x in ref):
+            key = _cell_reference(ref, namespace)
+            if key is None:
                 issue("invalid_contributor_reference", group=name)
                 continue
-            key = tuple(ref)
             keys.append(key)
             if key not in cells:
-                issue("orphan_contributor", group=name, library_id=key[0], cell_id=key[1])
+                issue("orphan_contributor", group=name, namespace=key[0], library_id=key[1], cell_id=key[2])
         n_duplicate = len(keys) - len(set(keys))
         if n_duplicate:
             issue("duplicate_within_group", group=name, n_repeated_edges=n_duplicate)
@@ -195,39 +226,45 @@ def audit(receipt, adapter=None, *, policy="report"):
             continue
         row_memberships[label] = row
     treatment, control, trace, referenced = {}, {}, {}, set()
+    pool_cache = {}
     fields_missing = Counter()
     for label in labels:
         row = row_memberships.get(label)
         if row is None:
             missing.append({"code": "aggregate_row_missing", "label": label})
             row = {}
-        roles = {}
+        roles, role_hashes = {}, {}
         for role in ("treatment", "control"):
             group_names = row.get(f"{role}_groups", [])
-            refs = []
+            valid_names = []
             for name in group_names:
+                if not _identifier(name):
+                    issue("invalid_group_reference", label=label, role=role)
+                    continue
+                valid_names.append(name)
                 if name not in resolved_groups:
                     issue("orphan_group_reference", label=label, role=role, group=name)
-                refs.extend(resolved_groups.get(name, set()))
-            if len(refs) != len(set(refs)):
+            pool_key = tuple(sorted(valid_names))
+            if pool_key not in pool_cache:
+                pools = [resolved_groups.get(name, set()) for name in pool_key]
+                selected = pools[0] if len(pools) == 1 else set().union(*pools)
+                pool_cache[pool_key] = (selected, sum(map(len, pools)) - len(selected), digest(sorted(selected)))
+            selected, repeated, contributor_hash = pool_cache[pool_key]
+            if repeated:
                 issue("duplicate_within_aggregate_role", label=label, role=role,
-                      n_repeated_edges=len(refs) - len(set(refs)))
-            # Reuse shared pool sets: do not materialize the same 12k-control
-            # contributor set once for every aggregate in a real packet.
-            selected = (resolved_groups[group_names[0]] if len(group_names) == 1
-                        and group_names[0] in resolved_groups else set(refs))
+                      n_repeated_edges=repeated)
             if not selected:
                 missing.append({"code": "contributors_missing", "label": label, "role": role})
             expected_label = label if role == "treatment" else "control"
-            wrong = [key for key in selected if isinstance(cells[key].get("label"), str)
-                     and cells[key]["label"] and cells[key]["label"] != expected_label]
+            wrong = [key for key in selected if "label" not in invalid_fields[key]
+                     and cells[key]["label"] != expected_label]
             if wrong:
                 issue("contributor_role_or_label_mismatch", label=label, role=role, n_cells=len(wrong))
             for key in selected:
-                for field in ("label", "guide_id", "gemgroup"):
-                    if not isinstance(cells[key].get(field), str) or not cells[key][field]:
-                        fields_missing[field] += 1
+                for field in invalid_fields[key]:
+                    fields_missing[field] += 1
             roles[role] = selected
+            role_hashes[role] = contributor_hash
             referenced.update(selected)
             # Many-to-one edges are resolved through the hash-bound membership
             # file's cell_groups and the observation file; shared pools stay one
@@ -237,18 +274,24 @@ def audit(receipt, adapter=None, *, policy="report"):
         if cross["n_unique_shared"]:
             issue("cross_role_reuse", label=label, **cross)
         trace[label] = {"granularity": "aggregate", "membership_row_label": label,
+                        "unmapped_target_symbols": sorted(set(label.split("+")) & unmapped),
                         **{role: {"groups": row.get(f"{role}_groups", []),
                                   "n_unique_contributors": len(roles[role]),
-                                  "contributors_sha256": digest(sorted(roles[role]))}
+                                  "contributors_sha256": role_hashes[role]}
                            for role in ("treatment", "control")}}
     for field, count in fields_missing.items():
         missing.append({"code": "observation_field_missing", "field": field,
                         "n_role_edges_affected": count})
     excluded = set()
     for exclusion in membership.get("excluded_cells", []):
-        key = (exclusion.get("library_id"), exclusion.get("cell_id"))
-        if key not in cells or not exclusion.get("reason") or key in referenced or key in excluded:
-            issue("invalid_declared_exclusion", library_id=key[0], cell_id=key[1])
+        key = _cell_reference([exclusion.get("namespace", namespace),
+                               exclusion.get("library_id"), exclusion.get("cell_id")], namespace)
+        reason = exclusion.get("reason")
+        if (key not in cells or not isinstance(reason, str) or not reason.strip()
+                or key in referenced or key in excluded):
+            issue("invalid_declared_exclusion", namespace=exclusion.get("namespace", namespace),
+                  library_id=exclusion.get("library_id"), cell_id=exclusion.get("cell_id"))
+            continue
         excluded.add(key)
     unreferenced = set(cells) - referenced - excluded
     if unreferenced:
@@ -256,9 +299,20 @@ def audit(receipt, adapter=None, *, policy="report"):
               examples=sorted(unreferenced)[:5])
     def union(table, names):
         return set().union(*(table[p] for p in names))
+    guide_namespaces, guide_fallback = {}, set()
+    for key, obs in cells.items():
+        declared = obs.get("guide_namespace", scope.get("guide_namespace"))
+        if not _identifier(declared):
+            guide_fallback.add(key)
+            if declared is not None:
+                issue("invalid_guide_namespace", namespace=key[0], library_id=key[1], cell_id=key[2])
+        guide_namespaces[key] = declared if _identifier(declared) else key[0]
+    if guide_fallback:
+        missing.append({"code": "guide_namespace_unverified", "n_unique_source_cells": len(guide_fallback)})
     def groups_for(keys, field):
-        return {(namespace, cells[k]["library_id"], cells[k][field]) for k in keys
-                if isinstance(cells[k].get(field), str) and cells[k][field]}
+        if field == "guide_id":
+            return {(guide_namespaces[k], cells[k][field]) for k in keys if field not in invalid_fields[k]}
+        return {(k[0], k[1], cells[k][field]) for k in keys if field not in invalid_fields[k]}
     def reuse(table, names):
         counts = Counter(cell for p in names for cell in table[p])
         return {"n_unique_reused_contributors": sum(n > 1 for n in counts.values()),
@@ -290,6 +344,8 @@ def audit(receipt, adapter=None, *, policy="report"):
                          "cross_role": _overlap(tet, tec)}},
             "n_eval_aggregates": len(split["test"]), "n_eval_with_observed_both_roles": n_complete,
             "n_eval_affected_by_shared_source": len(affected), "affected_eval_labels": affected,
+            "unmapped_eval_labels": [p for p in split["test"] if set(p.split("+")) & unmapped],
+            "n_eval_aggregates_with_unmapped_targets": sum(bool(set(p.split("+")) & unmapped) for p in split["test"]),
             "n_train_unique_treatment_cells": len(trt), "n_eval_unique_treatment_cells": len(tet),
             "n_train_unique_control_cells": len(trc), "n_eval_unique_control_cells": len(tec)})
         for detail in [*overlaps.values(), fold_reports[-1]["batch_sharing"]["all_contributors"],
@@ -305,14 +361,23 @@ def audit(receipt, adapter=None, *, policy="report"):
     policy_result = ("not_enforced" if policy == "report" else
                      "fail" if violations else "unknown" if missing else "pass")
     return {"schema_version": 1, "policy": policy, "policy_result": policy_result,
-            "evidence_status": "partial" if missing else "invalid" if findings else "complete",
+            "evidence_status": "invalid" if findings else "partial" if missing else "complete",
+            "evidence_validity": "invalid" if findings else "no_structural_findings",
+            "evidence_completeness": "partial" if missing else "all_declared_fields_present",
+            "attestation_verification": "not_independently_verified; declarations and hashes are not a trust anchor",
+            "guide_identity_scope": "(declared guide namespace, guide_id); no library component; fallback to cell namespace is unverified",
+            "gene_mapping": {"recorded_unmapped_symbols": sorted(unmapped),
+                             "n_runs_without_mapping_evidence": mapping_runs_missing,
+                             "source": "saved fit missing-target receipts; aliases and canonical mapping unverified"},
             "identity_scope": scope, "provenance_kind": adapter.get("provenance_kind", "unknown"),
             "control_use": adapter.get("control_use", []), "evidence": adapter.get("evidence"),
             "findings": findings, "missing_evidence": missing,
             "coverage": {"n_expected_aggregates": len(labels), "n_membership_rows": len(row_memberships),
                          "n_valid_unique_source_cells": len(cells), "n_referenced_unique_source_cells": len(referenced),
                          "n_duplicate_source_identities": len(ambiguous), "n_orphan_source_cells": len(unreferenced),
+                         "n_valid_declared_exclusions": len(excluded),
                          "n_evaluation_rows": len(receipt["rows"])},
+            "pool_cache": {"n_distinct_role_pools": len(pool_cache)},
             "aggregate_trace": trace, "evaluation_row_links": evaluation_links, "folds": fold_reports,
             "disjointness_feasibility": {
                 "n_folds_with_shared_controls": sum(f["source_cell_overlap"]["control_to_control"]["n_unique_shared"] > 0 for f in fold_reports),
@@ -321,6 +386,8 @@ def audit(receipt, adapter=None, *, policy="report"):
                        "reported_symbol_split_semantics_unchanged": True,
                        "shared_reference_invalidates_legacy_score": False,
                        "preprocessing_predictions_and_metrics_changed": False,
+                       "producer_attestations_independently_verified": False,
+                       "report_exit_zero_means_evidence_accepted": False,
                        "absence_of_observed_overlap_is_not_proof_when_coverage_partial": True}}
 
 
