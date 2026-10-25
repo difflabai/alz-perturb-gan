@@ -27,7 +27,9 @@ from typing import Callable
 
 import torch
 import torch.nn.functional as F
-from particlegan import get_recipe, scale_learning_rates
+from particlegan import scale_learning_rates
+from particlegan.optim.constraint_geometry import constraint_geometry_backward
+from .particle_integration import make_recipe
 
 from .data import PerturbationSet
 from .models import ConditionalCritic, ConditionalGenerator, DecisionModel
@@ -150,6 +152,7 @@ def train_gan_decision(
     z_dim: int = 4,
     lr: float = 1e-3,
     device: str = "cpu",
+    trainer: str = "bcap",
     progress: Callable[[int, dict[str, float]], None] | None = None,
 ) -> GANDecision:
     """Fit the conditional GAN and the decision head on training cells only."""
@@ -158,8 +161,10 @@ def train_gan_decision(
     if data.cell_control.shape[0] < 1:
         raise ValueError("dataset has no training cells")
     torch.manual_seed(seed)
-    recipe = get_recipe(
-        "gan",
+    if trainer == "bispf":
+        raise ValueError("BISPF conditional transport contract is not reviewed; use bcap")
+    recipe = make_recipe(
+        trainer,
         total_steps=steps,
         batch_size=min(batch_size, data.cell_control.shape[0]),
         z_dim=z_dim,
@@ -196,7 +201,7 @@ def train_gan_decision(
         embedding = data.cell_embedding[choice].to(device)
         condition = torch.cat([control, embedding], dim=-1)
 
-        z, _ = prior.sample(batch)
+        z, indices = prior.sample(batch)
         fake = generator(z, control, embedding)
 
         d_real = critic(outcome, condition)
@@ -212,7 +217,8 @@ def train_gan_decision(
         reconstruction = F.mse_loss(fake, outcome)
         g_loss = generator_adv_weight * adversarial + rec_weight * reconstruction
         opt_g.zero_grad()
-        g_loss.backward()
+        if hasattr(opt_g, "set_sampled_rows"): opt_g.set_sampled_rows(prior.z, indices)
+        constraint_geometry_backward(g_loss, opt_g, (generator_adv_weight * adversarial,))
         opt_g.step()
 
         target_index, candidate, real_label = sampler.sample(batch, batch_rng)

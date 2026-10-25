@@ -157,7 +157,8 @@ def _fake_chain(tmp_path, sup_sleep=0.0):
     text = CHAIN.read_text(); name = re.search(r'^SUPERVISOR_NAME=(\S+)$', text, re.M).group(1)
     (study / name).write_text(
         'import json,sys,time\n'
-        'if "--post-run-probe" in sys.argv: print(json.dumps({"verdict": "clean"})); sys.exit(0)\n'
+        f'if "--post-run-probe" in sys.argv: open({str(rec / "post_run_probe_observation.json")!r}, "w").write("{{}}"); sys.exit(0)\n'
+        'if "--finalize-probe" in sys.argv: print(json.dumps({"verdict": "clean"})); sys.exit(0)\n'
         f'time.sleep({sup_sleep})\n'
         f'print(json.dumps({{"receipt": "{rec / "supervisor_receipt.json"}"}})); sys.exit(0)\n')
     for k, v in (('SCOPE', root), ('S', study), ('PY', sys.executable), ('CACHE', cache)):

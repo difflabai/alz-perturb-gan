@@ -102,7 +102,8 @@ def _fake_chain(tmp_path, args):
     marker = root / 'supervisor_argv.json'
     (study / name).write_text(
         'import json,sys\n'
-        f'if "--post-run-probe" in sys.argv: print(json.dumps({{"verdict": "clean"}})); sys.exit(0)\n'
+        f'if "--post-run-probe" in sys.argv: open({str(rec / "post_run_probe_observation.json")!r}, "w").write("{{}}"); sys.exit(0)\n'
+        'if "--finalize-probe" in sys.argv: print(json.dumps({"verdict": "clean"})); sys.exit(0)\n'
         f'open("{marker}", "w").write(json.dumps(sys.argv))\n'
         f'print(json.dumps({{"receipt": "{rec / "supervisor_receipt.json"}"}})); sys.exit(0)\n')
     for k, v in (('SCOPE', root), ('S', study), ('PY', sys.executable), ('CACHE', cache)):

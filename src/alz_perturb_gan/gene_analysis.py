@@ -14,6 +14,7 @@ from pathlib import Path
 from .gene_evaluation import paired_delta, all_seed_deltas
 from .gene_features import file_sha256, json_hash
 from .gene_calibration import calibrator_sha
+from .gene_protocol import StudyProtocol
 import math
 import torch
 from .paths import scoped, create_new, check_name, check_new_target
@@ -77,13 +78,20 @@ def _verify_checkpoint(ck_path, tj_path, *, seed, arm, protocol_sha256, grant, s
     except Exception as e:  # noqa: BLE001 - dummy bytes, truncated or foreign files
         raise BindingError(f'{where}: checkpoint is not a loadable checkpoint ({type(e).__name__})')
     _need(file_sha256(scoped(ck_path)) == want, f'{where}: checkpoint changed while reading')
-    _need(isinstance(blob, dict) and blob.get('schema_version') == 1, f'{where}: checkpoint schema is not 1')
+    _need(isinstance(blob, dict) and blob.get('schema_version') in (1,2), f'{where}: checkpoint schema is not 1 or 2')
     cfg, state = blob.get('config') or {}, blob.get('state') or {}
+    if blob.get('schema_version') == 2:
+        from .particle_integration import PARTICLEGAN_COMMIT
+        from .gene_checkpoint import serving_law
+        integration = blob.get('particle_integration',{})
+        _need(integration.get('commit') == PARTICLEGAN_COMMIT, f'{where}: checkpoint dependency identity differs')
+        _need(isinstance(blob.get('resolved_recipe'), dict) and blob.get('resolved_recipe') == integration.get('recipe'), f'{where}: resolved recipe differs')
+        _need(blob.get('serving_law') == serving_law(StudyProtocol(**blob['protocol'])), f'{where}: serving law differs')
     _need(set(state) == {'generator', 'critic', 'decision', 'prior'}, f'{where}: checkpoint state is incomplete')
     tensors = [v for sd in state.values() for v in sd.values() if torch.is_tensor(v) and v.is_floating_point()]
     _need(tensors and all(bool(torch.isfinite(v).all()) for v in tensors), f'{where}: checkpoint has non-finite or no weights')
     _need(any(float(v.std()) > 0 for v in tensors if v.numel() > 1), f'{where}: checkpoint weights are constant (dummy)')
-    _need(blob.get('training_protocol_sha256') == protocol_sha256 == json_hash(blob.get('protocol')),
+    _need(blob.get('training_protocol_sha256') == protocol_sha256 == StudyProtocol(**blob['protocol']).fingerprint,
           f'{where}: checkpoint was not trained under the bound protocol (untrained or foreign)')
     t = json.loads(Path(scoped(tj_path)).read_text())
     _need(blob.get('training_receipt') == t, f'{where}: training.json differs from the receipt embedded in the checkpoint')

@@ -6,6 +6,8 @@ import time
 import torch
 import torch.nn.functional as F
 from particlegan import scale_learning_rates
+from particlegan.optim.constraint_geometry import constraint_geometry_backward
+from .particle_integration import receipt as recipe_receipt
 from .gene_checkpoint import model_hashes
 from .gene_calibration import split_hash, relativistic_realness
 
@@ -65,6 +67,8 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
     Synthetic unit checks need no grant. A real cohort requires explicit parent
     authorization/capacity; this function does not discover/reserve GPUs.
     """
+    if models.config.trainer == 'bispf':
+        raise ValueError('BISPF cross-row transport needs a reviewed conditional-context contract; use bcap or ka2')
     started = time.monotonic()
     cfg = models.config
     models.validate_study(study)
@@ -96,6 +100,7 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
         import copy
         opt_g, opt_d = recipe.make_optimizers(g, d, prior, ema_critic=copy.deepcopy(d))
         penalty, loss = recipe.make_critic_penalty(opt_d), recipe.make_loss()
+        prior_regularizer = recipe.make_prior_regularizer(prior=prior, weight=1.)
         base = [[group['lr'] for group in opt.param_groups] for opt in (opt_g, opt_d)]
     opt_j = torch.optim.Adam([p for p in j.parameters() if p.requires_grad], lr=cfg.lr, betas=(0., .999))
     # Independent streams keep constructor/projector and head draws out of G batches/latents.
@@ -127,9 +132,12 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
             with frozen(d):
                 adv = loss.g_loss(d(fake, condition), d(outcome, condition))
                 rec = F.mse_loss(fake, outcome)
-                gloss = .1 * adv + rec
+                prior_loss = (prior_regularizer(prior.z) * recipe.prior_reg
+                              if recipe.prior_reg > 0 else adv.new_zeros(()))
+                gloss = .1 * adv + rec + prior_loss
                 if diagnostics: row.update(_gradient_geometry(adv, rec, g))
-                gloss.backward()
+                if hasattr(opt_g, 'set_sampled_rows'): opt_g.set_sampled_rows(prior.z, ix)
+                constraint_geometry_backward(gloss, opt_g, (.1 * adv,))
             _finite(gloss, g); _finite(gloss, prior); row.update(g_loss=float(gloss.detach()), d_loss=float(dloss.detach()),
                                         reconstruction=float(rec.detach()), adversarial=float(adv.detach()), g_grad_norm=_norm(g))
             if diagnostics:
@@ -189,7 +197,7 @@ def _train_arm(models, study, *, decision_cells=8, max_wall_seconds=60, grant=No
         if any(before_frozen[k] != after[k] for k in ('generator', 'prior', 'critic')):
             raise RuntimeError('frozen probe changed generator/prior/critic')
     models.training_protocol_sha256 = study.protocol.fingerprint
-    return {'arm': cfg.arm, 'steps': steps, 'history': history, 'streams': {k:v.hexdigest() for k,v in digests.items()},
+    return {'particle_integration': recipe_receipt(recipe), 'arm': cfg.arm, 'steps': steps, 'history': history, 'streams': {k:v.hexdigest() for k,v in digests.items()},
             'wall_seconds': time.monotonic() - started, 'parameter_counts': models.counts(),
             'objective': 'single-cell MSE + .1 GAN; independent candidate/query pools; stable logits BCE',
             'diagnostics_interval':1000, 'update_ratio':'1D:1G:1J; frozen probe 1J only',

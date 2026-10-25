@@ -164,8 +164,8 @@ def test_checkpoint_restore_is_zero_update_and_hash_bound(tmp_path,study,table,m
     args={'hidden':8,'seed':42,'steps':2,'batch_size':4,'lr':.0002}
     torch.save({'generator':base.generator.backbone.state_dict(),'critic':base.critic.state_dict(),
                 'decision':base.decision.backbone.state_dict(),'prior':base.prior.state_dict(),'args':args},p)
-    loaded=load_checkpoint(p,file_sha256(p))
-    assert state_hash(loaded.generator.backbone)==state_hash(base.generator.backbone)
+    with pytest.raises(ValueError,match='original ALZ loader'):
+        load_checkpoint(p,file_sha256(p))
 
 
 def test_evaluation_records_exact_inputs_pairs_four_groups_and_no_updates(tmp_path,study):
@@ -448,7 +448,7 @@ def test_provenance_git_children_receive_owned_lease_fds(tmp_path,study,monkeypa
     try:
         monkeypatch.setenv('ALZ_LEASE_FDS',str(fd));monkeypatch.setattr(ev.subprocess,'run',capture)
         evaluate(build_models(cfg()),study,output=tmp_path/'evaluation')
-        assert seen==[(fd,),(fd,)]
+        assert len(seen)>=2 and all(fds==(fd,) for fds in seen)  # VCS installs may use metadata after one git probe
     finally:os.close(fd)
 
 
