@@ -4,6 +4,9 @@
 It starts from PR5 `fdaa6304694af1099c062467354b433fdee93939` and does not
 change the existing Arc loaders, models, training code or results. Tau owns
 feature/data preparation; this harness consumes frozen existing summaries.
+The separate [opt-in contributor audit](norman-lineage.md) traces aggregate
+rows to treatment/control contributors and reports source-cell and batch
+sharing on the exact saved folds, without changing predictions or metrics.
 It imports NumPy only, never initializes torch/CUDA, acquires no data, and
 does not fit or publish a neural model.
 
