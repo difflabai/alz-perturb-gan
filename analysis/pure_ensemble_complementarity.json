@@ -1,0 +1,67 @@
+{
+  "status": "ANALYTIC_PURE_ENSEMBLE_COMPLEMENTARITY_ESTIMATE_NOT_A_MODEL_RESULT",
+  "utc": "2026-11-03T23:50:42.182096+00:00",
+  "registered_weights": [
+    0.75,
+    0.25
+  ],
+  "records": [
+    {
+      "replicate": 0,
+      "donor_between_forecast_U_distance_by_stage": [
+        0.4836161655160045,
+        0.8250540262950468,
+        0.7649574636537371,
+        0.7883729941450093
+      ],
+      "expected_energy_score_over_uniform_fixed50of200_masks": 1.939985069895059,
+      "weighted_empirical_cell_reservoir_energy_distance": 0.23401906993866295,
+      "between_forecast_cell_V_distance": 0.09373218248701143,
+      "PG8_saved_energy_score": 1.966316277633113,
+      "PG8_saved_cell_energy_distance": 0.25421486862400755,
+      "learned_saved_energy_score": 2.1306523119079506,
+      "learned_saved_cell_energy_distance": 0.24373081074788772
+    },
+    {
+      "replicate": 1,
+      "donor_between_forecast_U_distance_by_stage": [
+        0.5758689074419103,
+        0.6417561281458442,
+        0.7480831958980452,
+        1.2318740515262503
+      ],
+      "expected_energy_score_over_uniform_fixed50of200_masks": 1.9522466204465723,
+      "weighted_empirical_cell_reservoir_energy_distance": 0.22824270902291732,
+      "between_forecast_cell_V_distance": 0.11598652691625588,
+      "PG8_saved_energy_score": 1.9848171504453496,
+      "PG8_saved_cell_energy_distance": 0.2523374279963946,
+      "learned_saved_energy_score": 2.155814768171225,
+      "learned_saved_cell_energy_distance": 0.24294844728967746
+    }
+  ],
+  "mean_expected_energy_score_over_random_masks": 1.9461158451708156,
+  "mean_weighted_empirical_cell_reservoir_energy_distance": 0.23113088948079014,
+  "source_checkpoint_array_metrics_protocol_SHA256": {
+    "/ml2/alz/analysis/pure_ensemble_hypothesis.json": "34e67d1d0b704fcb439d189a3ecd97969dd718602c4e9d6158637def48d8705a",
+    "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/fit/final.pt": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
+    "/ml2/alz/runs/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0/fit/final.pt": "9e59988d216ef5f6d5fabf798ba204898a4d71905906938d486147e893b4df11",
+    "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/r0/arrays.npz": "a6b91199e7fb294d3f8b7047639cf89b710e5484e56669143425dfbec8f9cb78",
+    "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/r0/metrics.json": "49485275bdde4af1304c92886af474a0fd4d08869ac070de1d1aa3c890e1ed55",
+    "/ml2/alz/runs/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0/r0/arrays.npz": "8dd75b8080134b409fc91decea018f66139af15313033467d686ba55924a1836",
+    "/ml2/alz/runs/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0/r0/metrics.json": "13d6c5ff2020d8585b3734e10853c168f2736c218ed72cbbc88f92d52f2a4a7b",
+    "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/r1/arrays.npz": "d8c31d9c17e9f9778d5a4829b201c073aef90c2f6cbefd5993c0d861dafe052c",
+    "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/r1/metrics.json": "4037d225de834a91016e83598d170e5ef1f5c10443bfc52c4910ac6b33cac831",
+    "/ml2/alz/runs/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0/r1/arrays.npz": "30e71a6ab3d0d4c86fc0b65de65053295e17dd5fd404a79648d24c2a455a4c45",
+    "/ml2/alz/runs/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0/r1/metrics.json": "f289cd713d04b6f59c79bd3f27fea246df238c2610452e25a637e805a63973b1",
+    "/ml2/alz/analysis/pure_latent8_verification.json": "fb28b117835db599eb6ffa54e8322d8d3a4fec288b1502dc5a905b00d5dec69f",
+    "/ml2/alz/analysis/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0-result.json": "0052e156b38efb031ffc15506f7f58a14465e26ecb5425193e152e1090b1abf0"
+  },
+  "scope": "Already saved generated forecasts and scalar scores only. No calibration or evaluation target arrays loaded; no new generation, fitting, GPU allocation or selection. Independent masks were not scanned.",
+  "limits": "Donor estimate averages over random fixed-count masks, not the one registered native mask. Cell estimate combines empirical saved reservoirs, not a newly drawn mixture reservoir. Sampling error, donor spread and native count/control replay remain unverified. Two20k parents use40k total updates; not equal compute to one20k model.",
+  "native_ensemble_result_verified": false,
+  "incumbents_changed": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/diagnose_pure_ensemble.py": "dc01fa1cc212f7e2d57a9e16470b091dc6cfc2176c8cd7730426d6abbbb7482e",
+    "/ml2/alz/analysis/test_ensemble_estimate.py": "5f8eb92ca135dcd1d7685c3c828eb206238faf7e7eea87d635c662849600f881"
+  }
+}
