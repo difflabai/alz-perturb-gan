@@ -1,0 +1,25 @@
+{
+  "status": "VERIFIED_NATIVE_LEARNED_OBSERVATION_RECOVERY_MECHANISM_ONLY",
+  "utc": "2026-11-03T23:00:13.372615+00:00",
+  "completed_updates": 2000,
+  "archived_snapshot": "/ml2/alz/artifacts/native_recovery_audits/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0/step2000.pt",
+  "snapshot_SHA256": "3e1793f65961615b45d42e682d692b1a5a0a6f610d84bb35c345af97d0abef51",
+  "encoder_parameter_delta_from_initial_L2": 10.26421070098877,
+  "synthetic_probe_learned50_feature_delta_L2": 1.243048906326294,
+  "original100_moment_coordinates_bitwise_unchanged": true,
+  "all_model_tensors_finite": true,
+  "native_recipe_exact_API_factory": true,
+  "learned_observation_config": {
+    "enabled": true,
+    "cell_hidden": 64,
+    "cell_features": 25,
+    "feature_scale": 0.2,
+    "pool_epsilon": 1e-06,
+    "layernorm_epsilon": 1e-05
+  },
+  "CUDA_initialized": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_learned_observation_recovery.py": "f0a1303335548622c0c272c0c7c3706030d9a7ba16cd45c9e5bf39e5a0a493af"
+  },
+  "scope": "CPU read-only snapshot and synthetic3bag/11cell probe only. Confirms weights and learned observations changed; does not establish quality, causal benefit or an endpoint result. No optimizer update, held-out target, GPU allocation or restart."
+}
