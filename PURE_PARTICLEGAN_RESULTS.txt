@@ -1,0 +1,20 @@
+Pure ParticleGAN calibration comparison
+
+All seven retained trained formulations were generated directly through iter_pg, with zero real-bag replacements. Same4calibrationdonors,firstfold,seed0,two fixed generation replicates. Lower scores are better.
+
+| Pure formulation | Updates | Energy score | Cell energy distance | Spread |
+|---|---:|---:|---:|---:|
+| Matched resampling | — | 2.07928718 | 0.24277825 | 1.08669 |
+| latent8 | 20000 | 1.97556671 | 0.25327615 | 0.94908 |
+| theta10 | 20000 | 2.00142434 | 0.27122252 | 0.91444 |
+| fourier5 | 20000 | 2.00751709 | 0.28946140 | 0.90901 |
+| cell32 | 20000 | 2.02325405 | 0.31593183 | 0.88822 |
+| continue40k | 40000 | 2.04855219 | 0.26188396 | 0.94080 |
+| reference2 | 20000 | 2.16451788 | 0.33100923 | 0.78881 |
+| balanced8 | 20000 | 2.26647708 | 0.33299772 | 0.79970 |
+
+Reference2, latent8 and balanced8 control arrays and integer count exemplars reproduced bitwise. Every run completed cleanly and saved scores/counts/checkpoint hashes were independently verified.
+
+The40000-update continuation uses extra compute. These are adaptive calibration results, not independent validation or an external SOTA claim. Pure and hybrid leaders are kept separately. No pure formulation meets the joint5%ES/cellED/spread target.
+
+New training updates for this suite:0. Charged GPU time:54.4254 seconds.
