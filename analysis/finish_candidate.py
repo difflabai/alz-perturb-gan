@@ -139,7 +139,10 @@ def main():
         return
     if args.pure:
         assert candidate.get('pure_only') is True and candidate.get('real_bag_replacements')==0 and candidate.get('hybrid_config') is None
-        assert (candidate.get('operation'),candidate.get('native_recipe')) in [('train_bispf','bispf'),('train_semantic','bispf_optimized')]
+        assert (candidate.get('operation'),candidate.get('native_recipe')) in [('train_bispf','bispf'),('train_semantic','bispf_optimized'),('train_bcap','bcap')]
+        if candidate['operation']=='train_bcap':
+            audit=read(ROOT/'analysis/bcap_checkpoint_audit.json')
+            assert audit['status']=='VERIFIED_COMPLETE_NATIVE_BCAP_CHECKPOINT' and audit['checkpoint_SHA256']==candidate['checkpoint_SHA256'] and audit['native_recipe_exactly_matches_official_API_factory']
         if candidate['operation']=='train_semantic':
             assert candidate['semantic_config']==deployment['semantic_config']=={'enabled':True,'temperature':1.,'epsilon':1e-4}
             audit=read(ROOT/'analysis/semantic_checkpoint_audit.json')

@@ -1,0 +1,19 @@
+{
+  "status": "PASSED_BCAP_PRELAUNCH_CPU_CHECKS",
+  "utc": "2026-11-03T22:12:42.588327+00:00",
+  "synthetic_model_selection_tests_passed": 40,
+  "resource_accounting_tests_passed": 15,
+  "new_native_BCAP_source_binding_tests_passed": 3,
+  "total_unique_checks": 58,
+  "limits": "CPU qualification only. Native GPU quality, memory and throughput unproven. Source-only binding test uses virtual enabled plan and allocates nothing. Original immutable guard/Controller unchanged.",
+  "qualification_note": "Initial test expected identical prior state keys; corrected to exact G/D state and learned prior parameters, with absent SBNP buffers declared. First binding fixture incorrectly inherited900s evaluation cap; corrected fixture to actual21600s training cap and verified wrongcap refusal. No native job launched on failed tests.",
+  "source_SHA256": {
+    "/ml2/alz/runtime/binding.py": "ed0805453f4d9c95a440d2ee06e31eecef7e5d9c5dae9cf07c534873c60a7607",
+    "/ml2/alz/runtime/worker_gpu0.py": "9cbf2e452f555e1e328595ab2269b1c1a4c35849185ed3ffed9bd4b94eda8b1e",
+    "/ml2/alz/runtime/test_bcap_binding.py": "3e1c17cce5ff6dc0d7a597e53d88931a34ae2261b0bfcfa2203e6e89d93aa0c7",
+    "/ml2/alz/prepare_bcap_job.py": "8c52b059c344610789aa4199f2bbe9f6ed33c008d64ca4df7ccba79d4660c9f3",
+    "/ml2/alz/analysis/finish_candidate.py": "6f79eccae0d3143d73491075dc6b6e772973f8f646e35a7325e697777a89866d",
+    "/ml2/alz/analysis/audit_bcap_checkpoint.py": "2e0a0c25fc0667c717094e35008b327c961924d17352add2dc4932c79b83de03",
+    "/ml2/alz/analysis/bcap_cpu_qualification.json": "f7ecc33b3cd8aab1701a4d6e3a666009773c370966e0a6482a0e74fe6678ec84"
+  }
+}

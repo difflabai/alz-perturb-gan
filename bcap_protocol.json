@@ -1,0 +1,26 @@
+{
+  "status": "REGISTERED_BEFORE_NATIVE_BCAP_TRAINING",
+  "utc": "2026-11-03T22:10:00.534586+00:00",
+  "rationale": "Two BISPF native families and the semantic observation extension have not met the joint donor/cell target. Test the released BCAP preset as a third pure formulation, rather than tune evaluation targets. Its input-gradient-cap critic penalty and zero prior penalty change the optimization geometry relative to optimized BISPF. Improvement is a hypothesis, not established by previous failures.",
+  "native_API": "ParticleGAN0.9.4 get_recipe('bcap',total_steps=20000,batch_size=32,num_particles=512,z_dim=8), no other recipe overrides",
+  "task": {
+    "fold": 0,
+    "seed": 0,
+    "updates": 20000,
+    "cap_seconds": 21600,
+    "architecture": "matched retained PG8",
+    "same_initial_G_D_and_prior_parameter_rows": true
+  },
+  "unchanged": "33 optimization donors, preprocessing, 150 fixed moments/Fourier observations, count model, discrete forward/declared biased Gamma-rate backward, data batches/library law, deterministic streams, direct iter_pg, 0 real bag replacements, 4 calibration donors and 2 fixed generation replicates.20 evaluation donors excluded.",
+  "confounds": "Whole native recipe comparison. BCAP changes critic penalty, prior regularization weight, convolution update rule/backend and declared training precision relative to optimized BISPF. Not a single-component causal ablation. No performance or natural-image claim.",
+  "qualification": [
+    "Exact official API recipe/components",
+    "Exact unchanged optimized-PG advance AST",
+    "Same initial generator/critic/prior tensors",
+    "Finite nonzero G/dispersion/prior gradients and complete serialized next-update bitwise equality",
+    "Recipe/cache/config mismatch refusal",
+    "Existing CPU resource/accounting regression checks"
+  ],
+  "selection": "Compare pure_incumbent by existing donorES primary/cellED nonregression/spread guard; no threshold or cohort changes. Commit candidate plan enabled=true before launch, evidence commit plus actual revert on failure/regression. Joint baseline target and matched three-seed confirmation still required.",
+  "native_prior_buffers": "BCAP has only z; optimized BISPF adds moment_tether_mean/covariance/count native SBNP reference buffers. These are a declared native-preset difference; initialization parity applies to learned parameters, not complete prior state dictionaries."
+}

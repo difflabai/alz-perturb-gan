@@ -1,0 +1,26 @@
+{
+  "status": "PASSED_SYNTHETIC_CPU_BCAP_QUALIFICATION",
+  "scope": "No actual ALZ fitting; no GPU allocation",
+  "tests_passed": 4,
+  "native_recipe": "bcap",
+  "declared_task_overrides": {
+    "total_steps": 20000,
+    "batch_size": 32,
+    "num_particles": 512,
+    "z_dim": 8
+  },
+  "full_serialized_restore_next_update_bitwise_equal": true,
+  "native_api_component_types_verified": true,
+  "same_initial_generator_critic_and_prior_rows_verified": true,
+  "native_prior_buffer_difference": "BCAP has only z; optimized BISPF adds three native SBNP reference buffers. Initial learned parameter rows match exactly; complete prior state dictionaries intentionally differ.",
+  "optimized_update_AST_unchanged": true,
+  "CUDA_initialized": false,
+  "source_SHA256": {
+    "/ml2/alz/model/bcap_adapter.py": "0bced7a96c39f467741802f24bba594f72ef30bb6f957a3c14552c48706e1dad",
+    "/ml2/alz/model/bcap_update.py": "c8fdc130418f29bea0e98077105fcc0f4a99c838c573654c1363dd020d500b3e",
+    "/ml2/alz/test_bcap.py": "aec998b5ce23b92d04ec8475dac6c7d1648d6def8a9177e4666139898ff17788",
+    "/ml2/alz/bcap_protocol.json": "820b50a9535fea2125a9587ac07e1d3dea164e60bff5944d60dfb921de473f93",
+    "/ml2/alz/analysis/run_bcap_cpu.py": "2fba7389e1e247499a01b0eafcc39de6386708e12f586d3028a6b54a74c47d32"
+  },
+  "utc": "2026-11-03T22:11:12.307947+00:00"
+}

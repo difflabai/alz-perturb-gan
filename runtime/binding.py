@@ -139,7 +139,7 @@ def source_closure(auth,layout):
         manifest=pinned_inventory(data/'manifest.json',auth.get('calibration_manifest_SHA256'),pins,'calibration input')
         require(manifest.get('status')=='CPU_CALIBRATION_PROJECTED_WITHOUT_REFITTING','calibration provenance differs')
         require_members(pins,{str(data/name):pin for name,pin in manifest['files_SHA256'].items()},'calibration arrays')
-        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','train_variant','train_bispf','train_semantic','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
+        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','train_variant','train_bcap','train_bispf','train_semantic','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
         if auth['operation']=='qualify_continuation':
             require(auth['cap_seconds']==900 and auth.get('qualification_only') is True and auth.get('qualification_steps')==1 and auth.get('caller_execution_limit')==40000,'finite one-step continuation qualification required')
             checkpoint=Path(auth['checkpoint_path'])
@@ -161,6 +161,16 @@ def source_closure(auth,layout):
                 require(str(config) in pins and read(config)==auth.get('hybrid_config'),'exact hybrid config absent or changed')
                 require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete hybrid base-model source pins required')
         else:
+            if auth['operation']=='train_bcap':
+                plan=HERE.parent/'bcap_plan.json';proof_path=HERE.parent/'analysis/bcap_cpu_qualification.json';protocol=HERE.parent/'bcap_protocol.json'
+                require(pins.get(str(plan))==auth.get('bcap_plan_SHA256')==sha(plan),'native BCAP prospective plan pin absent')
+                require(read(plan)=={'enabled':True,'native_recipe':'bcap','fixed_endpoint':20000,'pure_only':True,'training_seed':0},'native BCAP plan disabled or changed')
+                require(auth.get('hybrid_config') is None and auth['cell']['seed']==0 and auth['variant_config']=={'z_dim':8,'stage_balance':False,'cell_z_dim':8,'theta_init_scale':1.,'fourier_feature_scale':1.},'pure matched seed0 BCAP scope only')
+                require(auth.get('fixed_endpoint')==20000 and auth.get('pure_formulation')=='bcap' and auth.get('qualification_only') is False,'complete fixed20k BCAP trial required')
+                require(pins.get(str(proof_path))==auth.get('bcap_qualification_SHA256')==sha(proof_path) and pins.get(str(protocol))==sha(protocol),'native BCAP qualification/protocol pins absent')
+                proof=read(proof_path)
+                require(proof['status']=='PASSED_SYNTHETIC_CPU_BCAP_QUALIFICATION' and all(proof[k] for k in ['full_serialized_restore_next_update_bitwise_equal','native_api_component_types_verified','same_initial_generator_critic_and_prior_rows_verified','optimized_update_AST_unchanged']) and proof['CUDA_initialized'] is False,'native BCAP qualification incomplete')
+                for path,pin in proof['source_SHA256'].items():require(pins.get(path)==pin==sha(path),'native BCAP qualified source changed: '+path)
             if auth['operation']=='train_semantic':
                 plan=HERE.parent/'semantic_plan.json';proof_path=HERE.parent/'analysis/semantic_cpu_qualification.json';probe_path=HERE.parent/'analysis/semantic_fitting_gradient_probe.json'
                 require(pins.get(str(plan))==auth.get('semantic_plan_SHA256')==sha(plan) and read(plan)==auth.get('semantic_config')=={'enabled':True,'temperature':1.,'epsilon':1e-4},'semantic plan remains disabled or changed')
