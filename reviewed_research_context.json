@@ -1,0 +1,84 @@
+{
+  "utc": "2026-11-03T16:15:24.643691+00:00",
+  "reviewed_prior_ALZ_task": "01a19ed0-eda6-762a-a457-2679cdfa603d",
+  "reviewed_scheduler_task": "01a1a055-180c-70a9-b151-3eae1737e00a",
+  "history_access": "Prior tasks not loaded in this app server or current local task database. Reviewed retained handoff, primary artifacts, source and independent review receipts at original filesystem paths.",
+  "prior_findings": {
+    "cooling_vs_constant_energy_score_mean_difference": 0.046828,
+    "cooling_donor_bootstrap_interval": [
+      0.008515,
+      0.089912
+    ],
+    "direction": "cooling worsened all3matched seeds; lowerESbetter",
+    "control_PG_mean_ES": 1.662777,
+    "resampling_mean_ES": 1.556682,
+    "cached_scVI_mean_ES": 1.701156,
+    "prior_superiority_demonstrated": false,
+    "CFGen_pilot_outcome": "failed GPU sampling device mismatch; native registeredCPU model vs externalCUDA stage embedding; no retry of CFGen in this run",
+    "historically_exposed_outer_donors": 18,
+    "new_independent_confirmation": false
+  },
+  "prepared_core": {
+    "methods": [
+      "pg",
+      "scvi"
+    ],
+    "folds": 3,
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "matrix_cells": 30,
+    "selected_run": {
+      "fold": 0,
+      "method": "pg",
+      "seed": 0
+    },
+    "PG_fixed_updates": 20000,
+    "job_cap_seconds": 21600,
+    "fold0_optimization_donors": 33,
+    "fold0_calibration_donors": 4,
+    "fold0_evaluation_donors": 20,
+    "primary_generation_replicates": 2,
+    "diagnostic_stage_permutation": [
+      2,
+      3,
+      0,
+      1
+    ]
+  },
+  "manifest_sha256": "36a0a6975e1fd01806bc6cc72ae5c639bcbfb723023fde628b373e555b93ce87",
+  "original_budget_status": {
+    "schema": 2,
+    "project": "ALZ/SEA-AD ParticleGAN and comparator computational research",
+    "revision": 7,
+    "authoritative_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/project_gpu_budget.json",
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_seconds": 70330.19226193507,
+    "charged_GPU_hours": 19.536164517204185,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 1004.4638354827957,
+    "available_after_reservations_GPU_hours": 1004.4638354827957,
+    "counted_ledgers": 19,
+    "guarded_attempts": 36,
+    "excluded_duplicate_ledgers": 1,
+    "new_grant_GPU_hours": 1000.0,
+    "individual_job_deadlines_changed": false,
+    "resource_or_launch_admission_verified": false,
+    "paid_cloud_authorized": false
+  },
+  "initial_verification": {
+    "source_runtime_input_pins_matched": 450,
+    "protected_peers_matched": 8,
+    "integration_tests_passed": 15
+  },
+  "files": {
+    "ALZ_handoff": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/current-status.md",
+    "scientific_protocol": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/CORE_PROTOCOL.json",
+    "adoption": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/gpu0-owner-handoff/ADOPTION_RECEIPT.json",
+    "live_progress": "/ml2/alz/latest_progress.json"
+  }
+}

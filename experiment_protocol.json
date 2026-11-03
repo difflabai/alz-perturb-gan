@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "status": "prospectively_frozen_before_calibration_scores",
+  "user_goal": "Iteratively evaluate and debug toward best calibration energy score and distribution match; commit changes; revert regressions.",
+  "reference": "ALZ_CORE_V1_f0_pg_s0, 20000 updates, unchanged reviewed GPU0 pipeline",
+  "optimization_donors": 33,
+  "calibration_donors": 4,
+  "calibration_role": "One donor per stage, excluded from fitting and preprocessing. Adaptive selection scores, never independent confirmation.",
+  "evaluation_role": "Keep the 20 first-fold evaluation donors outside candidate ranking and debugging metrics. Preserve fixed reference evaluation.",
+  "unchanged_preprocessing": "Reuse only the first-fold optimization-fitted HVG selection, normalization, PCA and measurement classifier. No calibration refit.",
+  "primary": "Mean donor energy score across four calibration donors, averaged over two fixed generation replicates; lower is better.",
+  "distribution_match": "Cell-level energy distance in the same frozen 50-PC space, pooled with equal stage weights; lower is better.",
+  "accept_candidate": {
+    "primary": "calibration donor energy score strictly below incumbent by more than 1e-9",
+    "cell_fidelity": "calibration cell energy distance no greater than incumbent plus 1e-9",
+    "spread": "If incumbent total donor spread is inside [0.7,1.3], candidate remains inside. Otherwise candidate distance to that band cannot increase.",
+    "validity": "Complete fixed endpoint, finite nonnegative integer counts, correct conditioning and donor splits; no primary score substitution."
+  },
+  "monitor": ["per-stage donor energy score", "per-stage cell energy distance", "total spread", "within-stage spread", "80 percent coverage", "zero-count frequency", "sampled-library quantiles"],
+  "comparison": "Every candidate and resampling baseline use identical frozen source donor/cell/library schedules and generation replicate seeds. No evaluation on changing draws to rescue a failure.",
+  "rollback": "Commit candidate before execution. Retain results; git revert candidate implementation if worse or not accepted; never delete failed evidence.",
+  "all_time_high_scope": "Best observed comparable calibration result in this experiment lineage; historical scores with different donors/transforms are not directly comparable.",
+  "good_result_target": "At least 5 percent lower calibration donor energy score than matched hierarchical resampling, cell energy distance no worse than resampling, total spread [0.7,1.3]; repeat improvement on three training seeds before calling it stable.",
+  "compute": {"aggregate_GPU_hours": 1024, "individual_job_cap_seconds": 21600, "paid_cloud": false, "accounting": "Existing canonical project accounting, inclusive assigned-card time; no reset."},
+  "external_confirmation": false
+}
