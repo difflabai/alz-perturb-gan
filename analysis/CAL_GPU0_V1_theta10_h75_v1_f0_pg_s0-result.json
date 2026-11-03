@@ -1,0 +1,122 @@
+{
+  "utc": "2026-11-03T18:55:13.196827+00:00",
+  "attempt": "CAL_GPU0_V1_theta10_h75_v1_f0_pg_s0",
+  "candidate_commit": "137c6afaf76712d09e82fb195d93ccf9f4688a04",
+  "candidate": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9777900384367304,
+    "cell_energy_distance": 0.25717253692426834,
+    "spread_ratio": 0.9644572903513855,
+    "within_condition_spread_ratio": 0.9059785958047847,
+    "coverage80": 0.7019230769230769,
+    "generated_zero_count_rate": 0.0,
+    "per_donor_energy_score": [
+      1.2216398818313747,
+      2.999856228939887,
+      1.6329778663571886,
+      2.0566861766184714
+    ],
+    "per_stage_cell_energy_distance": [
+      0.698664737432825,
+      1.7461049781181233,
+      1.1409110542098508,
+      0.5434493895834498
+    ],
+    "status": "completed",
+    "completed_updates": 20000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_theta10_h75_v1_f0_pg_s0",
+    "operation": "train_hybrid",
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_theta10_h75_v1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "b43b18808576d36806b405dc8f2364d8f43a177e029e4d5c487dd6c34bde6d58",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 10.0
+    },
+    "method": "pg_resampling_hybrid",
+    "hybrid_config": {
+      "pg_bag_fraction": 0.75
+    },
+    "qualification_only": false,
+    "new_model_updates": 20000,
+    "automatic_successor": false
+  },
+  "previous_incumbent": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9688403041237994,
+    "cell_energy_distance": 0.2528690821338335,
+    "spread_ratio": 0.9814293736907242,
+    "within_condition_spread_ratio": 0.9148400895833021,
+    "coverage80": 0.6826923076923077,
+    "generated_zero_count_rate": 1.5625e-06,
+    "per_donor_energy_score": [
+      1.184894817935084,
+      2.829881038126534,
+      1.7803760120413101,
+      2.0802093483922697
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7870426610292096,
+      1.635408347121511,
+      1.1428956879526604,
+      0.5078458835014219
+    ],
+    "status": "completed",
+    "completed_updates": 20000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_hybrid75_v1_f0_pg_s0",
+    "operation": "evaluate_hybrid",
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false
+    },
+    "method": "pg_resampling_hybrid",
+    "hybrid_config": {
+      "pg_bag_fraction": 0.75
+    },
+    "qualification_only": false,
+    "new_model_updates": 0,
+    "automatic_successor": false,
+    "candidate_commit": "6c8107fcf3504a7617ccf126e996cb05b38d9d7a"
+  },
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "ES_change": 0.008949734312931001,
+  "cell_ED_change": 0.004303454790434813,
+  "ES_relative_improvement_vs_resampling": 0.048813431716122624,
+  "cell_ED_difference_vs_resampling": 0.014394283841088651,
+  "charged_GPU_seconds": 1428.0410485549946,
+  "independent_saved_scores_checkpoint_and_count_exemplars_verified": true,
+  "scope": "Four adaptive calibration donors, one training seed; no evaluation metric was used for selection."
+}
