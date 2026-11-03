@@ -10,6 +10,8 @@ def decide(candidate, incumbent):
     reasons = []
     identity = ['metric_role', 'donors', 'generation_replicates', 'training_seed',
                 'calibration_manifest_SHA256', 'trace_manifest_SHA256', 'sampling_contract']
+    if any(candidate.get(k) is None or incumbent.get(k) is None for k in identity):
+        reasons.append('required comparison identity is missing')
     if any(candidate.get(k) != incumbent.get(k) for k in identity):
         reasons.append('incomparable calibration data or sampling contract')
     if candidate.get('metric_role') != 'calibration_selection':

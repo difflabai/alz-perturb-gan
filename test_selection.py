@@ -45,6 +45,11 @@ class SelectionContract(unittest.TestCase):
     def test_equal_result_is_not_an_ath(self):
         self.assertFalse(decide(self.incumbent, self.incumbent)['accept'])
 
+    def test_both_records_missing_identity_is_not_comparable(self):
+        del self.incumbent['trace_manifest_SHA256']
+        del self.candidate['trace_manifest_SHA256']
+        self.assertFalse(decide(self.candidate, self.incumbent)['accept'])
+
     def test_nonfinite_or_unverified_counts_are_rejected(self):
         self.candidate['energy_score'] = float('nan')
         self.assertFalse(decide(self.candidate, self.incumbent)['accept'])
