@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "generation": "direct_iter_pg",
+  "real_bag_replacements": 0,
+  "calibration_only": true,
+  "replicates": [
+    0,
+    1
+  ],
+  "entries": {
+    "reference2": {
+      "checkpoint_path": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/runs_gpu0_v1/GPU0_V1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "c6fdab29e87dca26b5742208999e7552392ff25bab07056214da747cfb9e4fea",
+      "completed_updates": 20000,
+      "training_seed": 0,
+      "variant_config": {
+        "z_dim": 2,
+        "stage_balance": false,
+        "cell_z_dim": 8,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 1.0
+      },
+      "prior_score_output": "/ml2/alz/runs/CAL_GPU0_V1_reference_eval_000_f0_pg_s0",
+      "prior_generation_is_pure": true
+    },
+    "latent8": {
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
+      "completed_updates": 20000,
+      "training_seed": 0,
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": false,
+        "cell_z_dim": 8,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 1.0
+      },
+      "prior_score_output": "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0",
+      "prior_generation_is_pure": true
+    },
+    "balanced8": {
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_balanced8_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "17675cfa43d6ffecf29436c60f2294202c1f5d6bb2e187bed50ae78a575394af",
+      "completed_updates": 20000,
+      "training_seed": 0,
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": true,
+        "cell_z_dim": 8,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 1.0
+      },
+      "prior_score_output": "/ml2/alz/runs/CAL_GPU0_V1_balanced8_v1_f0_pg_s0",
+      "prior_generation_is_pure": true
+    },
+    "cell32": {
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_cell32_h75_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "81fe9bf0d70914585eb8fa712f261bf8f3201a00f228be68a703ab4114f44bc4",
+      "completed_updates": 20000,
+      "training_seed": 0,
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": false,
+        "cell_z_dim": 32,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 1.0
+      },
+      "prior_score_output": "/ml2/alz/runs/CAL_GPU0_V1_cell32_h75_v1_f0_pg_s0",
+      "prior_generation_is_pure": false
+    },
+    "theta10": {
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_theta10_h75_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "b43b18808576d36806b405dc8f2364d8f43a177e029e4d5c487dd6c34bde6d58",
+      "completed_updates": 20000,
+      "training_seed": 0,
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": false,
+        "cell_z_dim": 8,
+        "theta_init_scale": 10.0,
+        "fourier_feature_scale": 1.0
+      },
+      "prior_score_output": "/ml2/alz/runs/CAL_GPU0_V1_theta10_h75_v1_f0_pg_s0",
+      "prior_generation_is_pure": false
+    },
+    "fourier5": {
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_fourier5_h75_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "c91d7637074dfdf85f0ca9b2605d1420588fb1528317008bd5f87e3f0e1123d0",
+      "completed_updates": 20000,
+      "training_seed": 0,
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": false,
+        "cell_z_dim": 8,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 5.0
+      },
+      "prior_score_output": "/ml2/alz/runs/CAL_GPU0_V1_fourier5_h75_v1_f0_pg_s0",
+      "prior_generation_is_pure": false
+    },
+    "continue40k": {
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_continue40k_h75_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "b33313581137ef12bf00988ccec948f134f15e307af45d1d5a0655f880718cca",
+      "completed_updates": 40000,
+      "training_seed": 0,
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": false,
+        "cell_z_dim": 8,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 1.0
+      },
+      "prior_score_output": "/ml2/alz/runs/CAL_GPU0_V1_continue40k_h75_v1_f0_pg_s0",
+      "prior_generation_is_pure": false
+    }
+  }
+}

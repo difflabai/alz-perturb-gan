@@ -15,11 +15,11 @@ def validate_reference(checkpoint,auth):
     value=b.cell(auth)
     b.require(checkpoint.get('schema')==1 and checkpoint.get('method')=='pg','reference checkpoint schema/method differs')
     b.require(checkpoint.get('fold')==value['fold'] and checkpoint.get('seed')==value['seed'],'reference checkpoint fold/seed differs')
-    b.require(checkpoint.get('status')=='completed' and checkpoint.get('completed_updates')==checkpoint.get('fixed_endpoint')==20000,'complete fixed reference checkpoint required')
+    b.require(checkpoint.get('status')=='completed' and checkpoint.get('completed_updates')==checkpoint.get('fixed_endpoint')==(auth['fixed_endpoint'] if auth.get('operation')=='evaluate_pure_variant' else 20000),'complete fixed reference checkpoint required')
     b.require(checkpoint.get('cache_manifest_SHA256')==b.sha(Path(auth['cache_dir'])/'manifest.json'),'reference preprocessing/cache differs')
 
 def run_scientific(auth,admission,layout):
-    b.require(auth['operation'] in ('evaluate_reference','evaluate_hybrid','train_variant','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
+    b.require(auth['operation'] in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','train_variant','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
     runtime=b.runtime_path(layout,b.cell(auth))
     b.require(Path(sys.executable).absolute()==runtime.absolute() and sys.version_info[:2]==(3,12),'exact PG scientific interpreter required')
     sys.path.extend(map(str,b.native_site_roots(b.cell(auth),auth['files_SHA256'])))
@@ -49,8 +49,8 @@ def run_scientific(auth,admission,layout):
             result.update(parent_checkpoint_SHA256=auth['checkpoint_SHA256'],allocation_id=admission['allocation_id'])
             dump(out/'qualification.json',result)
             return
-        if auth['operation'] in ('evaluate_reference','evaluate_hybrid'):
-            if auth['operation']=='evaluate_hybrid':
+        if auth['operation'] in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant'):
+            if auth['operation'] in ('evaluate_hybrid','evaluate_pure_variant'):
                 sys.path.insert(0,str(b.HERE.parent/'model'))
                 import variant_pg_update
                 variant_pg_update.configure(auth['variant_config'])
@@ -61,7 +61,7 @@ def run_scientific(auth,admission,layout):
             checkpoint=torch.load(auth['checkpoint_path'],map_location='cpu',weights_only=False)
             validate_reference(checkpoint,auth)
             ctx=Context(Path(auth['cache_dir']),'cuda:0')
-            bundle,_,_,_,_=restore(ctx,checkpoint)
+            bundle,_,_,_,_=restore(ctx,checkpoint,expected_endpoint=auth['fixed_endpoint']) if auth['operation']=='evaluate_pure_variant' else restore(ctx,checkpoint)
             checkpoint_path=Path(auth['checkpoint_path'])
         else:
             sys.path.insert(0,str(b.HERE.parent/'model'))
@@ -103,6 +103,8 @@ def run_scientific(auth,admission,layout):
                       initial_completed_updates=auth.get('initial_completed_updates',0),native_recipe_schedule_horizon=20000,
                       parent_checkpoint_SHA256=auth.get('checkpoint_SHA256') if auth['operation']=='continue_hybrid' else None,
                       automatic_successor=False)
+        if auth['operation']=='evaluate_pure_variant':
+            result.update(generation='direct_iter_pg',real_bag_replacements=0,pure_formulation=auth['pure_formulation'],pure_only=True)
         dump(out/'completed.json',result)
     except BaseException as exc:
         dump(out/'failure.json',{'status':'incomplete','error':repr(exc),'automatic_retry':False})
