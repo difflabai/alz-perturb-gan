@@ -1,7 +1,7 @@
 """Read-only real readiness refusal and synthetic scientific-gate edge cases."""
 import copy,json,unittest
 from pathlib import Path
-from freeze_pure_confirmation import seed0_gate,sha
+from freeze_pure_confirmation import seed0_gate,sha,confirmation_identities
 
 ROOT=Path('/ml2/alz')
 
@@ -29,5 +29,20 @@ class ConfirmationGate(unittest.TestCase):
    for value in [float('nan'),float('inf'),float('-inf'),True,None]:
     with self.subTest(metric=metric,value=value):self.assertFalse(seed0_gate({**self.good,metric:value},self.b)['ready'])
   self.assertFalse(seed0_gate(self.good,{**self.b,'energy_score':0.})['ready'])
+ def test_confirmation_attempts_are_prospectively_unique_and_deterministic(self):
+  attempt='CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0';pin='a'*64
+  q=confirmation_identities(attempt,pin)
+  self.assertEqual(q,confirmation_identities(attempt,pin))
+  self.assertEqual(set(q),{'1','2'})
+  self.assertNotEqual(q['1']['attempt_id'],q['2']['attempt_id'])
+  self.assertNotEqual(q,confirmation_identities(attempt,'b'*64))
+  self.assertNotEqual(q,confirmation_identities('CAL_GPU0_V1_another_v1_f0_pg_s0',pin))
+  for seed in (1,2):
+   self.assertEqual(q[str(seed)]['cell']['seed'],seed)
+   self.assertRegex(q[str(seed)]['cell']['experiment'],r'^pure_confirm_[0-9a-f]{20}$')
+ def test_malformed_selection_identity_or_incomplete_checkpoint_digest_refuses(self):
+  for attempt,pin in [('CAL_GPU0_V1_test_f0_pg_s1','a'*64),('../selection','a'*64),
+                      ('CAL_GPU0_V1_test_f0_pg_s0','a'*63),('CAL_GPU0_V1_test_f0_pg_s0','z'*64)]:
+   with self.subTest(attempt=attempt,pin=pin),self.assertRaises(ValueError):confirmation_identities(attempt,pin)
 
 if __name__=='__main__':unittest.main()

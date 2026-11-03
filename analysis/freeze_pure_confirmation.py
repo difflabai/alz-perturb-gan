@@ -1,5 +1,5 @@
 """Freeze a verified pure seed0 winner for fixed seeds1/2; never allocate a GPU."""
-import argparse,datetime,hashlib,json,math,subprocess
+import argparse,datetime,hashlib,json,math,re,subprocess
 from pathlib import Path
 from aggregate_validation import verified_deployment,scientific_sources
 
@@ -8,6 +8,17 @@ PROTOCOL=ROOT/'analysis/pure_confirmation_protocol.json'
 
 def read(path):return json.loads(Path(path).read_bytes())
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def confirmation_identities(seed0_attempt,checkpoint_sha256):
+ if not isinstance(seed0_attempt,str) or re.fullmatch(r'CAL_GPU0_V1_[a-z][a-z0-9_]{0,48}_f0_pg_s0',seed0_attempt) is None:
+  raise ValueError('Exact first-fold seed0 attempt identity required')
+ if not isinstance(checkpoint_sha256,str) or re.fullmatch(r'[0-9a-f]{64}',checkpoint_sha256) is None:
+  raise ValueError('Complete selected checkpoint SHA256 required')
+ identity=json.dumps({'seed0_attempt':seed0_attempt,'checkpoint_SHA256':checkpoint_sha256},sort_keys=True).encode()
+ experiment='pure_confirm_'+hashlib.sha256(identity).hexdigest()[:20]
+ return {str(seed):{'cell':{'fold':0,'method':'pg','seed':seed,'experiment':experiment},
+                    'attempt_id':f'CAL_GPU0_V1_{experiment}_f0_pg_s{seed}',
+                    'allocation_id':f'ALZ_CAL_V1_{experiment}_f0_pg_s{seed}'} for seed in (1,2)}
 
 def seed0_gate(candidate,baseline):
  reasons=[]
@@ -61,6 +72,7 @@ def main():
          'seed0_attempt':attempt,'seed0_candidate':candidate,'pure_incumbent_SHA256':sha(selected_path),
          'seed0_decision_SHA256':sha(decision_path),'seed0_authorization_SHA256':sha(deployment['authorization_path']),
          'pure_confirmation_protocol_SHA256':sha(PROTOCOL),'training_seeds':[0,1,2],'confirmation_training_seeds':[1,2],
+         'confirmation_identities':confirmation_identities(attempt,candidate['checkpoint_SHA256']),
          'scientific_source_SHA256':sources,'matched_baselines':baselines,'ranking_seeds_allowed':False,
          'native_allocation_created':False,'confirmation_complete':False,
          'scope':'Frozen same-model calibration seed confirmation only. Runtime admission must separately bind this freeze and exact seed1/2 cells; this file does not authorize an unreviewed backend or expand existing device scope.'}
