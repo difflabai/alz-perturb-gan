@@ -1,0 +1,121 @@
+{
+  "status": "RETAINED_CALIBRATION_DISTRIBUTION_DIAGNOSTICS",
+  "utc": "2026-11-03T18:39:26.360028+00:00",
+  "selection_rule_unchanged": true,
+  "records": [
+    {
+      "method": "resampling",
+      "paths": [
+        "/ml2/alz/artifacts/calibration_resampling_seed0/r0/metrics.json",
+        "/ml2/alz/artifacts/calibration_resampling_seed0/r1/metrics.json"
+      ],
+      "energy_score": 2.079287181278266,
+      "cell_energy_distance": 0.24277825308317968,
+      "spread_ratio": 1.086688043301637,
+      "per_donor_energy_score": [
+        1.272282323410263,
+        3.047641176747636,
+        1.95978725566323,
+        2.0374379692919344
+      ],
+      "per_stage_cell_energy_distance": [
+        0.9114143695390835,
+        1.8390837374697222,
+        1.132453828552058,
+        0.5532384176654261
+      ],
+      "per_stage_composition_L1": [
+        0.3191250000000003,
+        0.6751422297297294,
+        0.933866916859122,
+        0.3709980769230769
+      ]
+    },
+    {
+      "method": "purePG8",
+      "paths": [
+        "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/r0/metrics.json",
+        "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/r1/metrics.json"
+      ],
+      "energy_score": 1.9755667140392312,
+      "cell_energy_distance": 0.25327614831020107,
+      "spread_ratio": 0.9490753309366126,
+      "per_donor_energy_score": [
+        1.1734055831400327,
+        2.8064253482400496,
+        1.8097970210337848,
+        2.1126389037430577
+      ],
+      "per_stage_cell_energy_distance": [
+        0.7826674758588661,
+        1.592456388753198,
+        1.137019646507424,
+        0.5136302106926189
+      ],
+      "per_stage_composition_L1": [
+        0.22306649214659663,
+        0.6968083230958227,
+        0.9947047921478062,
+        0.2503480769230769
+      ]
+    },
+    {
+      "method": "hybrid75",
+      "paths": [
+        "/ml2/alz/runs/CAL_GPU0_V1_hybrid75_v1_f0_pg_s0/r0/metrics.json",
+        "/ml2/alz/runs/CAL_GPU0_V1_hybrid75_v1_f0_pg_s0/r1/metrics.json"
+      ],
+      "energy_score": 1.9688403041237994,
+      "cell_energy_distance": 0.2528690821338335,
+      "spread_ratio": 0.9814293736907242,
+      "per_donor_energy_score": [
+        1.184894817935084,
+        2.829881038126534,
+        1.7803760120413101,
+        2.0802093483922697
+      ],
+      "per_stage_cell_energy_distance": [
+        0.7870426610292096,
+        1.635408347121511,
+        1.1428956879526604,
+        0.5078458835014219
+      ],
+      "per_stage_composition_L1": [
+        0.1442460078534028,
+        0.6779933660933659,
+        0.9658047921478063,
+        0.295248076923077
+      ]
+    },
+    {
+      "method": "cell32_rejected",
+      "paths": [
+        "/ml2/alz/runs/CAL_GPU0_V1_cell32_h75_v1_f0_pg_s0/r0/metrics.json",
+        "/ml2/alz/runs/CAL_GPU0_V1_cell32_h75_v1_f0_pg_s0/r1/metrics.json"
+      ],
+      "energy_score": 1.9936326400600892,
+      "cell_energy_distance": 0.2926178998329858,
+      "spread_ratio": 0.9443936617408596,
+      "per_donor_energy_score": [
+        1.1106700119275825,
+        3.1144490168468564,
+        1.7917322694922673,
+        1.9576792619736505
+      ],
+      "per_stage_cell_energy_distance": [
+        0.8342124161606606,
+        1.8756429265099648,
+        1.0502030364362787,
+        0.5007318865870598
+      ],
+      "per_stage_composition_L1": [
+        0.15837552356020934,
+        0.6464047297297297,
+        0.766604792147806,
+        0.22853557692307697
+      ]
+    }
+  ],
+  "interpretation": "PurePG8 improves matched cellED within stages0,1,3, but pooled cellED remains worse. Cross-stage distance terms make pooled energy distance differ from mean conditional distances. Both are retained; predeclared pooled gate remains binding. Hybrid75 has best accepted donorES but does not meet baseline pooled distribution target.",
+  "scope": "Four adaptive calibration donors and two fixed generation replicates; no new evaluation data or independent validation."
+}
