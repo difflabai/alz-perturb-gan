@@ -143,6 +143,7 @@ def main():
         if candidate['operation']=='train_bcap':
             audit=read(ROOT/'analysis/bcap_checkpoint_audit.json')
             assert audit['status']=='VERIFIED_COMPLETE_NATIVE_BCAP_CHECKPOINT' and audit['checkpoint_SHA256']==candidate['checkpoint_SHA256'] and audit['native_recipe_exactly_matches_official_API_factory']
+            assert audit['all_model_keys_shapes_and_dtypes_match_declared_architecture'] and audit['finite_model_floating_point_values']==371105
         if candidate['operation']=='train_semantic':
             assert candidate['semantic_config']==deployment['semantic_config']=={'enabled':True,'temperature':1.,'epsilon':1e-4}
             audit=read(ROOT/'analysis/semantic_checkpoint_audit.json')
