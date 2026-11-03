@@ -139,8 +139,15 @@ def source_closure(auth,layout):
         manifest=pinned_inventory(data/'manifest.json',auth.get('calibration_manifest_SHA256'),pins,'calibration input')
         require(manifest.get('status')=='CPU_CALIBRATION_PROJECTED_WITHOUT_REFITTING','calibration provenance differs')
         require_members(pins,{str(data/name):pin for name,pin in manifest['files_SHA256'].items()},'calibration arrays')
-        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','train_variant','train_hybrid'),'registered calibration operation required')
-        if auth['operation'] in ('evaluate_reference','evaluate_hybrid'):
+        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','train_variant','train_hybrid','qualify_continuation'),'registered calibration operation required')
+        if auth['operation']=='qualify_continuation':
+            require(auth['cap_seconds']==900 and auth.get('qualification_only') is True and auth.get('qualification_steps')==1 and auth.get('caller_execution_limit')==40000,'finite one-step continuation qualification required')
+            checkpoint=Path(auth['checkpoint_path'])
+            require(pins.get(str(checkpoint))==auth.get('checkpoint_SHA256'),'complete parent checkpoint pin absent')
+            config=HERE.parent/'candidate.json'
+            require(str(config) in pins and read(config)==auth.get('variant_config'),'exact qualification architecture differs')
+            require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete qualification model source pins required')
+        elif auth['operation'] in ('evaluate_reference','evaluate_hybrid'):
             checkpoint=Path(auth['checkpoint_path'])
             require(pins.get(str(checkpoint))==auth.get('checkpoint_SHA256'),'complete reference checkpoint pin absent')
             if auth['operation']=='evaluate_hybrid':

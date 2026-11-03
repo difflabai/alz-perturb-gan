@@ -35,5 +35,10 @@
     "If selected, freeze the same total40000endpoint across seeds0/1/2 and match resampling query draws perseed; do notrankseeds"
   ],
   "current_active_GPU0_source_changed": false,
-  "scope": "Plan only. No new continuation GPU allocation, code deployment or performance result."
+  "scope": "Plan only. No new continuation GPU allocation, code deployment or performance result.",
+  "qualification_revision_before_any_continuation_result": {
+    "reason": "ActualsyntheticCPUhorizonqualificationtakesabout35minutes. Use a stronger direct native same-GPU0 parent restore and one-update replay qualification as the release gate; keep longsyntheticCPUaudit running independently.",
+    "native_qualification": "Separate900s finite qualification-only allocation, two replaybranches ofoneupdate each fromtheactualretained20000-update checkpoint. Compare complete initial state and all next model/optimizer/penalty/policy/RNG/usage state and metrics bitwise. No calibration scores or longfit are produced; aftercleanqualification a separate fullcontinuation authorization is stillrequired.",
+    "quality_results_used_to_change_this_gate": false
+  }
 }
