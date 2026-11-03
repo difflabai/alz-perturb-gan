@@ -16,7 +16,8 @@ def decide(candidate, incumbent):
         reasons.append('incomparable calibration data or sampling contract')
     if candidate.get('metric_role') != 'calibration_selection':
         reasons.append('evaluation results cannot select a candidate')
-    if candidate.get('status') != 'completed' or candidate.get('completed_updates') != 20000:
+    endpoint=candidate.get('fixed_endpoint',20000)
+    if type(endpoint) is not int or endpoint not in (20000,40000) or candidate.get('status') != 'completed' or candidate.get('completed_updates') != endpoint:
         reasons.append('incomplete fixed endpoint')
     keys = ['energy_score', 'cell_energy_distance', 'spread_ratio', 'generated_zero_count_rate']
     if any(type(candidate.get(k)) not in (int, float) or not math.isfinite(candidate[k]) for k in keys):

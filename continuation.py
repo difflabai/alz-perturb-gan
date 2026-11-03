@@ -1,6 +1,9 @@
 """Same-device complete-state qualification before any longer ALZ continuation."""
 import copy
 from pathlib import Path
+import signal
+import shutil
+import time
 
 import numpy as np
 import torch
@@ -54,3 +57,61 @@ def qualify(ctx, checkpoint, out):
             'complete_next_state_and_metrics_bitwise_equal': True,
             'qualification_checkpoint_path': str(path),
             'calibration_or_evaluation_scores_generated': False, 'automatic_successor': False}
+
+
+def fit_extended(ctx, out, seed, *, end_monotonic, parent=None, parent_SHA256=None):
+    """Train to the prospectively fixed40k endpoint, preserving native20k schedule."""
+    from contracts import dump, sha
+    if ctx.device.type != 'cuda':
+        raise RuntimeError('Real extended fitting requires guarded CUDA admission')
+    out = Path(out)
+    out.mkdir(exist_ok=False, parents=True)
+    if parent is None:
+        b, g, r, u, streams = variant.build(ctx.mu, ctx.theta, ctx.device, ctx.fold, seed)
+        initial = 0
+    else:
+        if parent['completed_updates'] != 20000 or parent['status'] != 'completed' or parent['seed'] != seed:
+            raise ValueError('Complete matching20k parent required')
+        b, g, r, u, streams = variant.restore(ctx, parent)
+        initial = 20000
+        expected = copy.deepcopy(parent)
+        expected['variant_config'] = update.normalized_config(parent.get('variant_config', {'z_dim': parent['recipe']['z_dim']}))
+        same(expected, variant.snapshot(ctx, b, g, r, u, seed, streams, parent['status']))
+    assert b[0].total_steps == 20000 and b[-1].completed_steps == initial
+    stops = []
+    handlers = {s: signal.signal(s, lambda sig, frame: stops.append(sig)) for s in [signal.SIGINT, signal.SIGTERM]}
+    def save(status):
+        path = out / ('final.pt' if status == 'completed' else 'recovery.pt')
+        q = variant.snapshot(ctx, b, g, r, u, seed, streams, status)
+        q.update(fixed_endpoint=40000, native_recipe_schedule_horizon=20000,
+                 initial_completed_updates=initial, parent_checkpoint_SHA256=parent_SHA256)
+        temporary = path.with_suffix('.partial.pt')
+        torch.save(q, temporary)
+        temporary.replace(path)
+        dump(out / 'checkpoint_receipt.json', {'path': path.name, 'SHA256': sha(path), 'status': status,
+                                              'completed_updates': b[-1].completed_steps, 'fixed_endpoint': 40000,
+                                              'initial_completed_updates': initial,
+                                              'new_model_updates': b[-1].completed_steps - initial,
+                                              'native_recipe_schedule_horizon': 20000})
+        return path
+    try:
+        while b[-1].completed_steps < 40000:
+            if stops or time.monotonic() >= end_monotonic:
+                raise InterruptedError('Finite extended allocation ending')
+            metrics = variant.advance(ctx, b, g, r, u, execution_limit=40000)
+            if metrics['step'] % 250 == 0 or metrics['step'] == initial + 1:
+                dump(out / 'progress.json', metrics)
+            if metrics['step'] % 1000 == 0 or (parent is not None and metrics['step'] == initial + 1):
+                path=save('recovery')
+                if parent is not None and metrics['step'] == initial + 1:
+                    shutil.copyfile(path,out/'initial_continuation.pt')
+        return b, save('completed')
+    except BaseException as error:
+        if b[-1]._phase == 'ready':
+            save('incomplete')
+        dump(out / 'failure.json', {'error': repr(error), 'completed_updates': b[-1].completed_steps,
+                                   'fixed_endpoint': 40000, 'phase': b[-1]._phase, 'primary_endpoint_complete': False})
+        raise
+    finally:
+        for s, handler in handlers.items():
+            signal.signal(s, handler)

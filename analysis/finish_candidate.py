@@ -66,7 +66,8 @@ def main():
     candidate = read(out / 'completed.json')
     checkpoint = Path(candidate['checkpoint_path'])
     receipt = read(checkpoint.parent / 'checkpoint_receipt.json')
-    assert receipt['status'] == 'completed' and receipt['completed_updates'] == 20000
+    endpoint=deployment.get('endpoint',20000)
+    assert endpoint in (20000,40000) and receipt['status'] == 'completed' and receipt['completed_updates'] == candidate['completed_updates'] == endpoint
     assert checkpoint.name == receipt['path']
     assert sha(checkpoint) == receipt['SHA256'] == candidate['checkpoint_SHA256']
     assert candidate['variant_config'] == deployment['variant_config']
@@ -110,6 +111,7 @@ def main():
         assert architecture(candidate['variant_config']) == architecture(incumbent['variant_config'])
         assert candidate.get('hybrid_config') == incumbent.get('hybrid_config')
         assert candidate.get('method', 'pg') == incumbent.get('method', 'pg')
+        assert candidate['completed_updates']==incumbent['completed_updates'], 'Frozen seed confirmation endpoint differs'
         seed = candidate['training_seed']
         assert seed in [1, 2], 'Confirmation seeds are fixed prospectively'
         baseline = read(ROOT / 'analysis' / f'baseline_calibration_seed{seed}.json')
@@ -138,6 +140,7 @@ def main():
         'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
         'attempt': args.attempt, 'candidate_commit': deployment['candidate_commit'],
         'candidate': candidate, 'previous_incumbent': incumbent, 'decision': decision,
+        'comparison_training_updates': {'candidate_total':candidate['completed_updates'],'previous_total':incumbent['completed_updates'],'equal_training_budget':candidate['completed_updates']==incumbent['completed_updates']},
         'ES_change': candidate['energy_score'] - incumbent['energy_score'],
         'cell_ED_change': candidate['cell_energy_distance'] - incumbent['cell_energy_distance'],
         'ES_relative_improvement_vs_resampling': 1 - candidate['energy_score'] / baseline['energy_score'],

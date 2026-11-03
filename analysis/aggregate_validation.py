@@ -41,7 +41,7 @@ def verified_deployment(attempt):
     assert settlement['uncertain'] is None and settlement['settlement']['status'] == 'settled'
     assert job['status'] == 'completed' and job['exit_code'] == 0 and job['reservation_released']
     candidate = read(Path(deployment['output_dir']) / 'completed.json')
-    assert candidate['completed_updates'] == 20000 and candidate['integer_count_contract_passed']
+    assert candidate['completed_updates'] == deployment.get('endpoint',20000) and candidate['completed_updates'] in (20000,40000) and candidate['integer_count_contract_passed']
     assert sha(candidate['checkpoint_path']) == candidate['checkpoint_SHA256']
     return deployment, auth, candidate
 
@@ -74,6 +74,7 @@ def main():
         for key in IDENTITY:
             assert candidate[key] == baseline[key], 'Unmatched baseline: ' + key
         assert candidate['training_seed'] == seed and candidate['generation_replicates'] == 2
+        assert candidate['completed_updates']==incumbent['completed_updates'], 'Seed endpoint changed'
         assert architecture(candidate['variant_config']) == architecture(incumbent['variant_config'])
         assert candidate.get('hybrid_config') == incumbent.get('hybrid_config')
         assert candidate['method'] == incumbent['method']

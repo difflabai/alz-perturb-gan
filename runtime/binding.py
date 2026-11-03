@@ -139,7 +139,7 @@ def source_closure(auth,layout):
         manifest=pinned_inventory(data/'manifest.json',auth.get('calibration_manifest_SHA256'),pins,'calibration input')
         require(manifest.get('status')=='CPU_CALIBRATION_PROJECTED_WITHOUT_REFITTING','calibration provenance differs')
         require_members(pins,{str(data/name):pin for name,pin in manifest['files_SHA256'].items()},'calibration arrays')
-        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','train_variant','train_hybrid','qualify_continuation'),'registered calibration operation required')
+        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','train_variant','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
         if auth['operation']=='qualify_continuation':
             require(auth['cap_seconds']==900 and auth.get('qualification_only') is True and auth.get('qualification_steps')==1 and auth.get('caller_execution_limit')==40000,'finite one-step continuation qualification required')
             checkpoint=Path(auth['checkpoint_path'])
@@ -156,11 +156,23 @@ def source_closure(auth,layout):
                 require(str(config) in pins and read(config)==auth.get('hybrid_config'),'exact hybrid config absent or changed')
                 require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete hybrid base-model source pins required')
         else:
+            if auth['operation'] in ('continue_hybrid','train_extended_hybrid'):
+                plan=HERE.parent/'training_plan.json';protocol=HERE.parent/'continuation_protocol.json'
+                require(pins.get(str(plan))==sha(plan) and read(plan)=={'fixed_endpoint':40000} and pins.get(str(protocol))==auth.get('continuation_protocol_SHA256')==sha(protocol),'registered prospective40k endpoint protocol absent')
+                require(auth.get('initial_completed_updates')==(20000 if auth['operation']=='continue_hybrid' else 0),'explicit extended initial endpoint differs')
+                proof_path=HERE.parent/'analysis/continuation_native_qualification.json'
+                require(pins.get(str(proof_path))==auth.get('continuation_qualification_SHA256')==sha(proof_path),'native continuation qualification pin absent')
+                proof=read(proof_path)
+                require(proof['status']=='VERIFIED_NATIVE_GPU0_QUALIFICATION_ONLY' and proof['clean_settlement_and_owned_release_verified'] and proof['proof']['complete_next_state_and_metrics_bitwise_equal'],'native continuation qualification invalid')
+                if auth['operation']=='continue_hybrid':require(proof['proof']['parent_checkpoint_SHA256']==auth['checkpoint_SHA256'],'qualified parent checkpoint differs')
+                if auth['operation']=='continue_hybrid':
+                    checkpoint=Path(auth['checkpoint_path'])
+                    require(pins.get(str(checkpoint))==auth.get('checkpoint_SHA256'),'complete continuation parent pin absent')
             require(auth['cap_seconds']==21600,'fixed training pipeline cap required')
             config=HERE.parent/'candidate.json'
             require(str(config) in pins and read(config)==auth.get('variant_config'),'exact selected candidate config absent or changed')
             require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete model variant source pins required')
-            if auth['operation']=='train_hybrid':
+            if auth['operation'] in ('train_hybrid','continue_hybrid','train_extended_hybrid'):
                 config=HERE.parent/'hybrid.json'
                 require(str(config) in pins and read(config)==auth.get('hybrid_config'),'exact training-hybrid mixture config absent or changed')
     for path,pin in pins.items():require(sha(path)==pin,'source/input/runtime changed: '+path)
@@ -183,7 +195,7 @@ def verify(auth_path,layout=NATIVE_LAYOUT):
     require(type(expiry) in (float,int) and math.isfinite(expiry) and expiry>time.time(),'finite one-use scheduler expiry missing or expired')
     cap=auth.get('cap_seconds')
     require((type(cap) is int and 11<=cap<=15) if layout.fixture_mode else cap in (900,21600),'fixed finite scientific job cap differs')
-    require(auth.get('fixed_endpoint')==(20000 if value['method']=='pg' else 400) and auth.get('core_GPU_hour_ceiling')==180,'fixed scientific endpoint/core envelope changed')
+    require(auth.get('fixed_endpoint')==((40000 if auth.get('operation') in ('continue_hybrid','train_extended_hybrid') else 20000) if value['method']=='pg' else 400) and auth.get('core_GPU_hour_ceiling')==180,'fixed scientific endpoint/core envelope changed')
     wanted_paths={'project_root':layout.project,'science_root':layout.science,'cache_dir':cache_path(layout,value),'output_dir':output_path(layout,value),'ledger_path':ledger_path(layout,value)}
     require(all(auth.get(k)==str(v) for k,v in wanted_paths.items()),'immutable project/cache/output/ledger identity differs')
     require(auth.get('role')=='alz_core_'+value['method'] and auth.get('command')==expected_command(layout,auth_path,value),'reviewed runtime/worker command or role differs')

@@ -53,9 +53,9 @@ def snapshot(ctx,bundle,generators,rng,usage,seed,streams,status):
  q={'schema':1,'method':'pg','fold':ctx.fold,'seed':seed,'cache_manifest_SHA256':sha(ctx.cache/'manifest.json'),'recipe':rec.to_dict(),'policy':policy.state_dict(),'prior_regularizer':rec.prior_regularizer_checkpoint(reg),'generators':{k:g.get_state() for k,g in generators.items()},'numpy_rng':rng.bit_generator.state,'usage':usage.state_dict(),'training_streams':streams,'torch_cpu_rng':torch.get_rng_state(),'torch_device_rng':torch.cuda.get_rng_state(ctx.device) if ctx.device.type=='cuda' else None,'completed_updates':policy.completed_steps,'fixed_endpoint':PG_UPDATES,'status':status}
  q['variant_config']=dict(CONFIG)
  return copy.deepcopy(q)
-def restore(ctx,q):
+def restore(ctx,q,*,expected_endpoint=PG_UPDATES):
  if normalized_config(q.get('variant_config',{'z_dim':q['recipe']['z_dim']}))!=CONFIG:raise ValueError('variant sampling configuration differs')
- if q['cache_manifest_SHA256']!=sha(ctx.cache/'manifest.json') or q['fold']!=ctx.fold or q['fixed_endpoint']!=PG_UPDATES:raise ValueError('checkpoint fold/cache/endpoint mismatch')
+ if expected_endpoint not in (20000,40000) or q['cache_manifest_SHA256']!=sha(ctx.cache/'manifest.json') or q['fold']!=ctx.fold or q['fixed_endpoint']!=expected_endpoint:raise ValueError('checkpoint fold/cache/endpoint mismatch')
  b,g,r,u,seeds=build(ctx.mu,ctx.theta,ctx.device,ctx.fold,q['seed']);rec=b[0];policy=b[-1]
  if q['recipe']!=rec.to_dict() or q['training_streams']!=seeds:raise ValueError('checkpoint recipe/seeds differ')
  policy.load_state_dict(q['policy']);rec.restore_prior_regularizer(b[-2],q['prior_regularizer'].get('prior_regularizer'))

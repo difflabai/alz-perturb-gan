@@ -44,6 +44,24 @@ class ContinuationComparison(unittest.TestCase):
         with self.assertRaises(AssertionError):
             continuation.qualify(SimpleNamespace(device=torch.device('cpu')), {}, Path('/not-created'))
 
+    def test_extended_checkpoint_requires_explicit_endpoint_and_preserves_next_update(self):
+        with tempfile.TemporaryDirectory() as directory:
+            cache = Path(directory)
+            (cache / 'manifest.json').write_text('{}')
+            ctx = fixture(cache)
+            update.configure({'z_dim': 8})
+            b, g, r, u, streams = variant.build(ctx.mu, ctx.theta, 'cpu', 0, 0)
+            variant.advance(ctx, b, g, r, u, execution_limit=40000)
+            checkpoint = variant.snapshot(ctx, b, g, r, u, 0, streams, 'synthetic')
+            checkpoint.update(fixed_endpoint=40000, native_recipe_schedule_horizon=20000)
+            with self.assertRaisesRegex(ValueError, 'endpoint mismatch'):
+                variant.restore(ctx, checkpoint)
+            expected_metrics = variant.advance(ctx, b, g, r, u, execution_limit=40000)
+            expected = variant.snapshot(ctx, b, g, r, u, 0, streams, 'synthetic')
+            rb, rg, rr, ru, rs = variant.restore(ctx, checkpoint, expected_endpoint=40000)
+            continuation.same(expected_metrics, variant.advance(ctx, rb, rg, rr, ru, execution_limit=40000))
+            continuation.same(expected, variant.snapshot(ctx, rb, rg, rr, ru, 0, rs, 'synthetic'))
+
 
 if __name__ == '__main__':
     unittest.main()

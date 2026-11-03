@@ -32,6 +32,14 @@ class SelectionContract(unittest.TestCase):
         self.candidate['completed_updates'] = 19000
         self.assertFalse(decide(self.candidate, self.incumbent)['accept'])
 
+    def test_declared40k_requires_complete40k_and_unsupported_endpoints_refuse(self):
+        self.candidate.update(fixed_endpoint=40000, completed_updates=20000)
+        self.assertFalse(decide(self.candidate, self.incumbent)['accept'])
+        self.candidate['completed_updates'] = 40000
+        self.assertTrue(decide(self.candidate, self.incumbent)['accept'])
+        self.candidate.update(fixed_endpoint=60000, completed_updates=60000)
+        self.assertFalse(decide(self.candidate, self.incumbent)['accept'])
+
     def test_evaluation_scores_cannot_select_candidates(self):
         self.candidate['metric_role'] = 'evaluation'
         self.assertFalse(decide(self.candidate, self.incumbent)['accept'])
