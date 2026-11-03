@@ -8,10 +8,10 @@ from particlegan import UpdatePolicy
 from particlegan.optim.dualnorm import NormalizedOptimizer
 from pg_model import CountGenerator,standardize_counts
 from bench_core import load_space
-from critic import VectorCritic,N_FEATURES,bag_features
+from critic import VectorCritic,N_FEATURES
 from stage_law import StageLaw,mask_adnc
 from usage import Usage
-from variant_pg_update import recipe,advance,CONFIG,normalized_config
+from variant_pg_update import recipe,advance,CONFIG,normalized_config,bag_features
 STREAM_NAMES=['generator_init','critic_init','prior_init','policy_latent','policy_penalty','policy_eval','policy_noise','cell','count','gamma_global','donor_sampler']
 def training_streams(fold,seed):
  if fold not in range(3) or seed not in SEEDS:raise ValueError('unregistered training cell')

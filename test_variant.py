@@ -178,6 +178,48 @@ class Variant(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'variant sampling configuration differs'):
                 variant.restore(ctx, checkpoint)
 
+    def test_fourier5_changes_only_fixed_fourier_block_for_real_and_fake_features(self):
+        from critic import bag_features, FREQUENCIES, EPSILON
+        update.configure({'z_dim': 8, 'fourier_feature_scale': 5.})
+        x = torch.randn(3, 11, 50, generator=torch.Generator().manual_seed(776), requires_grad=True)
+        observed = update.bag_features(x)
+        expected = bag_features(x)
+        self.assertTrue(torch.equal(observed[:, :100], expected[:, :100]))
+        self.assertTrue(torch.equal(observed[:, 100:], expected[:, 100:] * 5))
+        phase = x @ FREQUENCIES.to(x).T
+        independent = torch.cat([x.mean(1), (x.var(1, unbiased=False) + EPSILON).sqrt(),
+                                 torch.cat([phase.cos(), phase.sin()], -1).mean(1)], 1)
+        torch.testing.assert_close(observed, independent, rtol=1e-6, atol=1e-7)
+        self.assertTrue(torch.equal(observed, update.bag_features(x.flip(1))))
+        self.assertTrue(torch.equal(observed.flip(0), update.bag_features(x.flip(0))))
+        observed.sum().backward()
+        self.assertTrue(torch.isfinite(x.grad).all() and x.grad.abs().sum() > 0)
+        with tempfile.TemporaryDirectory() as d:
+            ctx = fixture(Path(d))
+            original_batch = original.Context.batch(ctx, np.random.default_rng(100))
+            actual = ctx.batch(np.random.default_rng(100))
+            same(original_batch[1:], actual[1:])
+            self.assertTrue(torch.equal(actual[0][:, :100], original_batch[0][:, :100]))
+            self.assertTrue(torch.equal(actual[0][:, 100:], original_batch[0][:, 100:] * 5))
+
+    def test_fourier5_complete_continuation_and_scale_mismatch_rejection(self):
+        update.configure({'z_dim': 8, 'fourier_feature_scale': 5.})
+        with tempfile.TemporaryDirectory() as d:
+            cache = Path(d)
+            (cache / 'manifest.json').write_text('{}')
+            ctx = fixture(cache)
+            b, g, r, u, streams = variant.build(ctx.mu, ctx.theta, 'cpu', 0, 0)
+            variant.advance(ctx, b, g, r, u, execution_limit=20000)
+            checkpoint = variant.snapshot(ctx, b, g, r, u, 0, streams, 'synthetic')
+            metrics = variant.advance(ctx, b, g, r, u, execution_limit=20000)
+            expected = variant.snapshot(ctx, b, g, r, u, 0, streams, 'synthetic')
+            rb, rg, rr, ru, rs = variant.restore(ctx, checkpoint)
+            same(metrics, variant.advance(ctx, rb, rg, rr, ru, execution_limit=20000))
+            same(expected, variant.snapshot(ctx, rb, rg, rr, ru, 0, rs, 'synthetic'))
+            update.configure({'z_dim': 8, 'fourier_feature_scale': 1.})
+            with self.assertRaisesRegex(ValueError, 'variant sampling configuration differs'):
+                variant.restore(ctx, checkpoint)
+
 
 if __name__ == '__main__':
     unittest.main()

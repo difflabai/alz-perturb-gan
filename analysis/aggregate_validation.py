@@ -23,7 +23,8 @@ def sha(path):
 
 def architecture(value):
     return dict(z_dim=value['z_dim'], stage_balance=value.get('stage_balance', False),
-                cell_z_dim=value.get('cell_z_dim', 8), theta_init_scale=value.get('theta_init_scale', 1.))
+                cell_z_dim=value.get('cell_z_dim', 8), theta_init_scale=value.get('theta_init_scale', 1.),
+                fourier_feature_scale=value.get('fourier_feature_scale', 1.))
 
 
 def scientific_sources(auth):

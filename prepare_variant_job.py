@@ -21,10 +21,11 @@ def main():
     parser.add_argument('--hybrid', action='store_true')
     args = parser.parse_args()
     config = b.read(ROOT / 'candidate.json')
-    b.require(set(config) == {'z_dim', 'stage_balance', 'cell_z_dim', 'theta_init_scale'} and config['z_dim'] in (2, 8)
+    b.require(set(config) == {'z_dim', 'stage_balance', 'cell_z_dim', 'theta_init_scale', 'fourier_feature_scale'} and config['z_dim'] in (2, 8)
               and type(config['stage_balance']) is bool and type(config['cell_z_dim']) is int
               and config['cell_z_dim'] in (8, 32) and type(config['theta_init_scale']) in (int, float)
-              and config['theta_init_scale'] in (1., 10.), 'registered candidate config required')
+              and config['theta_init_scale'] in (1., 10.) and type(config['fourier_feature_scale']) in (int, float)
+              and config['fourier_feature_scale'] in (1., 5.), 'registered candidate config required')
     hybrid = b.read(ROOT / 'hybrid.json') if args.hybrid else None
     if hybrid is not None:
         fraction = hybrid.get('pg_bag_fraction')
@@ -48,7 +49,7 @@ def main():
                 output_dir=str(b.output_path(b.NATIVE_LAYOUT, value)),
                 ledger_path=str(b.ledger_path(b.NATIVE_LAYOUT, value)),
                 variant_config=config, hybrid_config=hybrid, candidate_commit=commit,
-                source_review='Original science/runtime/input/guard preserved; exact optimizer/update AST and disabled-sampling original full-state parity; balanced8bags-per-stage test, complete continuation and sampling-config mismatch rejection; source-derived15CPU ownership/accounting tests. New native candidate quality unproven.')
+                source_review='Original science/runtime/input/guard preserved; exact optimizer/update AST and disabled-sampling original full-state parity; nineCPU parity/continuation tests including Fourier-block-only scaling and permutation invariance; source-derived15CPU ownership/accounting tests. New native candidate quality unproven.')
     auth['command'] = b.expected_command(b.NATIVE_LAYOUT, auth_path, value)
     research_paths = [*ROOT.glob('*.py'), *(ROOT / 'runtime').glob('*.py'), *(ROOT / 'model').glob('*.py')]
     research = {str(p): b.sha(p) for p in research_paths}
