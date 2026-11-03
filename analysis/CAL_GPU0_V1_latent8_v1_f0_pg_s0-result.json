@@ -1,0 +1,99 @@
+{
+  "utc": "2026-11-03T17:09:01.989648+00:00",
+  "attempt": "CAL_GPU0_V1_latent8_v1_f0_pg_s0",
+  "candidate_commit": "7faff6b709af4d777e7e7ab541030e79da997925",
+  "candidate": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9755667140392312,
+    "cell_energy_distance": 0.25327614831020107,
+    "spread_ratio": 0.9490753309366126,
+    "within_condition_spread_ratio": 0.8756998631077559,
+    "coverage80": 0.6490384615384616,
+    "generated_zero_count_rate": 3.125e-06,
+    "per_donor_energy_score": [
+      1.1734055831400327,
+      2.8064253482400496,
+      1.8097970210337848,
+      2.1126389037430577
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7826674758588661,
+      1.592456388753198,
+      1.137019646507424,
+      0.5136302106926189
+    ],
+    "status": "completed",
+    "completed_updates": 20000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_latent8_v1_f0_pg_s0",
+    "operation": "train_variant",
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
+    "variant_config": {
+      "z_dim": 8
+    },
+    "automatic_successor": false
+  },
+  "previous_incumbent": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 2.1645178795687547,
+    "cell_energy_distance": 0.3310092348599314,
+    "spread_ratio": 0.788807800385467,
+    "within_condition_spread_ratio": 0.7222611779014332,
+    "coverage80": 0.5480769230769231,
+    "generated_zero_count_rate": 6.25e-06,
+    "per_donor_energy_score": [
+      1.3069695212280739,
+      3.2145305442211463,
+      1.8914844983894388,
+      2.24508695443636
+    ],
+    "per_stage_cell_energy_distance": [
+      0.8682113202949067,
+      1.9108320925365367,
+      1.2101440748993957,
+      0.6372571713503428
+    ],
+    "status": "completed",
+    "completed_updates": 20000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_reference_eval_000_f0_pg_s0",
+    "operation": "evaluate_reference",
+    "checkpoint_path": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/runs_gpu0_v1/GPU0_V1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "c6fdab29e87dca26b5742208999e7552392ff25bab07056214da747cfb9e4fea",
+    "automatic_successor": false
+  },
+  "decision": {
+    "accept": true,
+    "reasons": []
+  },
+  "ES_change": -0.1889511655295235,
+  "cell_ED_change": -0.07773308654973032,
+  "ES_relative_improvement_vs_resampling": 0.049882704117509835,
+  "cell_ED_difference_vs_resampling": 0.010497895227021381,
+  "charged_GPU_seconds": 1475.293240597006,
+  "independent_saved_scores_checkpoint_and_count_exemplars_verified": true,
+  "scope": "Four adaptive calibration donors, one training seed; no evaluation metric was used for selection."
+}
