@@ -1,0 +1,22 @@
+{
+  "status": "NINE_CPU_PARITY_AND_FOURIER_CHECKS_PASSED",
+  "utc": "2026-11-03T19:08:14.871158+00:00",
+  "source_SHA256": {
+    "/ml2/alz/test_variant.py": "6de8f8bbaae8b4ed204520d6e22bb341f83e524f65aab284b3a225899ff8f207",
+    "/ml2/alz/model/variant_pg_adapter.py": "76fd5e532a4190ec111b38b3b51216d15a5b4f04998a98e7bf08631b6da8d592",
+    "/ml2/alz/model/variant_pg_update.py": "65f85a1f17b9b1b5263ecf38f39d11d9960d50e65e667dc888c7c9b9b65ccc69"
+  },
+  "command": [
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/bin/python",
+    "-I",
+    "-S",
+    "-B",
+    "-c",
+    "import sys,runpy;sys.path[:0]=['/ml2/alz/model', '/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103', '/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark', '/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages', '/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/.venv312/lib/python3.12/site-packages'];sys.argv=['test_variant.py'];runpy.run_path('/ml2/alz/test_variant.py',run_name='__main__')"
+  ],
+  "CUDA_VISIBLE_DEVICES": "",
+  "tests_passed": 9,
+  "log": "artifacts/fourier-cpu-qualification.log",
+  "GPU1_native_admission_or_review_proven": false,
+  "scope": "Synthetic CPU tests only. Exact original default state and update parity; feature-block math/permutation/finite gradients; complete nondefault checkpoint continuation and configuration mismatch rejection. No model quality inference."
+}
