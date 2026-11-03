@@ -4,7 +4,7 @@
     "bispf",
     "bispf_optimized"
   ],
-  "new_training_updates": 20000,
+  "new_training_updates": 40000,
   "protocol_SHA256": "6a4bea0b3448a6de3322e790ea52ef02639ce57a2dc05f5c1be3b709aeff93f7",
   "manifest_SHA256": "c3649115c2ff98d18d658bad1f93a3487311928e1166e81cdc7599cc09ee4bcc",
   "pure_only": true,
@@ -132,6 +132,86 @@
       "native_recipe": "bispf_optimized",
       "ES_improvement_vs_resampling_percent": 3.4516678532900746,
       "cell_ED_difference_vs_resampling": 0.04668314783159033,
+      "joint_baseline_target_met": false
+    },
+    {
+      "metric_role": "calibration_selection",
+      "generation_replicates": 2,
+      "donors": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "training_seed": 0,
+      "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+      "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+      "sampling_contract": "calibration_equal_stage375_priority_v1",
+      "energy_score": 2.0096927952371675,
+      "cell_energy_distance": 0.2706714017894054,
+      "spread_ratio": 0.9558269066041274,
+      "within_condition_spread_ratio": 0.8802670084822597,
+      "coverage80": 0.6923076923076923,
+      "generated_zero_count_rate": 3.125e-06,
+      "per_donor_energy_score": [
+        1.2521055301258133,
+        2.818084928333546,
+        1.8935154304859005,
+        2.0750652920034103
+      ],
+      "per_stage_cell_energy_distance": [
+        0.9172697106862913,
+        1.5629886849114456,
+        1.2048084823865768,
+        0.5752826696996802
+      ],
+      "status": "VERIFIED_PURE_PG_ONLY",
+      "completed_updates": 20000,
+      "fixed_endpoint": 20000,
+      "integer_count_contract_passed": true,
+      "allocation_id": "ALZ_CAL_V1_semantic_v1_f0_pg_s0",
+      "operation": "train_semantic",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_semantic_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "a5def10a8df2b70e2f4a035b10ebcad44ed6b9799187a58d0763377b1b89fdb9",
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": false,
+        "cell_z_dim": 8,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 1.0
+      },
+      "method": "pg_semantic_observation",
+      "hybrid_config": null,
+      "qualification_only": false,
+      "new_model_updates": 20000,
+      "initial_completed_updates": 0,
+      "native_recipe_schedule_horizon": 20000,
+      "parent_checkpoint_SHA256": null,
+      "automatic_successor": false,
+      "generation": "direct_iter_pg",
+      "real_bag_replacements": 0,
+      "pure_only": true,
+      "native_recipe": "bispf_optimized",
+      "pure_formulation": "semantic_observation",
+      "semantic_config": {
+        "enabled": true,
+        "temperature": 1.0,
+        "epsilon": 0.0001
+      },
+      "semantic_observation": {
+        "enabled": true,
+        "temperature": 1.0,
+        "epsilon": 0.0001,
+        "classifier_state_SHA256": "dd0a7a709c01816206a63d410c4100fd84703c329cadfe80ed055d654706da81"
+      },
+      "classifier_file_SHA256": "090fbc7370fe55b157354ba4ca14be285a8284150dc46a79be0450f0cd23e479",
+      "formulation": "semantic_observation",
+      "complete_clean_settlement_verified": true,
+      "charged_GPU_seconds": 1532.6854336810065,
+      "accepted": false,
+      "decision_evidence": "/ml2/alz/analysis/CAL_GPU0_V1_semantic_v1_f0_pg_s0-result.json",
+      "ES_improvement_vs_resampling_percent": 3.3470309761787997,
+      "cell_ED_difference_vs_resampling": 0.027893148706225723,
       "joint_baseline_target_met": false
     },
     {
@@ -364,7 +444,7 @@
     }
   ],
   "best_pure_by_energy_score": "latent8",
-  "suite_charged_GPU_seconds": 777.1170432069921,
+  "suite_charged_GPU_seconds": 2309.8024768879986,
   "joint_target_met_any": false,
   "limitations": "Adaptive4calibrationdonors, firstfold,seed0,two generation replicates.40k uses extra training compute. Not evaluation or external SOTA.",
   "hybrid_incumbent_SHA256": "c83f7f184b12eb4e705f4a4c6492e332bcab7c29482f834d1c70dd7c48071fc7",
