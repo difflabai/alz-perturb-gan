@@ -1,0 +1,132 @@
+{
+  "utc": "2026-11-03T20:25:10.361230+00:00",
+  "attempt": "CAL_GPU0_V1_continue40k_h75_v1_f0_pg_s0",
+  "candidate_commit": "20cfe0942d4da3a2acb317b40af7e481ee4635c7",
+  "candidate": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 2.024950331804717,
+    "cell_energy_distance": 0.2555672009275174,
+    "spread_ratio": 0.9812669369850426,
+    "within_condition_spread_ratio": 0.9054262582740722,
+    "coverage80": 0.6682692307692308,
+    "generated_zero_count_rate": 6.2499999999999995e-06,
+    "per_donor_energy_score": [
+      1.1645198290340706,
+      3.004741644081413,
+      1.8428845351042535,
+      2.087655318999131
+    ],
+    "per_stage_cell_energy_distance": [
+      0.853779640720921,
+      1.6916779171934948,
+      1.127889383444864,
+      0.4998388284136759
+    ],
+    "status": "completed",
+    "completed_updates": 40000,
+    "fixed_endpoint": 40000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_continue40k_h75_v1_f0_pg_s0",
+    "operation": "continue_hybrid",
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_continue40k_h75_v1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "b33313581137ef12bf00988ccec948f134f15e307af45d1d5a0655f880718cca",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "method": "pg_resampling_hybrid_40k",
+    "hybrid_config": {
+      "pg_bag_fraction": 0.75
+    },
+    "qualification_only": false,
+    "new_model_updates": 20000,
+    "initial_completed_updates": 20000,
+    "native_recipe_schedule_horizon": 20000,
+    "parent_checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
+    "automatic_successor": false
+  },
+  "previous_incumbent": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9688403041237994,
+    "cell_energy_distance": 0.2528690821338335,
+    "spread_ratio": 0.9814293736907242,
+    "within_condition_spread_ratio": 0.9148400895833021,
+    "coverage80": 0.6826923076923077,
+    "generated_zero_count_rate": 1.5625e-06,
+    "per_donor_energy_score": [
+      1.184894817935084,
+      2.829881038126534,
+      1.7803760120413101,
+      2.0802093483922697
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7870426610292096,
+      1.635408347121511,
+      1.1428956879526604,
+      0.5078458835014219
+    ],
+    "status": "completed",
+    "completed_updates": 20000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_hybrid75_v1_f0_pg_s0",
+    "operation": "evaluate_hybrid",
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false
+    },
+    "method": "pg_resampling_hybrid",
+    "hybrid_config": {
+      "pg_bag_fraction": 0.75
+    },
+    "qualification_only": false,
+    "new_model_updates": 0,
+    "automatic_successor": false,
+    "candidate_commit": "6c8107fcf3504a7617ccf126e996cb05b38d9d7a"
+  },
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "comparison_training_updates": {
+    "candidate_total": 40000,
+    "previous_total": 20000,
+    "equal_training_budget": false
+  },
+  "ES_change": 0.05611002768091766,
+  "cell_ED_change": 0.002698118793683868,
+  "ES_relative_improvement_vs_resampling": 0.02613244094552869,
+  "cell_ED_difference_vs_resampling": 0.012788947844337706,
+  "charged_GPU_seconds": 1544.8280058419914,
+  "independent_saved_scores_checkpoint_and_count_exemplars_verified": true,
+  "scope": "Four adaptive calibration donors, one training seed; no evaluation metric was used for selection."
+}
