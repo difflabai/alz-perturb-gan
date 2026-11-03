@@ -1,0 +1,30 @@
+{
+  "status": "PASSED_PRIVATE_CPU_BOTH_CARD_ENVELOPE_REGRESSIONS",
+  "utc": "2026-11-03T21:09:18.759809+00:00",
+  "rows": [
+    {
+      "card": "0",
+      "tests_passed": 4,
+      "actual_backend_postreserve_cancellation_before_guard_verified": true,
+      "boundary_admission_and_plus_one_refusal_verified": true,
+      "parallel_Controller_postchecks_both_refused_cancelled_zero_charge": true
+    },
+    {
+      "card": "1",
+      "tests_passed": 4,
+      "actual_backend_postreserve_cancellation_before_guard_verified": true,
+      "boundary_admission_and_plus_one_refusal_verified": true,
+      "parallel_Controller_postchecks_both_refused_cancelled_zero_charge": true
+    }
+  ],
+  "source_SHA256": {
+    "/ml2/alz/analysis/check_cross_card_envelope.py": "e4b94521c0b7a56ec756cebbb4fd53be340653722f7a2a847d9919dfefa7471c",
+    "/ml2/alz/runtime/binding.py": "37bdda66e1b148012d2d344d6ba99f3990d448be0948456b238c523c1768cd52",
+    "/ml2/alz/runtime/project_runner_gpu0.py": "0fa6e1ce9f1ec8f46bd153649320dc5724d3dacad9b1b008f2f42fbdd40fbd2b",
+    "/ml2/alz/gpu1_runtime/binding.py": "f6ff135485988ee0422b241379b21cc2ff4644d4575a978fedf89f13d7adcfab",
+    "/ml2/alz/gpu1_runtime/project_runner_gpu0.py": "14e5f686239a43f81eb098e7ccb2acef6f47a134f92a99b036fea32427e90abe"
+  },
+  "scope": "Actual per-card owner/backend boundary/precheck/+1s refusal and forced postreserve race/cancel fixtures; simultaneous shared private immutableController reservations/postchecks/cancellation under barrier, not two complete simultaneous native owners. No canonical mutation or GPU/physical leases.",
+  "native_G1_qualified": false,
+  "independent_integrated_review_complete": false
+}
