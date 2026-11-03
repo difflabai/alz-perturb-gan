@@ -1,0 +1,19 @@
+{
+  "status": "PROSPECTIVE_FALLBACK_ONLY_NOT_IMPLEMENTED_OR_ALLOCATED",
+  "utc": "2026-11-03T18:43:50.982945+00:00",
+  "condition": "Only consider after theta10 endpoint and its keep/revert decision; if no jointly good configuration is ready for frozen seed confirmation.",
+  "hypothesis": "The critic sees Fourier distribution features divided by5 while PC means and SDs retain their scales. Giving the fixed Fourier block more weight may improve joint cell distribution fidelity.",
+  "evidence": "Fitting-only reference critic probe: Fourier block raw input-gradient norms about1.8-1.9 and feature mean errors .11-.17, versus means gradients10.5-11.7 and errors1.2-2.25. Original critic.py explicitly divides Fourier coordinates by5. This is descriptive and may reflect fit/scale, not a causal bottleneck.",
+  "single_change": {
+    "fourier_feature_scale": 5.0,
+    "meaning": "Undo the fixed division by5 only for the 50 Fourier observation coordinates, identically on real/fake training bags. Preserve fixed frequencies, first100 moment coordinates, network width, training donors, optimizer/loss/update code,20k endpoint, generation law and metrics."
+  },
+  "qualification_before_any_job": [
+    "Defaultscale1 must reproduce original complete state and next update exactly",
+    "Real/fake use identical wrapper; default and nondefault checked against independent fixed-frequency feature calculation",
+    "Retain donor/cell permutation invariance, finite nonzero gradients and complete exact checkpoint continuation",
+    "Bind scale into checkpoint and authorization; reject mismatch; no edits while current pinned job active"
+  ],
+  "comparison": "Predeclared four-donor calibration ES primary, pooled cellED cannot worsen incumbent, spread guard retained. Keep accepted configuration or actualgitrevert the candidate; no metric substitutions or seed ranking.",
+  "limitations": "Feature scaling changes the training observation geometry and is a model-choice confound, not a pure implementation bug fix. No prediction of improved endpoint scores."
+}
