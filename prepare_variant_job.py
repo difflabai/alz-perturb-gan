@@ -21,9 +21,10 @@ def main():
     parser.add_argument('--hybrid', action='store_true')
     args = parser.parse_args()
     config = b.read(ROOT / 'candidate.json')
-    b.require(set(config) == {'z_dim', 'stage_balance', 'cell_z_dim'} and config['z_dim'] in (2, 8)
+    b.require(set(config) == {'z_dim', 'stage_balance', 'cell_z_dim', 'theta_init_scale'} and config['z_dim'] in (2, 8)
               and type(config['stage_balance']) is bool and type(config['cell_z_dim']) is int
-              and config['cell_z_dim'] in (8, 32), 'registered candidate config required')
+              and config['cell_z_dim'] in (8, 32) and type(config['theta_init_scale']) in (int, float)
+              and config['theta_init_scale'] in (1., 10.), 'registered candidate config required')
     hybrid = b.read(ROOT / 'hybrid.json') if args.hybrid else None
     if hybrid is not None:
         fraction = hybrid.get('pg_bag_fraction')

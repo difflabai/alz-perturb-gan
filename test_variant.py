@@ -157,6 +157,27 @@ class Variant(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'variant sampling configuration differs'):
                 variant.restore(ctx, checkpoint)
 
+    def test_theta10_initialization_and_complete_continuation(self):
+        update.configure({'z_dim': 8, 'cell_z_dim': 8, 'theta_init_scale': 10.})
+        with tempfile.TemporaryDirectory() as d:
+            cache = Path(d)
+            (cache / 'manifest.json').write_text('{}')
+            ctx = fixture(cache)
+            b, g, r, u, streams = variant.build(ctx.mu, ctx.theta, 'cpu', 0, 0)
+            actual = torch.nn.functional.softplus(b[1].log_theta) + .05
+            torch.testing.assert_close(actual, ctx.theta * 10, rtol=1e-6, atol=1e-6)
+            variant.advance(ctx, b, g, r, u, execution_limit=20000)
+            checkpoint = variant.snapshot(ctx, b, g, r, u, 0, streams, 'synthetic')
+            expected_metrics = variant.advance(ctx, b, g, r, u, execution_limit=20000)
+            expected = variant.snapshot(ctx, b, g, r, u, 0, streams, 'synthetic')
+            rb, rg, rr, ru, rs = variant.restore(ctx, checkpoint)
+            observed_metrics = variant.advance(ctx, rb, rg, rr, ru, execution_limit=20000)
+            same(expected_metrics, observed_metrics)
+            same(expected, variant.snapshot(ctx, rb, rg, rr, ru, 0, rs, 'synthetic'))
+            update.configure({'z_dim': 8, 'theta_init_scale': 1.})
+            with self.assertRaisesRegex(ValueError, 'variant sampling configuration differs'):
+                variant.restore(ctx, checkpoint)
+
 
 if __name__ == '__main__':
     unittest.main()

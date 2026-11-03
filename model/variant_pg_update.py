@@ -9,12 +9,12 @@ from particlegan.optim.constraint_geometry import constraint_geometry_backward
 from pg_model import critic_features
 from critic import bag_features,N_FEATURES
 
-CONFIG={'z_dim':2,'stage_balance':False,'cell_z_dim':8}
+CONFIG={'z_dim':2,'stage_balance':False,'cell_z_dim':8,'theta_init_scale':1.0}
 
 def normalized_config(value):
-    if not isinstance(value,dict) or 'z_dim' not in value or set(value)-{'z_dim','stage_balance','cell_z_dim'} or type(value['z_dim']) is not int or value['z_dim'] not in (2,8) or type(value.get('stage_balance',False)) is not bool or type(value.get('cell_z_dim',8)) is not int or value.get('cell_z_dim',8) not in (8,32):
+    if not isinstance(value,dict) or 'z_dim' not in value or set(value)-{'z_dim','stage_balance','cell_z_dim','theta_init_scale'} or type(value['z_dim']) is not int or value['z_dim'] not in (2,8) or type(value.get('stage_balance',False)) is not bool or type(value.get('cell_z_dim',8)) is not int or value.get('cell_z_dim',8) not in (8,32) or type(value.get('theta_init_scale',1.0)) not in (int,float) or value.get('theta_init_scale',1.0) not in (1.,10.):
         raise ValueError('registered donor latent dimension2or8 and Boolean stage balance required')
-    return {'z_dim':value['z_dim'],'stage_balance':value.get('stage_balance',False),'cell_z_dim':value.get('cell_z_dim',8)}
+    return {'z_dim':value['z_dim'],'stage_balance':value.get('stage_balance',False),'cell_z_dim':value.get('cell_z_dim',8),'theta_init_scale':float(value.get('theta_init_scale',1.0))}
 
 def configure(value):
     selected=normalized_config(value)
