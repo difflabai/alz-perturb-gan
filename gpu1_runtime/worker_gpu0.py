@@ -23,7 +23,7 @@ def run_scientific(auth,admission,layout):
     runtime=b.runtime_path(layout,b.cell(auth))
     b.require(Path(sys.executable).absolute()==runtime.absolute() and sys.version_info[:2]==(3,12),'exact PG scientific interpreter required')
     sys.path.extend(map(str,b.native_site_roots(b.cell(auth),auth['files_SHA256'])))
-    sys.path.insert(0,str(layout.science));sys.path.insert(0,str(b.HERE.parent))
+    sys.path.insert(0,str(layout.science));sys.path.insert(0,str(b.RESEARCH))
     def deny(self,address):raise RuntimeError('calibration worker network disabled')
     socket.socket.connect=deny;socket.socket.connect_ex=deny
     os.environ.update(WANDB_MODE='disabled',WANDB_DISABLED='true',OTEL_SDK_DISABLED='true',DO_NOT_TRACK='1',HF_HUB_OFFLINE='1',JAX_PLATFORMS='cpu',CUBLAS_WORKSPACE_CONFIG=':4096:8')
@@ -37,7 +37,7 @@ def run_scientific(auth,admission,layout):
     try:
         if auth['operation'] in ('evaluate_reference','evaluate_hybrid'):
             if auth['operation']=='evaluate_hybrid':
-                sys.path.insert(0,str(b.HERE.parent/'model'))
+                sys.path.insert(0,str(b.RESEARCH/'model'))
                 import variant_pg_update
                 variant_pg_update.configure(auth['variant_config'])
                 from variant_pg_adapter import Context,restore
@@ -50,7 +50,7 @@ def run_scientific(auth,admission,layout):
             bundle,_,_,_,_=restore(ctx,checkpoint)
             checkpoint_path=Path(auth['checkpoint_path'])
         else:
-            sys.path.insert(0,str(b.HERE.parent/'model'))
+            sys.path.insert(0,str(b.RESEARCH/'model'))
             import variant_pg_update
             variant_pg_update.configure(auth['variant_config'])
             from variant_pg_adapter import Context,fit

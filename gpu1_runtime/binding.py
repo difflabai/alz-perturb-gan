@@ -15,6 +15,7 @@ import sys
 import time
 
 HERE=Path(__file__).resolve().parent
+RESEARCH=HERE.parent/'gpu1_science_snapshot'
 PROJECT=Path('/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark')
 SCIENCE=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103')
 GUARD=HERE/'guard'
@@ -134,7 +135,7 @@ def source_closure(auth,layout):
     if not layout.fixture_mode:
         extra=auth.get('research_source_SHA256',{})
         require_members(pins,extra,'calibration research source')
-        require(all(str(p) in extra for p in HERE.parent.glob('*.py')),'complete calibration scorer/orchestrator source pins required')
+        require(all(str(p) in extra for p in RESEARCH.glob('*.py')),'complete calibration scorer/orchestrator source pins required')
         data=HERE.parent/'data/calibration_fold0'
         manifest=pinned_inventory(data/'manifest.json',auth.get('calibration_manifest_SHA256'),pins,'calibration input')
         require(manifest.get('status')=='CPU_CALIBRATION_PROJECTED_WITHOUT_REFITTING','calibration provenance differs')
@@ -145,16 +146,16 @@ def source_closure(auth,layout):
             require(pins.get(str(checkpoint))==auth.get('checkpoint_SHA256'),'complete reference checkpoint pin absent')
             if auth['operation']=='evaluate_hybrid':
                 require(auth['cap_seconds']==900,'finite hybrid sampling cap required')
-                config=HERE.parent/'hybrid.json'
+                config=HERE/'qualification_sampler.json'
                 require(str(config) in pins and read(config)==auth.get('hybrid_config'),'exact hybrid config absent or changed')
-                require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete hybrid base-model source pins required')
+                require(all(str(p) in extra for p in (RESEARCH/'model').glob('*.py')),'complete hybrid base-model source pins required')
         else:
             require(auth['cap_seconds']==21600,'fixed training pipeline cap required')
             config=HERE.parent/'candidate.json'
             require(str(config) in pins and read(config)==auth.get('variant_config'),'exact selected candidate config absent or changed')
-            require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete model variant source pins required')
+            require(all(str(p) in extra for p in (RESEARCH/'model').glob('*.py')),'complete model variant source pins required')
             if auth['operation']=='train_hybrid':
-                config=HERE.parent/'hybrid.json'
+                config=HERE/'qualification_sampler.json'
                 require(str(config) in pins and read(config)==auth.get('hybrid_config'),'exact training-hybrid mixture config absent or changed')
     for path,pin in pins.items():require(sha(path)==pin,'source/input/runtime changed: '+path)
 
@@ -195,6 +196,14 @@ def verify(auth_path,layout=NATIVE_LAYOUT):
         require(all(p.resolve().is_relative_to(root) for p in paths),'CPU fixture path escapes its isolated root')
     else:
         require(layout==NATIVE_LAYOUT and Path(auth['registry_path']).resolve()==PROJECT/'cooperative_gpu1_calibration_v1/live_registry','native GPU1 root/registry differs')
+    if not layout.fixture_mode:
+        base=read(HERE/'qualification_base.json')
+        require(auth.get('operation')=='evaluate_hybrid' and auth.get('qualification_only') is True and value['seed']==0 and cap==900,'GPU1 scope is retained zero-update qualification only')
+        require(auth.get('checkpoint_path')==base['checkpoint_path'] and auth.get('checkpoint_SHA256')==base['checkpoint_SHA256'] and auth.get('variant_config')==base['variant_config'],'exact retained GPU1 parent differs')
+        require(auth.get('hybrid_config')==read(HERE/'qualification_sampler.json')=={'pg_bag_fraction':.75},'fixed GPU1 qualification sampler differs')
+        require(policy.get('alz_role_lock')=='/mnt/nvme/sliders/locks/gpu-1-alz-training.lock','exact exclusive ALZ role protection absent')
+        require(policy['roles']['alz_core_pg']=={'gpu_bytes':3*1024**3,'ram_bytes':6*1024**3},'reviewed small shared ALZ role differs')
+        require(str(RESEARCH/'SOURCE_ORIGINS.json') in auth['files_SHA256'],'literal frozen science inventory absent')
     source_closure(auth,layout)
     return auth,hashlib.sha256(raw).hexdigest()
 
