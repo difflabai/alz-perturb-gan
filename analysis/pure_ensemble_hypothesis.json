@@ -1,0 +1,21 @@
+{
+  "status": "CONDITIONAL_HYPOTHESIS_BEFORE_COMPLEMENTARITY_DIAGNOSTIC_NOT_NATIVE_ADMITTED",
+  "condition": "Consider only if the active network-rate trial does not satisfy the joint objective. Diagnose complementarity first; do not allocate or select from an analytic estimate.",
+  "rationale": "Selected pure PG8 has lower donor energy score, while the rejected learned-observation model has lower pooled cell energy distance. An ensemble of their generated whole-bag distributions may improve both through forecast complementarity. It may also fail; rejection of the learned model remains in force.",
+  "models": [
+    {"name": "PG8", "weight": 0.75, "checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2", "completed_updates": 20000},
+    {"name": "learned_observation", "weight": 0.25, "checkpoint_SHA256": "9e59988d216ef5f6d5fabf798ba204898a4d71905906938d486147e893b4df11", "completed_updates": 20000}
+  ],
+  "single_registered_weight": "Exactly 75/25, chosen before the cross-forecast calculation. No mixture-weight grid or target-based bag selection.",
+  "generation": "Whole generated bags, never real-count resampling or within-bag cell blending. For every stage/replicate, select exactly50 of200 bag indices with numpy.default_rng(20261108+100*replicate+stage).choice(200,50,replace=False) from the learned model; remaining150 use PG8. Retain common frozen condition/library schedules and native integer-count validation. Generate each complete model branch separately with its own original streams before selection; interleaving would couple the global Gamma RNG.",
+  "diagnostic": "Read only already generated summaries/cells and saved scalar scores. Check checkpoint and array hashes and matched cohort/trace identity. Compute between-forecast donor and cell energy distances. Use mixture energy identities at the one registered weight to estimate scores; no held-out target arrays, new generation or training. U-statistic finite-sample and reservoir estimates are not actual fixed-mask native ensemble results.",
+  "scope": "100percent GAN-generated pure ensemble, distinguished from one ParticleGAN model and from the prior PG/real-resampling hybrid. Both parent models used the native optimized BISPF API. This adds no fourth trainer family or auxiliary loss.",
+  "compute": "Two separately trained20k models: total40000 parent updates. Existing parent training is retained; a prospective bounded generation-only evaluation would add zero updates. Do not claim equal training compute to a single20k PG8 model.",
+  "pre_native_requirements": [
+    "Only after current owned GPU0 job completes and settles: isolate and qualify a new exact-source ensemble operation, two parent/checkpoint/config bindings, integer contracts and existing accounting/resource guards.",
+    "Qualification-only zero/one-weight controls reproduce each parent's saved arrays and integer count exemplars bitwise, with sequential branch RNG isolation and no ranking from controls.",
+    "Prospective900second cap for each separately admitted qualification or evaluation, no automatic successors or unguarded GPU work.",
+    "A real ensemble result needs both native fixed sampling replicates, independent saved-score/count/hash checks, parent-update accounting and actual evidence/commit/revert selection against the proper pure scope. Estimates cannot replace these checks.",
+    "Stable confirmation would freeze both parent configurations and retrain both for seeds1/2 with the fixed mixture and no seed ranking. Current single-model confirmation binding is not sufficient."
+  ]
+}
