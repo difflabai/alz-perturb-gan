@@ -41,7 +41,25 @@ def main():
     assert settlement['uncertain'] is None
     assert settlement['settlement']['status'] == 'settled'
     job = read(ledger)['jobs'][0]
-    assert job['status'] == 'completed' and job['reservation_released'] and job['exit_code'] == 0
+    assert job['reservation_released'], 'Do not edit or revert source before proven cleanup'
+    assert not git('status', '--porcelain'), 'Commit or reconcile other work before recording a candidate decision'
+    if job['status'] != 'completed' or job['exit_code'] != 0:
+        failure = {'attempt': args.attempt, 'candidate_commit': deployment['candidate_commit'],
+                   'decision': {'accept': False, 'reasons': ['native attempt failed or fixed endpoint incomplete']},
+                   'guard_status': job['status'], 'exit_code': job['exit_code'],
+                   'charged_GPU_seconds': settlement['settlement']['charged_GPU_seconds'],
+                   'previous_incumbent_preserved': True,
+                   'worker_failure': read(out / 'failure.json') if (out / 'failure.json').exists() else None,
+                   'fit_failure': read(out / 'fit/failure.json') if (out / 'fit/failure.json').exists() else None,
+                   'checkpoint': read(out / 'fit/checkpoint_receipt.json') if (out / 'fit/checkpoint_receipt.json').exists() else None}
+        result_path = ROOT / 'analysis' / (args.attempt + '-result.json')
+        assert not result_path.exists()
+        result_path.write_text(json.dumps(failure, indent=2) + '\n')
+        subprocess.run(['git', 'add', str(result_path)], cwd=ROOT, check=True)
+        subprocess.run(['git', 'commit', '-m', 'Retain failed ' + args.attempt + ' before reverting candidate'], cwd=ROOT, check=True)
+        subprocess.run(['git', 'revert', '--no-edit', deployment['candidate_commit']], cwd=ROOT, check=True)
+        print(json.dumps(failure, indent=2))
+        return
     candidate = read(out / 'completed.json')
     receipt = read(out / 'fit/checkpoint_receipt.json')
     assert receipt['status'] == 'completed' and receipt['completed_updates'] == 20000
