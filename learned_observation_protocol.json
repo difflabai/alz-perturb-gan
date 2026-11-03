@@ -1,0 +1,32 @@
+{
+  "status": "REGISTERED_BEFORE_LEARNED_CELL_OBSERVATION_TRAINING",
+  "utc": "2026-11-03T22:48:35.170735+00:00",
+  "hypothesis": "Fixed low-frequency Fourier coordinates may miss joint cell structure. Replace ONLY their50 coordinates with learned bounded per-cell mean/SD observations, preserving original100 PC mean/SD coordinates and150-vector native penalty inputs.",
+  "evidence": "analysis/cell_covariance_fit_diagnostic.json: PG8 covariance relative Frobenius error.607-.759 versus resampling cross-replicate descriptive contrast.392-.532, despite covariance trace ratios.848-1.049. Finite375cell/stage reservoirs and different query replicates limit interpretation; offdiagonal-error fractions alone are not evidence.",
+  "API": "ParticleGAN0.9.4 native get_recipe(total_steps=20000,batch_size=32,num_particles=512,z_dim=8), same optimized BISPF factories/loss/prior/optimizer/policy. No package or immutable backend changes.",
+  "task": {
+    "fold": 0,
+    "seed": 0,
+    "updates": 20000,
+    "cap_seconds": 21600,
+    "counts_model": "same PG8",
+    "real_and_fake_training_cells_per_bag": 128,
+    "pure_only": true,
+    "real_bag_replacements": 0
+  },
+  "cell_encoder": "FrozenPC50 -> Linear64 -> SiLU -> Linear25 -> LayerNorm25(eps1e-5, no affine). Same unconditional encoder for real/fake cells. Sort each feature over cells, pool mean and sqrt(population variance+1e-6), concatenate50 coordinates and multiply.2. LayerNorm bounds the new feature block norm to approximately1, matching the original Fourier block bound. Keep first100 PC mean/SD features exactly.",
+  "critic": "Original150-input head initialized first with the original critic stream, then new cell encoder. G, prior and original head parameter initializations match PG8. Encoder is registered among critic parameters and receives BOTH real and fake adversarial gradients. Freeze the whole critic, including encoder, in G phase; preserve derivatives through its inputs.",
+  "penalty_geometry": "Released Born-Infeld penalty receives150-dimensional vectors, never raw rank3 bags or flat6400 inputs, avoiding its image/categorical shape branches. Penalty gradients regularize the head with respect to learned observations, NOT the cell encoder. LayerNorm bounds encoder outputs; no new encoder penalty is added. Native penalty coordinate meanings change even though dimension is unchanged.",
+  "confounds": "Replaces fixed Fourier observations by learned mean/SD coordinates; adds4889 critic parameters and adversarial representation learning. Changes optimization geometry and feature semantics. Count forward and declared biased Gamma-rate backward unchanged. Not a causal bug fix or an unchanged-architecture claim.",
+  "qualification": [
+    "Disabled observation complete state and next update bitwise match PG8",
+    "Same initial G/prior/original head parameters",
+    "Independent feature math, fixed first100 coordinates and donor/cell permutation invariance",
+    "Finite adversarial encoder gradients from real AND fake, no encoder gradient from detached-input native penalty",
+    "Finite nonzero generator/dispersion/prior gradients through frozen encoder",
+    "Full serialized checkpoint restore and next-update bitwise equality; mismatched config refuses",
+    "Actual optimization-only gradient probe with zero fitting updates",
+    "Resource/accounting and native source-binding CPU checks"
+  ],
+  "selection": "Existing four adaptive calibration donors, two fixed generation replicates, primary donorES with cellED/spread guards against pure_incumbent. Fixed20k endpoint. Commit candidate before execution, retain independently verified evidence and actually revert if rejected. No evaluation-cohort ranking. Three matched seeds still needed for stable joint target."
+}

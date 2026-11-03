@@ -1,0 +1,84 @@
+{
+  "status": "PASSED_FITTING_ONLY_LEARNED_OBSERVATION_PROBE_NO_TRAINING",
+  "utc": "2026-11-03T22:53:02.333303+00:00",
+  "elapsed_CPU_seconds": 2.003243463987019,
+  "optimization_donors": 33,
+  "probe_donors": [
+    "H20.33.044",
+    "H20.33.001",
+    "H20.33.005",
+    "H20.33.008"
+  ],
+  "calibration_or_evaluation_targets_read": false,
+  "real_probe_bags": 4,
+  "generated_probe_bags": 8,
+  "cells_per_bag": 128,
+  "optimizer_updates": 0,
+  "completed_policy_steps": 0,
+  "native_recipe": "bispf_optimized",
+  "learned_observation_config": {
+    "enabled": true,
+    "cell_hidden": 64,
+    "cell_features": 25,
+    "feature_scale": 0.2,
+    "pool_epsilon": 1e-06,
+    "layernorm_epsilon": 1e-05
+  },
+  "observation_dimensions": 150,
+  "first100_moment_coordinates_exact": true,
+  "new_feature_block_norm_bound_verified": true,
+  "encoder_gradients_real_and_fake": [
+    {
+      "side": "real",
+      "norm": 0.007600628770887852,
+      "all_finite": true
+    },
+    {
+      "side": "fake",
+      "norm": 0.008306293748319149,
+      "all_finite": true
+    }
+  ],
+  "generator_gradients_through_frozen_encoder": [
+    {
+      "name": "G_output_weight",
+      "norm": 0.0003631558793131262,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "name": "G_dispersion",
+      "norm": 0.00044971241732127964,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "name": "particle_prior",
+      "norm": 5.081696485831344e-07,
+      "nonzero_fraction": 0.0078125
+    }
+  ],
+  "isolated_learned50_generator_gradients": [
+    {
+      "name": "G_output_weight",
+      "norm": 7.732332706451416,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "name": "G_dispersion",
+      "norm": 9.482431411743164,
+      "nonzero_fraction": 1.0
+    },
+    {
+      "name": "particle_prior",
+      "norm": 0.012058316729962826,
+      "nonzero_fraction": 0.0078125
+    }
+  ],
+  "cache_manifest_SHA256": "553fbe2ad8d901782e834a1e3a77fc959e95cf6aef51b9ca88528aea29f6c631",
+  "CUDA_initialized": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/probe_learned_observation_fitting.py": "b4b6b16ae3013ddb246cf5d3c9a9c22d5f6329ba9900fc81d75d41b80f0e1868",
+    "/ml2/alz/model/learned_pg_adapter.py": "0e2552cbadf1f86ae585d19e0cd03445f4acc60151bdf27fbfe8e1eece809d5b",
+    "/ml2/alz/model/learned_pg_update.py": "6ac08b03dd8d20eaf0f10d08c116f37c2ff36b4dc64b8602febbab980cb90961",
+    "/ml2/alz/model/learned_cell_observation.py": "1b23bc0054cca241cb3ca7a256ea8e097c56b898c4b9296bfeb9c92edde333e7"
+  }
+}
