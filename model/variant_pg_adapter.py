@@ -11,7 +11,7 @@ from bench_core import load_space
 from critic import VectorCritic,N_FEATURES,bag_features
 from stage_law import StageLaw,mask_adnc
 from usage import Usage
-from variant_pg_update import recipe,advance,CONFIG
+from variant_pg_update import recipe,advance,CONFIG,normalized_config
 STREAM_NAMES=['generator_init','critic_init','prior_init','policy_latent','policy_penalty','policy_eval','policy_noise','cell','count','gamma_global','donor_sampler']
 def training_streams(fold,seed):
  if fold not in range(3) or seed not in SEEDS:raise ValueError('unregistered training cell')
@@ -32,7 +32,12 @@ class Context:
   self.law=StageLaw(self.fitc,self.by,self.fitlibs.cpu().numpy())
  def project(self,x):return standardize_counts(x,self.mean,self.sd)@self.W
  def batch(self,rng):
-  ds=rng.integers(len(self.ids),size=32);idx=torch.as_tensor(np.stack([rng.choice(self.by[i],128,replace=True) for i in ds]),device=self.device)
+  if CONFIG['stage_balance']:
+   stage=np.rint(self.fitc[:,3]*3).astype(int);groups=[np.flatnonzero(stage==s) for s in range(4)]
+   if any(len(group)==0 for group in groups):raise ValueError('balanced fitting requires optimization donors at every stage')
+   order=np.repeat(np.arange(4),8);rng.shuffle(order);ds=np.asarray([rng.choice(groups[s]) for s in order])
+  else:ds=rng.integers(len(self.ids),size=32)
+  idx=torch.as_tensor(np.stack([rng.choice(self.by[i],128,replace=True) for i in ds]),device=self.device)
   return bag_features(self.trainpcs[idx]),self.conditions[torch.as_tensor(ds,device=self.device)],self.X[idx].sum(-1)
 def build(mu,theta,device,fold,seed):
  streams=training_streams(fold,seed);rec=recipe();torch.manual_seed(streams['generator_init']);G=CountGenerator(mu.cpu(),theta.cpu(),zd=rec.z_dim).to(device)
@@ -46,8 +51,10 @@ def snapshot(ctx,bundle,generators,rng,usage,seed,streams,status):
  rec,G,D,P,og,od,pen,loss,reg,policy=bundle
  if policy._phase!='ready':raise ValueError('no checkpoint at a partial optimizer-pair boundary')
  q={'schema':1,'method':'pg','fold':ctx.fold,'seed':seed,'cache_manifest_SHA256':sha(ctx.cache/'manifest.json'),'recipe':rec.to_dict(),'policy':policy.state_dict(),'prior_regularizer':rec.prior_regularizer_checkpoint(reg),'generators':{k:g.get_state() for k,g in generators.items()},'numpy_rng':rng.bit_generator.state,'usage':usage.state_dict(),'training_streams':streams,'torch_cpu_rng':torch.get_rng_state(),'torch_device_rng':torch.cuda.get_rng_state(ctx.device) if ctx.device.type=='cuda' else None,'completed_updates':policy.completed_steps,'fixed_endpoint':PG_UPDATES,'status':status}
+ q['variant_config']=dict(CONFIG)
  return copy.deepcopy(q)
 def restore(ctx,q):
+ if normalized_config(q.get('variant_config',{'z_dim':q['recipe']['z_dim']}))!=CONFIG:raise ValueError('variant sampling configuration differs')
  if q['cache_manifest_SHA256']!=sha(ctx.cache/'manifest.json') or q['fold']!=ctx.fold or q['fixed_endpoint']!=PG_UPDATES:raise ValueError('checkpoint fold/cache/endpoint mismatch')
  b,g,r,u,seeds=build(ctx.mu,ctx.theta,ctx.device,ctx.fold,q['seed']);rec=b[0];policy=b[-1]
  if q['recipe']!=rec.to_dict() or q['training_streams']!=seeds:raise ValueError('checkpoint recipe/seeds differ')

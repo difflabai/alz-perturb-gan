@@ -9,12 +9,16 @@ from particlegan.optim.constraint_geometry import constraint_geometry_backward
 from pg_model import critic_features
 from critic import bag_features,N_FEATURES
 
-CONFIG={'z_dim':2}
+CONFIG={'z_dim':2,'stage_balance':False}
+
+def normalized_config(value):
+    if not isinstance(value,dict) or 'z_dim' not in value or set(value)-{'z_dim','stage_balance'} or type(value['z_dim']) is not int or value['z_dim'] not in (2,8) or type(value.get('stage_balance',False)) is not bool:
+        raise ValueError('registered donor latent dimension2or8 and Boolean stage balance required')
+    return {'z_dim':value['z_dim'],'stage_balance':value.get('stage_balance',False)}
 
 def configure(value):
-    if set(value)!={'z_dim'} or type(value['z_dim']) is not int or value['z_dim'] not in (2,8):
-        raise ValueError('registered donor latent dimension2or8 required')
-    CONFIG.clear();CONFIG.update(value)
+    selected=normalized_config(value)
+    CONFIG.clear();CONFIG.update(selected)
 
 def recipe():
     # Only task execution allowance and donor-bag batch size override defaults.

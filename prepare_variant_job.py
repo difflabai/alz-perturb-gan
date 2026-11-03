@@ -19,7 +19,8 @@ def main():
     parser.add_argument('--seed', type=int, default=0)
     args = parser.parse_args()
     config = b.read(ROOT / 'candidate.json')
-    b.require(set(config) == {'z_dim'} and config['z_dim'] in (2, 8), 'registered candidate config required')
+    b.require(set(config) == {'z_dim', 'stage_balance'} and config['z_dim'] in (2, 8)
+              and type(config['stage_balance']) is bool, 'registered candidate config required')
     b.require(not subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True),
               'commit the complete candidate before deploying an experiment')
     commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
