@@ -94,6 +94,8 @@ def evaluate(ctx, method, seed, rep, iterator, out):
     assert len(actual) == len(expected) == 320000
     q.update(status='completed', method=method, training_seed=seed,
              generation_replicate=rep, generated_cells=len(actual),
+             trace_manifest_SHA256=sha(SCIENCE / 'traces/manifest.json'),
+             sampling_contract='calibration_equal_stage375_priority_v1',
              generated_zero_count_rate=float((actual == 0).mean()),
              actual_library_quantiles=np.percentile(actual, [0, 10, 50, 90, 100]).tolist(),
              supplied_exposure_quantiles=np.percentile(expected, [0, 10, 50, 90, 100]).tolist())
@@ -109,10 +111,14 @@ def average(records):
     assert all(q['status'] == 'completed' and q['metric_role'] == 'calibration_selection' for q in records)
     assert records[0]['donors'] == records[1]['donors']
     assert [q['generation_replicate'] for q in records] == [0, 1]
+    identity = ['training_seed', 'calibration_manifest_SHA256',
+                'trace_manifest_SHA256', 'sampling_contract']
+    assert all(records[0][key] == records[1][key] for key in identity)
     keys = ['energy_score', 'cell_energy_distance', 'spread_ratio',
             'within_condition_spread_ratio', 'coverage80', 'generated_zero_count_rate']
     return {'metric_role': 'calibration_selection', 'generation_replicates': 2,
             'donors': records[0]['donors'],
+            **{key: records[0][key] for key in identity},
             **{k: float(np.mean([q[k] for q in records])) for k in keys},
             'per_donor_energy_score': np.mean([q['per_donor_energy_score'] for q in records], axis=0).tolist(),
             'per_stage_cell_energy_distance': np.mean([q['per_stage_cell_energy_distance'] for q in records], axis=0).tolist()}
