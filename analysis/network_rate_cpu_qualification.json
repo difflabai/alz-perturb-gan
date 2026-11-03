@@ -1,0 +1,27 @@
+{
+  "status": "PASSED_SYNTHETIC_CPU_NETWORK_RATE_QUALIFICATION",
+  "utc": "2026-11-03T23:28:08.130538+00:00",
+  "tests_passed": 4,
+  "native_recipe": "bispf_optimized",
+  "network_rate_config": {
+    "lr": 0.006,
+    "prior_lr_mult": 5.0
+  },
+  "only_two_official_recipe_fields_change": true,
+  "native_api_component_types_verified": true,
+  "same_initial_complete_G_D_prior_models": true,
+  "optimizer_state_only_intended_network_rates_differ": true,
+  "actual_UpdatePolicy_rates_and_native_schedule_verified": true,
+  "full_serialized_restore_next_update_bitwise_equal": true,
+  "update_observation_context_and_fit_AST_unchanged": true,
+  "finite_nonzero_native_gradients_verified": true,
+  "CUDA_initialized": false,
+  "scope": "Synthetic CPU only, no actual ALZ fitting or GPU allocation",
+  "source_SHA256": {
+    "/ml2/alz/model/network_rate_adapter.py": "4069f0b33a09fd8f813797d24bd8fad5e0f0d540ee846a39239c3c880bafd895",
+    "/ml2/alz/model/network_rate_update.py": "fdc6dd9beb29937f0cf5a310037c635c2de4f2be7d4dce6717c336696a700b74",
+    "/ml2/alz/test_network_rate.py": "943319698b1a06d474331822b5955567504dd593b250c053365b9e43cf9f759f",
+    "/ml2/alz/network_rate_protocol.json": "c22d5a1b6c2eb747e10e021bf916310efddde8d81af040270bf19ceeaa4efa46",
+    "/ml2/alz/analysis/run_network_rate_cpu.py": "e3ae396ad0a0851fc48dd34b08fd0ee15aa6f184e887348855320d6a1e277b4b"
+  }
+}

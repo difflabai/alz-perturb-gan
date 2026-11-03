@@ -139,12 +139,17 @@ def main():
         return
     if args.pure:
         assert candidate.get('pure_only') is True and candidate.get('real_bag_replacements')==0 and candidate.get('hybrid_config') is None
-        assert (candidate.get('operation'),candidate.get('native_recipe')) in [('train_bispf','bispf'),('train_semantic','bispf_optimized'),('train_bcap','bcap'),('train_learned','bispf_optimized')]
+        assert (candidate.get('operation'),candidate.get('native_recipe')) in [('train_bispf','bispf'),('train_semantic','bispf_optimized'),('train_bcap','bcap'),('train_learned','bispf_optimized'),('train_network_rate','bispf_optimized')]
         if candidate['operation']=='train_learned':
             assert candidate['learned_observation_config']==deployment['learned_observation_config']=={'enabled':True,'cell_hidden':64,'cell_features':25,'feature_scale':.2,'pool_epsilon':1e-6,'layernorm_epsilon':1e-5}
             audit=read(ROOT/'analysis/learned_observation_checkpoint_audit.json')
             assert audit['status']=='VERIFIED_COMPLETE_PURE_LEARNED_OBSERVATION_CHECKPOINT' and audit['checkpoint_SHA256']==candidate['checkpoint_SHA256'] and audit['native_recipe_exactly_matches_official_API_factory']
             assert audit['all_model_keys_shapes_and_dtypes_match_declared_architecture'] and audit['finite_model_floating_point_values']==376066 and audit['learned_observation_config']==candidate['learned_observation_config']
+        if candidate['operation']=='train_network_rate':
+            assert candidate['network_rate_config']==deployment['network_rate_config']=={'lr':.006,'prior_lr_mult':5.}
+            audit=read(ROOT/'analysis/network_rate_checkpoint_audit.json')
+            assert audit['status']=='VERIFIED_COMPLETE_NATIVE_NETWORK_RATE_CHECKPOINT' and audit['checkpoint_SHA256']==candidate['checkpoint_SHA256'] and audit['native_recipe_exactly_matches_official_API_factory']
+            assert audit['all_model_keys_shapes_and_dtypes_match_declared_architecture'] and audit['finite_model_floating_point_values']==371177 and audit['network_rate_config']==candidate['network_rate_config']
         if candidate['operation']=='train_bcap':
             audit=read(ROOT/'analysis/bcap_checkpoint_audit.json')
             assert audit['status']=='VERIFIED_COMPLETE_NATIVE_BCAP_CHECKPOINT' and audit['checkpoint_SHA256']==candidate['checkpoint_SHA256'] and audit['native_recipe_exactly_matches_official_API_factory']

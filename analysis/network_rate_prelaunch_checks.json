@@ -1,0 +1,20 @@
+{
+  "status": "PASSED_NETWORK_RATE_PRELAUNCH_CPU_CHECKS",
+  "utc": "2026-11-03T23:30:36.086543+00:00",
+  "model_selection_tests_passed": 51,
+  "resource_accounting_and_native_source_binding_tests_passed": 24,
+  "total_unique_checks": 75,
+  "independent_declared_model_floating_values": 371177,
+  "GPU_allocation_created": false,
+  "limits": "CPU synthetic qualification only. No actual ALZ fitting, GPU allocation or native quality/memory/throughput claim. Original immutable guard, canonical Controller and native package unchanged. GPU1 source remains frozen.",
+  "qualification_note": "Initial expected D LR literal .009 differed from native .006*1.5 at floating-point precision. Corrected test to exact API-derived product without changing implementation; all model/optimizer/restore/rate checks pass. No native launch on failed checks.",
+  "source_SHA256": {
+    "/ml2/alz/runtime/binding.py": "13bd23e813dae15e52810d9c8cff40177dbdfe7b95b4166ce06bdfcf429ce4d4",
+    "/ml2/alz/runtime/worker_gpu0.py": "87d4b5ce409daa1ffe2e8daf568f5a247bc4372c67a9e6835701019df1681786",
+    "/ml2/alz/runtime/test_network_rate_binding.py": "16cfe9d7550f79c2c0e3cd31a00f084541c8c4287f0e8eb0a6ba35066f2c8fec",
+    "/ml2/alz/prepare_network_rate_job.py": "5622f0b85a03a5de565a837495a35fdc6b7fa83bdf93ac8518402d86bb8313be",
+    "/ml2/alz/analysis/finish_candidate.py": "ae35f8c7710c03d6fa9ccf8cdd014e59a5c3f965d92b727e3a739a998d4786d0",
+    "/ml2/alz/analysis/audit_network_rate_checkpoint.py": "880cc8e291db4b22df8dbdec7c4aea0bc3bffd29108382743544d518c85b907d",
+    "/ml2/alz/analysis/network_rate_cpu_qualification.json": "a9d4c1eede5832df017f47121db4b6d719754c61a8213392daa14129a3e8347a"
+  }
+}

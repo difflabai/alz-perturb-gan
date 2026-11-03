@@ -1,0 +1,35 @@
+{
+  "status": "REGISTERED_BEFORE_NETWORK_RATE_TRAINING",
+  "rationale": "Pure PG8 remains the selected donor-energy-score model. The 40000-update continuation regressed, and changing observation representations did not improve the joint objective. Existing PG8 network rates remain constant at G .012 and D .018. Test smaller network steps while preserving the particle-row step, rather than extending the same constant-rate fit. These observations do not prove that the current rates are excessive.",
+  "recipe": "Official ParticleGAN 0.9.4 get_recipe(total_steps=20000,batch_size=32,num_particles=512,z_dim=8,lr=.006,prior_lr_mult=5.). Keep every other bispf_optimized recipe field unchanged.",
+  "rates": {
+    "generator": 0.006,
+    "critic": 0.009,
+    "particle_prior": 0.03,
+    "schedule": "Same native schedule and floors; verify actual rates through UpdatePolicy."
+  },
+  "unchanged": "Original pure PG8 count generator, 150 fixed moment/Fourier observations and critic, prior initialization and SBNP regularizer, native loss/penalty/optimizer/update policy, fitting donors/transforms, initialization and sampling streams, integer generation and zero real-bag replacements.",
+  "confounds": "Network step sizes halve while the prior step stays constant, so the network/prior learning-rate ratio changes. Equal 20000 updates do not imply equal optimization trajectories or progress. Not a formulation-level causal conclusion.",
+  "task": {
+    "fold": 0,
+    "seed": 0,
+    "fixed_updates": 20000,
+    "cap_seconds": 21600,
+    "pure_only": true,
+    "real_bag_replacements": 0
+  },
+  "pre_native_requirements": [
+    "Isolated explicit adapter/update/config binding; preserve default PG8 and GPU1 frozen source.",
+    "Initial generator, critic and prior model states match PG8 exactly; native optimizers differ only in intended network rates.",
+    "Exact official API recipe equality with only lr and prior_lr_mult overrides; finite connected native gradients and unchanged losses/penalty/observation AST.",
+    "Full serialized model/optimizer/policy/RNG/usage restore and next-update bitwise equality on synthetic CPU fixtures; refuse mismatched config.",
+    "Qualify exact native source/config/endpoint/count binding and existing resource/accounting guards before any deployment.",
+    "Separate framework and plan-only candidate commits, fresh protected peers/capacity and one-use authorization; no automatic successor."
+  ],
+  "decision": "Existing four adaptive calibration donors and two fixed generation replicates, donor energy score primary with cellED/spread/count guards against selected pure PG8. Independently audit/recompute final evidence after clean settlement; commit and actually revert rejected candidate. Same stable three-seed confirmation protocol; evaluation donors excluded from selection.",
+  "new_sources": [
+    "model/network_rate_adapter.py",
+    "model/network_rate_update.py"
+  ],
+  "plan": "network_rate_plan.json"
+}

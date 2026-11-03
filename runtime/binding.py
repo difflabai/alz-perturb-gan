@@ -139,7 +139,7 @@ def source_closure(auth,layout):
         manifest=pinned_inventory(data/'manifest.json',auth.get('calibration_manifest_SHA256'),pins,'calibration input')
         require(manifest.get('status')=='CPU_CALIBRATION_PROJECTED_WITHOUT_REFITTING','calibration provenance differs')
         require_members(pins,{str(data/name):pin for name,pin in manifest['files_SHA256'].items()},'calibration arrays')
-        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','train_variant','train_bcap','train_bispf','train_semantic','train_learned','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
+        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','train_variant','train_bcap','train_bispf','train_semantic','train_learned','train_network_rate','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
         if auth['operation']=='qualify_continuation':
             require(auth['cap_seconds']==900 and auth.get('qualification_only') is True and auth.get('qualification_steps')==1 and auth.get('caller_execution_limit')==40000,'finite one-step continuation qualification required')
             checkpoint=Path(auth['checkpoint_path'])
@@ -177,6 +177,18 @@ def source_closure(auth,layout):
                 require(len(gradients)==3 and {q['name'] for q in gradients}=={'G_output_weight','G_dispersion','particle_prior'} and all(math.isfinite(q['norm']) and q['norm']>0 for q in gradients),'isolated learned-feature gradient path unproven')
                 for evidence in [proof,probe]:
                     for path,pin in evidence['source_SHA256'].items():require(pins.get(path)==pin==sha(path),'qualified learned observation source changed: '+path)
+            if auth['operation']=='train_network_rate':
+                plan=HERE.parent/'network_rate_plan.json';proof_path=HERE.parent/'analysis/network_rate_cpu_qualification.json';protocol=HERE.parent/'network_rate_protocol.json'
+                options={'lr':.006,'prior_lr_mult':5.}
+                require(pins.get(str(plan))==auth.get('network_rate_plan_SHA256')==sha(plan),'network-rate prospective plan pin absent')
+                require(read(plan)=={'enabled':True,'native_recipe':'bispf_optimized',**options,'fixed_endpoint':20000,'pure_only':True,'training_seed':0},'network-rate plan disabled or changed')
+                require(auth.get('network_rate_config')==options and auth.get('hybrid_config') is None and auth['cell']['seed']==0 and auth['variant_config']=={'z_dim':8,'stage_balance':False,'cell_z_dim':8,'theta_init_scale':1.,'fourier_feature_scale':1.},'pure matched seed0 network-rate scope only')
+                require(auth.get('fixed_endpoint')==20000 and auth.get('pure_formulation')=='network_rate_half' and auth.get('qualification_only') is False,'complete fixed20k network-rate trial required')
+                require(pins.get(str(proof_path))==auth.get('network_rate_qualification_SHA256')==sha(proof_path) and pins.get(str(protocol))==sha(protocol),'network-rate qualification/protocol pins absent')
+                proof=read(proof_path)
+                checks=['only_two_official_recipe_fields_change','native_api_component_types_verified','same_initial_complete_G_D_prior_models','optimizer_state_only_intended_network_rates_differ','actual_UpdatePolicy_rates_and_native_schedule_verified','full_serialized_restore_next_update_bitwise_equal','update_observation_context_and_fit_AST_unchanged','finite_nonzero_native_gradients_verified']
+                require(proof['status']=='PASSED_SYNTHETIC_CPU_NETWORK_RATE_QUALIFICATION' and proof['network_rate_config']==options and all(proof[k] for k in checks) and proof['CUDA_initialized'] is False,'network-rate CPU qualification incomplete')
+                for path,pin in proof['source_SHA256'].items():require(pins.get(path)==pin==sha(path),'network-rate qualified source changed: '+path)
             if auth['operation']=='train_bcap':
                 plan=HERE.parent/'bcap_plan.json';proof_path=HERE.parent/'analysis/bcap_cpu_qualification.json';protocol=HERE.parent/'bcap_protocol.json'
                 require(pins.get(str(plan))==auth.get('bcap_plan_SHA256')==sha(plan),'native BCAP prospective plan pin absent')
