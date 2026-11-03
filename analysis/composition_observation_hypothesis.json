@@ -1,0 +1,16 @@
+{
+  "status": "PROSPECTIVE_FALLBACK_ONLY_NOT_IMPLEMENTED_OR_ALLOCATED",
+  "utc": "2026-11-03T19:58:38.720381+00:00",
+  "condition": "Only consider after the active40k continuation and its keep/revert decision, if no jointly good frozen configuration is ready for seed confirmation.",
+  "evidence": "analysis/fitting_composition_mismatch.json: keptPG8 generated subtype mixture L1 deviations .4169,.1497,.0736,.2173 bystage against matched optimization-donor resampling querylaw. Generated arrays only, no held-out target arrays used in this diagnostic.",
+  "hypothesis": "The fixed moment/low-frequency Fourier observation may leave biological subtype composition underconstrained. Add six donor-bag composition observations derived from the already-frozen optimization-only subtype classifier.",
+  "prospective_change": "Identical real/fake feature construction, six additional classifier-based composition coordinates; classifier frozen and cache/source pinned. Choose a differentiable or straight-through surrogate explicitly before training; inspect finite gradients and saturation using fitting data only. Keep counts model, querylaw andnativePGupdate/optimizer/loss unchanged.",
+  "qualification_before_any_native_job": [
+    "Disabledfeature must preserve original complete state and nextupdate exactly",
+    "Freeze classifier parameters; retain exact folding/projection and cell/donor permutation invariance",
+    "Independently verify feature math, fixedclassifierstate, finite/nonzero Ggradients and exact complete checkpoint continuation",
+    "Bind featurechoice in checkpoint/authorization; refuse configuration/cache mismatch",
+    "Declare endpoint and all new input-capacity/gradient-surrogate confounds prospectively, without changing scoring/selection criteria orusingevaluationdonors"
+  ],
+  "limitations": "Additional semantic observations and critic input capacity are model-choice confounds. Better fitting-query composition need not improve calibration cellED or donorES. No performance prediction or implementation claim."
+}
