@@ -1,0 +1,39 @@
+{
+  "status": "PROSPECTIVE_CONTINUATION_NOT_IMPLEMENTED_OR_ALLOCATED",
+  "utc": "2026-11-03T19:13:00.895994+00:00",
+  "user_authority": "if you need to continue training do so. (2026-11-03T18:54UTC followup)",
+  "condition": "If the current Fourier20k comparison does not produce a jointly good winner, test more training on the best retained20k fit. Preserve original20k comparison as completed.",
+  "proposal": {
+    "base_checkpoint": "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/fit/final.pt",
+    "base_checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
+    "initial_completed_updates": 20000,
+    "additional_updates": 20000,
+    "prospective_total_endpoint": 40000,
+    "recipe_schedule_horizon": 20000,
+    "new_allocation_cap_seconds": 21600,
+    "sampler": "Same75percentPG/25percenttraining-resampling; explicit continued40k method label.",
+    "state": "Restore complete native G/D/prior/optimizer/penalty/policy/RNG/usage on the same device. Do not just load weights or reset optimizer/schedule."
+  },
+  "native_source_evidence": {
+    "path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/policy.py",
+    "begin_step_lines": [
+      584,
+      609,
+      633
+    ],
+    "load_state_lines": [
+      1284,
+      1286
+    ],
+    "behavior": "Native external execution_limit is separate from recipe schedule horizon; loader explicitly permits completed steps beyond that horizon. Existing LRfloors1/noannealing retained."
+  },
+  "qualification_required": [
+    "Actual synthetic20000to20001 full-state/next-update exact continuation test running CPU-only; not a real ALZ fit",
+    "Prospective explicit40000 endpoint authorization/receipt/selection gate, new lineage, complete20k parent checkpoint binding and6h cap before anynative continuation",
+    "Preserve all original20k source/results; report extra compute and total40k, never claim equal training budget",
+    "Independent verification of total/new updates, checkpoint/counts/calibration metrics and ownedcleanup beforekeep/revert",
+    "If selected, freeze the same total40000endpoint across seeds0/1/2 and match resampling query draws perseed; do notrankseeds"
+  ],
+  "current_active_GPU0_source_changed": false,
+  "scope": "Plan only. No new continuation GPU allocation, code deployment or performance result."
+}
