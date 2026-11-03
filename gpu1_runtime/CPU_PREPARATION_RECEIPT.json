@@ -1,5 +1,5 @@
 {
-  "utc": "2026-11-03T18:12:20.884067+00:00",
+  "utc": "2026-11-03T18:36:26.079710+00:00",
   "status": "GPU1_SOURCE_CPU_PREPARED_NOT_ADMITTED",
   "guard_CPU_tests_passed": 28,
   "integration_CPU_tests_passed": 16,
@@ -16,9 +16,16 @@
     "/ml2/alz/gpu1_runtime/guard/gpu0_runner.py": "00ed47a4c1fee19028c9668b67d2770a981a4c7110b03db77585d54a7d721bcd",
     "/ml2/alz/gpu1_runtime/guard/gpu0_admission.py": "25d2f7fead87a043afb35b860c1f38b5547e45139aff74294fb8fc8254cb4a20",
     "/ml2/alz/gpu1_runtime/guard/test_gpu0_candidate.py": "644b3f5338f1175b6f522cdecd87377e2503effe4a0611b8b3fff3d462c597bc",
-    "/ml2/alz/gpu1_runtime/guard/REVIEW_MANIFEST.json": "00d31882ed278171535675473b51bf02b93b67968f024ee010c6e8669e91a884"
+    "/ml2/alz/gpu1_runtime/guard/REVIEW_MANIFEST.json": "00d31882ed278171535675473b51bf02b93b67968f024ee010c6e8669e91a884",
+    "/ml2/alz/gpu1_runtime/prepare_held_packet.py": "a73de2f895ba5b9149646961bab8bf82517d0f29238a6dbc6b1300baca6c0430"
   },
   "device": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
   "review_scope": "Specialization of original v2GPU0ownership/controller/cleanup logic toGPU1UUID+lockpair+separatebackend/registry/ledger;canonical scientific key shared acrosscards,attemptidentity distinct;nativeper-cardphase permitslaterparallelconfirmations. Newpolicy/actualcapacity admission stillrequired.",
-  "current_GPU1_constraint": "MOSScomputePID297198 andexclusivephysicalGPU1lockowner220061;noattempttobypass/adopt/signal."
+  "current_GPU1_constraint": "No transfer confirmed. Observed no compute at18:35:24 but foreign lock ownership/next MOSS boundary must be reconciled through Ember; no ALZ allocation started.",
+  "held_packet": "artifacts/gpu1-held/20261103T183524Z/REVIEW_PACKET.json",
+  "test_invocations": [
+    "python -I -S -B -m unittest discover -s /ml2/alz/gpu1_runtime -p test_integration.py (16passed)",
+    "cwd gpu1_runtime/guard: python -I -S -B -m unittest discover -s . -p test_gpu0_candidate.py (28passed)"
+  ],
+  "test_invocation_limitation": "Guard lifecycle test subprocess imports its fixture module from cwd; repository-root discovery fails module lookup. Correct guard-directory discovery passes without source changes."
 }
