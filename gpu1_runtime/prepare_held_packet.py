@@ -94,6 +94,8 @@ def main():
     gpu_need += sum(max(0, p['gpu_budget_bytes'] - obs['gpu_memory'][p['identity']['pid']]) for p in peers)
     ram_need = 6 * GiB + host_floor + sum(max(0, p['ram_budget_bytes'] - obs['procs'][p['identity']['pid']]['rss'],
                                                       obs['procs'][p['identity']['pid']]['hwm'] - obs['procs'][p['identity']['pid']]['rss']) for p in peers)
+    host_peak_extra=sum(max(0,q['hwm']-q['rss']) for q in growth)
+    ram_need+=host_peak_extra
     basis = {'status': 'READ_ONLY_SHARING_FORECAST_NOT_ADMISSION', 'utc': stamp,
              'MOSS_published_policy_path': str(MOSS / 'gpu1-sharing.json'), 'MOSS_published_policy_SHA256': b.sha(MOSS / 'gpu1-sharing.json'),
              'MOSS_shared_source_SHA256': b.sha(MOSS / 'shared_gpu.py'),
@@ -101,7 +103,8 @@ def main():
              'authority_provenance':'Own currentuser explicitly permitsbothGPUs; sharing coordination follows authenticatedEmber9473. The Mikkel quote inMOSS JSON is publisher provenance, not a directmessage independentlyseenhere.',
              'compatibility': 'MOSS shared_gpu.Peers dynamically pins new same-UID compute peers and caps external compute at4GiB; ALZ3GiB plus desktop.25GiB forecasts fit even if graphics are conservatively included. Both physical leasesREAD; distinct exclusiveALZrole. Never signal/adopt MOSS.',
              'GPU_required_bytes': gpu_need, 'GPU_total_bytes': obs['total'], 'GPU_fits_snapshot': gpu_need <= obs['total'],
-             'host_required_available_bytes': ram_need, 'host_available_bytes': obs['available_ram'], 'host_fits_snapshot': ram_need <= obs['available_ram'],
+             'host_required_available_bytes': ram_need, 'host_peak_extra_bytes':host_peak_extra,
+             'observed_protected_RAM':[{**q['identity'],'rss':obs['procs'][q['identity']['pid']]['rss'],'hwm':obs['procs'][q['identity']['pid']]['hwm']} for q in peers], 'host_available_bytes': obs['available_ram'], 'host_fits_snapshot': ram_need <= obs['available_ram'],
              'enforcement':'Native sharingguard stops ownedALZ on externalCOMPUTE actual/projected>3.75GiB, ownRSSbudgetbreach, MemAvailable<8GiB or hostgrowthforecastfailure. Graphics-only desktop excluded fromMOSScompute cap, separatelyforecast; fresh exact hostpeak identities reserveadditionalHWM growth.',
              'host_floor_basis': {'minimum_host_floor_bytes': 8 * GiB, 'future_or_concurrent_GPU0_ALZ_RAM_bytes': 6 * GiB,
                                  'GPU0_other_protected_remaining_growth': growth},
