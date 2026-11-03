@@ -1,0 +1,18 @@
+{
+  "status": "REGISTERED_BEFORE_SEMANTIC_OBSERVATION_TRAINING",
+  "hypothesis": "The critic's fixed150 moment/Fourier observations underconstrain six biological subtype proportions. Adding the already frozen optimization-only classifier's bag compositions may improve pure PG calibration distribution matching.",
+  "evidence": "analysis/fitting_composition_mismatch.json: PG8 vs matched optimization-query resampling subtype L1 .4169,.1497,.0736,.2173 bystage. No calibration/evaluation target arrays used for that diagnosis.",
+  "native_recipe": "ParticleGAN0.9.4 bispf_optimized; same native recipe, prior, optimizers, losses, penalty, update policy and ALZ update-body statements",
+  "task": {"fold":0,"training_seed":0,"updates":20000,"cap_seconds":21600,"donor_z_dim":8,"cell_z_dim":8,"stage_balance":false,"theta_init_scale":1.0,"fourier_feature_scale":1.0},
+  "observation": "Append6 sqrt hard subtype proportions from the frozen optimization-only TypeClassifier50->64->6, to the existing150 features. Same construction for real/fake bags.",
+  "forward_math": "logits=clf(pcs);hard=sqrt(mean(one_hot(argmax(logits),6),cells));soft=sqrt(mean(softmax(logits/T),cells)+epsilon);feature=hard.detach()+(soft-soft.detach())",
+  "temperature":1.0,
+  "epsilon":0.0001,
+  "gradient_surrogate": "Hard forward, soft surrogate backward. Freeze classifier parameters, retain derivatives wrt PC inputs. Sorting per-class probabilities before their mean makes the soft reduction cell-permutation invariant.",
+  "initialization": "Same G/prior initialization as PG8. Build original150-feature critic first, expand first input matrix by6 zero columns before7 condition columns, copy all original weights/biases. No other critic weights change initially. Zero extra columns receive training gradients.",
+  "confounds": "Adds optimization-subtype label information and6 critic input coordinates; changes input dimension, native penalty geometry/normalization and optimizer matrix geometry. Hard composition is nondifferentiable; declared soft gradient is a surrogate. Not a causal bug-fix ablation or an unchanged-default claim.",
+  "checkpoint": "Bind semantic feature enabled flag, fixedT/epsilon, classifier-state digest and cache classifier file digest; full model/optimizer/policy/RNG/usage checkpoint continuation required. Mismatched source/cache/classifier/config must refuse.",
+  "generation": "Pure original iter_pg; zero real-bag resampling replacements; counts/exposure/query law unchanged.",
+  "selection": "Same4adaptive calibrationdonors,twofixedgenerationreplicates,matchedbaseline,ESprimary with no cellED/spread regression. Compare pure_incumbent only; evidence commit and actual candidate-plan revert on regression.20evaluationdonors excluded.",
+  "qualification": ["Disabledfeature preserves complete PG8 state/nextupdate exactly","Feature forward matches independent hardcomposition and remains permutation invariant","Finite nonzero semantic gradients and frozen classifier state","SameinitialG/D/Pfunctionalcontrol","Complete serialized checkpoint restore and nextupdate bitwise equal; classifier/config mismatch refusal","Fitting-only actual classifier/count-model gradient probe, no CPU training or held-out targets"]
+}
