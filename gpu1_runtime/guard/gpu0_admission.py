@@ -128,16 +128,41 @@ def protected_identity(pid):
     return value
 
 class Registry:
-    def __init__(self,path,*,locks=LOCKS,gpu=GPU1,roles=None,driver_headroom=GiB,protected_peers=None,host_free_floor=0,policy_sha256):
+    def __init__(self,path,*,locks=LOCKS,gpu=GPU1,roles=None,driver_headroom=GiB,protected_peers=None,host_free_floor=0,policy_sha256,sharing=None,host_peak_identities=None):
         self.path=Path(path);self.locks=tuple(map(Path,locks));self.gpu=gpu
         self.roles=set(roles or ());self.driver_headroom=driver_headroom
         self.protected_peers=protected_peers or [];self.host_free_floor=host_free_floor
         if not isinstance(policy_sha256,str) or len(policy_sha256)!=64 or set(policy_sha256)-set('0123456789abcdef'):raise Conflict('Exact reviewed policy digest required')
         self.policy_sha256=policy_sha256
+        self.sharing=dict(sharing) if sharing is not None else None
+        self.host_peak_identities=list(host_peak_identities or [])
         if type(driver_headroom) is not int or driver_headroom<=0 or type(host_free_floor) is not int or host_free_floor<=0:raise Conflict('Explicit positive GPU driver and host admission headroom required')
         pids=[p['identity']['pid'] for p in self.protected_peers]
         if gpu!=GPU1 or not pids or len(pids)!=len(set(pids)):raise Conflict('Exact nonempty protected GPU1 identities required')
         if any(set(p['identity'])!=set(IDENTITY_KEYS) or not p.get('gpu_kinds') or len(p['gpu_kinds'])!=len(set(p['gpu_kinds'])) or set(p['gpu_kinds'])-{'compute','graphics'} or any(type(p.get(k)) is not int or p[k]<=0 for k in ('gpu_budget_bytes','ram_budget_bytes')) for p in self.protected_peers):raise Conflict('Explicit reviewed peer identities/kinds/growth budgets required')
+        if self.sharing is not None:
+            cfg=self.sharing
+            if type(cfg.get('external_compute_budget_bytes')) is not int or not 0<cfg['external_compute_budget_bytes']<=15*GiB//4:raise Conflict('Shared external COMPUTE limit must have margin below4GiB')
+            if cfg.get('minimum_available_ram_bytes')!=8*GiB or cfg.get('enforce_own_rss') is not True or cfg.get('enforce_host_growth') is not True or self.host_free_floor<8*GiB:raise Conflict('Explicit shared RSS and8GiB host-floor enforcement required')
+            moss=cfg.get('moss_compute_pids',[])
+            if not moss or len(moss)!=len(set(moss)) or not set(moss)<=set(pids) or any('compute' not in p['gpu_kinds'] for p in self.protected_peers if p['identity']['pid'] in moss):raise Conflict('Exact protected MOSS COMPUTE identities required')
+        if any(set(v)!=set(IDENTITY_KEYS) for v in self.host_peak_identities) or len({v['pid'] for v in self.host_peak_identities})!=len(self.host_peak_identities):raise Conflict('Exact distinct host-peak identities required')
+    def host_peak_growth(self,obs,own=()):
+        protected={p['identity']['pid'] for p in self.protected_peers};growth=0
+        for saved in self.host_peak_identities:
+            current=obs['procs'].get(saved['pid'],{})
+            if any(current.get(k)!=saved[k] for k in IDENTITY_KEYS):raise Conflict('Protected host-peak identity changed')
+            if saved['pid'] not in own and saved['pid'] not in protected:growth+=max(0,current.get('hwm',current['rss'])-current['rss'])
+        return growth
+    def external_compute(self,state,obs,actual,prospective=0):
+        if self.sharing is None:return {'sharing_active':False,'external_compute_budget_exceeded':False}
+        moss=set(self.sharing['moss_compute_pids'])
+        current=sum(used for pid,used in obs['gpu_memory'].items() if pid not in moss and 'compute' in obs['gpu_kinds'].get(pid,()))
+        growth=sum(max(0,p['gpu_budget_bytes']-obs['gpu_memory'].get(p['identity']['pid'],0)) for p in self.protected_peers if p['identity']['pid'] not in moss and 'compute' in p['gpu_kinds'])
+        pending=sum(max(0,j['request']['gpu_bytes']-actual[token]) for token,j in state['jobs'].items())
+        projected=current+growth+pending+prospective;limit=self.sharing['external_compute_budget_bytes']
+        return {'sharing_active':True,'external_compute_actual_bytes':current,'external_compute_projected_bytes':projected,
+                'external_compute_limit_bytes':limit,'external_compute_budget_exceeded':current>limit or projected>limit}
     @contextlib.contextmanager
     def transaction(self):
         self.path.mkdir(parents=True,exist_ok=True)
@@ -228,6 +253,8 @@ class Registry:
                 if any(j['status']=='orphaned' for j in state['jobs'].values()):raise Conflict('Live orphan reservation requires reconciliation')
                 if any(owner['pid'] in self.membership(j,obs) for j in state['jobs'].values()):raise Conflict('A new guardian cannot nest inside another job worker')
                 actual,ram=self.accounting(state,obs)
+                shared=self.external_compute(state,obs,actual,request['gpu_bytes'])
+                if shared['external_compute_budget_exceeded']:raise Capacity('Shared external COMPUTE budget exceeds margin below MOSS4GiB')
                 # Current usage plus unconsumed peer budgets plus new budget;
                 # driver/library allowance includes observed unattributed use.
                 overhead=max(0,obs['used']-sum(obs['gpu_memory'].values()))
@@ -241,6 +268,7 @@ class Registry:
                 own=set().union(*(descendants(j['owner']['pid'],obs['procs']) for j in state['jobs'].values())) if state['jobs'] else set()
                 own|=descendants(owner['pid'],obs['procs'])
                 protected_growth=sum(max(0,v['hwm']-v['rss']) for pid,v in obs['procs'].items() if pid not in own and pid in obs.get('protected_pids',[]) and pid not in protected)
+                if self.host_peak_identities:protected_growth=self.host_peak_growth(obs,own)
                 if gpu_need>obs['total']:raise Capacity('GPU resource reservations plus driver headroom exceed physical capacity')
                 if ram_need+protected_growth>obs['available_ram']:raise Capacity('Declared remaining job growth plus observed protected growth exceeds available RAM')
                 token=uuid.uuid4().hex
@@ -280,9 +308,11 @@ class Lease:
             gpu_need=observed_charge+max(0,self.registry.driver_headroom-overhead)+protected_gpu_growth+sum(max(0,v['request']['gpu_bytes']-actual[t]) for t,v in state['jobs'].items())
             if gpu_need>obs['total']:raise Capacity('Protected/registered GPU growth no longer fits; stop owned worker only')
             ram_need=self.registry.host_free_floor+protected_ram_growth+sum(max(0,v['request']['ram_bytes']-ram[t]) for t,v in state['jobs'].items())
-            # Preserve original runtime host stop rule: actual OOM or sustained
-            # PSI, never an RSS/reservation heuristic kill. reserve() repeats
-            # the RAM envelope before any new admission.
+            own=set().union(*(descendants(v['owner']['pid'],obs['procs']) for v in state['jobs'].values())) if state['jobs'] else set()
+            ram_need+=self.registry.host_peak_growth(obs,own)
+            shared=self.registry.external_compute(state,obs,actual)
+            # Legacy CPU fixtures preserve report-only RAM; explicit native
+            # sharing policy enforces ownedRSS,8GiBfreefloor andgrowth below.
             ram_forecast_fits=ram_need<=obs['available_ram']
             members=self.registry.membership(j,obs)
             j['known_members']=[{k:obs['procs'][p][k] for k in ('pid','birth','boot')} for p in sorted(members) if p in obs['procs']]
@@ -290,6 +320,10 @@ class Lease:
             return {'own_gpu_bytes':actual[self.token],'own_ram_bytes':ram[self.token],
               'own_gpu_budget_exceeded':actual[self.token]>j['request']['gpu_bytes'],
               'own_ram_above_reservation':ram[self.token]>j['request']['ram_bytes'],
+              'own_ram_budget_exceeded':self.registry.sharing is not None and ram[self.token]>j['request']['ram_bytes'],
+              'shared_host_floor_breached':self.registry.sharing is not None and obs['available_ram']<self.registry.sharing['minimum_available_ram_bytes'],
+              'shared_host_growth_budget_exceeded':self.registry.sharing is not None and not ram_forecast_fits,
+              **shared,
               'host_growth_forecast_fits':ram_forecast_fits,'host_growth_required_bytes':ram_need,
               'registered_peers':[x['role'] for t,x in state['jobs'].items() if t!=self.token],
               'members':sorted(members),'free_gpu_bytes':obs['total']-obs['used']}

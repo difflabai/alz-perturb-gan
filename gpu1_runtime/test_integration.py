@@ -187,7 +187,7 @@ def status(root):
             state=copy.deepcopy(self.state);state['allocation_history']=[{'allocation_id':self.auth['allocation_id'],'status':status}]
             with self.assertRaisesRegex(b.Refusal,'already consumed'):b.unseen(self.auth,self.layout,state)
         legacy=self.layout.science/'runs/f0_pg_s0';legacy.mkdir(parents=True)
-        with self.assertRaisesRegex(b.Refusal,'existing GPU1/GPU1'):b.unseen(self.auth,self.layout,self.state)
+        with self.assertRaisesRegex(b.Refusal,'existing cross-card'):b.unseen(self.auth,self.layout,self.state)
     def test_core_180hour_budget_includes_closed_and_open_card_hours(self):
         state={'allocation_history':[{'allocation_id':self.auth['allocation_id'],'charged_GPU_seconds':180*3600-10,'status':'settled'}]}
         with self.assertRaisesRegex(b.Refusal,'180GPU-hour'):b.core_envelope(state,45)

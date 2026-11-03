@@ -42,6 +42,8 @@ def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
         result=None;error=None
         old={k:os.environ.get(k) for k in ['ALZ_PROJECT_RESERVATION_TOKEN','ALZ_PROJECT_BUDGET_ROOT']}
         try:
+            with controller.transaction() as state:
+                controller_gate(state,auth);b.core_envelope(state,0)
             os.environ['ALZ_PROJECT_RESERVATION_TOKEN']=reservation['token']
             os.environ['ALZ_PROJECT_BUDGET_ROOT']=str(layout.project)
             result=guard.run(ledger,b.GPU0,auth['label'],auth['command'],cap_seconds=auth['cap_seconds'],policy_path=auth['policy_path'],role=auth['role'],protect=protect,absolute_deadline=auth['expires_unix'],observe=observe,test_mode=layout.fixture_mode,expected_policy_sha256=auth['policy_SHA256'])

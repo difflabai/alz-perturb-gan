@@ -12,7 +12,7 @@ import project_runner_gpu0
 
 def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
     auth,_=b.verify(auth_path,layout)
-    # Same lock already held by the existing GPU1 core owner: no old/new race.
+    # Card-local phase serialization; backend also holds the distinct ALZ role lease.
     lock_path=(layout.science/'core_phase.lock') if layout.fixture_mode else (layout.project/'calibration_gpu1_phase.lock')
     with lock_path.open('a+') as phase_lock:
         fcntl.flock(phase_lock,fcntl.LOCK_EX|fcntl.LOCK_NB)

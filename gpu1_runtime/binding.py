@@ -21,7 +21,7 @@ SCIENCE=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/c
 GUARD=HERE/'guard'
 GPU1='GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69'
 SCIENCE_REVIEW='2d5f0add12b0fad41eb907594d9f6a4921147c26aa80229da384b8af7e203519'
-GUARD_REVIEW='00d31882ed278171535675473b51bf02b93b67968f024ee010c6e8669e91a884'
+GUARD_REVIEW='ddae35217691777556aed520ac2a7909ec117cd66e0186775bb92e13013d609d'
 CONTROLLER=PROJECT/'budget_executor_v2_20261103_r2/budget_controller.py'
 CONTROLLER_SHA='c8520f426e6b7a94741dd96804b96d9d22a224bff973b7e85d765e5b83c09848'
 PROJECT_BUDGET_SHA='85ea495a54dfc524fb493a34002305b534964cf1992fc659d07d2c38951e4872'
@@ -203,6 +203,9 @@ def verify(auth_path,layout=NATIVE_LAYOUT):
         require(auth.get('hybrid_config')==read(HERE/'qualification_sampler.json')=={'pg_bag_fraction':.75},'fixed GPU1 qualification sampler differs')
         require(policy.get('alz_role_lock')=='/mnt/nvme/sliders/locks/gpu-1-alz-training.lock','exact exclusive ALZ role protection absent')
         require(policy['roles']['alz_core_pg']=={'gpu_bytes':3*1024**3,'ram_bytes':6*1024**3},'reviewed small shared ALZ role differs')
+        sharing=policy.get('sharing',{})
+        require(sharing.get('external_compute_budget_bytes')==15*1024**3//4 and sharing.get('minimum_available_ram_bytes')==8*1024**3 and sharing.get('enforce_own_rss') is True and sharing.get('enforce_host_growth') is True,'reviewed sharing compute/RSS/host enforcement absent')
+        require(set(policy.get('protected_host_peak_pids',[]))=={v['pid'] for v in policy.get('protected_host_peak_identities',[])},'fresh exact host peak identities absent')
         require(str(RESEARCH/'SOURCE_ORIGINS.json') in auth['files_SHA256'],'literal frozen science inventory absent')
     source_closure(auth,layout)
     return auth,hashlib.sha256(raw).hexdigest()
@@ -239,7 +242,10 @@ def unseen(auth,layout,state):
     value=cell(auth);key=allocation_key(value)
     require(not any(r['allocation_id']==key for r in state.get('allocation_history',[])+state.get('open_reservations',[])),'scientific matrix cell already consumed/reserved, including failed or uncertain history')
     legacy=layout.science/'runs'/f"f{value['fold']}_{value['method']}_s{value['seed']}"
-    require(not legacy.exists() and not output_path(layout,value).exists() and not ledger_path(layout,value).exists(),'existing GPU1/GPU1 scientific output or ledger; inspect instead of duplicate')
+    other_attempt=attempt_key(value).replace('CAL_GPU1_V1_','CAL_GPU0_V1_',1)
+    other_output=(layout.science/'runs_calibration' if layout.fixture_mode else HERE.parent/'runs')/other_attempt
+    other_ledger=layout.project/'calibration_gpu0_v1_ledgers'/(other_attempt+'.json')
+    require(not legacy.exists() and not output_path(layout,value).exists() and not ledger_path(layout,value).exists() and not other_output.exists() and not other_ledger.exists(),'existing cross-card scientific output or ledger; inspect instead of duplicate')
 
 def require_live(auth_path,layout=NATIVE_LAYOUT):
     """Read-only child gate, called before site packages or model imports."""

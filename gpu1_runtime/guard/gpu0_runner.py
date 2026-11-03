@@ -61,13 +61,21 @@ def full_pressure():
     fields=dict(t.split('=') for t in next(l for l in Path('/proc/pressure/memory').read_text().splitlines() if l.startswith('full ')).split()[1:])
     return float(fields['avg10'])
 
+def enforce_health(health):
+    for flag,message in [('own_gpu_budget_exceeded','Owned GPU budget exceeded'),
+                         ('external_compute_budget_exceeded','Shared external COMPUTE margin exceeded'),
+                         ('own_ram_budget_exceeded','Owned ALZ RSS budget exceeded'),
+                         ('shared_host_floor_breached','Shared8GiB host availability floor breached'),
+                         ('shared_host_growth_budget_exceeded','Shared host growth forecast no longer fits')]:
+        if health.get(flag):raise MemoryError(message)
+
 def run(ledger_path,gpu_uuid,label,command,*,cap_seconds=3600,policy_path,role,protect=lambda:None,
         absolute_deadline=None,observe=None,poll_seconds=2,expected_policy_sha256=None,test_mode=False):
     """Wall-clock budget includes model startup, qualification, eval and cleanup.
 
     Per-job ledger lock prevents duplicate launches. Legacy guard source and
-    all earlier ledgers stay unchanged. Runtime RSS over reservation is reported,
-    not a kill rule; actual OOM/sustained pressure retains existing policy.
+    all earlier ledgers stay unchanged. Legacy fixtures retain report-only RSS. Explicit sharing policy additionally
+    stops only owned ALZ on RSS, external COMPUTE or host-floor/growth breach.
     """
     import fcntl
     if gpu_uuid!=GPU1:raise Conflict('This isolated candidate is GPU1 only')
@@ -102,8 +110,11 @@ def run(ledger_path,gpu_uuid,label,command,*,cap_seconds=3600,policy_path,role,p
             if hashlib.sha256(Path(path).read_bytes()).hexdigest()!=sha:raise Conflict('Pinned source changed: '+path)
         original_protect()
     protect()
+    if not test_mode and cfg.get('sharing') is None:raise Conflict('Explicit reviewed MOSS sharing enforcement required')
+    peak_ids=cfg.get('protected_host_peak_identities',[])
+    if set(cfg.get('protected_host_peak_pids',[]))!={v['pid'] for v in peak_ids}:raise Conflict('Host peak PID/identity binding differs')
     role_cfg=cfg['roles'][role]
-    registry=Registry(cfg['registry_path'],locks=cfg['locks'],roles=set(cfg['roles']),driver_headroom=cfg['driver_headroom_bytes'],gpu=GPU1,protected_peers=cfg['protected_peers'],host_free_floor=cfg['host_free_floor_bytes'],policy_sha256=expected_policy_sha256)
+    registry=Registry(cfg['registry_path'],locks=cfg['locks'],roles=set(cfg['roles']),driver_headroom=cfg['driver_headroom_bytes'],gpu=GPU1,protected_peers=cfg['protected_peers'],host_free_floor=cfg['host_free_floor_bytes'],policy_sha256=expected_policy_sha256,sharing=cfg.get('sharing'),host_peak_identities=peak_ids)
     native_observe=observe is None
     if native_observe and cfg.get('status')!='REVIEWED_GPU1_DEPLOYED':raise Conflict('Cooperative policy is prepared, not deployed; coordinate migration first')
     if observe is None:
@@ -158,7 +169,7 @@ def run(ledger_path,gpu_uuid,label,command,*,cap_seconds=3600,policy_path,role,p
                         atomic(ledger_path.with_name('telemetry_unknown.json'),{'checked_unix':time.time(),'error':repr(exc),'no_new_admission':True})
                         if now-unknown_since>90:raise Uncertain('Telemetry unknown beyond existing90-second grace') from exc
                     atomic(ledger_path.with_name('cooperative_live.json'),{'checked_unix':time.time(),'elapsed_seconds':now-started,**(last_health or {})})
-                    if last_health is not None and last_health['own_gpu_budget_exceeded']:raise MemoryError('Owned GPU budget exceeded')
+                    if last_health is not None:enforce_health(last_health)
                     if native_observe:
                         if oom_count()!=initial_oom:raise MemoryError('Actual host OOM observed')
                         psi=full_pressure();pressure_since=(pressure_since or now) if psi>=10 else None

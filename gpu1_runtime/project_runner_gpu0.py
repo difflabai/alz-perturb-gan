@@ -28,6 +28,7 @@ def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
         code_paths=[*b.HERE.glob('*.py'),b.GUARD/'gpu0_admission.py',b.GUARD/'gpu0_runner.py']
         code_paths+=list(b.read(layout.science/'REVIEW_MANIFEST.json')['source_SHA256'])
         code_paths+=list(auth.get('research_source_SHA256',{}))
+        if auth.get('checkpoint_path'):code_paths.append(auth['checkpoint_path'])
         def protect():
             role_lease.check()
             b.require(b.sha(auth_path)==auth_sha,'one-use authorization changed during execution')
@@ -35,8 +36,8 @@ def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
             for peer in auth['protected_peers']:b.require(admission.protected_identity(peer['identity']['pid'])==peer['identity'],'protected peer identity changed')
         protect()
         ledger.parent.mkdir(parents=True,exist_ok=True)
-        # The outer owner holds the existing scientific core_phase.lock throughout.
-        # This lock remains distinct from the unchanged Controller and guard locks.
+        # Outer card-local phase and this global ALZ role lease serialize GPU1.
+        # Cross-card core accounting is rechecked after canonical reserve below.
         with ledger.with_suffix('.project-owner.lock').open('a+') as owner_lock:
             fcntl.flock(owner_lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
             with controller.transaction() as state:
@@ -46,6 +47,8 @@ def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
             result=None;error=None
             old={k:os.environ.get(k) for k in ['ALZ_PROJECT_RESERVATION_TOKEN','ALZ_PROJECT_BUDGET_ROOT']}
             try:
+                with controller.transaction() as state:
+                    controller_gate(state,auth);b.core_envelope(state,0)
                 os.environ['ALZ_PROJECT_RESERVATION_TOKEN']=reservation['token']
                 os.environ['ALZ_PROJECT_BUDGET_ROOT']=str(layout.project)
                 result=guard.run(ledger,b.GPU1,auth['label'],auth['command'],cap_seconds=auth['cap_seconds'],policy_path=auth['policy_path'],role=auth['role'],protect=protect,absolute_deadline=auth['expires_unix'],observe=observe,test_mode=layout.fixture_mode,expected_policy_sha256=auth['policy_SHA256'])

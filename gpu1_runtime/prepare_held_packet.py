@@ -8,6 +8,7 @@ from pathlib import Path
 import subprocess
 import sys
 import tarfile
+import time
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
@@ -45,6 +46,13 @@ def main():
     admission = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(admission)
     obs = admission.snapshot()
+    desktop_samples=[obs['gpu_memory'].get(9387,0)]
+    members=set(obs['gpu_memory'])
+    for _ in range(2):
+        time.sleep(.1)
+        fresh=admission.snapshot()
+        b.require(set(fresh['gpu_memory'])==members,'GPU1 peer turnover during desktop measurement; refresh held snapshot')
+        desktop_samples.append(fresh['gpu_memory'].get(9387,0));obs=fresh
     compute = [pid for pid, kinds in obs['gpu_kinds'].items() if 'compute' in kinds]
     b.require(len(compute) == 1, 'one exact stable MOSS compute peer required for this held snapshot')
     moss_pid = compute[0]
@@ -55,7 +63,7 @@ def main():
     gnome = [copy.deepcopy(p) for p in gpu0_policy['protected_peers'] if p['identity']['pid'] == 9387]
     b.require(len(gnome) == 1 and admission.protected_identity(9387) == gnome[0]['identity'], 'desktop identity changed')
     gnome[0]['gpu_kinds'] = list(obs['gpu_kinds'][9387])
-    gnome[0]['gpu_budget_bytes'] = GiB // 4
+    gnome[0]['gpu_budget_bytes'] = max(GiB//4,max(desktop_samples)+GiB//8)
     peers = [*gnome, {'identity': admission.protected_identity(moss_pid), 'gpu_kinds': list(obs['gpu_kinds'][moss_pid]),
                       'gpu_budget_bytes': 40 * GiB, 'ram_budget_bytes': 40 * GiB}]
     growth = []
@@ -76,6 +84,9 @@ def main():
               'locks': list(admission.LOCKS), 'alz_role_lock': '/mnt/nvme/sliders/locks/gpu-1-alz-training.lock',
               'driver_headroom_bytes': GiB, 'host_free_floor_bytes': host_floor,
               'roles': {'alz_core_pg': {'gpu_bytes': 3 * GiB, 'ram_bytes': 6 * GiB}}, 'protected_peers': peers,
+              'sharing': dict(external_compute_budget_bytes=15*GiB//4,moss_compute_pids=compute,minimum_available_ram_bytes=8*GiB,enforce_own_rss=True,enforce_host_growth=True),
+              'protected_host_peak_pids':[q['identity']['pid'] for q in growth],
+              'protected_host_peak_identities':[q['identity'] for q in growth],
               'source_sha256': {str(p): b.sha(p) for p in [*HERE.glob('*.py'), *(HERE / 'guard').glob('*.py')]},
               'prepared_note': 'HELD sharing-compatible source proposal. No deployment/registration/reservation/job. Exact current MOSS membership and all source/capacity gates must be refreshed after independent review.'}
     overhead = max(0, obs['used'] - sum(obs['gpu_memory'].values()))
@@ -86,9 +97,12 @@ def main():
     basis = {'status': 'READ_ONLY_SHARING_FORECAST_NOT_ADMISSION', 'utc': stamp,
              'MOSS_published_policy_path': str(MOSS / 'gpu1-sharing.json'), 'MOSS_published_policy_SHA256': b.sha(MOSS / 'gpu1-sharing.json'),
              'MOSS_shared_source_SHA256': b.sha(MOSS / 'shared_gpu.py'),
+             'desktop_measurement':{'observed_GPU_bytes':desktop_samples,'observed_peak_bytes':max(desktop_samples),'forecast_GPU_bytes':gnome[0]['gpu_budget_bytes'],'forecast_rule':'max256MiB, measuredpeak+128MiB; reserve is a conservative forecast, not a measured peak.'},
+             'authority_provenance':'Own currentuser explicitly permitsbothGPUs; sharing coordination follows authenticatedEmber9473. The Mikkel quote inMOSS JSON is publisher provenance, not a directmessage independentlyseenhere.',
              'compatibility': 'MOSS shared_gpu.Peers dynamically pins new same-UID compute peers and caps external compute at4GiB; ALZ3GiB plus desktop.25GiB forecasts fit even if graphics are conservatively included. Both physical leasesREAD; distinct exclusiveALZrole. Never signal/adopt MOSS.',
              'GPU_required_bytes': gpu_need, 'GPU_total_bytes': obs['total'], 'GPU_fits_snapshot': gpu_need <= obs['total'],
              'host_required_available_bytes': ram_need, 'host_available_bytes': obs['available_ram'], 'host_fits_snapshot': ram_need <= obs['available_ram'],
+             'enforcement':'Native sharingguard stops ownedALZ on externalCOMPUTE actual/projected>3.75GiB, ownRSSbudgetbreach, MemAvailable<8GiB or hostgrowthforecastfailure. Graphics-only desktop excluded fromMOSScompute cap, separatelyforecast; fresh exact hostpeak identities reserveadditionalHWM growth.',
              'host_floor_basis': {'minimum_host_floor_bytes': 8 * GiB, 'future_or_concurrent_GPU0_ALZ_RAM_bytes': 6 * GiB,
                                  'GPU0_other_protected_remaining_growth': growth},
              'native_GPU1_qualified': False, 'foreign_worker_turnover': 'Any exact peer membership/identity change refuses/stops owned ALZ; refresh finite attempt after review, never relax peer gates.'}
