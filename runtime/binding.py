@@ -143,6 +143,11 @@ def source_closure(auth,layout):
         if auth['operation']=='evaluate_reference':
             checkpoint=Path(auth['checkpoint_path'])
             require(pins.get(str(checkpoint))==auth.get('checkpoint_SHA256'),'complete reference checkpoint pin absent')
+        else:
+            require(auth['cap_seconds']==21600,'fixed training pipeline cap required')
+            config=HERE.parent/'candidate.json'
+            require(str(config) in pins and read(config)==auth.get('variant_config'),'exact selected candidate config absent or changed')
+            require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete model variant source pins required')
     for path,pin in pins.items():require(sha(path)==pin,'source/input/runtime changed: '+path)
 
 def verify(auth_path,layout=NATIVE_LAYOUT):
