@@ -1,10 +1,11 @@
 {
   "status": "PURE_RETAINED_VARIANTS_AND_NATIVE_RECIPE_COMPARISON_VERIFIED",
   "native_recipe_families_tested": [
+    "bcap",
     "bispf",
     "bispf_optimized"
   ],
-  "new_training_updates": 40000,
+  "new_training_updates": 60000,
   "protocol_SHA256": "6a4bea0b3448a6de3322e790ea52ef02639ce57a2dc05f5c1be3b709aeff93f7",
   "manifest_SHA256": "c3649115c2ff98d18d658bad1f93a3487311928e1166e81cdc7599cc09ee4bcc",
   "pure_only": true,
@@ -295,6 +296,74 @@
       "joint_baseline_target_met": false
     },
     {
+      "metric_role": "calibration_selection",
+      "generation_replicates": 2,
+      "donors": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "training_seed": 0,
+      "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+      "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+      "sampling_contract": "calibration_equal_stage375_priority_v1",
+      "energy_score": 2.1307024699088712,
+      "cell_energy_distance": 0.2868419455158664,
+      "spread_ratio": 0.8903876331083471,
+      "within_condition_spread_ratio": 0.7990048932274683,
+      "coverage80": 0.6490384615384616,
+      "generated_zero_count_rate": 7.8125e-06,
+      "per_donor_energy_score": [
+        1.2549049260959002,
+        3.0478023754423464,
+        2.1739251449538997,
+        2.046177433143338
+      ],
+      "per_stage_cell_energy_distance": [
+        0.9795959923426159,
+        1.7651775191657286,
+        1.1234262728982713,
+        0.5796691711941149
+      ],
+      "status": "VERIFIED_PURE_PG_ONLY",
+      "completed_updates": 20000,
+      "fixed_endpoint": 20000,
+      "integer_count_contract_passed": true,
+      "allocation_id": "ALZ_CAL_V1_bcap_v1_f0_pg_s0",
+      "operation": "train_bcap",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_bcap_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "c2cce549865c605fcf6efff771db17269821c8f39e48d11b7a3c5bbafca90d34",
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": false,
+        "cell_z_dim": 8,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 1.0
+      },
+      "method": "pg_bcap",
+      "hybrid_config": null,
+      "qualification_only": false,
+      "new_model_updates": 20000,
+      "initial_completed_updates": 0,
+      "native_recipe_schedule_horizon": 20000,
+      "parent_checkpoint_SHA256": null,
+      "automatic_successor": false,
+      "generation": "direct_iter_pg",
+      "real_bag_replacements": 0,
+      "pure_only": true,
+      "native_recipe": "bcap",
+      "pure_formulation": "bcap",
+      "formulation": "bcap",
+      "complete_clean_settlement_verified": true,
+      "charged_GPU_seconds": 1426.8922563740052,
+      "accepted": false,
+      "decision_evidence": "/ml2/alz/analysis/CAL_GPU0_V1_bcap_v1_f0_pg_s0-result.json",
+      "ES_improvement_vs_resampling_percent": -2.4727362864324087,
+      "cell_ED_difference_vs_resampling": 0.04406369243268671,
+      "joint_baseline_target_met": false
+    },
+    {
       "status": "VERIFIED_PURE_PG_ONLY",
       "formulation": "reference2",
       "attempt": "CAL_GPU0_V1_pure_reference2_v1_f0_pg_s0",
@@ -444,7 +513,7 @@
     }
   ],
   "best_pure_by_energy_score": "latent8",
-  "suite_charged_GPU_seconds": 2309.8024768879986,
+  "suite_charged_GPU_seconds": 3736.694733262004,
   "joint_target_met_any": false,
   "limitations": "Adaptive4calibrationdonors, firstfold,seed0,two generation replicates.40k uses extra training compute. Not evaluation or external SOTA.",
   "hybrid_incumbent_SHA256": "c83f7f184b12eb4e705f4a4c6492e332bcab7c29482f834d1c70dd7c48071fc7",

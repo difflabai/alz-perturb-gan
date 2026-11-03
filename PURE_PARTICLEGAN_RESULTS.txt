@@ -1,6 +1,6 @@
 Pure ParticleGAN calibration comparison
 
-9 completed pure comparisons. Native recipe families: bispf, bispf_optimized. Seven retained architecture/training variants, native-preset comparisons, and a frozen subtype-observation trial. Direct iter_pg, zero real-bag replacements. Same4calibrationdonors,firstfold,seed0,two fixed generation replicates. Lower scores are better. Running or failed attempts are not quality results.
+10 completed pure comparisons. Native recipe families: bcap, bispf, bispf_optimized. Seven retained architecture/training variants, native-preset comparisons, and a frozen subtype-observation trial. Direct iter_pg, zero real-bag replacements. Same4calibrationdonors,firstfold,seed0,two fixed generation replicates. Lower scores are better. Running or failed attempts are not quality results.
 
 | Pure formulation | Updates | Energy score | Cell energy distance | Spread |
 |---|---:|---:|---:|---:|
@@ -11,6 +11,7 @@ Pure ParticleGAN calibration comparison
 | semantic_observation | 20000 | 2.00969280 | 0.27067140 | 0.95583 |
 | cell32 | 20000 | 2.02325405 | 0.31593183 | 0.88822 |
 | continue40k | 40000 | 2.04855219 | 0.26188396 | 0.94080 |
+| bcap | 20000 | 2.13070247 | 0.28684195 | 0.89039 |
 | reference2 | 20000 | 2.16451788 | 0.33100923 | 0.78881 |
 | original_bispf | 20000 | 2.23057151 | 0.35232120 | 0.85379 |
 | balanced8 | 20000 | 2.26647708 | 0.33299772 | 0.79970 |
@@ -19,4 +20,4 @@ Reference2, latent8 and balanced8 control arrays and integer count exemplars rep
 
 The40000-update continuation uses extra compute. These are adaptive calibration results, not independent validation or an external SOTA claim. Pure and hybrid leaders are kept separately. No pure formulation meets the joint5%ES/cellED/spread target.
 
-New training updates in additional recipe/observation comparisons:40000. Charged GPU time:2309.8025 seconds.
+New training updates in additional recipe/observation comparisons:60000. Charged GPU time:3736.6947 seconds.
