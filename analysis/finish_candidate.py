@@ -34,6 +34,7 @@ def git(*args):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--attempt', required=True)
+    parser.add_argument('--validation', action='store_true')
     args = parser.parse_args()
     deployment = read(ROOT / 'artifacts/allocations' / args.attempt / 'deployment.json')
     assert not deployment.get('qualification_only'), 'Qualification jobs cannot select or revert a candidate'
@@ -58,7 +59,8 @@ def main():
         result_path.write_text(json.dumps(failure, indent=2) + '\n')
         subprocess.run(['git', 'add', str(result_path)], cwd=ROOT, check=True)
         subprocess.run(['git', 'commit', '-m', 'Retain failed ' + args.attempt + ' before reverting candidate'], cwd=ROOT, check=True)
-        subprocess.run(['git', 'revert', '--no-edit', deployment['candidate_commit']], cwd=ROOT, check=True)
+        if not args.validation:
+            subprocess.run(['git', 'revert', '--no-edit', deployment['candidate_commit']], cwd=ROOT, check=True)
         print(json.dumps(failure, indent=2))
         return
     candidate = read(out / 'completed.json')
@@ -101,6 +103,35 @@ def main():
         records.append(q)
     for key in ['energy_score', 'cell_energy_distance', 'spread_ratio', 'within_condition_spread_ratio', 'coverage80', 'generated_zero_count_rate']:
         np.testing.assert_allclose(candidate[key], np.mean([q[key] for q in records]), rtol=0, atol=1e-10)
+    if args.validation:
+        def architecture(value):
+            return {'z_dim': value['z_dim'], 'stage_balance': value.get('stage_balance', False),
+                    'cell_z_dim': value.get('cell_z_dim', 8)}
+        assert architecture(candidate['variant_config']) == architecture(incumbent['variant_config'])
+        assert candidate.get('hybrid_config') == incumbent.get('hybrid_config')
+        assert candidate.get('method', 'pg') == incumbent.get('method', 'pg')
+        seed = candidate['training_seed']
+        assert seed in [1, 2], 'Confirmation seeds are fixed prospectively'
+        baseline = read(ROOT / 'analysis' / f'baseline_calibration_seed{seed}.json')
+        for key in ['donors', 'training_seed', 'generation_replicates', 'calibration_manifest_SHA256', 'trace_manifest_SHA256', 'sampling_contract']:
+            assert candidate[key] == baseline[key], 'Unmatched confirmation baseline: ' + key
+        result = {'status': 'SEED_CONFIRMATION_RECORDED_NO_MODEL_SELECTION',
+                  'attempt': args.attempt, 'candidate': candidate, 'baseline': baseline,
+                  'ES_relative_improvement': 1 - candidate['energy_score'] / baseline['energy_score'],
+                  'cell_ED_difference': candidate['cell_energy_distance'] - baseline['cell_energy_distance'],
+                  'joint_improvement': candidate['energy_score'] < baseline['energy_score']
+                                       and candidate['cell_energy_distance'] <= baseline['cell_energy_distance']
+                                       and .7 <= candidate['spread_ratio'] <= 1.3,
+                  'incumbent_unchanged': True, 'training_seed_was_not_ranked': True,
+                  'independently_verified_saved_scores_counts_and_checkpoint': True,
+                  'charged_GPU_seconds': settlement['settlement']['charged_GPU_seconds']}
+        path = ROOT / 'analysis' / (args.attempt + '-confirmation.json')
+        assert not path.exists()
+        path.write_text(json.dumps(result, indent=2, allow_nan=False) + '\n')
+        subprocess.run(['git', 'add', str(path)], cwd=ROOT, check=True)
+        subprocess.run(['git', 'commit', '-m', 'Record matched seed confirmation ' + args.attempt + ' without selecting seeds'], cwd=ROOT, check=True)
+        print(json.dumps({key: result[key] for key in ['status', 'attempt', 'ES_relative_improvement', 'cell_ED_difference', 'joint_improvement']}, indent=2))
+        return
     decision = decide(candidate, incumbent)
     baseline = read(ROOT / 'baseline_calibration.json')
     result = {
