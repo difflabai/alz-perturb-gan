@@ -18,7 +18,7 @@ def main():
     import torch
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
-    from pg_adapter import Context, restore
+    from pg_adapter import Context, build
     from pg_model import critic_features
     from critic import bag_features
     from contracts import sha
@@ -26,7 +26,17 @@ def main():
     assert sha(checkpoint) == 'c6fdab29e87dca26b5742208999e7552392ff25bab07056214da747cfb9e4fea'
     ctx = Context(SCIENCE / 'caches/fold0', 'cpu')
     state = torch.load(checkpoint, map_location='cpu', weights_only=False)
-    bundle, _, _, _, _ = restore(ctx, state)
+    bundle, _, _, _, _ = build(ctx.mu, ctx.theta, 'cpu', 0, 0)
+    # Observe only exact model tensors. Never rewrite checkpoint device fields
+    # or resume the CUDA optimizer/policy on a different device.
+    saved = state['policy']
+    for name, module in bundle[-1]._training_modules().items():
+        module.load_state_dict(saved['models'][name], strict=True)
+    with torch.no_grad():
+        bundle[3].z.copy_(saved['table'])
+    for name, module in bundle[-1]._training_modules().items():
+        for key, value in module.state_dict().items():
+            assert torch.equal(value, saved['models'][name][key])
     G, D, P = bundle[1], bundle[2], bundle[3]
     G.eval(); D.eval(); D.requires_grad_(False)
     rng = np.random.default_rng(20261107)
@@ -74,6 +84,7 @@ def main():
               'checkpoint_SHA256': sha(checkpoint),
               'scope': 'Fixed eight generated/real bags per stage on optimization donors only. Raw gradients before native optimizer geometry. Descriptive probe, no causal attribution.',
               'GPU_used': False, 'model_updates': 0, 'calibration_or_evaluation_targets_used': False}
+    result['observation_mode'] = 'CPU exact model tensor copy only; CUDA training policy/optimizer/RNG not resumed.'
     (ROOT / 'analysis/reference_critic_probe.json').write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps(result, indent=2))
 
