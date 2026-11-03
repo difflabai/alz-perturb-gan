@@ -1,0 +1,11 @@
+{
+  "status": "PROSPECTIVE_HYPOTHESIS_NOT_IMPLEMENTED_OR_ALLOCATED",
+  "hypothesis": "Marginal-count moment initialization assigns variation among biological cell states to independent per-gene Gamma noise. Higher initialNBprecision may allow the latent decoder to learn structured variation instead.",
+  "evidence": "analysis/nb_noise_diagnostic.json; fitting-only4096cellprobe ofkeptdonor8/cell8model:aggregateGamma fraction.83415,medianpergeneGamma fraction.65658,initialtheta median.1,learnedtheta median.16023. No calibration/evaluation targets used in this diagnostic.",
+  "next_single_change_if_needed": {
+    "theta_init_scale": 10.0,
+    "meaning": "Multiply optimization-only empiricaltheta by10whenconstructinggenerator;stilllearnedthereafter. Keep querylaw,losses,optimizer,20kendpoint,donorlatent8,selectedcelllatent,and75/25sampler fixed."
+  },
+  "qualification": "Implement default1state-parity and explicitcheckpointconfig binding; CPUcomplete continuation/finitegradient tests before anynativejob. No activepinnedsource edits.",
+  "limitations": "Rawcount decomposition does not directly decompose nonlinear log/PCA metrics or prove a causal failure. Actualcompleteendpoint calibrationES/cellED/spread decide; revert ifworse."
+}
