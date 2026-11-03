@@ -139,7 +139,7 @@ def source_closure(auth,layout):
         manifest=pinned_inventory(data/'manifest.json',auth.get('calibration_manifest_SHA256'),pins,'calibration input')
         require(manifest.get('status')=='CPU_CALIBRATION_PROJECTED_WITHOUT_REFITTING','calibration provenance differs')
         require_members(pins,{str(data/name):pin for name,pin in manifest['files_SHA256'].items()},'calibration arrays')
-        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','train_variant'),'registered calibration operation required')
+        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','train_variant','train_hybrid'),'registered calibration operation required')
         if auth['operation'] in ('evaluate_reference','evaluate_hybrid'):
             checkpoint=Path(auth['checkpoint_path'])
             require(pins.get(str(checkpoint))==auth.get('checkpoint_SHA256'),'complete reference checkpoint pin absent')
@@ -153,6 +153,9 @@ def source_closure(auth,layout):
             config=HERE.parent/'candidate.json'
             require(str(config) in pins and read(config)==auth.get('variant_config'),'exact selected candidate config absent or changed')
             require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete model variant source pins required')
+            if auth['operation']=='train_hybrid':
+                config=HERE.parent/'hybrid.json'
+                require(str(config) in pins and read(config)==auth.get('hybrid_config'),'exact training-hybrid mixture config absent or changed')
     for path,pin in pins.items():require(sha(path)==pin,'source/input/runtime changed: '+path)
 
 def verify(auth_path,layout=NATIVE_LAYOUT):

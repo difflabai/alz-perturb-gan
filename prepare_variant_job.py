@@ -3,6 +3,7 @@ import argparse
 import copy
 import datetime
 import json
+import math
 from pathlib import Path
 import subprocess
 import sys
@@ -17,10 +18,18 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--experiment', required=True)
     parser.add_argument('--seed', type=int, default=0)
+    parser.add_argument('--hybrid', action='store_true')
     args = parser.parse_args()
     config = b.read(ROOT / 'candidate.json')
-    b.require(set(config) == {'z_dim', 'stage_balance'} and config['z_dim'] in (2, 8)
-              and type(config['stage_balance']) is bool, 'registered candidate config required')
+    b.require(set(config) == {'z_dim', 'stage_balance', 'cell_z_dim'} and config['z_dim'] in (2, 8)
+              and type(config['stage_balance']) is bool and type(config['cell_z_dim']) is int
+              and config['cell_z_dim'] in (8, 32), 'registered candidate config required')
+    hybrid = b.read(ROOT / 'hybrid.json') if args.hybrid else None
+    if hybrid is not None:
+        fraction = hybrid.get('pg_bag_fraction')
+        b.require(set(hybrid) == {'pg_bag_fraction'} and type(fraction) in (int, float)
+                  and math.isfinite(fraction) and 0 <= fraction <= 1
+                  and abs(200 * fraction - round(200 * fraction)) < 1e-9, 'exact whole-bag hybrid fraction required')
     b.require(not subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True),
               'commit the complete candidate before deploying an experiment')
     commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
@@ -34,10 +43,10 @@ def main():
     now = time.time()
     auth.update(cell=value, allocation_id=b.allocation_key(value), attempt_id=b.attempt_key(value),
                 label=b.attempt_key(value), scheduler_allocation_id='ALZ_CAL_TRAIN_' + datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ'),
-                expires_unix=now + 21630, cap_seconds=21600, operation='train_variant',
+                expires_unix=now + 21630, cap_seconds=21600, operation='train_hybrid' if args.hybrid else 'train_variant',
                 output_dir=str(b.output_path(b.NATIVE_LAYOUT, value)),
                 ledger_path=str(b.ledger_path(b.NATIVE_LAYOUT, value)),
-                variant_config=config, candidate_commit=commit,
+                variant_config=config, hybrid_config=hybrid, candidate_commit=commit,
                 source_review='Original science/runtime/input/guard preserved; exact optimizer/update AST and disabled-sampling original full-state parity; balanced8bags-per-stage test, complete continuation and sampling-config mismatch rejection; source-derived15CPU ownership/accounting tests. New native candidate quality unproven.')
     auth['command'] = b.expected_command(b.NATIVE_LAYOUT, auth_path, value)
     research_paths = [*ROOT.glob('*.py'), *(ROOT / 'runtime').glob('*.py'), *(ROOT / 'model').glob('*.py')]
@@ -46,6 +55,8 @@ def main():
     pins = auth['files_SHA256']
     pins.update(research)
     pins[str(ROOT / 'candidate.json')] = b.sha(ROOT / 'candidate.json')
+    if args.hybrid:
+        pins[str(ROOT / 'hybrid.json')] = b.sha(ROOT / 'hybrid.json')
     for path in [ROOT / 'incumbent.json', ROOT / 'ITERATION_AUTHORIZATION_20261103.json']:
         pins[str(path)] = b.sha(path)
     b.source_closure(auth, b.NATIVE_LAYOUT)
@@ -84,7 +95,7 @@ def main():
               'utc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
               'authorization_path': str(auth_path), 'authorization_SHA256': b.sha(auth_path),
               'allocation_id': auth['allocation_id'], 'attempt_id': auth['attempt_id'],
-              'candidate_commit': commit, 'variant_config': config,
+              'candidate_commit': commit, 'variant_config': config, 'hybrid_config': hybrid,
               'cap_seconds': 21600, 'endpoint': 20000, 'source_pin_count': len(pins),
               'output_dir': auth['output_dir'], 'ledger_path': auth['ledger_path']}
     (allocation_dir / 'deployment.json').write_text(json.dumps(record, indent=2) + '\n')

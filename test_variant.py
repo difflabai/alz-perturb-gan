@@ -135,6 +135,28 @@ class Variant(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'variant sampling configuration differs'):
                 variant.restore(ctx, checkpoint)
 
+    def test_cell32_architecture_complete_checkpoint_and_next_update_match(self):
+        update.configure({'z_dim': 8, 'stage_balance': False, 'cell_z_dim': 32})
+        with tempfile.TemporaryDirectory() as d:
+            cache = Path(d)
+            (cache / 'manifest.json').write_text('{}')
+            ctx = fixture(cache)
+            b, g, r, u, streams = variant.build(ctx.mu, ctx.theta, 'cpu', 0, 0)
+            self.assertEqual(b[1].zc, 32)
+            self.assertEqual(b[1].cell[0].in_features, 32)
+            self.assertEqual(tuple(b[3].z.shape), (512, 8))
+            variant.advance(ctx, b, g, r, u, execution_limit=20000)
+            checkpoint = variant.snapshot(ctx, b, g, r, u, 0, streams, 'synthetic')
+            expected_metrics = variant.advance(ctx, b, g, r, u, execution_limit=20000)
+            expected = variant.snapshot(ctx, b, g, r, u, 0, streams, 'synthetic')
+            rb, rg, rr, ru, rs = variant.restore(ctx, checkpoint)
+            observed_metrics = variant.advance(ctx, rb, rg, rr, ru, execution_limit=20000)
+            same(expected_metrics, observed_metrics)
+            same(expected, variant.snapshot(ctx, rb, rg, rr, ru, 0, rs, 'synthetic'))
+            update.configure({'z_dim': 8, 'cell_z_dim': 8})
+            with self.assertRaisesRegex(ValueError, 'variant sampling configuration differs'):
+                variant.restore(ctx, checkpoint)
+
 
 if __name__ == '__main__':
     unittest.main()

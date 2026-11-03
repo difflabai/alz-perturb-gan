@@ -40,7 +40,7 @@ class Context:
   idx=torch.as_tensor(np.stack([rng.choice(self.by[i],128,replace=True) for i in ds]),device=self.device)
   return bag_features(self.trainpcs[idx]),self.conditions[torch.as_tensor(ds,device=self.device)],self.X[idx].sum(-1)
 def build(mu,theta,device,fold,seed):
- streams=training_streams(fold,seed);rec=recipe();torch.manual_seed(streams['generator_init']);G=CountGenerator(mu.cpu(),theta.cpu(),zd=rec.z_dim).to(device)
+ streams=training_streams(fold,seed);rec=recipe();torch.manual_seed(streams['generator_init']);G=CountGenerator(mu.cpu(),theta.cpu(),zd=rec.z_dim,zc=CONFIG['cell_z_dim']).to(device)
  torch.manual_seed(streams['critic_init']);D=VectorCritic(N_FEATURES,h=128).to(device)
  P=rec.make_prior(generator=torch.Generator().manual_seed(streams['prior_init'])).to(device);og,od=rec.make_optimizers(G,D,P);pen=rec.make_critic_penalty(od);loss=rec.make_loss();reg=rec.make_prior_regularizer(prior=P,weight=1.)
  policy=UpdatePolicy(rec,G,D,prior=P,generator_optimizer=og,critic_optimizer=od,penalty=pen,seed=seed,row_semantics='conditional',streams={name:torch.Generator(device=device).manual_seed(streams['policy_'+key]) for name,key in [('latent_generator','latent'),('penalty_generator','penalty'),('eval_generator','eval'),('noise_generator','noise')]})
