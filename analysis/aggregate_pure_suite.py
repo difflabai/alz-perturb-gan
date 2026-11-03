@@ -43,6 +43,15 @@ if extra.exists() and 'candidate' in read(extra):
  assert audit['all_model_keys_shapes_and_dtypes_match_declared_architecture'] and audit['finite_model_floating_point_values']==376066 and audit['learned_observation_config']==candidate['learned_observation_config']
  for key in ['donors','training_seed','sampling_contract','calibration_manifest_SHA256','trace_manifest_SHA256','generation_replicates']:assert candidate[key]==rows[0][key]
  rows.append({**candidate,'status':'VERIFIED_PURE_PG_ONLY','formulation':'learned_observation','complete_clean_settlement_verified':True,'charged_GPU_seconds':evidence['charged_GPU_seconds'],'accepted':evidence['decision']['accept'],'decision_evidence':str(extra)})
+extra=ROOT/'analysis/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0-result.json'
+if extra.exists() and 'candidate' in read(extra):
+ evidence=read(extra);candidate=evidence['candidate'];audit=read(ROOT/'analysis/network_rate_checkpoint_audit.json')
+ assert evidence['independent_saved_scores_checkpoint_and_count_exemplars_verified']
+ assert candidate['pure_only'] and candidate['real_bag_replacements']==0 and candidate['native_recipe']=='bispf_optimized' and candidate['operation']=='train_network_rate'
+ assert audit['status']=='VERIFIED_COMPLETE_NATIVE_NETWORK_RATE_CHECKPOINT' and audit['checkpoint_SHA256']==candidate['checkpoint_SHA256'] and audit['native_recipe_exactly_matches_official_API_factory']
+ assert audit['all_model_keys_shapes_and_dtypes_match_declared_architecture'] and audit['finite_model_floating_point_values']==371177 and audit['network_rate_config']==candidate['network_rate_config']=={'lr':.006,'prior_lr_mult':5.}
+ for key in ['donors','training_seed','sampling_contract','calibration_manifest_SHA256','trace_manifest_SHA256','generation_replicates']:assert candidate[key]==rows[0][key]
+ rows.append({**candidate,'status':'VERIFIED_PURE_PG_ONLY','formulation':'network_rate_half','complete_clean_settlement_verified':True,'charged_GPU_seconds':evidence['charged_GPU_seconds'],'accepted':evidence['decision']['accept'],'decision_evidence':str(extra)})
 base=read(ROOT/'baseline_calibration.json')
 for row in rows:
  row['ES_improvement_vs_resampling_percent']=100*(1-row['energy_score']/base['energy_score'])
