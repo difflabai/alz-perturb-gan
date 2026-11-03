@@ -68,6 +68,7 @@ def main():
     attempts = [freeze['seed0_attempt'], args.seed1_attempt, args.seed2_attempt]
     assert len(set(attempts)) == 3
     deployment0, auth0, candidate0 = verified_deployment(attempts[0])
+    assert auth0.get('cpu_fixture') is False and auth0['status'] == 'APPROVED_FOR_BOUNDED_EXECUTION'
     assert sha(deployment0['authorization_path']) == freeze['seed0_authorization_SHA256']
     assert candidate0 == freeze['seed0_candidate'] == {k: v for k, v in read(incumbent_path).items() if k != 'candidate_commit'}
     identities = confirmation_identities(attempts[0], candidate0['checkpoint_SHA256'])
@@ -85,6 +86,7 @@ def main():
     records = []; evidence_pins = {str(args.freeze.resolve()): freeze_pin, str(decision_path): sha(decision_path)}
     for seed, attempt in enumerate(attempts):
         deployment, auth, candidate = verified_deployment(attempt)
+        assert auth.get('cpu_fixture') is False and auth['status'] == 'APPROVED_FOR_BOUNDED_EXECUTION'
         base_record = freeze['matched_baselines'][str(seed)]
         baseline_path = ROOT / 'analysis' / f'baseline_calibration_seed{seed}.json'
         assert str(baseline_path) == base_record['path'] and sha(baseline_path) == base_record['SHA256']
