@@ -1,0 +1,41 @@
+{
+  "status": "SYNTHETIC_CPU_20000_TO_20001_CONTINUATION_BITWISE_VERIFIED",
+  "utc": "2026-11-03T19:53:27.637037+00:00",
+  "synthetic_actual_updates": 20001,
+  "native_recipe_schedule_horizon": 20000,
+  "caller_execution_limit": 40000,
+  "complete_state_and_next_update_bitwise_equal_after_restore": true,
+  "elapsed_seconds": 2316.511710652965,
+  "variant_config": {
+    "z_dim": 8,
+    "stage_balance": false,
+    "cell_z_dim": 8,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0
+  },
+  "synthetic_checkpoint_SHA256": "820cda5e9fd351f025a0baffaaa3cc3f84bb8961c65bed363b070cc41c148acd",
+  "source_SHA256": {
+    "/ml2/alz/analysis/qualify_extension_cpu.py": "d733b9bdbb0aaabfd110ab8a81140f88652efd8634d13043f0ea3b98ba977d8b",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/policy.py": "4eb130cb5982c8333eec1abac6829c76b8aeea8f4ce87bc90b06b805c7dede0c",
+    "/ml2/alz/artifacts/cpu_extension_qualification_isolated/source/test_variant.py": "6de8f8bbaae8b4ed204520d6e22bb341f83e524f65aab284b3a225899ff8f207",
+    "/ml2/alz/artifacts/cpu_extension_qualification_isolated/source/model/variant_pg_adapter.py": "76fd5e532a4190ec111b38b3b51216d15a5b4f04998a98e7bf08631b6da8d592",
+    "/ml2/alz/artifacts/cpu_extension_qualification_isolated/source/model/variant_pg_update.py": "65f85a1f17b9b1b5263ecf38f39d11d9960d50e65e667dc888c7c9b9b65ccc69"
+  },
+  "copied_source_origins": {
+    "/ml2/alz/artifacts/cpu_extension_qualification_isolated/source/test_variant.py": {
+      "original_path": "/ml2/alz/test_variant.py",
+      "SHA256": "6de8f8bbaae8b4ed204520d6e22bb341f83e524f65aab284b3a225899ff8f207"
+    },
+    "/ml2/alz/artifacts/cpu_extension_qualification_isolated/source/model/variant_pg_adapter.py": {
+      "original_path": "/ml2/alz/model/variant_pg_adapter.py",
+      "SHA256": "76fd5e532a4190ec111b38b3b51216d15a5b4f04998a98e7bf08631b6da8d592"
+    },
+    "/ml2/alz/artifacts/cpu_extension_qualification_isolated/source/model/variant_pg_update.py": {
+      "original_path": "/ml2/alz/model/variant_pg_update.py",
+      "SHA256": "65f85a1f17b9b1b5263ecf38f39d11d9960d50e65e667dc888c7c9b9b65ccc69"
+    }
+  },
+  "GPU_used": false,
+  "real_ALZ_fitting_updates": 0,
+  "scope": "Synthetic6donors/24cells/8genes only. Demonstrates native horizon and full-state continuation, not ALZ quality or GPU admission. No real calibration/evaluation data used."
+}
