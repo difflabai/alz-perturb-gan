@@ -1,0 +1,15 @@
+{
+  "status": "REGISTERED_BEFORE_ORIGINAL_BISPF_TRIAL",
+  "hypothesis": "The native original BISPF recipe may improve pure ALZ donor-summary energy and cell distribution match relative to optimized BISPF.",
+  "native_recipe": "bispf, ParticleGAN0.9.4; full resolved recipe saved in checkpoint",
+  "task_overrides": {"total_steps": 20000, "batch_size": 32, "num_particles": 512, "z_dim": 8},
+  "matched": "Same PG8 generator/critic/prior initialization, architecture, unbalanced donor sampling, 33optimizationdonors, fixed features, cell8/theta1/Fourier1, fold0/seed0, preprocessing and two calibration generation traces.",
+  "recipe_confound": "Compare complete native recipes: original BISPF uses Sinkhorn relativistic pairing, native Adam laws and SBNP prior_reg.05, versus optimized BISPF non-saturating/DualNorm/SBNP.01. This is not a one-factor optimizer/loss ablation.",
+  "generator_objective": "Native SinkhornRelativisticLoss.g_loss(fake_logits, real_logits), using fresh matched real2/c2 batch. All other ALZ update-body statements retain optimized adapter behavior.",
+  "generation": "Pure direct iter_pg, zero whole-bag real-resampling replacements; same original count model/Poisson draw and count validation.",
+  "cap_seconds": 21600,
+  "device": "GPU0 with exact protected Nano/desktop peers; existing canonical1024GPUh and180hcore envelopes",
+  "selection": "Compare against pure_incumbent.json only. Strictly lower calibration ES, no worse cellED/spread-band distance, complete20k and count validity. Preserve hybrid incumbent. Commit evidence then actual git revert candidate plan on rejection.",
+  "joint_target": "At least5percent lowerES than matched resampling, no worsecellED,spread[.7,1.3],then freeze configuration and confirm matched trainingseeds0/1/2. Four adaptivecalibrationdonors do not establish independent validation or external SOTA.",
+  "evaluation_donors": "Excluded from candidate ranking; no generation/evaluation on20evaluationdonors in trial."
+}

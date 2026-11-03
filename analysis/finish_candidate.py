@@ -35,7 +35,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--attempt', required=True)
     parser.add_argument('--validation', action='store_true')
+    parser.add_argument('--pure', action='store_true')
     args = parser.parse_args()
+    assert not(args.pure and args.validation),'Pure seed confirmation needs a frozen explicit protocol'
+    incumbent_name='pure_incumbent.json' if args.pure else 'incumbent.json'
     deployment = read(ROOT / 'artifacts/allocations' / args.attempt / 'deployment.json')
     assert not deployment.get('qualification_only'), 'Qualification jobs cannot select or revert a candidate'
     out, ledger = Path(deployment['output_dir']), Path(deployment['ledger_path'])
@@ -73,8 +76,8 @@ def main():
     assert candidate['variant_config'] == deployment['variant_config']
     if deployment.get('hybrid_config') is not None:
         assert candidate['hybrid_config'] == deployment['hybrid_config']
-    incumbent = json.loads(git('show', deployment['candidate_commit'] + ':incumbent.json'))
-    assert read(ROOT / 'incumbent.json') == incumbent, 'Incumbent changed concurrently; reconcile rather than select against a moving target'
+    incumbent = json.loads(git('show', deployment['candidate_commit'] + ':'+incumbent_name))
+    assert read(ROOT / incumbent_name) == incumbent, 'Incumbent changed concurrently; reconcile rather than select against a moving target'
     targets = np.load(ROOT / 'data/calibration_fold0/real_summaries.npz', allow_pickle=False)
     real_cells = np.load(ROOT / 'data/calibration_fold0/cell_reservoir.npz', allow_pickle=False)
     records = []
@@ -134,6 +137,9 @@ def main():
         subprocess.run(['git', 'commit', '-m', 'Record matched seed confirmation ' + args.attempt + ' without selecting seeds'], cwd=ROOT, check=True)
         print(json.dumps({key: result[key] for key in ['status', 'attempt', 'ES_relative_improvement', 'cell_ED_difference', 'joint_improvement']}, indent=2))
         return
+    if args.pure:
+        assert candidate.get('pure_only') is True and candidate.get('real_bag_replacements')==0 and candidate.get('hybrid_config') is None
+        assert candidate.get('native_recipe')=='bispf' and candidate.get('operation')=='train_bispf'
     decision = decide(candidate, incumbent)
     baseline = read(ROOT / 'baseline_calibration.json')
     result = {
@@ -154,8 +160,8 @@ def main():
     result_path.write_text(json.dumps(result, indent=2, allow_nan=False) + '\n')
     if decision['accept']:
         candidate['candidate_commit'] = deployment['candidate_commit']
-        (ROOT / 'incumbent.json').write_text(json.dumps(candidate, indent=2) + '\n')
-        subprocess.run(['git', 'add', str(result_path), 'incumbent.json'], cwd=ROOT, check=True)
+        (ROOT / incumbent_name).write_text(json.dumps(candidate, indent=2) + '\n')
+        subprocess.run(['git', 'add', str(result_path), incumbent_name], cwd=ROOT, check=True)
         subprocess.run(['git', 'commit', '-m', 'Keep ' + args.attempt + ': improved calibration ES and distribution match'], cwd=ROOT, check=True)
     else:
         subprocess.run(['git', 'add', str(result_path)], cwd=ROOT, check=True)

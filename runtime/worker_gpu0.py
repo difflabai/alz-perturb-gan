@@ -19,7 +19,7 @@ def validate_reference(checkpoint,auth):
     b.require(checkpoint.get('cache_manifest_SHA256')==b.sha(Path(auth['cache_dir'])/'manifest.json'),'reference preprocessing/cache differs')
 
 def run_scientific(auth,admission,layout):
-    b.require(auth['operation'] in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','train_variant','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
+    b.require(auth['operation'] in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','train_variant','train_bispf','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
     runtime=b.runtime_path(layout,b.cell(auth))
     b.require(Path(sys.executable).absolute()==runtime.absolute() and sys.version_info[:2]==(3,12),'exact PG scientific interpreter required')
     sys.path.extend(map(str,b.native_site_roots(b.cell(auth),auth['files_SHA256'])))
@@ -32,7 +32,7 @@ def run_scientific(auth,admission,layout):
     from generation import iter_pg
     from calibration import evaluate,average,dump,sha
     out=Path(auth['output_dir']);out.mkdir(parents=True,exist_ok=False)
-    reserve=120 if auth['operation'] in ('train_variant','train_hybrid','continue_hybrid','train_extended_hybrid') else 30
+    reserve=120 if auth['operation'] in ('train_variant','train_bispf','train_hybrid','continue_hybrid','train_extended_hybrid') else 30
     end=time.monotonic()+max(0,min(admission['authorization_expiry'],admission['ledger_started_unix']+auth['cap_seconds'])-time.time()-reserve)
     try:
         if auth['operation']=='qualify_continuation':
@@ -65,9 +65,14 @@ def run_scientific(auth,admission,layout):
             checkpoint_path=Path(auth['checkpoint_path'])
         else:
             sys.path.insert(0,str(b.HERE.parent/'model'))
-            import variant_pg_update
-            variant_pg_update.configure(auth['variant_config'])
-            from variant_pg_adapter import Context,fit
+            if auth['operation']=='train_bispf':
+                import original_bispf_update
+                original_bispf_update.configure(auth['variant_config'])
+                from original_bispf_adapter import Context,fit
+            else:
+                import variant_pg_update
+                variant_pg_update.configure(auth['variant_config'])
+                from variant_pg_adapter import Context,fit
             ctx=Context(Path(auth['cache_dir']),'cuda:0')
             if auth['operation'] in ('continue_hybrid','train_extended_hybrid'):
                 from continuation import fit_extended
@@ -90,6 +95,7 @@ def run_scientific(auth,admission,layout):
                     yield item
             return iterator
         method='pg_resampling_hybrid' if auth['operation'] in ('evaluate_hybrid','train_hybrid','continue_hybrid','train_extended_hybrid') else 'pg'
+        if auth['operation']=='train_bispf':method='pg_bispf'
         if auth['fixed_endpoint']==40000:method+='_'+'40k'
         records=[evaluate(ctx,method,b.cell(auth)['seed'],rep,iterator_for(rep),out/f'r{rep}') for rep in [0,1]]
         result=average(records)
@@ -99,12 +105,14 @@ def run_scientific(auth,admission,layout):
                       variant_config=auth.get('variant_config',{'z_dim':2}),
                       method=method,hybrid_config=auth.get('hybrid_config'),
                       qualification_only=auth.get('qualification_only',False),
-                      new_model_updates=auth['fixed_endpoint']-auth.get('initial_completed_updates',0) if auth['operation'] in ('train_variant','train_hybrid','continue_hybrid','train_extended_hybrid') else 0,
+                      new_model_updates=auth['fixed_endpoint']-auth.get('initial_completed_updates',0) if auth['operation'] in ('train_variant','train_bispf','train_hybrid','continue_hybrid','train_extended_hybrid') else 0,
                       initial_completed_updates=auth.get('initial_completed_updates',0),native_recipe_schedule_horizon=20000,
                       parent_checkpoint_SHA256=auth.get('checkpoint_SHA256') if auth['operation']=='continue_hybrid' else None,
                       automatic_successor=False)
         if auth['operation']=='evaluate_pure_variant':
             result.update(generation='direct_iter_pg',real_bag_replacements=0,pure_formulation=auth['pure_formulation'],pure_only=True)
+        if auth['operation']=='train_bispf':
+            result.update(generation='direct_iter_pg',real_bag_replacements=0,pure_only=True,native_recipe='bispf',pure_formulation='original_bispf')
         dump(out/'completed.json',result)
     except BaseException as exc:
         dump(out/'failure.json',{'status':'incomplete','error':repr(exc),'automatic_retry':False})

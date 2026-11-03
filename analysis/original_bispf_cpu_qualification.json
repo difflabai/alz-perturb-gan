@@ -1,0 +1,24 @@
+{
+  "status": "PASSED_SYNTHETIC_CPU_ORIGINAL_BISPF_QUALIFICATION",
+  "scope": "No actual ALZ fitting; no GPU allocation",
+  "tests_passed": 4,
+  "native_recipe": "bispf",
+  "declared_task_overrides": {
+    "total_steps": 20000,
+    "batch_size": 32,
+    "num_particles": 512,
+    "z_dim": 8
+  },
+  "full_serialized_restore_next_update_bitwise_equal": true,
+  "native_api_component_types_verified": true,
+  "same_initial_generator_critic_prior_as_PG8_verified": true,
+  "only_SRPGAN_real_logits_change_in_update_AST": true,
+  "CUDA_initialized": false,
+  "source_SHA256": {
+    "/ml2/alz/model/original_bispf_adapter.py": "d8b192f4aad333ae80740de34027b8222da805a9a65d6b28d0ab20f27e9a9c42",
+    "/ml2/alz/model/original_bispf_update.py": "022ba6aa743c7efcccd131d81cd18d04cb46c7594311b63c31f0b78e303d9880",
+    "/ml2/alz/test_original_bispf.py": "0ab0d9925a41c3e481d03b17925d5eb72491390a760dc3bffa6009b33a56109a",
+    "/ml2/alz/analysis/run_original_bispf_cpu.py": "bdd47589fd81d1692300b9d3a5909c52d2787b081b180ab7bebcc35429e729a6"
+  },
+  "utc": "2026-11-03T21:02:08.912563+00:00"
+}

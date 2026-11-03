@@ -139,7 +139,7 @@ def source_closure(auth,layout):
         manifest=pinned_inventory(data/'manifest.json',auth.get('calibration_manifest_SHA256'),pins,'calibration input')
         require(manifest.get('status')=='CPU_CALIBRATION_PROJECTED_WITHOUT_REFITTING','calibration provenance differs')
         require_members(pins,{str(data/name):pin for name,pin in manifest['files_SHA256'].items()},'calibration arrays')
-        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','train_variant','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
+        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','train_variant','train_bispf','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
         if auth['operation']=='qualify_continuation':
             require(auth['cap_seconds']==900 and auth.get('qualification_only') is True and auth.get('qualification_steps')==1 and auth.get('caller_execution_limit')==40000,'finite one-step continuation qualification required')
             checkpoint=Path(auth['checkpoint_path'])
@@ -161,6 +161,15 @@ def source_closure(auth,layout):
                 require(str(config) in pins and read(config)==auth.get('hybrid_config'),'exact hybrid config absent or changed')
                 require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete hybrid base-model source pins required')
         else:
+            if auth['operation']=='train_bispf':
+                plan=HERE.parent/'original_bispf_plan.json';proof_path=HERE.parent/'analysis/original_bispf_cpu_qualification.json'
+                require(pins.get(str(plan))==auth.get('original_bispf_plan_SHA256')==sha(plan),'original BISPF prospective plan pin absent')
+                require(read(plan)=={'enabled':True,'native_recipe':'bispf','fixed_endpoint':20000,'pure_only':True,'training_seed':0},'original BISPF plan remains disabled or changed')
+                require(auth.get('hybrid_config') is None and auth['cell']['seed']==0,'pure seed0 original BISPF scope only')
+                require(pins.get(str(proof_path))==auth.get('original_bispf_qualification_SHA256')==sha(proof_path),'original BISPF CPU qualification pin absent')
+                proof=read(proof_path)
+                require(proof['status']=='PASSED_SYNTHETIC_CPU_ORIGINAL_BISPF_QUALIFICATION' and proof['full_serialized_restore_next_update_bitwise_equal'] and proof['native_api_component_types_verified'] and not proof['CUDA_initialized'],'original BISPF qualification incomplete')
+                for path,pin in proof['source_SHA256'].items():require(pins.get(path)==pin==sha(path),'original BISPF qualified source changed: '+path)
             if auth['operation'] in ('continue_hybrid','train_extended_hybrid'):
                 plan=HERE.parent/'training_plan.json';protocol=HERE.parent/'continuation_protocol.json'
                 require(pins.get(str(plan))==sha(plan) and read(plan)=={'fixed_endpoint':40000} and pins.get(str(protocol))==auth.get('continuation_protocol_SHA256')==sha(protocol),'registered prospective40k endpoint protocol absent')
