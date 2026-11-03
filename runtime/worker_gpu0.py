@@ -19,7 +19,7 @@ def validate_reference(checkpoint,auth):
     b.require(checkpoint.get('cache_manifest_SHA256')==b.sha(Path(auth['cache_dir'])/'manifest.json'),'reference preprocessing/cache differs')
 
 def run_scientific(auth,admission,layout):
-    b.require(auth['operation'] in ('evaluate_reference','train_variant'),'registered calibration operation required')
+    b.require(auth['operation'] in ('evaluate_reference','evaluate_hybrid','train_variant'),'registered calibration operation required')
     runtime=b.runtime_path(layout,b.cell(auth))
     b.require(Path(sys.executable).absolute()==runtime.absolute() and sys.version_info[:2]==(3,12),'exact PG scientific interpreter required')
     sys.path.extend(map(str,b.native_site_roots(b.cell(auth),auth['files_SHA256'])))
@@ -35,8 +35,14 @@ def run_scientific(auth,admission,layout):
     reserve=120 if auth['operation']=='train_variant' else 30
     end=time.monotonic()+max(0,min(admission['authorization_expiry'],admission['ledger_started_unix']+auth['cap_seconds'])-time.time()-reserve)
     try:
-        if auth['operation']=='evaluate_reference':
-            from pg_adapter import Context,restore
+        if auth['operation'] in ('evaluate_reference','evaluate_hybrid'):
+            if auth['operation']=='evaluate_hybrid':
+                sys.path.insert(0,str(b.HERE.parent/'model'))
+                import variant_pg_update
+                variant_pg_update.configure(auth['variant_config'])
+                from variant_pg_adapter import Context,restore
+            else:
+                from pg_adapter import Context,restore
             b.require(sha(auth['checkpoint_path'])==auth['checkpoint_SHA256'],'reference checkpoint changed')
             checkpoint=torch.load(auth['checkpoint_path'],map_location='cpu',weights_only=False)
             validate_reference(checkpoint,auth)
@@ -51,16 +57,26 @@ def run_scientific(auth,admission,layout):
             ctx=Context(Path(auth['cache_dir']),'cuda:0')
             bundle,checkpoint_path=fit(ctx,out/'fit',b.cell(auth)['seed'],end_monotonic=end)
             b.require(bundle[-1].completed_steps==20000,'complete fixed variant endpoint required')
-        def iterator(schedule,c,s):
-            for item in iter_pg(ctx,bundle[1],bundle[3],schedule,c,s):
-                if time.monotonic()>=end:raise TimeoutError('calibration allocation ending; no partial score')
-                yield item
-        records=[evaluate(ctx,'pg',b.cell(auth)['seed'],rep,iterator,out/f'r{rep}') for rep in [0,1]]
+        def iterator_for(rep):
+            def iterator(schedule,c,s):
+                if auth['operation']=='evaluate_hybrid':
+                    from hybrid import iter_hybrid
+                    stream=iter_hybrid(ctx,bundle[1],bundle[3],schedule,c,s,fraction=auth['hybrid_config']['pg_bag_fraction'],replicate=rep)
+                else:stream=iter_pg(ctx,bundle[1],bundle[3],schedule,c,s)
+                for item in stream:
+                    if time.monotonic()>=end:raise TimeoutError('calibration allocation ending; no partial score')
+                    yield item
+            return iterator
+        method='pg_resampling_hybrid' if auth['operation']=='evaluate_hybrid' else 'pg'
+        records=[evaluate(ctx,method,b.cell(auth)['seed'],rep,iterator_for(rep),out/f'r{rep}') for rep in [0,1]]
         result=average(records)
         result.update(status='completed',completed_updates=20000,integer_count_contract_passed=True,
                       allocation_id=admission['allocation_id'],operation=auth['operation'],
                       checkpoint_path=str(checkpoint_path),checkpoint_SHA256=sha(checkpoint_path),
                       variant_config=auth.get('variant_config',{'z_dim':2}),
+                      method=method,hybrid_config=auth.get('hybrid_config'),
+                      qualification_only=auth.get('qualification_only',False),
+                      new_model_updates=20000 if auth['operation']=='train_variant' else 0,
                       automatic_successor=False)
         dump(out/'completed.json',result)
     except BaseException as exc:

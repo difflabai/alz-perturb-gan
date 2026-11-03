@@ -36,6 +36,7 @@ def main():
     parser.add_argument('--attempt', required=True)
     args = parser.parse_args()
     deployment = read(ROOT / 'artifacts/allocations' / args.attempt / 'deployment.json')
+    assert not deployment.get('qualification_only'), 'Qualification jobs cannot select or revert a candidate'
     out, ledger = Path(deployment['output_dir']), Path(deployment['ledger_path'])
     settlement = read(ledger.with_name(args.attempt + '-settlement.json'))
     assert settlement['uncertain'] is None
@@ -61,10 +62,14 @@ def main():
         print(json.dumps(failure, indent=2))
         return
     candidate = read(out / 'completed.json')
-    receipt = read(out / 'fit/checkpoint_receipt.json')
+    checkpoint = Path(candidate['checkpoint_path'])
+    receipt = read(checkpoint.parent / 'checkpoint_receipt.json')
     assert receipt['status'] == 'completed' and receipt['completed_updates'] == 20000
-    assert sha(out / 'fit' / receipt['path']) == receipt['SHA256'] == candidate['checkpoint_SHA256']
+    assert checkpoint.name == receipt['path']
+    assert sha(checkpoint) == receipt['SHA256'] == candidate['checkpoint_SHA256']
     assert candidate['variant_config'] == deployment['variant_config']
+    if deployment.get('hybrid_config') is not None:
+        assert candidate['hybrid_config'] == deployment['hybrid_config']
     incumbent = json.loads(git('show', deployment['candidate_commit'] + ':incumbent.json'))
     assert read(ROOT / 'incumbent.json') == incumbent, 'Incumbent changed concurrently; reconcile rather than select against a moving target'
     targets = np.load(ROOT / 'data/calibration_fold0/real_summaries.npz', allow_pickle=False)

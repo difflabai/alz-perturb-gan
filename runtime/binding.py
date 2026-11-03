@@ -139,10 +139,15 @@ def source_closure(auth,layout):
         manifest=pinned_inventory(data/'manifest.json',auth.get('calibration_manifest_SHA256'),pins,'calibration input')
         require(manifest.get('status')=='CPU_CALIBRATION_PROJECTED_WITHOUT_REFITTING','calibration provenance differs')
         require_members(pins,{str(data/name):pin for name,pin in manifest['files_SHA256'].items()},'calibration arrays')
-        require(auth.get('operation') in ('evaluate_reference','train_variant'),'registered calibration operation required')
-        if auth['operation']=='evaluate_reference':
+        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','train_variant'),'registered calibration operation required')
+        if auth['operation'] in ('evaluate_reference','evaluate_hybrid'):
             checkpoint=Path(auth['checkpoint_path'])
             require(pins.get(str(checkpoint))==auth.get('checkpoint_SHA256'),'complete reference checkpoint pin absent')
+            if auth['operation']=='evaluate_hybrid':
+                require(auth['cap_seconds']==900,'finite hybrid sampling cap required')
+                config=HERE.parent/'hybrid.json'
+                require(str(config) in pins and read(config)==auth.get('hybrid_config'),'exact hybrid config absent or changed')
+                require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete hybrid base-model source pins required')
         else:
             require(auth['cap_seconds']==21600,'fixed training pipeline cap required')
             config=HERE.parent/'candidate.json'
