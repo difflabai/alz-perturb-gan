@@ -21,7 +21,7 @@ SCIENCE=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/c
 GUARD=HERE/'guard'
 GPU1='GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69'
 SCIENCE_REVIEW='2d5f0add12b0fad41eb907594d9f6a4921147c26aa80229da384b8af7e203519'
-GUARD_REVIEW='ddae35217691777556aed520ac2a7909ec117cd66e0186775bb92e13013d609d'
+GUARD_REVIEW='4e4ea9ec7d4cb6feaa83494b81eab240aca9b08316af0d20fdd147e4761fc0ac'
 CONTROLLER=PROJECT/'budget_executor_v2_20261103_r2/budget_controller.py'
 CONTROLLER_SHA='c8520f426e6b7a94741dd96804b96d9d22a224bff973b7e85d765e5b83c09848'
 PROJECT_BUDGET_SHA='85ea495a54dfc524fb493a34002305b534964cf1992fc659d07d2c38951e4872'
@@ -205,6 +205,10 @@ def verify(auth_path,layout=NATIVE_LAYOUT):
         require(policy['roles']['alz_core_pg']=={'gpu_bytes':3*1024**3,'ram_bytes':6*1024**3},'reviewed small shared ALZ role differs')
         sharing=policy.get('sharing',{})
         require(sharing.get('external_compute_budget_bytes')==15*1024**3//4 and sharing.get('minimum_available_ram_bytes')==8*1024**3 and sharing.get('enforce_own_rss') is True and sharing.get('enforce_host_growth') is True,'reviewed sharing compute/RSS/host enforcement absent')
+        mode=sharing.get('admission_mode','with_moss')
+        require(mode in ('with_moss','free_card_exact_peers'),'explicit supported GPU1 peer admission mode required')
+        if mode=='free_card_exact_peers':require(sharing.get('moss_compute_pids')==[] and all('compute' not in peer['gpu_kinds'] for peer in policy['protected_peers']),'fresh free-card policy must have no compute peers')
+        require(auth.get('torch_allocator_cap_bytes')==2*1024**3,'explicit2GiB Torch allocator cap required under3GiB GPU role')
         require(set(policy.get('protected_host_peak_pids',[]))=={v['pid'] for v in policy.get('protected_host_peak_identities',[])},'fresh exact host peak identities absent')
         require(str(RESEARCH/'SOURCE_ORIGINS.json') in auth['files_SHA256'],'literal frozen science inventory absent')
     source_closure(auth,layout)

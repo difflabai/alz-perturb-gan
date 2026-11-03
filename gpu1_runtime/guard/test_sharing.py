@@ -42,6 +42,37 @@ class Sharing(unittest.TestCase):
                           protected_peers=self.peers, driver_headroom=G, host_free_floor=8*G,
                           policy_sha256='f'*64, sharing=cfg, host_peak_identities=list(peak))
 
+    def free_registry(self):
+        cfg=dict(admission_mode='free_card_exact_peers',external_compute_budget_bytes=15*G//4,moss_compute_pids=[],minimum_available_ram_bytes=8*G,enforce_own_rss=True,enforce_host_growth=True)
+        peers=[copy.deepcopy(self.peers[1])]
+        obs=copy.deepcopy(self.obs);del obs['gpu_memory'][1];del obs['gpu_kinds'][1]
+        registry=a.Registry(self.root/'free_registry',locks=self.paths,gpu=a.GPU1,roles={'one'},protected_peers=peers,driver_headroom=G,host_free_floor=8*G,policy_sha256='f'*64,sharing=cfg)
+        return registry,obs,cfg
+
+    def test_free_card_requires_explicit_mode_and_no_protected_compute(self):
+        registry,obs,cfg=self.free_registry()
+        for bad in [{k:v for k,v in cfg.items() if k!='admission_mode'},{**cfg,'admission_mode':'unknown'},{**cfg,'moss_compute_pids':[1]}]:
+            with self.assertRaises(a.Conflict):a.Registry(self.root/'bad',locks=self.paths,gpu=a.GPU1,roles={'one'},protected_peers=[self.peers[1]],host_free_floor=8*G,policy_sha256='f'*64,sharing=bad)
+        with self.assertRaises(a.Conflict):a.Registry(self.root/'bad',locks=self.paths,gpu=a.GPU1,roles={'one'},protected_peers=self.peers,host_free_floor=8*G,policy_sha256='f'*64,sharing=cfg)
+
+    def test_free_card_admits_bounded_role_and_new_compute_refuses_without_adoption(self):
+        registry,obs,cfg=self.free_registry();lease=registry.reserve('one',self.owner,{'gpu_bytes':3*G,'ram_bytes':G},obs)
+        incoming=copy.deepcopy(obs);incoming['procs'][3]=fixtures.proc(3);incoming['gpu_memory'][3]=G;incoming['gpu_kinds'][3]=['compute']
+        with self.assertRaisesRegex(a.Conflict,'Unregistered'):lease.health(incoming)
+        self.assertEqual([p['identity']['pid'] for p in registry.protected_peers],[2])
+        lease.release(obs)
+        state=a.json.loads((registry.path/'registry.json').read_text());self.assertFalse(state['jobs'])
+
+    def test_free_card_keeps_compute_margin_own_RSS_and_host_stops(self):
+        registry,obs,cfg=self.free_registry()
+        with self.assertRaisesRegex(a.Capacity,'COMPUTE'):registry.reserve('one',self.owner,{'gpu_bytes':4*G,'ram_bytes':G},obs)
+        lease=registry.reserve('one',self.owner,{'gpu_bytes':3*G,'ram_bytes':G},obs)
+        changed=copy.deepcopy(obs);changed['procs'][10]['rss']=2*G
+        with self.assertRaisesRegex(MemoryError,'RSS'):runner.enforce_health(lease.health(changed))
+        changed=copy.deepcopy(obs);changed['available_ram']=7*G
+        with self.assertRaises(MemoryError):runner.enforce_health(lease.health(changed))
+        lease.release(obs)
+
     def test_external_cap_has_margin_and_counts_compute_not_graphics(self):
         registry = self.shared_registry()
         obs = copy.deepcopy(self.obs)

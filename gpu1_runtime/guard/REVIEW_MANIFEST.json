@@ -1,13 +1,14 @@
 {
-  "schema": "alz-gpu1-specialized-reviewed-v2-guard",
+  "schema": "alz-gpu1-specialized-held-free-card-v3-guard",
   "status": "CPU_PREPARED_NOT_ADMITTED",
   "source_SHA256": {
-    "/ml2/alz/gpu1_runtime/guard/gpu0_admission.py": "d69ebcd99c1da41d42f2644e203c7fd6f19391194ca29386226f1d0370914b6c",
+    "/ml2/alz/gpu1_runtime/guard/gpu0_admission.py": "c05d01f934d263b4c2f3dd10c47908b0b8f6ef6a12894f671a224de019af2738",
     "/ml2/alz/gpu1_runtime/guard/gpu0_runner.py": "f824869aee02beebf6e3352a79f7633fbe4cb1ce6f0422fb44d4f05f326c3716",
     "/ml2/alz/gpu1_runtime/guard/test_gpu0_candidate.py": "644b3f5338f1175b6f522cdecd87377e2503effe4a0611b8b3fff3d462c597bc",
-    "/ml2/alz/gpu1_runtime/guard/test_sharing.py": "47ae6898ae96a84d57a193b30ef7e9d4fbe9fd7d777eb8236173d583f9dcc6e3"
+    "/ml2/alz/gpu1_runtime/guard/test_sharing.py": "6804735cd0cff3ef1d6ec96df332efb828c95debcc190a8f14de06973c62b24e"
   },
   "lineage_manifest_SHA256": "091589c19caa1898be29acc8ce3e2ab8b79a8f9b9a4cf443219ef13bd55dc08b",
-  "delta": "GPU1 UUID/default and exact GPU1 physical lock pair only; same ownership/accounting/cleanup algorithm. Actual native admission remains separate.",
-  "review_scope": "HELD sharing-v2 guard source: externalCOMPUTE aggregate margin, ownRSS/8GiBhostfloor/hostgrowth stops for explicitsharingpolicy; unchangedowned-only cleanup, noGPU1deployment. Independent integratedreviewpending."
+  "delta": "Explicit free_card_exact_peers mode permits zero MOSS identities only with graphics-only protected peers; strict active-MOSS mode retained. Same compute margin/RSS/hostgrowth/identity/owned-only cleanup. No native deployment.",
+  "review_scope": "HELD free-card exact-peer refinement; independent integrated source review pending; actual allocation separate.",
+  "parent_specialized_manifest_SHA256": "ddae35217691777556aed520ac2a7909ec117cd66e0186775bb92e13013d609d"
 }

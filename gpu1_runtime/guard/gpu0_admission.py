@@ -145,7 +145,12 @@ class Registry:
             if type(cfg.get('external_compute_budget_bytes')) is not int or not 0<cfg['external_compute_budget_bytes']<=15*GiB//4:raise Conflict('Shared external COMPUTE limit must have margin below4GiB')
             if cfg.get('minimum_available_ram_bytes')!=8*GiB or cfg.get('enforce_own_rss') is not True or cfg.get('enforce_host_growth') is not True or self.host_free_floor<8*GiB:raise Conflict('Explicit shared RSS and8GiB host-floor enforcement required')
             moss=cfg.get('moss_compute_pids',[])
-            if not moss or len(moss)!=len(set(moss)) or not set(moss)<=set(pids) or any('compute' not in p['gpu_kinds'] for p in self.protected_peers if p['identity']['pid'] in moss):raise Conflict('Exact protected MOSS COMPUTE identities required')
+            mode=cfg.get('admission_mode','with_moss')
+            if mode=='free_card_exact_peers':
+                if moss or any('compute' in p['gpu_kinds'] for p in self.protected_peers):raise Conflict('Free-card profile requires no protected COMPUTE peer or MOSS identity')
+            elif mode=='with_moss':
+                if not moss or len(moss)!=len(set(moss)) or not set(moss)<=set(pids) or any('compute' not in p['gpu_kinds'] for p in self.protected_peers if p['identity']['pid'] in moss):raise Conflict('Exact protected MOSS COMPUTE identities required')
+            else:raise Conflict('Explicit supported GPU1 peer admission mode required')
         if any(set(v)!=set(IDENTITY_KEYS) for v in self.host_peak_identities) or len({v['pid'] for v in self.host_peak_identities})!=len(self.host_peak_identities):raise Conflict('Exact distinct host-peak identities required')
     def host_peak_growth(self,obs,own=()):
         protected={p['identity']['pid'] for p in self.protected_peers};growth=0

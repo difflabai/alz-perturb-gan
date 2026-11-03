@@ -1,5 +1,6 @@
 """Freeze a literal-source, sharing-compatible review capsule; never deploy."""
 import copy
+import argparse
 import datetime
 import difflib
 import importlib.util
@@ -25,6 +26,7 @@ def write(path, value):
 
 
 def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--free-card',action='store_true');args=parser.parse_args()
     budget = b.PROJECT / 'project_gpu_budget.json'
     before = b.sha(budget)
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
@@ -54,18 +56,18 @@ def main():
         b.require(set(fresh['gpu_memory'])==members,'GPU1 peer turnover during desktop measurement; refresh held snapshot')
         desktop_samples.append(fresh['gpu_memory'].get(9387,0));obs=fresh
     compute = [pid for pid, kinds in obs['gpu_kinds'].items() if 'compute' in kinds]
-    b.require(len(compute) == 1, 'one exact stable MOSS compute peer required for this held snapshot')
-    moss_pid = compute[0]
-    proc = Path('/proc') / str(moss_pid)
-    argv = (proc / 'cmdline').read_bytes().decode(errors='replace').split('\0')
-    b.require(proc.joinpath('cwd').resolve() == MOSS and str(MOSS / 'run_shared_pair.py') in argv,
-              'GPU1 compute peer is not the coordinated MOSS sharing worker')
+    if args.free_card:
+        b.require(not compute,'free-card profile requires zero current COMPUTE peers; never use stale or invented MOSS identity')
+    else:
+        b.require(len(compute)==1,'one exact stable MOSS compute peer required for sharing snapshot')
+        moss_pid=compute[0];proc=Path('/proc')/str(moss_pid)
+        argv=(proc/'cmdline').read_bytes().decode(errors='replace').split('\0')
+        b.require(proc.joinpath('cwd').resolve()==MOSS and str(MOSS/'run_shared_pair.py') in argv,'GPU1 compute peer is not the coordinated MOSS sharing worker')
     gnome = [copy.deepcopy(p) for p in gpu0_policy['protected_peers'] if p['identity']['pid'] == 9387]
     b.require(len(gnome) == 1 and admission.protected_identity(9387) == gnome[0]['identity'], 'desktop identity changed')
     gnome[0]['gpu_kinds'] = list(obs['gpu_kinds'][9387])
     gnome[0]['gpu_budget_bytes'] = max(GiB//4,max(desktop_samples)+GiB//8)
-    peers = [*gnome, {'identity': admission.protected_identity(moss_pid), 'gpu_kinds': list(obs['gpu_kinds'][moss_pid]),
-                      'gpu_budget_bytes': 40 * GiB, 'ram_budget_bytes': 40 * GiB}]
+    peers=gnome if args.free_card else [*gnome,{'identity':admission.protected_identity(moss_pid),'gpu_kinds':list(obs['gpu_kinds'][moss_pid]),'gpu_budget_bytes':40*GiB,'ram_budget_bytes':40*GiB}]
     growth = []
     for peer in gpu0_policy['protected_peers']:
         pid = peer['identity']['pid']
@@ -84,11 +86,11 @@ def main():
               'locks': list(admission.LOCKS), 'alz_role_lock': '/mnt/nvme/sliders/locks/gpu-1-alz-training.lock',
               'driver_headroom_bytes': GiB, 'host_free_floor_bytes': host_floor,
               'roles': {'alz_core_pg': {'gpu_bytes': 3 * GiB, 'ram_bytes': 6 * GiB}}, 'protected_peers': peers,
-              'sharing': dict(external_compute_budget_bytes=15*GiB//4,moss_compute_pids=compute,minimum_available_ram_bytes=8*GiB,enforce_own_rss=True,enforce_host_growth=True),
+              'sharing': dict(admission_mode='free_card_exact_peers' if args.free_card else 'with_moss',external_compute_budget_bytes=15*GiB//4,moss_compute_pids=compute,minimum_available_ram_bytes=8*GiB,enforce_own_rss=True,enforce_host_growth=True),
               'protected_host_peak_pids':[q['identity']['pid'] for q in growth],
               'protected_host_peak_identities':[q['identity'] for q in growth],
               'source_sha256': {str(p): b.sha(p) for p in [*HERE.glob('*.py'), *(HERE / 'guard').glob('*.py')]},
-              'prepared_note': 'HELD sharing-compatible source proposal. No deployment/registration/reservation/job. Exact current MOSS membership and all source/capacity gates must be refreshed after independent review.'}
+              'prepared_note': 'HELD exact-peer source proposal (free-card or active-MOSS profile). No deployment/registration/reservation/job. Exact current MOSS membership and all source/capacity gates must be refreshed after independent review.'}
     overhead = max(0, obs['used'] - sum(obs['gpu_memory'].values()))
     gpu_need = max(obs['used'], sum(obs['gpu_memory'].values())) + max(0, GiB - overhead) + 3 * GiB
     gpu_need += sum(max(0, p['gpu_budget_bytes'] - obs['gpu_memory'][p['identity']['pid']]) for p in peers)
@@ -96,12 +98,12 @@ def main():
                                                       obs['procs'][p['identity']['pid']]['hwm'] - obs['procs'][p['identity']['pid']]['rss']) for p in peers)
     host_peak_extra=sum(max(0,q['hwm']-q['rss']) for q in growth)
     ram_need+=host_peak_extra
-    basis = {'status': 'READ_ONLY_SHARING_FORECAST_NOT_ADMISSION', 'utc': stamp,
+    basis = {'status': 'READ_ONLY_SHARING_FORECAST_NOT_ADMISSION', 'utc': stamp, 'admission_mode':'free_card_exact_peers' if args.free_card else 'with_moss', 'future_unknown_compute_peer':'Refuse/stop only owned ALZ on any new unallowlisted COMPUTE identity; no MOSS future-memory claim in absent-peer profile.',
              'MOSS_published_policy_path': str(MOSS / 'gpu1-sharing.json'), 'MOSS_published_policy_SHA256': b.sha(MOSS / 'gpu1-sharing.json'),
              'MOSS_shared_source_SHA256': b.sha(MOSS / 'shared_gpu.py'),
              'desktop_measurement':{'observed_GPU_bytes':desktop_samples,'observed_peak_bytes':max(desktop_samples),'forecast_GPU_bytes':gnome[0]['gpu_budget_bytes'],'forecast_rule':'max256MiB, measuredpeak+128MiB; reserve is a conservative forecast, not a measured peak.'},
              'authority_provenance':'Own currentuser explicitly permitsbothGPUs; sharing coordination follows authenticatedEmber9473. The Mikkel quote inMOSS JSON is publisher provenance, not a directmessage independentlyseenhere.',
-             'compatibility': 'MOSS shared_gpu.Peers dynamically pins new same-UID compute peers and caps external compute at4GiB; ALZ3GiB plus desktop.25GiB forecasts fit even if graphics are conservatively included. Both physical leasesREAD; distinct exclusiveALZrole. Never signal/adopt MOSS.',
+             'compatibility': 'Free-card mode pins current graphics only and refuses/stops owned ALZ on any unexpected compute peer. Active-MOSS mode: MOSS shared_gpu.Peers dynamically pins new same-UID compute peers and caps external compute at4GiB; ALZ3GiB plus desktop.25GiB forecasts fit even if graphics are conservatively included. Both physical leasesREAD; distinct exclusiveALZrole. Never signal/adopt MOSS.',
              'GPU_required_bytes': gpu_need, 'GPU_total_bytes': obs['total'], 'GPU_fits_snapshot': gpu_need <= obs['total'],
              'host_required_available_bytes': ram_need, 'host_peak_extra_bytes':host_peak_extra,
              'observed_protected_RAM':[{**q['identity'],'rss':obs['procs'][q['identity']['pid']]['rss'],'hwm':obs['procs'][q['identity']['pid']]['hwm']} for q in peers], 'host_available_bytes': obs['available_ram'], 'host_fits_snapshot': ram_need <= obs['available_ram'],
@@ -118,7 +120,7 @@ def main():
     observation['physical_locks'] = [{'path': name, 'records': [line for line in records if any(token.endswith(':' + str(Path(name).stat().st_ino)) for token in line.split())]}
                                     for name in admission.LOCKS]
     write(folder / 'observation.json', observation)
-    value = dict(fold=0, method='pg', seed=0, experiment='gpu1_shared_h75_qualification_v1')
+    value = dict(fold=0, method='pg', seed=0, experiment='gpu1_free_h75_qualification_v1' if args.free_card else 'gpu1_shared_h75_qualification_v1')
     research = {str(p): b.sha(p) for p in [*b.RESEARCH.glob('*.py'), *(b.RESEARCH / 'model').glob('*.py'), *HERE.glob('*.py'), MOSS / 'shared_gpu.py', MOSS / 'gpu1-sharing.json']}
     pins = {path: pin for path, pin in auth['files_SHA256'].items()
             if not Path(path).is_relative_to(ROOT) or Path(path).is_relative_to(ROOT / 'data')
@@ -132,7 +134,7 @@ def main():
     auth.update(status='HELD_GPU1_SHARING_REVIEW_REQUIRED', schema='alz-calibration-gpu1-held-v2',
                 source_review_passed=False, scheduler_allocation_id=None, expires_unix=0, files_SHA256=pins,
                 cell=value, allocation_id=b.allocation_key(value), attempt_id=b.attempt_key(value), label=b.attempt_key(value),
-                gpu_uuid=b.GPU1, cap_seconds=900, operation='evaluate_hybrid', qualification_only=True,
+                gpu_uuid=b.GPU1, cap_seconds=900,torch_allocator_cap_bytes=2*GiB, operation='evaluate_hybrid', qualification_only=True,
                 output_dir=str(b.output_path(b.NATIVE_LAYOUT, value)), ledger_path=str(b.ledger_path(b.NATIVE_LAYOUT, value)),
                 checkpoint_path=str(checkpoint), checkpoint_SHA256=base['checkpoint_SHA256'], variant_config=base['variant_config'], hybrid_config=sampler,
                 policy_path=str(folder / 'policy.HELD.json'), policy_SHA256=b.sha(folder / 'policy.HELD.json'),

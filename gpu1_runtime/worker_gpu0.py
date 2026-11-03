@@ -18,6 +18,13 @@ def validate_reference(checkpoint,auth):
     b.require(checkpoint.get('status')=='completed' and checkpoint.get('completed_updates')==checkpoint.get('fixed_endpoint')==20000,'complete fixed reference checkpoint required')
     b.require(checkpoint.get('cache_manifest_SHA256')==b.sha(Path(auth['cache_dir'])/'manifest.json'),'reference preprocessing/cache differs')
 
+def configure_allocator(torch,auth):
+    cap=auth.get('torch_allocator_cap_bytes')
+    b.require(cap==2*1024**3,'reviewed finite2GiB Torch allocator cap required')
+    total=torch.cuda.get_device_properties(0).total_memory
+    b.require(total>cap,'GPU total memory below allocator cap')
+    torch.cuda.set_per_process_memory_fraction(cap/total,device=0)
+
 def run_scientific(auth,admission,layout):
     b.require(auth['operation'] in ('evaluate_reference','evaluate_hybrid','train_variant','train_hybrid'),'registered calibration operation required')
     runtime=b.runtime_path(layout,b.cell(auth))
@@ -29,6 +36,7 @@ def run_scientific(auth,admission,layout):
     os.environ.update(WANDB_MODE='disabled',WANDB_DISABLED='true',OTEL_SDK_DISABLED='true',DO_NOT_TRACK='1',HF_HUB_OFFLINE='1',JAX_PLATFORMS='cpu',CUBLAS_WORKSPACE_CONFIG=':4096:8')
     import torch
     torch.set_num_threads(1);torch.set_num_interop_threads(1);torch.use_deterministic_algorithms(True);torch.set_float32_matmul_precision('highest')
+    configure_allocator(torch,auth)
     from generation import iter_pg
     from calibration import evaluate,average,dump,sha
     out=Path(auth['output_dir']);out.mkdir(parents=True,exist_ok=False)
@@ -77,7 +85,7 @@ def run_scientific(auth,admission,layout):
                       method=method,hybrid_config=auth.get('hybrid_config'),
                       qualification_only=auth.get('qualification_only',False),
                       new_model_updates=20000 if auth['operation'] in ('train_variant','train_hybrid') else 0,
-                      automatic_successor=False)
+                      automatic_successor=False,torch_allocator_cap_bytes=auth['torch_allocator_cap_bytes'])
         dump(out/'completed.json',result)
     except BaseException as exc:
         dump(out/'failure.json',{'status':'incomplete','error':repr(exc),'automatic_retry':False})

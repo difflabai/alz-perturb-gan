@@ -1,38 +1,33 @@
 {
-  "utc": "2026-11-03T20:25:09.651234+00:00",
-  "status": "SHARING_REVIEW_FIXES_CPU_PREPARED_NATIVE_HELD",
-  "guard_CPU_tests_passed": 35,
-  "integration_CPU_tests_passed": 16,
+  "utc": "2026-11-03T21:45:05.215639+00:00",
+  "status": "FREE_CARD_EXACT_PEERS_CPU_PREPARED_NATIVE_HELD",
+  "guard_CPU_tests_passed": 38,
+  "runtime_integration_role_review_allocator_CPU_tests_passed": 25,
   "actual_GPU1_model_import_or_allocation": false,
   "native_policy_deployed": false,
-  "canonical_budget_before_SHA256": "3e9a421da48fae520921148b5056de9917fef9bacb556e1a141b71246a266cce",
-  "canonical_budget_after_SHA256": "3e9a421da48fae520921148b5056de9917fef9bacb556e1a141b71246a266cce",
+  "canonical_budget_observed_SHA256": "5fdde1c92529059dc26c9c3adb646561dbe5f6f69d8421943df91ea4c3b017b4",
   "source_SHA256": {
     "/ml2/alz/gpu1_runtime/role_lease.py": "9f16636c19c699b556dcd1d104641ea0dfc775e0c34f29bbeda657d6475f1190",
     "/ml2/alz/gpu1_runtime/launch_core_gpu0.py": "f4cfd18a3636ecd56735bd2d02491c80642df4814a4bca03538b21f08dd08f99",
     "/ml2/alz/gpu1_runtime/project_runner_gpu0.py": "14e5f686239a43f81eb098e7ccb2acef6f47a134f92a99b036fea32427e90abe",
-    "/ml2/alz/gpu1_runtime/prepare_held_packet.py": "17eeb2124c22be9d301ce9708735b8ec8ac73b92343bb695daaaff9b64e4c79f",
+    "/ml2/alz/gpu1_runtime/prepare_held_packet.py": "b2881c2a268fd3ea7123220e31a6e8f1636a93016eee1fa4bdcd91563ab1eabe",
+    "/ml2/alz/gpu1_runtime/test_allocator.py": "58fd3a8122ef0ba0faf81777f52eec6af6daf71b759b1dc6aa754ad4ff8e7f22",
     "/ml2/alz/gpu1_runtime/test_role_lease.py": "932786e349a8e729701ed4e9c978f841db10e2f6282f5ec9dc89c53453577170",
-    "/ml2/alz/gpu1_runtime/worker_gpu0.py": "2abb482e5c6710b7db8495b4dde2b58d55376672587b1c3c475545f4f67c1e8c",
+    "/ml2/alz/gpu1_runtime/worker_gpu0.py": "2d910d034f3c2793a27bc8dd835031e93a7a6484f03c1761a0a354d97eacf1c1",
     "/ml2/alz/gpu1_runtime/test_integration.py": "fdbb2adb4ff7aa341031f1b02ad02178b8042035baac4687c34504746dea7f63",
     "/ml2/alz/gpu1_runtime/test_review_regressions.py": "1482619bdd33dc0ef6844a9f512c7c35b438b69cd17e1f8eaabe2ccbe938351d",
-    "/ml2/alz/gpu1_runtime/binding.py": "f6ff135485988ee0422b241379b21cc2ff4644d4575a978fedf89f13d7adcfab",
-    "/ml2/alz/gpu1_runtime/guard/test_sharing.py": "47ae6898ae96a84d57a193b30ef7e9d4fbe9fd7d777eb8236173d583f9dcc6e3",
+    "/ml2/alz/gpu1_runtime/binding.py": "1aa1c1fc86208d343c401913d1cefb7cc308ed2d4e4c879e76aa18388a7b079d",
+    "/ml2/alz/gpu1_runtime/guard/test_sharing.py": "6804735cd0cff3ef1d6ec96df332efb828c95debcc190a8f14de06973c62b24e",
     "/ml2/alz/gpu1_runtime/guard/gpu0_runner.py": "f824869aee02beebf6e3352a79f7633fbe4cb1ce6f0422fb44d4f05f326c3716",
-    "/ml2/alz/gpu1_runtime/guard/gpu0_admission.py": "d69ebcd99c1da41d42f2644e203c7fd6f19391194ca29386226f1d0370914b6c",
+    "/ml2/alz/gpu1_runtime/guard/gpu0_admission.py": "c05d01f934d263b4c2f3dd10c47908b0b8f6ef6a12894f671a224de019af2738",
     "/ml2/alz/gpu1_runtime/guard/test_gpu0_candidate.py": "644b3f5338f1175b6f522cdecd87377e2503effe4a0611b8b3fff3d462c597bc",
-    "/ml2/alz/gpu1_runtime/guard/REVIEW_MANIFEST.json": "ddae35217691777556aed520ac2a7909ec117cd66e0186775bb92e13013d609d"
+    "/ml2/alz/gpu1_runtime/guard/REVIEW_MANIFEST.json": "4e4ea9ec7d4cb6feaa83494b81eab240aca9b08316af0d20fdd147e4761fc0ac"
   },
   "device": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
-  "review_scope": "M1postreservecoregate/cancel plusbothcardorderfixtures;M2externalCOMPUTEactual/projected3.75GiBmargin;M3ownedRSS/8GiBfreefloor/hostgrowthstops,exacthostpeakidentities;M4explicit hybrid75. L1crosscardunrecordedfiles,L3parentcheckpointduringrunpin,rolelease/sourceisolation retained. Newintegratedindependentreviewpending;noneofthisdeploys.",
-  "current_GPU1_constraint": "Heldpolicy/sourcecapssupersedeold1940capsule; newfreeze/reviewrequired. NoG1ALZpolicy/controller/reservation/job.",
-  "held_packet": "artifacts/gpu1-held/20261103T183524Z/REVIEW_PACKET.json",
+  "review_scope": "Explicit free_card_exact_peers permits absent MOSS only with graphics-only protected peers; strict old activeMOSS mode retained. Unknown compute refuses/stops owned ALZ, no adoption.3.75GiB compute margin,ownRSS/8GiBhostfloor/hostgrowth stops remain. Native worker2GiB Torch allocator cap below3GiB role (CPU API-argument spy test only, actual native behavior still unqualified). M1crosscard gates,rolelease,checkpoint/source/isolation,hybrid75scope unchanged. Fresh literal source review pending; no deployment.",
   "test_invocations": [
-    "35guard/sharing CPUtests,includingactualownedCPUworkerRSSbreachcleanupwithprotectedpeerpreserved",
-    "23runtimeintegration/role/reviewCPUtests,includingforcedpostreserveothercardracecancellationandbothcardlockorderings",
-    "15GPU0CPUintegrationtestsaftermatchingpostreservegate,appliedonlyaftercurrent40krunsettled"
+    "Fromguardcwd: python3 -B -m unittest discover -s . -p test_*.py (38)",
+    "FromROOT: python3 -B -m unittest discover -s gpu1_runtime -p test_*.py (25)"
   ],
-  "test_invocation_limitation": "Guard lifecycle test subprocess imports its fixture module from cwd; repository-root discovery fails module lookup. Correct guard-directory discovery passes without source changes.",
-  "role_lease_CPU_tests_passed": 3,
-  "review_regression_CPU_tests_passed": 4
+  "scope_limitation": "No native GPU1 context/model allocation tested; allocator check uses mocked Torch API. No changes to frozen science snapshot or original canonical Controller/guard."
 }
