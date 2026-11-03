@@ -1,0 +1,97 @@
+{
+  "status": "FITTING_QUERY_COMPOSITION_DIAGNOSTIC",
+  "records": [
+    {
+      "stage": 0,
+      "PG8_generated_composition": [
+        0.0396375,
+        0.7262374999999999,
+        0.00181875,
+        0.1890874999999999,
+        0.04315625000000003,
+        6.250000000000001e-05
+      ],
+      "matched_optimization_resampling_composition": [
+        0.038493749999999965,
+        0.5313499999999997,
+        0.00989375,
+        0.3886187499999999,
+        0.030743750000000007,
+        0.0009000000000000006
+      ],
+      "composition_L1": 0.41688750000000024,
+      "PC_mean_error_L2": 1.295827676782814
+    },
+    {
+      "stage": 1,
+      "PG8_generated_composition": [
+        0.04961875000000001,
+        0.4960312500000005,
+        0.001324999999999999,
+        0.38988124999999973,
+        0.06305624999999998,
+        8.750000000000004e-05
+      ],
+      "matched_optimization_resampling_composition": [
+        0.026875,
+        0.4552125000000002,
+        0.02654999999999998,
+        0.37859999999999977,
+        0.11234375000000005,
+        0.00041875000000000023
+      ],
+      "composition_L1": 0.1496875000000003,
+      "PC_mean_error_L2": 1.155641007359041
+    },
+    {
+      "stage": 2,
+      "PG8_generated_composition": [
+        0.041625000000000044,
+        0.6944437500000005,
+        0.002012499999999997,
+        0.17657499999999998,
+        0.08490625,
+        0.0004375000000000002
+      ],
+      "matched_optimization_resampling_composition": [
+        0.03506249999999999,
+        0.6658499999999996,
+        0.004356249999999988,
+        0.20281249999999987,
+        0.08328124999999999,
+        0.00863749999999999
+      ],
+      "composition_L1": 0.0735625000000008,
+      "PC_mean_error_L2": 0.48231763747045636
+    },
+    {
+      "stage": 3,
+      "PG8_generated_composition": [
+        0.03420624999999999,
+        0.7257875000000006,
+        0.006874999999999997,
+        0.07835624999999996,
+        0.15476874999999998,
+        6.250000000000001e-06
+      ],
+      "matched_optimization_resampling_composition": [
+        0.04535625000000004,
+        0.6654624999999998,
+        0.008893749999999992,
+        0.16952499999999998,
+        0.10642500000000009,
+        0.004337499999999998
+      ],
+      "composition_L1": 0.21733750000000074,
+      "PC_mean_error_L2": 0.7586880201071553
+    }
+  ],
+  "source_arrays_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/r0/arrays.npz": "a6b91199e7fb294d3f8b7047639cf89b710e5484e56669143425dfbec8f9cb78",
+    "/ml2/alz/artifacts/calibration_resampling_seed0/r0/arrays.npz": "e2d99112bf69bd3fa6687a9ddb62a6eb8f0dfcdb292c6350cad1fe5ae01abd13",
+    "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/r1/arrays.npz": "d8c31d9c17e9f9778d5a4829b201c073aef90c2f6cbefd5993c0d861dafe052c",
+    "/ml2/alz/artifacts/calibration_resampling_seed0/r1/arrays.npz": "793071d2f104124c43753b16461a9b300fda355e591eead92e3a759427773225"
+  },
+  "scope": "Generated arrays only,400bags perstage across2fixedreplicates. Query donor/condition/library law and resampling derive from optimization donors. No calibration or evaluation target arrays parsed. KeptPG8 was adaptively selected previously; no independence/causal claim.",
+  "hypothesis_if_further_iteration_needed": "Fixed low-frequency Fourier and moment observations may leave subtype composition underconstrained. A prospective critic observation extension using the frozen optimization-only subtype classifier could be tested, with model-choice confounds explicit. No implementation or allocation yet."
+}
