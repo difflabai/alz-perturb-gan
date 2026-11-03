@@ -49,7 +49,7 @@ def main():
                 theoretical[fraction].append(fraction * energy(a, real) + (1 - fraction) * energy(b, real)
                                               - .5 * fraction * (1 - fraction) * separation)
     result = {
-        'status': 'DIAGNOSTIC_DONOR_ES_ONLY_NOT_ELIGIBLE_FOR_SELECTION',
+        'status': 'DIAGNOSTIC_MIXTURE_BOUNDS_NOT_ELIGIBLE_FOR_SELECTION',
         'fixed_grid': fractions,
         'meaning': 'fraction of complete donor bags from PG latent8; remainder hierarchical resampling. One global mixture weight; fixed independent mask ordering.',
         'finite200bag_mixture_ES': {str(f): float(np.mean(scores[f])) for f in fractions},
