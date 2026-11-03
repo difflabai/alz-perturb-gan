@@ -38,7 +38,7 @@ def main():
                 output_dir=str(b.output_path(b.NATIVE_LAYOUT, value)),
                 ledger_path=str(b.ledger_path(b.NATIVE_LAYOUT, value)),
                 variant_config=config, candidate_commit=commit,
-                source_review='Original science/runtime/input/guard preserved; local exact update AST and latent2 full-state parity; latent8 complete continuation; source-derived15CPU ownership/accounting tests. Native quality/performance unproven.')
+                source_review='Original science/runtime/input/guard preserved; exact optimizer/update AST and disabled-sampling original full-state parity; balanced8bags-per-stage test, complete continuation and sampling-config mismatch rejection; source-derived15CPU ownership/accounting tests. New native candidate quality unproven.')
     auth['command'] = b.expected_command(b.NATIVE_LAYOUT, auth_path, value)
     research_paths = [*ROOT.glob('*.py'), *(ROOT / 'runtime').glob('*.py'), *(ROOT / 'model').glob('*.py')]
     research = {str(p): b.sha(p) for p in research_paths}
@@ -46,6 +46,8 @@ def main():
     pins = auth['files_SHA256']
     pins.update(research)
     pins[str(ROOT / 'candidate.json')] = b.sha(ROOT / 'candidate.json')
+    for path in [ROOT / 'incumbent.json', ROOT / 'ITERATION_AUTHORIZATION_20261103.json']:
+        pins[str(path)] = b.sha(path)
     b.source_closure(auth, b.NATIVE_LAYOUT)
     controller, admission, _ = b.modules(auth)
     observation = admission.snapshot()
