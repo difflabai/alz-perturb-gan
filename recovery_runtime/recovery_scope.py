@@ -2,11 +2,11 @@
 import hashlib,json,sys,time
 from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=ROOT/'recovery_runtime'
-PROTOCOL=ROOT/'analysis/exact_seed1_recovery_protocol_v5.json'
-CPU_PROOF=ROOT/'analysis/recovery_runtime_cpu_qualification_v5.json'
-NATIVE_PROOF=ROOT/'analysis/exact_seed1_native_restore_verification_v5.json'
-INITIAL=35293
-PARENT_INITIAL=15293
+PROTOCOL=ROOT/'analysis/exact_seed1_recovery_protocol_v6.json'
+CPU_PROOF=ROOT/'analysis/recovery_runtime_cpu_qualification_v6.json'
+NATIVE_PROOF=ROOT/'analysis/exact_seed1_native_restore_verification_v6.json'
+INITIAL=35483
+PARENT_INITIAL=15483
 def read(p):return json.loads(Path(p).read_bytes())
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def frozen():

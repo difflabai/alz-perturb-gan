@@ -34,7 +34,8 @@ def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
             parallel_profile.validate(auth)
             parallel_profile.free_floor()
         for path in code_paths:b.require(b.sha(path)==auth['files_SHA256'][str(path)],'reviewed code changed during owned execution: '+str(path))
-        for peer in auth['protected_peers']:b.require(admission.protected_identity(peer['identity']['pid'])==peer['identity'],'protected peer identity changed')
+        if auth.get('dynamic_shared_foreign') is not True:
+            for peer in auth['protected_peers']:b.require(admission.protected_identity(peer['identity']['pid'])==peer['identity'],'protected peer identity changed')
     protect()
     ledger.parent.mkdir(parents=True,exist_ok=True)
     # The outer owner holds the existing scientific core_phase.lock throughout.

@@ -31,7 +31,7 @@ def main():
                 pure_formulation='pg8_learned_ensemble75',ensemble_config=p['frozen_ensemble_config'],qualification_only=qualify,
                 initial_completed_updates=0 if seed2 else scope.PARENT_INITIAL if qualify else scope.INITIAL,initial_parent_updates=[0,0] if seed2 else [20000,scope.PARENT_INITIAL],new_model_updates={'qualify':2,'resume':40000-scope.INITIAL,'seed2':40000}[args.mode],
                 recovery_protocol_SHA256=b.sha(scope.PROTOCOL),recovery_CPU_proof_SHA256=b.sha(scope.CPU_PROOF),
-                source_review_type='OWNER_AUTHORIZED_VERIFIED_SOURCE_AND_RESOURCE_CHECKS',independent_current_device_review_claimed=False,source_review='Owner explicitly extended research to five days. Resume actual15293 terminal learned state, completedPG8 byteidentical20k retained,4707 learned updates remain. ALL9pastcanonicalcharges/checkpoints/actualexecutionsources retained. Frozen recipes/20k endpoints/allthreefixedseeds/data/scorer/two75-25wholebag calibration replicas unchanged. New actual15293/two15294 replay parity and clean settlement required before training from original15293, never replaystates. Five-day authorization file pinned, finite perjob6h/qual900s guards and1024GPU-hourprojectcap unchanged. SharedGPU1 own3GiB hard allocator plus sampledguard,3.5GiBfree earlyyield, exactforeignsource/peerforecast. No foreigncontrol or original task11 policy/source mutation')
+                source_review_type='OWNER_AUTHORIZED_VERIFIED_SOURCE_AND_RESOURCE_CHECKS',independent_current_device_review_claimed=False,source_review='Owner explicitly extended research to five days. Resume actual15483 terminal learned state, completedPG8 byteidentical20k retained,4517 learned updates remain. ALL11pastcanonicalcharges/checkpoints/actualexecutionsources retained. Frozen recipes/20k endpoints/allthreefixedseeds/data/scorer/two75-25wholebag calibration replicas unchanged. New actual15483/two15484 replay parity and clean settlement required before training from original15483, never replaystates. Five-day authorization file pinned, finite perjob6h/qual900s guards and1024GPU-hourprojectcap unchanged. SharedGPU1 own3GiB hard allocator plus sampledguard,3.5GiBfree earlyyield, sampled same-user foreign occupancy plus explicit growth allowances. No foreigncontrol or original task11 policy/source mutation')
     if not seed2:auth.update(checkpoint_path=p['checkpoint_path'],checkpoint_SHA256=p['checkpoint_SHA256'])
     auth['command']=b.expected_command(b.NATIVE_LAYOUT,auth_path,value)
     parallel.configure(auth,check_only=args.check_only)
@@ -48,11 +48,12 @@ def main():
     controller, admission, _ = b.modules(auth)
     observation = admission.snapshot()
     policy = b.read(auth['policy_path'])
-    b.require(set(observation['gpu_memory']) == {p['identity']['pid'] for p in policy['protected_peers']}, 'unknown or missing GPU0 peer')
-    for peer in policy['protected_peers']:
-        pid = peer['identity']['pid']
-        b.require(admission.protected_identity(pid) == peer['identity']
-                  and set(observation['gpu_kinds'][pid]) == set(peer['gpu_kinds']), 'protected identity/membership changed')
+    if auth.get('dynamic_shared_foreign') is not True:
+        b.require(set(observation['gpu_memory']) == {p['identity']['pid'] for p in policy['protected_peers']}, 'unknown or missing GPU0 peer')
+        for peer in policy['protected_peers']:
+            pid = peer['identity']['pid']
+            b.require(admission.protected_identity(pid) == peer['identity']
+                      and set(observation['gpu_kinds'][pid]) == set(peer['gpu_kinds']), 'protected identity/membership changed')
     registry=Path(auth['registry_path'])/'registry.json'
     b.require(not registry.exists() or not b.read(registry)['jobs'], 'resource registry has active work')
     forecast=parallel.capacity(observation,admission)

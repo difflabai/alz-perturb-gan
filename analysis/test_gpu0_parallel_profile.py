@@ -4,23 +4,24 @@ from pathlib import Path
 from unittest.mock import patch
 R=Path('/ml2/alz');sys.path[:0]=[str(R/'recovery_runtime'),str(R/'runtime'),'/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2']
 import parallel_profile as p
-import gpu1_admission as a
+import shared_gpu1_admission as a
+import shared_gpu1_runner as shared_runner
 class Parallel(unittest.TestCase):
  def setUp(self):
-  s=p.read(R/'analysis/resource_v2_gpu1_profile_observation.json');peers=[v for v in s['peers'] if v['GPU_kinds']]
+  s=p.read(R/'analysis/shared_v3_gpu1_profile_observation.json');peers=[v for v in s['peers'] if v['GPU_kinds']]
   self.obs={'gpu':s['gpu'],'total':s['total'],'used':s['used'],'available_ram':s['available_ram'],'total_ram':128*2**30,'complete':True,'procs':{v['pid']:{k:v[k] for k in a.IDENTITY_KEYS+('rss','hwm')} for v in peers},'gpu_memory':{v['pid']:v['GPU_bytes'] for v in peers},'gpu_kinds':{v['pid']:v['GPU_kinds'] for v in peers}}
   self.peer_pid=p.read(p.PREPARED)['protected_peers'][-1]['identity']['pid']
-  for pid,v in self.obs['procs'].items():v.update(sid=pid,pgid=pid)
+  for pid,v in self.obs['procs'].items():v.update(sid=pid,pgid=pid,ppid=0)
  def test_snapshot_capacity_fits_with_remaining_foreign_growth(self):
   q=p.capacity(self.obs,a);self.assertTrue(q['GPU_fits'] and q['host_fits']);self.assertFalse(q['allocation_or_lease_created']);self.assertGreater(q['GPU_required_bytes'],self.obs['used']+4*2**30)
  def test_unknown_cuda_worker_not_automatically_adopted(self):
   self.obs['gpu_memory'][999]=1
   with self.assertRaises(a.Conflict):p.capacity(self.obs,a)
- def test_missing_reused_changed_identity_or_kinds_refuses(self):
-  for key,value in [('birth',0),('exe','/tmp/other'),('argv_sha256','0'*64),('uid',0)]:
+ def test_unobservable_invalid_identity_or_kinds_refuses(self):
+  for key,value in [('birth',0),('uid',0)]:
    obs=copy.deepcopy(self.obs);obs['procs'][self.peer_pid][key]=value
    with self.assertRaises(a.Conflict):p.capacity(obs,a)
-  self.obs['gpu_kinds'][self.peer_pid]=['compute'] if self.obs['gpu_kinds'][self.peer_pid]==['graphics'] else ['graphics']
+  self.obs['gpu_kinds'][self.peer_pid]=['invalid']
   with self.assertRaises(a.Conflict):p.capacity(self.obs,a)
  def test_host_remaining_growth_and_hwm_protected(self):
   self.obs['available_ram']=1
@@ -38,10 +39,10 @@ class Parallel(unittest.TestCase):
    obs['procs'][900]={**owner,'ppid':1,'sid':900,'pgid':900,'rss':1,'hwm':1}
    obs['procs'][901]={**worker,'ppid':900,'sid':901,'pgid':901,'rss':1,'hwm':1}
    lease=reg.reserve('alz_core_pg',owner,pol['roles']['alz_core_pg'],obs);lease.attach(worker,obs)
-   self.assertEqual(lease.cleanup_targets(obs),[{'pgid':901,'leader':worker}])
+   self.assertEqual(shared_runner.cleanup_owned_targets(lease,obs),[{'pgid':901,'leader':worker}])
    obs['gpu_memory'][999]=2**30
    with self.assertRaises(a.Conflict):lease.health(obs)
-   self.assertEqual(lease.cleanup_targets(obs),[{'pgid':901,'leader':worker}])
+   self.assertEqual(shared_runner.cleanup_owned_targets(lease,obs),[{'pgid':901,'leader':worker}])
    del obs['procs'][901];lease.release(obs)
    self.assertEqual(p.read(root/'registry/registry.json')['jobs'],{})
  def test_absent_independent_review_refuses(self):

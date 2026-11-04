@@ -323,6 +323,7 @@ def load_pinned(path,expected,name):
     return module
 
 def modules(auth):
+    require(auth.get('dynamic_shared_foreign') is not True or (auth.get('parallel_profile') is True and device(auth)==GPU1),'dynamic foreign sharing requires exact reviewed GPU1 profile')
     pins=auth['files_SHA256']
     controller=load_pinned(CONTROLLER,CONTROLLER_SHA,'alz_gpu0_unchanged_budget_controller')
     admission=load_pinned(GUARD/'gpu0_admission.py',pins[str(GUARD/'gpu0_admission.py')],'gpu0_admission')
@@ -330,7 +331,11 @@ def modules(auth):
     if auth.get('parallel_profile') is True and device(auth)==GPU1:
         ap=HERE.parent/'recovery_runtime/gpu1_admission.py'
         admission=load_pinned(ap,pins[str(ap)],'gpu1_admission')
-        path=HERE.parent/'recovery_runtime/gpu1_runner.py'
+        if auth.get('dynamic_shared_foreign') is True:
+            ap=HERE.parent/'recovery_runtime/shared_gpu1_admission.py'
+            admission=load_pinned(ap,pins[str(ap)],'shared_gpu1_admission')
+            path=HERE.parent/'recovery_runtime/shared_gpu1_runner.py'
+        else:path=HERE.parent/'recovery_runtime/gpu1_runner.py'
         guard=load_pinned(path,pins[str(path)],'alz_owned_gpu1_parallel_guard')
     elif auth.get('parallel_profile') is True:
         path=HERE.parent/'recovery_runtime/parallel_runner.py'
@@ -385,7 +390,8 @@ def require_live(auth_path,layout=NATIVE_LAYOUT):
         try:pid=int(Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()[1])
         except FileNotFoundError:break
     require(bound,'worker is outside the registered owned session')
-    for peer in auth['protected_peers']:require(admission.protected_identity(peer['identity']['pid'])==peer['identity'],'protected peer identity changed before model import')
+    if auth.get('dynamic_shared_foreign') is not True:
+        for peer in auth['protected_peers']:require(admission.protected_identity(peer['identity']['pid'])==peer['identity'],'protected peer identity changed before model import')
     value=cell(auth)
     require(not output_path(layout,value).exists() and not (layout.science/'runs'/f"f{value['fold']}_{value['method']}_s{value['seed']}").exists(),'scientific output already exists before model import')
     return auth,{'allocation_id':auth['allocation_id'],'authorization_expiry':auth['expires_unix'],'ledger_started_unix':job['started_unix']}
