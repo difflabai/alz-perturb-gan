@@ -1,0 +1,28 @@
+{
+  "status": "PASSED_PURE_ENSEMBLE_PRELAUNCH_CPU_CHECKS",
+  "utc": "2026-11-04T00:08:51.118474+00:00",
+  "model_selection_composition_checks": 57,
+  "runtime_resource_native_source_binding_checks": 27,
+  "total_unique_checks": 84,
+  "independent_parent_model_float_counts": [
+    371177,
+    376066
+  ],
+  "native_zero_one_controls_verified": false,
+  "candidate_evaluation_admitted": false,
+  "GPU_allocation_created": false,
+  "limits": "CPU composition and source/admission qualification plus independent full parent checkpoint audits only. Native zero/one parent array/count bitwise replays remain required before .25 candidate evaluation. Two20k parents total40k updates, new0updates; ensemble reference checkpoint JSON binds full retained checkpoints, not new training. Original immutable guard/Controller and frozen GPU1 source unchanged.",
+  "qualification_note": "Exact legacy PG8 checkpoint omits variant_config. Independent audit uses its registered checkpoint digest, recipe z_dim and existing default restore semantics; this is explicit and remains subject to native bitwise replay. No weakened full model state audit.",
+  "source_SHA256": {
+    "/ml2/alz/ensemble_scope.py": "407ba913834c477c0f9301f2103d07a19476db93872844f0721c043885665a5c",
+    "/ml2/alz/ensemble_execution.py": "80b88a18ca48591e8ecbfe50958afe898f2c4fc389ec57722b1cc0f1e1ab31a7",
+    "/ml2/alz/prepare_ensemble_job.py": "a2d081aacc39ce0082928b37311fa8a7ce848a72769fd8cece72b1ecac52f0cf",
+    "/ml2/alz/runtime/binding.py": "8e27f6cf69baacfb2ca1eb023b4d7885803171cabf1769fb14dce4207d399083",
+    "/ml2/alz/runtime/worker_gpu0.py": "0f1d733bd598398908831b462f9679e2a87d410ae6723b9038100289d87e55ab",
+    "/ml2/alz/runtime/test_ensemble_scope.py": "14f9f6c986c9ec39be01c2abff75d6446972b5fe0ecc817b7dd09288a7c16e6c",
+    "/ml2/alz/analysis/finish_candidate.py": "f428c5ab1b674177be79b92323b0633958756e98ed143b8cc392a0eeef6d9139",
+    "/ml2/alz/analysis/verify_ensemble_control.py": "8f0c64285576a35e8b66c87f053cbe76f4faaad76ce2852f179da9adf77c6416",
+    "/ml2/alz/analysis/ensemble_cpu_qualification.json": "f3d1dff5a8bee126088f9f650e5ca10c8682e4207eedab2560e844287321cecf",
+    "/ml2/alz/analysis/ensemble_parent_checkpoint_audit.json": "05f8eb9635ef0e30e17d6b8e284f09c74bb66bda697ec2152860ec77a5c3e2b6"
+  }
+}

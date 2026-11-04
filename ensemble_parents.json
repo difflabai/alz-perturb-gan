@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "fold": 0,
+  "training_seed": 0,
+  "native_recipe": "bispf_optimized",
+  "parent_completed_updates": 20000,
+  "parent_training_updates_total": 40000,
+  "real_bag_replacements": 0,
+  "mask_seed": 20261108,
+  "candidate_learned_weight": 0.25,
+  "replicates": [
+    0,
+    1
+  ],
+  "parents": [
+    {
+      "name": "PG8",
+      "adapter": "variant",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
+      "completed_updates": 20000,
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": false,
+        "cell_z_dim": 8,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 1.0
+      },
+      "score_output": "/ml2/alz/runs/CAL_GPU0_V1_latent8_v1_f0_pg_s0",
+      "learned_observation_config": null
+    },
+    {
+      "name": "learned_observation",
+      "adapter": "learned",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "9e59988d216ef5f6d5fabf798ba204898a4d71905906938d486147e893b4df11",
+      "completed_updates": 20000,
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": false,
+        "cell_z_dim": 8,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 1.0
+      },
+      "score_output": "/ml2/alz/runs/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0",
+      "learned_observation_config": {
+        "enabled": true,
+        "cell_hidden": 64,
+        "cell_features": 25,
+        "feature_scale": 0.2,
+        "pool_epsilon": 1e-06,
+        "layernorm_epsilon": 1e-05
+      }
+    }
+  ]
+}

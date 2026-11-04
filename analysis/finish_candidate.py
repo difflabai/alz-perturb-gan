@@ -139,7 +139,14 @@ def main():
         return
     if args.pure:
         assert candidate.get('pure_only') is True and candidate.get('real_bag_replacements')==0 and candidate.get('hybrid_config') is None
-        assert (candidate.get('operation'),candidate.get('native_recipe')) in [('train_bispf','bispf'),('train_semantic','bispf_optimized'),('train_bcap','bcap'),('train_learned','bispf_optimized'),('train_network_rate','bispf_optimized')]
+        assert (candidate.get('operation'),candidate.get('native_recipe')) in [('train_bispf','bispf'),('train_semantic','bispf_optimized'),('train_bcap','bcap'),('train_learned','bispf_optimized'),('train_network_rate','bispf_optimized'),('evaluate_pure_ensemble','bispf_optimized')]
+        if candidate['operation']=='evaluate_pure_ensemble':
+            from ensemble_scope import read as ensemble_read,validate_authorization,verify_reference
+            validate_authorization(ensemble_read(deployment['authorization_path']))
+            verify_reference(candidate)
+            assert candidate['ensemble_config']==deployment['ensemble_config']=={'learned_weight':.25,'mask_seed':20261108,'bags_per_stage':200}
+            assert candidate['parent_training_updates_total']==40000 and candidate['parent_completed_updates']==[20000,20000] and candidate['new_model_updates']==0
+            assert candidate['generation']=='iter_pg_whole_bag_ensemble' and candidate['checkpoint_kind']=='complete_two_parent_references'
         if candidate['operation']=='train_learned':
             assert candidate['learned_observation_config']==deployment['learned_observation_config']=={'enabled':True,'cell_hidden':64,'cell_features':25,'feature_scale':.2,'pool_epsilon':1e-6,'layernorm_epsilon':1e-5}
             audit=read(ROOT/'analysis/learned_observation_checkpoint_audit.json')

@@ -1,0 +1,27 @@
+{
+  "status": "VERIFIED_COMPLETE_PURE_ENSEMBLE_PARENT_CHECKPOINTS",
+  "utc": "2026-11-04T00:01:56.709461+00:00",
+  "parent_manifest_SHA256": "283243061d72af81e9451de22581a03fb691c0c46ff5364b314fd39325f69a1f",
+  "parents": [
+    {
+      "name": "PG8",
+      "checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
+      "finite_model_floating_values": 371177,
+      "exact_official_recipe_and_complete_G_D_prior_load": true,
+      "configuration_binding": "registered exact legacy PG8 checkpoint and existing default restore semantics; native replay still required"
+    },
+    {
+      "name": "learned_observation",
+      "checkpoint_SHA256": "9e59988d216ef5f6d5fabf798ba204898a4d71905906938d486147e893b4df11",
+      "finite_model_floating_values": 376066,
+      "exact_official_recipe_and_complete_G_D_prior_load": true,
+      "configuration_binding": "saved variant_config"
+    }
+  ],
+  "CUDA_initialized": false,
+  "new_model_updates": 0,
+  "scope": "Independent CPU strict generator/critic/prior state audits only. No optimizer/CUDA RNG restore claim or native control replay, fitting or GPU allocation.",
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_ensemble_parents.py": "17d16550bc051ce5d11061a393acb9dd0063fa0be59952a15208a8486b72ffec"
+  }
+}
