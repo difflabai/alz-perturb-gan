@@ -1,0 +1,41 @@
+{
+  "status": "REGISTERED_BEFORE_BCAP_ADAM_NATIVE_QUALIFICATION_OR_TRAINING",
+  "utc": "2026-11-04T08:30:39.964564+00:00",
+  "native_API": "ParticleGAN0.9.4 get_recipe('bcap_adam',total_steps=20000,batch_size=32,num_particles=512,z_dim=8); no other recipe overrides",
+  "rationale": "Original frozen PG8/learned whole-bag model improved donor energy across seeds but failed pooled cell matching for both confirmations. The preregistered uniformallseed ensemble also failed joint analytical screen. Test the published plain-Adam BCAP preset with the same count/critic architecture and fixed sampling, rather than changing scores or repairing generated cells. Optimizer/step dynamics may alter the shared distribution bias; improvement is an unverified hypothesis.",
+  "experiment": "bcap_adam_v1",
+  "operation": "train_bcap_adam",
+  "task": {
+    "fold": 0,
+    "training_seed": 0,
+    "updates": 20000,
+    "cap_seconds": 21600,
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    }
+  },
+  "unchanged": "33optimizationdonors, preprocessing, CountGenerator,150moments/Fourier critic features, batch/library laws, deterministic streams, native count discrete-forward/declared biased-rate backward, direct iter_pg with zero real replacements,4calibrationdonors,two generationreplicates.20evaluationdonors excluded.",
+  "native_preset_confound": "Whole released BCAP/Adam preset: paired relativistic logistic objective, plain Adam step/moment and constraint-geometry settings differ from DualNorm/BCAP and optimizedBISPF. Native GANLoss.g_loss requires fresh matched real2 scores; use D(real2,c2).detach() with frozen critic. This is a declared whole-preset comparison, not an isolated optimizer ablation. Compare20k singleparent compute to selected40k two-parent ensemble openly.",
+  "qualification": [
+    "exact official recipe/factory component types",
+    "same initial learned G/D/prior tensors and streams",
+    "Only native paired G-loss real2 logit argument changes advance AST; other update/observation/sampling/fit AST preserved",
+    "finite nonzero count-generator/dispersion/prior gradients",
+    "full serialized exact nextupdate equality and invalidrecipe/cache refusal",
+    "isolated runtime source/admission/budget/lease/no-model-import checks before native launch"
+  ],
+  "selection": "Unchanged selection.decide against current pure incumbent: strict lower donorES AND no higher pooled cellED, spreadband nonregression, integercounts and completedendpoint. Independently recompute two saved replicas/exemplars/checkpoint/source/cleanup/charges. Commit actual candidate evidence and revert active trial activation on regression; never delete negative evidence or change threshold. Stable joint confirmation remains necessary.",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "original_failed_confirmation_path": "/ml2/alz/analysis/pure_ensemble_confirmation_v6_all_seeds.json",
+  "original_failed_confirmation_SHA256": "d9b31c4ab50eef50fbd69fa63cda7e7e424120ba6a59fac6dd3ec410c8165aa1",
+  "uniform_ensemble_negative_screen_path": "/ml2/alz/analysis/uniform_training_seed_ensemble_estimate.json",
+  "uniform_ensemble_negative_screen_SHA256": "5d89f36e8fe58aa3e9e13d7977624846c2e14862ff5dcb183d789762b4c706d4",
+  "owner_window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+  "GPU_job_started": false,
+  "native_result_available": false,
+  "incumbents_changed": false
+}
