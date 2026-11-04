@@ -18,11 +18,15 @@ def assignment(source,name,value):
     assert n==1,(name,n)
     return source
 
-def make_candidate(candidate_id,gpu,predecessor_attempt):
+def make_candidate(candidate_id,gpu,predecessor_attempt,*,alternate_first_card=False):
     protocol=read(PROTOCOL)
     settings=[s for s in protocol['stage1']['configs'] if s['id']==candidate_id]
     assert len(settings)==1,'Candidate ID is not in the registered27-setting grid'
-    assert candidate_id!='lr_g050_d050_p050','First setting already has its own prepared runtime'
+    if candidate_id=='lr_g050_d050_p050':
+        assert alternate_first_card and gpu==0,'First setting already has its own prepared GPU1 runtime; explicit unused GPU0 alternative required'
+        attempt='CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0'
+        assert not (ROOT/'artifacts/allocations'/attempt).exists() and not (ROOT/'runs'/attempt).exists(),'First scientific key already prepared or consumed; no alternate-card duplicate'
+    else:assert alternate_first_card is False,'Alternate-first flag is specific to the first unused setting'
     setting=settings[0];assert gpu in GPUS
     assert re.fullmatch(r'CAL_GPU0_V1_[a-z][a-z0-9_]{0,48}_f0_pg_s0',predecessor_attempt),'Exact owned calibration predecessor required'
     predecessor_auth=ROOT/'artifacts/allocations'/predecessor_attempt/'authorization.json'
@@ -98,6 +102,7 @@ def make_candidate(candidate_id,gpu,predecessor_attempt):
     receipt={'status':'GENERATED_DISABLED_DECLARED_RATE_CANDIDATE_NOT_QUALIFIED_OR_DEPLOYED',
         'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'candidate_id':candidate_id,'parameters':setting['parameters'],
         'physical_GPU_uuid':GPUS[gpu],'runtime_directory':str(folder),'predecessor_attempt':predecessor_attempt,
+        'alternative_first_card':alternate_first_card,
         'template_runtime_qualification_SHA256':sha(TEMPLATE_PROOF),'protocol_SHA256':sha(PROTOCOL),
         'generator_source_SHA256':sha(__file__),
         'source_SHA256':{str(path):sha(path) for path in folder.glob('*.py')},
@@ -108,5 +113,5 @@ def make_candidate(candidate_id,gpu,predecessor_attempt):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--candidate-id',required=True);parser.add_argument('--gpu',type=int,choices=(0,1),required=True)
-    parser.add_argument('--predecessor-attempt',required=True);args=parser.parse_args()
-    print(json.dumps(make_candidate(args.candidate_id,args.gpu,args.predecessor_attempt),indent=2))
+    parser.add_argument('--predecessor-attempt',required=True);parser.add_argument('--alternate-first-card',action='store_true');args=parser.parse_args()
+    print(json.dumps(make_candidate(args.candidate_id,args.gpu,args.predecessor_attempt,alternate_first_card=args.alternate_first_card),indent=2))
