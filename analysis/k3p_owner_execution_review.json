@@ -1,0 +1,98 @@
+{
+  "status": "OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS",
+  "utc": "2026-11-04T10:39:43.455532+00:00",
+  "reviewer_session": "01a1a22b-f310-7190-a7c6-8697ecabae6c",
+  "independent_review_claimed": false,
+  "owner_authorization": {
+    "available_capacity": "I authorize using the available GPU capacity.",
+    "both_cards": "You can use both gpus without permission.",
+    "sharing": "you dont need solo access",
+    "continuation": "contineue",
+    "deadline_extension": "extend it to 5 days"
+  },
+  "scope": "ONE_PUBLISHED_K3P_SEED0_TRIAL_ONLY",
+  "policy_SHA256": "0ba4dbeef2177f433c3200f94e176c22af005595ac291c239134cab9d5c98e86",
+  "source_SHA256": {
+    "/ml2/alz/k3p_runtime/resource_profile.py": "9f8f3ee789b2f28cc33e35eb69db6b0afc58a8f809061eb211e895543a2baf15",
+    "/ml2/alz/k3p_runtime/finish.py": "8dcb487b0f6f829bbdaf19e8c0be075ff2035fbeae88679c08226d5653f474a2",
+    "/ml2/alz/k3p_runtime/launch_core_gpu0.py": "f4de7b30d845886c30307dc23fad0b79c8a2f7c67f2afa3a9fcad8ae2c4aaaa4",
+    "/ml2/alz/k3p_runtime/project_runner_gpu0.py": "562507e0d1e5554dfa71e7f32ae16322bcf460caee2b3fc440681534e2c86fb5",
+    "/ml2/alz/k3p_runtime/preset_scope.py": "8745138ce558ae57c23d10460299a6ed31619e0e97550a1c1bc0ef9ac8ab86f9",
+    "/ml2/alz/k3p_runtime/test_scope.py": "d8381bfd91ed337a2f0bc7da170a6fe0e86e286dedbd1f54fd17cf68baba4bd3",
+    "/ml2/alz/k3p_runtime/prepare.py": "5f73237930134aa9673cc46a48c9350e31c32c430f3fa19feb1618f832e28873",
+    "/ml2/alz/k3p_runtime/worker_gpu0.py": "d7735b689d22f6fe01a634f04fd0610768db6aac8018ba709f450cb9c910fbac",
+    "/ml2/alz/k3p_runtime/qualify.py": "29e8779bccf6ea91593836530182f3abb9b0ee0df08365f771a83c6765b72663",
+    "/ml2/alz/k3p_runtime/test_integration.py": "7219a1de16e0a209fb8c592cb72d2c7958e42c3e0d195f33cd39b6d85d599822",
+    "/ml2/alz/k3p_runtime/binding.py": "bb04694a2a7965967508346d38fcd6762131521a269b052152a39d4def3b6e97",
+    "/ml2/alz/k3p_runtime/policy.prepared.json": "40c88730ae231dfe81670828f0c5b564a6d952c0ac0ad11e3c78ce4c182e7120",
+    "/ml2/alz/model/k3p_update.py": "8718abaf09e9607e6d7c43e5ee9f637abf6d6fb746a6f8804b209d67a3489d5c",
+    "/ml2/alz/model/k3p_adapter.py": "868ee2ab83dd8ca77fc967297836d2a9a311ae9db07aa2f9ebaf8e2ba7185db1",
+    "/ml2/alz/analysis/k3p_protocol.json": "a4ccbea438d85384fca8535cc11f3ce45df88d93b91f1db0de9efa453b673f4a",
+    "/ml2/alz/analysis/k3p_model_CPU_qualification.json": "3cff03ca1fd49f2f82d7b479dba68ab58e9e40fd51fe80159712bd5168b868c8",
+    "/ml2/alz/analysis/k3p_runtime_CPU_qualification.json": "7227a82d2c8f35ebff9c535e685800753c45d538c9dc57a417b352d0d782217e",
+    "/ml2/alz/analysis/research_window_20261104_five_days.json": "2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1"
+  },
+  "verification": {
+    "actual_final_model_path_CPU_tests_passed": 6,
+    "source_relocation_byteidentical_verified": true,
+    "actual_LR_dependent_native_anchor_transition_at_CPU1400_verified": true,
+    "isolated_runtime_tests_passed": 22,
+    "old_execution_sources_unchanged": true,
+    "plan_enabled_at_review_creation": false,
+    "forecast": {
+      "GPU_required_bytes": 24318644224,
+      "GPU_total_bytes": 51527024640,
+      "host_remaining_growth_required_bytes": 27690078208,
+      "host_available_bytes": 78732103680,
+      "GPU_fits": true,
+      "host_fits": true,
+      "allocation_or_lease_created": false,
+      "observed_foreign": [
+        {
+          "identity": {
+            "pid": 146094,
+            "birth": 534000,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/usr/bin/gnome-shell (deleted)",
+            "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+            "ppid": 7650
+          },
+          "gpu_kinds": [
+            "graphics"
+          ],
+          "gpu_budget_bytes": 272699392,
+          "ram_budget_bytes": 2575880192,
+          "observed_gpu_bytes": 4263936,
+          "observed_rss_bytes": 310939648,
+          "GPU_growth_allowance_bytes": 268435456,
+          "foreign_control": "NONE"
+        },
+        {
+          "identity": {
+            "pid": 778996,
+            "birth": 2125082,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/ml2/iris-particle-sliders-task-20261008/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12",
+            "argv_sha256": "5582d2907a83aff4f6d9d5a30f0ee810fd896e8bffbe96d751fe19e76d5cfeb6",
+            "ppid": 778932
+          },
+          "gpu_kinds": [
+            "compute"
+          ],
+          "gpu_budget_bytes": 17603493888,
+          "ram_budget_bytes": 17755262976,
+          "observed_gpu_bytes": 17066622976,
+          "observed_rss_bytes": 11657478144,
+          "GPU_growth_allowance_bytes": 536870912,
+          "foreign_control": "NONE"
+        }
+      ]
+    },
+    "GPU_free_bytes": 33807138816,
+    "host_available_bytes": 78723305472,
+    "native_quality_unproven": true
+  },
+  "limitations": "Owner-authorized source/resource checks, not independent peer approval. ArchivedK3P supportedpreset, not latestdefaultKA2critic. Forecasts do not constrain foreign jobs or guarantee abrupt allocation between samples. CPUqualification is not GPUquality."
+}
