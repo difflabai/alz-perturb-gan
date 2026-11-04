@@ -1,0 +1,54 @@
+{
+  "status": "AUDITED_CRITIC_QUARTER_REJECTED_NEXT_REGISTERED_GENERATOR_QUARTER_PREPARED",
+  "utc": "2026-11-04T21:45:04.708839+00:00",
+  "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d025p050_f0_pg_s0-result.json",
+  "result_SHA256": "7a37e65f9f900ce4707babfbc14a6dd9e15dceae585eddf7d522ac0198856075",
+  "previous_best_single_model_result": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json",
+  "previous_result_SHA256": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+  "metric_changes_percent_vs_critic_half": {
+    "energy_score": 18.348439121872605,
+    "cell_energy_distance": 36.15844011814984
+  },
+  "metric_changes_percent_vs_resampling": {
+    "energy_score": 7.707846565484577,
+    "cell_energy_distance": 33.736773296609
+  },
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "native_audit_complete": true,
+  "all3_checkpoint_scores_independently_recomputed": true,
+  "charge_GPU_seconds": 2034.7035111409932,
+  "owned_registry_empty": true,
+  "owner_worker_and_waiter_absent": true,
+  "activation_to_revert": "ec0c566",
+  "incumbent_changed": false,
+  "next_setting": {
+    "id": "lr_g025_d050_p050",
+    "parameters": {
+      "generator_lr": 0.003,
+      "critic_lr": 0.009,
+      "particle_lr": 0.015,
+      "reg_coeff": 1.0,
+      "reg_kappa": 1.0,
+      "prior_reg": 0.01
+    }
+  },
+  "next_setting_reason": "At fixedG.006/P.015, reducing criticLR.009->.0045 worsens both final20k metrics. Keep critic.009/particles.015 and reduce generatorLR.006->.003 as a single registered scalar change from the best completed rate setting. NativeBISPF/regularization/architecture/data/seed streams fixed.",
+  "next_runtime": "/ml2/alz/released_rate_g025d050p050_runtime",
+  "next_runtime_qualification_path": "/ml2/alz/analysis/released_rate_g025d050p050_runtime_CPU_qualification.json",
+  "next_runtime_checks_passed": 24,
+  "next_model_started": false,
+  "original_protocol_path": "/ml2/alz/analysis/released_tuning/protocol.json",
+  "original_protocol_SHA256": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1",
+  "same27settings_retained": true,
+  "previously_prepared_generator_and_critic_quarter_setting_deferred_not_dropped": true,
+  "stage2_anchor_selected": false,
+  "fixed_three_seed_confirmation_unchanged": true,
+  "stable_joint_ATH_claimed": false,
+  "evaluation_donors_used": false
+}
