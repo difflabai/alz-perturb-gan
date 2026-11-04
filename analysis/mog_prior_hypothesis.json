@@ -1,0 +1,22 @@
+{
+  "status": "PREDECLARED_SINGLE_PUBLISHED_MOG_PRIOR_MODEL_FAMILY_COMPARISON",
+  "utc": "2026-11-04T12:28:24.471138+00:00",
+  "experiment": "mog_prior_v1",
+  "native_API": "get_recipe('mog',total_steps=20000,batch_size=32,num_particles=512,z_dim=8)",
+  "rationale": "Six published trainerrecipes and the explicit cellenergytaskextension have failed to improve the joint incumbent target. Fitting-only counterfactuals supplied no finiteovershoot example, and the one fixedtask+learned mixture screen failed. Test the supported native MoG prior family rather than assuming an atomic512-row prior is sufficient for donor variation. No improvement is promised.",
+  "controls": "Published MoG model selector inherits the current native optimizedBISPF trainer. Preserve all native fields; only standard tasklimits/batch/particles/latentdimension overridden. Native sigma_rel.025 and readstandardizationTrue retained; absolute sigma calibrated ONCE frominitialstandardizedmeans by native mediannearestneighbor rule, then fixed throughout training and inference. No sigma or bandwidth grid. No taskcell-energyauxiliary in this comparison.",
+  "confounds": "MoG changes standardizedlatentmeans and adds fixedGaussian kernel noise together; rawparticleinit/G/D/task/data/CountG remain matched. Not an isolated noise ablation or seventhtrainerpreset. Distinguish published prior-model family from six completedtrainerpresetnames.",
+  "initialization_and_streams": "Append one independent namedprior_noise stream after the existing11 SeedSequencechildren; prove all oldstreamseeds/G/D/rawP.z initialization unchanged. Both native trainingP.sample calls isolate Gaussian draws with that newstream. Snapshot/restore it. Inference uses unchanged iter_pg/nativeMoG.sample with its documented default shared index/noise generator, so kernelnoise remains active.",
+  "quality_contract": "Fold0 seed0 fixed20k updates,21600s cap insideexistingownerfive-daywindow/1024GPUhcap. Same33fittingdonors,4adaptivecalibdonors,20evaluationdonorsexcluded, exactcountforward/declaredbiasedratebackward, matchedStageLaw/traces/scorer/2replicas. Zero real replacements or outputrepair.",
+  "qualification": [
+    "exactpublicrecipe/factories/MoGclass/conditionalrowpolicy; native sigma initialization/calibration and metadata",
+    "sameinitialG/D/rawparticlecoordinates andfirst11 streamseeds",
+    "independentindex/kernelRNG, explicit eps reproduction, nonzeroG/dispersion/rawprior gradients",
+    "fullserializednextupdatebitwise replay including prior_noise andextra_state; wrongMoG/recipe/cache/config refused",
+    "separatenative source/resource/lease/accounting andfull20k/savedscore/count/checkpoint/cleanup/chargeaudit"
+  ],
+  "decision": "Unchanged jointselection.decide against frozenpureincumbent. Commit actualnegativeevidence thenrevertactivationifworse; successfulseed0needsfixedseed1/2 andoriginalstablejointtarget. No ranking/droppingseeds or targettraining.",
+  "GPU_allocation_created": false,
+  "quality_result_available": false,
+  "incumbent_changed": false
+}
