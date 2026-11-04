@@ -1,0 +1,176 @@
+{
+  "status": "VERIFIED_NATIVE_HALLOWEEN_COUNT_PRESET_RESULT",
+  "utc": "2026-11-04T16:27:44.621221+00:00",
+  "attempt": "CAL_GPU0_V1_halloween_native_v1_f0_pg_s0",
+  "candidate": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 4.185330196719224,
+    "cell_energy_distance": 5.30821264184506,
+    "spread_ratio": 0.005733218544953803,
+    "within_condition_spread_ratio": 0.005715175194153398,
+    "coverage80": 0.038461538461538464,
+    "generated_zero_count_rate": 0.000125,
+    "per_donor_energy_score": [
+      3.4098603981502658,
+      5.028958193955075,
+      3.901747228629541,
+      4.400754966142011
+    ],
+    "per_stage_cell_energy_distance": [
+      5.565914080620631,
+      6.936529341217464,
+      6.0262682594728005,
+      5.215207349077628
+    ],
+    "status": "completed",
+    "completed_updates": 20000,
+    "fixed_endpoint": 20000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_halloween_native_v1_f0_pg_s0",
+    "operation": "train_halloween_native",
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "b8a7baca5b9c49978263ff5ae5275b584f263dbbbad119fe94030fd9421b6c88",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "method": "pg_halloween",
+    "hybrid_config": null,
+    "qualification_only": false,
+    "new_model_updates": 20000,
+    "initial_completed_updates": 0,
+    "native_recipe_schedule_horizon": 20000,
+    "parent_checkpoint_SHA256": null,
+    "automatic_successor": false,
+    "generation": "direct_iter_pg",
+    "real_bag_replacements": 0,
+    "pure_only": true,
+    "native_recipe": "halloween",
+    "pure_formulation": "halloween",
+    "preset_protocol_SHA256": "daf1910b4fac4682faa58ee075c2c62ca025bc8c4089022257397d7bf5d3595b"
+  },
+  "incumbent": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9355320396443134,
+    "cell_energy_distance": 0.2318446092298636,
+    "spread_ratio": 1.0139376087094576,
+    "within_condition_spread_ratio": 0.9558202746934397,
+    "coverage80": 0.6971153846153846,
+    "generated_zero_count_rate": 3.125e-06,
+    "per_donor_energy_score": [
+      1.1847406370618034,
+      2.762139284338443,
+      1.7135998549675175,
+      2.0816483822094902
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7562105456693518,
+      1.603245353937993,
+      1.1354997606494939,
+      0.538689614861954
+    ],
+    "status": "completed",
+    "completed_updates": 40000,
+    "fixed_endpoint": 40000,
+    "integer_count_contract_passed": true,
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/fit/ensemble.json",
+    "checkpoint_SHA256": "bc9ac029c6b1aa18114f5cbb0f0522da1e775390404a8cd68208eb350c5444de",
+    "checkpoint_kind": "complete_two_parent_references",
+    "operation": "evaluate_pure_ensemble",
+    "allocation_id": "ALZ_CAL_V1_ensemble75_v1_f0_pg_s0",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "hybrid_config": null,
+    "method": "pg_pure_ensemble75",
+    "pure_only": true,
+    "pure_formulation": "pg8_learned_ensemble75",
+    "real_bag_replacements": 0,
+    "generation": "iter_pg_whole_bag_ensemble",
+    "ensemble_config": {
+      "learned_weight": 0.25,
+      "mask_seed": 20261108,
+      "bags_per_stage": 200
+    },
+    "parent_manifest_SHA256": "283243061d72af81e9451de22581a03fb691c0c46ff5364b314fd39325f69a1f",
+    "parent_training_updates_total": 40000,
+    "parent_completed_updates": [
+      20000,
+      20000
+    ],
+    "effective_active_parent_training_updates": 40000,
+    "new_model_updates": 0,
+    "initial_completed_updates": 40000,
+    "native_recipe": "bispf_optimized",
+    "native_recipe_schedule_horizon_each": 20000,
+    "qualification_only": false,
+    "automatic_successor": false,
+    "candidate_commit": "f11139740a3e87f60bb132732c4519de03f95c52"
+  },
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened",
+      "donor spread moved farther outside the acceptable band"
+    ]
+  },
+  "candidate_commit": "adbbdb18306ce438696d6673f89911ad1f765c55",
+  "independent_saved_scores_checkpoint_and_count_exemplars_verified": true,
+  "full_native_recipe_model_and_seed_streams_verified": true,
+  "finite_model_floating_values": 371105,
+  "native_optimizer_and_EMA_checkpoint_state_verified": true,
+  "native_TensorFlowV1Adam_all_role_clocks_and_marker_verified": true,
+  "sampled_raw_row_ownership_and_all512rows_used_verified": true,
+  "owned_release_and_clean_settlement_verified": true,
+  "charged_GPU_seconds": 785.7348799419997,
+  "array_and_exemplar_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/r0/stage0_exemplar.npz": "dfcf3ec9b04c6740fe528ea0d310eea6fdff4e06740ce6fff53a638146711454",
+    "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/r0/stage1_exemplar.npz": "3070aa27d136f719c8a4fd2a674f8e68c600c26cea099f8219a8aaf2c8cf3eea",
+    "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/r0/stage2_exemplar.npz": "89b71a3ed203e328ed7874a74acd0eec469dcbbb2f255b4926aae768c26ee85d",
+    "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/r0/stage3_exemplar.npz": "fedcd1c893a232194fc184c9611edf47009b24cafb410129990efe2cc9179cbb",
+    "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/r0/arrays.npz": "f27bf2598edaa2f31cdbef301f8cf56ca8bcc70a1dfa631b3e99b984be9ebf07",
+    "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/r1/stage0_exemplar.npz": "9814f2c5a478836b996ec44b884e13f4d8de4db9bad9eeb74c88f708ec098e88",
+    "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/r1/stage1_exemplar.npz": "4bea27c858f05b898619ac8da2ebb32d3fdca7c6a6630a5ae076b9c75c4bb9ca",
+    "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/r1/stage2_exemplar.npz": "e662c987c47cf229fb913f326beab391bd66738e615e27d861d96311e48b9196",
+    "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/r1/stage3_exemplar.npz": "adb062377bef09b00dd9262ddf4b2bce9680249913100ea6deaabe658f3dd865",
+    "/ml2/alz/runs/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0/r1/arrays.npz": "b8607346f013cbc0feb8a62e87b28b9ff5d32783a5f784b86dc564f14319f33f"
+  },
+  "authorization_SHA256": "c241a4959d69a9eb2818ad0a1c7961320c2ea2fbde807db8259e717f96c6c89a",
+  "preset_protocol_SHA256": "daf1910b4fac4682faa58ee075c2c62ca025bc8c4089022257397d7bf5d3595b",
+  "source_SHA256": {
+    "/ml2/alz/halloween_runtime/finish.py": "e4925f3d8d519d86e58a3643f6deaaa941ec96007d78ee9028003635ef29dea6"
+  },
+  "incumbent_changed": false,
+  "next_step": "Commit negative evidence and revert trial activation; keep current incumbent. Try the next scientifically defined candidate.",
+  "scope": "Four adaptive calibration donors only; published native Halloween count-preset, exact native TensorFlow-v1 Adam roles/clocks/moments, least-squares labels, zero penalty/priorreg/noise/EMA and constant rates. SamePG8 data/networks/512x8learnedparticles/11streams/directcounts; fullpreset mechanisms confounded.20k singleparent vs40k selectedensemble. No evaluation donor access or independent biological confirmation."
+}
