@@ -1,0 +1,42 @@
+{
+  "status": "PREDECLARED_SINGLE_STAGE_CONDITIONED_PARTICLE_PRIOR_TASK_EXTENSION",
+  "utc": "2026-11-04T15:08:46.164874+00:00",
+  "native_API": "Unchanged ParticleGAN0.9.4 get_recipe(total_steps=20000,batch_size=32,num_particles=512,z_dim=8), native ParticlePrior.forward(indices), UpdatePolicy conditional row ownership; no recipe overrides beyond original task limits",
+  "stage_prior_config": {
+    "conditioning": "known_ADNC_stage",
+    "stages": 4,
+    "particles_per_stage": 128,
+    "num_particles": 512,
+    "partition": "contiguous_fixed_equal_groups",
+    "sampling": "uniform_with_replacement_within_stage"
+  },
+  "question": "Does specializing latent particle locations to their known ADNC condition improve both donor ES and pooled cell distribution compared with one particle cloud reused across conditions?",
+  "rationale": "Six native trainer presets, nativeMoG prior, fixed finite-prior control and nativeKA2EMA readout did not improve the existing joint target. FixednativeMoG/learned andMoG/fixedbank pair screens also failed. Test one explicit conditional-prior sampling-law change, keeping totalparticle parameters512x8 and all networks/data/losses/streams fixed. A particle row now always represents one knownstage; benefit or a cross-condition gradient conflict is not assumed proven.",
+  "task": {
+    "fold": 0,
+    "training_seed": 0,
+    "updates": 20000,
+    "cap_seconds": 21600,
+    "z_dim": 8,
+    "cell_z_dim": 8,
+    "stage_balance": false,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0
+  },
+  "changed": "Only conditional particle-index support in the two native-update prior draws and generation. Forstage s0..3, index=s*128+randint(128). Same full512x8 initializedtable, nativeoptimizer/regularizer/rowownership. Preserve original11 RNGseeds and consumption (verify), initialG/D/rawPz, uniformfittingdonor sampling. Generation wraps the same nativeprior with fixedstage view; directiter_pg/counts unchanged.",
+  "confounds": "Conditional specialization and reduced per-condition support128vs512 occur together at unchangedtotalcapacity. This is a task-specific conditional-prior extension, not a newly published prior/model/trainer or E22/Atlas implementation. Nativeglobal priorregularization unchanged; no per-stage regularizer, sampler balancing, extra loss, new controller, network/cellfeature/dispersion change or tuning grid.",
+  "data": "Only33fittingdonors for training, knownADNC metadata already available toallmodels, fouradaptivecalibrationdonors onlyforunchangedselection;20evaluationdonors excluded. No donorID latent routing or test-target statistics.",
+  "qualification_required": [
+    "Allfourstage supports/replacement law/nativeforward/RNG advancement and fixedtableinitialization parity",
+    "Nativecompleteupdate gradients G/dispersion/P and zero unsampled movement",
+    "Unchanged Context/fit/old11streams and loss/updateAST except two declared sampling calls",
+    "Fullserialized next-step replay and conditioning/config/cache/domain refusals",
+    "Full2000gene architecture/count sampler and exactsource/sharedGPU0/controller/runtime qualification before native20k training"
+  ],
+  "selection": "Same strict lower ES and no higher pooledcellED versus currentpureincumbent, spreadbandnonregression, fixed20k complete/tworeplicas/counts/source/checkpoint/recomputedarrays/cleanrelease/settledcharges. Commit negatives then actualactivationrevert onfailure. Acceptedseed0 needs fixed1/2confirmation, no reranking. No intermediatecheckpoint selection orweight/particlecount/stagecapacity scan.",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "EMA_negative_path": "/ml2/alz/analysis/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0-result.json",
+  "EMA_negative_SHA256": "67a27f3011a549624c3ab69321b11a977d70167a8354d61ff041eed700b9bd46",
+  "native_GPU_launched": false,
+  "quality_known": false
+}
