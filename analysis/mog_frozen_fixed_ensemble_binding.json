@@ -1,0 +1,32 @@
+{
+  "status": "BIND_COMPLETED_JOINTLY_REJECTED_CONTROL_TO_PRIOR_FIXED_PAIR_PREREGISTRATION",
+  "utc": "2026-11-04T14:20:55.681106+00:00",
+  "hypothesis_path": "/ml2/alz/analysis/mog_frozen_fixed_ensemble_hypothesis.json",
+  "hypothesis_SHA256": "f383bc5f013b78bd7ea288ad6046a705ca0a2f3a86e9b141a47c5a35c11ffc20",
+  "models": [
+    {
+      "name": "native_MoG_prior",
+      "weight": 0.75,
+      "attempt": "CAL_GPU0_V1_mog_prior_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "cac07403d737f8bf7cd6d33edae3d5d7d602a46a739ac08359ceee1de9ca9999",
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "324bc395c2009247f0f1f632637cfa735063c9f17e6b92cb091bec0f18dad5d8"
+    },
+    {
+      "name": "native_fixed_particle_control",
+      "weight": 0.25,
+      "attempt": "CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "dd26f01f13e6a20381078af9a767d5e7e6afa995a5fb43b5d76ee0d023d62d62",
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "ff0ef36fa758205d95bf5bc6bf5c35636bebfa41712d3dcbfcabed9f8d3af699"
+    }
+  ],
+  "current_control_jointly_rejected": true,
+  "control_negative_commit": "fb0aae2",
+  "control_actual_activation_revert_commit": "7696a60",
+  "preregistered_before_current_control_quality": true,
+  "original_hypothesis_unchanged": true,
+  "GPU_allocation_created": false
+}

@@ -1,0 +1,73 @@
+{
+  "status": "ANALYTIC_FIXED_MOG_FROZEN_ESTIMATE_NOT_NATIVE_MODEL_RESULT",
+  "utc": "2026-11-04T14:20:56.241823+00:00",
+  "registered_weights": [
+    0.75,
+    0.25
+  ],
+  "replicates": [
+    {
+      "replicate": 0,
+      "donor_complementarity_U_by_stage": [
+        0.5868292963560751,
+        0.5704097007367923,
+        0.28686047221389366,
+        0.4449786833949574
+      ],
+      "expected_energy_score_over_uniform_fixed50of200_masks": 1.9307923800566669,
+      "weighted_empirical_cell_reservoir_energy_distance": 0.2562561289504053,
+      "cell_complementarity_V": 0.06253602471673148
+    },
+    {
+      "replicate": 1,
+      "donor_complementarity_U_by_stage": [
+        0.7217005394412117,
+        0.572491812488146,
+        0.32795812597882223,
+        0.5568450820632691
+      ],
+      "expected_energy_score_over_uniform_fixed50of200_masks": 1.9219421868723232,
+      "weighted_empirical_cell_reservoir_energy_distance": 0.2499885821886032,
+      "cell_complementarity_V": 0.06994916563239428
+    }
+  ],
+  "mean_expected_energy_score": 1.926367283464495,
+  "mean_weighted_empirical_cell_ED": 0.25312235556950424,
+  "selected_pure_incumbent_energy_score": 1.9355320396443134,
+  "selected_pure_incumbent_cell_ED": 0.2318446092298636,
+  "expected_ES_change": -0.00916475617981849,
+  "empirical_cell_ED_change": 0.021277746339640635,
+  "joint_analytic_screen_passed": false,
+  "native_ensemble_result_verified": false,
+  "current_control_completed_joint_rejection_verified": true,
+  "original_preregistration_unchanged": true,
+  "model_selected": false,
+  "incumbents_changed": false,
+  "current_three_seed_confirmation_changed": false,
+  "scope": "One predeclared fixed-pair analytical check on adaptive seed0 calibration only. Components are native MoG prior and native fixed finite-particle count models; their fixed mixture is not a single published formulation. Totalparenttraining40k updates. No new target/evaluation arrays, fitting, generation, native allocation or modelsource changes. No weight/mask search.",
+  "limits": "Donor estimate averages over hypothetical uniformly selected fixed-count masks, not the registered native mask. Cell estimate uses weighted empirical reservoirs, not a newly sampled mixture. Joint native RNG changes, spread and integer-count mixture validity remain unverified. A screen cannot establish a new ATH, independent confirmation or biological generalization.",
+  "next_step": "Retain the original failed three-seed confirmation and current incumbent. This fixed pair does not meet the joint analytic screen; retain the current incumbent. No native candidate activated.",
+  "source_checkpoint_array_metric_SHA256": {
+    "/ml2/alz/analysis/mog_frozen_fixed_ensemble_hypothesis.json": "f383bc5f013b78bd7ea288ad6046a705ca0a2f3a86e9b141a47c5a35c11ffc20",
+    "/ml2/alz/analysis/mog_frozen_fixed_ensemble_binding.json": "9bbd50f7751bed993e7b66ecaf8eeb91164122c6f5d41abf03f17468f529a99a",
+    "/ml2/alz/pure_incumbent.json": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+    "/ml2/alz/analysis/pure_ensemble_confirmation_freeze.json": "93e63252d278aa84b70e017d0aaacd818386fbc82f93cea48e830ffe5ac6b199",
+    "/ml2/alz/analysis/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0-result.json": "324bc395c2009247f0f1f632637cfa735063c9f17e6b92cb091bec0f18dad5d8",
+    "/ml2/alz/runs/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0/fit/final.pt": "cac07403d737f8bf7cd6d33edae3d5d7d602a46a739ac08359ceee1de9ca9999",
+    "/ml2/alz/analysis/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0-result.json": "ff0ef36fa758205d95bf5bc6bf5c35636bebfa41712d3dcbfcabed9f8d3af699",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/fit/final.pt": "dd26f01f13e6a20381078af9a767d5e7e6afa995a5fb43b5d76ee0d023d62d62",
+    "/ml2/alz/runs/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0/r0/arrays.npz": "102576cb53fe526829f1220808afb90ceb857711c1917389cb17565f1f114482",
+    "/ml2/alz/runs/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0/r0/metrics.json": "471ed51e7834c25728b16fc1459d9f4841d034baadb9db1e9485d5d48263c9ba",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r0/arrays.npz": "4159c690963064f93994b8ffd8dd0f2beaa4c3922f7486febc50620cf0de33d0",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r0/metrics.json": "2eb988c6a1291f1645ea1a1541695c6a42fc6364564d9abd90ebf0c87dc5950c",
+    "/ml2/alz/runs/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0/r1/arrays.npz": "f64e6b87f32d462c1d8a123705ca7f28259983d222cb31e6786620052a5d7138",
+    "/ml2/alz/runs/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0/r1/metrics.json": "b63f7bdf442343b2ac35ceffc56d4221ee3e3de16857edd58da0c4ea4418554a",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r1/arrays.npz": "e187ee0fd8530e8b0af0b643a552ffc5f975ee5e20d3abf75e666ab93f99c8d2",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r1/metrics.json": "b4d1ebaff80b61c01b6bfcdb86e56763419a7e3c844cbb8941b8b4094bcda9e9"
+  },
+  "source_SHA256": {
+    "/ml2/alz/analysis/diagnose_mog_frozen_fixed_ensemble.py": "b9762c64db05fb42b3b3faa09fa28af4f62833b6f764cae3101789e7f5be3360",
+    "/ml2/alz/analysis/diagnose_pure_ensemble.py": "dc01fa1cc212f7e2d57a9e16470b091dc6cfc2176c8cd7730426d6abbbb7482e",
+    "/ml2/alz/analysis/test_ensemble_estimate.py": "5f8eb92ca135dcd1d7685c3c828eb206238faf7e7eea87d635c662849600f881"
+  }
+}
