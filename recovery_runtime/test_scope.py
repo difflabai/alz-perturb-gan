@@ -87,10 +87,10 @@ class RecoveryScope(unittest.TestCase):
    with patch.object(scope,'ROOT',root),patch.object(scope,'lineage',return_value=(p,f)),self.assertRaises(AssertionError):scope.reference_payload(2,parents)
  def test_retained_completed_and_interrupted_parent_counts_cannot_change(self):
   p=scope.read(scope.PROTOCOL);target=p['latest_interruption_evidence'];original_read=scope.read
-  for change in [{'new_learned_updates_this_allocation':0},{'total_completed_updates':29236},{'remaining_learned_updates':0},{'learned_completed_updates':9237}]:
+  for change in [{'previous_initial_updates':0},{'total_completed_updates':33265},{'new_updates_this_allocation':0},{'remaining_learned_updates':0}]:
    def changed(path):return {**original_read(path),**change} if str(path)==target else original_read(path)
    with patch.object(scope,'read',side_effect=changed),self.assertRaises(AssertionError):scope.lineage()
- def test_all_seven_retained_canonical_charges_are_required(self):
+ def test_all_retained_canonical_charges_are_required(self):
   p=scope.read(scope.PROTOCOL);original_read=scope.read
   for change in [{'retained_charge_records':p['retained_charge_records'][:-1]},{'retained_charge_records':[{**x,'charged_GPU_seconds':0} for x in p['retained_charge_records']]}]:
    def changed(path):return {**original_read(path),**change} if Path(path)==scope.PROTOCOL else original_read(path)

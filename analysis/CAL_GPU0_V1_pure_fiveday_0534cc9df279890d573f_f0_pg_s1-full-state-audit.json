@@ -1,0 +1,45 @@
+{
+  "status": "CPU_FULL_STATE_VERIFIED_COMPLETED_AND_LATEST_INTERRUPTED_LEARNED",
+  "utc": "2026-11-04T07:00:15.056631+00:00",
+  "parents": [
+    {
+      "path": "/ml2/alz/artifacts/confirmation_recovery_lineage/CAL_GPU0_V1_pure_fiveday_0534cc9df279890d573f_f0_pg_s1/terminal/pg8-step20000.pt",
+      "SHA256": "cebfcb76ee263a2fc91e3c3c9409e94c9cbc6cbb7920aa1082dc93744ebbffad",
+      "completed_updates": 20000,
+      "name": "PG8_completed",
+      "strict_G_D_prior_load_verified": true,
+      "finite_model_values": 371177,
+      "full_state_inventory": {
+        "tensors": 54,
+        "finite_floating_values": 696273
+      },
+      "native_recipe_and_seed_streams_verified": true,
+      "optimizer_states_and_rates_verified": true,
+      "CPU_and_CUDA_rng_bytes_present": true
+    },
+    {
+      "path": "/ml2/alz/artifacts/confirmation_recovery_lineage/CAL_GPU0_V1_pure_fiveday_0534cc9df279890d573f_f0_pg_s1/terminal/learned-step15293.pt",
+      "SHA256": "c8e894b1dcf1fdb44a2781423f8b21f9f635cb3a3c751ed76a4825370e75bbb4",
+      "completed_updates": 15293,
+      "name": "learned_interrupted",
+      "strict_G_D_prior_load_verified": true,
+      "finite_model_values": 376066,
+      "full_state_inventory": {
+        "tensors": 58,
+        "finite_floating_values": 701162
+      },
+      "native_recipe_and_seed_streams_verified": true,
+      "optimizer_states_and_rates_verified": true,
+      "CPU_and_CUDA_rng_bytes_present": true
+    }
+  ],
+  "total_completed_updates": 35293,
+  "remaining_learned_updates": 4707,
+  "CUDA_initialized": false,
+  "native_CUDA_restoration_verified": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_guarded_interruption.py": "d64f7c53cb0e40f9e85b4984dc1285c78b328cfdae8c29497cb6b5ce6d2ce875",
+    "/ml2/alz/analysis/CAL_GPU0_V1_pure_fiveday_0534cc9df279890d573f_f0_pg_s1-interruption.json": "a72081cc69ac23db248d6c45a3fcc32a249a6f353f0665f11243898ce0cbf728"
+  },
+  "scope": "CPU full-state and exact native model/recipe/seed/rate/RNG audit only. No updates, generation or quality. Completed PG8 retained. Latest actual interrupted learned state requires NEW guarded native initial-state/two-next-update parity proof and clean settlement before remaining fixed-endpoint training. No quality or model selection."
+}

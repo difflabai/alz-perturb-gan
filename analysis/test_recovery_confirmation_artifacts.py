@@ -33,7 +33,7 @@ class RecoveryArtifacts(fixture_base.EnsembleArtifacts):
     'completed_parent_checkpoint':{'path':str(base_archive),'SHA256':common.sha(base_archive),'completed_updates':20000},'initial_parent_updates':[20000,scope.PARENT_INITIAL],
     'qualification_cell':{**self.ids['1']['cell'],'experiment':'private_qualification'},'recovery_cell':self.ids['1']['cell'],
     'frozen_ensemble_config':self.candidates[0]['ensemble_config'],'wall_clock_envelope':{'absolute_recovery_deadline_unix':22600.,'total_seed_wall_cap_seconds':432000},'retained_charge_records':records,
-    'owner_extension_path':str(owner),'owner_extension_SHA256':common.sha(owner),'latest_interruption_evidence':str(failed),'scientific_source_SHA256':self.sources,'frozen_baseline_pins':f['matched_baselines']}
+    'owner_extension_path':str(owner),'owner_extension_SHA256':common.sha(owner),'original_wallcapped_evidence_path':str(failed),'latest_interruption_evidence':str(failed),'scientific_source_SHA256':self.sources,'frozen_baseline_pins':f['matched_baselines']}
   self.write(self.recovery_protocol,p);self.bridge=p
   self.write(r/'analysis/interrupted_seed1_source_history.json',{'authorization_path':self.deployments[0]['authorization_path'],'verification_source_SHA256':{}})
   for path in [r/'analysis/failed_seed1_full_state_audit.json',r/'analysis/exact_interrupted_resume_cpu_qualification.json']:self.write(path,{'fixture':'PRIVATE_METADATA_NOT_CUDA'})
