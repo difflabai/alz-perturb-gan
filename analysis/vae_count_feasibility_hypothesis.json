@@ -1,0 +1,38 @@
+{
+  "status": "PREDECLARED_NATIVE_VAE_GAN_COUNT_ADAPTER_CPU_FEASIBILITY_ONLY",
+  "utc": "2026-11-04T18:15:56.442520+00:00",
+  "native_API": "get_recipe('vae_gan',trainer='bispf_optimized',total_steps=20000,batch_size=32,num_particles=512,z_dim=8); Recipe.encode(draws=2); ParticleEncoding.negative_elbo(observation_sigma=recipe.observation_sigma)",
+  "rationale": "Seven completed native trainer presets and23seed0pure-count comparisons have not produced a stable joint result. The routedE22 trial remains live and unscored. Independently check whether the still-untested native encoder model family can support the count task, rather than treating successful component construction as a quality result.",
+  "architecture": {
+    "generator": "Unchanged CountGenerator:8donorlatent/8cellnoise, original initialization from fitting-only moments, exact Gamma-Poisson count forward and existing biased transformed-rate backward.",
+    "critic": "Unchanged VectorCritic on150permutation-invariant frozen50PCbag features plus7condition slots.",
+    "encoder": "Independent MLP157->128->128->8 with SiLU hidden activations, observing the same150bagfeatures plus7condition slots; query only, no learned local posterior offset/variance.",
+    "prior": "Native512x8MoG learned locations, standardized reads, sigma_rel.025 with native one-time spacing calibration retained; fixed absolute sigma during training/serving."
+  },
+  "objective": "GAN plus recipe.reconstruction_weight times native Gaussian negative ELBO plus recipe.prior_reg times native SBNP on the unique union of generator-side sampled prior/posterior rows. Negative ELBO observes150bagstatistics, sigma.03, both posterior draws, full normalization constant and native hard jointKL log512. No claim of a negative-binomial count likelihood. Encoder and decoder jointly owned by native optimizer; protect existing GAN and reconstruction terms through native constraint_geometry_backward.",
+  "conditioning_and_data": "Known ADNC only in the existing7slot condition. Preserve original33fittingdonor sampler,32bagsx128cells per optimizer half and original fixed preprocessing/traces. No target data loaded for feasibility; no calibration/evaluation optimizer input. No new protection split is required by this BISPF preset, whose native row controls are disabled by that preset rather than overridden.",
+  "RNG_contract": "Preserve all12named MoG stream seeds and G/D/rawP/kernel initialization. Append encoder_init,posterior,reconstruction_cell,reconstruction_count,reconstruction_gamma. Posterior/localGaussian uses native encode generator. Reconstruction Gamma uses a private generator state via RNG fork, restoring the adversarial globalGamma stream. Snapshot/restore all7live private generators, both native/global RNG engines and donor cursor.",
+  "raw_particle_usage": "Track union of32prior draws and64posterior draws per update, including duplicates. Expand passive unique-row histogram to513bins; existing33bin helper is insufficient. Observe complete sampled-row union in native policy before backward. Native ownership constraints and differentiable standardized reads remain unchanged.",
+  "generation": "Eventual pure generation would use the learned MoG prior and original CountGenerator/direct Gamma-Poisson counts, without the encoder or empirical bag replacement. Native coupled serving policy is honored. Must independently qualify400cell integer readout and fixed traces before any native run.",
+  "qualification": [
+    "Native exact recipe/factories/ownership and previous12seed/init prefix parity.",
+    "Permutation-invariant encoder inputs; native Gaussian objective including fixed hardKL, no posterior offset and finite nonzero G/dispersion/E/P gradients.",
+    "One complete native optimizer pair and subsequent serialized exact replay, including private reconstructionGamma state and native multiobjective optimizer state.",
+    "Wrong family/config/cache/RNG/sampler/usage clocks refused. No real CPU fitting entry point.",
+    "Full2000gene/128cell CPU pair and clean400cell serving capacity, then separate future guarded runtime/source/resource/lease/accounting qualification if selected for a trial."
+  ],
+  "limitations": "Encoder, reconstruction likelihood and protected multiobjective update are coupled changes to the native model family. Hard routing and count backward are biased estimators. Summary Gaussian objective does not replace cell-distribution scoring or establish a cell-count likelihood. Native recipe fields and objective weights remain fixed; no hyperparameter grid.",
+  "future_quality_contract": "If later selected after the active phase is settled: fixedfold0seed0/20k/6h inside existing owner5daywindow and1024GPUhcap, same4adaptivecalibration/20evaluationexcluded, two fixed generation replicas, original joint selection and fixed3seed confirmation. Recordnegative thenrevertactivation ifworse. This CPU feasibility declaration is not a native launch authorization artifact.",
+  "GPU_allocation_created": false,
+  "native_trial_admitted": false,
+  "ALZ_quality_measured": false,
+  "current_routed_E22_trial_changed": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/particle_encoder_native_contract_probe.json": "3180e3d4b8f1a3ed32a85e54383b3484618ef1757365404eb6e251efcda5cbc1",
+    "/ml2/alz/analysis/pure_formulations_leaderboard_after_Halloween.json": "a5d87904c5e6cfd6124b9b7b07449f9a8024da7fe26d20b7d6a7c8864681a48e",
+    "/ml2/alz/analysis/pure_ensemble_confirmation_v6_all_seeds.json": "d9b31c4ab50eef50fbd69fa63cda7e7e424120ba6a59fac6dd3ec410c8165aa1",
+    "/ml2/alz/model/mog_pg_adapter.py": "e056d18b86518a7d948ed01c7894e62ce364cbd5daec5f684ff3aa7eb1f81b7b",
+    "/ml2/alz/model/mog_pg_update.py": "1d1fd446540638f1afe320217ed87c17a46bc0e8a9ba19bce7f9a9b349c1f251",
+    "/ml2/alz/pure_incumbent.json": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa"
+  }
+}
