@@ -28,7 +28,21 @@ def build(destination):
         assert candidate['real_bag_replacements']==0 and candidate['preset_protocol_SHA256']==sha(protocolpath)
         assert sha(candidate['checkpoint_path'])==candidate['checkpoint_SHA256']
         if candidate.get('resumed_same_model'):
-            assert result['native10842_parent_all_scientific_streams_and_diagnostics_lineage_verified'] is True
+            parent=candidate['continuation'];initial=parent['completed_updates']
+            legacy=(initial==10842 and result.get('native10842_parent_all_scientific_streams_and_diagnostics_lineage_verified') is True)
+            assert legacy or result.get('native_parent_all_scientific_streams_and_diagnostics_lineage_verified') is True
+            assert 0<initial<20000 and candidate['initial_completed_updates']==initial
+            assert candidate['new_model_updates']==20000-initial
+            assert sha(parent['checkpoint_path'])==parent['checkpoint_SHA256']
+            receipt=Path(candidate['native_parent_restore_path'])
+            assert sha(receipt)==candidate['native_parent_restore_SHA256']
+            restored=read(receipt)
+            assert restored['status']=='EXACT_FULL_NATIVE_AND_ALL_SCIENTIFIC_PARENT_STATE_RESTORED_ON_CUDA'
+            assert restored['whole_parent_scientific_fingerprint']==parent['whole_parent_scientific_fingerprint']
+            assert restored['initial_completed_updates']==initial and restored['remaining_model_updates']==20000-initial
+            assert restored['native_or_usage_or_data_clock_reset'] is False
+            assert restored['original_absolute_deadline_unix']==parent['original_absolute_deadline_unix']
+            assert result['charged_GPU_seconds_total_scientific_trial']==result['charged_GPU_seconds']+parent['parent_charged_GPU_seconds']
         charged=result.get('charged_GPU_seconds_total_scientific_trial',result['charged_GPU_seconds'])
         row=dict(candidate,formulation=identity,complete_clean_settlement_verified=True,
             charged_GPU_seconds=charged,accepted=result['decision']['accept'],decision_evidence=str(path),decision_evidence_SHA256=sha(path))
