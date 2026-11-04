@@ -1,0 +1,160 @@
+{
+  "status": "SAVED_METRIC_READOUT_NO_NEW_SELECTION_OR_QUALITY_MEASUREMENT",
+  "utc": "2026-11-04T16:03:16.869412+00:00",
+  "points": [
+    {
+      "name": "network_rate_half",
+      "ES": 1.9101423308956023,
+      "cell_ED": 0.2711466659298969
+    },
+    {
+      "name": "native_MoG_prior_family",
+      "ES": 1.913786694264621,
+      "cell_ED": 0.2606690579428381
+    },
+    {
+      "name": "pure_ensemble75",
+      "ES": 1.9355320396443134,
+      "cell_ED": 0.2318446092298636
+    },
+    {
+      "name": "latent8",
+      "ES": 1.9755667140392312,
+      "cell_ED": 0.25327614831020107
+    },
+    {
+      "name": "ka2",
+      "ES": 1.9803337991605336,
+      "cell_ED": 0.30470721594082395
+    },
+    {
+      "name": "explicit_saved_native_KA2_EMA_readout",
+      "ES": 1.9822060673838455,
+      "cell_ED": 0.3043266469444106
+    },
+    {
+      "name": "theta10",
+      "ES": 2.00142434282722,
+      "cell_ED": 0.27122252499565036
+    },
+    {
+      "name": "fourier5",
+      "ES": 2.007517094064503,
+      "cell_ED": 0.28946140091477
+    },
+    {
+      "name": "semantic_observation",
+      "ES": 2.0096927952371675,
+      "cell_ED": 0.2706714017894054
+    },
+    {
+      "name": "cell32",
+      "ES": 2.0232540496588305,
+      "cell_ED": 0.31593182619469573
+    },
+    {
+      "name": "continue40k",
+      "ES": 2.04855219471981,
+      "cell_ED": 0.2618839567688074
+    },
+    {
+      "name": "explicit_ALZ_cell_energy_task_extension",
+      "ES": 2.055408925819279,
+      "cell_ED": 0.26195553127638416
+    },
+    {
+      "name": "k3p",
+      "ES": 2.062421747861435,
+      "cell_ED": 0.3332231147672129
+    },
+    {
+      "name": "fourier128",
+      "ES": 2.0831851577981775,
+      "cell_ED": 0.2789826099285335
+    },
+    {
+      "name": "bcap",
+      "ES": 2.1307024699088712,
+      "cell_ED": 0.2868419455158664
+    },
+    {
+      "name": "learned_observation",
+      "ES": 2.1432335400395877,
+      "cell_ED": 0.2433396290187826
+    },
+    {
+      "name": "native_fixed_finite_particle_control",
+      "ES": 2.155758252352112,
+      "cell_ED": 0.28016419483042476
+    },
+    {
+      "name": "reference2",
+      "ES": 2.1645178795687547,
+      "cell_ED": 0.3310092348599314
+    },
+    {
+      "name": "original_bispf",
+      "ES": 2.2305715109757784,
+      "cell_ED": 0.35232120361556873
+    },
+    {
+      "name": "balanced8",
+      "ES": 2.266477082794516,
+      "cell_ED": 0.3329977233792283
+    },
+    {
+      "name": "bcap_adam",
+      "ES": 2.3035173920043746,
+      "cell_ED": 0.7961370323971231
+    }
+  ],
+  "nondominated_seed0_points": [
+    {
+      "name": "network_rate_half",
+      "ES": 1.9101423308956023,
+      "cell_ED": 0.2711466659298969
+    },
+    {
+      "name": "native_MoG_prior_family",
+      "ES": 1.913786694264621,
+      "cell_ED": 0.2606690579428381
+    },
+    {
+      "name": "pure_ensemble75",
+      "ES": 1.9355320396443134,
+      "cell_ED": 0.2318446092298636
+    }
+  ],
+  "fixed_seed_confirmation_relative_metrics": [
+    {
+      "seed": 0,
+      "ES_improvement_percent": 6.913674211446708,
+      "cell_ED_improvement_percent": 4.503551580285093,
+      "joint_pass": true
+    },
+    {
+      "seed": 1,
+      "ES_improvement_percent": 5.974568586635298,
+      "cell_ED_improvement_percent": -18.613689862285597,
+      "joint_pass": false
+    },
+    {
+      "seed": 2,
+      "ES_improvement_percent": 8.554234699372998,
+      "cell_ED_improvement_percent": -21.584548803914537,
+      "joint_pass": false
+    }
+  ],
+  "stable_joint_target_passed": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/plot_joint_calibration_readout.py": "73d20e4f22480b8f998a204a143316a3e7415115884cc9f9e3a66e06f59b265f",
+    "/ml2/alz/analysis/pure_formulations_leaderboard_after_KA2_EMA.json": "a9410a9319fef6514a2e6c218233e57a268610e3739dcfe3eddaf9a271348330",
+    "/ml2/alz/analysis/pure_ensemble_confirmation_v6_all_seeds.json": "d9b31c4ab50eef50fbd69fa63cda7e7e424120ba6a59fac6dd3ec410c8165aa1"
+  },
+  "output_SHA256": {
+    "/ml2/alz/analysis/pure_joint_readout_21.png": "b733716e148e39ae1d17ae6515ba53670f357b5229063d7c2056e43f2e645de0",
+    "/ml2/alz/analysis/pure_joint_readout_21.pdf": "ae79b64b89ccb3ef4f350b404d271b1a9a8fe35884217581f3c4189b706b7667"
+  },
+  "incumbent_changed": false,
+  "scope": "Saved metrics only. Four adaptive calibration donors; no new generation, fitting, target access, decision threshold change, seed replacement or ranking of confirmation seeds. Nondomination is descriptive, not a replacement for the fixed joint selection protocol."
+}
