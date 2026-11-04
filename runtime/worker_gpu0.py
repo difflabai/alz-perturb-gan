@@ -19,7 +19,7 @@ def validate_reference(checkpoint,auth):
     b.require(checkpoint.get('cache_manifest_SHA256')==b.sha(Path(auth['cache_dir'])/'manifest.json'),'reference preprocessing/cache differs')
 
 def run_scientific(auth,admission,layout):
-    b.require(auth['operation'] in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','qualify_pure_ensemble','evaluate_pure_ensemble','train_variant','train_bcap','train_bispf','train_semantic','train_learned','train_network_rate','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
+    b.require(auth['operation'] in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','qualify_pure_ensemble','evaluate_pure_ensemble','confirm_pure_ensemble','train_variant','train_bcap','train_bispf','train_semantic','train_learned','train_network_rate','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
     runtime=b.runtime_path(layout,b.cell(auth))
     b.require(Path(sys.executable).absolute()==runtime.absolute() and sys.version_info[:2]==(3,12),'exact PG scientific interpreter required')
     sys.path.extend(map(str,b.native_site_roots(b.cell(auth),auth['files_SHA256'])))
@@ -32,9 +32,14 @@ def run_scientific(auth,admission,layout):
     from generation import iter_pg
     from calibration import evaluate,average,dump,sha
     out=Path(auth['output_dir']);out.mkdir(parents=True,exist_ok=False)
-    reserve=120 if auth['operation'] in ('train_variant','train_bcap','train_bispf','train_semantic','train_learned','train_network_rate','train_hybrid','continue_hybrid','train_extended_hybrid') else 30
+    reserve=120 if auth['operation'] in ('confirm_pure_ensemble','train_variant','train_bcap','train_bispf','train_semantic','train_learned','train_network_rate','train_hybrid','continue_hybrid','train_extended_hybrid') else 30
     end=time.monotonic()+max(0,min(admission['authorization_expiry'],admission['ledger_started_unix']+auth['cap_seconds'])-time.time()-reserve)
     try:
+        if auth['operation']=='confirm_pure_ensemble':
+            sys.path.insert(0,str(b.HERE.parent/'confirmation_runtime'))
+            from ensemble_confirmation_execution import run
+            run(auth,out,end,admission,validate_reference)
+            return
         if auth['operation'] in ('qualify_pure_ensemble','evaluate_pure_ensemble'):
             from ensemble_execution import run
             run(auth,out,end,admission,validate_reference)
