@@ -1,0 +1,183 @@
+{
+  "status": "VERIFIED_NATIVE_KA2_SAVED_EMA_READOUT_RESULT",
+  "utc": "2026-11-04T15:01:47.890188+00:00",
+  "attempt": "CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0",
+  "candidate": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9822060673838455,
+    "cell_energy_distance": 0.3043266469444106,
+    "spread_ratio": 0.9534475265037141,
+    "within_condition_spread_ratio": 0.9004726229518827,
+    "coverage80": 0.7307692307692308,
+    "generated_zero_count_rate": 1.71875e-05,
+    "per_donor_energy_score": [
+      1.2657270102496634,
+      2.9936786246474503,
+      1.674550362973451,
+      1.9948682716648172
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7279744059019322,
+      1.802321575199354,
+      1.0380988919614689,
+      0.5916696835909176
+    ],
+    "status": "completed",
+    "completed_updates": 20000,
+    "fixed_endpoint": 20000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_ka2_ema_readout_v1_f0_pg_s0",
+    "operation": "evaluate_ka2_ema",
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/ema_reference.json",
+    "checkpoint_SHA256": "8da4ef9197b5429afcaef828338364ca4bad279dfa1a1daca88b7b0770ca42cd",
+    "checkpoint_kind": "explicit_native_KA2_EMA_readout_reference",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "method": "pg_ka2_native_ema",
+    "hybrid_config": null,
+    "qualification_only": false,
+    "new_model_updates": 0,
+    "initial_completed_updates": 20000,
+    "parent_training_updates_total": 20000,
+    "native_recipe_schedule_horizon": 20000,
+    "parent_checkpoint_SHA256": "fa9313540444af0227a98bcf76e646c3a2a12e3b919f3aad94622aca5fabf0d3",
+    "automatic_successor": false,
+    "generation": "direct_iter_pg",
+    "real_bag_replacements": 0,
+    "pure_only": true,
+    "native_recipe": "ka2",
+    "pure_formulation": "ka2_saved_native_ema_readout",
+    "readout_config": {
+      "weights": "native_saved_generator_and_prior_EMA",
+      "ema_decay": 0.995,
+      "training_serve_average": 0.0,
+      "output_noise": false
+    },
+    "preset_protocol_SHA256": "658e18dce79cc24122108779b73c370a9119010d49cc3741b4cd17054f295eaf"
+  },
+  "incumbent": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9355320396443134,
+    "cell_energy_distance": 0.2318446092298636,
+    "spread_ratio": 1.0139376087094576,
+    "within_condition_spread_ratio": 0.9558202746934397,
+    "coverage80": 0.6971153846153846,
+    "generated_zero_count_rate": 3.125e-06,
+    "per_donor_energy_score": [
+      1.1847406370618034,
+      2.762139284338443,
+      1.7135998549675175,
+      2.0816483822094902
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7562105456693518,
+      1.603245353937993,
+      1.1354997606494939,
+      0.538689614861954
+    ],
+    "status": "completed",
+    "completed_updates": 40000,
+    "fixed_endpoint": 40000,
+    "integer_count_contract_passed": true,
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/fit/ensemble.json",
+    "checkpoint_SHA256": "bc9ac029c6b1aa18114f5cbb0f0522da1e775390404a8cd68208eb350c5444de",
+    "checkpoint_kind": "complete_two_parent_references",
+    "operation": "evaluate_pure_ensemble",
+    "allocation_id": "ALZ_CAL_V1_ensemble75_v1_f0_pg_s0",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "hybrid_config": null,
+    "method": "pg_pure_ensemble75",
+    "pure_only": true,
+    "pure_formulation": "pg8_learned_ensemble75",
+    "real_bag_replacements": 0,
+    "generation": "iter_pg_whole_bag_ensemble",
+    "ensemble_config": {
+      "learned_weight": 0.25,
+      "mask_seed": 20261108,
+      "bags_per_stage": 200
+    },
+    "parent_manifest_SHA256": "283243061d72af81e9451de22581a03fb691c0c46ff5364b314fd39325f69a1f",
+    "parent_training_updates_total": 40000,
+    "parent_completed_updates": [
+      20000,
+      20000
+    ],
+    "effective_active_parent_training_updates": 40000,
+    "new_model_updates": 0,
+    "initial_completed_updates": 40000,
+    "native_recipe": "bispf_optimized",
+    "native_recipe_schedule_horizon_each": 20000,
+    "qualification_only": false,
+    "automatic_successor": false,
+    "candidate_commit": "f11139740a3e87f60bb132732c4519de03f95c52"
+  },
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "candidate_commit": "b213a5329d0c7662eb942b7a31b8562cbbd99a53",
+  "independent_saved_scores_checkpoint_and_count_exemplars_verified": true,
+  "full_native_recipe_model_and_seed_streams_verified": true,
+  "finite_model_floating_values": 316832,
+  "audited_complete_parent_lineage_verified": true,
+  "exact_coupled_native_EMA_readout_weights_verified": true,
+  "new_training_updates": 0,
+  "owned_release_and_clean_settlement_verified": true,
+  "charged_GPU_seconds": 9.60154810899985,
+  "array_and_exemplar_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/r0/stage0_exemplar.npz": "2bcc1041d650aec6bc8bf5ce26fcc4a9135bfb440c684f57bc32da5d10ce585a",
+    "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/r0/stage1_exemplar.npz": "8ca302012a48a6b27274c3f30cb7e1e5fbcdde546c54ca10b75e4dae337b902c",
+    "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/r0/stage2_exemplar.npz": "ac6314d9d06010ac79e1144d3cf9867423245fe20975d31616d0215c3319dad2",
+    "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/r0/stage3_exemplar.npz": "1fb86965c16b24899bd6336d30128c0a23e3e6910bd5d2ca23f42e7e590b6734",
+    "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/r0/arrays.npz": "f37c0a80f13f90bfc4f72d16b81fddcc002f7ac26fbf4710086ca6f8030cdb1f",
+    "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/r1/stage0_exemplar.npz": "bd849214820b91021e15d130ab67c2d821479cce3d25d5bbd7f5c116ea46bca7",
+    "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/r1/stage1_exemplar.npz": "7caafc22494d87e3bc2ad634e711b34332a327bec163b48bda289a304bc4f4a2",
+    "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/r1/stage2_exemplar.npz": "799a909e04dddc4f783c926132d751beeeeb5f9081cc949d3d6c2dd5797e5abc",
+    "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/r1/stage3_exemplar.npz": "905ce2781417c1833f2bdbae648bc0b21eab289d92bfdd3568ff8435064ece95",
+    "/ml2/alz/runs/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0/r1/arrays.npz": "6ac848c5a28bc146644cdeb399b0c557de18f3e141e9eeb0b97a65a2cd570685"
+  },
+  "authorization_SHA256": "2c574bd4930fdbf3bca500b6beabe46c93752bfa7f437e254d2aa12bb0f73a61",
+  "preset_protocol_SHA256": "658e18dce79cc24122108779b73c370a9119010d49cc3741b4cd17054f295eaf",
+  "source_SHA256": {
+    "/ml2/alz/ema_runtime/finish.py": "41b3f0b299d53f3782779e17d9c998f091978714064241c19edc4707ff7e9807"
+  },
+  "incumbent_changed": false,
+  "next_step": "Commit negative evidence and revert trial activation; keep current incumbent. Try the next scientifically defined candidate.",
+  "scope": "Four adaptive calibration donors only; explicit savednativeKA2 G+priorEMA readout, unchanged parent recipe/defaultfastcontract and no new training.20k completedparent vs40k selectedensemble. No evaluation donor access or independent biological confirmation."
+}
