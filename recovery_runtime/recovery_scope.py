@@ -26,7 +26,7 @@ def lineage():
  assert job['status']=='failed' and job['reservation_released'] and job['exit_code']==1
  assert job['error']=="Conflict('Unregistered GPU allocation(s): [2156154]')"
  wall=p['wall_clock_envelope'];assert wall['original_started_unix']==job['started_unix'] and wall['absolute_recovery_deadline_unix']==job['started_unix']+21600
- assert wall['original_charged_GPU_seconds']==failure['charged_GPU_seconds']
+ assert wall['original_charged_GPU_seconds']==failure['charged_GPU_seconds']==job['charged_seconds']
  out=ROOT/'runs'/p['original_attempt'];assert not (out/'completed.json').exists() and not (out/'r0').exists() and not (out/'r1').exists(),'No quality result may precede infrastructure bridge'
  history=read(ROOT/'analysis/interrupted_seed1_source_history.json');assert history['status']=='VERIFIED_INTERRUPTED_ALLOCATION_COMMITTED_SOURCE_HISTORY'
  assert history['attempt']==p['original_attempt'] and history['original_freeze_SHA256']==p['original_confirmation_freeze_SHA256']

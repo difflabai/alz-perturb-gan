@@ -8,7 +8,7 @@ from aggregate_pure_confirmation import stable_target,frozen_input_pins
 
 def aggregate(output):
  assert not output.exists(),'Never overwrite all-seed evidence'
- p,f=scope.lineage();records=[];evidence={str(scope.PROTOCOL):scope.sha(scope.PROTOCOL),p['original_interruption_evidence']:scope.sha(p['original_interruption_evidence']),str(scope.NATIVE_PROOF):scope.sha(scope.NATIVE_PROOF)};sources=None;inputs0=None
+ p,f=scope.lineage();records=[];evidence={str(scope.PROTOCOL):scope.sha(scope.PROTOCOL),p['original_interruption_evidence']:scope.sha(p['original_interruption_evidence']),str(scope.NATIVE_PROOF):scope.sha(scope.NATIVE_PROOF)};sources=None;inputs0=None;seed1_total_charge=None
  for seed in (0,1,2):
   name=f['seed0_attempt'] if seed==0 else scope.attempt(scope.cell_for('resume' if seed==1 else 'seed2'))
   dep,auth,candidate=verified_deployment(name);assert scope.sha(dep['authorization_path'])==dep['authorization_SHA256']
@@ -46,14 +46,15 @@ def aggregate(output):
    if seed==1:
     assert candidate['new_model_updates']==31058 and candidate['initial_completed_updates']==8942
     assert candidate['resume_parent_checkpoint_SHA256']==p['checkpoint_SHA256'] and candidate['original_interrupted_attempt']==p['original_attempt']
-    qualification=scope.read(scope.NATIVE_PROOF);charged=p['wall_clock_envelope']['original_charged_GPU_seconds']+proof['charged_GPU_seconds']+qualification['charged_GPU_seconds']
+    qualification=scope.read(scope.NATIVE_PROOF)
     ledger=Path(dep['ledger_path']);settlement=scope.read(ledger.with_name(name+'-settlement.json'))
-    assert charged<=21600 and scope.read(ledger)['jobs'][0]['ended_unix']<=p['wall_clock_envelope']['absolute_recovery_deadline_unix']
-    evidence['seed1_total_charged_GPU_seconds_including_failure_and_qualification']=charged
+    assert proof['charged_GPU_seconds']==settlement['settlement']['charged_GPU_seconds'],'Confirmation charge differs from canonical settlement'
+    seed1_total_charge=p['wall_clock_envelope']['original_charged_GPU_seconds']+settlement['settlement']['charged_GPU_seconds']+qualification['charged_GPU_seconds']
+    assert seed1_total_charge<=21600 and scope.read(ledger)['jobs'][0]['ended_unix']<=p['wall_clock_envelope']['absolute_recovery_deadline_unix']
    else:assert candidate['new_model_updates']==40000 and candidate['initial_completed_updates']==0
   records.append({'seed':seed,'attempt':name,'energy_score':candidate['energy_score'],'matched_baseline_energy_score':baseline['energy_score'],
                   'cell_energy_distance':candidate['cell_energy_distance'],'matched_baseline_cell_energy_distance':baseline['cell_energy_distance'],'spread_ratio':candidate['spread_ratio']})
- result={**stable_target(records),'records':records,'evidence_SHA256':evidence,'original_failed_seed1_attempt_retained':p['original_attempt'],'original_confirmation_freeze_SHA256':p['original_confirmation_freeze_SHA256'],
+ result={**stable_target(records),'records':records,'evidence_SHA256':evidence,'seed1_total_charged_GPU_seconds_including_failure_and_qualification':seed1_total_charge,'original_failed_seed1_attempt_retained':p['original_attempt'],'original_confirmation_freeze_SHA256':p['original_confirmation_freeze_SHA256'],
          'pure_incumbent_SHA256':f['pure_incumbent_SHA256'],'incumbent_unchanged':True,'training_seeds_were_not_ranked':True,'each_seed_parent_training_updates':[20000,20000],
          'scope':'All three frozen training seeds and same four adaptive calibration donors, not twelve independent donors or external SOTA. Interrupted seed1 preserved and exactly continued; no replacement seed, fromscratch rerun or outcome dropping. Evaluation donors excluded.'}
  assert scope.sha(ROOT/'pure_incumbent.json')==f['pure_incumbent_SHA256']
