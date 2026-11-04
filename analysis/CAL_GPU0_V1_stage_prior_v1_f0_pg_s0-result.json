@@ -1,0 +1,182 @@
+{
+  "status": "VERIFIED_NATIVE_STAGE_PARTICLE_COUNT_CONTROL_RESULT",
+  "utc": "2026-11-04T16:12:16.336154+00:00",
+  "attempt": "CAL_GPU0_V1_stage_prior_v1_f0_pg_s0",
+  "candidate": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 2.0590705342551674,
+    "cell_energy_distance": 0.32356811154800713,
+    "spread_ratio": 0.9141783712032086,
+    "within_condition_spread_ratio": 0.8271236757178636,
+    "coverage80": 0.625,
+    "generated_zero_count_rate": 3.125e-06,
+    "per_donor_energy_score": [
+      1.2190658914167047,
+      3.126772282943401,
+      1.8139812145947116,
+      2.076462748065852
+    ],
+    "per_stage_cell_energy_distance": [
+      0.8241236852841647,
+      1.8772408380839734,
+      1.0887795090960877,
+      0.5563315894664793
+    ],
+    "status": "completed",
+    "completed_updates": 20000,
+    "fixed_endpoint": 20000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_stage_prior_v1_f0_pg_s0",
+    "operation": "train_stage_prior",
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "1dbf7e2588b8bfad4eeea276993d4133afd965ab7ed073d34c0948f9da60dc77",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "method": "pg_stage_conditioned_prior",
+    "hybrid_config": null,
+    "qualification_only": false,
+    "new_model_updates": 20000,
+    "initial_completed_updates": 0,
+    "native_recipe_schedule_horizon": 20000,
+    "parent_checkpoint_SHA256": null,
+    "automatic_successor": false,
+    "generation": "direct_iter_pg",
+    "real_bag_replacements": 0,
+    "pure_only": true,
+    "native_recipe": "bispf_optimized",
+    "pure_formulation": "stage_conditioned_particle_prior",
+    "stage_prior_config": {
+      "conditioning": "known_ADNC_stage",
+      "stages": 4,
+      "particles_per_stage": 128,
+      "num_particles": 512,
+      "partition": "contiguous_fixed_equal_groups",
+      "sampling": "uniform_with_replacement_within_stage"
+    },
+    "preset_protocol_SHA256": "1a47d293f59ab71dd7259e489af7cf54e43c076794b1ff1530b4d920d7eff9c2"
+  },
+  "incumbent": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9355320396443134,
+    "cell_energy_distance": 0.2318446092298636,
+    "spread_ratio": 1.0139376087094576,
+    "within_condition_spread_ratio": 0.9558202746934397,
+    "coverage80": 0.6971153846153846,
+    "generated_zero_count_rate": 3.125e-06,
+    "per_donor_energy_score": [
+      1.1847406370618034,
+      2.762139284338443,
+      1.7135998549675175,
+      2.0816483822094902
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7562105456693518,
+      1.603245353937993,
+      1.1354997606494939,
+      0.538689614861954
+    ],
+    "status": "completed",
+    "completed_updates": 40000,
+    "fixed_endpoint": 40000,
+    "integer_count_contract_passed": true,
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/fit/ensemble.json",
+    "checkpoint_SHA256": "bc9ac029c6b1aa18114f5cbb0f0522da1e775390404a8cd68208eb350c5444de",
+    "checkpoint_kind": "complete_two_parent_references",
+    "operation": "evaluate_pure_ensemble",
+    "allocation_id": "ALZ_CAL_V1_ensemble75_v1_f0_pg_s0",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "hybrid_config": null,
+    "method": "pg_pure_ensemble75",
+    "pure_only": true,
+    "pure_formulation": "pg8_learned_ensemble75",
+    "real_bag_replacements": 0,
+    "generation": "iter_pg_whole_bag_ensemble",
+    "ensemble_config": {
+      "learned_weight": 0.25,
+      "mask_seed": 20261108,
+      "bags_per_stage": 200
+    },
+    "parent_manifest_SHA256": "283243061d72af81e9451de22581a03fb691c0c46ff5364b314fd39325f69a1f",
+    "parent_training_updates_total": 40000,
+    "parent_completed_updates": [
+      20000,
+      20000
+    ],
+    "effective_active_parent_training_updates": 40000,
+    "new_model_updates": 0,
+    "initial_completed_updates": 40000,
+    "native_recipe": "bispf_optimized",
+    "native_recipe_schedule_horizon_each": 20000,
+    "qualification_only": false,
+    "automatic_successor": false,
+    "candidate_commit": "f11139740a3e87f60bb132732c4519de03f95c52"
+  },
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "candidate_commit": "b0038e2db91684eab97b7ead97c767b84426e1b1",
+  "independent_saved_scores_checkpoint_and_count_exemplars_verified": true,
+  "full_native_recipe_model_and_seed_streams_verified": true,
+  "finite_model_floating_values": 371177,
+  "native_optimizer_and_EMA_checkpoint_state_verified": true,
+  "native_stage_partition_sampled_raw_row_ownership_and_all_stage_coverage_verified": true,
+  "owned_release_and_clean_settlement_verified": true,
+  "charged_GPU_seconds": 2818.5045843929984,
+  "array_and_exemplar_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/r0/stage0_exemplar.npz": "dbaee1cd854d3dde041b149aaf58e9494162ffabf800cae6594b0f2ea1c1758f",
+    "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/r0/stage1_exemplar.npz": "f6558fc7ee1c121c3fac886515e9836cbae6169ce8d8a899365d72c1a2314240",
+    "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/r0/stage2_exemplar.npz": "1ceca463b72892aa609540a70ca2fb7fe195154d46207e708b9e43cf6b023212",
+    "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/r0/stage3_exemplar.npz": "d8cc16ee203decc7a2b4dd2e8aba19b92e3aad290440c3ed3fea25f06b9ef9e3",
+    "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/r0/arrays.npz": "a8a643ab46332e4b26d2da201456b7bd5246c55aed4b553eb66816504341e02a",
+    "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/r1/stage0_exemplar.npz": "dd5e3b51a27ceb186a3a1eddbd0c7c1bde18843c510e313a0595abe1b46035d8",
+    "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/r1/stage1_exemplar.npz": "b6783198ac955adc43c79f6689c152140e1af33481f9b3e64bb7aa8c9df0d6ad",
+    "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/r1/stage2_exemplar.npz": "8c7e573ff3c5f70c65475c2d89bd478c87eb1542990f95d233886e0aacda5122",
+    "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/r1/stage3_exemplar.npz": "09de8a1c066e3837655d17f36be7b3e0d9e7821266ea7c229040668f50f70549",
+    "/ml2/alz/runs/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/r1/arrays.npz": "8d114878d7f8c8da5682aae57fbdc79d87f40282dc5eb557b24de2f86d06aa87"
+  },
+  "authorization_SHA256": "8126f6b735f0828aeb05403c0b6dfd46e52cbbb2cb512640d2013a38597ad683",
+  "preset_protocol_SHA256": "1a47d293f59ab71dd7259e489af7cf54e43c076794b1ff1530b4d920d7eff9c2",
+  "source_SHA256": {
+    "/ml2/alz/stage_runtime/finish.py": "9c050ac728c253724c5c00f1140523452c3a44aa1233d15a61d6380c4a4a4546"
+  },
+  "incumbent_changed": false,
+  "next_step": "Commit negative evidence and revert trial activation; keep current incumbent. Try the next scientifically defined candidate.",
+  "scope": "Four adaptive calibration donors only; task-specific stage-conditioned prior with unchangednativeoptimizedBISPF trainer; same512particles split128perknownstage, twoindexdraws/generationview changed, no taskloss oroutputrepair.20k singleparent vs40k selectedensemble. No evaluation donor access or independent biological confirmation."
+}
