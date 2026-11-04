@@ -1,0 +1,25 @@
+{
+  "status": "PROSPECTIVE_CONDITIONAL_NATIVE_PRESET_HYPOTHESIS_NOT_ACTIVATED",
+  "experiment": "ka2_native_v1",
+  "condition": "Only consider this trial if the currently running Fourier128 comparison fails the unchanged joint seed0 rule. If Fourier128 passes, prioritize its fixed-seed confirmation instead.",
+  "rationale": "Four published preset names have actual seed0 training evidence, but KA2 has only factory-construction evidence. Test the published KA2 optimizer, regularizer, noise, scheduling, mobility and EMA implementation together instead of treating a successful constructor as a trained formulation. No claim that KA2 will improve the ALZ distribution is made.",
+  "native_recipe": "get_recipe('ka2', total_steps=20000, batch_size=32, num_particles=512, z_dim=8)",
+  "task_model": "Original PG8 CountGenerator, original150-feature VectorCritic with width128, original fitting donor law and two-batch adapter. Same count forward/rate backward and discrete Gamma-Poisson inference. No new task loss, no real-bag replacement, no output repair.",
+  "scope": "One first-fold seed0 fixed20000-update native trial, maximum21600seconds, within the owner's existing five-day window and canonical1024GPU-hour cap. No preset, LR, noise, averaging or sample-mask grid.",
+  "native_integration_required": [
+    "Supply the native-required copied critic EMA to make_optimizers and retain its full regularizer checkpoint state.",
+    "Use the published InputNoise wrapper, begin_step schedules, output-noise stream, critic penalty, sampled-row observation and all UpdatePolicy lifecycle hooks without disabling recipe controls.",
+    "Preserve native generator/prior EMA updates and explicitly freeze clean final serving behavior before admission; report final versus EMA choice rather than choosing on calibration results.",
+    "Qualify complete optimizer, regularizer, policy, EMA and RNG serialization with bitwise next-update replay on synthetic CPU inputs.",
+    "Verify native G/dispersion/prior gradients, conditional critic/EMA penalty calls, noise schedules, optimizer role binding and unchanged donor sampling. Factory construction alone is insufficient.",
+    "Bind a separate source/profile/lease/accounting scope after current native completion; preserve all earlier execution source bytes and results. Do not edit currently pinned model/runtime sources."
+  ],
+  "serving_decision_before_admission": "Use clean final raw generator/prior weights to match existing PG8 serving; preserve and audit native EMA state, but do not rank raw versus EMA outputs. This serving choice is an explicit task convention, not an assertion of equivalence to all native trainer serving options.",
+  "confounds": "A published preset changes multiple coupled mechanisms at once. This is a formulation comparison, not attribution of quality to any single KA2 feature. Conditional ALZ task adapter and discrete counts remain task-owned.",
+  "decision": "Unchanged selection.decide against the frozen current pure incumbent; independent saved-score, checkpoint, count, cleanup and canonical-charge audit. Commit actual result, revert activation if rejected, preserve negative evidence. Accepted seed0 still requires fixed seeds1/2 and the original stable joint target.",
+  "data_separation": "Only33 optimization donors for fitting. Four adaptive calibration donors for iteration;20 evaluation donors excluded from candidate selection.",
+  "GPU_allocation_created": false,
+  "optimizer_pairs_executed_for_this_candidate": 0,
+  "quality_result_available": false,
+  "incumbent_changed": false
+}
