@@ -19,6 +19,11 @@ PROJECT=Path('/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark')
 SCIENCE=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103')
 GUARD=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2')
 GPU0='GPU-72c1b506-891d-b8bc-b353-e020585e1c47'
+GPU1='GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69'
+def device(auth):
+    value=auth.get('gpu_uuid')
+    require(value==GPU0 or (value==GPU1 and auth.get('parallel_profile') is True),'unapproved device')
+    return value
 SCIENCE_REVIEW='2d5f0add12b0fad41eb907594d9f6a4921147c26aa80229da384b8af7e203519'
 GUARD_REVIEW='091589c19caa1898be29acc8ce3e2ab8b79a8f9b9a4cf443219ef13bd55dc08b'
 CONTROLLER=PROJECT/'budget_executor_v2_20261103_r2/budget_controller.py'
@@ -269,7 +274,7 @@ def verify(auth_path,layout=NATIVE_LAYOUT):
     value=cell(auth)
     require(auth.get('allocation_id')==allocation_key(value) and auth.get('attempt_id')==attempt_key(value),'scientific one-use key or distinct GPU0 attempt identity differs')
     require(auth.get('label')==attempt_key(value),'immutable GPU0 attempt label differs')
-    require(auth.get('gpu_uuid')==GPU0 and auth.get('machine_id')==socket.gethostname(),'exact GPU0/machine binding differs')
+    require(auth.get('gpu_uuid')==device(auth) and auth.get('machine_id')==socket.gethostname(),'exact GPU0/machine binding differs')
     require(auth.get('source_review_passed') is True and bool(auth.get('scheduler_allocation_id')),'independent source review/scheduler assignment missing')
     expiry=auth.get('expires_unix')
     require(type(expiry) in (float,int) and math.isfinite(expiry) and expiry>time.time(),'finite one-use scheduler expiry missing or expired')
@@ -291,7 +296,7 @@ def verify(auth_path,layout=NATIVE_LAYOUT):
     else:require(policy_path==Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json'),'native exact GPU0 policy path differs')
     policy=read(policy_path)
     require(sha(policy_path)==auth.get('policy_SHA256'),'exact reviewed policy changed')
-    require(policy.get('gpu')==GPU0 and auth['role'] in policy.get('roles',{}),'policy device/role differs')
+    require(policy.get('gpu')==device(auth) and auth['role'] in policy.get('roles',{}),'policy device/role differs')
     require(policy.get('status')==('PREPARED_FIXTURE_ONLY' if layout.fixture_mode else 'REVIEWED_GPU0_DEPLOYED'),'GPU0 resource policy remains prepared')
     require(policy.get('protected_peers')==auth.get('protected_peers') and bool(auth['protected_peers']),'complete exact protected allowlist differs')
     require(auth.get('registry_path')==policy.get('registry_path'),'exact GPU0 registry binding differs')
@@ -322,7 +327,12 @@ def modules(auth):
     controller=load_pinned(CONTROLLER,CONTROLLER_SHA,'alz_gpu0_unchanged_budget_controller')
     admission=load_pinned(GUARD/'gpu0_admission.py',pins[str(GUARD/'gpu0_admission.py')],'gpu0_admission')
     guard=load_pinned(GUARD/'gpu0_runner.py',pins[str(GUARD/'gpu0_runner.py')],'alz_gpu0_guard_v2')
-    if auth.get('parallel_profile') is True:
+    if auth.get('parallel_profile') is True and device(auth)==GPU1:
+        ap=HERE.parent/'recovery_runtime/gpu1_admission.py'
+        admission=load_pinned(ap,pins[str(ap)],'gpu1_admission')
+        path=HERE.parent/'recovery_runtime/gpu1_runner.py'
+        guard=load_pinned(path,pins[str(path)],'alz_owned_gpu1_parallel_guard')
+    elif auth.get('parallel_profile') is True:
         path=HERE.parent/'recovery_runtime/parallel_runner.py'
         guard=load_pinned(path,pins[str(path)],'alz_owned_gpu0_parallel_guard')
     return controller,admission,guard
@@ -348,7 +358,7 @@ def require_live(auth_path,layout=NATIVE_LAYOUT):
     required=['ALZ_PROJECT_RESERVATION_TOKEN','ALZ_PROJECT_BUDGET_ROOT','ALZ_BUDGET_LEDGER','COOPERATIVE_GPU_TOKEN']
     require(all(os.environ.get(k) for k in required),'no live canonical reservation/cooperative lease; refuse before model import')
     require(os.environ['ALZ_PROJECT_BUDGET_ROOT']==str(layout.project) and os.environ['ALZ_BUDGET_LEDGER']==auth['ledger_path'],'live project/ledger binding differs')
-    require(os.environ.get('CUDA_VISIBLE_DEVICES')==('' if layout.fixture_mode else GPU0),'live device visibility differs')
+    require(os.environ.get('CUDA_VISIBLE_DEVICES')==('' if layout.fixture_mode else device(auth)),'live device visibility differs')
     controller,admission,_=modules(auth)
     state=read(layout.project/'project_gpu_budget.json');core_envelope(state)
     backend=load_pinned(HERE/'project_runner_gpu0.py',auth['files_SHA256'][str(HERE/'project_runner_gpu0.py')],'project_runner_gpu0')
@@ -361,12 +371,12 @@ def require_live(auth_path,layout=NATIVE_LAYOUT):
     job=jobs[0];limit=time.monotonic()+2
     while 'child_identity' not in job and time.monotonic()<limit:
         time.sleep(.01);job=read(auth['ledger_path'])['jobs'][0]
-    require(reservation['allocation_id']==auth['allocation_id'] and reservation['status']=='reserved' and reservation['gpu_uuids']==[GPU0] and reservation['device_count']==1 and reservation['declared_wall_seconds']==reservation['job_cap_seconds']==auth['cap_seconds'],'live scientific cell/device/deadline differs')
+    require(reservation['allocation_id']==auth['allocation_id'] and reservation['status']=='reserved' and reservation['gpu_uuids']==[device(auth)] and reservation['device_count']==1 and reservation['declared_wall_seconds']==reservation['job_cap_seconds']==auth['cap_seconds'],'live scientific cell/device/deadline differs')
     require(reservation['label']==auth['label'] and reservation['machine_id']==auth['machine_id'] and reservation['ledger_path']==str(Path(auth['ledger_path']).relative_to(layout.project)),'live allocation label/machine/ledger differs')
-    require(job['guard_identity']==reservation['owner'] and admission.identity(reservation['owner']['pid'])==reservation['owner'] and job['status']=='active' and job['role']==auth['role'] and job['lease_token']==os.environ['COOPERATIVE_GPU_TOKEN'] and ledger['cap_seconds']==auth['cap_seconds'] and ledger['gpu_uuid']==GPU0,'live owned guardian/lease/ledger differs')
+    require(job['guard_identity']==reservation['owner'] and admission.identity(reservation['owner']['pid'])==reservation['owner'] and job['status']=='active' and job['role']==auth['role'] and job['lease_token']==os.environ['COOPERATIVE_GPU_TOKEN'] and ledger['cap_seconds']==auth['cap_seconds'] and ledger['gpu_uuid']==device(auth),'live owned guardian/lease/ledger differs')
     require(job['label']==auth['label'] and job['command']==auth['command'],'live exact worker command/label differs')
     registry=read(Path(auth['registry_path'])/'registry.json');lease=registry['jobs'].get(job['lease_token'])
-    require(registry.get('schema')==2 and registry.get('gpu')==GPU0 and registry.get('policy_sha256')==auth['policy_SHA256'],'physical GPU0 registry/policy differs')
+    require(registry.get('schema')==2 and registry.get('gpu')==device(auth) and registry.get('policy_sha256')==auth['policy_SHA256'],'physical GPU0 registry/policy differs')
     require(lease is not None and lease['owner']==reservation['owner'] and lease['worker']==job.get('child_identity') and lease['status']=='running','bound physical GPU0 lease absent')
     require(lease['role']==auth['role'] and lease['request']==read(auth['policy_path'])['roles'][auth['role']],'live resource role/request differs')
     pid=os.getpid();bound=False

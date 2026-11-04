@@ -44,7 +44,7 @@ def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
         with controller.transaction() as state:
             controller_gate(state,auth);b.unseen(auth,layout,state)
             b.core_envelope(state,auth['cap_seconds']+30)
-        reservation=controller.reserve(allocation_id=auth['allocation_id'],label=auth['label'],owner=admission.identity(os.getpid()),machine_id=auth['machine_id'],gpu_uuids=[b.GPU0],wall_seconds=auth['cap_seconds'],job_cap_seconds=auth['cap_seconds'],ledger_path=str(ledger.relative_to(layout.project)))
+        reservation=controller.reserve(allocation_id=auth['allocation_id'],label=auth['label'],owner=admission.identity(os.getpid()),machine_id=auth['machine_id'],gpu_uuids=[b.device(auth)],wall_seconds=auth['cap_seconds'],job_cap_seconds=auth['cap_seconds'],ledger_path=str(ledger.relative_to(layout.project)))
         result=None;error=None
         old={k:os.environ.get(k) for k in ['ALZ_PROJECT_RESERVATION_TOKEN','ALZ_PROJECT_BUDGET_ROOT']}
         try:
@@ -52,7 +52,7 @@ def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
                 controller_gate(state,auth);b.core_envelope(state,0)
             os.environ['ALZ_PROJECT_RESERVATION_TOKEN']=reservation['token']
             os.environ['ALZ_PROJECT_BUDGET_ROOT']=str(layout.project)
-            result=guard.run(ledger,b.GPU0,auth['label'],auth['command'],cap_seconds=auth['cap_seconds'],policy_path=auth['policy_path'],role=auth['role'],protect=protect,absolute_deadline=auth['expires_unix'],observe=observe,test_mode=layout.fixture_mode,expected_policy_sha256=auth['policy_SHA256'])
+            result=guard.run(ledger,b.device(auth),auth['label'],auth['command'],cap_seconds=auth['cap_seconds'],policy_path=auth['policy_path'],role=auth['role'],protect=protect,absolute_deadline=auth['expires_unix'],observe=observe,test_mode=layout.fixture_mode,expected_policy_sha256=auth['policy_SHA256'])
             return result
         except BaseException as exc:
             error=repr(exc);raise
@@ -73,5 +73,5 @@ def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
                     settlement={'status':'cancelled_before_execution','charged_GPU_seconds':0}
             except BaseException as exc:
                 uncertain=repr(exc);controller.uncertain(reservation,uncertain)
-            controller_module.atomic(ledger.with_name(auth['attempt_id']+'-settlement.json'),{'checked_unix':time.time(),'allocation_id':auth['allocation_id'],'attempt_id':auth['attempt_id'],'gpu_uuid':b.GPU0,'guard_return_code':result,'guard_error':error,'settlement':settlement,'uncertain':uncertain,'original_job_cap_seconds':auth['cap_seconds'],'no_foreign_processes_signalled':True})
+            controller_module.atomic(ledger.with_name(auth['attempt_id']+'-settlement.json'),{'checked_unix':time.time(),'allocation_id':auth['allocation_id'],'attempt_id':auth['attempt_id'],'gpu_uuid':b.device(auth),'guard_return_code':result,'guard_error':error,'settlement':settlement,'uncertain':uncertain,'original_job_cap_seconds':auth['cap_seconds'],'no_foreign_processes_signalled':True})
             if uncertain:raise controller_module.Uncertain('Project reservation retained: '+uncertain)

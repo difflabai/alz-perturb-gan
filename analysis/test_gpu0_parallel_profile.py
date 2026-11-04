@@ -4,10 +4,10 @@ from pathlib import Path
 from unittest.mock import patch
 R=Path('/ml2/alz');sys.path[:0]=[str(R/'recovery_runtime'),str(R/'runtime'),'/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2']
 import parallel_profile as p
-import gpu0_admission as a
+import gpu1_admission as a
 class Parallel(unittest.TestCase):
  def setUp(self):
-  s=p.read(R/'analysis/learned_v5_profile_observation.json');peers=[v for v in s['peers'] if v['GPU_kinds']]
+  s=p.read(R/'analysis/learned_gpu1_profile_observation.json');peers=[v for v in s['peers'] if v['GPU_kinds']]
   self.obs={'gpu':s['gpu'],'total':s['total'],'used':s['used'],'available_ram':s['available_ram'],'total_ram':128*2**30,'complete':True,'procs':{v['pid']:{k:v[k] for k in a.IDENTITY_KEYS+('rss','hwm')} for v in peers},'gpu_memory':{v['pid']:v['GPU_bytes'] for v in peers},'gpu_kinds':{v['pid']:v['GPU_kinds'] for v in peers}}
   self.peer_pid=p.read(p.PREPARED)['protected_peers'][-1]['identity']['pid']
   for pid,v in self.obs['procs'].items():v.update(sid=pid,pgid=pid)
@@ -33,7 +33,7 @@ class Parallel(unittest.TestCase):
   with tempfile.TemporaryDirectory(prefix='alz-parallel-fixture-') as t:
    root=Path(t);locks=[root/'a.lock',root/'b.lock']
    for f in locks:f.touch()
-   pol=p.validate_proposal();reg=a.Registry(root/'registry',locks=locks,roles=pol['roles'],driver_headroom=pol['driver_headroom_bytes'],host_free_floor=pol['host_free_floor_bytes'],protected_peers=pol['protected_peers'],policy_sha256=p.policy_sha())
+   pol=p.validate_proposal();reg=a.Registry(root/'registry',gpu=pol['gpu'],locks=locks,roles=pol['roles'],driver_headroom=pol['driver_headroom_bytes'],host_free_floor=pol['host_free_floor_bytes'],protected_peers=pol['protected_peers'],policy_sha256=p.policy_sha())
    obs=copy.deepcopy(self.obs);owner={'pid':900,'birth':1,'boot':'fixture'};worker={'pid':901,'birth':2,'boot':'fixture'}
    obs['procs'][900]={**owner,'ppid':1,'sid':900,'pgid':900,'rss':1,'hwm':1}
    obs['procs'][901]={**worker,'ppid':900,'sid':901,'pgid':901,'rss':1,'hwm':1}

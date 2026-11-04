@@ -6,10 +6,10 @@ Forecasts reserve foreign growth; they do not constrain or signal foreign work.
 import hashlib,json,sys,subprocess
 from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent
-PREPARED=HERE/'parallel_policy.learned-v5.prepared.json'
-DEPLOYED=ROOT/'artifacts/gpu0-learned-v5-20261104/policy.deployed.json'
+PREPARED=HERE/'parallel_policy.gpu1.prepared.json'
+DEPLOYED=ROOT/'artifacts/gpu1-learned-v1-20261104/policy.deployed.json'
 REGISTRY=DEPLOYED.parent/'live_registry'
-REVIEW=ROOT/'analysis/gpu0_learned_v5_independent_review.json'
+REVIEW=ROOT/'analysis/gpu1_learned_v1_independent_review.json'
 OLD=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json')
 OLD_SHA='5a4dfd1d5288bde24964ee680c003dd75f13fefe1a83ac55b27b49e6a05d125e'
 MOSS=Path('/ml2/particlesliders-working/moss_training/train_concept.py')
@@ -28,12 +28,12 @@ def review_sources():
 def validate_proposal():
  assert sha(OLD)==OLD_SHA,'Original policy changed'
  old=read(OLD);p=read(PREPARED)
- assert p['gpu']==old['gpu'] and p['locks']==old['locks'] and p['registry_path']==str(REGISTRY)
- assert p['roles']=={'alz_core_pg':old['roles']['alz_core_pg']}
+ assert p['gpu']=='GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69' and p['locks']==[s.replace('gpu-0.lock','gpu-1.lock') for s in old['locks']] and p['registry_path']==str(REGISTRY)
+ assert p['roles']=={'alz_core_pg':{'gpu_bytes':3*2**30,'ram_bytes':6*2**30}}
  assert p['driver_headroom_bytes']==3*2**30 and p['host_free_floor_bytes']==12*2**30
  expected={str(OLD.parent.parent/'v2'/name):sha(OLD.parent.parent/'v2'/name) for name in ['gpu0_admission.py','gpu0_runner.py']}
  expected[str(HERE/'parallel_runner.py')]=sha(HERE/'parallel_runner.py')
- assert p['resource_basis']['foreign_source_SHA256']=={str(MOSS):MOSS_SHA} and sha(MOSS)==MOSS_SHA
+ expected.update({str(HERE/n):sha(HERE/n) for n in ['gpu1_admission.py','gpu1_runner.py']})
  assert p['source_sha256']==expected,'Complete exact active guard and original reference sources required'
  assert not read(ROOT/'artifacts/gpu0-turnover-20261104/live_registry/registry.json')['jobs'],'Latest own namespace must be empty'
  assert not read(ROOT/'artifacts/gpu0-parallel-20261104/live_registry/registry.json')['jobs'],'Prior own namespace must be empty after clean turnover'
@@ -60,13 +60,14 @@ def reviewed():
  return q
 def configure(auth,*,check_only=False):
  p=validate_proposal();path=PREPARED if check_only else DEPLOYED;pin=sha(PREPARED) if check_only else policy_sha()
- auth.update(policy_path=str(path),policy_SHA256=pin,protected_peers=p['protected_peers'],registry_path=str(REGISTRY),parallel_profile=True)
+ auth.update(gpu_uuid=p['gpu'],policy_path=str(path),policy_SHA256=pin,protected_peers=p['protected_peers'],registry_path=str(REGISTRY),parallel_profile=True)
  auth['files_SHA256'].update({str(PREPARED):sha(PREPARED),str(path):pin})
  if REVIEW.exists():auth['files_SHA256'][str(REVIEW)]=sha(REVIEW)
  return p
 def validate(auth):
  assert auth['operation'] in OPS and auth.get('parallel_profile') is True,'Parallel profile is exact recovery/seed2 only'
  p=validate_proposal();reviewed()
+ assert auth['gpu_uuid']==p['gpu']
  assert auth['policy_path']==str(DEPLOYED) and auth['registry_path']==str(REGISTRY)
  assert sha(DEPLOYED)==auth['policy_SHA256']==policy_sha()
  assert auth['protected_peers']==p['protected_peers']
@@ -76,7 +77,7 @@ def validate(auth):
  return p
 def capacity(obs,admission):
  """Same unchanged guard forecast arithmetic, no lock/registry/allocation write."""
- p=validate_proposal();reg=admission.Registry(REGISTRY,locks=p['locks'],roles=p['roles'],driver_headroom=p['driver_headroom_bytes'],host_free_floor=p['host_free_floor_bytes'],protected_peers=p['protected_peers'],policy_sha256=policy_sha())
+ p=validate_proposal();reg=admission.Registry(REGISTRY,gpu=p['gpu'],locks=p['locks'],roles=p['roles'],driver_headroom=p['driver_headroom_bytes'],host_free_floor=p['host_free_floor_bytes'],protected_peers=p['protected_peers'],policy_sha256=policy_sha())
  reg.accounting({'jobs':{}},obs);_,gg,gr=reg.protected(obs)
  req=p['roles']['alz_core_pg'];overhead=max(0,obs['used']-sum(obs['gpu_memory'].values()))
  gpu=max(obs['used'],sum(obs['gpu_memory'].values()))+max(0,p['driver_headroom_bytes']-overhead)+gg+req['gpu_bytes']

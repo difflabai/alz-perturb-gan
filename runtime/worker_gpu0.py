@@ -29,6 +29,9 @@ def run_scientific(auth,admission,layout):
     os.environ.update(WANDB_MODE='disabled',WANDB_DISABLED='true',OTEL_SDK_DISABLED='true',DO_NOT_TRACK='1',HF_HUB_OFFLINE='1',JAX_PLATFORMS='cpu',CUBLAS_WORKSPACE_CONFIG=':4096:8')
     import torch
     torch.set_num_threads(1);torch.set_num_interop_threads(1);torch.use_deterministic_algorithms(True);torch.set_float32_matmul_precision('highest')
+    if b.device(auth)==b.GPU1:
+        total=torch.cuda.get_device_properties(0).total_memory
+        torch.cuda.set_per_process_memory_fraction((3*2**30)/total,0)
     from generation import iter_pg
     from calibration import evaluate,average,dump,sha
     out=Path(auth['output_dir']);out.mkdir(parents=True,exist_ok=False)
