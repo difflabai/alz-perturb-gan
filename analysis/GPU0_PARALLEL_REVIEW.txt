@@ -4,8 +4,8 @@ Prepared only. No policy/registry deployment, budget reservation, lease or CUDA 
 User parallel-sharing directive authenticated in Ember message9825. Original task11
 policy/registry, denied task11 action, guard and Controller remain untouched.
 
-Profile: recovery_runtime/parallel_policy.prepared.json. Anticipated deployed digest:
-79b34f2d6e76486c681aebbec77716ae1e298cb408fbe2472fe0149ddccbc54c
+Profile: recovery_runtime/parallel_policy.prepared.json. Anticipated deployed digest: see current review-v2 MANIFEST.json
+(v1 was withdrawn before any native work).
 Own future policy/registry: artifacts/gpu0-parallel-20261104/{policy.deployed.json,live_registry}.
 Native exact source review is required by existing binding.source_review_passed;
 parallel_profile.reviewed adds an explicit authenticated-review receipt gate for
@@ -26,8 +26,20 @@ Snapshot capacity formula is unchanged guard arithmetic, read-only, both fit.
 Exact9peer identities/kinds include current MOSS2156154 only. Original8 identities
 and kinds unchanged; unknown/newCUDA, queued sampler, MOSS exit or replacement
 REFUSES/stops owned ALZ. No dynamic PID/name whitelist or transparent turnover.
+Original task11 runner cleanup cannot signal owned work after protectedpeer exits;
+new parallel_runner.py addresses this without altering the original runner or
+admission. Original strict peer health remains: foreigndeparture refuses and
+stops OWN work. New cleanup requires own live identity and only own descendants
+in the group, excludes ALL protected PID numbers even if reused, re-observes
+processes before signalling, refuses unowned group contamination; orphancleanup
+only signals still-matching previously known own descendants. No foreign signal.
+Full nativeguard source preflight now exercised read-only with complete inventory;
+v1 missing required source_sha256 inventory found/fixed before anylease/job.
+AST test proves original run() differs only pinned admission path/active source
+origin and ownedcleanup call; all other original helpers unchanged.
 Old registry must remain empty; original shared physical locks and core_phase lock
-retained. No foreign signals. New registry uses unchanged immutable guard schema;
+retained. No foreign signals. New registry uses unchanged immutable admission/schema; separate ALZ-owned
+parallel_runner.py retains original runner gates with minimal owned cleanup correction;
 old history unchanged. Existing canonical Controller/accounting and180h envelope
 unchanged. Native model imports remain behind live exact reservation/worker gate.
 
@@ -41,7 +53,8 @@ Seed2 original frozen identity/fresh parents retained. No reranking/incumbent ch
 Original46 scientific model/scorer sources,4 calibration and20 evaluation separation
 unchanged. Latest selected seed0 quality remainsES1.93553204/cellED.23184461.
 
-CPU checks:12 profile identity/capacity/review/refusal/ownedcleanup tests,
+CPU checks:12 profile identity/capacity/review/refusal tests plus12 new owned
+cleanup/nativepreflight checks (including actual CPUguard+worker/peerexit/release),
 9 recovery scope tests,27 current runtime checks passed. Complete native binding
 path test uses confined counterfactual policy/review file wires; not approval/CUDA.
 Actual check-only source closure+live exact9peer+capacity PASS. No native test yet.

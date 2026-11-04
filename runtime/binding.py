@@ -322,6 +322,9 @@ def modules(auth):
     controller=load_pinned(CONTROLLER,CONTROLLER_SHA,'alz_gpu0_unchanged_budget_controller')
     admission=load_pinned(GUARD/'gpu0_admission.py',pins[str(GUARD/'gpu0_admission.py')],'gpu0_admission')
     guard=load_pinned(GUARD/'gpu0_runner.py',pins[str(GUARD/'gpu0_runner.py')],'alz_gpu0_guard_v2')
+    if auth.get('parallel_profile') is True:
+        path=HERE.parent/'recovery_runtime/parallel_runner.py'
+        guard=load_pinned(path,pins[str(path)],'alz_owned_gpu0_parallel_guard')
     return controller,admission,guard
 
 def core_envelope(state,prospective_seconds=0):

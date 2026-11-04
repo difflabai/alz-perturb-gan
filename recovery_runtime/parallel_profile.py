@@ -31,6 +31,9 @@ def validate_proposal():
  assert p['gpu']==old['gpu'] and p['locks']==old['locks'] and p['registry_path']==str(REGISTRY)
  assert p['roles']=={'alz_core_pg':old['roles']['alz_core_pg']}
  assert p['driver_headroom_bytes']==3*2**30 and p['host_free_floor_bytes']==12*2**30
+ expected={str(OLD.parent.parent/'v2'/name):sha(OLD.parent.parent/'v2'/name) for name in ['gpu0_admission.py','gpu0_runner.py']}
+ expected[str(HERE/'parallel_runner.py')]=sha(HERE/'parallel_runner.py')
+ assert p['source_sha256']==expected,'Complete exact active guard and original reference sources required'
  assert len(p['protected_peers'])==9
  assert [v['identity'] for v in p['protected_peers'][:8]]==[v['identity'] for v in old['protected_peers']]
  assert [v['gpu_kinds'] for v in p['protected_peers'][:8]]==[v['gpu_kinds'] for v in old['protected_peers']]
