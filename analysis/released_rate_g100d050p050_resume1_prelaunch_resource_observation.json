@@ -1,0 +1,105 @@
+{
+  "status": "READ_ONLY_CURRENT_SHARED_GPU0_CAPACITY_AND_PSI_PASS_AFTER_HOST_RAM_STOP",
+  "utc": "2026-11-04T23:01:02.737299+00:00",
+  "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+  "GPU_free_bytes": 50190090240,
+  "host_available_bytes": 51292385280,
+  "forecast": {
+    "GPU_required_bytes": 8641294336,
+    "GPU_total_bytes": 51527024640,
+    "host_remaining_growth_required_bytes": 28210462720,
+    "host_available_bytes": 51302375424,
+    "GPU_fits": true,
+    "host_fits": true,
+    "allocation_or_lease_created": false,
+    "observed_foreign": [
+      {
+        "identity": {
+          "pid": 10392,
+          "birth": 2225,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/home/mikkel/nano-work-server/target/release/nano-work-server",
+          "argv_sha256": "2d9f9156b44ba5e54d03c8effa7b25c58ce2328ce40153543b2a143edad5901e",
+          "ppid": 1
+        },
+        "gpu_kinds": [
+          "compute"
+        ],
+        "gpu_budget_bytes": 811597824,
+        "ram_budget_bytes": 2361503744,
+        "observed_gpu_bytes": 274726912,
+        "observed_rss_bytes": 193032192,
+        "GPU_growth_allowance_bytes": 536870912,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 146094,
+          "birth": 534000,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/usr/bin/gnome-shell (deleted)",
+          "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+          "ppid": 7650
+        },
+        "gpu_kinds": [
+          "graphics"
+        ],
+        "gpu_budget_bytes": 510595072,
+        "ram_budget_bytes": 2575880192,
+        "observed_gpu_bytes": 242159616,
+        "observed_rss_bytes": 303034368,
+        "GPU_growth_allowance_bytes": 268435456,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 147560,
+          "birth": 534312,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/usr/bin/Xwayland",
+          "argv_sha256": "de126b621b3161a113e53b9f6b8d032626ae1c5197b8699f3bd076e63b7af9d8",
+          "ppid": 146094
+        },
+        "gpu_kinds": [
+          "graphics"
+        ],
+        "gpu_budget_bytes": 273223680,
+        "ram_budget_bytes": 2303303680,
+        "observed_gpu_bytes": 4788224,
+        "observed_rss_bytes": 62042112,
+        "GPU_growth_allowance_bytes": 268435456,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 3146181,
+          "birth": 7083096,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/home/mikkel/.local/opt/listener-brave/brave",
+          "argv_sha256": "2f6ef98eece31836d497be9cd8659a803ddfea9a0945d544029cac4cefc3e286",
+          "ppid": 3146135
+        },
+        "gpu_kinds": [
+          "compute",
+          "graphics"
+        ],
+        "gpu_budget_bytes": 603426816,
+        "ram_budget_bytes": 2372009984,
+        "observed_gpu_bytes": 66555904,
+        "observed_rss_bytes": 171479040,
+        "GPU_growth_allowance_bytes": 536870912,
+        "foreign_control": "NONE"
+      }
+    ]
+  },
+  "memory_pressure": "some avg10=11.27 avg60=10.97 avg300=13.63 total=731405983\nfull avg10=9.92 avg60=9.63 avg300=11.63 total=557679580\n",
+  "canonical_open_reservations": [],
+  "stable_readiness_path": "/ml2/alz/artifacts/diagnostics/released_upper_generator2589_capacity/ready.json",
+  "stable_readiness_SHA256": "d9f549c8b944a3615643531ae6647942b91256ca71b6f977d8ab089417f6205d",
+  "GPU_context_created": false,
+  "allocation_or_lease_created": false
+}
