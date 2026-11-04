@@ -1,0 +1,24 @@
+Published ParticleGAN preset coverage for the ALZ conditional count model
+
+These are CPU component-construction checks. They add no trained models, optimizer updates, count-serving validation or calibration scores. Existing completed quality coverage is 13 pure comparisons across BCAP, original BISPF and optimized BISPF.
+
+| Preset | Actual ALZ quality run completed | CPU construction in current loop | Native requirement follow-up |
+| --- | --- | --- | --- |
+| ka2 | No | this penalty needs the critic's EMA: pass ema_critic=copy.deepcopy(critic) to recipe.make_optimizers / recipe.make_critic_optimizer | Constructed with required critic EMA |
+| k3p | No | this penalty needs the critic's EMA: pass ema_critic=copy.deepcopy(critic) to recipe.make_optimizers / recipe.make_critic_optimizer | Constructed with required critic EMA |
+| bcap_adam | No | Constructed; no updates | Not separately checked |
+| bcap | Yes | Constructed; no updates | Not separately checked |
+| bispf | Yes | Constructed; no updates | Not separately checked |
+| bispf_optimized | Yes | Constructed; no updates | Not separately checked |
+| e22 | No | continuous policies require total_steps=None | row evidence and birth/death require independent unconditional table atoms; conditional and densely soft-routed banks are unsupported |
+| atlas | No | continuous policies require total_steps=None | row evidence and birth/death require independent unconditional table atoms; conditional and densely soft-routed banks are unsupported |
+| e22_routed | No | continuous policies require total_steps=None | row_policy='routed_paired' requires an explicit RoutedRows contract |
+| halloween | No | Constructed; no updates | Not separately checked |
+
+The follow-up retains a 20,000-update external cap while leaving continuous-policy total_steps=None, and supplies the documented EMA critic. E22/Atlas still reject conditional table-row semantics with their native row controls enabled. Routed E22 requires an explicit RoutedRows contract. No controls were disabled to force construction.
+
+A KA2/K3P trial needs a faithful critic EMA update and checkpoint plus preset-specific noise/averaging/serving behavior. BCAP/Adam is another currently untested count-adapter preset. Successful initialization is insufficient for native admission or a quality claim.
+
+MoG, DDGAN and AE/VAE model families are not covered by these policy-preset construction checks. Any new family must retain the original count contract, fitting/calibration/evaluation separation, fixed endpoint, exact source binding and full checkpoint/score audit.
+
+Evidence: analysis/published_recipe_construction_inventory.json; analysis/native_preset_requirements_inventory.json.
