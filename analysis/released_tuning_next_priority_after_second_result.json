@@ -1,0 +1,50 @@
+{
+  "status": "AUDITED_PARTICLE_QUARTER_REJECTED_NEXT_REGISTERED_CRITIC_QUARTER_PREPARED",
+  "utc": "2026-11-04T21:08:01.922293+00:00",
+  "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p025_f0_pg_s0-result.json",
+  "result_SHA256": "af890e6c9ccad005319413d8d5cad2d444b0a8ae167adfaf5499a0e0cedfcbb3",
+  "previous_best_single_model_result": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json",
+  "previous_result_SHA256": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+  "metric_changes_percent_vs_particle_half": {
+    "energy_score": 5.532910532348567,
+    "cell_energy_distance": 4.749472031097413
+  },
+  "metric_changes_percent_vs_resampling": {
+    "energy_score": -3.9554503670131913,
+    "cell_energy_distance": 2.8864342291696543
+  },
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "native_audit_complete": true,
+  "all3_checkpoint_scores_independently_recomputed": true,
+  "charge_GPU_seconds": 1419.4106742829972,
+  "owned_registry_empty": true,
+  "owner_and_waiter_absent": true,
+  "activation_to_revert": "14aecc2",
+  "incumbent_changed": false,
+  "next_setting": {
+    "id": "lr_g050_d025_p050",
+    "parameters": {
+      "generator_lr": 0.006,
+      "critic_lr": 0.0045,
+      "particle_lr": 0.015,
+      "reg_coeff": 1.0,
+      "reg_kappa": 1.0,
+      "prior_reg": 0.01
+    }
+  },
+  "next_setting_reason": "At fixed G.006/D.009, P.015 beats both P.03 and P.0075 at20k on both measured metrics. Hold G.006/P.015 and reduce criticLR.009->.0045 as a single registered scalar change from the best completed rate setting. All27 original configurations remain registered; no threshold, anchor, checkpoint, donor or seed change.",
+  "next_model_started": false,
+  "next_runtime": "/ml2/alz/released_rate_g050d025p050_runtime",
+  "next_runtime_qualification_path": "/ml2/alz/analysis/released_rate_g050d025p050_runtime_CPU_qualification.json",
+  "next_runtime_checks_passed": 24,
+  "stage2_anchor_selected": false,
+  "fixed_three_seed_confirmation_unchanged": true,
+  "stable_joint_ATH_claimed": false,
+  "evaluation_donors_used": false
+}
