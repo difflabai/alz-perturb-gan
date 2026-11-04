@@ -6,10 +6,10 @@ Forecasts reserve foreign growth; they do not constrain or signal foreign work.
 import hashlib,json,sys,subprocess
 from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent
-PREPARED=HERE/'parallel_policy.learned.prepared.json'
-DEPLOYED=ROOT/'artifacts/gpu0-learned-20261104/policy.deployed.json'
+PREPARED=HERE/'parallel_policy.learned-v5.prepared.json'
+DEPLOYED=ROOT/'artifacts/gpu0-learned-v5-20261104/policy.deployed.json'
 REGISTRY=DEPLOYED.parent/'live_registry'
-REVIEW=ROOT/'analysis/gpu0_learned_independent_review.json'
+REVIEW=ROOT/'analysis/gpu0_learned_v5_independent_review.json'
 OLD=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json')
 OLD_SHA='5a4dfd1d5288bde24964ee680c003dd75f13fefe1a83ac55b27b49e6a05d125e'
 MOSS=Path('/ml2/particlesliders-working/moss_training/train_concept.py')

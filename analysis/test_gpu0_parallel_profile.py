@@ -7,7 +7,7 @@ import parallel_profile as p
 import gpu0_admission as a
 class Parallel(unittest.TestCase):
  def setUp(self):
-  s=p.read(R/'analysis/learned_profile_observation.json');peers=[v for v in s['peers'] if v['GPU_kinds']]
+  s=p.read(R/'analysis/learned_v5_profile_observation.json');peers=[v for v in s['peers'] if v['GPU_kinds']]
   self.obs={'gpu':s['gpu'],'total':s['total'],'used':s['used'],'available_ram':s['available_ram'],'total_ram':128*2**30,'complete':True,'procs':{v['pid']:{k:v[k] for k in a.IDENTITY_KEYS+('rss','hwm')} for v in peers},'gpu_memory':{v['pid']:v['GPU_bytes'] for v in peers},'gpu_kinds':{v['pid']:v['GPU_kinds'] for v in peers}}
   self.peer_pid=p.read(p.PREPARED)['protected_peers'][-1]['identity']['pid']
   for pid,v in self.obs['procs'].items():v.update(sid=pid,pgid=pid)
