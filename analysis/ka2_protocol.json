@@ -1,0 +1,48 @@
+{
+  "status": "PREDECLARED_NATIVE_KA2_PROTOCOL_BEFORE_TRAINING",
+  "utc": "2026-11-04T10:07:41.260823+00:00",
+  "native_API": "ParticleGAN0.9.4 get_recipe('ka2',total_steps=20000,batch_size=32,num_particles=512,z_dim=8); no other recipe overrides",
+  "rationale": "The completed Fourier128 trial failed both unchanged joint seed0 targets after full source/checkpoint/score/count/settlement audit and was reverted. Test the predeclared published KA2 formulation with the original150-feature count adapter. Existing KA2 evidence is construction only, not trained quality.",
+  "experiment": "ka2_native_v1",
+  "operation": "train_ka2",
+  "task": {
+    "fold": 0,
+    "training_seed": 0,
+    "updates": 20000,
+    "cap_seconds": 21600,
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    }
+  },
+  "unchanged": "33optimizationdonors, preprocessing, CountGenerator,150moments/Fourier critic features, batch/library laws, deterministic streams, native count discrete-forward/declared biased-rate backward, direct iter_pg with zero real replacements,4calibrationdonors,two generationreplicates.20evaluationdonors excluded.",
+  "native_preset_confound": "Whole released KA2 preset changes critic optimizer/EMA anchor, generator/prior optimizer, step schedules, mobility and input/output training noise together. Native UpdatePolicy and InputNoise preserve those controls. This is a whole-preset comparison, not an isolated mechanism ablation. Clean final raw G/prior serving is frozen before admission; native EMA state is still maintained and audited. Singleparent20k vs selected two-parent40k compute disclosed.",
+  "qualification": [
+    "Exact official KA2 recipe/component classes and same initial G/D/learned prior rows",
+    "Native input/output noise and native G/prior averaging; full actual800-call warmup crossing and conditional EMA penalty evaluation",
+    "Unchanged fitting sampler, observation and fit AST; finite nonzero G/dispersion/prior gradients",
+    "Complete early and post-warmup serialized bitwise next-update replay with native EMA/noise/optimizers/policy; invalid recipe/cache/EMA/serving/config refused",
+    "Separate isolated runtime source/admission/budget/lease/no-model-import checks and current shared-capacity observation before GPU launch"
+  ],
+  "selection": "Unchanged selection.decide against current pure incumbent: strict lower donorES AND no higher pooled cellED, spreadband nonregression, integercounts and completedendpoint. Independently recompute two saved replicas/exemplars/checkpoint/source/cleanup/charges. Commit actual candidate evidence and revert active trial activation on regression; never delete negative evidence or change threshold. Stable joint confirmation remains necessary.",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "original_failed_confirmation_path": "/ml2/alz/analysis/pure_ensemble_confirmation_v6_all_seeds.json",
+  "original_failed_confirmation_SHA256": "d9b31c4ab50eef50fbd69fa63cda7e7e424120ba6a59fac6dd3ec410c8165aa1",
+  "uniform_ensemble_negative_screen_path": "/ml2/alz/analysis/uniform_training_seed_ensemble_estimate.json",
+  "uniform_ensemble_negative_screen_SHA256": "5d89f36e8fe58aa3e9e13d7977624846c2e14862ff5dcb183d789762b4c706d4",
+  "owner_window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+  "GPU_job_started": false,
+  "native_result_available": false,
+  "incumbents_changed": false,
+  "serving_contract": {
+    "weights": "final_raw",
+    "output_noise": false
+  },
+  "hypothesis_path": "/ml2/alz/analysis/ka2_next_candidate_hypothesis.json",
+  "hypothesis_SHA256": "0da9f088a484f71dd380215eae5d2c47f77e5f2eefb1953ad145c35caa1aa948",
+  "failed_fourier128_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_fourier128_v1_f0_pg_s0-result.json",
+  "failed_fourier128_result_SHA256": "795cc56b6085cc3f1292f3a502efc4ec65af26a30cdf8339dfe1dce8ecbdd8fc"
+}
