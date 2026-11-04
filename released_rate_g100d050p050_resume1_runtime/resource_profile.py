@@ -8,7 +8,7 @@ from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent
 ENGINE=ROOT/'recovery_runtime'
 PREPARED=HERE/'policy.prepared.json'
-DEPLOYED=ROOT/'artifacts/gpu0-released-g025d050p050-resume1-20261104/policy.deployed.json'
+DEPLOYED=ROOT/'artifacts/gpu0-released-g100d050p050-resume1-20261104/policy.deployed.json'
 REGISTRY=DEPLOYED.parent/'live_registry'
 REVIEW=ROOT/'analysis/released_rate_g100d050p050_resume1_owner_execution_review.json'
 OLD=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json')

@@ -16,6 +16,7 @@ PARENT = 'CAL_GPU0_V1_released_rate_g100d050p050_f0_pg_s0'
 N = 2589
 NEW = ROOT/'released_rate_g100d050p050_resume1_runtime'
 PROTO = ROOT/'analysis/released_rate_g100d050p050_resume1_protocol.json'
+NAMESPACE = 'gpu0-'+NEW.name.removesuffix('_runtime').replace('released_rate_', 'released-').replace('_','-')+'-20261104'
 
 
 def assignment(source, name, value):
@@ -96,8 +97,6 @@ def main():
         source = source.replace('released_rate_g050d050p050','released_rate_g100d050p050')
         source = source.replace('lr_g050_d050_p050','lr_g100_d050_p050')
         source = replace_update_clock(source)
-        source = source.replace('gpu0-released-g050d050p050-resume1-20261104',
-                                'gpu0-released-g025d050p050-resume1-20261104')
         source = source.replace("'tests_passed':27","'tests_passed':28").replace("proof['tests_passed']==27","proof['tests_passed']==28")
         source = source.replace('native2589_parent_all_scientific_streams_and_diagnostics_lineage_verified',
                                 'native_parent_all_scientific_streams_and_diagnostics_lineage_verified')
@@ -105,6 +104,7 @@ def main():
             source = assignment(source,'HYPER',repr(auth['released_hyperparameters']))
             source = source.replace('released_rate_g100d050p050_initial_resource_observation.json',obs_path.name)
         elif path.name == 'resource_profile.py':
+            source = assignment(source,'DEPLOYED',"ROOT/'artifacts/"+NAMESPACE+"/policy.deployed.json'")
             source = assignment(source,'PREVIOUS_REGISTRY',repr(str(Path(auth['registry_path'])/'registry.json')))
             source = source.replace("PREVIOUS_REGISTRY='", "PREVIOUS_REGISTRY=Path('")
             source = re.sub(r"^(PREVIOUS_REGISTRY=Path\('[^']*')$",r'\1)',source,flags=re.M)
@@ -124,7 +124,7 @@ def main():
             source = source.replace(marker, marker+"\n    assert restored['original_diagnostic_checkpoints_and_log_prefix_byte_exact'] is True")
         ast.parse(source); (NEW/path.name).write_text(source)
     policy = read(ROOT/'released_rate_resume_runtime/policy.prepared.json')
-    policy['registry_path'] = str(ROOT/'artifacts/gpu0-released-g025d050p050-resume1-20261104/live_registry')
+    policy['registry_path'] = str(ROOT/'artifacts'/NAMESPACE/'live_registry')
     policy['resource_basis']['observation_path'] = str(obs_path)
     policy['resource_basis']['observation_SHA256'] = sha(obs_path)
     policy['resource_basis']['foreign_control']='NONE. Exact2589-to20k same-model continuation after host-RAM stop; original deadline and unchanged shared guards retained. Fresh complete capacity forecast required.'
