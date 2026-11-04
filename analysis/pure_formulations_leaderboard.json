@@ -88,6 +88,86 @@
       "joint_baseline_target_met": false
     },
     {
+      "metric_role": "calibration_selection",
+      "generation_replicates": 2,
+      "donors": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "training_seed": 0,
+      "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+      "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+      "sampling_contract": "calibration_equal_stage375_priority_v1",
+      "energy_score": 1.9355320396443134,
+      "cell_energy_distance": 0.2318446092298636,
+      "spread_ratio": 1.0139376087094576,
+      "within_condition_spread_ratio": 0.9558202746934397,
+      "coverage80": 0.6971153846153846,
+      "generated_zero_count_rate": 3.125e-06,
+      "per_donor_energy_score": [
+        1.1847406370618034,
+        2.762139284338443,
+        1.7135998549675175,
+        2.0816483822094902
+      ],
+      "per_stage_cell_energy_distance": [
+        0.7562105456693518,
+        1.603245353937993,
+        1.1354997606494939,
+        0.538689614861954
+      ],
+      "status": "VERIFIED_PURE_PG_ONLY",
+      "completed_updates": 40000,
+      "fixed_endpoint": 40000,
+      "integer_count_contract_passed": true,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/fit/ensemble.json",
+      "checkpoint_SHA256": "bc9ac029c6b1aa18114f5cbb0f0522da1e775390404a8cd68208eb350c5444de",
+      "checkpoint_kind": "complete_two_parent_references",
+      "operation": "evaluate_pure_ensemble",
+      "allocation_id": "ALZ_CAL_V1_ensemble75_v1_f0_pg_s0",
+      "variant_config": {
+        "z_dim": 8,
+        "stage_balance": false,
+        "cell_z_dim": 8,
+        "theta_init_scale": 1.0,
+        "fourier_feature_scale": 1.0
+      },
+      "hybrid_config": null,
+      "method": "pg_pure_ensemble75",
+      "pure_only": true,
+      "pure_formulation": "pg8_learned_ensemble75",
+      "real_bag_replacements": 0,
+      "generation": "iter_pg_whole_bag_ensemble",
+      "ensemble_config": {
+        "learned_weight": 0.25,
+        "mask_seed": 20261108,
+        "bags_per_stage": 200
+      },
+      "parent_manifest_SHA256": "283243061d72af81e9451de22581a03fb691c0c46ff5364b314fd39325f69a1f",
+      "parent_training_updates_total": 40000,
+      "parent_completed_updates": [
+        20000,
+        20000
+      ],
+      "effective_active_parent_training_updates": 40000,
+      "new_model_updates": 0,
+      "initial_completed_updates": 40000,
+      "native_recipe": "bispf_optimized",
+      "native_recipe_schedule_horizon_each": 20000,
+      "qualification_only": false,
+      "automatic_successor": false,
+      "formulation": "pure_ensemble75",
+      "complete_clean_settlement_verified": true,
+      "charged_GPU_seconds": 7.677336492983159,
+      "accepted": true,
+      "decision_evidence": "/ml2/alz/analysis/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0-result.json",
+      "ES_improvement_vs_resampling_percent": 6.913674211446708,
+      "cell_ED_difference_vs_resampling": -0.010933643853316077,
+      "joint_baseline_target_met": true
+    },
+    {
       "status": "VERIFIED_PURE_PG_ONLY",
       "formulation": "latent8",
       "attempt": "CAL_GPU0_V1_pure_latent8_v1_f0_pg_s0",
@@ -661,18 +741,18 @@
     }
   ],
   "best_pure_by_energy_score": "network_rate_half",
-  "suite_charged_GPU_seconds": 6585.160635898006,
-  "joint_target_met_any": false,
+  "suite_charged_GPU_seconds": 6592.837972390989,
+  "joint_target_met_any": true,
   "limitations": "Adaptive4calibrationdonors, firstfold,seed0,two generation replicates.40k uses extra training compute. Not evaluation or external SOTA.",
   "hybrid_incumbent_SHA256": "c83f7f184b12eb4e705f4a4c6492e332bcab7c29482f834d1c70dd7c48071fc7",
   "hybrid_incumbent_unchanged": true,
   "selected_pure_incumbent": {
-    "allocation_id": "ALZ_CAL_V1_pure_latent8_v1_f0_pg_s0",
-    "pure_formulation": "latent8",
-    "checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
-    "energy_score": 1.9755667140392312,
-    "cell_energy_distance": 0.25327614831020107,
-    "spread_ratio": 0.9490753309366126
+    "allocation_id": "ALZ_CAL_V1_ensemble75_v1_f0_pg_s0",
+    "pure_formulation": "pg8_learned_ensemble75",
+    "checkpoint_SHA256": "bc9ac029c6b1aa18114f5cbb0f0522da1e775390404a8cd68208eb350c5444de",
+    "energy_score": 1.9355320396443134,
+    "cell_energy_distance": 0.2318446092298636,
+    "spread_ratio": 1.0139376087094576
   },
-  "selected_pure_incumbent_SHA256": "c94d2483940f4495860989d099c3d0891cba175fac57f80798a537eb3968d7e8"
+  "selected_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa"
 }
