@@ -1,0 +1,18 @@
+{
+  "status": "CPU_REPLAY_COMPARATOR_REQUIRES_DOCUMENTED_NATIVE_NAN_SENTINEL_HANDLING",
+  "utc": "2026-11-04T16:48:21.027481+00:00",
+  "actual_exec_session": 11179,
+  "actual_original_optimizer_pairs": 21,
+  "actual_replayed_optimizer_pairs_before_assert": 1,
+  "native_probe_clock_boundary_reached": true,
+  "reported_metrics_after_probe_matched": true,
+  "full_state_replay_claimed": false,
+  "first_observed_nonfinite_locations": "policy.lr_settle.0.2.r_b and r_2b scalar Tensor entries; NaN marks dropped pairs in official continuous.py line411 and cosine validity law",
+  "issue": "torch.equal returns False for identical NaN entries; bytewise comparison will preserve stricter exact tensor representation checks including native sentinels, without tolerances or library changes. This diagnosis does not yet prove full replay; rerun the actual probe and complete continuation.",
+  "failed_executed_source_path": "/ml2/alz/analysis/e22_routed_count_candidate/probe_replay_v1_failed_source.txt",
+  "failed_executed_source_SHA256": "169f2ba662209a61f93fbf14fe14de16848a1ff2fe07df6cd96b3d972f818e36",
+  "checkpoint_before_probe_path": "/ml2/alz/artifacts/diagnostics/e22_routed_count_CPU_probe20_v1/before_probe19.pt",
+  "checkpoint_before_probe_SHA256": "4801d6ececbf17ec0ccdcf9fcb704efcc403ca2d5d3e964e0ef0283ed4e151c0",
+  "GPU_context_created": false,
+  "quality_measured": false
+}
