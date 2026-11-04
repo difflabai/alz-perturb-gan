@@ -1,0 +1,53 @@
+{
+  "schema": "gpu0-coexistence-policy-v1",
+  "status": "PREPARED_EXACT_GPU0_PARALLEL_PROFILE",
+  "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+  "registry_path": "/ml2/alz/artifacts/gpu0-shared-candidate-20261104/live_registry",
+  "locks": [
+    "/mnt/nvme/sliders/qualification/admission-gpu-0.lock",
+    "/mnt/nvme/sliders/locks/gpu-0.lock"
+  ],
+  "driver_headroom_bytes": 3221225472,
+  "host_free_floor_bytes": 12884901888,
+  "roles": {
+    "alz_core_pg": {
+      "gpu_bytes": 3221225472,
+      "ram_bytes": 6442450944
+    }
+  },
+  "protected_peers": [
+    {
+      "identity": {
+        "pid": 146094,
+        "birth": 534000,
+        "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+        "uid": 1000,
+        "exe": "/usr/bin/gnome-shell (deleted)",
+        "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+        "ppid": 7650
+      },
+      "gpu_kinds": [
+        "graphics"
+      ],
+      "gpu_budget_bytes": 272699392,
+      "ram_budget_bytes": 2575880192
+    }
+  ],
+  "resource_basis": {
+    "purpose": "INACTIVE sharedGPU0 engine candidate only; no native training launcher bound, no deployment, no admission or lease. Same dynamicforeign forecasting; threeGiBownGPU/sixGiBhost/threeGiBdriver/twelveGiBhost floor. Fresh source/resource and model-specific canonical authorization required before any native use.",
+    "foreign_control": "NONE",
+    "CPU_fixtures_forbid_physical_locks_on_both_cards": true
+  },
+  "source_sha256": {
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2/gpu0_admission.py": "c92e975ff4839ba3d70f53d67c712916bf0bb346fcb218ef9c96e6dbf6dfeaca",
+    "/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_admission.py": "d6300693ca6afcfc94fb7cfe33513adaa0e30a3a393935b74eec73bee6922998",
+    "/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_runner.py": "019bc2a2f8c03032eeeddf8a0b3bd9c68c4d105dcc6b3e393c4788f787fe1238"
+  },
+  "dynamic_shared_foreign": true,
+  "foreign_growth_allowances": {
+    "compute_GPU_bytes": 536870912,
+    "graphics_GPU_bytes": 268435456,
+    "host_above_peak_bytes": 2147483648,
+    "uid": 1000
+  }
+}

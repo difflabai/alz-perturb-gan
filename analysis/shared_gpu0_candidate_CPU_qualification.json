@@ -1,0 +1,176 @@
+{
+  "status": "PASSED_CPU_SHARED_GPU0_ENGINE_CANDIDATE_ONLY_WITH_CURRENT_READ_ONLY_FORECAST",
+  "utc": "2026-11-04T13:27:31.590196+00:00",
+  "tests_passed": 10,
+  "execution_reference": "Actual exec91324 exit0; Ran10tests in2.960s OK",
+  "source_SHA256": {
+    "/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_admission.py": "d6300693ca6afcfc94fb7cfe33513adaa0e30a3a393935b74eec73bee6922998",
+    "/ml2/alz/analysis/shared_gpu0_candidate/gpu0_shared_profile.py": "bd377fb5bf3671878356e7edf6e43976c7a1bf06fba47f23f27fed013de95edf",
+    "/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_runner.py": "019bc2a2f8c03032eeeddf8a0b3bd9c68c4d105dcc6b3e393c4788f787fe1238",
+    "/ml2/alz/analysis/shared_gpu0_candidate/test_shared_gpu0_accounting.py": "6a31b22506ee14bcd7c9e17fb3a1c05062c647b17569ec00281b865b74787354",
+    "/ml2/alz/analysis/shared_gpu0_candidate/policy.prepared.json": "4268b5b49369068ab814e1cba8bc9ec164c133c32bf459fff8b543560bbb54c4",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2/gpu0_admission.py": "c92e975ff4839ba3d70f53d67c712916bf0bb346fcb218ef9c96e6dbf6dfeaca"
+  },
+  "source_port_delta": {
+    "recovery_runtime/shared_gpu1_admission.py": {
+      "baseline_SHA256": "7a615c15ebd14024f1d35646a458ee74c858947f1061ee89b06a71367ec9757a",
+      "candidate_SHA256": "d6300693ca6afcfc94fb7cfe33513adaa0e30a3a393935b74eec73bee6922998",
+      "diff": "--- recovery_runtime/shared_gpu1_admission.py\n+++ analysis/shared_gpu0_candidate/shared_gpu0_admission.py\n@@ -5,7 +5,7 @@\n sampled coexistence forecast, not a reservation or allocator cap on other jobs.\n \"\"\"\n import os\n-import gpu1_admission as base\n+import gpu0_admission as base\n \n GPU0=base.GPU0\n GiB=base.GiB\n"
+    },
+    "recovery_runtime/shared_gpu1_runner.py": {
+      "baseline_SHA256": "621492363bafbb28181aa9b4c9faae46bfe87f353d69542a437c52abe344b362",
+      "candidate_SHA256": "019bc2a2f8c03032eeeddf8a0b3bd9c68c4d105dcc6b3e393c4788f787fe1238",
+      "diff": "--- recovery_runtime/shared_gpu1_runner.py\n+++ analysis/shared_gpu0_candidate/shared_gpu0_runner.py\n@@ -2,8 +2,8 @@\n from __future__ import annotations\n import inspect,json,math,os,signal,subprocess,sys,time\n from pathlib import Path\n-import shared_gpu1_admission as admission_source\n-from shared_gpu1_admission import Registry,GPU0,GiB,Conflict,identity,matches,atomic,snapshot,proc_table,protected_identity,Uncertain\n+import shared_gpu0_admission as admission_source\n+from shared_gpu0_admission import Registry,GPU0,GiB,Conflict,identity,matches,atomic,snapshot,proc_table,protected_identity,Uncertain\n \n def gate_spawn(command,environment,lease,observe):\n     \"\"\"Child cannot import model/CUDA until its session is registered.\"\"\"\n@@ -106,11 +106,11 @@\n         if root.name!='fixture' or not (root.is_relative_to(Path('/tmp')) or root.is_relative_to(Path(__file__).resolve().parent)):raise Conflict('Fixture root must be task-local or tmp and explicitly named fixture')\n         paths=[policy_path,Path(ledger_path),Path(ledger_path).with_suffix('.lock'),Path(cfg['registry_path']),*map(Path,cfg['locks'])]\n         if any(not p.resolve().is_relative_to(root) for p in paths):raise Conflict('All fixture policy/registry/ledger/lock paths must resolve inside fixture root')\n-        physical=[Path('/mnt/nvme/sliders')/part for part in ['qualification/admission-gpu-1.lock','locks/gpu-1.lock','qualification/admission-gpu-1.lock','locks/gpu-1.lock']]\n+        physical=[Path('/mnt/nvme/sliders')/part for part in ['qualification/admission-gpu-0.lock','locks/gpu-0.lock','qualification/admission-gpu-1.lock','locks/gpu-1.lock']]\n         forbidden={(p.stat().st_dev,p.stat().st_ino) for p in physical if p.exists()}\n         if any(p.exists() and (p.stat().st_dev,p.stat().st_ino) in forbidden for p in paths):raise Conflict('Fixture alias of physical GPU lock refused')\n-    if not test_mode and tuple(cfg['locks'])!=('/mnt/nvme/sliders/qualification/admission-gpu-1.lock','/mnt/nvme/sliders/locks/gpu-1.lock'):raise Conflict('Exact physical GPU0 lock pair required')\n-    admission_path=Path('/ml2/alz/recovery_runtime/shared_gpu1_admission.py')\n+    if not test_mode and tuple(cfg['locks'])!=('/mnt/nvme/sliders/qualification/admission-gpu-0.lock','/mnt/nvme/sliders/locks/gpu-0.lock'):raise Conflict('Exact physical GPU0 lock pair required')\n+    admission_path=Path('/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_admission.py')\n     required={str(Path(__file__).resolve()),str(admission_path)}\n     if not required<=set(cfg.get('source_sha256',{})):raise Conflict('Both active GPU0 source files must be pinned')\n     if cfg['gpu']!=gpu_uuid:raise Conflict('Policy GPU mismatch')\n"
+    }
+  },
+  "verification": {
+    "foreign_same_UID_arrival_departure_PID_reuse_growth_and_ownership_cases_passed": true,
+    "unobservable_or_other_UID_foreign_refuses": true,
+    "real_confined_CPU_owner_worker_and_release_with_foreign_turnover_passed": true,
+    "native_source_origin_preflight_before_allocation_passed": true,
+    "current_complete_GPU0_observation": true,
+    "active_MoG_and_old_execution_sources_unchanged": true,
+    "physical_GPU0_and_GPU1_aliases_forbidden_in_fixture_source": true
+  },
+  "current_forecast": {
+    "GPU_required_bytes": 18161057792,
+    "GPU_total_bytes": 51527024640,
+    "host_remaining_growth_required_bytes": 41436393472,
+    "host_available_bytes": 104156598272,
+    "GPU_fits": true,
+    "host_fits": true,
+    "observed_foreign": [
+      {
+        "identity": {
+          "pid": 10392,
+          "birth": 2225,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/home/mikkel/nano-work-server/target/release/nano-work-server",
+          "argv_sha256": "2d9f9156b44ba5e54d03c8effa7b25c58ce2328ce40153543b2a143edad5901e",
+          "ppid": 1
+        },
+        "gpu_kinds": [
+          "compute"
+        ],
+        "gpu_budget_bytes": 811597824,
+        "ram_budget_bytes": 2361503744,
+        "observed_gpu_bytes": 274726912,
+        "observed_rss_bytes": 196190208,
+        "GPU_growth_allowance_bytes": 536870912,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 146094,
+          "birth": 534000,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/usr/bin/gnome-shell (deleted)",
+          "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+          "ppid": 7650
+        },
+        "gpu_kinds": [
+          "graphics"
+        ],
+        "gpu_budget_bytes": 614993920,
+        "ram_budget_bytes": 2575880192,
+        "observed_gpu_bytes": 346558464,
+        "observed_rss_bytes": 306647040,
+        "GPU_growth_allowance_bytes": 268435456,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 147551,
+          "birth": 534311,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/home/mikkel/.local/opt/listener-brave/brave",
+          "argv_sha256": "1aa41d6ece5abc24b5be91dac291a8a75082e52136f0b950b22d81906ae15c8a",
+          "ppid": 146967
+        },
+        "gpu_kinds": [
+          "compute",
+          "graphics"
+        ],
+        "gpu_budget_bytes": 610897920,
+        "ram_budget_bytes": 2466926592,
+        "observed_gpu_bytes": 74027008,
+        "observed_rss_bytes": 164098048,
+        "GPU_growth_allowance_bytes": 536870912,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 147560,
+          "birth": 534312,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/usr/bin/Xwayland",
+          "argv_sha256": "de126b621b3161a113e53b9f6b8d032626ae1c5197b8699f3bd076e63b7af9d8",
+          "ppid": 146094
+        },
+        "gpu_kinds": [
+          "graphics"
+        ],
+        "gpu_budget_bytes": 273223680,
+        "ram_budget_bytes": 2303303680,
+        "observed_gpu_bytes": 4788224,
+        "observed_rss_bytes": 70979584,
+        "GPU_growth_allowance_bytes": 268435456,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 164844,
+          "birth": 593699,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/usr/lib/chatgpt/ChatGPT",
+          "argv_sha256": "048c2b736b5eeaba3c1a82da1432ffbcd7bfc44092cce858d54efa8997739a59",
+          "ppid": 164705
+        },
+        "gpu_kinds": [
+          "graphics"
+        ],
+        "gpu_budget_bytes": 708907008,
+        "ram_budget_bytes": 2366795776,
+        "observed_gpu_bytes": 440471552,
+        "observed_rss_bytes": 219312128,
+        "GPU_growth_allowance_bytes": 268435456,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 1344937,
+          "birth": 3578542,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/mnt/nvme/ai/conda/anaconda3/bin/python3.11",
+          "argv_sha256": "c974784e79bfab4439433db1c873e539ee25ad10c9c208a006f3dfcc577445e4",
+          "ppid": 1344930
+        },
+        "gpu_kinds": [
+          "compute"
+        ],
+        "gpu_budget_bytes": 8698986496,
+        "ram_budget_bytes": 13083979776,
+        "observed_gpu_bytes": 8162115584,
+        "observed_rss_bytes": 2092122112,
+        "GPU_growth_allowance_bytes": 536870912,
+        "foreign_control": "NONE"
+      }
+    ],
+    "allocation_or_lease_created": false,
+    "native_launcher_integrated": false
+  },
+  "GPU_observed_used_bytes": 9518972928,
+  "GPU_total_bytes": 51527024640,
+  "GPU_utilization_informational": "49",
+  "native_launcher_integrated": false,
+  "native_policy_deployed": false,
+  "canonical_reservation_created": false,
+  "GPU_context_created": false,
+  "scope": "ALZ-owned inactiveGPU0 sharing-engine port from unchangedtestedGPU1 dynamic engine to originalunchangedGPU0 admissionbase. Onlyimport/sourcebindings/physicalGPU0locks changed; fixture alias protection includesbothcards. Actual10CPUcases and readonlycurrentcapacity fit are not model-specific canonicalcontroller/privateauth/launcher qualification or a futurecapacity guarantee. No owned/foreignprocesses signaled outside confined CPU fixtures; no real physical locks acquired. NativeMoG onGPU1 remains unmodified. Fresh native binding/source/resources and clean previous phase settlement still required before use."
+}
