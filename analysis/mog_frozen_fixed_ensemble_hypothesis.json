@@ -1,0 +1,43 @@
+{
+  "status": "PREDECLARED_SINGLE_MOG_PLUS_FIXED_PARTICLE_SAVED_FORECAST_SCREEN",
+  "utc": "2026-11-04T14:10:31.930426+00:00",
+  "declared_before_fixed_particle_control_result": true,
+  "models": [
+    {
+      "name": "native_MoG_prior",
+      "weight": 0.75,
+      "attempt": "CAL_GPU0_V1_mog_prior_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "cac07403d737f8bf7cd6d33edae3d5d7d602a46a739ac08359ceee1de9ca9999",
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "324bc395c2009247f0f1f632637cfa735063c9f17e6b92cb091bec0f18dad5d8"
+    },
+    {
+      "name": "native_fixed_particle_control",
+      "weight": 0.25,
+      "attempt": "CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0",
+      "required_complete_result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0-result.json",
+      "required_complete_checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_binding_status": "PENDING_CURRENT_NATIVE_COMPLETION_AND_FULL_AUDIT; resolve in separate binding receipt, do not alter this preregistration"
+    }
+  ],
+  "replicates": [
+    0,
+    1
+  ],
+  "fixed_second_parent_bags_per200": 50,
+  "proposed_native_mask_seed": 20261108,
+  "total_parent_training_updates": 40000,
+  "additional_training_updates_for_screen": 0,
+  "rationale": "MoG lowered donorES but failed pooledcell match, and the fixedMoG/learned-observation75/25 pair also failed the unchanged cellgate. The ongoing native fixed-particle control changes location learning while retaining initialG/D/Pz and old11streams, giving a distinct potential error pattern. Predeclare one same75/25 MoG/fixed-bank pair before any fixed-control quality result is available. Complementarity is a hypothesis, not an assumed benefit. No alternativeweight/mask/component scan. Pure synthetic wholebag mixture of two native framework prior controls, not a single published formulation.",
+  "activation_condition": "Only analyze after the fixed-particle control completes20k/two replicas, fullcount/checkpoint/score/source/cleanup/charge audit and JOINT REJECTION. If control is accepted, its fixed-seed confirmation takes priority; no screen/native successor from this protocol. Current control continues untouched.",
+  "allowed_inputs": "Existing seed0 saved arrays/scalar metrics and verified nativecheckpoint/result/source bindings only. No new target/evaluation arrays, generation, fitting, GPU allocation or live source changes for the screen.",
+  "decision": "Unchanged strict lower expected donorES and no higher weighted empiricalcellED versus the same frozen incumbent. On failure retainnegative, no nativecandidate, no weight/mask scan. On promise only later actualregistered nativecount generation/spread/source/checkpoint/recomputedscore/cleanup/accounting +ownfixedseedconfirmation can establish an accepted model. No selection or ATH claim from the analytic screen.",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "frozen_confirmation_SHA256": "93e63252d278aa84b70e017d0aaacd818386fbc82f93cea48e830ffe5ac6b199",
+  "prior_failed_fixed_pair_path": "/ml2/alz/analysis/mog_learned_fixed_ensemble_estimate.json",
+  "prior_failed_fixed_pair_SHA256": "ef4c85df18216defa7dc937cc8fa92c5a2bab31fed077845b1db0289f5d86f4e",
+  "incumbents_changed": false,
+  "native_ensemble_result_verified": false,
+  "current_three_seed_confirmation_status": "Original completed ensembleconfirmation failedjointtarget; preserve all three outcomes. Same4adaptivecalib donors, not12independentbio donors. Evaluation20donors remain excluded."
+}
