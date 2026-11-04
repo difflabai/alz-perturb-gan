@@ -1,0 +1,29 @@
+Actual ParticleGAN ALZ formulation coverage, 2026-11-04T15:39:43.085779+00:00
+
+Pinned and rechecked official release:0.9.4. All51installed Python sources remain exact official-wheel matches.
+21 completed seed0 pure-count comparisons cover six published trainer preset names. The21 include architecture/sampling/observation variants and generated ensembles; they are not21 independent published recipes or biological replications.
+
+Preset | Updates | Donor energy score | Pooled cell energy distance (both lower is better)
+--- | --- | --- | ---
+bispf_optimized | 20000 | 1.975566714 | 0.253276148
+bispf | 20000 | 2.230571511 | 0.352321204
+bcap | 20000 | 2.130702470 | 0.286841946
+bcap_adam | 20000 | 2.303517392 | 0.796137032
+ka2 | 20000 | 1.980333799 | 0.304707216
+k3p | 20000 | 2.062421748 | 0.333223115
+
+Native MoG prior family, fixed finite-prior control and explicit native KA2 G+P EMA readout also completed; EMA added zero training updates. None replaced the joint incumbent.
+Selected pure whole-bag ensemble: ES1.935532040, cellED0.231844609;40k total parent updates. Its fixed three-seed confirmation failed joint cell criteria on seeds1and2. No stable joint ATH.
+
+Untrained or unsupported coverage:
+e22: Native conditional row semantics refused with row controls enabled; no trained quality result.
+atlas: Native conditional row semantics refused with row controls enabled; no trained quality result.
+e22_routed: Requires explicit RoutedRows full-forward contract; no qualified implementation or trained quality result.
+halloween: CPU component construction only; not trained.
+AE/VAE and DDGAN model families: Not trained; would require additional faithful count adapters.
+
+Current stage-conditioned prior trial is a task extension using native component APIs, with512particles split128perknownADNCstage. Native20k endpoint and two-replica quality evaluation remain pending. Actual3000update recovery checkpoint passed CPU portability/state/learned-particle/ownership audit; this is not a quality result.
+
+33 fitting donors; four adaptive calibration donors;20evaluation donors excluded from selection.
+Source-bound evidence: /ml2/alz/analysis/published_formulation_coverage_20261104T1538.json
+Historical CPU-only construction inventories remain unchanged; this dated report supersedes their old coverage counts without changing their original findings.

@@ -1,0 +1,128 @@
+{
+  "status": "SOURCE_BOUND_PUBLISHED_PRESET_COVERAGE_WITH_CURRENT_COMPLETED_RESULTS",
+  "utc": "2026-11-04T15:39:43.085779+00:00",
+  "native_release": "0.9.4",
+  "release_recheck_path": "/ml2/alz/analysis/particlegan_release_reverification_20261104T1538.json",
+  "release_recheck_SHA256": "3b47b3abbf361816f92171189a825ced92b12822f282be87b8212000945814dc",
+  "completed_pure_count_seed0_comparisons": 21,
+  "completed_published_trainer_presets": [
+    {
+      "published_trainer_preset": "bispf_optimized",
+      "completed_count_trial": true,
+      "formulation": "latent8",
+      "completed_updates": 20000,
+      "energy_score": 1.9755667140392312,
+      "cell_energy_distance": 0.25327614831020107,
+      "spread_ratio": 0.9490753309366126,
+      "evidence": {
+        "leaderboard_row": "latent8",
+        "leaderboard_SHA256": "a9410a9319fef6514a2e6c218233e57a268610e3739dcfe3eddaf9a271348330"
+      }
+    },
+    {
+      "published_trainer_preset": "bispf",
+      "completed_count_trial": true,
+      "formulation": "original_bispf",
+      "completed_updates": 20000,
+      "energy_score": 2.2305715109757784,
+      "cell_energy_distance": 0.35232120361556873,
+      "spread_ratio": 0.8537920619404167,
+      "evidence": {
+        "path": "/ml2/alz/analysis/CAL_GPU0_V1_original_bispf_v1_f0_pg_s0-result.json",
+        "SHA256": "2cb3c81893ad522261f6e2a76816d05d01aa2b0bbdb8cfa990ff81046caf2dcf"
+      }
+    },
+    {
+      "published_trainer_preset": "bcap",
+      "completed_count_trial": true,
+      "formulation": "bcap",
+      "completed_updates": 20000,
+      "energy_score": 2.1307024699088712,
+      "cell_energy_distance": 0.2868419455158664,
+      "spread_ratio": 0.8903876331083471,
+      "evidence": {
+        "path": "/ml2/alz/analysis/CAL_GPU0_V1_bcap_v1_f0_pg_s0-result.json",
+        "SHA256": "455dfa1268c8c4f08af3147e208d932e1970f0a2e7c95f91e22f722d3389cf3d"
+      }
+    },
+    {
+      "published_trainer_preset": "bcap_adam",
+      "completed_count_trial": true,
+      "formulation": "bcap_adam",
+      "completed_updates": 20000,
+      "energy_score": 2.3035173920043746,
+      "cell_energy_distance": 0.7961370323971231,
+      "spread_ratio": 0.7569513368911973,
+      "evidence": {
+        "path": "/ml2/alz/analysis/CAL_GPU0_V1_bcap_adam_v1_f0_pg_s0-result.json",
+        "SHA256": "2ad11edbce7a86f120e9813cfb9420321926f65c5c2d6bdde0489c35c558a46d"
+      }
+    },
+    {
+      "published_trainer_preset": "ka2",
+      "completed_count_trial": true,
+      "formulation": "ka2",
+      "completed_updates": 20000,
+      "energy_score": 1.9803337991605336,
+      "cell_energy_distance": 0.30470721594082395,
+      "spread_ratio": 0.9507879135756754,
+      "evidence": {
+        "leaderboard_row": "ka2",
+        "leaderboard_SHA256": "a9410a9319fef6514a2e6c218233e57a268610e3739dcfe3eddaf9a271348330"
+      }
+    },
+    {
+      "published_trainer_preset": "k3p",
+      "completed_count_trial": true,
+      "formulation": "k3p",
+      "completed_updates": 20000,
+      "energy_score": 2.062421747861435,
+      "cell_energy_distance": 0.3332231147672129,
+      "spread_ratio": 0.916148014774862,
+      "evidence": {
+        "leaderboard_row": "k3p",
+        "leaderboard_SHA256": "a9410a9319fef6514a2e6c218233e57a268610e3739dcfe3eddaf9a271348330"
+      }
+    }
+  ],
+  "additional_completed_native_prior_family": "mog",
+  "additional_controls": "Fixed finite particle bank and explicit KA2 saved generator+prior EMA readout completed. These add no published trainer names; EMA readout added zero training updates. Other count-adapter variants and fixed whole-bag ensembles are included in the21 comparisons, not21 independent published recipes.",
+  "not_quality_tested": [
+    {
+      "name": "e22",
+      "status": "Native conditional row semantics refused with row controls enabled; no trained quality result."
+    },
+    {
+      "name": "atlas",
+      "status": "Native conditional row semantics refused with row controls enabled; no trained quality result."
+    },
+    {
+      "name": "e22_routed",
+      "status": "Requires explicit RoutedRows full-forward contract; no qualified implementation or trained quality result."
+    },
+    {
+      "name": "halloween",
+      "status": "CPU component construction only; not trained."
+    },
+    {
+      "name": "AE/VAE and DDGAN model families",
+      "status": "Not trained; would require additional faithful count adapters."
+    }
+  ],
+  "currently_running": {
+    "attempt": "CAL_GPU0_V1_stage_prior_v1_f0_pg_s0",
+    "kind": "Task-specific stage-conditioned prior extension, not a new native preset",
+    "checkpoint3000_audit_path": "/ml2/alz/analysis/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0-checkpoint-3000-portability.json",
+    "checkpoint3000_audit_SHA256": "90d9c3aa1768d07e10b5020bfff4e4598d1908ad65ac1997c33ad349c5bae377",
+    "quality_complete": false
+  },
+  "source_SHA256": {
+    "/ml2/alz/analysis/report_published_coverage_20261104.py": "7c356b58823e8e9827a546a0b0e31b7431135fda851abe050aced095b09bde3e",
+    "/ml2/alz/analysis/pure_formulations_leaderboard_after_KA2_EMA.json": "a9410a9319fef6514a2e6c218233e57a268610e3739dcfe3eddaf9a271348330",
+    "/ml2/alz/analysis/native_preset_requirements_inventory.json": "0e46f537f5f837c6b1fb7213ba4e587843fd9c7f0c9ce2460fd351651959b863",
+    "/ml2/alz/analysis/published_recipe_construction_inventory.json": "2274b5031923929219d331ed61d997e995ef97f4a530bddcdf03cd999971560b"
+  },
+  "incumbent_unchanged": true,
+  "three_seed_stable_joint_target_passed": false,
+  "scope": "Four repeatedly used adaptive calibration donors;20evaluationdonors excluded. Comparison counts are not independent biological replication. All-six refers to six completed trainer preset names, not all published ParticleGAN model families. Original ensemble fixed-seed confirmation failed2of3jointcellgates; no stable joint ATH."
+}
