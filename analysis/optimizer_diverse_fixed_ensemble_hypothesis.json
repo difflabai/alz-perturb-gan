@@ -1,0 +1,43 @@
+{
+  "status": "PREDECLARED_SINGLE_OPTIMIZER_DIVERSE_FIXED_ENSEMBLE_SCREEN",
+  "utc": "2026-11-04T09:05:49.083683+00:00",
+  "models": [
+    {
+      "name": "selected_pure_ensemble",
+      "weight": 0.5,
+      "attempt": "CAL_GPU0_V1_ensemble75_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/fit/ensemble.json",
+      "checkpoint_SHA256": "bc9ac029c6b1aa18114f5cbb0f0522da1e775390404a8cd68208eb350c5444de",
+      "parent_training_updates": 40000,
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "3f231d6834338c984db03d0f80a9f675c86f47b4a3463aaa28b038e1c558b8f2"
+    },
+    {
+      "name": "network_rate_half",
+      "weight": 0.5,
+      "attempt": "CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "7b312554f6b4f8c26da7bc1eeb22573b9d4045e628b5698212cc0bd2cf014be3",
+      "parent_training_updates": 20000,
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "15b3e85ac642deb0dcdb7ed77818bcfe40e40e582f0de93fb2e43847ba250a52"
+    }
+  ],
+  "replicates": [
+    0,
+    1
+  ],
+  "fixed_network_bags_per200": 100,
+  "native_outer_mask_seed": 20261112,
+  "rationale": "Native BCAPAdam failed both scores and was deactivated. The half-network-step pure model has better donorES but worse cellED than the selected PG8/learned ensemble. Test one equal-weight whole-bag mixture of these two different optimizer/observation forecasts for complementary distribution residuals. This changes component set relative to the rejected uniformtrainingseed mixture and does not rank training seeds or scan weights/masks.",
+  "allowed_inputs": "Existing generated seed0 arrays and their independently verified scalar/checkpoint proofs only; no new target/evaluation arrays, generation, fitting, GPU allocation or quality repair.",
+  "decision": "One analytic fixed100-of200 outer-mask expectation and equal-weight empiricalcellmixture. Strictly lower ES and no greater pooled cellED than current selected pure incumbent. A positive screen needs actual fixed-mask/commonquery/RNG/count/spread/native-source verification before any candidate selection.",
+  "compute": "Three underlying pure20k count models: total60000 parent updates vs selected40000. Mixture is whole bags, never within-cell/count blending and never empiricalresampling.",
+  "limitations": "Analytical expectation is not the exact native outer mask, empiricalcellreservoir mixture is not a newly sampled native reservoir, and nested generation can alter global Gamma RNG. This is adaptive calibration exploration. The previously failed originalthree-seed result remains failed and fully retained; no retrospective repair or reclassification.",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "frozen_confirmation_SHA256": "93e63252d278aa84b70e017d0aaacd818386fbc82f93cea48e830ffe5ac6b199",
+  "failed_bcap_adam_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_bcap_adam_v1_f0_pg_s0-result.json",
+  "failed_bcap_adam_result_SHA256": "2ad11edbce7a86f120e9813cfb9420321926f65c5c2d6bdde0489c35c558a46d",
+  "native_ensemble_result_verified": false,
+  "incumbents_changed": false
+}
