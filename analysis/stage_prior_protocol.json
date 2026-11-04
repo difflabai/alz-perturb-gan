@@ -1,0 +1,46 @@
+{
+  "original_failed_confirmation_path": "/ml2/alz/analysis/pure_ensemble_confirmation_v6_all_seeds.json",
+  "original_failed_confirmation_SHA256": "d9b31c4ab50eef50fbd69fa63cda7e7e424120ba6a59fac6dd3ec410c8165aa1",
+  "uniform_ensemble_negative_screen_path": "/ml2/alz/analysis/uniform_training_seed_ensemble_estimate.json",
+  "uniform_ensemble_negative_screen_SHA256": "5d89f36e8fe58aa3e9e13d7977624846c2e14862ff5dcb183d789762b4c706d4",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "task": {
+    "fold": 0,
+    "training_seed": 0,
+    "updates": 20000,
+    "cap_seconds": 21600,
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    }
+  },
+  "selection": "Unchanged strict lower donor ES and no worse pooled cell ED, spreadband nonregression, exact cohort/traces, complete native20k endpoint, two generation replicas, direct integercounts/zero empirical replacements, full source/checkpoint/saved-score/cleanup/settled-charge audit. Record negative evidence then revert activation on rejection. All-three-seed fixed confirmation remains necessary.",
+  "status": "DECLARED_SINGLE_STAGE_CONDITIONED_PRIOR_TASK_PROTOCOL",
+  "utc": "2026-11-04T15:18:23.217502+00:00",
+  "native_API": "ParticleGAN0.9.4 get_recipe(total_steps=20000,batch_size=32,num_particles=512,z_dim=8); taskstageindexlaw only",
+  "experiment": "stage_prior_v1",
+  "operation": "train_stage_prior",
+  "stage_prior_config": {
+    "conditioning": "known_ADNC_stage",
+    "stages": 4,
+    "particles_per_stage": 128,
+    "num_particles": 512,
+    "partition": "contiguous_fixed_equal_groups",
+    "sampling": "uniform_with_replacement_within_stage"
+  },
+  "source_model_directory": "/ml2/alz/stage_model",
+  "hypothesis_path": "/ml2/alz/analysis/stage_prior_hypothesis.json",
+  "hypothesis_SHA256": "084f0e7fc253dea2d22660f66049ce214260c09ee7a01ea0dcf041be83fae733",
+  "failed_ema_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_ka2_ema_readout_v1_f0_pg_s0-result.json",
+  "failed_ema_result_SHA256": "67a27f3011a549624c3ab69321b11a977d70167a8354d61ff041eed700b9bd46",
+  "reverted_ema_plan_path": "/ml2/alz/ema_runtime/plan.json",
+  "reverted_ema_plan_SHA256": "f0de28a5bcaef1c8812f898be5f1b600313e55a5881e7a21b3764801654d53f4",
+  "EMA_negative_commit": "95814c1",
+  "EMA_actual_activation_revert_commit": "89965e9",
+  "scope": "Explicit conditionalprior taskextension, same512x8totalparticles split128perknownADNCstage, unchangednativeoptimizedBISPF/data/networks/critic/loss/11streams/library/queries/counts. Conditional specialization and per-condition supportchangeconfounded. No publishedE22/Atlas/newpresetclaim. Fixed20k/two replicas/strictjointgate andstablefixedseedconfirmation; 33fitting/4adaptivecalib/20evaluationexcluded.",
+  "GPU_launched": false,
+  "quality_known": false
+}

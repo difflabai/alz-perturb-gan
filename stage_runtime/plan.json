@@ -1,0 +1,16 @@
+{
+  "enabled": false,
+  "native_recipe": "bispf_optimized",
+  "fixed_endpoint": 20000,
+  "pure_only": true,
+  "training_seed": 0,
+  "experiment": "stage_prior_v1",
+  "stage_prior_config": {
+    "conditioning": "known_ADNC_stage",
+    "stages": 4,
+    "particles_per_stage": 128,
+    "num_particles": 512,
+    "partition": "contiguous_fixed_equal_groups",
+    "sampling": "uniform_with_replacement_within_stage"
+  }
+}
