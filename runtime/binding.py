@@ -283,6 +283,11 @@ def verify(auth_path,layout=NATIVE_LAYOUT):
     require(auth.get('role')=='alz_core_'+value['method'] and auth.get('command')==expected_command(layout,auth_path,value),'reviewed runtime/worker command or role differs')
     policy_path=Path(auth['policy_path']).resolve()
     if layout.fixture_mode:require(policy_path.is_relative_to(layout.fixture_root),'CPU fixture policy escapes root')
+    elif auth.get('parallel_profile') is True:
+        sys.path.insert(0,str(HERE.parent/'recovery_runtime'))
+        import parallel_profile
+        try:parallel_profile.validate(auth)
+        except (AssertionError,KeyError,ValueError,FileNotFoundError) as exc:raise Refusal('exact parallel profile/review refuses: '+str(exc)) from exc
     else:require(policy_path==Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json'),'native exact GPU0 policy path differs')
     policy=read(policy_path)
     require(sha(policy_path)==auth.get('policy_SHA256'),'exact reviewed policy changed')
@@ -295,7 +300,8 @@ def verify(auth_path,layout=NATIVE_LAYOUT):
         paths=[auth_path,policy_path,*wanted_paths.values(),Path(auth['registry_path']),*map(Path,policy['locks'])]
         require(all(p.resolve().is_relative_to(root) for p in paths),'CPU fixture path escapes its isolated root')
     else:
-        require(layout==NATIVE_LAYOUT and Path(auth['registry_path']).resolve()==PROJECT/'cooperative_gpu0_20261103_v2/live_registry','native GPU0 root/registry differs')
+        expected_registry=HERE.parent/'artifacts/gpu0-parallel-20261104/live_registry' if auth.get('parallel_profile') is True else PROJECT/'cooperative_gpu0_20261103_v2/live_registry'
+        require(layout==NATIVE_LAYOUT and Path(auth['registry_path']).resolve()==expected_registry,'native GPU0 root/registry differs')
     source_closure(auth,layout)
     return auth,hashlib.sha256(raw).hexdigest()
 

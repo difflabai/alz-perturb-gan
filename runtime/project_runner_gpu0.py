@@ -27,6 +27,12 @@ def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
     code_paths+=list(auth.get('research_source_SHA256',{}))
     def protect():
         b.require(b.sha(auth_path)==auth_sha,'one-use authorization changed during execution')
+        if auth.get('parallel_profile') is True:
+            import sys
+            sys.path.insert(0,str(b.HERE.parent/'recovery_runtime'))
+            import parallel_profile
+            parallel_profile.validate(auth)
+            parallel_profile.free_floor()
         for path in code_paths:b.require(b.sha(path)==auth['files_SHA256'][str(path)],'reviewed code changed during owned execution: '+str(path))
         for peer in auth['protected_peers']:b.require(admission.protected_identity(peer['identity']['pid'])==peer['identity'],'protected peer identity changed')
     protect()

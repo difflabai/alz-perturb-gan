@@ -1,15 +1,22 @@
-"""Prepare one explicitly scoped exact-recovery phase; original8-peer policy unchanged."""
+"""Prepare exact recovery with reviewed ALZ-owned parallel profile; old policy intact."""
 import argparse,copy,datetime,json,subprocess,sys,time
 from pathlib import Path
 ROOT=Path('/ml2/alz');sys.path[:0]=[str(ROOT/'runtime'),str(ROOT),str(Path(__file__).parent)]
 import binding as b
 import recovery_scope as scope
+import parallel_profile as parallel
 
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--mode',choices=['qualify','resume','seed2'],required=True);parser.add_argument('--check-only',action='store_true');args=parser.parse_args()
     p,f=scope.lineage();value=scope.cell_for(args.mode)
+    if not args.check_only:parallel.reviewed()
     if not args.check_only:b.require(not subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True),'Commit complete source qualification before deployment')
     commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    if not args.check_only:
+        parallel.DEPLOYED.parent.mkdir(parents=True,exist_ok=True)
+        if parallel.DEPLOYED.exists():b.require(parallel.DEPLOYED.read_bytes()==parallel.deployed_bytes(),'Existing parallel deployed policy differs; never replace')
+        else:
+            with parallel.DEPLOYED.open('xb') as stream:stream.write(parallel.deployed_bytes())
     prior=b.read(ROOT/'calibration_deployment.json');auth=copy.deepcopy(b.read(prior['authorization_path']))
     auth.pop('checkpoint_path',None);auth.pop('checkpoint_SHA256',None)
     qualify=args.mode=='qualify';seed2=args.mode=='seed2'
@@ -24,9 +31,10 @@ def main():
                 pure_formulation='pg8_learned_ensemble75',ensemble_config=p['frozen_ensemble_config'],qualification_only=qualify,
                 initial_completed_updates=0 if seed2 else 8942,new_model_updates={'qualify':2,'resume':31058,'seed2':40000}[args.mode],
                 recovery_protocol_SHA256=b.sha(scope.PROTOCOL),recovery_CPU_proof_SHA256=b.sha(scope.CPU_PROOF),
-                source_review='Single exact saved8942 trajectory after external GPU0guard conflict, failedallocation retained. Original frozen46 model/scorer sources and inputs unchanged. Fullstate CPU audit plus synthetic serialization/next-update parity and guarded/source tests qualified. Actual sameGPU initial/two-next-branch bitwise CUDA restoration mandatory before resume; replaybranch8943 never used for training. Resume to original20kPG8+fresh20klearned, frozen75/25 wholebags and2reps; original absolute6h seed1 deadline. Seed2 keeps exact originalidentity/fresh bothparents. No seedranking/incumbent mutation/foreignsignals/peer-policy change; original immutable GPU0guard/Controller/accounting/source gates.')
+                source_review='Single exact saved8942 trajectory after external GPU0guard conflict, failedallocation retained. Original frozen46 model/scorer sources and inputs unchanged. Fullstate CPU audit plus synthetic serialization/next-update parity and guarded/source tests qualified. Actual sameGPU initial/two-next-branch bitwise CUDA restoration mandatory before resume; replaybranch8943 never used for training. Resume to original20kPG8+fresh20klearned, frozen75/25 wholebags and2reps; original absolute6h seed1 deadline. Seed2 keeps exact originalidentity/fresh bothparents. No seedranking/incumbent mutation/foreignsignals; independently reviewed separate ALZ-owned exact9peer profile/registry, original task11 policy and immutable GPU0guard/Controller/accounting/source gates preserved.')
     if not seed2:auth.update(checkpoint_path=p['checkpoint_path'],checkpoint_SHA256=p['checkpoint_SHA256'])
     auth['command']=b.expected_command(b.NATIVE_LAYOUT,auth_path,value)
+    parallel.configure(auth,check_only=args.check_only)
     research={str(path):b.sha(path) for folder_source in [ROOT,ROOT/'model',ROOT/'runtime',ROOT/'confirmation_runtime',scope.HERE] for path in folder_source.glob('*.py')};auth['research_source_SHA256']=research;pins=auth['files_SHA256'];pins.update(research)
     paths=[scope.PROTOCOL,scope.CPU_PROOF,Path(p['original_confirmation_freeze']),Path(p['original_failed_ledger']),Path(p['original_interruption_evidence']),Path(p['checkpoint_path']),ROOT/'analysis/interrupted_seed1_source_history.json',ROOT/'analysis/failed_seed1_full_state_audit.json',ROOT/'analysis/exact_interrupted_resume_cpu_qualification.json',ROOT/'pure_incumbent.json',ROOT/'incumbent.json',ROOT/'analysis/pure_confirmation_protocol.json']
     paths.extend(Path(q['path']) for q in f['matched_baselines'].values())
@@ -45,9 +53,12 @@ def main():
         pid = peer['identity']['pid']
         b.require(admission.protected_identity(pid) == peer['identity']
                   and set(observation['gpu_kinds'][pid]) == set(peer['gpu_kinds']), 'protected identity/membership changed')
-    b.require(not b.read(Path(auth['registry_path']) / 'registry.json')['jobs'], 'resource registry has active work')
+    registry=Path(auth['registry_path'])/'registry.json'
+    b.require(not registry.exists() or not b.read(registry)['jobs'], 'resource registry has active work')
+    forecast=parallel.capacity(observation,admission)
+    parallel.free_floor()
     if args.check_only:
-        print(json.dumps({'status':'CHECK_ONLY_SOURCE_AND_CURRENT_PEERS_PASS_NO_DEPLOYMENT','mode':args.mode,'attempt':auth['attempt_id']},indent=2));return
+        print(json.dumps({'status':'CHECK_ONLY_PARALLEL_SOURCE_PEERS_CAPACITY_PASS_INDEPENDENT_REVIEW_STILL_REQUIRED','mode':args.mode,'attempt':auth['attempt_id'],'policy_SHA256':parallel.policy_sha(),'forecast':forecast},indent=2));return
     backend = b.load_pinned(ROOT / 'runtime/project_runner_gpu0.py', research[str(ROOT / 'runtime/project_runner_gpu0.py')], 'project_runner_gpu0')
     metadata = {'status': 'REVIEWED_FOR_BOUNDED_EXECUTION', 'path': str(ROOT / 'runtime/project_runner_gpu0.py'),
                 'source_SHA256': {str(p): pins[str(p)] for p in [*(ROOT / 'runtime').glob('*.py'), b.GUARD / 'gpu0_admission.py', b.GUARD / 'gpu0_runner.py']},

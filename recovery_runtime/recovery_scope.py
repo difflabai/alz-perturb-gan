@@ -1,4 +1,4 @@
-"""Frozen exact recovery lineage; unchanged original GPU0 peer policy only."""
+"""Frozen exact recovery lineage; old scheduler policy retained, reviewed own parallel profile."""
 import hashlib,json,sys,time
 from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=ROOT/'recovery_runtime'
