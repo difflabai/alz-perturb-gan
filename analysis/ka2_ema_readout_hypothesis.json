@@ -1,0 +1,38 @@
+{
+  "status": "PREDECLARED_SINGLE_NATIVE_KA2_SAVED_EMA_READOUT_CONTROL",
+  "utc": "2026-11-04T14:32:14.544231+00:00",
+  "native_API": "ParticleGAN0.9.4 KA2 UpdatePolicy.ema_G and .ema_prior, accumulated by native finish_step with recipe.ema_decay=0.995; no decay/window/weight search.",
+  "parent_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_ka2_native_v1_f0_pg_s0-result.json",
+  "parent_result_SHA256": "7699ac0d529b2ab070f93ff08aeba3f00f2cc3b51d2add90d7e3723e9b417a17",
+  "parent_checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_ka2_native_v1_f0_pg_s0/fit/final.pt",
+  "parent_checkpoint_SHA256": "fa9313540444af0227a98bcf76e646c3a2a12e3b919f3aad94622aca5fabf0d3",
+  "parent_training_updates": 20000,
+  "new_training_updates": 0,
+  "training_seed": 0,
+  "fold": 0,
+  "native_ema_decay": 0.995,
+  "original_native_serve_average": 0.0,
+  "original_checkpoint_serving_contract": {
+    "weights": "final_raw",
+    "output_noise": false
+  },
+  "readout": "Both saved native EMA generator AND native EMA prior together; clean CountGenerator.rates +direct iter_pg integercounts, two original calibrationreplicates, originalquery/library/trace/scorer. No averaging of observed outputs, realbags, modelpairs, seeds or evaluationtargets. No new training or reinterpretation of original raw KA2 outcome.",
+  "rationale": "NativeKA2 raw20k result and currentrawpriorcontrols failedjointtargets. The originalnativeKA2checkpoint also contains distinct native0.995generator/priorEMA states (not equalraw), which may smooth stochastic iterate noise. This is one declared post-training readout control, NOT a claim that the previous native raw-serving comparison was incorrect. NativeRecipe serve_average=0 and its defaultserved_snapshot selectfastweights. No EMAquality scores/generation have been computed at this declaration.",
+  "qualification_required": [
+    "Verify completeparent/nativefields/33fit-onlycache/source/seedstreams/cleanoldsettlement and parenthash",
+    "Verify both native averagedmodule states fullshape/dtype/finite and exactcheckpointload with no raw/averagealiasing or mutation",
+    "Verify full2000gene CPU count-sampler replay and refusals without loading/relabeling savedCUDApolicy asCPU",
+    "Qualify exact native900second generation-only resource/canonical sourcebinding and completebothcalibrationreplicates",
+    "Audit actualserving-reference/checkpoint/arrays/countsexemplars/recomputed scores/release/charges before selection"
+  ],
+  "selection": "Unchanged joint strictlower donorES and no higher pooledcellED versus samecurrentpureincumbent, spreadbandnonregression and pureintegercounts. Commit actualnegative then revert activation onregression; only acceptedseed0 configcanbe frozen for fixed1/2confirmation. No nativequality/ATHclaim from CPUreplay or checkpointweightdifference.",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "prior_fixed_pair_negative_paths": [
+    "/ml2/alz/analysis/mog_learned_fixed_ensemble_estimate.json",
+    "/ml2/alz/analysis/mog_frozen_fixed_ensemble_estimate.json"
+  ],
+  "evaluation_donors_accessed": false,
+  "native_generation_started": false,
+  "EMA_quality_known": false,
+  "incumbents_changed": false
+}
