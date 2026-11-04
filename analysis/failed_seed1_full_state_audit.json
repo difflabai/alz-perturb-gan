@@ -1,0 +1,42 @@
+{
+  "status": "VERIFIED_INTERRUPTED_NATIVE_PG8_COMPLETE_STATE_INVENTORY_CPU_ONLY",
+  "utc": "2026-11-04T00:39:04.279321+00:00",
+  "attempt": "CAL_GPU0_V1_pure_confirm_0da2a09092c823377ca5_f0_pg_s1",
+  "training_seed": 1,
+  "completed_updates": 8942,
+  "fixed_endpoint": 20000,
+  "checkpoint_path": "/ml2/alz/artifacts/confirmation_recovery_lineage/CAL_GPU0_V1_pure_confirm_0da2a09092c823377ca5_f0_pg_s1/pg8-step8942.pt",
+  "checkpoint_SHA256": "cf2aeb33b2d21fa3195cfc4c2e10a71d49e5bd38e03d7a9159cd0ee146e025b1",
+  "strict_complete_G_D_prior_load_verified": true,
+  "finite_model_floating_values": 371177,
+  "full_saved_state_inventory": {
+    "tensor_count": 54,
+    "finite_floating_tensor_values": 696273,
+    "numpy_array_count": 0,
+    "nonfinite_tensor_paths": []
+  },
+  "official_native_recipe_and_independent_seed_streams_verified": true,
+  "optimizer_rate_and_state_blocks_present": true,
+  "actual_optimizer_rates": [
+    [
+      0.012,
+      0.03
+    ],
+    [
+      0.018000000000000002
+    ]
+  ],
+  "explicit_CUDA_generator_states_retained_bytes": {
+    "cell": 16,
+    "count": 16
+  },
+  "global_CPU_and_CUDA_rng_states_present": true,
+  "policy_and_snapshot_CPU_rng_match": true,
+  "CUDA_initialized": false,
+  "actual_CUDA_restore_verified": false,
+  "scope": "Read-only full native saved-state inventory and strict model load on CPU. Explicit CUDA RNG bytes are preserved, not restored on CPU. No new updates/generation/quality scores/nativeallocation. Actual same-device complete state roundtrip and next-update parity remain required before resuming.",
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_failed_pg8_state.py": "077fae6dd0123938309ee5d00e06435d6d678d7de1487a435f0c43168528709f",
+    "/ml2/alz/analysis/CAL_GPU0_V1_pure_confirm_0da2a09092c823377ca5_f0_pg_s1-interrupted.json": "a08a9d34e5ceab164c011361ebc470c8b065423d8dcd2508d7b16f05d7047a67"
+  }
+}
