@@ -1,0 +1,65 @@
+{
+  "utc": "2026-11-04T18:35:42.428766+00:00",
+  "status": "READ_ONLY_CURRENT_GPU1_SHARED_CAPACITY_FORECAST_PASS",
+  "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+  "GPU_used_bytes": 35627466752,
+  "GPU_total_bytes": 51527024640,
+  "GPU_free_bytes": 15272509440,
+  "host_available_bytes": 100254990336,
+  "forecast": {
+    "GPU_required_bytes": 42855370752,
+    "GPU_total_bytes": 51527024640,
+    "host_remaining_growth_required_bytes": 33930358784,
+    "host_available_bytes": 100250705920,
+    "GPU_fits": true,
+    "host_fits": true,
+    "allocation_or_lease_created": false,
+    "observed_foreign": [
+      {
+        "identity": {
+          "pid": 146094,
+          "birth": 534000,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/usr/bin/gnome-shell (deleted)",
+          "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+          "ppid": 7650
+        },
+        "gpu_kinds": [
+          "graphics"
+        ],
+        "gpu_budget_bytes": 272699392,
+        "ram_budget_bytes": 2575880192,
+        "observed_gpu_bytes": 4263936,
+        "observed_rss_bytes": 313176064,
+        "GPU_growth_allowance_bytes": 268435456,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 778996,
+          "birth": 2125082,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/ml2/iris-particle-sliders-task-20261008/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12",
+          "argv_sha256": "5582d2907a83aff4f6d9d5a30f0ee810fd896e8bffbe96d751fe19e76d5cfeb6",
+          "ppid": 778932
+        },
+        "gpu_kinds": [
+          "compute"
+        ],
+        "gpu_budget_bytes": 36140220416,
+        "ram_budget_bytes": 17755262976,
+        "observed_gpu_bytes": 35603349504,
+        "observed_rss_bytes": 5414961152,
+        "GPU_growth_allowance_bytes": 536870912,
+        "foreign_control": "NONE"
+      }
+    ]
+  },
+  "host_memory_pressure": "some avg10=0.00 avg60=0.35 avg300=0.74 total=197604174\nfull avg10=0.00 avg60=0.34 avg300=0.73 total=194546143\n",
+  "canonical_revision": 163,
+  "canonical_open_reservations": [],
+  "GPU_context_created": false,
+  "allocation_or_lease_created": false
+}
