@@ -1,0 +1,26 @@
+{
+  "status": "ACTUAL_INTERMEDIATE_GPU_CHECKPOINT_CPU_PORTABILITY_AUDIT_PASSED",
+  "utc": "2026-11-04T13:58:06.339471+00:00",
+  "attempt": "CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0",
+  "completed_updates": 7000,
+  "fixed_endpoint": 20000,
+  "native_recovery_checkpoint_SHA256": "a665fb02d2045cfff2f3efefbec662957a63451c81f0ff7ffb33abed18d0f502",
+  "preserved_checkpoint_path": "/ml2/alz/artifacts/checkpoint_milestones/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/7000-a665fb02d2045cfff2f3efefbec662957a63451c81f0ff7ffb33abed18d0f502/recovery.pt",
+  "full_model_floating_values": 371105,
+  "native_optimizer_and_average_states_verified": true,
+  "native_fixed_initial_particle_bank_exactly_preserved": true,
+  "no_prior_optimizer_group_or_prior_regularization_verified": true,
+  "raw_particle_movement_counters_zero": true,
+  "total_generator_particle_draws": 224000,
+  "all_saved_floating_tensors_finite_including_regularizer_and_usage": true,
+  "GPU_policy_device_metadata_preserved": "cuda:0",
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_frozen_intermediate_checkpoint.py": "0f3ef2e4adae2343a28c3a69d06b9176d2a67a61c833bc3d349c80ceef314ee1"
+  },
+  "authorization_SHA256": "ba407ed1600a5a413c397cea3b4bc7183289274f4ff1df83cb4dda077c493a5d",
+  "CUDA_initialized": false,
+  "training_update_executed": false,
+  "calibration_forecasts_generated": false,
+  "quality_measured": false,
+  "scope": "Actual stable intermediate checkpoint copied by matching native receipt/hash before and after read. Full CPU model and optimizer validation succeeds without rewriting saved CUDA policy metadata or using CUDA RNG states as CPU streams. This is not GPU next-update replay, completed endpoint, quality selection, confirmation or lease/admission."
+}
