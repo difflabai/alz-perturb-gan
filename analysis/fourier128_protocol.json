@@ -1,0 +1,43 @@
+{
+  "status": "REGISTERED_BEFORE_FOURIER128_NATIVE_ADMISSION",
+  "utc": "2026-11-04T09:18:01.764708+00:00",
+  "experiment": "fourier128_v1",
+  "operation": "train_fourier128",
+  "native_API": "ParticleGAN0.9.4 get_recipe(total_steps=20000,batch_size=32,num_particles=512,z_dim=8); no other recipe overrides",
+  "task": {
+    "fold": 0,
+    "training_seed": 0,
+    "updates": 20000,
+    "cap_seconds": 21600,
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    }
+  },
+  "fourier_observation_config": {
+    "PC_dimensions": 50,
+    "moment_dimensions": 100,
+    "frequencies": 128,
+    "frequency_seed": 20261030,
+    "features": 356,
+    "hidden_width": 128
+  },
+  "hypothesis_path": "/ml2/alz/analysis/fourier128_hypothesis.json",
+  "hypothesis_SHA256": "599edd7d7c27178705a699aa20c2cb5862c3dcf411eb530a8ea91d8dbb537447",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "original_failed_confirmation_path": "/ml2/alz/analysis/pure_ensemble_confirmation_v6_all_seeds.json",
+  "original_failed_confirmation_SHA256": "d9b31c4ab50eef50fbd69fa63cda7e7e424120ba6a59fac6dd3ec410c8165aa1",
+  "uniform_ensemble_negative_screen_path": "/ml2/alz/analysis/optimizer_diverse_fixed_ensemble_estimate.json",
+  "uniform_ensemble_negative_screen_SHA256": "779e4db9468647161bfe658d1e6dfa37821f1fc16c97bbefc74f9b765db4ce87",
+  "failed_BCAP_Adam_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_bcap_adam_v1_f0_pg_s0-result.json",
+  "failed_BCAP_Adam_result_SHA256": "2ad11edbce7a86f120e9813cfb9420321926f65c5c2d6bdde0489c35c558a46d",
+  "decision": "Existing joint selection.decide against frozen current pure incumbent; independently recompute actual2replicas/countsexemplars/fullcheckpoint/cleanup/charge. Commit actual result then revert only activation ifworse. Seed0success stillneedsfixedseedconfirmation before a stable target claim.",
+  "confounds": "Observation dimension/basis and resulting critic input-layer capacity change. Mean/sd first100coordinates preserved and Fourierblock normalization retained in unitfeature norm. Not proof that missing Fourier coordinates caused the failure. No bandwidth/seed/frequency-count grid or mask/weight search.",
+  "owner_window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+  "native_result_available": false,
+  "GPU_allocation_created": false,
+  "incumbents_changed": false
+}

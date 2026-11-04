@@ -1,0 +1,49 @@
+{
+  "status": "OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS",
+  "utc": "2026-11-04T09:22:49.421819+00:00",
+  "reviewer_session": "01a1a22b-f310-7190-a7c6-8697ecabae6c",
+  "independent_review_claimed": false,
+  "owner_authorization": {
+    "available_capacity": "I authorize using the available GPU capacity.",
+    "both_cards": "You can use both gpus without permission.",
+    "sharing": "you dont need solo access",
+    "continuation": "contineue",
+    "deadline_extension": "extend it to 5 days"
+  },
+  "scope": "ONE_FIXED_FOURIER128_SEED0_TRIAL_ONLY",
+  "policy_SHA256": "f3a742e61f6f4b1a361d7c92619b9a2466abfb6f27bc93b3d809543393598237",
+  "source_SHA256": {
+    "/ml2/alz/fourier128_runtime/resource_profile.py": "660eaa90e97ab2fb8d7c24d8fbe002976f36d8a23b3a8088c278ad232808ccdc",
+    "/ml2/alz/fourier128_runtime/finish.py": "bd053dadddf05807276c0725e8e23a8fecb799481b381b978b277d1494168a07",
+    "/ml2/alz/fourier128_runtime/launch_core_gpu0.py": "f4de7b30d845886c30307dc23fad0b79c8a2f7c67f2afa3a9fcad8ae2c4aaaa4",
+    "/ml2/alz/fourier128_runtime/project_runner_gpu0.py": "562507e0d1e5554dfa71e7f32ae16322bcf460caee2b3fc440681534e2c86fb5",
+    "/ml2/alz/fourier128_runtime/preset_scope.py": "f60f567b7c5d014494f8b675a31e8806e9247101c2b97252fe1316c651126bee",
+    "/ml2/alz/fourier128_runtime/test_scope.py": "b3035667c1d5125b5960c2c370a9c01e9e325d4258249105aabb465d2dfc8b07",
+    "/ml2/alz/fourier128_runtime/prepare.py": "13638596965f1911baba18e78a4a11084dc9507fba7552ca9e00a4dd9ae91ddb",
+    "/ml2/alz/fourier128_runtime/worker_gpu0.py": "12cf86b02e83cc0c661c7e7682302b068cd306f45d70cdd7f3ad4197aa27ea01",
+    "/ml2/alz/fourier128_runtime/qualify.py": "780a5137aea15b33bff50adf6be4a4d37b5a4c9846399ddeb7592066720a8987",
+    "/ml2/alz/fourier128_runtime/test_integration.py": "7219a1de16e0a209fb8c592cb72d2c7958e42c3e0d195f33cd39b6d85d599822",
+    "/ml2/alz/fourier128_runtime/binding.py": "79817f5bfe5dbd194fb22f21b9dd86ad767ffd4dab677db6e7f6810375489798",
+    "/ml2/alz/fourier128_runtime/policy.prepared.json": "d5d86dd8129fc183c9ec507c01f3ae2e6e5852dc8b00f9cd994e773467fcaac5",
+    "/ml2/alz/model/fourier128_update.py": "0da12a7295cd230d561e6a83e31dccedaa4c458f265daaaf3e31fc6fb6635177",
+    "/ml2/alz/model/fourier128_adapter.py": "05947405bfe29842e8f2527208b5c623d53d041d919fc66f953339efc0d45eae",
+    "/ml2/alz/model/fourier128_observation.py": "dd3f36c0c7d6071b1e98838c4899a84b76c1e645aa1bc6d604bf6eef42eeabeb",
+    "/ml2/alz/analysis/fourier128_protocol.json": "268038593b023021239600b4b7c47f8575389f8999a81b0b404cd32679b0b79e",
+    "/ml2/alz/analysis/fourier128_model_CPU_qualification.json": "447fdf59b8a0df58177ea83680bd3847cf2f5bcb1f2ce3092304a65def3cd937",
+    "/ml2/alz/analysis/fourier128_runtime_CPU_qualification.json": "ab9492e6fb8064b5ce1fbf102a02c10cd814639d8e6cd5ec34defe9107a461fd",
+    "/ml2/alz/analysis/research_window_20261104_five_days.json": "2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1"
+  },
+  "verification": {
+    "model_tests_passed": 6,
+    "model_proof": "analysis/fourier128_model_CPU_qualification.json",
+    "model_proof_SHA256": "447fdf59b8a0df58177ea83680bd3847cf2f5bcb1f2ce3092304a65def3cd937",
+    "isolated_runtime_tests_passed": 22,
+    "runtime_proof": "analysis/fourier128_runtime_CPU_qualification.json",
+    "runtime_proof_SHA256": "ab9492e6fb8064b5ce1fbf102a02c10cd814639d8e6cd5ec34defe9107a461fd",
+    "old_execution_sources_byte_identical": true,
+    "plan_enabled_at_review_creation": false,
+    "native_quality_unproven": true
+  },
+  "rationale": "Same owner five-day window after committed actual BCAPAdam regression/activation rollback and negative fixed-mixture screens. One fixed128frequency observation,356feature critic under published optimizedBISPF. CountGenerator/data/draws/first100moments/recipe/update unchanged, critic input capacity change declared. Six actual model invariant/gradient/replay tests plus22source/admission/lease/accounting checks. Separate runtime preserves prior sources/evidence. Same previously qualified dynamic same-user sharedGPU1 engine/physicalsharedlocks,own3GiB/driver3GiB/host12GiB/free3.5GiB/Controller/globalphaselock. No foreigncontrol/scheduler-source changes. This is this worker source/resource verification under direct owner instructions, not independent sister approval.",
+  "activation_rule": "This source review creates no GPU lease/job. Plan content including128frequency configuration must be exactly enabled and pinned before deployment/model import and is checked by the running guard. Plan flag excluded from review source map solely to allow a plan-only activation/revert commit; one-use canonical identity prevents repeats. Actual20k/2replica checkpoint/score/count/cleanup audit required before any quality claim."
+}
