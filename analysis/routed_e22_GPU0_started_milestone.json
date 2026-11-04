@@ -1,0 +1,67 @@
+{
+  "status": "VERIFIED_NATIVE_ROUTED_E22_GPU0_TRAINING_STARTED",
+  "utc": "2026-11-04T17:45:13.627947+00:00",
+  "attempt": "CAL_GPU0_V1_routed_e22_v1_f0_pg_s0",
+  "owner_pid": 1928387,
+  "worker_identity": {
+    "pid": 1928452,
+    "birth": 5252351,
+    "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb"
+  },
+  "latest_recorded_progress": {
+    "step": 1,
+    "D_adversarial": 0.6945013999938965,
+    "D_penalty": 2.1514142645173706e-06,
+    "D_total": 0.6945035457611084,
+    "G_adversarial": 0.710394024848938,
+    "G_total": 0.710394024848938,
+    "prior_regularization_unweighted": 0.02501635253429413,
+    "native_output_sigma": 0.029123494401574135,
+    "G_prior_noise_LRs": [
+      0.00425,
+      0.0085,
+      0.00425
+    ],
+    "D_LRs": [
+      0.00425
+    ],
+    "routing_probe_clock": {
+      "observed_updates": 1,
+      "last_probe_update": 0
+    },
+    "routing_counters": {
+      "evals": 0,
+      "probes": 0,
+      "proposals": 0,
+      "guard_rejections": 0,
+      "moves": 0,
+      "splits": 0
+    }
+  },
+  "progress_log_interval": 250,
+  "checkpoint_interval": 1000,
+  "fixed_endpoint": 20000,
+  "phase_cap_seconds": 21600,
+  "authorization_SHA256": "a65a3a0e4418d0a597f1e59ac3d315522576a91c9467f55318ea1812d8b98247",
+  "activation_commit": "ac1c70f60710101bf7710349195185c22860afe7",
+  "model_CPU_tests": 19,
+  "runtime_CPU_tests": 27,
+  "shared_engine_CPU_tests": 10,
+  "actual_execution_source_archive": "/ml2/alz/artifacts/source-archives/CAL_GPU0_V1_routed_e22_v1_f0_pg_s0",
+  "archived_source_files": 402,
+  "post_settlement_audit_waiter_pid": 1931958,
+  "calibration_quality_available": false,
+  "joint_ATH_achieved": false,
+  "incumbent_changed": false,
+  "previous_completed_trials": "Stage-prior and nativeHalloween negatives were committed and their activation commits actually reverted.",
+  "canonical_budget_at_start": {
+    "revision": 162,
+    "cap_GPU_hours": 1024,
+    "charged_completed_GPU_hours": 31.769161565365817,
+    "reserved_GPU_hours": 6.008333333333334,
+    "available_after_reservations_GPU_hours": 986.222505101301
+  },
+  "coordinator_transition_delivery": "UNCONFIRMED: authenticated list_contacts succeeds but stage_report exits2 with generic helper failure; preserved existing mailbox. Latest exact incoming claim returned acknowledged/claimedfalse and was skipped.",
+  "next_step": "Observe native route probe progress and complete20k without changing bound source. Audit original-device fullnative checkpoint reload, coupledserved weights/counts, fixed2rep savedcalibration scores, cleanrelease andactualsettledcharge. Commitnegative thenrevertactivation ifrejected; noauto-successor.",
+  "scope": "Native routedE22 conditional count task-adapter; complete GammaPoisson/count-feature callback, publicnative controls enabled, publicprobeinterval20 and external20kcap/nativehorizonNone. KnownADNC only; same512x8bank/CountGenerator/150critic/frozenquery_exposures/scorer. Fit-only11825cell optimizer and initialmoments/protected2937cellacceptance pool within33donors; common preprocessing predates cellprotection and includes all original fittingcellinputs. Same4adaptivecalib/20evalexcluded. Dense routing, noise realization, protectedsplit/init and continuousnative mechanisms confounded; no independent SOTA/biological claim."
+}
