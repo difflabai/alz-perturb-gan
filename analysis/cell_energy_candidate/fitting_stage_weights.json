@@ -1,0 +1,38 @@
+{
+  "status": "VERIFIED_FITTING_ONLY_STAGE_WEIGHT_INPUTS_NOT_QUALITY",
+  "utc": "2026-11-04T10:49:31.638955+00:00",
+  "fitting_donors": 33,
+  "stage_counts": [
+    3,
+    4,
+    8,
+    18
+  ],
+  "fixed_population_importance_weights": [
+    2.75,
+    2.0625,
+    1.03125,
+    0.4583333333333333
+  ],
+  "input_metadata_path": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0/train/metadata.npz",
+  "input_metadata_SHA256": "5b7bb88301bc592786c585a7026e372e026a39d9b918d71bd804febc36be0a6a",
+  "verification": "Actual native-runtime NumPy read of pinned fitting-only metadata; official stages() validated ordinal codes,33 donorconditions and all4 positive groups. No fitted count matrix, GPU/model or target arrays read.",
+  "previous_equal_stage_adversarial_sampling_trial": {
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": true,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "energy_score": 2.266477082794516,
+    "cell_energy_distance": 0.3329977233792283,
+    "attempt": "CAL_GPU0_V1_pure_balanced8_v1_f0_pg_s0",
+    "checkpoint_SHA256": "17675cfa43d6ffecf29436c60f2294202c1f5d6bb2e187bed50ae78a575394af"
+  },
+  "distinction": "Equal-stage adversarial resampling was already tested and regressed; retain that negative evidence. The new inactive prototype keeps the existing uniform fitting-donor sampler and adversarial term, applying fixed population weights only to a direct crossbag cell energy auxiliary. Imbalance is motivation, not evidence that weighting improves calibration.",
+  "new_calibration_or_evaluation_target_arrays_read": false,
+  "GPU_allocation_created": false,
+  "quality_result_available": false,
+  "incumbent_changed": false
+}
