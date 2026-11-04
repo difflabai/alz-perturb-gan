@@ -1,0 +1,62 @@
+{
+  "status": "ACTUAL_FULL2000GENE_ROUTED_E22_CPU_UPDATE_AND_CLEAN400CELL_COUNT_READOUT_PASSED",
+  "utc": "2026-11-04T16:53:43.575973+00:00",
+  "native_optimizer_pairs_executed": 1,
+  "full_width_metrics": {
+    "step": 1,
+    "D_total": 0.6923531293869019,
+    "G_total": 0.7268257737159729,
+    "gradients": {
+      "G_output": 0.0036053599324077368,
+      "G_dispersion": 0.0004338028375059366,
+      "table": 2.2445599370257696e-06,
+      "learned_output_sigma": 1.2815045920433477e-05
+    },
+    "native_output_sigma": 0.029123418033123016
+  },
+  "CPU_update_seconds": 2.451720329998352,
+  "all_serving_checks_CPU_seconds": 6.927180714999849,
+  "total_CPU_wall_seconds": 11.149261575999844,
+  "peak_process_RSS_bytes": 1795096576,
+  "served_and_averaged_paths": [
+    {
+      "stage": 0,
+      "bags": 5,
+      "cells_per_bag": 400,
+      "served_source": "fast"
+    },
+    {
+      "stage": 1,
+      "bags": 5,
+      "cells_per_bag": 400,
+      "served_source": "fast"
+    },
+    {
+      "stage": 2,
+      "bags": 5,
+      "cells_per_bag": 400,
+      "served_source": "fast"
+    },
+    {
+      "stage": 3,
+      "bags": 5,
+      "cells_per_bag": 400,
+      "served_source": "fast"
+    }
+  ],
+  "full_width_query_replay_permutation_subsetting_exact": true,
+  "raw_count_and_auxiliary_transform_exact_forward_verified": true,
+  "full_width_nonzero_G_dispersion_table_and_learned_noise_gradients": true,
+  "native_row_controls_disabled": false,
+  "full_width_probe_boundary_exercised": false,
+  "real_fitting_partition_implemented": false,
+  "GPU_context_created": false,
+  "native_admission_ready": false,
+  "quality_measured": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/e22_routed_count_candidate/full_width_feasibility.py": "788af0d9fac6d01abd863c4777824b01095b6d1c2bd2472c1a83813d55e006e9",
+    "/ml2/alz/analysis/e22_routed_count_candidate/forward_feasibility.py": "2316ada0dc383801ca1eb1d1f2c662555cdf552a9a63f1f95d459f20daab02a9",
+    "/ml2/alz/analysis/e22_routed_count_candidate/update_feasibility.py": "cfa6ea91a684a24ceb3bbfa81f230ca61f29cce269aabc97ae16b1b38fcba4f6"
+  },
+  "scope": "Synthetic full2000gene/128cell native optimizer pair and all4stages five400cell bags each via current served and native averaged paths. CPU memory/timings are observations, not GPU admission or throughput guarantees. No real fitting data, calibration score, fullwidth20update probe boundary or native allocation."
+}
