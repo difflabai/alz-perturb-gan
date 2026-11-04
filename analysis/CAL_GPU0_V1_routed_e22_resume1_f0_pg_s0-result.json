@@ -1,0 +1,455 @@
+{
+  "status": "VERIFIED_NATIVE_ROUTED_E22_COUNT_ADAPTER_RESULT",
+  "utc": "2026-11-04T19:31:14.849411+00:00",
+  "attempt": "CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0",
+  "candidate": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 2.1477464086429823,
+    "cell_energy_distance": 0.26226267551246085,
+    "spread_ratio": 1.0504683833386792,
+    "within_condition_spread_ratio": 0.9131300098389494,
+    "coverage80": 0.5865384615384616,
+    "generated_zero_count_rate": 0.0,
+    "per_donor_energy_score": [
+      1.329225514284396,
+      2.9719826707379786,
+      2.35503514164156,
+      1.9347423079079946
+    ],
+    "per_stage_cell_energy_distance": [
+      1.1611124803013197,
+      1.78638381394392,
+      1.032633283287729,
+      0.6110098775025117
+    ],
+    "status": "completed",
+    "completed_updates": 20000,
+    "fixed_endpoint": 20000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_routed_e22_resume1_f0_pg_s0",
+    "operation": "resume_routed_e22",
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "3635b913c04b8b38aa0b3cadf14184ab990275aedeca877c5882c08927eb9903",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "routed_config": {
+      "native_recipe": "e22_routed",
+      "row_semantics": "dense_soft",
+      "probe_interval": 20,
+      "protected_fraction": "fixed_per_donor_hash_rank_floor_one_fifth",
+      "context": {
+        "query_dimension": 8,
+        "condition_dimension": 7,
+        "seed_streams": 3,
+        "words_per_seed": 4,
+        "word_bits": 16,
+        "effective_seed_bits": 64,
+        "output": "raw_counts_and_existing_transformed_rate_observation"
+      },
+      "output_noise_coordinates": "fake_150D_critic_observation_only",
+      "paired_fit_contexts": "same_fit_context_and_targets_for_D_and_G_substeps"
+    },
+    "method": "pg_e22_routed_counts",
+    "hybrid_config": null,
+    "qualification_only": false,
+    "new_model_updates": 12987,
+    "initial_completed_updates": 7013,
+    "native_recipe_schedule_horizon": null,
+    "parent_checkpoint_SHA256": "473f2495408d8b4f904ec5a02f2739fec3d739eec8e82db63d6ed8ab5d3c5791",
+    "continuation": {
+      "parent_attempt": "CAL_GPU0_V1_routed_e22_v1_f0_pg_s0",
+      "parent_authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_routed_e22_v1_f0_pg_s0/authorization.json",
+      "parent_authorization_SHA256": "a65a3a0e4418d0a597f1e59ac3d315522576a91c9467f55318ea1812d8b98247",
+      "checkpoint_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_routed_e22_v1_f0_pg_s0/terminal7013/recovery7013.pt",
+      "checkpoint_SHA256": "473f2495408d8b4f904ec5a02f2739fec3d739eec8e82db63d6ed8ab5d3c5791",
+      "completed_updates": 7013,
+      "original_absolute_deadline_unix": 1793835767.1797988,
+      "parent_charged_GPU_seconds": 1902.3751012259963
+    },
+    "resumed_same_model": true,
+    "native_parent_restore_path": "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/fit/native_parent_restore.json",
+    "native_parent_restore_SHA256": "d93a0b9d2525dd0c76da82d759fc4d937f1f632c76771120e8333c198e323f07",
+    "automatic_successor": false,
+    "generation": "native_served_routed_count_forward",
+    "real_bag_replacements": 0,
+    "pure_only": true,
+    "native_recipe": "e22_routed",
+    "pure_formulation": "e22_routed_count",
+    "partition": {
+      "schema": "ALZ_E22_GUARD_V1",
+      "salt": 20261104,
+      "protected_denominator": 5,
+      "rounding": "floor(n/5), at least1protected and1fitting cell per donor",
+      "donors": [
+        "H20.33.001",
+        "H20.33.005",
+        "H20.33.008",
+        "H20.33.011",
+        "H20.33.012",
+        "H20.33.013",
+        "H20.33.015",
+        "H20.33.026",
+        "H20.33.027",
+        "H20.33.028",
+        "H20.33.029",
+        "H20.33.030",
+        "H20.33.033",
+        "H20.33.041",
+        "H20.33.043",
+        "H20.33.044",
+        "H21.33.002",
+        "H21.33.003",
+        "H21.33.009",
+        "H21.33.017",
+        "H21.33.021",
+        "H21.33.026",
+        "H21.33.027",
+        "H21.33.029",
+        "H21.33.033",
+        "H21.33.034",
+        "H21.33.035",
+        "H21.33.037",
+        "H21.33.040",
+        "H21.33.041",
+        "H21.33.043",
+        "H21.33.044",
+        "H21.33.047"
+      ],
+      "fitting_cells": 11825,
+      "protected_cells": 2937,
+      "per_donor": [
+        {
+          "donor": "H20.33.001",
+          "fitting_cells": 626,
+          "protected_cells": 156
+        },
+        {
+          "donor": "H20.33.005",
+          "fitting_cells": 622,
+          "protected_cells": 155
+        },
+        {
+          "donor": "H20.33.008",
+          "fitting_cells": 148,
+          "protected_cells": 36
+        },
+        {
+          "donor": "H20.33.011",
+          "fitting_cells": 309,
+          "protected_cells": 77
+        },
+        {
+          "donor": "H20.33.012",
+          "fitting_cells": 378,
+          "protected_cells": 94
+        },
+        {
+          "donor": "H20.33.013",
+          "fitting_cells": 276,
+          "protected_cells": 69
+        },
+        {
+          "donor": "H20.33.015",
+          "fitting_cells": 279,
+          "protected_cells": 69
+        },
+        {
+          "donor": "H20.33.026",
+          "fitting_cells": 120,
+          "protected_cells": 29
+        },
+        {
+          "donor": "H20.33.027",
+          "fitting_cells": 172,
+          "protected_cells": 42
+        },
+        {
+          "donor": "H20.33.028",
+          "fitting_cells": 788,
+          "protected_cells": 196
+        },
+        {
+          "donor": "H20.33.029",
+          "fitting_cells": 278,
+          "protected_cells": 69
+        },
+        {
+          "donor": "H20.33.030",
+          "fitting_cells": 476,
+          "protected_cells": 119
+        },
+        {
+          "donor": "H20.33.033",
+          "fitting_cells": 127,
+          "protected_cells": 31
+        },
+        {
+          "donor": "H20.33.041",
+          "fitting_cells": 208,
+          "protected_cells": 51
+        },
+        {
+          "donor": "H20.33.043",
+          "fitting_cells": 585,
+          "protected_cells": 146
+        },
+        {
+          "donor": "H20.33.044",
+          "fitting_cells": 252,
+          "protected_cells": 63
+        },
+        {
+          "donor": "H21.33.002",
+          "fitting_cells": 336,
+          "protected_cells": 83
+        },
+        {
+          "donor": "H21.33.003",
+          "fitting_cells": 354,
+          "protected_cells": 88
+        },
+        {
+          "donor": "H21.33.009",
+          "fitting_cells": 196,
+          "protected_cells": 49
+        },
+        {
+          "donor": "H21.33.017",
+          "fitting_cells": 691,
+          "protected_cells": 172
+        },
+        {
+          "donor": "H21.33.021",
+          "fitting_cells": 193,
+          "protected_cells": 48
+        },
+        {
+          "donor": "H21.33.026",
+          "fitting_cells": 228,
+          "protected_cells": 57
+        },
+        {
+          "donor": "H21.33.027",
+          "fitting_cells": 828,
+          "protected_cells": 206
+        },
+        {
+          "donor": "H21.33.029",
+          "fitting_cells": 147,
+          "protected_cells": 36
+        },
+        {
+          "donor": "H21.33.033",
+          "fitting_cells": 468,
+          "protected_cells": 116
+        },
+        {
+          "donor": "H21.33.034",
+          "fitting_cells": 168,
+          "protected_cells": 41
+        },
+        {
+          "donor": "H21.33.035",
+          "fitting_cells": 324,
+          "protected_cells": 80
+        },
+        {
+          "donor": "H21.33.037",
+          "fitting_cells": 211,
+          "protected_cells": 52
+        },
+        {
+          "donor": "H21.33.040",
+          "fitting_cells": 298,
+          "protected_cells": 74
+        },
+        {
+          "donor": "H21.33.041",
+          "fitting_cells": 356,
+          "protected_cells": 88
+        },
+        {
+          "donor": "H21.33.043",
+          "fitting_cells": 770,
+          "protected_cells": 192
+        },
+        {
+          "donor": "H21.33.044",
+          "fitting_cells": 309,
+          "protected_cells": 77
+        },
+        {
+          "donor": "H21.33.047",
+          "fitting_cells": 304,
+          "protected_cells": 76
+        }
+      ],
+      "membership_SHA256": {
+        "all": "6d3601aba6ad9b4e6b3676b34a5b4202a138697e460eaef456dc0f38612a7aea",
+        "fitting": "7b123925fc4af31becd062767e8ee5d2d16a6eac75c1cb83757aa95e4aa5be0e",
+        "protected": "cacec8c31b5a82ab7f60ed9d0069c53010ae4350677ff3501c22bb59098d3082"
+      }
+    },
+    "serving_contract": {
+      "weights": "native_coupled_served_snapshot",
+      "source": "fast",
+      "output_noise": false,
+      "perturb": false,
+      "raw_count_half_primary": true
+    },
+    "native_reload_receipt_path": "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/native_checkpoint_reload.json",
+    "native_reload_receipt_SHA256": "a9bf7aabc61cad2b829ce4173d444d383c8950f6b94354d9127f7dfac399ca15",
+    "served_reference_path": "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/native_served_reference.json",
+    "served_reference_SHA256": "38de4d111c031c5605a2ee014c25be896f3f08a1e5e976e54c71afbe6200d55b",
+    "preset_protocol_SHA256": "d6486822a790788f0de17876f23ba12c5c3ef2048d005d94a41fe0b9c5ec4f4e"
+  },
+  "incumbent": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9355320396443134,
+    "cell_energy_distance": 0.2318446092298636,
+    "spread_ratio": 1.0139376087094576,
+    "within_condition_spread_ratio": 0.9558202746934397,
+    "coverage80": 0.6971153846153846,
+    "generated_zero_count_rate": 3.125e-06,
+    "per_donor_energy_score": [
+      1.1847406370618034,
+      2.762139284338443,
+      1.7135998549675175,
+      2.0816483822094902
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7562105456693518,
+      1.603245353937993,
+      1.1354997606494939,
+      0.538689614861954
+    ],
+    "status": "completed",
+    "completed_updates": 40000,
+    "fixed_endpoint": 40000,
+    "integer_count_contract_passed": true,
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/fit/ensemble.json",
+    "checkpoint_SHA256": "bc9ac029c6b1aa18114f5cbb0f0522da1e775390404a8cd68208eb350c5444de",
+    "checkpoint_kind": "complete_two_parent_references",
+    "operation": "evaluate_pure_ensemble",
+    "allocation_id": "ALZ_CAL_V1_ensemble75_v1_f0_pg_s0",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "hybrid_config": null,
+    "method": "pg_pure_ensemble75",
+    "pure_only": true,
+    "pure_formulation": "pg8_learned_ensemble75",
+    "real_bag_replacements": 0,
+    "generation": "iter_pg_whole_bag_ensemble",
+    "ensemble_config": {
+      "learned_weight": 0.25,
+      "mask_seed": 20261108,
+      "bags_per_stage": 200
+    },
+    "parent_manifest_SHA256": "283243061d72af81e9451de22581a03fb691c0c46ff5364b314fd39325f69a1f",
+    "parent_training_updates_total": 40000,
+    "parent_completed_updates": [
+      20000,
+      20000
+    ],
+    "effective_active_parent_training_updates": 40000,
+    "new_model_updates": 0,
+    "initial_completed_updates": 40000,
+    "native_recipe": "bispf_optimized",
+    "native_recipe_schedule_horizon_each": 20000,
+    "qualification_only": false,
+    "automatic_successor": false,
+    "candidate_commit": "f11139740a3e87f60bb132732c4519de03f95c52"
+  },
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "candidate_commit": "6064b67d2637a53ed02bcfad0b91e815355b3995",
+  "independent_saved_scores_checkpoint_and_count_exemplars_verified": true,
+  "full_native_recipe_model_and_seed_streams_verified": true,
+  "model_floating_values": 371617,
+  "native_optimizer_EMA_and_CPU_compatible_controller_audit_verified": true,
+  "full_original_device_native_public_policy_reload_verified": true,
+  "native_coupled_served_weights_table_mass_and_count_reference_verified": true,
+  "fitting_protection_sampler_and_reservoir_count_contract_verified": true,
+  "checkpoint_audit": {
+    "model_floating_values": 371617,
+    "policy_fingerprint": "02db1910f1b5c65398c002e8cc1280a7de53f1ef5fa3702729258bedbb23aeaf",
+    "served_source": "fast",
+    "served_models_fingerprint": "b8cf7326b28780f08c22858d7e5a80b26ebd3970d296747f097a54bb0e0016b4",
+    "served_table_fingerprint": "2a1e18ed5222d3af45ef9123502c7c92dbc92ae89da5b420dd29dd9a89302852",
+    "routing_probe_clock": {
+      "observed_updates": 20000,
+      "last_probe_update": 20000
+    },
+    "routing_counters": {
+      "evals": 1000,
+      "probes": 8000,
+      "proposals": 6164,
+      "guard_rejections": 536,
+      "moves": 0,
+      "splits": 0
+    },
+    "native_output_sigma": 0.02898847870528698
+  },
+  "owned_release_and_clean_settlement_verified": true,
+  "charged_GPU_seconds": 3256.825218433005,
+  "parent_charged_GPU_seconds": 1902.3751012259963,
+  "charged_GPU_seconds_total_scientific_trial": 5159.200319659001,
+  "native_7013_parent_and_remaining12987_update_lineage_verified": true,
+  "array_and_exemplar_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/r0/stage0_exemplar.npz": "2e2793e1a30144b3f54c1f43cbe097987e038c3690628f933d8c7dda3a3d0433",
+    "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/r0/stage1_exemplar.npz": "5162b2448a869472ed32e351d978a91dc71a4203989b768c7385c9d7f849e64c",
+    "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/r0/stage2_exemplar.npz": "9d87d91246bb8a1c52b0d91acaf58c1cf3190cf0905eadd236bf4e52a2ec0934",
+    "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/r0/stage3_exemplar.npz": "8ed16cb9e1e8bf8c4e675df24bdb1602adbd4c136e9057dea72c5b32cab7ab3d",
+    "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/r0/arrays.npz": "9e1cdd3fa51a15cf3d5d761946d3147c6edf7e0da662fd24fa57ce69d0fd0caa",
+    "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/r1/stage0_exemplar.npz": "24a6ef12a1f921398a471c314d9952aa0f1e19fb7991c53db049a21856ceb5fc",
+    "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/r1/stage1_exemplar.npz": "d0bb2abcf0f75b2267bd93f07da0b4ce6e53308cff295c1f9d4621cf834dddb2",
+    "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/r1/stage2_exemplar.npz": "836b7ac73ac60228c97c34b8cb286919480c4e312d421b9381fc961577d03cb3",
+    "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/r1/stage3_exemplar.npz": "3899519eb299b1eb35bf4a01d918b98db76237ca7bf0e73eca58616668a64218",
+    "/ml2/alz/runs/CAL_GPU0_V1_routed_e22_resume1_f0_pg_s0/r1/arrays.npz": "44ebc10d2ef0766cce6ad15ba87ef741a8225e485c937716de35386e58808e2c"
+  },
+  "authorization_SHA256": "8c87f39ddfd92314cc4e8ac27b1a23405c6bc9f2635929ac595737becc027c6c",
+  "preset_protocol_SHA256": "d6486822a790788f0de17876f23ba12c5c3ef2048d005d94a41fe0b9c5ec4f4e",
+  "source_SHA256": {
+    "/ml2/alz/routed_resume_runtime/finish.py": "aeba782edcad9559d4c5c858e8fbc2c20dc657417dcf15d1dc16228af81d2ae9"
+  },
+  "incumbent_changed": false,
+  "next_step": "Commit negative evidence and revert trial activation; keep current incumbent. Try the next scientifically defined candidate.",
+  "scope": "Native routedE22 conditional count task-adapter; complete GammaPoisson/count-feature callback, publicnative controls enabled, publicprobeinterval20 and external20kcap/nativehorizonNone. KnownADNC only; same512x8bank/CountGenerator/150critic/frozenquery_exposures/scorer. Fit-only11825cell optimizer and initialmoments/protected2937cellacceptance pool within33donors; common preprocessing predates cellprotection and includes all original fittingcellinputs. Same4adaptivecalib/20evalexcluded. Dense routing, noise realization, protectedsplit/init and continuousnative mechanisms confounded; no independent SOTA/biological claim. Continuation retains all original model/optimizer/controller/nativeCUDA and both data sampler states at7013; GPU0 hostPSI stop produced no quality score. Physicalcard changes toGPU1 withlogicalcuda0 and same nativeCUDAengine. Original deadline and source remain fixed."
+}
