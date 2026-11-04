@@ -1,0 +1,42 @@
+{
+  "status": "VERIFIED_TURNOVER_NATIVE_PG8_EXACT_STATE_CPU_ONLY",
+  "utc": "2026-11-04T02:16:52.505416+00:00",
+  "attempt": "CAL_GPU0_V1_pure_recover_bf27534c3a4250b2b4d2_f0_pg_s1",
+  "training_seed": 1,
+  "completed_updates": 14410,
+  "fixed_endpoint": 20000,
+  "checkpoint_path": "/ml2/alz/artifacts/confirmation_recovery_lineage/CAL_GPU0_V1_pure_recover_bf27534c3a4250b2b4d2_f0_pg_s1/terminal/pg8-step14410.pt",
+  "checkpoint_SHA256": "968f53ff15b4485ef9cde1385744b6adcebe20cf14bd8a1d07c94a2495b0856b",
+  "strict_complete_G_D_prior_load_verified": true,
+  "finite_model_floating_values": 371177,
+  "full_saved_state_inventory": {
+    "tensor_count": 54,
+    "finite_floating_tensor_values": 696273,
+    "numpy_array_count": 0,
+    "nonfinite_tensor_paths": []
+  },
+  "official_native_recipe_and_independent_seed_streams_verified": true,
+  "optimizer_rate_and_state_blocks_present": true,
+  "actual_optimizer_rates": [
+    [
+      0.012,
+      0.03
+    ],
+    [
+      0.018000000000000002
+    ]
+  ],
+  "explicit_CUDA_generator_states_retained_bytes": {
+    "cell": 16,
+    "count": 16
+  },
+  "global_CPU_and_CUDA_rng_states_present": true,
+  "policy_and_snapshot_CPU_rng_match": true,
+  "CUDA_initialized": false,
+  "actual_CUDA_restore_verified": false,
+  "scope": "Read-only full native saved-state inventory and strict model load on CPU. Explicit CUDA RNG bytes are preserved, not restored on CPU. This audit generated no updates/quality/nativeallocation and was performed after actual clean owned termination and settlement. Actual8942 CUDA restoration was separately qualified; this later saved checkpoint has not been used for any new allocation, and a future resume would require its own exact-state qualification.",
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_turnover_pg8_state.py": "874177c595b5bb1b91207b9eb00bbd932753602229eb72f90f3ee9ffbacff949",
+    "/ml2/alz/analysis/CAL_GPU0_V1_pure_recover_bf27534c3a4250b2b4d2_f0_pg_s1-turnover-interruption.json": "0339a34ee053768539f7055829bc594f46dba70aec2eb119ec29b342c6c3f495"
+  }
+}
