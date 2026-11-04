@@ -1,0 +1,25 @@
+{
+  "status": "PREDECLARED_CONDITIONAL_K3P_CPU_PROTOTYPE_NOT_NATIVE_ADMISSION",
+  "utc": "2026-11-04T10:20:21.836687+00:00",
+  "condition": "Only consider a nativeK3P quality trial if the currently running KA2 trial fails unchanged joint seed0 selection; acceptedKA2 takes priority for fixedseed confirmation. No automatic successor.",
+  "rationale": "Latest installed0.9.4 exposes archivedK3P through get_recipe. Current native recipe inventory differs fromKA2 only in name/critic_formulation while its numeric schedules and task overrides match. Compare published critic kernels and anchor controller behavior, not a noise/LR grid. Existing K3P evidence is factory construction only.",
+  "native_API": "get_recipe('k3p',total_steps=20000,batch_size=32,num_particles=512,z_dim=8)",
+  "task_model": "Matched originalCountGenerator/150featureVectorCritic/PG8 donor and cell latents,33optimizationdonors, originaltwo-batch sampler and streams. Reuse unchanged complete task update body from KA2 adapter but construct K3P native components. No addedtaskloss or outputrepair.",
+  "serving_contract": {
+    "weights": "final_raw",
+    "output_noise": false
+  },
+  "scope": "Prospective onefold0/seed0/20k/6h native comparison inside existingfive-daywindow andcanonical1024GPUh cap, contingent on source/runtime/resource qualification after currentnativephase. CPU prototype is not admission or quality evidence.",
+  "controls": "Native requiredcriticEMA,InputNoise,UpdatePolicy.generate/schedules/EMA, nativeconditionalcriticpenalty,particleoptimizersandallcontrols retained. K3P is an archived supportedformulation, not thecurrentdefaultKA2critic. No quietcontroldisabling.",
+  "qualification": [
+    "exactpublishedrecipe/components andinitialmatchedG/D/learnedpriorrows",
+    "complete actualnativewarmup crossing/conditionalEMAevaluation",
+    "early/late fullstate nextupdate replay and invalidrecipe/EMA/serving/config refusal",
+    "unchangedtask sampler/features/fit;finiteG/dispersion/priorgradients;noCPU donortraining"
+  ],
+  "decision": "Unchanged jointselection.decide against frozen pureincumbent; retainnegatives, commitactualresults thenrevertactivationifworse. Anyacceptedseed0requiresoriginalfixedthree-seedstablejointtarget. Fouradaptivecalibrationdonors only,20evaluationdonorsexcluded.",
+  "current_KA2_candidate_commit": "c168eedf2a56a182eab6308606835ccbf1c77dcb",
+  "GPU_allocation_created": false,
+  "quality_result_available": false,
+  "incumbent_changed": false
+}
