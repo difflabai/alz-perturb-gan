@@ -1,0 +1,56 @@
+{
+  "status": "NATIVE_CUDA_UPPER_GENERATOR_RATE_TRAINING_LIVE_NOT_A_QUALITY_RESULT",
+  "utc": "2026-11-04T22:39:27.414783+00:00",
+  "attempt": "CAL_GPU0_V1_released_rate_g100d050p050_f0_pg_s0",
+  "candidate_id": "lr_g100_d050_p050",
+  "physical_GPU_index": 0,
+  "physical_GPU_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+  "released_hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "owner_PID": 3119186,
+  "native_worker_PID": 3119294,
+  "CPU_audit_waiter_PID": 3121240,
+  "all_three_owned_processes_live_verified": true,
+  "latest_logged_updates": 751,
+  "actual_learning_rates": {
+    "generator": 0.012,
+    "critic": 0.009000000000000001,
+    "particles": 0.015
+  },
+  "particle_usage": {
+    "rows_drawn": 512,
+    "rows_moved": 512,
+    "total_draws": 24032,
+    "total_unsampled_row_moves": 0,
+    "particle_covariance_trace": 8.214941024780273,
+    "particle_mean_squared_norm": 8.229591369628906
+  },
+  "source_commit": "4c59310efd9d770fb9d1f02e4eadd75cf90f0086",
+  "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g100d050p050_f0_pg_s0/authorization.json",
+  "authorization_SHA256": "decdd23984e645601142ac6a551821d7a78801a7c244dc8d6f04c804e05dc12c",
+  "archived_Python_sources": 397,
+  "execution_source_archive_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g100d050p050_f0_pg_s0/execution_source_archive.json",
+  "execution_source_archive_SHA256": "819bafef86ae7717fe474d23e21b77cdcdfc3973351c5c6a874238cc97ff5096",
+  "prior_negative_result_commit": "af640e2",
+  "prior_actual_activation_revert": "1a45f5c",
+  "runtime_CPU_tests_passed": 24,
+  "project_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 35.25117119774776,
+    "reserved_GPU_hours": 6.008333333333334,
+    "remaining_GPU_hours": 988.7488288022522,
+    "available_after_reservations_GPU_hours": 982.7404954689189,
+    "new_grant_GPU_hours": 1000.0
+  },
+  "audited_rate_configurations_so_far": 4,
+  "declared_rate_configurations": 27,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "scope": "Fresh fixedseed0 matched generator-rate upper controlG.012 at D.009/P.015, same released native BISPF/count model/architecture/cohort/11streams and regularization. Only final20k selects; 5k/10k diagnostics scored after training. This live evidence is separate from qualification and has no quality result. Four adaptivecalibrationdonors, evaluation excluded. Foreign work and shared guard thresholds unchanged."
+}
