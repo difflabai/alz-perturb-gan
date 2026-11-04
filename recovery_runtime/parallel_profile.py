@@ -6,10 +6,10 @@ Forecasts reserve foreign growth; they do not constrain or signal foreign work.
 import hashlib,json,sys,subprocess
 from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent
-PREPARED=HERE/'parallel_policy.gpu1.prepared.json'
-DEPLOYED=ROOT/'artifacts/gpu1-learned-v1-20261104/policy.deployed.json'
+PREPARED=HERE/'parallel_policy.fiveday.prepared.json'
+DEPLOYED=ROOT/'artifacts/gpu1-fiveday-v1-20261104/policy.deployed.json'
 REGISTRY=DEPLOYED.parent/'live_registry'
-REVIEW=ROOT/'analysis/gpu1_learned_owner_execution_review.json'
+REVIEW=ROOT/'analysis/fiveday_gpu1_owner_execution_review.json'
 OLD=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json')
 OLD_SHA='5a4dfd1d5288bde24964ee680c003dd75f13fefe1a83ac55b27b49e6a05d125e'
 MOSS=Path('/ml2/particlesliders-working/moss_training/train_concept.py')
@@ -23,7 +23,7 @@ def deployed_bytes():
  return (json.dumps(p,indent=2)+'\n').encode()
 def policy_sha():return hashlib.sha256(deployed_bytes()).hexdigest()
 def review_sources():
- paths=[*HERE.glob('*.py'),PREPARED,* (ROOT/'runtime').glob('*.py'),ROOT/'analysis/exact_seed1_recovery_protocol_v3.json']
+ paths=[*HERE.glob('*.py'),PREPARED,* (ROOT/'runtime').glob('*.py'),ROOT/'analysis/exact_seed1_recovery_protocol_v4.json',ROOT/'analysis/research_window_20261104_five_days.json']
  return {str(p):sha(p) for p in paths}
 def validate_proposal():
  assert sha(OLD)==OLD_SHA,'Original policy changed'
@@ -36,6 +36,7 @@ def validate_proposal():
  expected.update({str(HERE/n):sha(HERE/n) for n in ['gpu1_admission.py','gpu1_runner.py']})
  for path,pin in p['resource_basis']['foreign_source_SHA256'].items():assert sha(path)==pin,'Foreign executable resource source changed'
  assert p['source_sha256']==expected,'Complete exact active guard and original reference sources required'
+ assert not read(ROOT/'artifacts/gpu1-learned-v1-20261104/live_registry/registry.json')['jobs'],'Prior shared GPU1 namespace must be empty'
  assert not read(ROOT/'artifacts/gpu0-turnover-20261104/live_registry/registry.json')['jobs'],'Latest own namespace must be empty'
  assert not read(ROOT/'artifacts/gpu0-parallel-20261104/live_registry/registry.json')['jobs'],'Prior own namespace must be empty after clean turnover'
  assert not read(Path(old['registry_path'])/'registry.json')['jobs'],'Old resource registry has active work; no parallel namespace bypass'
@@ -57,7 +58,7 @@ def reviewed():
  validate_proposal();q=read(REVIEW)
  assert q['status']=='OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS'
  assert q['reviewer_session']=='01a1a22b-f310-7190-a7c6-8697ecabae6c' and q['independent_review_claimed'] is False
- assert q['owner_authorization']=={'available_capacity':'I authorize using the available GPU capacity.','both_cards':'You can use both gpus without permission.','sharing':'you dont need solo access','continuation':'contineue'}
+ assert q['owner_authorization']=={'available_capacity':'I authorize using the available GPU capacity.','both_cards':'You can use both gpus without permission.','sharing':'you dont need solo access','continuation':'contineue','deadline_extension':'extend it to 5 days'}
  assert q['scope']=='EXACT_FROZEN_RECOVERY_AND_FIXED_SEED2_ONLY'
  assert q['policy_SHA256']==policy_sha() and q['source_SHA256']==review_sources(),'Review does not cover exact current source/profile'
  return q

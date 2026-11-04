@@ -27,12 +27,13 @@ class RecoveryArtifacts(fixture_base.EnsembleArtifacts):
    self.write(ledger,{'jobs':[{'status':status,'exit_code':0 if status=='completed' else 1,'reservation_released':True,'charged_seconds':charge}]});self.write(settlement,{'uncertain':None,'settlement':{'status':'settled','charged_GPU_seconds':charge}})
    records.append({'attempt':name,'ledger_path':str(ledger),'ledger_SHA256':common.sha(ledger),'settlement_path':str(settlement),'settlement_SHA256':common.sha(settlement),'charged_GPU_seconds':charge})
   self.original_ledger=Path(records[0]['ledger_path']);f=common.read(self.freeze)
+  owner=r/'analysis/PRIVATE-owner-window-wire.json';self.write(owner,{'fixture':'COUNTERFACTUAL_FIVE_DAY_WINDOW_WIRE_ONLY','duration_seconds':432000})
   p={'original_confirmation_freeze':str(self.freeze),'original_confirmation_freeze_SHA256':common.sha(self.freeze),'original_attempt':records[0]['attempt'],
     'original_failed_ledger':str(self.original_ledger),'original_interruption_evidence':str(failed),'checkpoint_path':str(archived),'checkpoint_SHA256':cp_sha,
     'completed_parent_checkpoint':{'path':str(base_archive),'SHA256':common.sha(base_archive),'completed_updates':20000},'initial_parent_updates':[20000,scope.PARENT_INITIAL],
     'qualification_cell':{**self.ids['1']['cell'],'experiment':'private_qualification'},'recovery_cell':self.ids['1']['cell'],
-    'frozen_ensemble_config':self.candidates[0]['ensemble_config'],'wall_clock_envelope':{'absolute_recovery_deadline_unix':22600.},'retained_charge_records':records,
-    'latest_interruption_evidence':str(failed),'scientific_source_SHA256':self.sources,'frozen_baseline_pins':f['matched_baselines']}
+    'frozen_ensemble_config':self.candidates[0]['ensemble_config'],'wall_clock_envelope':{'absolute_recovery_deadline_unix':22600.,'total_seed_wall_cap_seconds':432000},'retained_charge_records':records,
+    'owner_extension_path':str(owner),'owner_extension_SHA256':common.sha(owner),'latest_interruption_evidence':str(failed),'scientific_source_SHA256':self.sources,'frozen_baseline_pins':f['matched_baselines']}
   self.write(self.recovery_protocol,p);self.bridge=p
   self.write(r/'analysis/interrupted_seed1_source_history.json',{'authorization_path':self.deployments[0]['authorization_path'],'verification_source_SHA256':{}})
   for path in [r/'analysis/failed_seed1_full_state_audit.json',r/'analysis/exact_interrupted_resume_cpu_qualification.json']:self.write(path,{'fixture':'PRIVATE_METADATA_NOT_CUDA'})
@@ -86,7 +87,7 @@ class RecoveryArtifacts(fixture_base.EnsembleArtifacts):
  def test_resumed_parent_cannot_reset_initial_step_or_drop_lineage(self):
   ref=common.read(self.candidates[1]['checkpoint_path']);p=Path(ref['parents'][1]['checkpoint_path']).with_name('checkpoint_receipt.json');q=common.read(p);q.pop('resume_parent_checkpoint_SHA256');self.write(p,q)
   with self.assertRaises((AssertionError,KeyError)):self.run_aggregate()
- def test_original_sixhour_deadline_is_enforced_after_recovery(self):
+ def test_owner_extended_deadline_is_enforced_after_recovery(self):
   p=Path(self.deployments[1]['ledger_path']);q=common.read(p);q['jobs'][0]['ended_unix']=22601.;self.write(p,q)
   with self.assertRaises(AssertionError):self.run_aggregate()
  def test_total_native_charge_includes_all_failures_and_qualifications(self):

@@ -1,0 +1,73 @@
+{
+  "schema": "gpu0-coexistence-policy-v1",
+  "status": "PREPARED_EXACT_GPU0_PARALLEL_PROFILE",
+  "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+  "registry_path": "/ml2/alz/artifacts/gpu1-fiveday-v1-20261104/live_registry",
+  "locks": [
+    "/mnt/nvme/sliders/qualification/admission-gpu-1.lock",
+    "/mnt/nvme/sliders/locks/gpu-1.lock"
+  ],
+  "driver_headroom_bytes": 3221225472,
+  "host_free_floor_bytes": 12884901888,
+  "roles": {
+    "alz_core_pg": {
+      "gpu_bytes": 3221225472,
+      "ram_bytes": 6442450944
+    }
+  },
+  "protected_peers": [
+    {
+      "identity": {
+        "pid": 329405,
+        "birth": 897146,
+        "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+        "uid": 1000,
+        "exe": "/ml2/iris-particle-sliders-task-20261008/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12",
+        "argv_sha256": "46043fd8da4bd11dac163b5518347fdef99d5017140e4bc619b5ee7d5caf9b05",
+        "ppid": 329404
+      },
+      "gpu_kinds": [
+        "compute"
+      ],
+      "gpu_budget_bytes": 44291850240,
+      "ram_budget_bytes": 42949672960
+    },
+    {
+      "identity": {
+        "pid": 146094,
+        "birth": 534000,
+        "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+        "uid": 1000,
+        "exe": "/usr/bin/gnome-shell",
+        "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+        "ppid": 7650
+      },
+      "gpu_kinds": [
+        "graphics"
+      ],
+      "gpu_budget_bytes": 268435456,
+      "ram_budget_bytes": 4294967296
+    }
+  ],
+  "resource_basis": {
+    "observation_path": "/ml2/alz/analysis/fiveday_gpu1_profile_observation.json",
+    "observation_SHA256": "21ecbea32341e68cacef55fbf647a0d6139dc8eb4742291c29840e115208812f",
+    "forecast_not_foreign_caps": true,
+    "foreign_control": "NONE. P-H3 known qualifying peak42021MiB covered by41.25GiB occupancy forecast, not allocator reservation. Own3GiB hardallocator+sampledcap,3.5GiBactualfree earlyyield/12GiBhost floor,2secondpoll. GNOME.25GiB,driver3GiB;47.5/47.988GiB combinedforecast. Abrupt foreigngrowth can still trigger OOM; no foreign signals/changes. Owner authorizes sharedcards andfive-day extension.",
+    "ALZ_early_stop_GPU_free_bytes": 3758096384,
+    "ALZ_early_stop_host_free_bytes": 12884901888,
+    "foreign_source_SHA256": {
+      "/ml2/particlesliders-working/ph3-modern-native/tools/modern_native.py": "9d65a64d6c0451fe3113a8268229814d61e942ce1201342e6d851c70131d2cbc",
+      "/ml2/particlesliders-working/ph3-modern-native/src/ph3_sliders/gpu_lease.py": "f459b2bc6dd33a95ed251bc93416eca526e326a9abc39f1d9ede6f4a6e2826c2"
+    },
+    "known_foreign_qualifying_peak_MiB": 42021,
+    "foreign_occupancy_forecast_bytes": 44291850240
+  },
+  "source_sha256": {
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2/gpu0_admission.py": "c92e975ff4839ba3d70f53d67c712916bf0bb346fcb218ef9c96e6dbf6dfeaca",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2/gpu0_runner.py": "13453ca11cf5a0e7758dcee112de0f85189b0d74a098c3f5103388e1ebb32f27",
+    "/ml2/alz/recovery_runtime/parallel_runner.py": "41e586fed4ca267b6e13b0aaf5c3d3dce05f32383616d2b7ac816cb372f4008d",
+    "/ml2/alz/recovery_runtime/gpu1_admission.py": "8577361349e475a5400b1b9283de727df9dbe38f4feabbaf137d3e99585ae833",
+    "/ml2/alz/recovery_runtime/gpu1_runner.py": "bb5e5c5274dfa91453a238f4eb36120ec07703bda9acf3e82d531f20d7a9b32e"
+  }
+}

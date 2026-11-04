@@ -1,12 +1,12 @@
-"""Frozen exact recovery lineage; old scheduler policy retained, reviewed own parallel profile."""
+"""Exact retained lineage under the owner's explicit five-day research extension."""
 import hashlib,json,sys,time
 from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=ROOT/'recovery_runtime'
-PROTOCOL=ROOT/'analysis/exact_seed1_recovery_protocol_v3.json'
-CPU_PROOF=ROOT/'analysis/recovery_runtime_cpu_qualification_v3.json'
-NATIVE_PROOF=ROOT/'analysis/exact_seed1_native_restore_verification_v3.json'
-INITIAL=29237
-PARENT_INITIAL=9237
+PROTOCOL=ROOT/'analysis/exact_seed1_recovery_protocol_v4.json'
+CPU_PROOF=ROOT/'analysis/recovery_runtime_cpu_qualification_v4.json'
+NATIVE_PROOF=ROOT/'analysis/exact_seed1_native_restore_verification_v4.json'
+INITIAL=33265
+PARENT_INITIAL=13265
 def read(p):return json.loads(Path(p).read_bytes())
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def frozen():
@@ -16,57 +16,59 @@ def frozen():
 def _prior():
  import importlib.util
  p=read(PROTOCOL);path=Path(p['retained_scope_path']);assert sha(path)==p['retained_scope_SHA256']
- spec=importlib.util.spec_from_file_location('retained_scope_v3',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+ spec=importlib.util.spec_from_file_location('retained_wallcapped_scope_v3',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
  return module
-
 def lineage():
  p=read(PROTOCOL);previous=_prior();old,f=previous.lineage()
  assert sha(p['lineage_parent_protocol'])==p['lineage_parent_protocol_SHA256'] and read(p['lineage_parent_protocol'])==old
- for key in ('original_attempt','original_confirmation_freeze','original_confirmation_freeze_SHA256','scientific_source_SHA256','frozen_baseline_pins','wall_clock_envelope','frozen_ensemble_config'):
-  assert p[key]==old[key],'Retained original lineage differs: '+key
+ for key in ('original_attempt','original_confirmation_freeze','original_confirmation_freeze_SHA256','scientific_source_SHA256','frozen_baseline_pins','frozen_ensemble_config','completed_parent_checkpoint'):
+  assert p[key]==old[key],'Retained scientific lineage differs: '+key
+ assert sha(p['owner_extension_path'])==p['owner_extension_SHA256'];window=read(p['owner_extension_path'])
+ assert window['status']=='OWNER_EXPLICITLY_EXTENDED_RESEARCH_WINDOW' and window['owner_instruction']=='extend it to 5 days'
+ assert window['duration_seconds']==432000 and window['expires_unix']-window['effective_unix']==432000
+ assert window['project_GPU_hour_cap']==1024 and window['finite_training_phase_cap_seconds']==21600 and window['qualification_phase_cap_seconds']==900
+ wall=p['wall_clock_envelope'];assert wall['absolute_recovery_deadline_unix']==window['expires_unix'] and wall['owner_extended_start_unix']==window['effective_unix'] and wall['total_seed_wall_cap_seconds']==432000
+ assert wall['original_absolute_deadline_unix']==p['previous_absolute_deadline_unix']==old['wall_clock_envelope']['absolute_recovery_deadline_unix']
  assert p['initial_parent_updates']==[20000,PARENT_INITIAL] and p['fixed_parent_endpoints']==[20000,20000]
  assert p['new_training_updates_required']==40000-INITIAL==20000-PARENT_INITIAL and p['training_seed']==1
  assert sha(p['latest_interruption_evidence'])==p['latest_interruption_evidence_SHA256'];latest=read(p['latest_interruption_evidence'])
- assert latest['status']=='FROZEN_CLEAN_DESKTOP_TURNOVER_PG8_COMPLETE_LEARNED9237_NO_QUALITY'
- assert latest['total_completed_updates']==INITIAL and latest['remaining_learned_updates']==40000-INITIAL and latest['previous_initial_updates']==14410
- assert latest['new_updates_this_allocation']==INITIAL-14410 and latest['previous_PG8_checkpoint_SHA256']==old['checkpoint_SHA256']
- assert latest['quality_result_created'] is False and latest['owned_cleanup_and_settlement_verified']
- assert p['checkpoint_path']==latest['checkpoints']['learned_interrupted']['path'] and p['checkpoint_SHA256']==latest['checkpoints']['learned_interrupted']['SHA256']==sha(p['checkpoint_path'])
- assert p['completed_parent_checkpoint']==latest['checkpoints']['PG8_completed'] and p['completed_parent_checkpoint']['completed_updates']==20000
+ assert latest['status']=='VERIFIED_ORIGINAL_WALL_CAPPED_LEARNED13265_INCOMPLETE_NO_QUALITY'
+ assert latest['total_completed_updates']==INITIAL and latest['learned_completed_updates']==PARENT_INITIAL and latest['remaining_learned_updates']==40000-INITIAL
+ assert latest['new_learned_updates_this_allocation']==INITIAL-29237==4028
+ assert latest['quality_result_created'] is False and latest['guard_and_worker_gone'] and latest['owned_lease_released'] and latest['clean_settlement_uncertain'] is None and latest['deadline_or_policy_changed'] is False
+ assert p['checkpoint_path']==latest['checkpoint']['path'] and p['checkpoint_SHA256']==latest['checkpoint']['SHA256']==sha(p['checkpoint_path'])
  assert sha(p['completed_parent_checkpoint']['path'])==p['completed_parent_checkpoint']['SHA256']
- assert latest['checkpoints']['learned_interrupted']['completed_updates']==PARENT_INITIAL
  dep=read(ROOT/'artifacts/allocations'/latest['attempt']/'deployment.json');auth=read(dep['authorization_path'])
- assert sha(dep['authorization_path'])==dep['authorization_SHA256'] and auth['initial_completed_updates']==14410
- assert auth['checkpoint_SHA256']==old['checkpoint_SHA256'] and auth['expires_unix']==latest['original_absolute_deadline_unix']==p['wall_clock_envelope']['absolute_recovery_deadline_unix']
- assert latest['execution_source_SHA256']==auth['research_source_SHA256']
- archive=Path(p['checkpoint_path']).parent/'source'
- for path,pin in latest['execution_source_SHA256'].items():assert sha(archive/path.lstrip('/'))==pin
- for path,pin in latest['canonical_evidence_SHA256'].items():assert sha(path)==pin
+ assert sha(dep['authorization_path'])==dep['authorization_SHA256'] and auth['initial_completed_updates']==29237 and auth['initial_parent_updates']==[20000,9237]
+ assert auth['checkpoint_SHA256']==old['checkpoint_SHA256'] and auth['expires_unix']==latest['original_absolute_deadline_unix']==p['previous_absolute_deadline_unix']
+ archive=Path(p['actual_execution_source_archive'])
+ for path,pin in auth['research_source_SHA256'].items():assert sha(archive/path.lstrip('/'))==pin
+ for path,pin in latest['evidence_SHA256'].items():assert sha(path)==pin
+ assert sha(p['terminal_proposal_path'])==p['terminal_proposal_SHA256'];proposal=read(p['terminal_proposal_path'])
+ assert proposal['status']=='SOURCE_ONLY_TERMINAL_ALTERNATIVE_AWAITING_PARENT_DIRECTION' and proposal['checkpoint']==latest['checkpoint'] and proposal['operational_authorization'] is False
  proof=read(p['prior_qualification_proof']);assert sha(p['prior_qualification_proof'])==p['prior_qualification_proof_SHA256']
  assert proof['checkpoint_SHA256']==old['checkpoint_SHA256'] and proof['complete_initial_state_restored_exactly'] and proof['independent_saved_branch_states_bitwise_equal'] and proof['complete_clean_settlement_verified']
- assert proof['qualified_execution_source_SHA256']==latest['execution_source_SHA256']
- expected=[p['original_attempt'],read(old['previous_native_qualification_path'])['attempt'],read(old['latest_interruption_evidence'])['attempt'],proof['attempt'],latest['attempt']]
- assert [x['attempt'] for x in p['retained_charge_records']]==expected
+ assert proof['qualified_execution_source_SHA256']==auth['research_source_SHA256']
+ expected=[r['attempt'] for r in old['retained_charge_records']]+[previous.attempt(old['qualification_cell']),latest['attempt']]
+ assert [r['attempt'] for r in p['retained_charge_records']]==expected and p['retained_charge_records']==proposal['retained_canonical_charge_records']==latest['all_charge_records']
  for row in p['retained_charge_records']:
   assert sha(row['ledger_path'])==row['ledger_SHA256'] and sha(row['settlement_path'])==row['settlement_SHA256']
   job=read(row['ledger_path'])['jobs'][0];settlement=read(row['settlement_path'])
   assert job['status'] in ('failed','completed') and job['reservation_released'] and settlement['uncertain'] is None and settlement['settlement']['status']=='settled'
   assert job['charged_seconds']==row['charged_GPU_seconds']==settlement['settlement']['charged_GPU_seconds']
- assert sum(x['charged_GPU_seconds'] for x in p['retained_charge_records'])<21600
- assert read(dep['ledger_path'])['jobs'][0]['error']=="Refusal('protected peer identity changed')"
+ assert sum(r['charged_GPU_seconds'] for r in p['retained_charge_records'])==latest['all_seven_retained_seed1_charges_GPU_seconds']
+ assert sum(r['charged_GPU_seconds'] for r in p['retained_charge_records'])<432000
+ assert sha(p['terminal_CPU_audit_path'])==p['terminal_CPU_audit_SHA256'];audit=read(p['terminal_CPU_audit_path'])
+ assert audit['status']=='CPU_FULL_STATE_VERIFIED_PG8_COMPLETED_AND_WALLCAPPED_LEARNED' and audit['total_completed_updates']==INITIAL and audit['remaining_learned_updates']==6735 and audit['CUDA_initialized'] is False
+ assert [r['completed_updates'] for r in audit['parents']]==[20000,PARENT_INITIAL] and [r['finite_model_values'] for r in audit['parents']]==[371177,376066]
+ assert [r['SHA256'] for r in audit['parents']]==[p['completed_parent_checkpoint']['SHA256'],p['checkpoint_SHA256']]
  return p,f
-
 def continuation_paths(p):
- previous=_prior();old,_=previous.lineage();latest=read(p['latest_interruption_evidence']);archive=Path(p['checkpoint_path']).parent/'source'
- paths=previous.continuation_paths(old)+[Path(p['lineage_parent_protocol']),Path(p['retained_scope_path']),Path(p['latest_interruption_evidence']),Path(p['prior_qualification_proof']),Path(p['completed_parent_checkpoint']['path']),ROOT/'analysis/learned9237_full_state_audit.json',ROOT/'analysis/exact_learned_resume_cpu_qualification.json']
- paths.extend(map(Path,latest['canonical_evidence_SHA256']))
- paths.extend(archive/path.lstrip('/') for path in latest['execution_source_SHA256'])
+ previous=_prior();old,_=previous.lineage();latest=read(p['latest_interruption_evidence']);dep=read(ROOT/'artifacts/allocations'/latest['attempt']/'deployment.json');auth=read(dep['authorization_path']);archive=Path(p['actual_execution_source_archive'])
+ paths=previous.continuation_paths(old)+[Path(p[k]) for k in ('lineage_parent_protocol','retained_scope_path','latest_interruption_evidence','prior_qualification_proof','terminal_proposal_path','terminal_CPU_audit_path','owner_extension_path')]+[Path(p['completed_parent_checkpoint']['path'])]
+ paths.extend(map(Path,latest['evidence_SHA256']));paths.extend(archive/path.lstrip('/') for path in auth['research_source_SHA256'])
  for row in p['retained_charge_records']:paths.extend([Path(row['ledger_path']),Path(row['settlement_path'])])
- audit=read(ROOT/'analysis/learned9237_full_state_audit.json')
- assert audit['status']=='CPU_FULL_STATE_VERIFIED_PG8_COMPLETED_AND_LEARNED9237' and audit['total_completed_updates']==INITIAL and audit['remaining_learned_updates']==10763 and audit['CUDA_initialized'] is False
- assert [x['completed_updates'] for x in audit['parents']]==[20000,PARENT_INITIAL] and [x['finite_model_values'] for x in audit['parents']]==[371177,376066]
- assert [x['SHA256'] for x in audit['parents']]==[p['completed_parent_checkpoint']['SHA256'],p['checkpoint_SHA256']]
- paths.extend(map(Path,audit['source_SHA256']))
+ paths.extend(map(Path,read(p['terminal_CPU_audit_path'])['source_SHA256']))
  return list(dict.fromkeys(paths))
 
 def cell_for(mode):
@@ -88,8 +90,10 @@ def validate_authorization(auth,*,require_proof=True):
  assert auth['recovery_protocol_SHA256']==sha(PROTOCOL)
  if mode!='seed2':
   assert auth['checkpoint_path']==p['checkpoint_path'] and auth['checkpoint_SHA256']==p['checkpoint_SHA256']
-  assert auth['expires_unix']==p['wall_clock_envelope']['absolute_recovery_deadline_unix'],'Original absolute sixhour deadline cannot reset'
- else:assert 'checkpoint_path' not in auth and 'checkpoint_SHA256' not in auth
+  assert auth['expires_unix']==p['wall_clock_envelope']['absolute_recovery_deadline_unix'],'Owner-authorized five-day deadline differs'
+ else:
+  assert 'checkpoint_path' not in auth and 'checkpoint_SHA256' not in auth
+  assert auth['expires_unix']<=p['wall_clock_envelope']['absolute_recovery_deadline_unix']
  pins=auth['files_SHA256'];research=auth['research_source_SHA256']
  paths=[PROTOCOL,Path(p['original_confirmation_freeze']),Path(p['original_failed_ledger']),Path(p['original_interruption_evidence']),Path(p['checkpoint_path']),ROOT/'analysis/interrupted_seed1_source_history.json',ROOT/'analysis/failed_seed1_full_state_audit.json',ROOT/'analysis/exact_interrupted_resume_cpu_qualification.json',ROOT/'pure_incumbent.json',ROOT/'incumbent.json',ROOT/'analysis/pure_confirmation_protocol.json']
  paths.extend(Path(q['path']) for q in f['matched_baselines'].values())

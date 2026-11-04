@@ -28,10 +28,15 @@ class RecoveryScope(unittest.TestCase):
  def test_scientific_seed_checkpoint_horizon_and_alpha_cannot_change(self):
   for change in [{'checkpoint_SHA256':'0'*64},{'initial_completed_updates':0},{'new_model_updates':40000},{'fixed_endpoint':40000},{'cap_seconds':21600},{'qualification_only':False},{'cell':{**scope.cell_for('qualify'),'seed':False}},{'ensemble_config':{'learned_weight':.5,'mask_seed':20261108,'bags_per_stage':200}},{'hybrid_config':{'pg_bag_fraction':.75}}]:
    with self.subTest(change=change),self.assertRaises((AssertionError,KeyError)):scope.validate_authorization({**self.auth('qualify'),**change},require_proof=False)
- def test_original_seed1_absolute_sixhour_deadline_cannot_reset(self):
+ def test_owner_five_day_deadline_cannot_reset(self):
   for mode in ('qualify','resume'):
    auth=self.auth(mode)
    with self.assertRaises(AssertionError):scope.validate_authorization({**auth,'expires_unix':auth['expires_unix']+1},require_proof=False)
+ def test_five_day_owner_extension_cannot_expand_duration_budget_or_authority(self):
+  p=scope.read(scope.PROTOCOL);target=p['owner_extension_path'];original_read=scope.read
+  for change in [{'duration_seconds':432001},{'expires_unix':original_read(target)['expires_unix']+1},{'owner_instruction':'invented authorization'},{'project_GPU_hour_cap':2048}]:
+   def changed(path):return {**original_read(path),**change} if str(path)==target else original_read(path)
+   with patch.object(scope,'read',side_effect=changed),self.assertRaises(AssertionError):scope.lineage()
  def test_seed2_cannot_warm_start_from_interrupted_or_qualification_weights(self):
   auth=self.auth('seed2')
   for change in [{'checkpoint_path':'qualification_step8943.pt'},{'initial_completed_updates':8942},{'new_model_updates':31058}]:
@@ -82,16 +87,16 @@ class RecoveryScope(unittest.TestCase):
    with patch.object(scope,'ROOT',root),patch.object(scope,'lineage',return_value=(p,f)),self.assertRaises(AssertionError):scope.reference_payload(2,parents)
  def test_retained_completed_and_interrupted_parent_counts_cannot_change(self):
   p=scope.read(scope.PROTOCOL);target=p['latest_interruption_evidence'];original_read=scope.read
-  for change in [{'previous_initial_updates':0},{'total_completed_updates':29236},{'new_updates_this_allocation':29237},{'previous_PG8_checkpoint_SHA256':p['checkpoint_SHA256']}]:
+  for change in [{'new_learned_updates_this_allocation':0},{'total_completed_updates':29236},{'remaining_learned_updates':0},{'learned_completed_updates':9237}]:
    def changed(path):return {**original_read(path),**change} if str(path)==target else original_read(path)
    with patch.object(scope,'read',side_effect=changed),self.assertRaises(AssertionError):scope.lineage()
- def test_all_five_retained_canonical_charges_are_required(self):
+ def test_all_seven_retained_canonical_charges_are_required(self):
   p=scope.read(scope.PROTOCOL);original_read=scope.read
   for change in [{'retained_charge_records':p['retained_charge_records'][:-1]},{'retained_charge_records':[{**x,'charged_GPU_seconds':0} for x in p['retained_charge_records']]}]:
    def changed(path):return {**original_read(path),**change} if Path(path)==scope.PROTOCOL else original_read(path)
    with patch.object(scope,'read',side_effect=changed),self.assertRaises(AssertionError):scope.lineage()
  def test_actual_executed_source_archive_required_before_new_phase(self):
-  p=scope.read(scope.PROTOCOL);latest=scope.read(p['latest_interruption_evidence']);source=next(iter(latest['execution_source_SHA256']));archive=Path(p['checkpoint_path']).parent/'source'/source.lstrip('/');original_sha=scope.sha
+  p=scope.read(scope.PROTOCOL);latest=scope.read(p['latest_interruption_evidence']);dep=scope.read(ROOT/'artifacts/allocations'/latest['attempt']/'deployment.json');auth=scope.read(dep['authorization_path']);source=next(iter(auth['research_source_SHA256']));archive=Path(p['actual_execution_source_archive'])/source.lstrip('/');original_sha=scope.sha
   with patch.object(scope,'sha',side_effect=lambda path:'0'*64 if Path(path)==archive else original_sha(path)),self.assertRaises(AssertionError):scope.lineage()
  def test_real_failed_allocation_and_checkpoint_not_a_quality_result(self):
   p,f=scope.lineage();failure=scope.read(p['original_interruption_evidence']);self.assertFalse(failure['quality_result_created']);self.assertEqual(failure['completed_updates'],8942)
