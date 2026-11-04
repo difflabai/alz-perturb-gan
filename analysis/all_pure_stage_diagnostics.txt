@@ -1,0 +1,10 @@
+Completed pure seed0 conditional diagnostics
+
+All13 pure formulations, same4 adaptive calibration donors, two generation replicates. Descriptive only; no model selection or frozen confirmation changes.
+
+Stage0: joint-better-than-resampling = network_rate_half, pure_ensemble75, latent8, theta10, fourier5, cell32, continue40k, learned_observation, reference2, original_bispf; observed pure frontier = network_rate_half, theta10
+Stage1: joint-better-than-resampling = network_rate_half, pure_ensemble75, latent8, theta10, fourier5, semantic_observation; observed pure frontier = pure_ensemble75, latent8, semantic_observation
+Stage2: joint-better-than-resampling = cell32; observed pure frontier = cell32
+Stage3: joint-better-than-resampling = network_rate_half, pure_ensemble75, latent8, theta10, fourier5, cell32, continue40k; observed pure frontier = network_rate_half, fourier5, cell32
+
+Conditional stage ED is not pooled cell ED. An apparent per-stage frontier is not evidence that switching parent by stage would improve the pooled metrics or generalize; that would need a separately predeclared native generation comparison and new confirmation, retaining the current experiment.

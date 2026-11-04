@@ -1,0 +1,37 @@
+{
+  "status": "POST_HOC_CALIBRATION_HYPOTHESIS_BEFORE_SINGLE_SAVED_DISTRIBUTION_STITCH_SCORE",
+  "utc": "2026-11-04T01:27:14.900684+00:00",
+  "rationale": "Across all13 completed pure formulations, cell32 uniquely dominates stage2 resampling on both donorES and conditionalcellED. Existing selectedensemble improves other3 stages; test exactly one stage2 substitution as a diagnostic, not a weight/grid/mask search. Same4 adaptive donors, not independent evidence.",
+  "parent_rule_by_stage": {
+    "0": "selected_pg8_learned_ensemble75",
+    "1": "selected_pg8_learned_ensemble75",
+    "2": "retained_pure_cell32",
+    "3": "selected_pg8_learned_ensemble75"
+  },
+  "selected_reference": {
+    "path": "/ml2/alz/pure_incumbent.json",
+    "SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa"
+  },
+  "cell32_reference": {
+    "path": "/ml2/alz/analysis/pure_cell32_verification.json",
+    "SHA256": "3e3b667d4bd1f4e2c59afa0c2edb75115866a23ab9b0d5353dc57af226c80643",
+    "checkpoint_SHA256": "81fe9bf0d70914585eb8fa712f261bf8f3201a00f228be68a703ab4114f44bc4",
+    "attempt": "CAL_GPU0_V1_pure_cell32_v1_f0_pg_s0"
+  },
+  "diagnostic_reference": {
+    "path": "/ml2/alz/analysis/all_pure_stage_diagnostics.json",
+    "SHA256": "f8f3b9e3b2f97b6aef3202842b1eb181a81111e083c855d7a7bc40e76a4c7d92"
+  },
+  "single_declared_rule": "Keep savedselectedensemble stage0,1,3 arrays. Replace ENTIREstage2 donor summaries and stage2 cell reservoir with saved purecell32 same seed0/rep. Recompute unchanged calibration.score for both reps. No donor/bag ranking, weight optimization, mask scan, real resampling or evaluation donor reads.",
+  "meaning": "Scores describe a constructed empirical distribution from existing saved generated forecasts. Not an admitted/native-regenerated conditional model, not an accepted candidate/ATH, not independent validation. Conditional metrics alone cannot establish pooled cellED improvement, so recompute pooled score explicitly.",
+  "future_native_requirements": [
+    "Freeze exact threeparent checkpoints/source/config and full sequential original generation branches BEFORE stage selection, so globalGamma/count RNG streams match controls. No interleaving/crossbranch RNG coupling.",
+    "Native wholebag stage composition must reproduce declared saved summaries/reservoirs and each eightintegercount exemplars, common libraryexposures and exact parentstreams. Current recoveryprofile does NOT admit this future operation.",
+    "Three20k parents =60000 retained parentupdates, versus40000 for selectedtwo-parent ensemble. Zero new training in saved diagnostic; do not claim equalcompute.",
+    "Independent native source/replay/count/score/settlement audit and actual candidatecommit/revert comparison required before any acceptance. Retain current frozen originalconfirmation and alloutcomes. Any future confirmation would retrainALLTHREEparents for each same fixedseed and rule, no seedranking."
+  ],
+  "frozen_confirmation_changed": false,
+  "incumbents_changed": false,
+  "new_training_or_generation": false,
+  "GPU_allocation_created": false
+}
