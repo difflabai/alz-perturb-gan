@@ -1,0 +1,180 @@
+{
+  "status": "VERIFIED_NATIVE_FROZEN_PARTICLE_COUNT_CONTROL_RESULT",
+  "utc": "2026-11-04T14:14:20.407642+00:00",
+  "attempt": "CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0",
+  "candidate": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 2.155758252352112,
+    "cell_energy_distance": 0.28016419483042476,
+    "spread_ratio": 0.7083765927588603,
+    "within_condition_spread_ratio": 0.616425987612083,
+    "coverage80": 0.4519230769230769,
+    "generated_zero_count_rate": 1.5625e-06,
+    "per_donor_energy_score": [
+      1.4099519448848974,
+      3.0191642027942676,
+      2.2120309761392494,
+      1.9818858855900343
+    ],
+    "per_stage_cell_energy_distance": [
+      1.0046700707639111,
+      1.771542121152951,
+      1.0645520942295015,
+      0.6451403384942855
+    ],
+    "status": "completed",
+    "completed_updates": 20000,
+    "fixed_endpoint": 20000,
+    "integer_count_contract_passed": true,
+    "allocation_id": "ALZ_CAL_V1_frozen_prior_v1_f0_pg_s0",
+    "operation": "train_frozen_prior",
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "dd26f01f13e6a20381078af9a767d5e7e6afa995a5fb43b5d76ee0d023d62d62",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "method": "pg_frozen_particle_control",
+    "hybrid_config": null,
+    "qualification_only": false,
+    "new_model_updates": 20000,
+    "initial_completed_updates": 0,
+    "native_recipe_schedule_horizon": 20000,
+    "parent_checkpoint_SHA256": null,
+    "automatic_successor": false,
+    "generation": "direct_iter_pg",
+    "real_bag_replacements": 0,
+    "pure_only": true,
+    "native_recipe": "bispf_optimized",
+    "pure_formulation": "frozen_particle_control",
+    "frozen_prior_config": {
+      "prior_update": "frozen",
+      "prior_kind": "particles",
+      "num_particles": 512
+    },
+    "prior_update": "frozen",
+    "preset_protocol_SHA256": "ef1d57610e8a0671ae74fa9195323265df8c86c83fb9ccc699b6fbf2ec0891b3"
+  },
+  "incumbent": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9355320396443134,
+    "cell_energy_distance": 0.2318446092298636,
+    "spread_ratio": 1.0139376087094576,
+    "within_condition_spread_ratio": 0.9558202746934397,
+    "coverage80": 0.6971153846153846,
+    "generated_zero_count_rate": 3.125e-06,
+    "per_donor_energy_score": [
+      1.1847406370618034,
+      2.762139284338443,
+      1.7135998549675175,
+      2.0816483822094902
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7562105456693518,
+      1.603245353937993,
+      1.1354997606494939,
+      0.538689614861954
+    ],
+    "status": "completed",
+    "completed_updates": 40000,
+    "fixed_endpoint": 40000,
+    "integer_count_contract_passed": true,
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/fit/ensemble.json",
+    "checkpoint_SHA256": "bc9ac029c6b1aa18114f5cbb0f0522da1e775390404a8cd68208eb350c5444de",
+    "checkpoint_kind": "complete_two_parent_references",
+    "operation": "evaluate_pure_ensemble",
+    "allocation_id": "ALZ_CAL_V1_ensemble75_v1_f0_pg_s0",
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "hybrid_config": null,
+    "method": "pg_pure_ensemble75",
+    "pure_only": true,
+    "pure_formulation": "pg8_learned_ensemble75",
+    "real_bag_replacements": 0,
+    "generation": "iter_pg_whole_bag_ensemble",
+    "ensemble_config": {
+      "learned_weight": 0.25,
+      "mask_seed": 20261108,
+      "bags_per_stage": 200
+    },
+    "parent_manifest_SHA256": "283243061d72af81e9451de22581a03fb691c0c46ff5364b314fd39325f69a1f",
+    "parent_training_updates_total": 40000,
+    "parent_completed_updates": [
+      20000,
+      20000
+    ],
+    "effective_active_parent_training_updates": 40000,
+    "new_model_updates": 0,
+    "initial_completed_updates": 40000,
+    "native_recipe": "bispf_optimized",
+    "native_recipe_schedule_horizon_each": 20000,
+    "qualification_only": false,
+    "automatic_successor": false,
+    "candidate_commit": "f11139740a3e87f60bb132732c4519de03f95c52"
+  },
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "candidate_commit": "e2309af29370937ce74c78a9319ace9caa081822",
+  "independent_saved_scores_checkpoint_and_count_exemplars_verified": true,
+  "full_native_recipe_model_and_seed_streams_verified": true,
+  "finite_model_floating_values": 371105,
+  "native_optimizer_and_EMA_checkpoint_state_verified": true,
+  "native_fixed_initial_particle_bank_no_optimizer_group_or_movement_verified": true,
+  "owned_release_and_clean_settlement_verified": true,
+  "charged_GPU_seconds": 1459.3464490770057,
+  "array_and_exemplar_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r0/stage0_exemplar.npz": "cf396462744bbc125a63d03456f5b8c26be404a46b161df01dab4db08b12be4f",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r0/stage1_exemplar.npz": "ee2996cb0cccad23040348f19fd14cdee00e940f73ab0de96e48a53969eb5ea2",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r0/stage2_exemplar.npz": "2a9257ee66f1ce1a1b5d5d628fb8103498af420be6afc34b12f487cad35092eb",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r0/stage3_exemplar.npz": "2e191fb091b0fac6938ddf2a54b42314b6f6c4d92bdd975f2b09b03ec4648443",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r0/arrays.npz": "4159c690963064f93994b8ffd8dd0f2beaa4c3922f7486febc50620cf0de33d0",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r1/stage0_exemplar.npz": "746db36ff76987ebb5ab233f631ffa2e662f3f6231046975cfb6305eebc069ad",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r1/stage1_exemplar.npz": "b82197fda552a8db18becafbde8eb4b9f36a8febd8fdf3b6007270ebf3783371",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r1/stage2_exemplar.npz": "50d4026b91c75211e03637fb4cb68d4ce65dfd0479fe865b6055e06456734576",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r1/stage3_exemplar.npz": "e26287fc37a1281332fac914c89bd9b8d528675ab12e68739623c4f62af3e91c",
+    "/ml2/alz/runs/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0/r1/arrays.npz": "e187ee0fd8530e8b0af0b643a552ffc5f975ee5e20d3abf75e666ab93f99c8d2"
+  },
+  "authorization_SHA256": "ba407ed1600a5a413c397cea3b4bc7183289274f4ff1df83cb4dda077c493a5d",
+  "preset_protocol_SHA256": "ef1d57610e8a0671ae74fa9195323265df8c86c83fb9ccc699b6fbf2ec0891b3",
+  "source_SHA256": {
+    "/ml2/alz/frozen_runtime/finish.py": "966db638e59dea09990a62c90a733059e19b630ed6fbfd896fc7dc2ab58d9b72"
+  },
+  "incumbent_changed": false,
+  "next_step": "Commit negative evidence and revert trial activation; keep current incumbent. Try the next scientifically defined candidate.",
+  "scope": "Four adaptive calibration donors only; native fixed finite512particle bank control with unchangedoptimizedBISPF trainer; no particle optimizer group/regularization/location updates, no taskcell-energyauxiliary.20k singleparent vs40k selectedensemble. No evaluation donor access or independent biological confirmation."
+}
