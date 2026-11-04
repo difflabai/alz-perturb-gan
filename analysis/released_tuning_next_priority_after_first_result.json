@@ -1,0 +1,30 @@
+{
+  "status": "PROSPECTIVE_REPRIORITIZATION_WITHIN_UNCHANGED_DECLARED_RATE_GRID",
+  "utc": "2026-11-04T20:35:17.161567+00:00",
+  "original_protocol_path": "/ml2/alz/analysis/released_tuning/protocol.json",
+  "original_protocol_SHA256": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1",
+  "completed_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json",
+  "completed_result_SHA256": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+  "matched_particle_rate_comparison_path": "/ml2/alz/analysis/released_tuning_particle_rate_matched_comparison.json",
+  "matched_particle_rate_comparison_SHA256": "2bc96ff402cbde94d581d57a0522fdc415e8f5941f3613a89ce58cffb908de72",
+  "next_setting": {
+    "id": "lr_g050_d050_p025",
+    "parameters": {
+      "generator_lr": 0.006,
+      "critic_lr": 0.009,
+      "particle_lr": 0.0075,
+      "reg_coeff": 1.0,
+      "reg_kappa": 1.0,
+      "prior_reg": 0.01
+    }
+  },
+  "reason": "At same G.006/D.009, reducing particle step.03->.015 improved final20k donorES.93percent and cellED12.05percent on matchedseed0. The result beats resampling on both metrics but misses frozenensemble cellED. Test particle step.0075, holding networks and regularization fixed, as the next already-declared grid member.",
+  "same27settings_retained": true,
+  "previously_prepared_critic_half_setting_deferred_not_dropped": true,
+  "selection_or_anchor_rule_changed": false,
+  "only_final20k_selects": true,
+  "fixed_three_seed_confirmation_unchanged": true,
+  "evaluation_donors_used": false,
+  "next_GPU_job_started": false,
+  "scope": "Adaptive calibration priority, not a new posthoc threshold or early checkpoint selection. All27 fixed endpoints remain registered before regularization anchor selection."
+}
