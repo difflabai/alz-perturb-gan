@@ -1,0 +1,28 @@
+ParticleGAN ALZ formulation coverage, 2026-11-04T17:53:41.545119+00:00
+
+Official ParticleGAN0.9.4, last online release check15:37UTC2026-11-04. All51installed Python files rehashed now and unchanged from the official wheel.
+23completed seed0 pure-count comparisons cover seven published trainer presets. These counts include task variants and generated ensembles; they are not23independent published recipes or biological replications.
+
+Preset | Updates | Donor energy score | Pooled cell energy distance (both lower is better)
+--- | --- | --- | ---
+bispf_optimized | 20000 | 1.975566714 | 0.253276148
+bispf | 20000 | 2.230571511 | 0.352321204
+bcap | 20000 | 2.130702470 | 0.286841946
+bcap_adam | 20000 | 2.303517392 | 0.796137032
+ka2 | 20000 | 1.980333799 | 0.304707216
+k3p | 20000 | 2.062421748 | 0.333223115
+halloween | 20000 | 4.185330197 | 5.308212642
+
+Routed E22 is now implemented, CPU-qualified and training through the public e22_routed API with its native controls enabled.
+Actual live observation: 500updates; 200native probes, 104proposals, 9guard rejections, 0accepted moves. Endpoint20k/phasecap6h; no quality score yet.
+It uses complete Gamma-Poisson count/feature callbacks, per-context64bit seeds, 512x8dense learned bank, fit/protected cell pools11825/2937within33donors and one coupled native served snapshot. NativehorizonNone/probeinterval20 are declared before training.
+Common preprocessing predates this protection split and includes the original fitting-cell inputs; the protected pool is not independent biological validation.
+
+Stage-prior and Halloween are completed negatives, recorded then activation-reverted. Halloween had a severe count-distribution/spread collapse.
+Native MoG prior family, fixed-bank control and KA2 saved G+P EMA readout also completed; they add no published trainer preset names.
+
+Remaining untrained coverage: independent-row E22 and Atlas retain their native conditional-contract refusals; AE/VAE/DDGAN need faithful count adapters. Routed E22 is a distinct conditional formulation, not evidence those independent-row mechanisms were trained.
+
+Selected pure whole-bag ensemble remains ES1.935532040/cellED0.231844609 with40k total parent updates. Its fixed three-seed confirmation failed the joint cell criteria on seeds1and2. No stable joint ATH.
+Four repeatedly used adaptive calibration donors;20evaluationdonors remain excluded.
+Source-bound evidence: /ml2/alz/analysis/published_formulation_coverage_routed_live_20261104.json

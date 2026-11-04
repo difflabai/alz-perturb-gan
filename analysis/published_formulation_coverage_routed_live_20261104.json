@@ -1,0 +1,260 @@
+{
+  "status": "SOURCE_BOUND_COMPLETED_PRESETS_AND_VERIFIED_LIVE_ROUTED_E22",
+  "utc": "2026-11-04T17:53:41.545119+00:00",
+  "native_release": "0.9.4",
+  "release_last_online_check_utc": "2026-11-04T15:37:54.368052+00:00",
+  "release_recheck_path": "/ml2/alz/analysis/particlegan_release_reverification_20261104T1538.json",
+  "release_recheck_SHA256": "3b47b3abbf361816f92171189a825ced92b12822f282be87b8212000945814dc",
+  "official_wheel_python_source_files_reverified_now": 51,
+  "package_changed": false,
+  "completed_pure_count_seed0_comparisons": 23,
+  "completed_published_trainer_presets": [
+    {
+      "published_trainer_preset": "bispf_optimized",
+      "completed_count_trial": true,
+      "formulation": "latent8",
+      "completed_updates": 20000,
+      "energy_score": 1.9755667140392312,
+      "cell_energy_distance": 0.25327614831020107,
+      "spread_ratio": 0.9490753309366126,
+      "evidence": {
+        "leaderboard_path": "/ml2/alz/analysis/pure_formulations_leaderboard_after_Halloween.json",
+        "leaderboard_SHA256": "a5d87904c5e6cfd6124b9b7b07449f9a8024da7fe26d20b7d6a7c8864681a48e",
+        "leaderboard_row": "latent8"
+      }
+    },
+    {
+      "published_trainer_preset": "bispf",
+      "completed_count_trial": true,
+      "formulation": "original_bispf",
+      "completed_updates": 20000,
+      "energy_score": 2.2305715109757784,
+      "cell_energy_distance": 0.35232120361556873,
+      "spread_ratio": 0.8537920619404167,
+      "evidence": {
+        "leaderboard_path": "/ml2/alz/analysis/pure_formulations_leaderboard_after_Halloween.json",
+        "leaderboard_SHA256": "a5d87904c5e6cfd6124b9b7b07449f9a8024da7fe26d20b7d6a7c8864681a48e",
+        "leaderboard_row": "original_bispf"
+      }
+    },
+    {
+      "published_trainer_preset": "bcap",
+      "completed_count_trial": true,
+      "formulation": "bcap",
+      "completed_updates": 20000,
+      "energy_score": 2.1307024699088712,
+      "cell_energy_distance": 0.2868419455158664,
+      "spread_ratio": 0.8903876331083471,
+      "evidence": {
+        "leaderboard_path": "/ml2/alz/analysis/pure_formulations_leaderboard_after_Halloween.json",
+        "leaderboard_SHA256": "a5d87904c5e6cfd6124b9b7b07449f9a8024da7fe26d20b7d6a7c8864681a48e",
+        "leaderboard_row": "bcap"
+      }
+    },
+    {
+      "published_trainer_preset": "bcap_adam",
+      "completed_count_trial": true,
+      "formulation": "bcap_adam",
+      "completed_updates": 20000,
+      "energy_score": 2.3035173920043746,
+      "cell_energy_distance": 0.7961370323971231,
+      "spread_ratio": 0.7569513368911973,
+      "evidence": {
+        "leaderboard_path": "/ml2/alz/analysis/pure_formulations_leaderboard_after_Halloween.json",
+        "leaderboard_SHA256": "a5d87904c5e6cfd6124b9b7b07449f9a8024da7fe26d20b7d6a7c8864681a48e",
+        "leaderboard_row": "bcap_adam"
+      }
+    },
+    {
+      "published_trainer_preset": "ka2",
+      "completed_count_trial": true,
+      "formulation": "ka2",
+      "completed_updates": 20000,
+      "energy_score": 1.9803337991605336,
+      "cell_energy_distance": 0.30470721594082395,
+      "spread_ratio": 0.9507879135756754,
+      "evidence": {
+        "leaderboard_path": "/ml2/alz/analysis/pure_formulations_leaderboard_after_Halloween.json",
+        "leaderboard_SHA256": "a5d87904c5e6cfd6124b9b7b07449f9a8024da7fe26d20b7d6a7c8864681a48e",
+        "leaderboard_row": "ka2"
+      }
+    },
+    {
+      "published_trainer_preset": "k3p",
+      "completed_count_trial": true,
+      "formulation": "k3p",
+      "completed_updates": 20000,
+      "energy_score": 2.062421747861435,
+      "cell_energy_distance": 0.3332231147672129,
+      "spread_ratio": 0.916148014774862,
+      "evidence": {
+        "leaderboard_path": "/ml2/alz/analysis/pure_formulations_leaderboard_after_Halloween.json",
+        "leaderboard_SHA256": "a5d87904c5e6cfd6124b9b7b07449f9a8024da7fe26d20b7d6a7c8864681a48e",
+        "leaderboard_row": "k3p"
+      }
+    },
+    {
+      "published_trainer_preset": "halloween",
+      "formulation": "halloween",
+      "completed_count_trial": true,
+      "completed_updates": 20000,
+      "energy_score": 4.185330196719224,
+      "cell_energy_distance": 5.30821264184506,
+      "spread_ratio": 0.005733218544953803,
+      "evidence": {
+        "path": "/ml2/alz/analysis/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0-result.json",
+        "SHA256": "76039c359cbfa2cbee908fbf1e41777fd99c72753404e4c2cf48404179cb7852"
+      }
+    }
+  ],
+  "additional_completed_native_prior_family": "mog",
+  "additional_controls_and_task_variants": "Fixed bank, native KA2 saved G+P EMA, architecture/observation/rate variants, generated whole-bag ensembles, cell-energy auxiliary and stage-conditioned prior are included among23comparisons; they do not add published native trainer preset names.",
+  "not_quality_tested": [
+    {
+      "name": "e22_independent_rows",
+      "status": "Original native conditional row-semantics refusal remains; no independently trained formulation result. Routed E22 has a distinct conditional evidence/restructuring law."
+    },
+    {
+      "name": "atlas",
+      "status": "Original conditional-contract refusal; no trained count-quality result."
+    },
+    {
+      "name": "AE/VAE and DDGAN model families",
+      "status": "Not trained; faithful count task adapters remain absent."
+    }
+  ],
+  "currently_running": {
+    "attempt": "CAL_GPU0_V1_routed_e22_v1_f0_pg_s0",
+    "published_trainer_preset": "e22_routed",
+    "job_status": "active",
+    "worker_identity": {
+      "pid": 1928452,
+      "birth": 5252351,
+      "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb"
+    },
+    "latest_recorded_progress": {
+      "step": 500,
+      "D_adversarial": 0.6742762327194214,
+      "D_penalty": 0.008196310140192509,
+      "D_total": 0.6824725270271301,
+      "G_adversarial": 0.9442896246910095,
+      "G_total": 0.9442896246910095,
+      "prior_regularization_unweighted": 0.05170624703168869,
+      "native_output_sigma": 0.028999999165534973,
+      "G_prior_noise_LRs": [
+        0.00425,
+        0.0085,
+        0.00425
+      ],
+      "D_LRs": [
+        0.0030911504302466104
+      ],
+      "routing_probe_clock": {
+        "observed_updates": 500,
+        "last_probe_update": 500
+      },
+      "routing_counters": {
+        "evals": 25,
+        "probes": 200,
+        "proposals": 104,
+        "guard_rejections": 9,
+        "moves": 0,
+        "splits": 0
+      }
+    },
+    "fixed_endpoint": 20000,
+    "phase_cap_seconds": 21600,
+    "model_CPU_checks_passed": 19,
+    "runtime_CPU_checks_passed": 27,
+    "native_API": "ParticleGAN0.9.4 get_recipe('e22_routed',total_steps=None,batch_size=32,num_particles=512,z_dim=8); publicE22Policy_RoutedRows_RoutedBatch, probe_interval20, external20kcap",
+    "quality_complete": false,
+    "live_observation_note": "Exact boot/starttime worker identity checked through /proc and active ledger. Progress is a timestamped observation, not a live document. Full quality/count/checkpoint/served-state/release/charge audit remains pending."
+  },
+  "last_negative_trials": {
+    "stage_prior": {
+      "energy_score": 2.0590705342551674,
+      "cell_energy_distance": 0.32356811154800713,
+      "negative_commit": "c9931c9",
+      "actual_activation_revert": "77f97a6"
+    },
+    "halloween": {
+      "energy_score": 4.185330196719224,
+      "cell_energy_distance": 5.30821264184506,
+      "negative_commit": "8a0a999",
+      "actual_activation_revert": "98fb947"
+    }
+  },
+  "incumbent_unchanged": true,
+  "three_seed_stable_joint_target_passed": false,
+  "new_training_or_generation_by_this_report": false,
+  "CUDA_context_created_by_this_report": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/update_formulation_coverage_routed_live.py": "94fcfcce4e585bd7363486ec3f8295d508fce95e09d6955b77172ddee781a074",
+    "/ml2/alz/analysis/published_formulation_coverage_20261104T1538.json": "ef938c2a090a98d7400f97af3945c558b5c554c7a979a1aa706e53335b6ce32c",
+    "/ml2/alz/analysis/pure_formulations_leaderboard_after_Halloween.json": "a5d87904c5e6cfd6124b9b7b07449f9a8024da7fe26d20b7d6a7c8864681a48e",
+    "/ml2/alz/analysis/particlegan_release_reverification_20261104T1538.json": "3b47b3abbf361816f92171189a825ced92b12822f282be87b8212000945814dc",
+    "/ml2/alz/analysis/routed_e22_model_CPU_qualification.json": "b939b31dacd4e9156d56391d1144db71b2eed99d7e8408881419e70bc7864235",
+    "/ml2/alz/analysis/routed_e22_runtime_CPU_qualification.json": "3cc738c482b1c94bca489870277479c84f3ea1124d8aa93fc4bf5737a5215b25",
+    "/ml2/alz/analysis/routed_e22_protocol.json": "c2dc57c8e6fc204afbe4407d03abd229faac9e9f2e012f220cdd974c7fecf0be",
+    "/ml2/alz/analysis/pure_ensemble_confirmation_v6_all_seeds.json": "d9b31c4ab50eef50fbd69fa63cda7e7e424120ba6a59fac6dd3ec410c8165aa1",
+    "/ml2/alz/analysis/CAL_GPU0_V1_halloween_native_v1_f0_pg_s0-result.json": "76039c359cbfa2cbee908fbf1e41777fd99c72753404e4c2cf48404179cb7852",
+    "/ml2/alz/analysis/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0-result.json": "32cc9cc0558485376d87618f624f15fd7b51e4186663bf735648df0f00a5b186",
+    "/ml2/alz/pure_incumbent.json": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_routed_e22_v1_f0_pg_s0/authorization.json": "a65a3a0e4418d0a597f1e59ac3d315522576a91c9467f55318ea1812d8b98247",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_routed_e22_v1_f0_pg_s0/execution_source_archive.json": "ca91afe83e01d1f27603b6b73cec3cb482215d4e06861a938d7947b5e84faa67"
+  },
+  "installed_official_wheel_source_SHA256": {
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/__init__.py": "607c6bb12acd631ae1ff98f6e61d990ff4ab5b60ec86f5a8cb5864cda7c11864",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/_qr.py": "b59cd62cc27ed557b41b2d17ed86ed578c762a3a8a392d63731a5a3b2b018916",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/anchor_birth.py": "aa50983d8b61304acf4e1138f16fd4784798983df91e931863bcacd3b511f76f",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/autoencoder.py": "f3fbb9184e9f44112e15eccf0c0246dfba5ed490d3c7b81b0f837a5335916402",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/birth_death.py": "b14c50c611a8cf188347e391739fca50a5171200eb6be90e4e3d1509d64e47ed",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/birth_phase.py": "4af5a0915f927ca3d8e753195227d59c97f07304e9927ca1383bda9acd0ccb8f",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/bispf.py": "c97cef8942b6dc44b0f9dabab03ff25350cec37008eb6ed4aa72d62272a2d1a8",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/capabilities.py": "39df9c67dbedf612740057e5fa743bc724678a1bc323d1f7cf550b37c0c01177",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/conditional_transport.py": "4ffa96e7688825b83e618edbc1f0e2a6bc1ac6fb2e3e5d04d7f27274069e24ee",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/conditioning.py": "8734fe338868ace4b5851a8fdb1f071e46d47396f66a3765e6b1ef37f0481486",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/continuous.py": "4ceab49c7d51d1769ae91b7f8bc892eaf380ca6fbd77a948a086ade6627e9a41",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/coulomb_prior.py": "cd4fed5a3b22510911bc098e7b48bfb794366ef5a9c8c983d1672172f15b10a3",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/diffusion.py": "19c3aa8772703891551b9122fde8e74c07996f779892b7cb6be09553691efa61",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/discriminators.py": "0e2efb125ffb314577612ab7a2eba66b0a1a2d28ad25f403f42c18b6f6ee333f",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/execution.py": "015151489dd0b6c9933b9a9dc3f02edc721907770b82ab72d7e7ee2739d03c9d",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/feature_cells.py": "e0ea05f61abd7845c7437eed9a79c3a2511d5551ff04f4e619b6b9c8992e221a",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/feature_policy.py": "de1a50f70a37d4c9174c8850ce3eac2a2597ed01f19fc4fe1a2ce0ec3176a8b2",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/feature_reference.py": "58e076e9e04600be25e28afafc537a340de727371f4acbbfb2b7dd8bebac18b1",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/gan_loss.py": "f73cc593aef5d7507dc1a468ee261cc186c8dbfbee3a0aad769b6e252c2c143f",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/grad_regularizers.py": "a540d05a4a992540b6a5f3b5ff7ccc11ebaf18592135b87c95638adbe68aa747",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/init.py": "3534ff23efa413cdf8b4125b91e0d30671d873b3e2958547d4e744b750454b9b",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/initial_mmd.py": "59b9573dd79ac9d846779f2198d5864f865d0ae8207101ed8b3f4da720260615",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/k3p.py": "45ceabdc067fb420e163d3d4ac5a4edb0bb47d154c38c73865f95dabeaefcad7",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/ka2.py": "95fdaa58a2bdc229d5d146ef89548bc3fe07582d06181a149ed1bb4f5d632703",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/kinetic_transport.py": "8922627370b55e9e6b47e4c946f94cbd23f87bf17a94c6b9410fcf3c3967c1ee",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/mean_transport.py": "57a68e0a65c5424a4460f65002f3862a69e90af330a4d47c700dc773683a2c06",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/moment_tether.py": "16bc50edae9ca43464240c84ffd20cb93691194f2b285a1056b56ff3a98c0e5a",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/__init__.py": "34d32360b434685d6b88e346ffc68445759c889bac3fbe30c0d30d65eec5bc19",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/constraint_geometry.py": "b78f2d6dec2d345c1357b3812a7f9adac8c4da0f86c8536ebfe0092c18269c5e",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/convolution_frobenius.py": "0916f94d13c7213856faf5d40f5896891fb102f8995caa17e255ba8237bb9e3a",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/convolution_quintic.py": "55441cfca6e5136ea3810a6f6d5dfb284be4629c373e2b9a5bdaf16218608f14",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/critic_cap.py": "74950ecd95c56b9921e2ed28250c4c2694d764b1a9fd5a2d10585f283a45b999",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/direction_blend.py": "f18900ba47c639dc5484022d294bec7fe199efbd770c92876c548f727822eb72",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/dualnorm.py": "5b9a223c8765c5979af1e0592aad98ec0fac7bfdb6c9896f3a684d95f337107a",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/gram_polar.py": "6359f9069d5bd174351d1c05b1dc4084272d8574aa523ccde634179f1d6877c9",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/gram_svd_fallback.py": "a7081a7b85d1afc91caeafc08a2248d46404fe18720bc819a6aa31719812342f",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/prior_proximal.py": "50b20c11f0e7f7cabb9496d4874136172f36ce9997baf6db8d5dce91e3ca32ea",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/optim/strict_progress.py": "45f4764a3bdfbf4f0f6f6986817b8aef6aacc14cadbd1fc63e0d483011b2f577",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/output_moments.py": "dcf3e27228d2c3c9738e473c5b22ee9e6d5047ddcd60c538b66526adb53ef188",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/particle_prior.py": "0220878bebea227da63abbf9f5b1ebdabdc6aea54fd2332fd2cab02ed734238f",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/policy.py": "4eb130cb5982c8333eec1abac6829c76b8aeea8f4ce87bc90b06b805c7dede0c",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/population_continuity.py": "378cd75cca45bc8da4da33e686a12cf99df853042687978314e37c532bc17fe6",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/recipe_compat.py": "0a11bf4fd3b2c2db59f2a8462b2446f7fd31d358ec5ef728738bf5e8d8c60363",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/recipe_schedules.py": "b675bdc9f72224b11e9887f8ed66b1a541ffc76d80242709969cc67ac47ca46a",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/recipes.py": "6c818b90544a67f833f5effea36868524041ff8009960b2a9a17188df133977a",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/routing.py": "63249d808fccb3d4e113eb1d638a245ee665c3cade20a1542bb706f316b4abcc",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/row_evidence.py": "78be40141ef3946860458e9842159be9321f05c217a4800dd4134113b6eba93e",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/sigreg.py": "96bac4b2344f9d505a7d767ecfbb58ab06442e2a1de1a48ea479baa2288e048b",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/tensorflow_adam.py": "37f1192e48b84907446d8f676c62631bf87ff450b2a2e6b63e7489adc33e24e9",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/training.py": "3711700bcb1700d9446fb6ced07d8d98188860ff219828ec91f49e3bb10b8344",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/vicreg_loss.py": "177a68b98036e4725cacf6bc0d95277111184c0dcb9566d3f7fc1527046cefda"
+  },
+  "scope": "Four adaptive calibration donors,33fittingdonors,20evaluationdonors excluded.23comparisons are not23publishedrecipes or biologicalreplications. Seven completed native trainer presets plus one currently training is not exhaustive ParticleGAN model-family coverage. All3seed joint confirmation remains failed. No stablejointATH, externalSOTA or generalization claim. Historical coverage notes retained."
+}
