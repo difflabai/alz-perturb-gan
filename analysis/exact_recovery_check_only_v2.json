@@ -1,0 +1,38 @@
+{
+  "status": "UPDATED_RECOVERY_SOURCE_CHECK_REFUSED_FOREIGN_PEER_NO_DEPLOYMENT",
+  "utc": "2026-11-04T01:08:55.845174+00:00",
+  "checked_git_commit": "487514d49ed8d517f86aa101581f5a1aa1b57660",
+  "CPU_proof_SHA256": "40052b8d0aad5bd42fad4a6cda686be3d1c5efb39033b5487705525b222fe1bd",
+  "source_SHA256": {
+    "/ml2/alz/recovery_runtime/finish.py": "5cbeea552e8178e59ed4852ee4d17b68ff4ce08337da7124584e9a5e1585955c",
+    "/ml2/alz/recovery_runtime/aggregate.py": "c9341d984b1c18c54f3a2e5e766305dbe900e10f8e17e26629026bf587885c16",
+    "/ml2/alz/recovery_runtime/verify_qualification.py": "b4fde94d4051b62171cb2ce2e70fc2600b1467f15fc8e3f938e341d2041aa700",
+    "/ml2/alz/recovery_runtime/audit_checkpoints.py": "94f5b48d40d1d865e871ea0fec78c0c10daa0b8bad62bfb11a9c1db31b896804",
+    "/ml2/alz/recovery_runtime/test_scope.py": "8e106506aa95f49bef623e606927cf5bca413f47222aa2d298ff63d4aae5e3ad",
+    "/ml2/alz/recovery_runtime/exact_resume.py": "e021fef71bffda64bbe72db3b5fada85c386e86f66a9e354c7f9ea6952130518",
+    "/ml2/alz/recovery_runtime/prepare.py": "7e65649acd3dabf11c637d79c46558cdcc7b95360d6d76ff5e9922948e245971",
+    "/ml2/alz/recovery_runtime/qualify.py": "4b723a245e269bbf4c151eb5e8c77d7c7f26301a0c5c5f2a9d19b2dfa7ad42a2",
+    "/ml2/alz/recovery_runtime/execution.py": "dafffd09c5ddf860f7c109051b45b171d54ea6fa70baec3b8d01dbccec293380",
+    "/ml2/alz/recovery_runtime/recovery_scope.py": "c18cb6387883a535d08b74796e98854cd72d568e94099f6f4f03c20bcfb437eb",
+    "/ml2/alz/runtime/binding.py": "9f8eb8d3b91ae12546fe925044ad53917888048892b0f2ea626b4181394de1b5",
+    "/ml2/alz/runtime/worker_gpu0.py": "51e1c1a5b71233bc3326a09d3bdcd46515d76ed2305e130f6620316482892c8f"
+  },
+  "command": [
+    "/mnt/nvme/ai/conda/anaconda3/bin/python3",
+    "-B",
+    "/ml2/alz/recovery_runtime/prepare.py",
+    "--mode",
+    "qualify",
+    "--check-only"
+  ],
+  "return_code": 1,
+  "stderr": "Traceback (most recent call last):\n  File \"/ml2/alz/recovery_runtime/prepare.py\", line 74, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/ml2/alz/recovery_runtime/prepare.py\", line 43, in main\n    b.require(set(observation['gpu_memory']) == {p['identity']['pid'] for p in policy['protected_peers']}, 'unknown or missing GPU0 peer')\n  File \"/ml2/alz/runtime/binding.py\", line 42, in require\n    if not value:raise Refusal(message)\n                 ^^^^^^^^^^^^^^^^^^^^^^\nbinding.Refusal: unknown or missing GPU0 peer\n",
+  "canonical_budget_policy_registry_unchanged": true,
+  "canonical_allocation_directory_created": false,
+  "state_SHA256": {
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/project_gpu_budget.json": "d083c7f0d797b9d3a736722dc12358613dda11092d6be45eaf9818746d433ed5",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json": "5a4dfd1d5288bde24964ee680c003dd75f13fefe1a83ac55b27b49e6a05d125e",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/cooperative_gpu0_20261103_v2/live_registry/registry.json": "3a528019e66d2a18e3e22bb9330abf943748ded0b4b811fb08f33da190effa00"
+  },
+  "scope": "New verifier/accounting sources are committed and pass actual source closure; current unchanged8peerpolicy then refuses foreign MOSS. Check-only, no reservation/deployment/CUDA or external state mutation."
+}
