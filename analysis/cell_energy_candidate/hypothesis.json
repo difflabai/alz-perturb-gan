@@ -1,0 +1,24 @@
+{
+  "status": "PROSPECTIVE_INACTIVE_MATHEMATICAL_TASK_AUXILIARY_NOT_PUBLISHED_PRESET",
+  "utc": "2026-11-04T10:30:50.607960+00:00",
+  "condition": "Only consider native integration after the pending published KA2/K3P path fails; any accepted native candidate takes priority for fixedseed confirmation. No automatic successor and no candidate ranking from this CPU helper.",
+  "motivation": "Original confirmation seeds and Fourier128 can improve conditional cell scores yet regress on pooled cell ED. More fixed Fourier coordinates did not fix the problem. Directly estimate a stage-balanced pooled cell energy loss from fitting donors only, instead of assuming the donor-bag adversary constrains the required pooled marginal.",
+  "classification": "Explicit ALZ task objective extension on top of native optimizedBISPF, not an unmodified published ParticleGAN formulation. CountGenerator inference remains direct integer Gamma-Poisson counts with zero empirical replacements or output repairs. Existing pure published recipe comparisons remain separate evidence.",
+  "proposed_training_loss": "Unchanged bag adversarial loss + native prior regularizer coefficient + one coefficient1 stage-balanced cell ED auxiliary divided bysqrt(50). Same generator/prior optimizer and generated PC batch reused; no added RNG draws. No weight/bandwidth/PC grid.",
+  "estimator": "Use first4 exchangeable cells from each of32 already sampled independent training bags. For real and generated cells, exclude ALL pair blocks whose bag indices agree from XX,YY,andXY. Sum each off-diagonal bag block with product weights w_i*w_j, where w_i=1/(4*p_stage(i)) and p_s is that stage frequency among the33 fitting donors under the unchanged uniform donor sampler. Divide by32*31*4*4, never by the random sum of weights. This estimates equalstage pooled energy using only fitting law; it does not estimate target-cohort nuisance covariates.",
+  "why_exclude_bag_diagonals": "Cells within a bag share donor/latent/condition/library sampling. Matched real/fake bags share conditioning. Treating all cells as independent or keeping matchedbag XY blocks biases the marginal energy estimate. Independent bags can still draw the same donor/particle by replacement; those remain independent draws conditional on the empirical training/model laws.",
+  "finite_sample_caveat": "The unbiased U-statistic can be negative in an individual minibatch. Do not clamp it or normalize by observed weights. Crossbag dependence induced by shared learned parameters is conditioned on their current fixed values. Fitting-stage weighting does not imply calibration improvement or external biological validity.",
+  "gradient_and_resource_plan": "Use differentiable Euclidean pair differences rather than cdist backward, preserving discrete count forward/rate backward. First4 cells perbag keeps distance panels128x128x50 within the existing3GiB own GPU bound. Actual loop gradients/replay/resource closure still require separate qualification; this helper alone proves none of those native properties.",
+  "qualification": [
+    "explicit allcrossbagpair enumeration",
+    "exact expectation under unequal fitting-stage probabilities equals equalstage pooled energy",
+    "samebag-correlated counterexample demonstrates why naive cellV-statistic is biased",
+    "bag and withinselectedcell permutation/symmetry/replication invariance",
+    "finite differentiable gradients and invalidweight/shape/nonfinite refusal"
+  ],
+  "decision": "Any eventual native trial uses the unchanged joint seed0 selection rule, full fixed20k audit/negative commit/revert policy, and original allthree-seed stable target. No evaluation donor access. Fouradaptivecalibrationdonors only for existing comparisons; auxiliary itself reads fitting donors only.",
+  "GPU_allocation_created": false,
+  "native_training_loop_implemented": false,
+  "quality_result_available": false,
+  "incumbent_changed": false
+}
