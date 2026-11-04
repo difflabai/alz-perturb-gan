@@ -1,0 +1,143 @@
+{
+  "status": "FOUR_FIXED_FITTING_ONLY_CPU_COUNTERFACTUAL_FINITE_STEP_DIAGNOSTICS",
+  "utc": "2026-11-04T12:17:30.193287+00:00",
+  "records": [
+    {
+      "case": 0,
+      "fresh_CPU_diagnostic_seed": 202611041,
+      "protected_order": [
+        "bag_adversary",
+        "weighted_pooled_cell_energy"
+      ],
+      "before": [
+        4.305002212524414,
+        0.006485183257609606
+      ],
+      "after": [
+        3.226428508758545,
+        0.004371055867522955
+      ],
+      "finite_change": [
+        -1.0785737037658691,
+        -0.002114127390086651
+      ],
+      "first_order_derivatives_of_applied_displacement": [
+        -2.6474996139242677,
+        -0.001058555351639201
+      ],
+      "native_conflict_step": false,
+      "native_blended_step": false,
+      "any_finite_loss_increased": false,
+      "cell_finite_loss_increased": false,
+      "replay_exact_and_training_stream_states_unchanged": true,
+      "wall_seconds": 8.295609736996994
+    },
+    {
+      "case": 1,
+      "fresh_CPU_diagnostic_seed": 202611042,
+      "protected_order": [
+        "bag_adversary",
+        "weighted_pooled_cell_energy"
+      ],
+      "before": [
+        4.418069362640381,
+        0.008358779363334179
+      ],
+      "after": [
+        3.819708824157715,
+        0.0045882826671004295
+      ],
+      "finite_change": [
+        -0.598360538482666,
+        -0.0037704966962337494
+      ],
+      "first_order_derivatives_of_applied_displacement": [
+        -5.626562725381726,
+        -0.03433958810990624
+      ],
+      "native_conflict_step": true,
+      "native_blended_step": true,
+      "any_finite_loss_increased": false,
+      "cell_finite_loss_increased": false,
+      "replay_exact_and_training_stream_states_unchanged": true,
+      "wall_seconds": 6.169258431000344
+    },
+    {
+      "case": 2,
+      "fresh_CPU_diagnostic_seed": 202611043,
+      "protected_order": [
+        "bag_adversary",
+        "weighted_pooled_cell_energy"
+      ],
+      "before": [
+        3.740457534790039,
+        -0.0004730139335151762
+      ],
+      "after": [
+        3.374091148376465,
+        -0.001391292316839099
+      ],
+      "finite_change": [
+        -0.3663663864135742,
+        -0.0009182783833239228
+      ],
+      "first_order_derivatives_of_applied_displacement": [
+        -4.361950263385689,
+        -0.012218824153213539
+      ],
+      "native_conflict_step": true,
+      "native_blended_step": true,
+      "any_finite_loss_increased": false,
+      "cell_finite_loss_increased": false,
+      "replay_exact_and_training_stream_states_unchanged": true,
+      "wall_seconds": 6.4422093800021685
+    },
+    {
+      "case": 3,
+      "fresh_CPU_diagnostic_seed": 202611044,
+      "protected_order": [
+        "bag_adversary",
+        "weighted_pooled_cell_energy"
+      ],
+      "before": [
+        4.767337799072266,
+        -0.0034924896899610758
+      ],
+      "after": [
+        4.0244460105896,
+        -0.0036770955193787813
+      ],
+      "finite_change": [
+        -0.742891788482666,
+        -0.00018460582941770554
+      ],
+      "first_order_derivatives_of_applied_displacement": [
+        -2.2156694392591345,
+        -0.0011414204237863287
+      ],
+      "native_conflict_step": false,
+      "native_blended_step": false,
+      "any_finite_loss_increased": false,
+      "cell_finite_loss_increased": false,
+      "replay_exact_and_training_stream_states_unchanged": true,
+      "wall_seconds": 6.073946103002527
+    }
+  ],
+  "cases_with_any_finite_loss_increase": 0,
+  "cases_with_cell_finite_loss_increase": 0,
+  "input_SHA256": {
+    "/ml2/alz/analysis/cell_energy_finite_probe/protocol.json": "15786281bbccf6006fdf04f7391489407a668a0603f979172fb033c5eb8d9fe7",
+    "/ml2/alz/analysis/CAL_GPU0_V1_cell_energy_aux_v1_f0_pg_s0-result.json": "770e34dc78999c9b9c8c1f8cea6fc6fef1967728130f04ce8c0e437dd0e0b878",
+    "/ml2/alz/runs/CAL_GPU0_V1_cell_energy_aux_v1_f0_pg_s0/fit/final.pt": "8c20425024fab5dbd740e2dfde9ce04a2e8c2a46d8e7c48ab2ebf67cd72410d5"
+  },
+  "source_SHA256": {
+    "/ml2/alz/analysis/cell_energy_finite_probe/run.py": "8debcb76ce0c8df52870e02542077edfd914b59615ff7d4a7cdb8ad20b465f9b",
+    "/ml2/alz/model/cell_ed_adapter.py": "10644982b7b8f2d5a91f57269da7e6fe248da40a59cbf6f5f9ccdfb5f71f3919",
+    "/ml2/alz/model/cell_ed_update.py": "a4bd365c0b1de50f9e48b6e99b4959dd5d3e660c7a032d8366fd32a43bc9d161"
+  },
+  "CUDA_initialized": false,
+  "native_training_continuation_claimed": false,
+  "candidate_or_checkpoint_created_from_shadow_updates": false,
+  "calibration_forecasts_generated": false,
+  "scope": "CPUcounterfactualatonefrozenmodel/fourfixedminibatches, not actualGPUresume/replay, nativequality, calibrationforecast, broadtrainingstabilityclaim or support for reusing modifiedweights. Read33fittingdonors only, no calibration/evaluation arrays. Fixed-entropy replay calls count/gamma generators locally; do not claim that no samplingfunctions execute."
+}

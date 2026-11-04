@@ -1,0 +1,39 @@
+{
+  "status": "PREDECLARED_SINGLE_TASK_EXTENDED_PLUS_LEARNED_SAVED_FORECAST_SCREEN",
+  "utc": "2026-11-04T12:22:52.537653+00:00",
+  "models": [
+    {
+      "name": "cell_energy_task_extension",
+      "weight": 0.75,
+      "attempt": "CAL_GPU0_V1_cell_energy_aux_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_cell_energy_aux_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "8c20425024fab5dbd740e2dfde9ce04a2e8c2a46d8e7c48ab2ebf67cd72410d5",
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_cell_energy_aux_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "770e34dc78999c9b9c8c1f8cea6fc6fef1967728130f04ce8c0e437dd0e0b878"
+    },
+    {
+      "name": "learned_observation",
+      "weight": 0.25,
+      "attempt": "CAL_GPU0_V1_learned_obs_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "9e59988d216ef5f6d5fabf798ba204898a4d71905906938d486147e893b4df11",
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "0052e156b38efb031ffc15506f7f58a14465e26ecb5425193e152e1090b1abf0"
+    }
+  ],
+  "replicates": [
+    0,
+    1
+  ],
+  "fixed_learned_bags_per200": 50,
+  "rationale": "The completed cellenergytaskextension failedjointselection. Check one fixed75/25 replacement of the PG8 component by this taskextended countmodel while retaining the existing learned-observation component and weights. Same40k totalparentupdates as incumbent. This was declared after componentquality results, before computing mixture scores. No weight or mask scan; synthetic wholebag mixture only. Taskextension is not a published formulation.",
+  "decision": "Unchanged joint analytical gate against currentincumbent: strictlower expected donorES AND no higher empiricalcellED. Ifscreenfails, no nativecandidate; retainnegative. Ifpromising, actualmasked-nativegeneration/count/spread/source/cleanup/chargeaudit and fixedseedconfirmation are required. No selection based on this savedarrayestimate.",
+  "allowed_inputs": "Existing generated seed0 arrays and already-verified scalar metrics/checkpoint proofs only. No new target/evaluation donor arrays, fitting, generation, GPU allocation or modelsource edits.",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "frozen_confirmation_SHA256": "93e63252d278aa84b70e017d0aaacd818386fbc82f93cea48e830ffe5ac6b199",
+  "native_ensemble_result_verified": false,
+  "incumbents_changed": false,
+  "total_parent_training_updates": 40000,
+  "additional_training_updates_for_screen": 0,
+  "current_three_seed_confirmation_status": "Original completedconfirmation failedjointtarget; retainallthree outcomes. Any acceptednewconfiguration needs its own frozen fixedseed1/2 comparison."
+}

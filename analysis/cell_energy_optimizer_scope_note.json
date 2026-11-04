@@ -1,0 +1,28 @@
+{
+  "status": "CLARIFICATION_OF_EXECUTED_TASK_OPTIMIZER_SCOPE_NO_REINTERPRETATION_OF_QUALITY",
+  "utc": "2026-11-04T12:22:52.537970+00:00",
+  "actual_native_recipe_constraint_geometry_mode": "direction_blend",
+  "host_protected_losses_before_extension": [
+    "bag_adversary"
+  ],
+  "host_protected_losses_in_executed_extension": [
+    "bag_adversary",
+    "stage_weighted_cell_energy"
+  ],
+  "confound": "The native recipe and optimizerclass were unchanged, but adding/protecting the new task loss changes both the summed gradient and the objectives seen by native directionblending. Do not attribute results to scalar loss addition alone. Frozen executed sources/protocol/result remain unchanged.",
+  "actual_final_optimizer_statistics": {
+    "steps": 20000,
+    "projected_steps": 5790,
+    "max_derivative_before": 0.05072284164376602,
+    "max_derivative_after": 0.0,
+    "conflict_steps": 5790,
+    "blended_steps": 5790,
+    "pareto_stalls": 0
+  },
+  "four_fixed_fitting_CPU_counterfactuals": {
+    "result_path": "/ml2/alz/analysis/cell_energy_finite_probe/result.json",
+    "all_cases_finite_both_losses_decreased": true,
+    "scope": "FreshCPUdiagnostic entropy atfrozenfinalmodel, notGPUcontinuation orcalibrationquality. No supportingexample forfiniteovershoot inthese4cases; no globalabsenceorcausalityclaim."
+  },
+  "incumbent_changed": false
+}
