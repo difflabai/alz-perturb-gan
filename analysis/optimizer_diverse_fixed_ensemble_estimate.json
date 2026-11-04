@@ -1,0 +1,70 @@
+{
+  "status": "ANALYTIC_FIXED_OPTIMIZER_DIVERSE_ENSEMBLE_NOT_NATIVE_MODEL_RESULT",
+  "utc": "2026-11-04T09:05:50.312976+00:00",
+  "registered_weights": [
+    0.5,
+    0.5
+  ],
+  "replicates": [
+    {
+      "replicate": 0,
+      "donor_complementarity_U_by_stage": [
+        0.4101465295529785,
+        0.4787844957117544,
+        0.10151125328040722,
+        0.15915324592717184
+      ],
+      "expected_energy_score_over_uniform_fixed100of200_masks": 1.874603922311359,
+      "weighted_empirical_cell_reservoir_energy_distance": 0.24079202295943158,
+      "cell_complementarity_V": 0.038641175683739704
+    },
+    {
+      "replicate": 1,
+      "donor_complementarity_U_by_stage": [
+        0.3062513952451633,
+        0.512428109809413,
+        0.10847021831426273,
+        0.11165769736539666
+      ],
+      "expected_energy_score_over_uniform_fixed100of200_masks": 1.9023391999494565,
+      "weighted_empirical_cell_reservoir_energy_distance": 0.2427430859503299,
+      "cell_complementarity_V": 0.03918348931625637
+    }
+  ],
+  "mean_expected_energy_score": 1.888471561130408,
+  "mean_weighted_empirical_cell_ED": 0.24176755445488074,
+  "selected_pure_incumbent_energy_score": 1.9355320396443134,
+  "selected_pure_incumbent_cell_ED": 0.2318446092298636,
+  "expected_ES_change": -0.04706047851390549,
+  "empirical_cell_ED_change": 0.009922945225017132,
+  "joint_analytic_screen_passed": false,
+  "native_ensemble_result_verified": false,
+  "model_selected": false,
+  "incumbents_changed": false,
+  "current_three_seed_confirmation_changed": false,
+  "scope": "One preregistered equal-weight analytical saved-forecast check on adaptive seed0 calibration only. No new target/evaluation arrays, fitting, generation, native allocation or modelsource changes. No weight/mask search.",
+  "limits": "Donor estimate averages over hypothetical uniformly selected fixed-count masks, not the registered native mask. Cell estimate uses weighted empirical reservoirs, not a newly sampled mixture. Nested native Gamma-RNG changes, exact outer mask, spread and integer-count mixture validity remain unverified. Three underlying parents cost60000updates. A screen cannot establish a new ATH, independent confirmation or biological generalization.",
+  "next_step": "Keep the completed negative original three-seed confirmation unchanged. This fixed pair does not meet the joint analytic screen; retain the current incumbent. No native candidate activated.",
+  "source_checkpoint_array_metric_SHA256": {
+    "/ml2/alz/analysis/optimizer_diverse_fixed_ensemble_hypothesis.json": "6e2c93c4e33ed995ecd570abfe2c3d6aa583db34a4d4b4ad39120c87880f4a7a",
+    "/ml2/alz/pure_incumbent.json": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+    "/ml2/alz/analysis/pure_ensemble_confirmation_freeze.json": "93e63252d278aa84b70e017d0aaacd818386fbc82f93cea48e830ffe5ac6b199",
+    "/ml2/alz/analysis/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0-result.json": "3f231d6834338c984db03d0f80a9f675c86f47b4a3463aaa28b038e1c558b8f2",
+    "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/fit/ensemble.json": "bc9ac029c6b1aa18114f5cbb0f0522da1e775390404a8cd68208eb350c5444de",
+    "/ml2/alz/analysis/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0-result.json": "15b3e85ac642deb0dcdb7ed77818bcfe40e40e582f0de93fb2e43847ba250a52",
+    "/ml2/alz/runs/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0/fit/final.pt": "7b312554f6b4f8c26da7bc1eeb22573b9d4045e628b5698212cc0bd2cf014be3",
+    "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/r0/arrays.npz": "6abe5e1c992556f6a039ce28db20ef88f2a66e2479f17f3df96408f490eb3a7b",
+    "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/r0/metrics.json": "9d5d89daa851ba3360385962f15643bc347412b6ac018d8ad3c94536c1f704af",
+    "/ml2/alz/runs/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0/r0/arrays.npz": "5ac74a7755efc8add5b80168cf72b981a1ff8905f7b8a314ee36f03471343ee9",
+    "/ml2/alz/runs/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0/r0/metrics.json": "eee53dae4cf1fb366c33caeeaaeba84e55ab2e6247597a6712c1bc183734663d",
+    "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/r1/arrays.npz": "b13a4a99086a54c7e35d86f3e38848aaf3c30cb427fe9015f8c49fd93b1a793d",
+    "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/r1/metrics.json": "001f9ff80e424624e45ee3a0268e43a138f8a4d5d89bd07123dbe8d7375da9de",
+    "/ml2/alz/runs/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0/r1/arrays.npz": "9f8b8d672850468bb67560bb6198f1cb3477c1a7315821d99e6a49250d0408d3",
+    "/ml2/alz/runs/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0/r1/metrics.json": "8011b4974d6c8225b7b1b4ec80d981af081f8136265483a727f3deb05122868e"
+  },
+  "source_SHA256": {
+    "/ml2/alz/analysis/diagnose_optimizer_diverse_fixed_ensemble.py": "7bc8f4e87a444ba625238a1e126972efae09b5ad10c08f82a7f894e46f920527",
+    "/ml2/alz/analysis/diagnose_pure_ensemble.py": "dc01fa1cc212f7e2d57a9e16470b091dc6cfc2176c8cd7730426d6abbbb7482e",
+    "/ml2/alz/analysis/test_ensemble_estimate.py": "5f8eb92ca135dcd1d7685c3c828eb206238faf7e7eea87d635c662849600f881"
+  }
+}

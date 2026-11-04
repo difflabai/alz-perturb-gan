@@ -1,0 +1,49 @@
+{
+  "status": "PREDECLARED_SINGLE_RICHER_FIXED_CELL_OBSERVATION_HYPOTHESIS_NO_NATIVE_ADMISSION",
+  "utc": "2026-11-04T09:10:00.862593+00:00",
+  "experiment": "fourier128_v1",
+  "rationale": "Published BCAPAdam regressed on both scores and was deactivated. Fixed uniformseed and optimizer-diverse whole-bag mixture screens improve expected donorES but both fail cellnonregression. Test whether a richer fixed characteristic-function observation constrains multivariate cell-distribution residuals missed by25frequencies. The recorded pooled residual alignment is motivation, not evidence of a causal fix.",
+  "native_recipe": "bispf_optimized",
+  "task_overrides": {
+    "total_steps": 20000,
+    "batch_size": 32,
+    "num_particles": 512,
+    "z_dim": 8
+  },
+  "frozen_model_config": {
+    "z_dim": 8,
+    "stage_balance": false,
+    "cell_z_dim": 8,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0
+  },
+  "observation": {
+    "PC_dimensions": 50,
+    "unchanged_moment_dimensions": 100,
+    "fixed_fourier_frequencies": 128,
+    "fixed_frequency_seed": 20261030,
+    "frequency_distribution": "float64standardnormal /sqrt(50), converted to inputdtype/device",
+    "fourier_block": "sorted cell means of concatenated cos/sin, scaled by1/sqrt(128)",
+    "total_observation_dimensions": 356,
+    "critic_hidden_width": 128
+  },
+  "fixed_scope": "One seed0/fold0 native20k trial,21600s cap inside existing ownerfive-daywindow. SameCountGenerator/discretecountforward/ratebackward,512nativepriorrows,adaptersampling/33fittingdonors/Poisson-Gamma law/libraryqueries/traces/scorer/two calibrationreplicates. No real replacements, no outputrepair.20evaluationdonors excluded.",
+  "confounds": "Observation dimension/basis and resulting critic input-layer capacity change. Mean/sd first100coordinates preserved and Fourierblock normalization retained in unitfeature norm. Not proof that missing Fourier coordinates caused the failure. No bandwidth/seed/frequency-count grid or mask/weight search.",
+  "qualification_required": [
+    "first100momentcoordinates byteidentical",
+    "fixed feature permutation invariance and finite bounded trigonometric block",
+    "official native recipe/factory components unchanged",
+    "initial CountGenerator/prior learned tensors and streams match baseline; critic input capacity declared",
+    "finite nonzero countgenerator/dispersion/prior gradients through allfeatures and isolatednewFourierblock",
+    "complete serialized exact nextupdate replay and wrongsource/config/cache refusals",
+    "new isolated native source/profile/lease/accounting checks; all previous sources/evidence preserved"
+  ],
+  "decision": "Existing joint selection.decide against frozen current pure incumbent; independently recompute actual2replicas/countsexemplars/fullcheckpoint/cleanup/charge. Commit actual result then revert only activation ifworse. Seed0success stillneedsfixedseedconfirmation before a stable target claim.",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "failed_native_BCAP_Adam_result_SHA256": "2ad11edbce7a86f120e9813cfb9420321926f65c5c2d6bdde0489c35c558a46d",
+  "failed_optimizer_diverse_screen_path": "/ml2/alz/analysis/optimizer_diverse_fixed_ensemble_estimate.json",
+  "failed_optimizer_diverse_screen_SHA256": "779e4db9468647161bfe658d1e6dfa37821f1fc16c97bbefc74f9b765db4ce87",
+  "GPU_allocation_created": false,
+  "native_result_available": false,
+  "incumbents_changed": false
+}
