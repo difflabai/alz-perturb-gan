@@ -1,0 +1,42 @@
+{
+  "status": "VERIFIED_FROZEN_ENSEMBLE_PARENT_RECOVERY_STATE_ONLY",
+  "utc": "2026-11-04T00:25:24.966473+00:00",
+  "completed_updates": 2000,
+  "archived_snapshot": "/ml2/alz/artifacts/native_recovery_audits/CAL_GPU0_V1_pure_confirm_0da2a09092c823377ca5_f0_pg_s1/pg8/step2000.pt",
+  "snapshot_SHA256": "858642f228d8a515482faeffb4a7bd53746168c1c9e76ec4e65b3c3bc52a9a55",
+  "attempt": "CAL_GPU0_V1_pure_confirm_0da2a09092c823377ca5_f0_pg_s1",
+  "parent": "pg8",
+  "training_seed": 1,
+  "independent_seed_streams_verified": true,
+  "training_streams": {
+    "generator_init": 3831419135786728014,
+    "critic_init": 6983117229697947389,
+    "prior_init": 1763378350071638784,
+    "policy_latent": 3450493680171922906,
+    "policy_penalty": 5927750312485326206,
+    "policy_eval": 8596393481748330584,
+    "policy_noise": 8214113812180032494,
+    "cell": 7072020954438689827,
+    "count": 5690566065726694673,
+    "gamma_global": 5336387364448280658,
+    "donor_sampler": 3606454816551336673
+  },
+  "native_recipe_exact_API_factory": true,
+  "saved_initial_and_actual_optimizer_rates_match": true,
+  "actual_optimizer_rates": [
+    [
+      0.012,
+      0.03
+    ],
+    [
+      0.018000000000000002
+    ]
+  ],
+  "strict_complete_G_D_prior_model_load_verified": true,
+  "finite_model_floating_values": 371177,
+  "CUDA_initialized": false,
+  "scope": "CPU read-only atomic recovery inspection. No optimizer update or restore, CUDA RNG restore, new fitting, sampling, held-out targets, quality score or GPU allocation. Does not establish improvement or native continuation qualification.",
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_ensemble_confirmation_recovery.py": "e1363560af8f892a44d2424e7be04662eccaf1dc2b5ce6069936ac9fff49b5c3"
+  }
+}
