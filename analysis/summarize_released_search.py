@@ -31,7 +31,7 @@ def summarize(destination):
     audited={};inflight={}
     for path in (ROOT/'analysis').glob('CAL_GPU0_V1_*-result.json'):
         result=read(path);candidate=result.get('candidate',{});identity=candidate.get('tuning_candidate_id')
-        if identity not in settings:continue
+        if identity not in settings or candidate.get('training_seed')!=0:continue
         assert identity not in audited,'Duplicate completed scientific configuration requires explicit lineage audit'
         assert result['owned_release_and_clean_settlement_verified'] is True
         assert result['independent_saved_scores_checkpoint_and_count_exemplars_verified'] is True
@@ -47,20 +47,24 @@ def summarize(destination):
         audited[identity]={'id':identity,'parameters':settings[identity],'state':'audited_complete',
             **{k:candidate[k] for k in ('energy_score','cell_energy_distance','spread_ratio')},
             'endpoint_decision':result['decision'],'result_path':str(path),'result_SHA256':sha(path),
-            'charged_GPU_seconds':result['charged_GPU_seconds'],
+            'charged_GPU_seconds':result.get('charged_GPU_seconds_total_scientific_trial',result['charged_GPU_seconds']),
             'convergence_curve_path':candidate['convergence_curve_path'],'convergence_curve_SHA256':candidate['convergence_curve_SHA256']}
     # This inventory is explicitly output presence, not proof of a live job.
     # Authoritative process/ledger checks are required before saying "running".
     for path in (ROOT/'artifacts/allocations').glob('*/authorization.json'):
         auth=read(path);identity=auth.get('tuning_candidate_id')
-        if identity not in settings or identity in audited:continue
+        if identity not in settings or identity in audited or auth['cell']['seed']!=0:continue
         assert auth['released_hyperparameters']==settings[identity]
         out=Path(auth['output_dir']);progress=out/'fit/progress.json';failure=out/'failure.json'
         entry={'id':identity,'parameters':settings[identity],'state':'allocated_quality_not_audited',
-            'authorization_path':str(path),'process_liveness_checked':False}
+            'authorization_path':str(path),'attempt':auth['attempt_id'],'issued_unix':auth['issued_unix'],
+            'initial_completed_updates':auth['initial_completed_updates'],'process_liveness_checked':False}
         if progress.exists():entry['latest_saved_progress_updates']=read(progress)['step']
+        receipt=out/'fit/checkpoint_receipt.json'
+        if receipt.exists():entry['latest_checkpoint_complete_updates']=read(receipt)['completed_updates']
         if failure.exists():entry['state']='incomplete_operational_failure';entry['failure_path']=str(failure)
-        inflight[identity]=entry
+        prior=inflight.get(identity)
+        if prior is None or (entry['issued_unix'],entry['attempt'])>(prior['issued_unix'],prior['attempt']):inflight[identity]=entry
     rows=[audited.get(s['id'],inflight.get(s['id'],dict(s,state='not_started'))) for s in protocol['stage1']['configs']]
     all_complete=len(audited)==len(settings)
     anchor=choose_anchor(rows,incumbent) if all_complete else None
