@@ -1,0 +1,41 @@
+{
+  "status": "PREDECLARED_SINGLE_UNIFORM_TRAINING_SEED_ENSEMBLE_SCREEN_BEFORE_SEED2_RESULTS",
+  "utc": "2026-11-04T07:35:43.374853+00:00",
+  "scientific_role": "New adaptive calibration candidate screen only AFTER complete original frozen0/1/2 comparison is audited and reported. This cannot retroactively make the failed original frozen model stable.",
+  "hypothesis": "A fixed, uniform whole-bag mixture of all three trained seed ensembles may reduce shared cell-distribution bias through forecast diversity without changing counts or using real resampling. Include every seed equally; no seed, mask or weight ranking.",
+  "model_training_seeds": [
+    0,
+    1,
+    2
+  ],
+  "nominal_weights": [
+    0.3333333333333333,
+    0.3333333333333333,
+    0.3333333333333333
+  ],
+  "attempts": [
+    "CAL_GPU0_V1_ensemble75_v1_f0_pg_s0",
+    "CAL_GPU0_V1_pure_shared_9fafcd1b9091d5da6204_f0_pg_s1",
+    "CAL_GPU0_V1_pure_confirm_0da2a09092c823377ca5_f0_pg_s2"
+  ],
+  "inner_whole_bag_mixture": {
+    "PG8": 0.75,
+    "learned": 0.25
+  },
+  "outer_mask": {
+    "bags_per_stage_replica": 200,
+    "rule": "66of200 bags from each model plus two extra bags; exclude model index (4*replica+stage)%3 from the extras, giving each stage exactly200. Independent fixed random permutation seed20261110+100*replica+stage. Never scan masks.",
+    "replicas": [
+      0,
+      1
+    ]
+  },
+  "screen_inputs": "Existing saved generated summaries/cell reservoirs and their audited metrics/checkpoint/array proofs. No newly loaded target arrays, evaluation donors, fitting or generation. Compare one fixed mask expectation/weighted empirical mixture against current pure incumbent jointly.",
+  "screen_rule": "Strictly lower expected donor ES AND no greater empirical pooled cell ED than current selected pure incumbent. A screen is not a native result; native common-query/RNG/count/spread/exactsource/generation proof and fresh independent confirmation are still mandatory before claiming ATH or stable performance.",
+  "calibration_limit": "Using model outcomes from seeds0/1/2 for this next adaptive candidate makes them selection evidence. They cannot also serve as independent confirmation of this new ensemble.",
+  "training_compute": "Uses six full parent models:120000 aggregate parent updates, compared with40000 for original two-parent seed0 ensemble. Disclose extra compute.",
+  "motivation_evidence": "analysis/seed1_cell_ED_decomposition.json",
+  "original_confirmation_changed": false,
+  "native_successor_authorized_by_this_file": false,
+  "incumbents_changed": false
+}
