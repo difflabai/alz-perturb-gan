@@ -1,0 +1,22 @@
+{
+  "status": "EXACT_NATIVE_PRIOR_WITH_REPLACEMENT_CONSTRUCTION_AND_SAMPLING_VERIFIED",
+  "utc": "2026-11-04T11:41:49.297959+00:00",
+  "native_recipe": "bispf_optimized",
+  "actual_prior_class": "particlegan.particle_prior.ParticlePrior",
+  "sampling_calls": 32,
+  "rows_per_call": 32,
+  "particle_rows": 512,
+  "indices_and_rng_states_bitwise_match_torch_randint": true,
+  "latent_values_equal_indexed_raw_prior_rows": true,
+  "prior_buffers_and_parameters_unchanged_by_sampling": true,
+  "duplicate_indices_within_calls_observed": 26,
+  "source_SHA256": {
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/particle_prior.py": "0220878bebea227da63abbf9f5b1ebdabdc6aea54fd2332fd2cab02ed734238f",
+    "/ml2/alz/model/cell_ed_adapter.py": "10644982b7b8f2d5a91f57269da7e6fe248da40a59cbf6f5f9ccdfb5f71f3919"
+  },
+  "authorization_SHA256": "db02a2c11b755523f91218e6e1cea97dccb691e771e011a83ba0a240c3a7734d",
+  "CUDA_initialized": false,
+  "training_or_forecast_executed": false,
+  "quality_measured": false,
+  "scope": "Actual task recipe/factory/policy construction on CPU, including native prior policy. Confirms active ParticlePrior sample uses ordinary with-replacement randint, not the separate legacy BISPF stratified-cursor sampler. This is a source/API sampling-contract check, not a statistical proof of full generated-bag independence, GPU replay or quality."
+}
