@@ -69,6 +69,13 @@ def restore(ctx,q,*,expected_endpoint=PG_UPDATES):
  u.steps=q['usage']['steps'];u.unique_batch_histogram=list(q['usage']['unique_batch_histogram']);torch.set_rng_state(q['torch_cpu_rng'].cpu())
  if ctx.device.type=='cuda':torch.cuda.set_rng_state(q['torch_device_rng'].cpu(),ctx.device)
  return b,g,r,u,seeds
+@torch.no_grad()
+def passive_particle_diagnostics(bundle,usage):
+ table=bundle[3].z.detach()
+ return {'rows_drawn':int((usage.draws>0).sum()),'rows_moved':int((usage.moved_steps>0).sum()),
+  'total_draws':int(usage.draws.sum()),'total_unsampled_row_moves':int(usage.unsampled_moved_steps.sum()),
+  'particle_covariance_trace':float(table.var(0,unbiased=False).sum()),'particle_mean_squared_norm':float(table.square().sum(-1).mean())}
+
 def fit(ctx,out,seed,*,end_monotonic):
  if ctx.device.type!='cuda':raise RuntimeError('real PG fitting requires a separately reviewed guarded GPU admission; CPU tests use synthetic advance only')
  out=Path(out);out.mkdir(exist_ok=False,parents=True);b,g,r,u,seeds=build(ctx.mu,ctx.theta,ctx.device,ctx.fold,seed);stops=[];handlers={s:signal.signal(s,lambda sig,frame:stops.append(sig)) for s in [signal.SIGINT,signal.SIGTERM]}
@@ -78,7 +85,8 @@ def fit(ctx,out,seed,*,end_monotonic):
   while b[-1].completed_steps<PG_UPDATES:
    if stops or time.monotonic()>=end_monotonic:raise InterruptedError('finite scientific allocation ending; preserve completed-update checkpoint')
    metrics=advance(ctx,b,g,r,u,execution_limit=PG_UPDATES)
-   if metrics['step']%250==0 or metrics['step']==1:
+   if metrics['step']%250 in (0,1):
+    metrics['particle_usage']=passive_particle_diagnostics(b,u)
     dump(out/'progress.json',metrics)
     with (out/'learning_curve.jsonl').open('a') as stream:stream.write(json.dumps(metrics,allow_nan=False)+'\n')
    if metrics['step'] in (5000,10000):

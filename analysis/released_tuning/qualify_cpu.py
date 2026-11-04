@@ -88,6 +88,12 @@ class ReleasedTuning(unittest.TestCase):
             b,g,r,u,s = adapter.build(ctx.mu,ctx.theta,'cpu',0,0)
             for _ in range(2):adapter.advance(ctx,b,g,r,u,execution_limit=20000)
             actual=adapter.snapshot(ctx,b,g,r,u,0,s,'synthetic')
+            before=fingerprint(actual)
+            diagnostics=adapter.passive_particle_diagnostics(b,u)
+            self.assertGreater(diagnostics['rows_drawn'],0)
+            self.assertEqual(diagnostics['total_draws'],64)
+            self.assertEqual(diagnostics['total_unsampled_row_moves'],0)
+            self.assertEqual(before,fingerprint(adapter.snapshot(ctx,b,g,r,u,0,s,'synthetic')))
             actual.pop('native_recipe');actual.pop('released_hyperparameters')
             self.assertEqual(fingerprint(actual),fingerprint(expected))
 

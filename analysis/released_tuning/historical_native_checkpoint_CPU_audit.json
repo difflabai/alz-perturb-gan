@@ -1,0 +1,27 @@
+{
+  "status": "PASSED_ACTUAL_HISTORICAL_NATIVE_CUDA_CHECKPOINT_CPU_MODEL_OPTIMIZER_COMPATIBILITY_AUDIT",
+  "utc": "2026-11-04T18:50:33.403817+00:00",
+  "historical_checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0/fit/final.pt",
+  "historical_checkpoint_SHA256": "7b312554f6b4f8c26da7bc1eeb22573b9d4045e628b5698212cc0bd2cf014be3",
+  "historical_hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.03,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "new_tuning_training": false,
+  "fullwidth_model_floating_values": 371177,
+  "all_models_strict_loading_and_byte_fingerprint_verified": true,
+  "both_native_optimizer_validation_loading_and_byte_fingerprint_verified": true,
+  "original_CUDA_device_metadata_unchanged": "cuda:0",
+  "CUDA_initialized": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/released_tuning/audit_historical_native_checkpoint.py": "45504c3fa9c344e4cdec876028820e85215982e5e8332d19a4688d9a5edbd26f",
+    "/ml2/alz/analysis/released_tuning/released_adapter.py": "eefb9d37350f246a61baab6829ab558136aac0abbc1671c38d961176873c15cb",
+    "/ml2/alz/analysis/released_tuning/released_update.py": "0fb711bca17681b55b1393306ee6bc719796a6c3b5774e124bf0b0fb368986e8",
+    "/ml2/alz/released_rate_runtime/state_fingerprint.py": "29201ac7d98124296ec926fe6155903b30a8338e5e3875ae47d3276a7d61ae53"
+  },
+  "scope": "Read-only actual old20k network-rate negative checkpoint. Public native model/optimizer component loading on CPU; no optimizer steps, no CUDA policy relabel, no new tuning quality claim."
+}
