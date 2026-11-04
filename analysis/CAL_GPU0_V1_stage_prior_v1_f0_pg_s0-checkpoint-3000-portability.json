@@ -1,0 +1,46 @@
+{
+  "status": "ACTUAL_INTERMEDIATE_STAGE_GPU_CHECKPOINT_CPU_PORTABILITY_AUDIT_PASSED",
+  "utc": "2026-11-04T15:36:02.525204+00:00",
+  "attempt": "CAL_GPU0_V1_stage_prior_v1_f0_pg_s0",
+  "completed_updates": 3000,
+  "fixed_endpoint": 20000,
+  "native_recovery_checkpoint_SHA256": "5afc4777f46cce6b92a1ed6c46963df0e8bea5a41d54a1c6a3ac8850748376c8",
+  "preserved_checkpoint_path": "/ml2/alz/artifacts/checkpoint_milestones/CAL_GPU0_V1_stage_prior_v1_f0_pg_s0/3000-5afc4777f46cce6b92a1ed6c46963df0e8bea5a41d54a1c6a3ac8850748376c8/recovery.pt",
+  "full_model_floating_values": 371177,
+  "native_optimizer_and_average_states_verified": true,
+  "stage_prior_config": {
+    "conditioning": "known_ADNC_stage",
+    "stages": 4,
+    "particles_per_stage": 128,
+    "num_particles": 512,
+    "partition": "contiguous_fixed_equal_groups",
+    "sampling": "uniform_with_replacement_within_stage"
+  },
+  "learned_particle_bank_differs_from_exact_seeded_initial_bank": true,
+  "particle_group_L2_displacement_from_initial": [
+    7.248439788818359,
+    9.020845413208008,
+    12.776396751403809,
+    12.968839645385742
+  ],
+  "total_generator_particle_draws": 96000,
+  "generator_particle_draws_per_stage_group": [
+    8558,
+    11554,
+    23226,
+    52662
+  ],
+  "all_four_stage_groups_sampled_and_moved": true,
+  "unsampled_raw_particle_movement_zero": true,
+  "all_saved_floating_tensors_finite_including_usage_and_regularizer": true,
+  "GPU_policy_device_metadata_preserved": "cuda:0",
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_stage_intermediate_checkpoint.py": "decfa728f3feea50b1f7541189a500195202514b667e0a2e62ddf175d93d18a7"
+  },
+  "authorization_SHA256": "8126f6b735f0828aeb05403c0b6dfd46e52cbbb2cb512640d2013a38597ad683",
+  "CUDA_initialized": false,
+  "training_update_executed": false,
+  "calibration_forecasts_generated": false,
+  "quality_measured": false,
+  "scope": "Actual stable intermediate snapshot copied by matching native receipt/hash before and after read. Full CPU models/optimizers/EMA validate; saved CUDA policy and RNG metadata remain unchanged. No GPU next-update replay, quality selection, completed endpoint, confirmation or new admission."
+}
