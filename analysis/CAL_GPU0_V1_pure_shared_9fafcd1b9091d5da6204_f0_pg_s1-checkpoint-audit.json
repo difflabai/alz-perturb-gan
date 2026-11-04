@@ -1,0 +1,60 @@
+{
+  "status": "VERIFIED_EXACT_RECOVERED_OR_FROZEN_SEED2_CHECKPOINTS",
+  "utc": "2026-11-04T07:29:13.885330+00:00",
+  "attempt": "CAL_GPU0_V1_pure_shared_9fafcd1b9091d5da6204_f0_pg_s1",
+  "training_seed": 1,
+  "checkpoint_SHA256": "3cc85e70fc4a2f8d93774555b9056692b92acaabc21a4d01e8efb888bd97dc3e",
+  "original_confirmation_freeze_SHA256": "93e63252d278aa84b70e017d0aaacd818386fbc82f93cea48e830ffe5ac6b199",
+  "recovery_protocol_SHA256": "cc60e10cd8118365664bf43e7ff7e01d93f59cc464395329a3225247235810ad",
+  "seed0_checkpoint_SHA256": "bc9ac029c6b1aa18114f5cbb0f0522da1e775390404a8cd68208eb350c5444de",
+  "parents": [
+    {
+      "name": "PG8",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_pure_shared_9fafcd1b9091d5da6204_f0_pg_s1/fit/pg8/final.pt",
+      "checkpoint_SHA256": "cebfcb76ee263a2fc91e3c3c9409e94c9cbc6cbb7920aa1082dc93744ebbffad",
+      "finite_model_floating_values": 371177,
+      "seed_streams": {
+        "generator_init": 3831419135786728014,
+        "critic_init": 6983117229697947389,
+        "prior_init": 1763378350071638784,
+        "policy_latent": 3450493680171922906,
+        "policy_penalty": 5927750312485326206,
+        "policy_eval": 8596393481748330584,
+        "policy_noise": 8214113812180032494,
+        "cell": 7072020954438689827,
+        "count": 5690566065726694673,
+        "gamma_global": 5336387364448280658,
+        "donor_sampler": 3606454816551336673
+      },
+      "seed0_checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2"
+    },
+    {
+      "name": "learned_observation",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_pure_shared_9fafcd1b9091d5da6204_f0_pg_s1/fit/learned/final.pt",
+      "checkpoint_SHA256": "515684b1d6e71f5e210a258512344011754e0bfdc4aef46119fee028ea00cab1",
+      "finite_model_floating_values": 376066,
+      "seed_streams": {
+        "generator_init": 3831419135786728014,
+        "critic_init": 6983117229697947389,
+        "prior_init": 1763378350071638784,
+        "policy_latent": 3450493680171922906,
+        "policy_penalty": 5927750312485326206,
+        "policy_eval": 8596393481748330584,
+        "policy_noise": 8214113812180032494,
+        "cell": 7072020954438689827,
+        "count": 5690566065726694673,
+        "gamma_global": 5336387364448280658,
+        "donor_sampler": 3606454816551336673
+      },
+      "seed0_checkpoint_SHA256": "9e59988d216ef5f6d5fabf798ba204898a4d71905906938d486147e893b4df11"
+    }
+  ],
+  "recipe_exactly_matches_frozen_seed0": true,
+  "complete_model_keys_shapes_dtypes_finite_verified": true,
+  "policy_update_count_and_seed_streams_verified": true,
+  "CUDA_initialized": false,
+  "scope": "CPU strict full G/D/prior state, officialrecipe, fixed20k EACH and independent documented training streams. No fitting or optimizer/CUDA RNG restoration claim.",
+  "source_SHA256": {
+    "/ml2/alz/recovery_runtime/audit_checkpoints.py": "94f5b48d40d1d865e871ea0fec78c0c10daa0b8bad62bfb11a9c1db31b896804"
+  }
+}
