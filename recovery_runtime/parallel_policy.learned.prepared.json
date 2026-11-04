@@ -1,0 +1,126 @@
+{
+  "schema": "gpu0-coexistence-policy-v1",
+  "status": "PREPARED_EXACT_GPU0_PARALLEL_PROFILE",
+  "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+  "registry_path": "/ml2/alz/artifacts/gpu0-learned-20261104/live_registry",
+  "locks": [
+    "/mnt/nvme/sliders/qualification/admission-gpu-0.lock",
+    "/mnt/nvme/sliders/locks/gpu-0.lock"
+  ],
+  "driver_headroom_bytes": 3221225472,
+  "host_free_floor_bytes": 12884901888,
+  "roles": {
+    "alz_core_pg": {
+      "gpu_bytes": 4294967296,
+      "ram_bytes": 6442450944
+    }
+  },
+  "protected_peers": [
+    {
+      "identity": {
+        "pid": 10392,
+        "birth": 2225,
+        "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+        "uid": 1000,
+        "exe": "/home/mikkel/nano-work-server/target/release/nano-work-server",
+        "argv_sha256": "2d9f9156b44ba5e54d03c8effa7b25c58ce2328ce40153543b2a143edad5901e",
+        "ppid": 1
+      },
+      "gpu_kinds": [
+        "compute"
+      ],
+      "gpu_budget_bytes": 1073741824,
+      "ram_budget_bytes": 4294967296
+    },
+    {
+      "identity": {
+        "pid": 118740,
+        "birth": 461656,
+        "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+        "uid": 1000,
+        "exe": "/ml2/iris-particle-sliders-task-20261008/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12",
+        "argv_sha256": "f19ae083322d551a948800251e20da7fbfdda422122f93a06e3e011e73e95093",
+        "ppid": 118134
+      },
+      "gpu_kinds": [
+        "compute"
+      ],
+      "gpu_budget_bytes": 38654705664,
+      "ram_budget_bytes": 42949672960
+    },
+    {
+      "identity": {
+        "pid": 147551,
+        "birth": 534311,
+        "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+        "uid": 1000,
+        "exe": "/home/mikkel/.local/opt/listener-brave/brave",
+        "argv_sha256": "1aa41d6ece5abc24b5be91dac291a8a75082e52136f0b950b22d81906ae15c8a",
+        "ppid": 146967
+      },
+      "gpu_kinds": [
+        "compute",
+        "graphics"
+      ],
+      "gpu_budget_bytes": 536870912,
+      "ram_budget_bytes": 4294967296
+    },
+    {
+      "identity": {
+        "pid": 146094,
+        "birth": 534000,
+        "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+        "uid": 1000,
+        "exe": "/usr/bin/gnome-shell",
+        "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+        "ppid": 7650
+      },
+      "gpu_kinds": [
+        "graphics"
+      ],
+      "gpu_budget_bytes": 1073741824,
+      "ram_budget_bytes": 4294967296
+    },
+    {
+      "identity": {
+        "pid": 147560,
+        "birth": 534312,
+        "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+        "uid": 1000,
+        "exe": "/usr/bin/Xwayland",
+        "argv_sha256": "de126b621b3161a113e53b9f6b8d032626ae1c5197b8699f3bd076e63b7af9d8",
+        "ppid": 146094
+      },
+      "gpu_kinds": [
+        "graphics"
+      ],
+      "gpu_budget_bytes": 268435456,
+      "ram_budget_bytes": 4294967296
+    }
+  ],
+  "resource_basis": {
+    "observation_path": "/ml2/alz/analysis/learned_profile_observation.json",
+    "observation_SHA256": "bb033633cb578b784d2af702f63204c3d099b9d537a0f2653f03b5ed89a2db23",
+    "forecast_not_foreign_caps": true,
+    "MOSS_allocator_only_bytes": 34359738368,
+    "MOSS_GPU_forecast_bytes": 38654705664,
+    "MOSS_RAM_forecast_bytes": 42949672960,
+    "desktop_GPU_forecast_bytes": 2952790016,
+    "desktop_RAM_per_peer_bytes": 4294967296,
+    "foreign_control": "NONE. Exact original guard plus ALZ protect callback abort only owned ALZ. Poll<=2s, ALZ stops below3GiB actual GPUfree or12GiB hostavailable, before MOSS source thresholds2/8GiB for gradual growth; abrupt foreign growth can still trigger both, no guarantee/control over foreign jobs. Newpeer/identity/exit refuses.",
+    "MOSS_parent_observed_GPU_free_stop_bytes": 2147483648,
+    "MOSS_parent_observed_host_free_stop_bytes": 8589934592,
+    "ALZ_early_stop_GPU_free_bytes": 3221225472,
+    "ALZ_early_stop_host_free_bytes": 12884901888,
+    "owned_cleanup_delta": "Separate ALZ-owned parallel_runner copied from immutable original runner. Original strict admission/health/peer gates remain. Cleanup can signal only exact owned worker descendants/group even if MOSS departs/changes; verifies no protectedPID or unrelated groupmember. No foreign adoption/signals.",
+    "foreign_source_SHA256": {
+      "/ml2/particlesliders-working/moss_training/train_concept.py": "ff27a2c749be2221181b25158ca59bf26e4c8e0520e44a80899629031a9babcb"
+    },
+    "description": "Current post-login boot identities. Same previously reviewed per-executable desktop forecasts and MOSS36GPU40host forecast, unchanged foreign32GiB allocator and2GPU8host stop. No foreign control or dynamic identity adoption."
+  },
+  "source_sha256": {
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2/gpu0_admission.py": "c92e975ff4839ba3d70f53d67c712916bf0bb346fcb218ef9c96e6dbf6dfeaca",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2/gpu0_runner.py": "13453ca11cf5a0e7758dcee112de0f85189b0d74a098c3f5103388e1ebb32f27",
+    "/ml2/alz/recovery_runtime/parallel_runner.py": "41e586fed4ca267b6e13b0aaf5c3d3dce05f32383616d2b7ac816cb372f4008d"
+  }
+}

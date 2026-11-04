@@ -6,10 +6,10 @@ Forecasts reserve foreign growth; they do not constrain or signal foreign work.
 import hashlib,json,sys,subprocess
 from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent
-PREPARED=HERE/'parallel_policy.turnover.prepared.json'
-DEPLOYED=ROOT/'artifacts/gpu0-turnover-20261104/policy.deployed.json'
+PREPARED=HERE/'parallel_policy.learned.prepared.json'
+DEPLOYED=ROOT/'artifacts/gpu0-learned-20261104/policy.deployed.json'
 REGISTRY=DEPLOYED.parent/'live_registry'
-REVIEW=ROOT/'analysis/gpu0_turnover_independent_review.json'
+REVIEW=ROOT/'analysis/gpu0_learned_independent_review.json'
 OLD=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json')
 OLD_SHA='5a4dfd1d5288bde24964ee680c003dd75f13fefe1a83ac55b27b49e6a05d125e'
 MOSS=Path('/ml2/particlesliders-working/moss_training/train_concept.py')
@@ -23,7 +23,7 @@ def deployed_bytes():
  return (json.dumps(p,indent=2)+'\n').encode()
 def policy_sha():return hashlib.sha256(deployed_bytes()).hexdigest()
 def review_sources():
- paths=[*HERE.glob('*.py'),PREPARED,* (ROOT/'runtime').glob('*.py'),ROOT/'analysis/exact_seed1_recovery_protocol_v2.json']
+ paths=[*HERE.glob('*.py'),PREPARED,* (ROOT/'runtime').glob('*.py'),ROOT/'analysis/exact_seed1_recovery_protocol_v3.json']
  return {str(p):sha(p) for p in paths}
 def validate_proposal():
  assert sha(OLD)==OLD_SHA,'Original policy changed'
@@ -33,8 +33,9 @@ def validate_proposal():
  assert p['driver_headroom_bytes']==3*2**30 and p['host_free_floor_bytes']==12*2**30
  expected={str(OLD.parent.parent/'v2'/name):sha(OLD.parent.parent/'v2'/name) for name in ['gpu0_admission.py','gpu0_runner.py']}
  expected[str(HERE/'parallel_runner.py')]=sha(HERE/'parallel_runner.py')
- assert not p['resource_basis'].get('foreign_source_SHA256',{})
+ assert p['resource_basis']['foreign_source_SHA256']=={str(MOSS):MOSS_SHA} and sha(MOSS)==MOSS_SHA
  assert p['source_sha256']==expected,'Complete exact active guard and original reference sources required'
+ assert not read(ROOT/'artifacts/gpu0-turnover-20261104/live_registry/registry.json')['jobs'],'Latest own namespace must be empty'
  assert not read(ROOT/'artifacts/gpu0-parallel-20261104/live_registry/registry.json')['jobs'],'Prior own namespace must be empty after clean turnover'
  assert not read(Path(old['registry_path'])/'registry.json')['jobs'],'Old resource registry has active work; no parallel namespace bypass'
  return p
