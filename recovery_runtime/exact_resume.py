@@ -21,7 +21,7 @@ def restore_exact(ctx,checkpoint,seed,*,expected_initial):
     assert b[-1]._phase=='ready'
     return b,g,r,u,streams
 
-def qualify_exact(ctx,checkpoint,*,expected_initial):
+def qualify_exact(ctx,checkpoint,*,expected_initial,branch_directory=None):
     seed=checkpoint['seed'];b,g,r,u,streams=restore_exact(ctx,checkpoint,seed,expected_initial=expected_initial)
     expected_metrics=variant.advance(ctx,b,g,r,u,execution_limit=20000)
     expected=variant.snapshot(ctx,b,g,r,u,seed,streams,'qualification_only')
@@ -30,6 +30,9 @@ def qualify_exact(ctx,checkpoint,*,expected_initial):
     observed=variant.snapshot(ctx,rb,rg,rr,ru,seed,rs,'qualification_only')
     same(expected_metrics,observed_metrics);same(expected,observed)
     assert observed['completed_updates']==expected_initial+1 and observed['fixed_endpoint']==20000
+    if branch_directory is not None:
+        folder=Path(branch_directory);folder.mkdir(exist_ok=False,parents=True)
+        torch.save(expected,folder/'branch0.pt');torch.save(observed,folder/'branch1.pt')
     return {'status':'EXACT_INTERRUPTED_STATE_AND_NEXT_UPDATE_BITWISE_VERIFIED','qualification_only':True,
             'parent_completed_updates':expected_initial,'qualified_completed_updates':expected_initial+1,
             'complete_initial_state_restored_exactly':True,'complete_next_state_and_metrics_bitwise_equal':True,

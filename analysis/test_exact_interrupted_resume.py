@@ -40,6 +40,10 @@ class InterruptedResume(unittest.TestCase):
   for key,value in [('cache_manifest_SHA256','0'*64),('recipe',{**self.checkpoint['recipe'],'lr':.006})]:
    q=copy.deepcopy(self.checkpoint);q[key]=value
    with self.subTest(field=key),self.assertRaises((AssertionError,ValueError)):restore_exact(self.ctx,q,1,expected_initial=2)
+ def test_both_serialized_branch_artifacts_independently_match(self):
+  folder=self.cache/'branches';result,state=qualify_exact(self.ctx,self.checkpoint,expected_initial=2,branch_directory=folder)
+  a=torch.load(folder/'branch0.pt',map_location='cpu',weights_only=False);b=torch.load(folder/'branch1.pt',map_location='cpu',weights_only=False)
+  same(a,b);same(b,state)
  def test_CPU_fixture_cannot_start_actual_resume_loop(self):
   out=self.cache/'NOT-REAL-TRAINING'
   with self.assertRaises(RuntimeError):fit_resume(self.ctx,out,1,checkpoint=self.checkpoint,checkpoint_SHA256='0'*64,expected_initial=2,end_monotonic=float('inf'))

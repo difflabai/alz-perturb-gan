@@ -1,0 +1,23 @@
+{
+  "status": "RECOVERY_CHECK_ONLY_REFUSED_NO_NATIVE_DEPLOYMENT",
+  "utc": "2026-11-04T00:52:11.371843+00:00",
+  "command": [
+    "/mnt/nvme/ai/conda/anaconda3/bin/python3",
+    "-B",
+    "/ml2/alz/recovery_runtime/prepare.py",
+    "--mode",
+    "qualify",
+    "--check-only"
+  ],
+  "return_code": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/ml2/alz/recovery_runtime/prepare.py\", line 74, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/ml2/alz/recovery_runtime/prepare.py\", line 43, in main\n    b.require(set(observation['gpu_memory']) == {p['identity']['pid'] for p in policy['protected_peers']}, 'unknown or missing GPU0 peer')\n  File \"/ml2/alz/runtime/binding.py\", line 42, in require\n    if not value:raise Refusal(message)\n                 ^^^^^^^^^^^^^^^^^^^^^^\nbinding.Refusal: unknown or missing GPU0 peer\n",
+  "project_policy_registry_hashes_unchanged": true,
+  "canonical_allocation_directory_created": false,
+  "immutable_state_SHA256": {
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/project_gpu_budget.json": "d083c7f0d797b9d3a736722dc12358613dda11092d6be45eaf9818746d433ed5",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json": "5a4dfd1d5288bde24964ee680c003dd75f13fefe1a83ac55b27b49e6a05d125e",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/cooperative_gpu0_20261103_v2/live_registry/registry.json": "3a528019e66d2a18e3e22bb9330abf943748ded0b4b811fb08f33da190effa00"
+  },
+  "scope": "Check-only source/current-peer path. No policy/registry mutation, allocation deployment, reservation or CUDA context. This is not native admission."
+}

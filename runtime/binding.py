@@ -139,7 +139,7 @@ def source_closure(auth,layout):
         manifest=pinned_inventory(data/'manifest.json',auth.get('calibration_manifest_SHA256'),pins,'calibration input')
         require(manifest.get('status')=='CPU_CALIBRATION_PROJECTED_WITHOUT_REFITTING','calibration provenance differs')
         require_members(pins,{str(data/name):pin for name,pin in manifest['files_SHA256'].items()},'calibration arrays')
-        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','qualify_pure_ensemble','evaluate_pure_ensemble','confirm_pure_ensemble','train_variant','train_bcap','train_bispf','train_semantic','train_learned','train_network_rate','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
+        require(auth.get('operation') in ('evaluate_reference','evaluate_hybrid','evaluate_pure_variant','qualify_pure_ensemble','evaluate_pure_ensemble','confirm_pure_ensemble','qualify_interrupted_pg8','resume_pure_ensemble','confirm_frozen_ensemble_seed2','train_variant','train_bcap','train_bispf','train_semantic','train_learned','train_network_rate','train_hybrid','qualify_continuation','continue_hybrid','train_extended_hybrid'),'registered calibration operation required')
         if auth['operation']=='qualify_continuation':
             require(auth['cap_seconds']==900 and auth.get('qualification_only') is True and auth.get('qualification_steps')==1 and auth.get('caller_execution_limit')==40000,'finite one-step continuation qualification required')
             checkpoint=Path(auth['checkpoint_path'])
@@ -147,6 +147,12 @@ def source_closure(auth,layout):
             config=HERE.parent/'candidate.json'
             require(str(config) in pins and read(config)==auth.get('variant_config'),'exact qualification architecture differs')
             require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete qualification model source pins required')
+        elif auth['operation'] in ('qualify_interrupted_pg8','resume_pure_ensemble','confirm_frozen_ensemble_seed2'):
+            sys.path.insert(0,str(HERE.parent/'recovery_runtime'))
+            from recovery_scope import validate_authorization
+            try:validate_authorization(auth)
+            except (AssertionError,KeyError,ValueError) as exc:raise Refusal('exact frozen recovery/seed2 refuses: '+str(exc)) from exc
+            require(all(str(p) in extra for p in (HERE.parent/'model').glob('*.py')),'complete original frozen model source pins required')
         elif auth['operation']=='confirm_pure_ensemble':
             sys.path.insert(0,str(HERE.parent/'confirmation_runtime'))
             from ensemble_confirmation_scope import validate_authorization
@@ -270,7 +276,7 @@ def verify(auth_path,layout=NATIVE_LAYOUT):
     cap=auth.get('cap_seconds')
     require((type(cap) is int and 11<=cap<=15) if layout.fixture_mode else cap in (900,21600),'fixed finite scientific job cap differs')
     endpoint=auth.get('fixed_endpoint')
-    expected=(endpoint if auth.get('operation') in ('evaluate_pure_variant','qualify_pure_ensemble','evaluate_pure_ensemble') and endpoint in (20000,40000) else (40000 if auth.get('operation') in ('continue_hybrid','train_extended_hybrid','confirm_pure_ensemble') else 20000)) if value['method']=='pg' else 400
+    expected=(endpoint if auth.get('operation') in ('evaluate_pure_variant','qualify_pure_ensemble','evaluate_pure_ensemble') and endpoint in (20000,40000) else (40000 if auth.get('operation') in ('continue_hybrid','train_extended_hybrid','confirm_pure_ensemble','resume_pure_ensemble','confirm_frozen_ensemble_seed2') else 20000)) if value['method']=='pg' else 400
     require(endpoint==expected and auth.get('core_GPU_hour_ceiling')==180,'fixed scientific endpoint/core envelope changed')
     wanted_paths={'project_root':layout.project,'science_root':layout.science,'cache_dir':cache_path(layout,value),'output_dir':output_path(layout,value),'ledger_path':ledger_path(layout,value)}
     require(all(auth.get(k)==str(v) for k,v in wanted_paths.items()),'immutable project/cache/output/ledger identity differs')
