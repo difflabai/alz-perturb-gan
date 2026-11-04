@@ -1,0 +1,114 @@
+{
+  "status": "VERIFIED_ORIGINAL_WALL_CAPPED_LEARNED13265_INCOMPLETE_NO_QUALITY",
+  "utc": "2026-11-04T06:21:50.698086+00:00",
+  "attempt": "CAL_GPU0_V1_pure_learned_a5b327c4c32e01fa8555_f0_pg_s1",
+  "PG8_completed_updates": 20000,
+  "learned_completed_updates": 13265,
+  "total_completed_updates": 33265,
+  "new_learned_updates_this_allocation": 4028,
+  "remaining_learned_updates": 6735,
+  "checkpoint": {
+    "path": "/ml2/alz/artifacts/compute_time_alternative/20261104T062109598470Z/learned-step13265.pt",
+    "SHA256": "0534cc9df279890d573f3a74017b9aae4c29e180f7b5da3e423d3a5d856c06c8",
+    "completed_updates": 13265,
+    "receipt": {
+      "path": "recovery.pt",
+      "SHA256": "0534cc9df279890d573f3a74017b9aae4c29e180f7b5da3e423d3a5d856c06c8",
+      "status": "incomplete",
+      "completed_updates": 13265,
+      "initial_completed_updates": 9237,
+      "new_model_updates": 4028,
+      "resume_parent_checkpoint_SHA256": "e483bf68f8c42716b89d884195ca3e7977f116c2ed9281fab090b1a1d53030c1",
+      "native_recipe_schedule_horizon": 20000
+    },
+    "terminal_checkpoint": true
+  },
+  "original_absolute_deadline_unix": 1793773353.9159448,
+  "worker_ended_unix": 1793773236.0509777,
+  "deadline_or_policy_changed": false,
+  "reason": "Worker finite time boundary used original deadline minus120second cleanup reserve; saved native fullstate at ready optimizer boundary.",
+  "guard_and_worker_gone": true,
+  "owned_lease_released": true,
+  "canonical_charge_GPU_seconds_this_allocation": 1952.8184232439999,
+  "all_seven_retained_seed1_charges_GPU_seconds": 5094.048430139999,
+  "all_charge_records": [
+    {
+      "attempt": "CAL_GPU0_V1_pure_confirm_0da2a09092c823377ca5_f0_pg_s1",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_pure_confirm_0da2a09092c823377ca5_f0_pg_s1.json",
+      "ledger_SHA256": "35a8a2a0c19c3b78584feab10fc0b3e064aedbed93f137d717b4440562ee88d0",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_pure_confirm_0da2a09092c823377ca5_f0_pg_s1-settlement.json",
+      "settlement_SHA256": "fb58a2e38819ff90bdc4479403f773d9007ac4a5508f67b55bb3df8c27ceac07",
+      "charged_GPU_seconds": 637.5985119260149,
+      "status": "failed"
+    },
+    {
+      "attempt": "CAL_GPU0_V1_qual_recover_bf27534c3a4250b2b4d2_f0_pg_s1",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_qual_recover_bf27534c3a4250b2b4d2_f0_pg_s1.json",
+      "ledger_SHA256": "8c0d79201bd74e372b5f326919e10a17637834ab4603a447e97e9d61f7a9e81e",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_qual_recover_bf27534c3a4250b2b4d2_f0_pg_s1-settlement.json",
+      "settlement_SHA256": "e384a22165d51d52805905ba6097b79471871d0536def96b10d4ca146c014479",
+      "charged_GPU_seconds": 9.51172063901322,
+      "status": "completed"
+    },
+    {
+      "attempt": "CAL_GPU0_V1_pure_recover_bf27534c3a4250b2b4d2_f0_pg_s1",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_pure_recover_bf27534c3a4250b2b4d2_f0_pg_s1.json",
+      "ledger_SHA256": "d1943b39fe11764cd8fad66621a9bd1c8a8053e62c360b5063c331dbabb325c9",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_pure_recover_bf27534c3a4250b2b4d2_f0_pg_s1-settlement.json",
+      "settlement_SHA256": "9cf193923fb912ac306aba1c1b6591b799f991b73d1dc8e970cff61bab3846e1",
+      "charged_GPU_seconds": 1407.5343089550151,
+      "status": "failed"
+    },
+    {
+      "attempt": "CAL_GPU0_V1_qual_turnover_759f745011e764dd9490_f0_pg_s1",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_qual_turnover_759f745011e764dd9490_f0_pg_s1.json",
+      "ledger_SHA256": "47888cd298fb5c7adb6c5a186ada432b183901467ece62b4f181ad653a331b88",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_qual_turnover_759f745011e764dd9490_f0_pg_s1-settlement.json",
+      "settlement_SHA256": "07fafcca5c6594a8a65ff4f8b4eb7fab06601fa959f3624e7d83080881c46645",
+      "charged_GPU_seconds": 7.8516453839838505,
+      "status": "completed"
+    },
+    {
+      "attempt": "CAL_GPU0_V1_pure_turnover_759f745011e764dd9490_f0_pg_s1",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_pure_turnover_759f745011e764dd9490_f0_pg_s1.json",
+      "ledger_SHA256": "81848b73dab53dda4875832961eef943c992dbd309f1a1217b4408d9f9a0844c",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_pure_turnover_759f745011e764dd9490_f0_pg_s1-settlement.json",
+      "settlement_SHA256": "810f7b68c959d56fbc01df659dc9dc2dcddbcbe4bd0f47c1c46a2e5c5dd02b8b",
+      "charged_GPU_seconds": 1063.8122672279715,
+      "status": "failed"
+    },
+    {
+      "attempt": "CAL_GPU0_V1_qual_learned_a5b327c4c32e01fa8555_f0_pg_s1",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_qual_learned_a5b327c4c32e01fa8555_f0_pg_s1.json",
+      "ledger_SHA256": "420736f30bf4bc3563813a843b7b0ef11fcb0c7246649b8f293f4313cd12c799",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_qual_learned_a5b327c4c32e01fa8555_f0_pg_s1-settlement.json",
+      "settlement_SHA256": "7c792927e7bcab5daf8f37d0cb7c8012f3195ec717ef95a5dde256be51f850e6",
+      "charged_GPU_seconds": 14.921552764000808,
+      "status": "completed"
+    },
+    {
+      "attempt": "CAL_GPU0_V1_pure_learned_a5b327c4c32e01fa8555_f0_pg_s1",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_pure_learned_a5b327c4c32e01fa8555_f0_pg_s1.json",
+      "ledger_SHA256": "558db913585eb9fcf7d4f426dcce16d8fa9e68624893c01822b2d822cb6850cf",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_pure_learned_a5b327c4c32e01fa8555_f0_pg_s1-settlement.json",
+      "settlement_SHA256": "6be390ee699e164fef18b644e4a732a5cc116f5183484f6956d786444295f4f1",
+      "charged_GPU_seconds": 1952.8184232439999,
+      "status": "failed"
+    }
+  ],
+  "clean_settlement_uncertain": null,
+  "quality_result_created": false,
+  "native_terminal_restoration_verified": false,
+  "CPU_full_state_verified": true,
+  "successor_launched": false,
+  "source_only_continuation_proposal": "/ml2/alz/artifacts/compute_time_alternative/20261104T062109598470Z/proposal.json",
+  "parent_direction_required_for_deadline_semantic_change": true,
+  "evidence_SHA256": {
+    "/ml2/alz/artifacts/compute_time_alternative/20261104T062109598470Z/proposal.json": "04655e2bbe5aca4fdbece120f95a4cdebc65bfbdc6ebdfab7bfb1150ae7aab77",
+    "/ml2/alz/artifacts/compute_time_alternative/20261104T062109598470Z/terminal_full_state_CPU_audit.json": "d70dcf0424d4acdd307c387348d0014aa8c41e9ed67201f10468e8970058ebd8",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_pure_learned_a5b327c4c32e01fa8555_f0_pg_s1/authorization.json": "1b337d3da81bbce623edb6034c0a574a66cedc4a37f8065899d6016d151604a1",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_pure_learned_a5b327c4c32e01fa8555_f0_pg_s1.json": "558db913585eb9fcf7d4f426dcce16d8fa9e68624893c01822b2d822cb6850cf",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_pure_learned_a5b327c4c32e01fa8555_f0_pg_s1-settlement.json": "6be390ee699e164fef18b644e4a732a5cc116f5183484f6956d786444295f4f1",
+    "/ml2/alz/runs/CAL_GPU0_V1_pure_learned_a5b327c4c32e01fa8555_f0_pg_s1/fit/learned/failure.json": "550847116280ce26ed0ce167534565be048f301836f37305870777d2ffa8d877"
+  }
+}
