@@ -18,13 +18,13 @@
   "protected_peers": [
     {
       "identity": {
-        "pid": 141541,
-        "birth": 524500,
+        "pid": 329405,
+        "birth": 897146,
         "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
         "uid": 1000,
         "exe": "/ml2/iris-particle-sliders-task-20261008/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12",
-        "argv_sha256": "d2fec441cf63e9826a70060c3095451911923c279140366cf8b4c33dcd986da3",
-        "ppid": 141540
+        "argv_sha256": "46043fd8da4bd11dac163b5518347fdef99d5017140e4bc619b5ee7d5caf9b05",
+        "ppid": 329404
       },
       "gpu_kinds": [
         "compute"
@@ -50,13 +50,16 @@
     }
   ],
   "resource_basis": {
-    "observation_path": "/ml2/alz/analysis/learned_gpu1_profile_observation.json",
-    "observation_SHA256": "2a20d026665c69cb0eb6c4cb08bf11dd9faf232dbc2bbfb91b3c4472dd9e40d4",
+    "observation_path": "/ml2/alz/analysis/learned_gpu1_current_profile_observation.json",
+    "observation_SHA256": "a3b5ca7d3ff2d0a227b5c6b716985fca63a10e00d16840008e9ce395f6990309",
     "forecast_not_foreign_caps": true,
-    "foreign_control": "NONE. Foreign observed41,358MiB; forecast41GiB is occupancy forecast, NOT its0.94 allocator maximum or a reservation. ALZ owns3GiB limit;3GiB actual free early stop,2secondpoll,12GiBhostfloor. Abrupt foreign growth can cause OOM; no foreign signal/changes. User authorizes shared cards. GNOME small GPU1 graphics context forecast256MiB.",
-    "ALZ_early_stop_GPU_free_bytes": 3221225472,
+    "foreign_control": "NONE. Foreign observed41,358MiB; forecast41GiB is occupancy forecast, NOT its0.94 allocator maximum or a reservation. ALZ owns3GiB limit;3.5GiB actual free early stop,2secondpoll,12GiBhostfloor. Abrupt foreign growth can cause OOM; no foreign signal/changes. User authorizes shared cards. GNOME small GPU1 graphics context forecast256MiB.",
+    "ALZ_early_stop_GPU_free_bytes": 3758096384,
     "ALZ_early_stop_host_free_bytes": 12884901888,
-    "foreign_source_SHA256": {}
+    "foreign_source_SHA256": {
+      "/ml2/particlesliders-working/ph3-modern-native/tools/modern_native.py": "9d65a64d6c0451fe3113a8268229814d61e942ce1201342e6d851c70131d2cbc",
+      "/ml2/particlesliders-working/ph3-modern-native/src/ph3_sliders/gpu_lease.py": "f459b2bc6dd33a95ed251bc93416eca526e326a9abc39f1d9ede6f4a6e2826c2"
+    }
   },
   "source_sha256": {
     "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2/gpu0_admission.py": "c92e975ff4839ba3d70f53d67c712916bf0bb346fcb218ef9c96e6dbf6dfeaca",

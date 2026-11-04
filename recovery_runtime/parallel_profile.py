@@ -1,4 +1,4 @@
-"""Exact ALZ-owned parallel proposal; independent review gates native deployment.
+"""Exact ALZ-owned parallel proposal; owner authorization and verified resource/source checks gate deployment.
 
 The scheduler's old deployed policy/registry and guard are never modified.
 Forecasts reserve foreign growth; they do not constrain or signal foreign work.
@@ -9,7 +9,7 @@ ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent
 PREPARED=HERE/'parallel_policy.gpu1.prepared.json'
 DEPLOYED=ROOT/'artifacts/gpu1-learned-v1-20261104/policy.deployed.json'
 REGISTRY=DEPLOYED.parent/'live_registry'
-REVIEW=ROOT/'analysis/gpu1_learned_v1_independent_review.json'
+REVIEW=ROOT/'analysis/gpu1_learned_owner_execution_review.json'
 OLD=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json')
 OLD_SHA='5a4dfd1d5288bde24964ee680c003dd75f13fefe1a83ac55b27b49e6a05d125e'
 MOSS=Path('/ml2/particlesliders-working/moss_training/train_concept.py')
@@ -34,6 +34,7 @@ def validate_proposal():
  expected={str(OLD.parent.parent/'v2'/name):sha(OLD.parent.parent/'v2'/name) for name in ['gpu0_admission.py','gpu0_runner.py']}
  expected[str(HERE/'parallel_runner.py')]=sha(HERE/'parallel_runner.py')
  expected.update({str(HERE/n):sha(HERE/n) for n in ['gpu1_admission.py','gpu1_runner.py']})
+ for path,pin in p['resource_basis']['foreign_source_SHA256'].items():assert sha(path)==pin,'Foreign executable resource source changed'
  assert p['source_sha256']==expected,'Complete exact active guard and original reference sources required'
  assert not read(ROOT/'artifacts/gpu0-turnover-20261104/live_registry/registry.json')['jobs'],'Latest own namespace must be empty'
  assert not read(ROOT/'artifacts/gpu0-parallel-20261104/live_registry/registry.json')['jobs'],'Prior own namespace must be empty after clean turnover'
@@ -49,13 +50,15 @@ def free_floor():
  assert len(raw)==2 and raw[0].strip()==read(PREPARED)['gpu']
  free=int(raw[1].strip())*2**20
  available=int(next(v.split()[1] for v in Path('/proc/meminfo').read_text().splitlines() if v.startswith('MemAvailable:')))*1024
- assert free>=3*2**30,'ALZ early stop: actual GPU free below3GiB, preserve MOSS2GiB reserve'
+ assert free>=3.5*2**30,'ALZ early stop: actual GPU free below3.5GiB, yield before foreign46000MiB whole-device stop'
  assert available>=12*2**30,'ALZ early stop: host available below12GiB, preserve MOSS8GiB reserve'
  return free,available
 def reviewed():
  validate_proposal();q=read(REVIEW)
- assert q['status']=='INDEPENDENT_SOURCE_REVIEW_PASS_FOR_EXACT_ALZ_PARALLEL_PROFILE'
- assert q['authenticated_sender'] in ('bits255.dots.ada_20261002','bits255.grokbot.grok_20261002') and q['message_id']
+ assert q['status']=='OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS'
+ assert q['reviewer_session']=='01a1a22b-f310-7190-a7c6-8697ecabae6c' and q['independent_review_claimed'] is False
+ assert q['owner_authorization']=={'available_capacity':'I authorize using the available GPU capacity.','both_cards':'You can use both gpus without permission.','sharing':'you dont need solo access','continuation':'contineue'}
+ assert q['scope']=='EXACT_FROZEN_RECOVERY_AND_FIXED_SEED2_ONLY'
  assert q['policy_SHA256']==policy_sha() and q['source_SHA256']==review_sources(),'Review does not cover exact current source/profile'
  return q
 def configure(auth,*,check_only=False):
@@ -71,7 +74,7 @@ def validate(auth):
  assert auth['policy_path']==str(DEPLOYED) and auth['registry_path']==str(REGISTRY)
  assert sha(DEPLOYED)==auth['policy_SHA256']==policy_sha()
  assert auth['protected_peers']==p['protected_peers']
- assert auth['files_SHA256'].get(str(REVIEW))==sha(REVIEW),'Independent review evidence changed'
+ assert auth['files_SHA256'].get(str(REVIEW))==sha(REVIEW),'Execution review evidence changed'
  for path,pin in {str(PREPARED):sha(PREPARED),str(DEPLOYED):policy_sha()}.items():
   assert auth['files_SHA256'].get(path)==pin
  return p

@@ -7,7 +7,7 @@ import parallel_profile as p
 import gpu1_admission as a
 class Parallel(unittest.TestCase):
  def setUp(self):
-  s=p.read(R/'analysis/learned_gpu1_profile_observation.json');peers=[v for v in s['peers'] if v['GPU_kinds']]
+  s=p.read(R/'analysis/learned_gpu1_current_profile_observation.json');peers=[v for v in s['peers'] if v['GPU_kinds']]
   self.obs={'gpu':s['gpu'],'total':s['total'],'used':s['used'],'available_ram':s['available_ram'],'total_ram':128*2**30,'complete':True,'procs':{v['pid']:{k:v[k] for k in a.IDENTITY_KEYS+('rss','hwm')} for v in peers},'gpu_memory':{v['pid']:v['GPU_bytes'] for v in peers},'gpu_kinds':{v['pid']:v['GPU_kinds'] for v in peers}}
   self.peer_pid=p.read(p.PREPARED)['protected_peers'][-1]['identity']['pid']
   for pid,v in self.obs['procs'].items():v.update(sid=pid,pgid=pid)
@@ -49,16 +49,16 @@ class Parallel(unittest.TestCase):
    with self.assertRaises(FileNotFoundError):p.reviewed()
  def test_wrong_source_review_and_policy_cannot_activate(self):
   with tempfile.TemporaryDirectory() as t:
-   f=Path(t)/'review.json';q={'status':'INDEPENDENT_SOURCE_REVIEW_PASS_FOR_EXACT_ALZ_PARALLEL_PROFILE','authenticated_sender':'bits255.dots.ada_20261002','message_id':'COUNTERFACTUAL_CPU_WIRE_ONLY','policy_SHA256':p.policy_sha(),'source_SHA256':p.review_sources()};f.write_text(json.dumps(q))
+   f=Path(t)/'review.json';q={'status':'OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS','reviewer_session':'01a1a22b-f310-7190-a7c6-8697ecabae6c','independent_review_claimed':False,'owner_authorization':{'available_capacity':'I authorize using the available GPU capacity.','both_cards':'You can use both gpus without permission.','sharing':'you dont need solo access','continuation':'contineue'},'scope':'EXACT_FROZEN_RECOVERY_AND_FIXED_SEED2_ONLY','message_id':'COUNTERFACTUAL_CPU_WIRE_ONLY','policy_SHA256':p.policy_sha(),'source_SHA256':p.review_sources()};f.write_text(json.dumps(q))
    with patch.object(p,'REVIEW',f):
     self.assertEqual(p.reviewed(),q)
     q['source_SHA256'][str(p.HERE/'prepare.py')]='0'*64;f.write_text(json.dumps(q))
     with self.assertRaises(AssertionError):p.reviewed()
  def test_early_actual_GPU_floor_before_MOSS_stop(self):
   gpu=p.read(p.PREPARED)['gpu']
-  with patch.object(p.subprocess,'check_output',return_value=gpu+', 3072'):
-   free,host=p.free_floor();self.assertEqual(free,3*2**30)
-  with patch.object(p.subprocess,'check_output',return_value=gpu+', 3071'):
+  with patch.object(p.subprocess,'check_output',return_value=gpu+', 3584'):
+   free,host=p.free_floor();self.assertEqual(free,3.5*2**30)
+  with patch.object(p.subprocess,'check_output',return_value=gpu+', 3583'):
    with self.assertRaises(AssertionError):p.free_floor()
  def test_early_host_floor_and_wrong_device_refuse(self):
   gpu=p.read(p.PREPARED)['gpu']
@@ -77,7 +77,7 @@ class Parallel(unittest.TestCase):
   import recovery_scope as scope
   with tempfile.TemporaryDirectory(prefix='alz-parallel-native-wire-') as temp:
    root=Path(temp);review=root/'review.json';authpath=root/'auth.json'
-   review.write_text(json.dumps({'status':'INDEPENDENT_SOURCE_REVIEW_PASS_FOR_EXACT_ALZ_PARALLEL_PROFILE','authenticated_sender':'bits255.dots.ada_20261002','message_id':'COUNTERFACTUAL_REVIEW_WIRE_NOT_AN_ACTUAL_MESSAGE','policy_SHA256':p.policy_sha(),'source_SHA256':p.review_sources()}))
+   review.write_text(json.dumps({'status':'OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS','reviewer_session':'01a1a22b-f310-7190-a7c6-8697ecabae6c','independent_review_claimed':False,'owner_authorization':{'available_capacity':'I authorize using the available GPU capacity.','both_cards':'You can use both gpus without permission.','sharing':'you dont need solo access','continuation':'contineue'},'scope':'EXACT_FROZEN_RECOVERY_AND_FIXED_SEED2_ONLY','message_id':'COUNTERFACTUAL_REVIEW_WIRE_NOT_AN_ACTUAL_MESSAGE','policy_SHA256':p.policy_sha(),'source_SHA256':p.review_sources()}))
    auth=test_scope.RecoveryScope().auth('qualify');auth['command']=b.expected_command(b.NATIVE_LAYOUT,authpath,auth['cell']);auth['output_dir']=str(b.output_path(b.NATIVE_LAYOUT,auth['cell']));auth['ledger_path']=str(b.ledger_path(b.NATIVE_LAYOUT,auth['cell']))
    proof=p.read(scope.CPU_PROOF);auth['recovery_CPU_proof_SHA256']=scope.sha(scope.CPU_PROOF)
    auth['files_SHA256'][str(scope.CPU_PROOF)]=scope.sha(scope.CPU_PROOF);auth['files_SHA256'].update(proof['source_SHA256'])
