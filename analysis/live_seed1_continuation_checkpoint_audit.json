@@ -1,0 +1,42 @@
+{
+  "status": "VERIFIED_LIVE_NATIVE_PG8_CONTINUATION_FULL_STATE_CPU_ONLY",
+  "utc": "2026-11-04T02:02:11.106373+00:00",
+  "attempt": "CAL_GPU0_V1_pure_recover_bf27534c3a4250b2b4d2_f0_pg_s1",
+  "training_seed": 1,
+  "completed_updates": 11000,
+  "fixed_endpoint": 20000,
+  "checkpoint_path": "/ml2/alz/artifacts/confirmation_recovery_lineage/CAL_GPU0_V1_pure_recover_bf27534c3a4250b2b4d2_f0_pg_s1/pg8-live-step11000.pt",
+  "checkpoint_SHA256": "8f4fc7b54956e355339cc19b39f3a43d46d3935d66519f6db361660c03828f1d",
+  "strict_complete_G_D_prior_load_verified": true,
+  "finite_model_floating_values": 371177,
+  "full_saved_state_inventory": {
+    "tensor_count": 54,
+    "finite_floating_tensor_values": 696273,
+    "numpy_array_count": 0,
+    "nonfinite_tensor_paths": []
+  },
+  "official_native_recipe_and_independent_seed_streams_verified": true,
+  "optimizer_rate_and_state_blocks_present": true,
+  "actual_optimizer_rates": [
+    [
+      0.012,
+      0.03
+    ],
+    [
+      0.018000000000000002
+    ]
+  ],
+  "explicit_CUDA_generator_states_retained_bytes": {
+    "cell": 16,
+    "count": 16
+  },
+  "global_CPU_and_CUDA_rng_states_present": true,
+  "policy_and_snapshot_CPU_rng_match": true,
+  "CUDA_initialized": false,
+  "actual_CUDA_restore_verified": false,
+  "scope": "Read-only full native saved-state inventory and strict model load on CPU. Explicit CUDA RNG bytes are preserved, not restored on CPU. This audit generated no updates/quality/nativeallocation and does not pause the active worker. Actual8942 CUDA restoration was separately qualified; this later saved checkpoint has not been used for any new allocation, and a future resume would require its own exact-state qualification.",
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_live_seed1_continuation.py": "0d16a9dd6928254e1d3f43786988d0991dda309acbb45a15d6cf4d97f0c80186",
+    "/ml2/alz/artifacts/confirmation_recovery_lineage/CAL_GPU0_V1_pure_recover_bf27534c3a4250b2b4d2_f0_pg_s1/live-checkpoint-audit-input.json": "2f3bcd93f997b09a3852fee06151f8ffe58f3896162cd11838be41a6a0d30e8a"
+  }
+}
