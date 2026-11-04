@@ -1,0 +1,22 @@
+{
+  "status": "ACTUAL_INTERMEDIATE_GPU_CHECKPOINT_CPU_PORTABILITY_AUDIT_PASSED",
+  "utc": "2026-11-04T11:14:07.937383+00:00",
+  "attempt": "CAL_GPU0_V1_cell_energy_aux_v1_f0_pg_s0",
+  "completed_updates": 3000,
+  "fixed_endpoint": 20000,
+  "native_recovery_checkpoint_SHA256": "fa352d4e0714040d2f7a39b8dcd36aac6c85c13353b9a2bd04cb8833296523b8",
+  "preserved_checkpoint_path": "/ml2/alz/artifacts/checkpoint_milestones/CAL_GPU0_V1_cell_energy_aux_v1_f0_pg_s0/3000-fa352d4e0714040d2f7a39b8dcd36aac6c85c13353b9a2bd04cb8833296523b8/recovery.pt",
+  "full_model_floating_values": 371177,
+  "native_optimizer_and_average_states_verified": true,
+  "all_saved_floating_tensors_finite_including_regularizer_and_usage": true,
+  "GPU_policy_device_metadata_preserved": "cuda:0",
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_cell_energy_intermediate_checkpoint.py": "27b9d207c5c8cba70a540b8255aaac7739ea8d3065f6b514d78fd821c379f4d1"
+  },
+  "authorization_SHA256": "db02a2c11b755523f91218e6e1cea97dccb691e771e011a83ba0a240c3a7734d",
+  "CUDA_initialized": false,
+  "training_update_executed": false,
+  "calibration_forecasts_generated": false,
+  "quality_measured": false,
+  "scope": "Actual stable intermediate checkpoint copied by matching native receipt/hash before and after read. Full CPU model and optimizer validation succeeds without rewriting saved CUDA policy metadata or using CUDA RNG states as CPU streams. This is not GPU next-update replay, completed endpoint, quality selection, confirmation or lease/admission."
+}
