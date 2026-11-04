@@ -1,0 +1,19 @@
+{
+  "status": "PREDECLARED_FOUR_FITTING_ONLY_CPU_COUNTERFACTUAL_PROBES",
+  "utc": "2026-11-04T12:15:35.891523+00:00",
+  "frozen_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_cell_energy_aux_v1_f0_pg_s0-result.json",
+  "frozen_result_SHA256": "770e34dc78999c9b9c8c1f8cea6fc6fef1967728130f04ce8c0e437dd0e0b878",
+  "case_seeds": [
+    202611041,
+    202611042,
+    202611043,
+    202611044
+  ],
+  "design": "For each case independently reconstruct the SAME completed finalG/D/prior/optimizer/regularizer state onCPU; fresh registered diagnostic CPU streams and fitting-only sampler. Execute one CPU counterfactual optimizer pair at externalcap20001 without changing originalrecipehorizon20k. Retain everycase. Never save/use probedweights as a candidate, GPUtrajectory continuation or seedconfirmation.",
+  "question": "Current native direction_blend already protects both losses atfirstorder (5790conflicts/20k, maxpostderivative0). Do realized same-batch fixed-entropy LGAN or cellenergy values nevertheless increase after an applied fullstep? This is exploratory trainingmechanics, not evidence of calibration causality.",
+  "replay": "Capture actual G-step batch/indices and pre-forward CPU/G-cell/count RNGstates. Re-evaluate with common fixed entropy in isolated/restored streams before and after optimizerstep; require baseline values replay originalprotectedlosses. No new draw consumption in diagnostic trainingstreams. Critic fixed during G step. Compare gradientdotdisplacement separately from finitechanges. Countforward/ratebackward remains a declared biased surrogate.",
+  "limits": "CPUcounterfactualatonefrozenmodel/fourfixedminibatches, not actualGPUresume/replay, nativequality, calibrationforecast, broadtrainingstabilityclaim or support for reusing modifiedweights. Read33fittingdonors only, no calibration/evaluation arrays. Fixed-entropy replay calls count/gamma generators locally; do not claim that no samplingfunctions execute.",
+  "GPU_allocation_created": false,
+  "candidate_created": false,
+  "incumbent_changed": false
+}
