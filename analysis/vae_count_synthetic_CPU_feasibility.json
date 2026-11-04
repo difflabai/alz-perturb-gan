@@ -1,0 +1,92 @@
+{
+  "status": "NATIVE_VAE_COUNT_SYNTHETIC_PAIR_AND_FULL_REPLAY_PASSED",
+  "utc": "2026-11-04T18:19:22.371905+00:00",
+  "native_family": "vae_gan",
+  "trainer_preset": "bispf_optimized",
+  "original_optimizer_pairs": 2,
+  "replayed_optimizer_pairs": 1,
+  "first_update": {
+    "step": 1,
+    "D_adversarial": 1.3859198093414307,
+    "D_penalty": 0.00012333232734818012,
+    "D_total": 1.3860431909561157,
+    "G_adversarial": 0.6796168088912964,
+    "reconstruction_Gaussian_negative_ELBO": 2437.62060546875,
+    "posterior_joint_KL": 6.238324165344238,
+    "prior_regularization_unweighted": 0.1259598731994629,
+    "G_total": 2438.301513671875,
+    "gradient_absolute_sums": {
+      "G": 2885.80126953125,
+      "encoder": 21.326580047607422,
+      "prior": 0.5679121017456055
+    },
+    "G_encoder_prior_LRs": [
+      0.012,
+      0.012,
+      0.03
+    ],
+    "D_LRs": [
+      0.018000000000000002
+    ],
+    "native_integer_count_draws_validated": true,
+    "prior_draws_observed": 96
+  },
+  "second_update": {
+    "step": 2,
+    "D_adversarial": 1.3831017017364502,
+    "D_penalty": 2.3416334443027154e-05,
+    "D_total": 1.3831250667572021,
+    "G_adversarial": 0.6939094066619873,
+    "reconstruction_Gaussian_negative_ELBO": 2227.501708984375,
+    "posterior_joint_KL": 6.238324165344238,
+    "prior_regularization_unweighted": 0.12657201290130615,
+    "G_total": 2228.19677734375,
+    "gradient_absolute_sums": {
+      "G": 3785.21435546875,
+      "encoder": 73.2684555053711,
+      "prior": 1.059859037399292
+    },
+    "G_encoder_prior_LRs": [
+      0.012,
+      0.012,
+      0.03
+    ],
+    "D_LRs": [
+      0.018000000000000002
+    ],
+    "native_integer_count_draws_validated": true,
+    "prior_draws_observed": 96
+  },
+  "same_initial_G_D_native_MoG_and_original12stream_seeds": true,
+  "recipe_difference_from_native_MoG": [
+    "name",
+    "encoder_mode"
+  ],
+  "native_E_optimizer_ownership_and_checkpoint": true,
+  "permutation_invariant_encoder_observation_verified": true,
+  "private_reconstruction_Gamma_preserves_global_stream": true,
+  "complete_native_and_all7private_RNGs_sampler_usage_serialized_next_update_byte_exact": true,
+  "wrong_family_config_cache_missingGamma_and_clock_refusals_verified": true,
+  "real_fitting_path_refused": true,
+  "checkpoint_path": "/ml2/alz/artifacts/diagnostics/native_vae_count_synthetic_v1/after1.pt",
+  "checkpoint_SHA256": "ebf94a1ffe96280903b89fd6783b98a31533488a438422b76a17d16e4b67037f",
+  "CPU_wall_seconds": 3.1511381640011678,
+  "peak_process_RSS_bytes": 845938688,
+  "source_SHA256": {
+    "/ml2/alz/analysis/vae_count_candidate/qualify_synthetic.py": "817d5446bf934207f8b943acdd47c51f0340af6e0ebfa373a3df9c84699dc9a6",
+    "/ml2/alz/analysis/vae_count_candidate/vae_count_adapter.py": "8759c4f3400bf5ce8e1ab659baf121cbb6ecf653c71cef11a67d1f104da6418a",
+    "/ml2/alz/analysis/particle_encoder_native_contract_probe.json": "3180e3d4b8f1a3ed32a85e54383b3484618ef1757365404eb6e251efcda5cbc1",
+    "/ml2/alz/analysis/vae_count_feasibility_hypothesis.json": "f46b2b4a52cadb19bc396846b64a1304af2f032d91cf4cb037449efd43645ba6",
+    "/ml2/alz/model/mog_pg_adapter.py": "e056d18b86518a7d948ed01c7894e62ce364cbd5daec5f684ff3aa7eb1f81b7b",
+    "/ml2/alz/model/mog_pg_update.py": "1d1fd446540638f1afe320217ed87c17a46bc0e8a9ba19bce7f9a9b349c1f251",
+    "/ml2/alz/test_variant.py": "6de8f8bbaae8b4ed204520d6e22bb341f83e524f65aab284b3a225899ff8f207"
+  },
+  "real_data_used": false,
+  "full2000gene_qualification_completed": false,
+  "clean400cell_generation_qualified": false,
+  "GPU_context_created": false,
+  "native_admission_ready": false,
+  "ALZ_quality_measured": false,
+  "current_routed_trial_changed": false,
+  "scope": "Synthetic8genes,32bagsx128cells, six donor labels, exact original CountGenerator/VectorCritic and150invariantfeatures. Native public hardVAE Gaussian summary objective/learnedMoG/G+E+P optimizer/constraintgeometry with both GAN and reconstruction protected. Two original optimizer pairs plus one exact serialized replay. No real donor optimizer input or calibration score; no cell-count likelihood claim. This remains a CPU feasibility adapter needing fullwidth/serving/data/native-runtime qualification."
+}
