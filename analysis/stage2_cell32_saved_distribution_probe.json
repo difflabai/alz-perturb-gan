@@ -1,0 +1,158 @@
+{
+  "status": "SAVED_EMPIRICAL_STAGE_SUBSTITUTION_DIAGNOSTIC_NOT_NATIVE_MODEL_RESULT",
+  "utc": "2026-11-04T01:27:59.361909+00:00",
+  "declared_rule": {
+    "0": "selected_pg8_learned_ensemble75",
+    "1": "selected_pg8_learned_ensemble75",
+    "2": "retained_pure_cell32",
+    "3": "selected_pg8_learned_ensemble75"
+  },
+  "records": [
+    {
+      "metric_role": "calibration_selection",
+      "donors": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "stage": [
+        3,
+        1,
+        0,
+        2
+      ],
+      "per_donor_energy_score": [
+        1.2115230603910614,
+        2.7386698790876087,
+        1.6842978892629539,
+        2.00458463123746
+      ],
+      "energy_score": 1.909768864994771,
+      "cell_energy_distance": 0.25519445683973707,
+      "per_stage_cell_energy_distance": [
+        0.7661615030188802,
+        1.5669299064321685,
+        1.0696123121058525,
+        0.5643821900213277
+      ],
+      "spread_ratio": 0.9923747354836219,
+      "within_condition_spread_ratio": 0.9405044294064588,
+      "coverage80": 0.7115384615384616,
+      "per_stage_composition_L1": [
+        0.20265850785340286,
+        0.6837958230958228,
+        0.7464547921478055,
+        0.3908480769230769
+      ],
+      "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+      "not_independent_confirmation": true,
+      "generation_replicate": 0,
+      "computed_from_saved_distribution_only": true
+    },
+    {
+      "metric_role": "calibration_selection",
+      "donors": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "stage": [
+        3,
+        1,
+        0,
+        2
+      ],
+      "per_donor_energy_score": [
+        1.1579582137325453,
+        2.785608689589278,
+        1.7429018206720812,
+        1.9538903484900185
+      ],
+      "energy_score": 1.9100897681209807,
+      "cell_energy_distance": 0.2450463616541967,
+      "per_stage_cell_energy_distance": [
+        0.7462595883198233,
+        1.6395608014438157,
+        1.0178110262778395,
+        0.5129970397025767
+      ],
+      "spread_ratio": 0.9834202076211225,
+      "within_condition_spread_ratio": 0.9233811646552093,
+      "coverage80": 0.6730769230769231,
+      "per_stage_composition_L1": [
+        0.21678350785340286,
+        0.6959708230958226,
+        0.7191547921478061,
+        0.3594730769230771
+      ],
+      "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+      "not_independent_confirmation": true,
+      "generation_replicate": 1,
+      "computed_from_saved_distribution_only": true
+    }
+  ],
+  "mean_saved_empirical_scores": {
+    "energy_score": 1.909929316557876,
+    "cell_energy_distance": 0.2501204092469669,
+    "spread_ratio": 0.9878974715523722,
+    "within_condition_spread_ratio": 0.931942797030834,
+    "coverage80": 0.6923076923076923,
+    "per_donor_energy_score": [
+      1.1847406370618034,
+      2.7621392843384434,
+      1.7135998549675175,
+      1.9792374898637393
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7562105456693518,
+      1.603245353937992,
+      1.043711669191846,
+      0.5386896148619522
+    ]
+  },
+  "change_from_selected_ensemble": {
+    "energy_score": -0.025602723086437518,
+    "cell_energy_distance": 0.018275800017103272,
+    "spread_ratio": -0.02604013715708542
+  },
+  "comparison_to_matched_resampling": {
+    "energy_score": -0.16935786472039016,
+    "cell_energy_distance": 0.007342156163787195
+  },
+  "donor_energy_additivity_verified": true,
+  "scope": "Exactly one preregistered saved-array stage2 replacement. Exact recomputed score of the constructed saved empirical forecasts, not a native-regenerated conditional generator. This is post hoc on4adaptivecalibrationdonors, not independent evidence. Conditional native count/stream/exposure/replay verification and separately reviewed operation not performed; no model acceptance or ATH claim.",
+  "parent_training_updates_total": 60000,
+  "new_training_updates": 0,
+  "new_model_generation": false,
+  "GPU_allocation_created": false,
+  "native_result_verified": false,
+  "incumbents_changed": false,
+  "frozen_confirmation_changed": false,
+  "source_array_metrics_hypothesis_SHA256": {
+    "/ml2/alz/analysis/stage2_cell32_hypothesis.json": "fb55dd218bbbdfc05230c2b4e93d37c8ec1232a0ebd7586c7e7cd530a6264404",
+    "/ml2/alz/pure_incumbent.json": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+    "/ml2/alz/incumbent.json": "c83f7f184b12eb4e705f4a4c6492e332bcab7c29482f834d1c70dd7c48071fc7",
+    "/ml2/alz/analysis/pure_ensemble_confirmation_freeze.json": "93e63252d278aa84b70e017d0aaacd818386fbc82f93cea48e830ffe5ac6b199",
+    "/ml2/alz/analysis/exact_seed1_recovery_protocol.json": "454b8592a2ebb44a85756c4936b02b0fcccc6929915dfe1d201b0d9a96a2486d",
+    "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/r0/arrays.npz": "6abe5e1c992556f6a039ce28db20ef88f2a66e2479f17f3df96408f490eb3a7b",
+    "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/r0/metrics.json": "9d5d89daa851ba3360385962f15643bc347412b6ac018d8ad3c94536c1f704af",
+    "/ml2/alz/runs/CAL_GPU0_V1_pure_cell32_v1_f0_pg_s0/r0/arrays.npz": "e0852e303a8b5a6fcf3bceed4c27eccf071530a4e8d7b3a83f112ed91b5ab2ca",
+    "/ml2/alz/runs/CAL_GPU0_V1_pure_cell32_v1_f0_pg_s0/r0/metrics.json": "2bf6f3ad5551b0a1c9a85a5673dd0c55d923c490b8579eec52e0c5de335e2cbd",
+    "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/r1/arrays.npz": "b13a4a99086a54c7e35d86f3e38848aaf3c30cb427fe9015f8c49fd93b1a793d",
+    "/ml2/alz/runs/CAL_GPU0_V1_ensemble75_v1_f0_pg_s0/r1/metrics.json": "001f9ff80e424624e45ee3a0268e43a138f8a4d5d89bd07123dbe8d7375da9de",
+    "/ml2/alz/runs/CAL_GPU0_V1_pure_cell32_v1_f0_pg_s0/r1/arrays.npz": "8c623a8e763b46cb3e96a3b11c0b350157dc2dc2563cede4693ae2558747eb7a",
+    "/ml2/alz/runs/CAL_GPU0_V1_pure_cell32_v1_f0_pg_s0/r1/metrics.json": "d57ce8ca976923e9f017a0f5a4c3821f69f0e1c50c15ae52c972096977ebaf6c"
+  },
+  "immutable_before_and_after_SHA256": {
+    "/ml2/alz/pure_incumbent.json": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+    "/ml2/alz/incumbent.json": "c83f7f184b12eb4e705f4a4c6492e332bcab7c29482f834d1c70dd7c48071fc7",
+    "/ml2/alz/analysis/pure_ensemble_confirmation_freeze.json": "93e63252d278aa84b70e017d0aaacd818386fbc82f93cea48e830ffe5ac6b199",
+    "/ml2/alz/analysis/exact_seed1_recovery_protocol.json": "454b8592a2ebb44a85756c4936b02b0fcccc6929915dfe1d201b0d9a96a2486d"
+  },
+  "source_SHA256": {
+    "/ml2/alz/analysis/probe_stage2_cell32.py": "7dc5e4cd8c148aa134a6b245cc3798f98ef7aed5dcfb014a05555ad11ef45d8c",
+    "/ml2/alz/calibration.py": "ce1ea5d5086db11712aa075b81daca799f2101a9ca3d8df3ff03e0b3d45da747"
+  }
+}
