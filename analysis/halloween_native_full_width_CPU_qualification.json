@@ -1,0 +1,41 @@
+{
+  "status": "PASSED_FULL2000GENE_NATIVE_HALLOWEEN_UPDATE_AND_UNCHANGED_COUNT_GENERATION_CPU_CHECK",
+  "utc": "2026-11-04T15:47:41.016675+00:00",
+  "full_model_floating_values": 371105,
+  "native_G_D_dispersion_and_P_nonzero_gradients_verified": true,
+  "native_generator_output_and_prior_parameter_movement_verified": true,
+  "first_update_diagnostic": [
+    {
+      "parameter": "G_output_weight",
+      "changed_values": 254878,
+      "gradient_L2": 0.003222803119570017,
+      "movement_L2": 5.546079046325758e-05
+    },
+    {
+      "parameter": "G_log_theta",
+      "changed_values": 0,
+      "gradient_L2": 1.1708038073265925e-05,
+      "movement_L2": 0.0
+    },
+    {
+      "parameter": "prior_z",
+      "changed_values": 256,
+      "gradient_L2": 1.592868443367479e-06,
+      "movement_L2": 0.053090427070856094
+    }
+  ],
+  "exact_TensorFlowV1Adam_float32_application_including_dispersion_rounding_verified": true,
+  "native_TensorFlowV1Adam_all_role_clocks_powers_and_marker_verified": true,
+  "native_zero_penalty_and_prior_regularization_verified": true,
+  "unsampled_raw_particle_movement_zero": true,
+  "unchanged_iter_pg_first_five_bags_PC_integer_counts_and_mode_restoration_passed": true,
+  "CUDA_initialized": false,
+  "quality_measured": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/test_halloween_full_width.py": "4129073211a5bce4529ba6abe06e6301ce5cf90165c43696a549cfa824d23de8",
+    "/ml2/alz/halloween_model/halloween_pg_adapter.py": "a2f44f55a345ca13b466bd94142f954b49abbb1cf8199232c638a081cf84d64c",
+    "/ml2/alz/halloween_model/halloween_pg_update.py": "2a7551c25ae8d40e9a26835f2d277a6ef42052e736bf7e9f2c85d0767659ec8e",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/generation.py": "4d092c75060eff24aa19e3ccbb8c6fdb8f592edd8e8b3b3c7f2084aa52a5f085"
+  },
+  "scope": "One synthetic fullwidth native optimizer pair and first five bags from unchanged iter_pg. G output and prior move; log_theta has a finite nonzero gradient but its first synthetic step rounds to zero in float32 under the unmodified native generator epsilon. Exact native application is independently recomputed, including that rounding. This does not establish real-data dispersion immobility or quality. No real data, targets, calibration score, GPU context or allocation. This is qualification, not a completed native Halloween comparison."
+}
