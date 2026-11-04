@@ -1,0 +1,101 @@
+{
+  "status": "OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS",
+  "utc": "2026-11-04T11:03:43.384435+00:00",
+  "reviewer_session": "01a1a22b-f310-7190-a7c6-8697ecabae6c",
+  "independent_review_claimed": false,
+  "owner_authorization": {
+    "available_capacity": "I authorize using the available GPU capacity.",
+    "both_cards": "You can use both gpus without permission.",
+    "sharing": "you dont need solo access",
+    "continuation": "contineue",
+    "deadline_extension": "extend it to 5 days"
+  },
+  "scope": "ONE_ALZ_CELL_ENERGY_TASK_EXTENSION_SEED0_TRIAL_ONLY",
+  "policy_SHA256": "6a6592de1653a97d4496067929dc3b60673416b431c078d185dbc9e108a9a8e4",
+  "source_SHA256": {
+    "/ml2/alz/cell_energy_runtime/resource_profile.py": "04a5ef10ad26bbbeb80d001a903a6514537a4f9f3279baab000d3fdd573eac01",
+    "/ml2/alz/cell_energy_runtime/finish.py": "3d6826bef12b053225448f2fcd03dc556138b8bb1b6141e8cbc2d13a226e0b5a",
+    "/ml2/alz/cell_energy_runtime/launch_core_gpu0.py": "f4de7b30d845886c30307dc23fad0b79c8a2f7c67f2afa3a9fcad8ae2c4aaaa4",
+    "/ml2/alz/cell_energy_runtime/project_runner_gpu0.py": "562507e0d1e5554dfa71e7f32ae16322bcf460caee2b3fc440681534e2c86fb5",
+    "/ml2/alz/cell_energy_runtime/preset_scope.py": "f9aabc8775a5b814e920fa8d930f7741a8ee58dfde5c2a04f57a5bd9193d1b86",
+    "/ml2/alz/cell_energy_runtime/test_scope.py": "5df233b773f0492a2f6b01f390733ddaceee13085b102f4b644d2de03102a3e5",
+    "/ml2/alz/cell_energy_runtime/prepare.py": "528da9e4fb6e5a3f0690d46a69c2082d234197fc6ba01db9aa00d27ae1ee35ad",
+    "/ml2/alz/cell_energy_runtime/worker_gpu0.py": "e469da41447723775ab7e17b0faa9a6a04a03fc549a05e5ca44bef1a0878aabb",
+    "/ml2/alz/cell_energy_runtime/qualify.py": "f218ac01fc5021febee7f50b068f890e78f1569fe10476cfac7e44880c32a86c",
+    "/ml2/alz/cell_energy_runtime/test_integration.py": "7219a1de16e0a209fb8c592cb72d2c7958e42c3e0d195f33cd39b6d85d599822",
+    "/ml2/alz/cell_energy_runtime/binding.py": "3949c8ae0e9d7f8eb0a1ead16f6f3a7490c6779b69c48d7893f347f0bd0f75f4",
+    "/ml2/alz/cell_energy_runtime/policy.prepared.json": "2534ac9a7113279507035a6675f2b5fbe70a42212c68a28be91d17fd13c60802",
+    "/ml2/alz/model/cell_ed_update.py": "a4bd365c0b1de50f9e48b6e99b4959dd5d3e660c7a032d8366fd32a43bc9d161",
+    "/ml2/alz/model/cell_ed_adapter.py": "10644982b7b8f2d5a91f57269da7e6fe248da40a59cbf6f5f9ccdfb5f71f3919",
+    "/ml2/alz/model/task_cell_energy.py": "9ae4c6350f0376d132270886b7e3ff89b60e74cc2936ca87bd149d16fca6913b",
+    "/ml2/alz/analysis/cell_energy_protocol.json": "131d6daa1dea3d6b6db5c41f68c2ce1b98e7c81f4c60bd227cad6d9759d32e4e",
+    "/ml2/alz/analysis/cell_energy_model_CPU_qualification.json": "dc3337e8007fe576cabc06630994afe349ea243f9baa572cfaf1105d28c78795",
+    "/ml2/alz/analysis/cell_energy_runtime_CPU_qualification.json": "fcea05235aa6040af60d377b4ebcf3f40bf85d31af0a1e90eda137755ed15e1f",
+    "/ml2/alz/analysis/research_window_20261104_five_days.json": "2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1"
+  },
+  "verification": {
+    "actual_final_model_path_CPU_tests_passed": 11,
+    "mathematical_tests_passed": 5,
+    "task_loop_tests_passed": 6,
+    "native_first_critic_update_and_RNG_stream_parity_verified": true,
+    "auxiliary_G_dispersion_prior_gradients_and_full_replay_verified": true,
+    "isolated_runtime_tests_passed": 22,
+    "old_execution_sources_unchanged": true,
+    "plan_enabled_at_review_creation": false,
+    "forecast": {
+      "GPU_required_bytes": 48863711232,
+      "GPU_total_bytes": 51527024640,
+      "host_remaining_growth_required_bytes": 33975107584,
+      "host_available_bytes": 98895691776,
+      "GPU_fits": true,
+      "host_fits": true,
+      "allocation_or_lease_created": false,
+      "observed_foreign": [
+        {
+          "identity": {
+            "pid": 146094,
+            "birth": 534000,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/usr/bin/gnome-shell (deleted)",
+            "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+            "ppid": 7650
+          },
+          "gpu_kinds": [
+            "graphics"
+          ],
+          "gpu_budget_bytes": 272699392,
+          "ram_budget_bytes": 2575880192,
+          "observed_gpu_bytes": 4263936,
+          "observed_rss_bytes": 309358592,
+          "GPU_growth_allowance_bytes": 268435456,
+          "foreign_control": "NONE"
+        },
+        {
+          "identity": {
+            "pid": 778996,
+            "birth": 2125082,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/ml2/iris-particle-sliders-task-20261008/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12",
+            "argv_sha256": "5582d2907a83aff4f6d9d5a30f0ee810fd896e8bffbe96d751fe19e76d5cfeb6",
+            "ppid": 778932
+          },
+          "gpu_kinds": [
+            "compute"
+          ],
+          "gpu_budget_bytes": 42148560896,
+          "ram_budget_bytes": 17755262976,
+          "observed_gpu_bytes": 41611689984,
+          "observed_rss_bytes": 5374029824,
+          "GPU_growth_allowance_bytes": 536870912,
+          "foreign_control": "NONE"
+        }
+      ]
+    },
+    "GPU_free_bytes": 9264168960,
+    "host_available_bytes": 98875551744,
+    "native_quality_unproven": true
+  },
+  "limitations": "Explicit fitting-only ALZ loss extension to native optimizedBISPF, not a published formulation. Owner-authorized source/resource verification, not independent peer approval. Stageweighted value-estimator unbiasedness does not imply unbiased count-surrogate parameter gradients. Forecast does not cap foreign work or guarantee abrupt growth between samples. CPU qualification does not prove GPU quality."
+}

@@ -1,0 +1,17 @@
+{
+  "enabled": false,
+  "native_recipe": "bispf_optimized",
+  "fixed_endpoint": 20000,
+  "pure_only": true,
+  "training_seed": 0,
+  "experiment": "cell_energy_aux_v1",
+  "task_objective": "ALZ_stage_balanced_pooled_cell_energy_auxiliary",
+  "cell_energy_config": {
+    "cells_per_bag": 4,
+    "coefficient": 1.0,
+    "equal_stage_importance": true,
+    "exclude_same_bag_blocks": true,
+    "normalize_by_PC_dimensions_sqrt": true,
+    "PC_dimensions": 50
+  }
+}
