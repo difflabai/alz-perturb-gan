@@ -1,0 +1,96 @@
+{
+  "status": "OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS",
+  "utc": "2026-11-04T12:41:07.507611+00:00",
+  "reviewer_session": "01a1a22b-f310-7190-a7c6-8697ecabae6c",
+  "independent_review_claimed": false,
+  "owner_authorization": {
+    "available_capacity": "I authorize using the available GPU capacity.",
+    "both_cards": "You can use both gpus without permission.",
+    "sharing": "you dont need solo access",
+    "continuation": "contineue",
+    "deadline_extension": "extend it to 5 days"
+  },
+  "scope": "ONE_PUBLISHED_MOG_PRIOR_SEED0_TRIAL_ONLY",
+  "policy_SHA256": "6da167cdc22c7447cb7337c27fa04f4253bca3815d90d84231568287c4b1ce51",
+  "source_SHA256": {
+    "/ml2/alz/mog_runtime/resource_profile.py": "2b7f4875e9815d5edd81e2464cee97a59116953c725f2d581f025de67de73e3e",
+    "/ml2/alz/mog_runtime/finish.py": "7203ea01a770dc0843753c47f64e9c2d80263acfa1df801e7432e447f8b7e176",
+    "/ml2/alz/mog_runtime/launch_core_gpu0.py": "f4de7b30d845886c30307dc23fad0b79c8a2f7c67f2afa3a9fcad8ae2c4aaaa4",
+    "/ml2/alz/mog_runtime/project_runner_gpu0.py": "562507e0d1e5554dfa71e7f32ae16322bcf460caee2b3fc440681534e2c86fb5",
+    "/ml2/alz/mog_runtime/preset_scope.py": "aaf35416e38de98b1dc5b8fa6bdd643fde1f38b049c616d231e47466a5813f98",
+    "/ml2/alz/mog_runtime/test_scope.py": "5e9cc59c2bbf7b8dd5ecf67ac10dca442ed7c75b12192aa20e16aabfb3c1886c",
+    "/ml2/alz/mog_runtime/prepare.py": "bf3bdddfbadaeff4f6c0346b48da400ef2f15744a7074ff5f89ce9ea45b5e3ea",
+    "/ml2/alz/mog_runtime/worker_gpu0.py": "37c8553717fdf82751e749893cbc882da16fc2b3129ddc253c4474fe69fe9e2f",
+    "/ml2/alz/mog_runtime/qualify.py": "83c43a2ca3f6ceeef20108c0a10b94c5236aa66e18cb81a59eb8d66066d7d51e",
+    "/ml2/alz/mog_runtime/test_integration.py": "7219a1de16e0a209fb8c592cb72d2c7958e42c3e0d195f33cd39b6d85d599822",
+    "/ml2/alz/mog_runtime/binding.py": "1efb9872408216ee1720c0cccc95bc192d1ef126aee5c945de8136cdeb797693",
+    "/ml2/alz/mog_runtime/policy.prepared.json": "f5377074c645b4f8b45af7ebc86ea745818d2fa417509a93f22a96e150828c69",
+    "/ml2/alz/model/mog_pg_update.py": "1d1fd446540638f1afe320217ed87c17a46bc0e8a9ba19bce7f9a9b349c1f251",
+    "/ml2/alz/model/mog_pg_adapter.py": "e056d18b86518a7d948ed01c7894e62ce364cbd5daec5f684ff3aa7eb1f81b7b",
+    "/ml2/alz/analysis/mog_prior_protocol.json": "2fb48025e7c768347f15c83368a9d21820f310b13d2bda89602049a6159bb500",
+    "/ml2/alz/analysis/mog_prior_model_CPU_qualification.json": "85f69ed74a6b34ea90af427a4348cbdee6c078c4fc4e4bf190124c5d72dc7a77",
+    "/ml2/alz/analysis/mog_prior_runtime_CPU_qualification.json": "5649851fa102e95812dcab328af12eba9a9ec4464991da75d22b9f843696f740",
+    "/ml2/alz/analysis/research_window_20261104_five_days.json": "2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1"
+  },
+  "verification": {
+    "actual_final_model_path_CPU_tests_passed": 6,
+    "isolated_runtime_tests_passed": 22,
+    "old_execution_sources_unchanged": true,
+    "plan_enabled_at_review_creation": false,
+    "forecast": {
+      "GPU_required_bytes": 48863711232,
+      "GPU_total_bytes": 51527024640,
+      "host_remaining_growth_required_bytes": 33985486848,
+      "host_available_bytes": 106786263040,
+      "GPU_fits": true,
+      "host_fits": true,
+      "allocation_or_lease_created": false,
+      "observed_foreign": [
+        {
+          "identity": {
+            "pid": 146094,
+            "birth": 534000,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/usr/bin/gnome-shell (deleted)",
+            "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+            "ppid": 7650
+          },
+          "gpu_kinds": [
+            "graphics"
+          ],
+          "gpu_budget_bytes": 272699392,
+          "ram_budget_bytes": 2575880192,
+          "observed_gpu_bytes": 4263936,
+          "observed_rss_bytes": 307396608,
+          "GPU_growth_allowance_bytes": 268435456,
+          "foreign_control": "NONE"
+        },
+        {
+          "identity": {
+            "pid": 778996,
+            "birth": 2125082,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/ml2/iris-particle-sliders-task-20261008/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12",
+            "argv_sha256": "5582d2907a83aff4f6d9d5a30f0ee810fd896e8bffbe96d751fe19e76d5cfeb6",
+            "ppid": 778932
+          },
+          "gpu_kinds": [
+            "compute"
+          ],
+          "gpu_budget_bytes": 42148560896,
+          "ram_budget_bytes": 17755262976,
+          "observed_gpu_bytes": 41611689984,
+          "observed_rss_bytes": 5365612544,
+          "GPU_growth_allowance_bytes": 536870912,
+          "foreign_control": "NONE"
+        }
+      ]
+    },
+    "GPU_free_bytes": 9264168960,
+    "host_available_bytes": 106870267904,
+    "native_quality_unproven": true
+  },
+  "limitations": "Owner-authorized source/resource verification, not independent peer approval. Published MoG prior family bundles read standardization and fixed initial Gaussian kernel; not an isolated noise ablation. Forecasts reserve observed foreign growth without controlling foreign jobs or guaranteeing abrupt changes. Calibration quality unproven."
+}
