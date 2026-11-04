@@ -1,0 +1,45 @@
+{
+  "status": "CPU_FULL_STATE_VERIFIED_PG8_COMPLETED_AND_LEARNED9237",
+  "utc": "2026-11-04T04:25:27.369873+00:00",
+  "parents": [
+    {
+      "path": "/ml2/alz/artifacts/confirmation_recovery_lineage/CAL_GPU0_V1_pure_turnover_759f745011e764dd9490_f0_pg_s1/terminal/pg8-step20000.pt",
+      "SHA256": "cebfcb76ee263a2fc91e3c3c9409e94c9cbc6cbb7920aa1082dc93744ebbffad",
+      "completed_updates": 20000,
+      "name": "PG8_completed",
+      "strict_G_D_prior_load_verified": true,
+      "finite_model_values": 371177,
+      "full_state_inventory": {
+        "tensors": 54,
+        "finite_floating_values": 696273
+      },
+      "native_recipe_and_seed_streams_verified": true,
+      "optimizer_states_and_rates_verified": true,
+      "CPU_and_CUDA_rng_bytes_present": true
+    },
+    {
+      "path": "/ml2/alz/artifacts/confirmation_recovery_lineage/CAL_GPU0_V1_pure_turnover_759f745011e764dd9490_f0_pg_s1/terminal/learned-step9237.pt",
+      "SHA256": "e483bf68f8c42716b89d884195ca3e7977f116c2ed9281fab090b1a1d53030c1",
+      "completed_updates": 9237,
+      "name": "learned_interrupted",
+      "strict_G_D_prior_load_verified": true,
+      "finite_model_values": 376066,
+      "full_state_inventory": {
+        "tensors": 58,
+        "finite_floating_values": 701162
+      },
+      "native_recipe_and_seed_streams_verified": true,
+      "optimizer_states_and_rates_verified": true,
+      "CPU_and_CUDA_rng_bytes_present": true
+    }
+  ],
+  "total_completed_updates": 29237,
+  "remaining_learned_updates": 10763,
+  "CUDA_initialized": false,
+  "native_CUDA_restoration_verified": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_learned9237_state.py": "6647597d548b593c13184c5c28b9875cd1e5f4bb38636da45c46797d03f9fcb2",
+    "/ml2/alz/analysis/learned9237_interruption.json": "befd7e5b2ba3d3c4b857be3f6b919b83d956ef11f9a149dd7074d76f57053632"
+  },
+  "scope": "CPU full-state and exact native model/recipe/seed/rate/RNG audit only. No updates, generation or quality. Completed PG8 retained; learned9237 requires new same-GPU initial-state and two-next-update replay verification before remaining10763 training."
+}
