@@ -28,8 +28,9 @@ class Scope(unittest.TestCase):
             auth=self.auth();auth.update(change);rd,sh=self.active(auth)
             with rd,sh,self.subTest(change=change),self.assertRaises(AssertionError):scope.validate_authorization(auth,require_runtime_proof=False)
     def test_disabled_plan_refuses_and_does_not_import_model(self):
-        auth=self.auth()
-        with self.assertRaisesRegex(AssertionError,'disabled or changed'):scope.validate_authorization(auth,require_runtime_proof=False)
+        auth=self.auth();original_read=scope.read
+        with patch.object(scope,'read',side_effect=lambda p:{**scope.ENABLED,'enabled':False} if Path(p)==scope.PLAN else original_read(p)):
+            with self.assertRaisesRegex(AssertionError,'disabled or changed'):scope.validate_authorization(auth,require_runtime_proof=False)
         self.assertNotIn('torch',sys.modules)
     def test_changed_model_proof_source_refuses(self):
         auth=self.auth();auth['files_SHA256'][str(scope.ROOT/'model/bcap_adam_update.py')]='0'*64;rd,sh=self.active(auth)

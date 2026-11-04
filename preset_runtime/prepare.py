@@ -50,16 +50,17 @@ def main():
     auth,auth_path=build_authorization(check_only=args.check_only)
     b.require(auth['expires_unix']>time.time()+150,'Owner window leaves no startup/cleanup interval')
     b.require(not auth_path.parent.exists(),'Exact trial already exists; inspect rather than duplicate/reset')
+    if not args.check_only:
+        profile.DEPLOYED.parent.mkdir(parents=True,exist_ok=True)
+        if profile.DEPLOYED.exists():b.require(profile.DEPLOYED.read_bytes()==profile.deployed_bytes(),'Existing deployed policy differs; do not replace')
+        else:
+            with profile.DEPLOYED.open('xb') as stream:stream.write(profile.deployed_bytes())
     b.source_closure(auth,b.NATIVE_LAYOUT)
     controller,admission,_=b.modules(auth);observation=admission.snapshot()
     forecast=profile.capacity(observation,admission);profile.free_floor()
     reg=profile.REGISTRY/'registry.json';b.require(not reg.exists() or not b.read(reg)['jobs'],'ALZ resource namespace has active work')
     if args.check_only:
         print(json.dumps({'status':'CHECK_ONLY_BCAP_ADAM_SOURCE_AND_CAPACITY_PASS_NO_ALLOCATION','attempt':auth['attempt_id'],'forecast':forecast},indent=2));return
-    profile.DEPLOYED.parent.mkdir(parents=True,exist_ok=True)
-    if profile.DEPLOYED.exists():b.require(profile.DEPLOYED.read_bytes()==profile.deployed_bytes(),'Existing deployed policy differs; do not replace')
-    else:
-        with profile.DEPLOYED.open('xb') as stream:stream.write(profile.deployed_bytes())
     pins=auth['files_SHA256'];backend=b.load_pinned(HERE/'project_runner_gpu0.py',pins[str(HERE/'project_runner_gpu0.py')],'project_runner_gpu0')
     metadata={'status':'REVIEWED_FOR_BOUNDED_EXECUTION','path':str(HERE/'project_runner_gpu0.py'),
               'source_SHA256':{str(p):pins[str(p)] for p in [*HERE.glob('*.py'),b.GUARD/'gpu0_admission.py',b.GUARD/'gpu0_runner.py']},
