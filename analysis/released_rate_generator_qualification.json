@@ -1,0 +1,33 @@
+{
+  "status": "GENERATED_REGISTERED_RATE_CANDIDATES_QUALIFIED_ON_BOTH_GPU_PROFILES_HELD",
+  "utc": "2026-11-04T19:06:50.390350+00:00",
+  "generator_source_path": "/ml2/alz/analysis/prepare_released_rate_candidate.py",
+  "current_generator_source_SHA256": "ee6cd04cd0ef2b915195c76c0c95bf3df4180389972bf7b3cce2bd9e2e96985f",
+  "entries": [
+    {
+      "runtime_directory": "/ml2/alz/released_rate_g100d050p100_runtime",
+      "qualification_path": "/ml2/alz/analysis/released_rate_g100d050p100_runtime_CPU_qualification.json",
+      "qualification_SHA256": "e7d616bc72944fa41af9ae6c43954fc566886680ccf51a9447337cf244fb46e0",
+      "actual_runtime_CPU_checks_passed": 24,
+      "plan_enabled": false,
+      "native_allocation_created": false
+    },
+    {
+      "runtime_directory": "/ml2/alz/released_rate_g100d100p050_runtime",
+      "qualification_path": "/ml2/alz/analysis/released_rate_g100d100p050_runtime_CPU_qualification.json",
+      "qualification_SHA256": "37503ea60984b862e16ec9734d76e513742744735d0bc1067e798e352cdde4a1",
+      "actual_runtime_CPU_checks_passed": 24,
+      "plan_enabled": false,
+      "native_allocation_created": false
+    }
+  ],
+  "first_CPU_source_inventory_failure_preserved_at": "/ml2/alz/artifacts/diagnostics/released_grid_first_CPU_failure",
+  "refusals_exercised": [
+    "nonregisteredcandidate",
+    "existingfirstsetting",
+    "existinggenerateddirectory"
+  ],
+  "native_jobs_started": 0,
+  "first_scheduled_tuning_job": "lr_g050_d050_p050 after E22 actual settlement/audit",
+  "scope": "Same fully qualified released count model and registered scalar grid. Generated source/physical-card/scope/refusal/owner-worker-accounting checks actual; no GPU training or calibration quality implied."
+}
