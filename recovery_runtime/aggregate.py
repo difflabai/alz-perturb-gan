@@ -49,14 +49,13 @@ def aggregate(output):
     qualification=scope.read(scope.NATIVE_PROOF)
     ledger=Path(dep['ledger_path']);settlement=scope.read(ledger.with_name(name+'-settlement.json'))
     assert proof['charged_GPU_seconds']==settlement['settlement']['charged_GPU_seconds'],'Confirmation charge differs from canonical settlement'
-    previous=scope.read(p['latest_interruption_evidence']);previous_qual=scope.read(p['previous_native_qualification_path'])
-    seed1_total_charge=p['wall_clock_envelope']['original_charged_GPU_seconds']+previous['charged_GPU_seconds']+previous_qual['charged_GPU_seconds']+settlement['settlement']['charged_GPU_seconds']+qualification['charged_GPU_seconds']
-    evidence.update({p['latest_interruption_evidence']:scope.sha(p['latest_interruption_evidence']),p['previous_native_qualification_path']:scope.sha(p['previous_native_qualification_path'])})
+    seed1_total_charge=sum(row['charged_GPU_seconds'] for row in p['retained_charge_records'])+settlement['settlement']['charged_GPU_seconds']+qualification['charged_GPU_seconds']
+    for row in p['retained_charge_records']:evidence.update({row['ledger_path']:row['ledger_SHA256'],row['settlement_path']:row['settlement_SHA256']})
     assert seed1_total_charge<=21600 and scope.read(ledger)['jobs'][0]['ended_unix']<=p['wall_clock_envelope']['absolute_recovery_deadline_unix']
    else:assert candidate['new_model_updates']==40000 and candidate['initial_completed_updates']==0
   records.append({'seed':seed,'attempt':name,'energy_score':candidate['energy_score'],'matched_baseline_energy_score':baseline['energy_score'],
                   'cell_energy_distance':candidate['cell_energy_distance'],'matched_baseline_cell_energy_distance':baseline['cell_energy_distance'],'spread_ratio':candidate['spread_ratio']})
- result={**stable_target(records),'records':records,'evidence_SHA256':evidence,'seed1_total_charged_GPU_seconds_including_failure_and_qualification':seed1_total_charge,'original_failed_seed1_attempt_retained':p['original_attempt'],'previous_failed_recovery_attempt_retained':scope.read(p['latest_interruption_evidence'])['attempt'],'original_confirmation_freeze_SHA256':p['original_confirmation_freeze_SHA256'],
+ result={**stable_target(records),'records':records,'evidence_SHA256':evidence,'seed1_total_charged_GPU_seconds_including_failure_and_qualification':seed1_total_charge,'retained_prior_allocations':p['retained_charge_records'],'original_failed_seed1_attempt_retained':p['original_attempt'],'previous_failed_recovery_attempt_retained':scope.read(p['latest_interruption_evidence'])['attempt'],'original_confirmation_freeze_SHA256':p['original_confirmation_freeze_SHA256'],
          'pure_incumbent_SHA256':f['pure_incumbent_SHA256'],'incumbent_unchanged':True,'training_seeds_were_not_ranked':True,'each_seed_parent_training_updates':[20000,20000],
          'scope':'All three frozen training seeds and same four adaptive calibration donors, not twelve independent donors or external SOTA. Interrupted seed1 preserved and exactly continued; no replacement seed, fromscratch rerun or outcome dropping. Evaluation donors excluded.'}
  assert scope.sha(ROOT/'pure_incumbent.json')==f['pure_incumbent_SHA256']

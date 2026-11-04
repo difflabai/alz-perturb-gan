@@ -67,6 +67,7 @@ class SavedArrayVerification(unittest.TestCase):
    (scope,'ROOT',f.root),(scope,'HERE',f.recovery),(scope,'PROTOCOL',f.recovery_protocol),(scope,'CPU_PROOF',f.recovery_cpu),(scope,'NATIVE_PROOF',f.native_restore),(calibration,'DATA',self.data)]
   with contextlib.ExitStack() as stack:
    for module,name,value in values:stack.enter_context(patch.object(module,name,value))
+   stack.enter_context(patch.object(scope,'lineage',side_effect=f.wire_lineage));stack.enter_context(patch.object(scope,'continuation_paths',return_value=[]))
    stack.enter_context(contextlib.redirect_stdout(io.StringIO()));yield
  def run_verifier(self):
   with self.environment():finish.verify(self.attempt)

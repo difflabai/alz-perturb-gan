@@ -1,0 +1,39 @@
+{
+  "status": "LEARNED_CONTINUATION_CPU_COMPONENT_CHECKS_PASS_RESOURCE_PROFILE_PENDING",
+  "utc": "2026-11-04T04:29:41.721515+00:00",
+  "checks": {
+    "real_lineage_scope_and_private_native_wires": 12,
+    "both_adapter_synthetic_serialization_and_replay": 12,
+    "isolated_aggregate_and_reference_artifacts": 17,
+    "actual_calibration_score_on_synthetic_arrays": 6,
+    "runtime_integration": 15,
+    "owned_cleanup_native_preflight": 12
+  },
+  "checks_passed": 74,
+  "completed_parent_updates": [
+    20000,
+    9237
+  ],
+  "new_training_updates_required": 10763,
+  "original_deadline_unix": 1793773353.9159448,
+  "five_prior_allocations_charged_GPU_seconds": 3126.3084541319986,
+  "learned_native_CUDA_restore_verified": false,
+  "post_reboot_resource_admission_verified": false,
+  "native_job_created": false,
+  "scientific_frozen_sources_unchanged": true,
+  "source_SHA256": {
+    "/ml2/alz/recovery_runtime/parallel_runner.py": "41e586fed4ca267b6e13b0aaf5c3d3dce05f32383616d2b7ac816cb372f4008d",
+    "/ml2/alz/recovery_runtime/finish.py": "8207b198a27dee8b1f4b1a0f2d6b916af1dfd01ca1eaabdc516ba202d5a21216",
+    "/ml2/alz/recovery_runtime/aggregate.py": "3155f7cc4f98611fa2de8da886a0ebeb7090f65da470314c394bedb06757d0e6",
+    "/ml2/alz/recovery_runtime/verify_qualification.py": "8134f505dc196cc0be567b65c23a77feffc22028ea089397f4f528cb2c1ee026",
+    "/ml2/alz/recovery_runtime/audit_checkpoints.py": "94f5b48d40d1d865e871ea0fec78c0c10daa0b8bad62bfb11a9c1db31b896804",
+    "/ml2/alz/recovery_runtime/test_scope.py": "49d7ab86dea42be6c57d7489ed79768030bfa0e7839a74812f94dcd9a7aef963",
+    "/ml2/alz/recovery_runtime/exact_resume.py": "9276e2c0738e9e39028bd0742fe13e45d78ea465db119b34d262de9aa1df1f35",
+    "/ml2/alz/recovery_runtime/prepare.py": "2948790e4453a68b772c8303c22ba8742a468b6dc0424878bd430565a773917d",
+    "/ml2/alz/recovery_runtime/qualify.py": "feb354c6b9a428e44f4d58e892699c1572261b9463718b0f9ac73a938aa5f994",
+    "/ml2/alz/recovery_runtime/execution.py": "5335f12fd2c20aa6a8c02b462505d95c716b5c51e68b6f47c9f892386d8337f4",
+    "/ml2/alz/recovery_runtime/recovery_scope.py": "ebc2508c2ffa77aa0289880cde25209551a1f502ccfe5a49da22304028f62f5c",
+    "/ml2/alz/recovery_runtime/parallel_profile.py": "c1e54e5caac1d22210f7e3cb7838a7c06b6b180713ec6c2c05fa38c41a7b7561"
+  },
+  "scope": "Full native model and both saved state inventories audited on CPU. New adapter-selectable exact restore/fit helper verified with real native update code on synthetic CPU fixtures; no ALZ fitting/quality or CUDA claim. Artifact tests isolate current aggregate/reference from ancestor fixture construction; real ancestor lineage and all five canonical charges tested separately. Existing pre-reboot GPU profile is not valid for the current boot; readable current peer profile and independent exact-source review remain required before native learned9237 qualification."
+}
