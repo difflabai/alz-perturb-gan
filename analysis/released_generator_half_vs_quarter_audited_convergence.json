@@ -1,0 +1,534 @@
+{
+  "status": "TWO_AUDITED_MATCHED_SINGLE_SCALAR_CONVERGENCE_READOUT",
+  "utc": "2026-11-04T22:35:20.118194+00:00",
+  "changed_hyperparameter": "generator_lr",
+  "records": [
+    {
+      "candidate": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 0,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 1.892340501897739,
+        "cell_energy_distance": 0.23846028322414625,
+        "spread_ratio": 0.9980943742116393,
+        "within_condition_spread_ratio": 0.9419608259826376,
+        "coverage80": 0.7019230769230769,
+        "generated_zero_count_rate": 7.8125e-06,
+        "per_donor_energy_score": [
+          1.2296001164185708,
+          2.753514836039308,
+          1.6888580991581885,
+          1.8973889559748889
+        ],
+        "per_stage_cell_energy_distance": [
+          0.7980804213973123,
+          1.5962319634908688,
+          0.9958576240930102,
+          0.5921768211522798
+        ],
+        "status": "completed",
+        "completed_updates": 20000,
+        "fixed_endpoint": 20000,
+        "integer_count_contract_passed": true,
+        "allocation_id": "ALZ_CAL_V1_released_rate_g050d050p050_resume1_f0_pg_s0",
+        "operation": "resume_released_hyperparameters",
+        "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/fit/final.pt",
+        "checkpoint_SHA256": "5a217979b77c801f27409500a1adf9da34e4d8de15937ade59db54bf6244f336",
+        "variant_config": {
+          "z_dim": 8,
+          "stage_balance": false,
+          "cell_z_dim": 8,
+          "theta_init_scale": 1.0,
+          "fourier_feature_scale": 1.0
+        },
+        "released_hyperparameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.01
+        },
+        "tuning_candidate_id": "lr_g050_d050_p050",
+        "method": "pg_released_params",
+        "hybrid_config": null,
+        "qualification_only": false,
+        "new_model_updates": 9158,
+        "initial_completed_updates": 10842,
+        "continuation": {
+          "status": "PROSPECTIVE_EXACT_RELEASED_RATE_10842_TO_20000_CONTINUATION",
+          "utc": "2026-11-04T19:56:38.116083+00:00",
+          "parent_attempt": "CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0",
+          "parent_authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/authorization.json",
+          "parent_authorization_SHA256": "1452a1a61e860f721cfdca8f9afaa968456855d2b6c6dafa3bb3e73e35c7c015",
+          "checkpoint_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/terminal10842/recovery10842.pt",
+          "checkpoint_SHA256": "759025f4a281f77da665448be0f6140dbd01bdeb61d58196a313e52f794c6664",
+          "completed_updates": 10842,
+          "original_absolute_deadline_unix": 1793842420.7565928,
+          "parent_charged_GPU_seconds": 802.8628973890009,
+          "diagnostic_checkpoints": [
+            {
+              "original_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/fit/checkpoint05000.pt",
+              "immutable_copy_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/terminal10842/checkpoint05000.pt",
+              "SHA256": "dab7d50465246fbc3db9a5c62deeaf27ec3267235142fc6d0616039e1acff533",
+              "completed_updates": 5000
+            },
+            {
+              "original_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/fit/checkpoint10000.pt",
+              "immutable_copy_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/terminal10842/checkpoint10000.pt",
+              "SHA256": "90171c3c7e95dc85f1b40ae64dd91011217d54264f48cb9ebf6a7661bab72f79",
+              "completed_updates": 10000
+            }
+          ],
+          "training_log": {
+            "original_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/fit/learning_curve.jsonl",
+            "immutable_copy_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/terminal10842/learning_curve.jsonl",
+            "SHA256": "0c8a36c7a7976eb92bc25551a97ebffc27495b9095a17dfd124ca80bd42f538b"
+          },
+          "whole_parent_scientific_fingerprint": "4d2d3897a1e4dded7c939afe68b6f951d80a973c3d255d7466c51e042efa227f",
+          "parent_stop_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0-incomplete-host-pressure-stop.json",
+          "parent_stop_SHA256": "82c612384e2a3c63c9e633547e4580c2e2bc0e8eaf4e0ddcc79c7747bc0f9045",
+          "parent_audit_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0-checkpoint10842-native-state-audit.json",
+          "parent_audit_SHA256": "5270f82aa2bc6e5a246d6be1506512c3c616c9f265abbc13a2a7f89f7b7d9e73",
+          "parent_reverted_plan_path": "/ml2/alz/released_rate_g050d050p050_runtime/plan.json",
+          "parent_reverted_plan_SHA256": "e0ad2494d905d616ba38755d8163fbb12039e8a7152be69b5380f6c3273717f0",
+          "parent_stop_evidence_commit": "42f9c2c",
+          "parent_activation_actual_revert": "deec34e",
+          "same_frozen_model_source_directory": "/ml2/alz/analysis/released_tuning",
+          "new_model_updates": 9158,
+          "fixed_endpoint": 20000,
+          "training_seed": 0,
+          "new_training_seed": false,
+          "new_training_model": false,
+          "continuation_scope": "Exact full native policy/models/optimizers/samplers/usage/numpy/cell/count/CPU-CUDA Gamma states, same11original seed streams. Preserve both actual diagnostic checkpoints and raw log prefix. Original absolute deadline, source, public six parameters, science cohort/traces and all resource/PSI guards unchanged. Full scientific snapshot and native CUDA policy byte equality required after reload before new updates; no fresh retry or quality score until20k."
+        },
+        "continuation_protocol_SHA256": "39e513761a826bf2f2d0758fe000d1158d89d611a881809bbece50fd680743fe",
+        "resumed_same_model": true,
+        "native_recipe_schedule_horizon": 20000,
+        "parent_checkpoint_SHA256": "759025f4a281f77da665448be0f6140dbd01bdeb61d58196a313e52f794c6664",
+        "automatic_successor": false,
+        "generation": "direct_iter_pg",
+        "real_bag_replacements": 0,
+        "pure_only": true,
+        "native_recipe": "bispf_optimized",
+        "pure_formulation": "released_hyperparameters",
+        "preset_protocol_SHA256": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1",
+        "convergence_curve_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/convergence_curve.json",
+        "convergence_curve_SHA256": "8ec0ad20bfb82d6e95a339726d0161129322f2a031a14b2f2e5a0094e92d3b9e",
+        "native_reload_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/native_policy_reload_receipts.json",
+        "native_reload_SHA256": "c71aa21cce013b84cdfb36da906da17aa0526722a94544a9bd003c3e3ef74ee7",
+        "native_parent_restore_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/fit/native_parent_restore.json",
+        "native_parent_restore_SHA256": "44a6affde17d13e76e7577b722fa4c5cf05e5f50a1adad55796d31252e5480f5",
+        "learning_curve_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/fit/learning_curve.jsonl",
+        "learning_curve_SHA256": "566a1f6efb6994d91974b8cb714db2bbca705139d1f1e226b2e20b2aa757a0e3"
+      },
+      "entries": [
+        {
+          "completed_updates": 5000,
+          "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/fit/checkpoint05000.pt",
+          "checkpoint_SHA256": "dab7d50465246fbc3db9a5c62deeaf27ec3267235142fc6d0616039e1acff533",
+          "diagnostic_only": true,
+          "eligible_for_selection": false,
+          "metrics": {
+            "metric_role": "calibration_selection",
+            "generation_replicates": 2,
+            "donors": [
+              "H20.33.032",
+              "H21.33.001",
+              "H21.33.023",
+              "H21.33.025"
+            ],
+            "training_seed": 0,
+            "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+            "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+            "sampling_contract": "calibration_equal_stage375_priority_v1",
+            "energy_score": 1.8382518562737726,
+            "cell_energy_distance": 0.28408302165626864,
+            "spread_ratio": 0.8865209506526277,
+            "within_condition_spread_ratio": 0.8530684525824924,
+            "coverage80": 0.7163461538461539,
+            "generated_zero_count_rate": 0.0,
+            "per_donor_energy_score": [
+              1.167754010407295,
+              2.6495556636490116,
+              1.671049096825353,
+              1.8646486542134304
+            ],
+            "per_stage_cell_energy_distance": [
+              0.8678463000769723,
+              1.5711092841903787,
+              0.9799379880603682,
+              0.5752397444644508
+            ]
+          },
+          "replicate_directories": [
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/diagnostics/u05000/r0",
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/diagnostics/u05000/r1"
+          ]
+        },
+        {
+          "completed_updates": 10000,
+          "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/fit/checkpoint10000.pt",
+          "checkpoint_SHA256": "90171c3c7e95dc85f1b40ae64dd91011217d54264f48cb9ebf6a7661bab72f79",
+          "diagnostic_only": true,
+          "eligible_for_selection": false,
+          "metrics": {
+            "metric_role": "calibration_selection",
+            "generation_replicates": 2,
+            "donors": [
+              "H20.33.032",
+              "H21.33.001",
+              "H21.33.023",
+              "H21.33.025"
+            ],
+            "training_seed": 0,
+            "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+            "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+            "sampling_contract": "calibration_equal_stage375_priority_v1",
+            "energy_score": 1.870408755588532,
+            "cell_energy_distance": 0.26946793791540813,
+            "spread_ratio": 0.9516245727906221,
+            "within_condition_spread_ratio": 0.9094780031008297,
+            "coverage80": 0.7019230769230769,
+            "generated_zero_count_rate": 1.09375e-05,
+            "per_donor_energy_score": [
+              1.1781601118415057,
+              2.6167961907816206,
+              1.7955000246895014,
+              1.8911786950415002
+            ],
+            "per_stage_cell_energy_distance": [
+              0.9336952716790297,
+              1.5017541147985067,
+              1.0071481262012005,
+              0.5515909959712726
+            ]
+          },
+          "replicate_directories": [
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/diagnostics/u10000/r0",
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/diagnostics/u10000/r1"
+          ]
+        },
+        {
+          "completed_updates": 20000,
+          "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/fit/final.pt",
+          "checkpoint_SHA256": "5a217979b77c801f27409500a1adf9da34e4d8de15937ade59db54bf6244f336",
+          "diagnostic_only": false,
+          "eligible_for_selection": true,
+          "metrics": {
+            "metric_role": "calibration_selection",
+            "generation_replicates": 2,
+            "donors": [
+              "H20.33.032",
+              "H21.33.001",
+              "H21.33.023",
+              "H21.33.025"
+            ],
+            "training_seed": 0,
+            "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+            "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+            "sampling_contract": "calibration_equal_stage375_priority_v1",
+            "energy_score": 1.892340501897739,
+            "cell_energy_distance": 0.23846028322414625,
+            "spread_ratio": 0.9980943742116393,
+            "within_condition_spread_ratio": 0.9419608259826376,
+            "coverage80": 0.7019230769230769,
+            "generated_zero_count_rate": 7.8125e-06,
+            "per_donor_energy_score": [
+              1.2296001164185708,
+              2.753514836039308,
+              1.6888580991581885,
+              1.8973889559748889
+            ],
+            "per_stage_cell_energy_distance": [
+              0.7980804213973123,
+              1.5962319634908688,
+              0.9958576240930102,
+              0.5921768211522798
+            ]
+          },
+          "replicate_directories": [
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/r0",
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/r1"
+          ]
+        }
+      ],
+      "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json"
+    },
+    {
+      "candidate": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 0,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 2.0493267287199446,
+        "cell_energy_distance": 0.25296123568028683,
+        "spread_ratio": 1.008358102534853,
+        "within_condition_spread_ratio": 0.9110563122346331,
+        "coverage80": 0.6346153846153846,
+        "generated_zero_count_rate": 2.4999999999999998e-05,
+        "per_donor_energy_score": [
+          1.660241080316161,
+          2.69375371642266,
+          1.628531576027516,
+          2.214780542113441
+        ],
+        "per_stage_cell_energy_distance": [
+          0.7445085042428685,
+          1.5275609381760695,
+          1.2156464692315367,
+          0.9994211400213233
+        ],
+        "status": "completed",
+        "completed_updates": 20000,
+        "fixed_endpoint": 20000,
+        "integer_count_contract_passed": true,
+        "allocation_id": "ALZ_CAL_V1_released_rate_g025d050p050_resume1_f0_pg_s0",
+        "operation": "resume_released_hyperparameters",
+        "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/fit/final.pt",
+        "checkpoint_SHA256": "c9270042815d6a2d74aae6fce4ea63e07872e6a972eb79549be05bb83f65da47",
+        "variant_config": {
+          "z_dim": 8,
+          "stage_balance": false,
+          "cell_z_dim": 8,
+          "theta_init_scale": 1.0,
+          "fourier_feature_scale": 1.0
+        },
+        "released_hyperparameters": {
+          "generator_lr": 0.003,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.01
+        },
+        "tuning_candidate_id": "lr_g025_d050_p050",
+        "method": "pg_released_params",
+        "hybrid_config": null,
+        "qualification_only": false,
+        "new_model_updates": 18028,
+        "initial_completed_updates": 1972,
+        "continuation": {
+          "status": "PROSPECTIVE_EXACT_RELEASED_RATE_1972_TO_20000_CONTINUATION",
+          "utc": "2026-11-04T22:00:50.971849+00:00",
+          "parent_attempt": "CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0",
+          "parent_authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0/authorization.json",
+          "parent_authorization_SHA256": "76acbded31bafa2923c0cf00aa6cff90e75129d1a666c4d64727b86e608fb8b7",
+          "checkpoint_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0/terminal1972/recovery1972.pt",
+          "checkpoint_SHA256": "2fdce931649377f9be6654216862e991a5712801de871a06393704df207c38ec",
+          "completed_updates": 1972,
+          "original_absolute_deadline_unix": 1793850385.2767127,
+          "parent_charged_GPU_seconds": 538.8826845970034,
+          "diagnostic_checkpoints": [],
+          "training_log": {
+            "original_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0/fit/learning_curve.jsonl",
+            "immutable_copy_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0/terminal1972/learning_curve.jsonl",
+            "SHA256": "561c27b7d4f856c2bc4f0eddc953d4452f871cc865ebe6fa60d5f16d0c664d73"
+          },
+          "whole_parent_scientific_fingerprint": "6ffe80b9ae1139ee9d67d57449a51d023e38aa413915748482654af1c8803673",
+          "parent_stop_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0-incomplete-GPU-handoff-stop.json",
+          "parent_stop_SHA256": "2de6555c7a37fc8509f5c6c4c6a029f4a05758280cf36fa9b94ff06a1099b072",
+          "parent_audit_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0-checkpoint1972-native-state-audit.json",
+          "parent_audit_SHA256": "58dec3ce364c978b60fd81b91af90a20d4cc0817f02c09177df9b79a69078c8a",
+          "parent_reverted_plan_path": "/ml2/alz/released_rate_g025d050p050_runtime/plan.json",
+          "parent_reverted_plan_SHA256": "23c2ba6fe0b85854ffe9ffd098595a6a69f070816359b74d18f7ba0c9bf6b724",
+          "parent_stop_evidence_commit": "df20aac",
+          "parent_activation_actual_revert": "4e65b3e",
+          "same_frozen_model_source_directory": "/ml2/alz/analysis/released_tuning",
+          "new_model_updates": 18028,
+          "fixed_endpoint": 20000,
+          "training_seed": 0,
+          "new_training_seed": false,
+          "new_training_model": false,
+          "source_physical_GPU": 1,
+          "destination_physical_GPU": 0,
+          "continuation_scope": "Same native policy/models/optimizers/samplers/usage/numpy/cell/count/CPU-CUDA Gamma state and11original streams. Original deadline and total20k endpoint retained. Preserve original log prefix; create pending5k/10k diagnostic snapshots during continuation and score all3checkpoints after full training. Byte-exact CUDA policy and complete scientific snapshot restore required before any update. No fresh model/seed, selection change, foreign control, or guard relaxation."
+        },
+        "continuation_protocol_SHA256": "4b7821081fca16834dc757d377893b0f9c58e9005b06c432978ae1a0b327d354",
+        "resumed_same_model": true,
+        "native_recipe_schedule_horizon": 20000,
+        "parent_checkpoint_SHA256": "2fdce931649377f9be6654216862e991a5712801de871a06393704df207c38ec",
+        "automatic_successor": false,
+        "generation": "direct_iter_pg",
+        "real_bag_replacements": 0,
+        "pure_only": true,
+        "native_recipe": "bispf_optimized",
+        "pure_formulation": "released_hyperparameters",
+        "preset_protocol_SHA256": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1",
+        "convergence_curve_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/convergence_curve.json",
+        "convergence_curve_SHA256": "4b2ff08e48a1f7863a1f50346ab1cf390039cdbfcea5da56074fe2d2de34d2cf",
+        "native_reload_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/native_policy_reload_receipts.json",
+        "native_reload_SHA256": "a7ac1c88b04c0709d60640b5b4c1b43ecdb77fdd1fa1dc3d0db6df2c0afd1b35",
+        "native_parent_restore_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/fit/native_parent_restore.json",
+        "native_parent_restore_SHA256": "da995197aad6a4ddee837ebf3ede6fd28ca1c7f8803e232f73a9866291da6948",
+        "learning_curve_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/fit/learning_curve.jsonl",
+        "learning_curve_SHA256": "e4e9c13b5a632a89cc203c2f8f607d4c5f6ac3ab237d27be468390e24c578a4c"
+      },
+      "entries": [
+        {
+          "completed_updates": 5000,
+          "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/fit/checkpoint05000.pt",
+          "checkpoint_SHA256": "e9aa007569402a8a57937f23a98ce533a6c1e25ef8c21f10d3882468b6258363",
+          "diagnostic_only": true,
+          "eligible_for_selection": false,
+          "metrics": {
+            "metric_role": "calibration_selection",
+            "generation_replicates": 2,
+            "donors": [
+              "H20.33.032",
+              "H21.33.001",
+              "H21.33.023",
+              "H21.33.025"
+            ],
+            "training_seed": 0,
+            "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+            "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+            "sampling_contract": "calibration_equal_stage375_priority_v1",
+            "energy_score": 2.112196288504429,
+            "cell_energy_distance": 0.37952557080266747,
+            "spread_ratio": 0.7604061227372219,
+            "within_condition_spread_ratio": 0.7310948144939403,
+            "coverage80": 0.5817307692307692,
+            "generated_zero_count_rate": 1.5625e-06,
+            "per_donor_energy_score": [
+              1.036643801595098,
+              3.1039692933838703,
+              1.825659215107788,
+              2.4825128439309587
+            ],
+            "per_stage_cell_energy_distance": [
+              0.8337168633638488,
+              1.7172539420122952,
+              1.3216856140747986,
+              0.5852128066452771
+            ]
+          },
+          "replicate_directories": [
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/diagnostics/u05000/r0",
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/diagnostics/u05000/r1"
+          ]
+        },
+        {
+          "completed_updates": 10000,
+          "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/fit/checkpoint10000.pt",
+          "checkpoint_SHA256": "c6d88d726442e8e19712d50a5df8a63e1b5394462c9885fd8c200c55ebe7c456",
+          "diagnostic_only": true,
+          "eligible_for_selection": false,
+          "metrics": {
+            "metric_role": "calibration_selection",
+            "generation_replicates": 2,
+            "donors": [
+              "H20.33.032",
+              "H21.33.001",
+              "H21.33.023",
+              "H21.33.025"
+            ],
+            "training_seed": 0,
+            "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+            "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+            "sampling_contract": "calibration_equal_stage375_priority_v1",
+            "energy_score": 2.164160575974176,
+            "cell_energy_distance": 0.45016438905036704,
+            "spread_ratio": 0.7650260445642456,
+            "within_condition_spread_ratio": 0.7218620755476037,
+            "coverage80": 0.5865384615384616,
+            "generated_zero_count_rate": 6.2499999999999995e-06,
+            "per_donor_energy_score": [
+              1.0127548612494612,
+              3.218715680499043,
+              2.076034153235714,
+              2.3491376089124865
+            ],
+            "per_stage_cell_energy_distance": [
+              1.0637947858033332,
+              1.8994819973633659,
+              1.3234789365646966,
+              0.5270504210938753
+            ]
+          },
+          "replicate_directories": [
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/diagnostics/u10000/r0",
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/diagnostics/u10000/r1"
+          ]
+        },
+        {
+          "completed_updates": 20000,
+          "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/fit/final.pt",
+          "checkpoint_SHA256": "c9270042815d6a2d74aae6fce4ea63e07872e6a972eb79549be05bb83f65da47",
+          "diagnostic_only": false,
+          "eligible_for_selection": true,
+          "metrics": {
+            "metric_role": "calibration_selection",
+            "generation_replicates": 2,
+            "donors": [
+              "H20.33.032",
+              "H21.33.001",
+              "H21.33.023",
+              "H21.33.025"
+            ],
+            "training_seed": 0,
+            "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+            "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+            "sampling_contract": "calibration_equal_stage375_priority_v1",
+            "energy_score": 2.0493267287199446,
+            "cell_energy_distance": 0.25296123568028683,
+            "spread_ratio": 1.008358102534853,
+            "within_condition_spread_ratio": 0.9110563122346331,
+            "coverage80": 0.6346153846153846,
+            "generated_zero_count_rate": 2.4999999999999998e-05,
+            "per_donor_energy_score": [
+              1.660241080316161,
+              2.69375371642266,
+              1.628531576027516,
+              2.214780542113441
+            ],
+            "per_stage_cell_energy_distance": [
+              0.7445085042428685,
+              1.5275609381760695,
+              1.2156464692315367,
+              0.9994211400213233
+            ]
+          },
+          "replicate_directories": [
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/r0",
+            "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/r1"
+          ]
+        }
+      ],
+      "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0-result.json"
+    }
+  ],
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/plot_released_rate_scalar_comparison.py": "cd3bcc98738e331325fc72b142edde1e01d42e877ea832c64233d4d4cbfbb453",
+    "/ml2/alz/pure_incumbent.json": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+    "/ml2/alz/analysis/baseline_calibration_seed0.json": "46babfb542f4ed09a4e08ff60d86da3049798f8f245e882716a50f950a513a18",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+    "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/convergence_curve.json": "8ec0ad20bfb82d6e95a339726d0161129322f2a031a14b2f2e5a0094e92d3b9e",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0-result.json": "930d5d9daa7cf1ab28756df84c26dae564a6eac3cf268a01e93aa42a42e3c817",
+    "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0/convergence_curve.json": "4b2ff08e48a1f7863a1f50346ab1cf390039cdbfcea5da56074fe2d2de34d2cf",
+    "/ml2/alz/analysis/released_tuning/protocol.json": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1"
+  },
+  "output_SHA256": {
+    "/ml2/alz/analysis/released_generator_half_vs_quarter_audited_convergence.png": "f330c857b42f77f0fd24e5eac240e9007c4e997e71dce5328599b526d048a2dd",
+    "/ml2/alz/analysis/released_generator_half_vs_quarter_audited_convergence.pdf": "0c800549a8a6ddc0ed25d7888270798424869e9b1ae801f075304892a4e34dc9"
+  }
+}
