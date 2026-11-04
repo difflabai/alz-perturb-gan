@@ -1,0 +1,36 @@
+{
+  "status": "PREDECLARED_SINGLE_SAVED_FORECAST_HYPOTHESIS_NO_NATIVE_ADMISSION",
+  "utc": "2026-11-04T06:54:34.295992+00:00",
+  "models": [
+    {
+      "name": "network_rate_half",
+      "weight": 0.75,
+      "attempt": "CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "7b312554f6b4f8c26da7bc1eeb22573b9d4045e628b5698212cc0bd2cf014be3",
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "15b3e85ac642deb0dcdb7ed77818bcfe40e40e582f0de93fb2e43847ba250a52"
+    },
+    {
+      "name": "learned_observation",
+      "weight": 0.25,
+      "attempt": "CAL_GPU0_V1_learned_obs_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "9e59988d216ef5f6d5fabf798ba204898a4d71905906938d486147e893b4df11",
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "0052e156b38efb031ffc15506f7f58a14465e26ecb5425193e152e1090b1abf0"
+    }
+  ],
+  "replicates": [
+    0,
+    1
+  ],
+  "fixed_learned_bags_per200": 50,
+  "rationale": "The smaller-network-step pure model has lower standalone donor ES but worse cell ED. Test one fixed75/25 pure mixture with learned-observation forecasts for complementarity, as a source-only follow-up hypothesis. Do not scan weights or masks, and do not alter the currently frozen PG8+learned three-seed confirmation.",
+  "decision": "Analytic expectation over uniform fixed50-of200 masks and weighted empirical cell reservoirs only. Promising screen requires lower ES and no greater cell ED than CURRENT selected pure incumbent, not merely baseline. Native mask/RNG/count/spread/complete-source proof and fresh fixed-seed confirmation would still be required before any selection. A failed screen is not a completed native model result.",
+  "allowed_inputs": "Existing generated seed0 arrays and already-verified scalar metrics/checkpoint proofs only. No new target/evaluation donor arrays, fitting, generation, GPU allocation or modelsource edits.",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "frozen_confirmation_SHA256": "93e63252d278aa84b70e017d0aaacd818386fbc82f93cea48e830ffe5ac6b199",
+  "native_ensemble_result_verified": false,
+  "incumbents_changed": false
+}
