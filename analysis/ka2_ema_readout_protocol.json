@@ -1,0 +1,49 @@
+{
+  "original_failed_confirmation_path": "/ml2/alz/analysis/pure_ensemble_confirmation_v6_all_seeds.json",
+  "original_failed_confirmation_SHA256": "d9b31c4ab50eef50fbd69fa63cda7e7e424120ba6a59fac6dd3ec410c8165aa1",
+  "uniform_ensemble_negative_screen_path": "/ml2/alz/analysis/uniform_training_seed_ensemble_estimate.json",
+  "uniform_ensemble_negative_screen_SHA256": "5d89f36e8fe58aa3e9e13d7977624846c2e14862ff5dcb183d789762b4c706d4",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "status": "DECLARED_SINGLE_NATIVE_KA2_SAVED_EMA_READOUT_PROTOCOL",
+  "utc": "2026-11-04T14:54:47.072861+00:00",
+  "native_API": "ParticleGAN0.9.4 native KA2 saved policy.ema_G and policy.ema_prior, unchanged accumulated decay0.995, explicit clean EMA readout; original serve_average0 fast contract preserved",
+  "experiment": "ka2_ema_readout_v1",
+  "operation": "evaluate_ka2_ema",
+  "task": {
+    "fold": 0,
+    "training_seed": 0,
+    "parent_updates": 20000,
+    "new_training_updates": 0,
+    "cap_seconds": 900,
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    }
+  },
+  "readout_config": {
+    "weights": "native_saved_generator_and_prior_EMA",
+    "ema_decay": 0.995,
+    "training_serve_average": 0.0,
+    "output_noise": false
+  },
+  "source_model_directory": "/ml2/alz/ema_readout_model",
+  "hypothesis_path": "/ml2/alz/analysis/ka2_ema_readout_hypothesis.json",
+  "hypothesis_SHA256": "85621f024634a3ef46c2ab200b6b5aa12ed969ddc3a097333f72e43911e7b83a",
+  "parent_checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_ka2_native_v1_f0_pg_s0/fit/final.pt",
+  "parent_checkpoint_SHA256": "fa9313540444af0227a98bcf76e646c3a2a12e3b919f3aad94622aca5fabf0d3",
+  "parent_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_ka2_native_v1_f0_pg_s0-result.json",
+  "parent_result_SHA256": "7699ac0d529b2ab070f93ff08aeba3f00f2cc3b51d2add90d7e3723e9b417a17",
+  "failed_fixed_control_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0-result.json",
+  "failed_fixed_control_result_SHA256": "ff0ef36fa758205d95bf5bc6bf5c35636bebfa41712d3dcbfcabed9f8d3af699",
+  "reverted_fixed_control_plan_path": "/ml2/alz/frozen_runtime/plan.json",
+  "reverted_fixed_control_plan_SHA256": "b6c9f6c9e3240b9c7bc85e82393b6df074bccc31e97cd31ef003b13e8911270b",
+  "failed_fixed_control_commit": "fb0aae2",
+  "actual_fixed_control_activation_revert_commit": "7696a60",
+  "selection": "Unchanged strict lower donor ES and no worse pooled cell ED, spreadband nonregression, exact cohort/traces, complete native20k endpoint, two generation replicas, direct integercounts/zero empirical replacements, full source/checkpoint/saved-score/cleanup/settled-charge audit. Record negative evidence then revert activation on rejection. All-three-seed fixed confirmation remains necessary.",
+  "scope": "Generation-only explicit coupled native KA2 saved EMA readout from an audited complete20k parent; zero training updates. No change to originalrawKA2 verdict/native serve_average0 contract. Same data/context/query/library/trace/scorer; two replicas, direct integercounts/zero real replacements.20kparentcompute vs40k selectedensemble. Source/resource/privatecanonicalqualification required; no weight/window/seed search or evaluationtarget use.",
+  "GPU_launched": false,
+  "quality_known": false
+}

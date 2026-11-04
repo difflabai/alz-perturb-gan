@@ -1,0 +1,41 @@
+{
+  "status": "PASSED_ISOLATED_KA2_EMA_READOUT_RUNTIME_CPU_QUALIFICATION",
+  "utc": "2026-11-04T14:57:59.375435+00:00",
+  "native_profile_wire_and_refusals_verified": true,
+  "old_execution_sources_unchanged": true,
+  "GPU_allocation_created": false,
+  "test_processes": [
+    {
+      "test_file": "/ml2/alz/ema_runtime/test_integration.py",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_any_old_or_new_matrix_consumption_or_output_refuses_duplicate (__main__.Integration.test_any_old_or_new_matrix_consumption_or_output_refuses_duplicate) ... ok\ntest_calibration_worker_refuses_partial_or_wrong_reference (__main__.Integration.test_calibration_worker_refuses_partial_or_wrong_reference) ... ok\ntest_complete_native_inventory_and_input_pins_required (__main__.Integration.test_complete_native_inventory_and_input_pins_required) ... ok\ntest_core_180hour_budget_includes_closed_and_open_card_hours (__main__.Integration.test_core_180hour_budget_includes_closed_and_open_card_hours) ... ok\ntest_end_to_end_cpu_owner_worker_settle_then_unchanged_gpu1_key_refuses (__main__.Integration.test_end_to_end_cpu_owner_worker_settle_then_unchanged_gpu1_key_refuses) ... ok\ntest_failed_cpu_attempt_is_charged_and_consumes_same_scientific_key (__main__.Integration.test_failed_cpu_attempt_is_charged_and_consumes_same_scientific_key) ... ok\ntest_fixture_cannot_select_canonical_root (__main__.Integration.test_fixture_cannot_select_canonical_root) ... ok\ntest_held_owner_and_worker_refuse_before_reservation_or_model_import (__main__.Integration.test_held_owner_and_worker_refuse_before_reservation_or_model_import) ... ok\ntest_missing_live_reservation_or_lease_refuses_worker (__main__.Integration.test_missing_live_reservation_or_lease_refuses_worker) ... ok\ntest_native_runtime_import_roots_find_packages_without_importing_models (__main__.Integration.test_native_runtime_import_roots_find_packages_without_importing_models) ... ok\ntest_old_gpu1_phase_lock_prevents_new_gpu0_race (__main__.Integration.test_old_gpu1_phase_lock_prevents_new_gpu0_race) ... ok\ntest_source_or_cache_drift_refused_before_budget_or_model (__main__.Integration.test_source_or_cache_drift_refused_before_budget_or_model) ... ok\ntest_uncertain_resource_cleanup_preserves_canonical_reservation (__main__.Integration.test_uncertain_resource_cleanup_preserves_canonical_reservation) ... ok\ntest_worker_checks_private_canonical_lease_command_device_and_ancestor_bindings (__main__.Integration.test_worker_checks_private_canonical_lease_command_device_and_ancestor_bindings) ... ok\ntest_wrong_device_expiry_endpoint_command_or_backend_binding_refused (__main__.Integration.test_wrong_device_expiry_endpoint_command_or_backend_binding_refused) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 2.917s\n\nOK\n"
+    },
+    {
+      "test_file": "/ml2/alz/ema_runtime/test_scope.py",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.974s\n\nOK\n"
+    }
+  ],
+  "source_SHA256": {
+    "/ml2/alz/ema_runtime/resource_profile.py": "2b4cca5e6ce680732ebc05b744cea51e7ba32d134bd119d7d603b311a1829c99",
+    "/ml2/alz/ema_runtime/finish.py": "41b3f0b299d53f3782779e17d9c998f091978714064241c19edc4707ff7e9807",
+    "/ml2/alz/ema_runtime/launch_core_gpu0.py": "f4de7b30d845886c30307dc23fad0b79c8a2f7c67f2afa3a9fcad8ae2c4aaaa4",
+    "/ml2/alz/ema_runtime/project_runner_gpu0.py": "562507e0d1e5554dfa71e7f32ae16322bcf460caee2b3fc440681534e2c86fb5",
+    "/ml2/alz/ema_runtime/preset_scope.py": "fb58ae74bada51cdfeb6fd6e5d8e4293f3a9b496313780bd2db2b96689928a0f",
+    "/ml2/alz/ema_runtime/test_scope.py": "dc704b160c80cf7c2d81a35ce54166e1a6149b94dee11961ed8d0a7febdf515c",
+    "/ml2/alz/ema_runtime/prepare.py": "e709371738aa0d315a1b249c47877c699a353437cc1515d51c9159be6f639f29",
+    "/ml2/alz/ema_runtime/worker_gpu0.py": "7664896c0edba7de79b5978a1391a78ce9662133ee3964d497f4117cb72def95",
+    "/ml2/alz/ema_runtime/qualify.py": "60ce387d3df11970ae26454f6e90472816af9be4bf4b9c427c8cca1c8fa92178",
+    "/ml2/alz/ema_runtime/test_integration.py": "7219a1de16e0a209fb8c592cb72d2c7958e42c3e0d195f33cd39b6d85d599822",
+    "/ml2/alz/ema_runtime/binding.py": "15c224d6235396d8b922dbcca8bc7a52707ff2c640df4c248aae73ddfa53399e",
+    "/ml2/alz/ema_readout_model/ka2_ema.py": "bd9f60cebd3e3907145e6469b02f8d38ca9ac616f86c7114ffc301a7fb6b67f4",
+    "/ml2/alz/analysis/ka2_ema_readout_protocol.json": "658e18dce79cc24122108779b73c370a9119010d49cc3741b4cd17054f295eaf",
+    "/ml2/alz/analysis/ka2_ema_readout_CPU_qualification.json": "879727d089aab49a5286668f5a10c5e0644e08c11303f446f1fd1d9feaa47044",
+    "/ml2/alz/analysis/shared_gpu0_candidate_CPU_qualification.json": "fb8d6e6243ad9b13da0337c2b0194cb875d550e920d2886c89429ec3a8b29995",
+    "/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_admission.py": "d6300693ca6afcfc94fb7cfe33513adaa0e30a3a393935b74eec73bee6922998",
+    "/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_runner.py": "019bc2a2f8c03032eeeddf8a0b3bd9c68c4d105dcc6b3e393c4788f787fe1238"
+  },
+  "scope": "Actual confined CPU owner/worker/controller/lease/cleanup/accounting and private native profile/source-wire fixtures. No canonical policy/allocation/lease/model created. No GPUdeployment is performed bythesechecks; activeplan is sourcebound separately. Model native factories/gradient/replay qualification is separately pinned. Owner-authorized exact source/resource review and fresh native capacity/admission still required."
+}
