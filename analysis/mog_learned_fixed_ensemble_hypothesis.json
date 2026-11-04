@@ -1,0 +1,41 @@
+{
+  "status": "PREDECLARED_SINGLE_MOG_PLUS_LEARNED_SAVED_FORECAST_SCREEN",
+  "utc": "2026-11-04T14:03:29.929885+00:00",
+  "models": [
+    {
+      "name": "native_MoG_prior",
+      "weight": 0.75,
+      "attempt": "CAL_GPU0_V1_mog_prior_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "cac07403d737f8bf7cd6d33edae3d5d7d602a46a739ac08359ceee1de9ca9999",
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "324bc395c2009247f0f1f632637cfa735063c9f17e6b92cb091bec0f18dad5d8"
+    },
+    {
+      "name": "learned_observation",
+      "weight": 0.25,
+      "attempt": "CAL_GPU0_V1_learned_obs_v1_f0_pg_s0",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "9e59988d216ef5f6d5fabf798ba204898a4d71905906938d486147e893b4df11",
+      "result_proof": "/ml2/alz/analysis/CAL_GPU0_V1_learned_obs_v1_f0_pg_s0-result.json",
+      "result_proof_SHA256": "0052e156b38efb031ffc15506f7f58a14465e26ecb5425193e152e1090b1abf0"
+    }
+  ],
+  "replicates": [
+    0,
+    1
+  ],
+  "fixed_learned_bags_per200": 50,
+  "rationale": "The completed nativeMoG prior improved donorES but failed jointcell target. Check one fixed75/25 replacement of the incumbent PG8 component by MoG, retaining the same learned-observation component/weight and40k parentcompute. This is declared after both componentquality results and before computing mixture scores. Kernel/readstandardization changes may change error complementarity, but no complementarity improvement is assumed. No weight/mask scan. Synthetic wholebag mixture only; this pair is not a single published formulation.",
+  "decision": "Unchanged joint analytical gate against the current incumbent: strictlower expected donorES AND no higher empiricalcellED. Ifscreenfails, no nativecandidate and retainnegative. Ifpromising, actualregistered masked-nativegeneration/count/spread/source/cleanup/chargeaudit and ownfixedseedconfirmation are required. No modelselection from this savedarrayestimate. Current frozen-particle control continues untouched. If it is accepted, prioritize its fixed-seed confirmation; consider this pair as a native successor only if that control is rejected and the same incumbent remains frozen.",
+  "allowed_inputs": "Existing generated seed0 arrays and already-verified scalar metrics/checkpoint proofs only. No new target/evaluation donor arrays, fitting, generation, GPU allocation or modelsource edits.",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "frozen_confirmation_SHA256": "93e63252d278aa84b70e017d0aaacd818386fbc82f93cea48e830ffe5ac6b199",
+  "native_ensemble_result_verified": false,
+  "incumbents_changed": false,
+  "total_parent_training_updates": 40000,
+  "additional_training_updates_for_screen": 0,
+  "current_three_seed_confirmation_status": "Original completedconfirmation failedjointtarget; retainallthree outcomes. Any acceptednewconfiguration needs its own frozen fixedseed1/2 comparison.",
+  "current_control_attempt": "CAL_GPU0_V1_frozen_prior_v1_f0_pg_s0",
+  "current_control_quality_known": false
+}
