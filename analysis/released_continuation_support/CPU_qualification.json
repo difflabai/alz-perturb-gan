@@ -1,0 +1,24 @@
+{
+  "status": "PASSED_ACTUAL_FULL_STATE_REPLAY_WITH_PENDING_DIAGNOSTIC_CHECKPOINT_CPU_TESTS",
+  "utc": "2026-11-04T21:54:38.761579+00:00",
+  "tests_passed": 4,
+  "actual_test_output": "....\nRan 4 tests in 30.918s\nOK",
+  "full2000gene_model_and_native_optimizer_sampler_state_exact2_to4_replay": true,
+  "intermediate_diagnostic_checkpoint3_matches_uninterrupted_scientific_snapshot": true,
+  "native_endpoint_or_diagnostic_schedule_overrides_refused_before_GPU": true,
+  "parent_metadata_clock_parameters_and_seed_refusals_verified": true,
+  "real_CPU_resume_refused_before_checkpoint_or_output": true,
+  "CUDA_initialized": false,
+  "GPU_job_created": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/released_continuation_support/test_resume.py": "4f5ae313bff019ff71093087e627fd9abaf66e81053b814790f8a60f0aaa104b",
+    "/ml2/alz/analysis/released_continuation_support/resume_training.py": "4b0e0cc82ecaf533417460db252f592b5941285e92a3447711d2789653dec6f0",
+    "/ml2/alz/analysis/released_tuning/released_adapter.py": "eefb9d37350f246a61baab6829ab558136aac0abbc1671c38d961176873c15cb",
+    "/ml2/alz/analysis/released_tuning/released_update.py": "0fb711bca17681b55b1393306ee6bc719796a6c3b5774e124bf0b0fb368986e8",
+    "/ml2/alz/analysis/released_tuning/qualify_cpu.py": "b942b9a89b9e38cd4db9f12248495f3831e868acdd0cacee221503442d651bc6",
+    "/ml2/alz/analysis/released_tuning/audit_historical_native_checkpoint.py": "45504c3fa9c344e4cdec876028820e85215982e5e8332d19a4688d9a5edbd26f",
+    "/ml2/alz/released_rate_resume_runtime/binding.py": "c5e5a57c19c2fe49ad25fd834efc9fd3dd5a8440005467104434065b9047b4bc",
+    "/ml2/alz/released_rate_resume_runtime/state_fingerprint.py": "29201ac7d98124296ec926fe6155903b30a8338e5e3875ae47d3276a7d61ae53"
+  },
+  "scope": "Synthetic CPU controls qualify continuation mechanics only, no ALZ quality claim and no actual parent CUDA reload claim. A later concrete runtime must bind the immutable incomplete parent, original deadline and shared-resource source closure, run its28CPUchecks, and prove all CUDA/scientific state byte equality before updates."
+}

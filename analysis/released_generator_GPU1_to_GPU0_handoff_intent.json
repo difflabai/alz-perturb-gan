@@ -1,0 +1,128 @@
+{
+  "status": "OWNER_AUTHORIZED_GRACEFUL_CHECKPOINT_HANDOFF_PREPARED_NOT_SIGNALED",
+  "utc": "2026-11-04T21:54:38.762125+00:00",
+  "parent_attempt": "CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0",
+  "parent_owner_PID": 2804339,
+  "exact_owned_native_worker_PID": 2804421,
+  "source_physical_GPU": 1,
+  "destination_physical_GPU": 0,
+  "reason": "Measured currentGPU1 progress roughly3updates/s with99percentGPUutilization whileGPU0 observed7percentutilization and45GBfree. Move same model/optimizers/all original11streams to available sharedGPU0 without resetting seed/update counter or original deadline. No scientific quality result yet.",
+  "support_CPU_qualification_path": "/ml2/alz/analysis/released_continuation_support/CPU_qualification.json",
+  "support_CPU_qualification_SHA256": "04ef15f3fcc9f50031e632866ce247003f5f6e3fdccd35f858c9c0792f3035c8",
+  "current_destination_forecast": {
+    "GPU_required_bytes": 9477865472,
+    "GPU_total_bytes": 51527024640,
+    "host_remaining_growth_required_bytes": 30441689088,
+    "host_available_bytes": 52097306624,
+    "GPU_fits": true,
+    "host_fits": true,
+    "allocation_or_lease_created": false,
+    "observed_foreign": [
+      {
+        "identity": {
+          "pid": 10392,
+          "birth": 2225,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/home/mikkel/nano-work-server/target/release/nano-work-server",
+          "argv_sha256": "2d9f9156b44ba5e54d03c8effa7b25c58ce2328ce40153543b2a143edad5901e",
+          "ppid": 1
+        },
+        "gpu_kinds": [
+          "compute"
+        ],
+        "gpu_budget_bytes": 811597824,
+        "ram_budget_bytes": 2361503744,
+        "observed_gpu_bytes": 274726912,
+        "observed_rss_bytes": 196190208,
+        "GPU_growth_allowance_bytes": 536870912,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 146094,
+          "birth": 534000,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/usr/bin/gnome-shell (deleted)",
+          "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+          "ppid": 7650
+        },
+        "gpu_kinds": [
+          "graphics"
+        ],
+        "gpu_budget_bytes": 615911424,
+        "ram_budget_bytes": 2575880192,
+        "observed_gpu_bytes": 347475968,
+        "observed_rss_bytes": 311148544,
+        "GPU_growth_allowance_bytes": 268435456,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 147551,
+          "birth": 534311,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/home/mikkel/.local/opt/listener-brave/brave",
+          "argv_sha256": "1aa41d6ece5abc24b5be91dac291a8a75082e52136f0b950b22d81906ae15c8a",
+          "ppid": 146967
+        },
+        "gpu_kinds": [
+          "compute",
+          "graphics"
+        ],
+        "gpu_budget_bytes": 610897920,
+        "ram_budget_bytes": 2466926592,
+        "observed_gpu_bytes": 74027008,
+        "observed_rss_bytes": 162590720,
+        "GPU_growth_allowance_bytes": 536870912,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 147560,
+          "birth": 534312,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/usr/bin/Xwayland",
+          "argv_sha256": "de126b621b3161a113e53b9f6b8d032626ae1c5197b8699f3bd076e63b7af9d8",
+          "ppid": 146094
+        },
+        "gpu_kinds": [
+          "graphics"
+        ],
+        "gpu_budget_bytes": 273223680,
+        "ram_budget_bytes": 2303303680,
+        "observed_gpu_bytes": 4788224,
+        "observed_rss_bytes": 70832128,
+        "GPU_growth_allowance_bytes": 268435456,
+        "foreign_control": "NONE"
+      },
+      {
+        "identity": {
+          "pid": 164844,
+          "birth": 593699,
+          "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+          "uid": 1000,
+          "exe": "/usr/lib/chatgpt/ChatGPT",
+          "argv_sha256": "048c2b736b5eeaba3c1a82da1432ffbcd7bfc44092cce858d54efa8997739a59",
+          "ppid": 164705
+        },
+        "gpu_kinds": [
+          "graphics"
+        ],
+        "gpu_budget_bytes": 723783680,
+        "ram_budget_bytes": 2403643392,
+        "observed_gpu_bytes": 455348224,
+        "observed_rss_bytes": 256159744,
+        "GPU_growth_allowance_bytes": 268435456,
+        "foreign_control": "NONE"
+      }
+    ]
+  },
+  "GPU_free_bytes": 49530535936,
+  "host_available_bytes": 52090437632,
+  "no_foreign_signal_or_limit_or_source_change": true,
+  "next_action": "Verify exact live child identity against its owned ledger, send only that childSIGTERM handled at native optimizer-pair boundary, wait for original owner clean settlement, archive and audit incomplete terminal checkpoint; then commit/revert old activation and qualify one exact continuation onGPU0. No fresh-model reset or six-hour deadline extension."
+}
