@@ -1,0 +1,56 @@
+{
+  "status": "NATIVE_CUDA_TRAINING_LIVE_NOT_A_QUALITY_RESULT",
+  "utc": "2026-11-04T21:47:52.056434+00:00",
+  "attempt": "CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0",
+  "candidate_id": "lr_g025_d050_p050",
+  "physical_GPU_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+  "physical_GPU_index": 1,
+  "released_hyperparameters": {
+    "generator_lr": 0.003,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "owner_PID": 2804339,
+  "owner_process_live_verified": true,
+  "native_worker_PID": 2804421,
+  "native_worker_live_verified": true,
+  "CPU_audit_waiter_PID": 2806558,
+  "CPU_audit_waiter_live_verified": true,
+  "latest_logged_updates": 251,
+  "learning_rates_actual": {
+    "generator": 0.003,
+    "critic": 0.009000000000000001,
+    "particles": 0.015
+  },
+  "particle_usage": {
+    "rows_drawn": 512,
+    "rows_moved": 512,
+    "total_draws": 8032,
+    "total_unsampled_row_moves": 0,
+    "particle_covariance_trace": 8.529586791992188,
+    "particle_mean_squared_norm": 8.541314125061035
+  },
+  "native_ledger_status": "active",
+  "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0/authorization.json",
+  "authorization_SHA256": "76acbded31bafa2923c0cf00aa6cff90e75129d1a666c4d64727b86e608fb8b7",
+  "activation_commit": "85e953370145da844e3b1d9f8b5dfee445d529e1",
+  "execution_source_archive_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g025d050p050_f0_pg_s0/execution_source_archive.json",
+  "execution_source_archive_SHA256": "15925d97b52105bebce48c83b20951efef617a5225ef47da06edeb76be3c699d",
+  "archived_Python_sources": 396,
+  "previous_negative_result_commit": "6ba6e77",
+  "previous_activation_actual_revert": "50350a5",
+  "project_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 34.60025022109248,
+    "reserved_GPU_hours": 6.008333333333334,
+    "remaining_GPU_hours": 989.3997497789076,
+    "available_after_reservations_GPU_hours": 983.3914164455742,
+    "new_grant_GPU_hours": 1000.0
+  },
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "scope": "Actual native CUDA20k comparison on shared physicalGPU1, using logicalcuda0 inside its pinned native child. No exclusive GPU requirement. Same frozen count model/cohort/traces/11streams, only generator rate changed from best released-rate setting. Source/runtime qualifications are distinct from this real training observation. Final three checkpoint scores, original joint criterion and fixed3seedconfirmation remain required."
+}
