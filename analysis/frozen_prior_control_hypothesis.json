@@ -1,0 +1,38 @@
+{
+  "status": "PREDECLARED_CONDITIONAL_NATIVE_FROZEN_PARTICLE_CONTROL",
+  "utc": "2026-11-04T12:50:15.443923+00:00",
+  "activation_condition": "Only consider native seed0 qualification/deployment if the currently running native MoG trial fails unchanged joint selection. On accepted MoG, prioritize fixed-seed confirmation instead. No automatic launch.",
+  "native_API": "get_recipe(total_steps=20000,batch_size=32,num_particles=512,z_dim=8,prior_update='frozen')",
+  "single_changed_recipe_field": "prior_update learned -> frozen; no hyperparameter grid",
+  "question": "Can removing particle-location adaptation improve both donor energy and pooled cell distribution while preserving the initial finite latent support and all count-generator/critic/data/traces?",
+  "rationale": "Original fixed-seed confirmation failed pooled cell targets in two seeds. Six trainer presets and explicit cell-energy task loss failed joint seed0 improvement. Native MoG is testing standardized/noisy learned means. A matched native fixed-particle bank is a distinct causal control for location learning, not evidence that movement causes the observed failures.",
+  "fixed_task": {
+    "fold": 0,
+    "training_seed": 0,
+    "updates": 20000,
+    "phase_cap_seconds": 21600,
+    "num_particles": 512,
+    "z_dim": 8,
+    "cell_z_dim": 8,
+    "stage_balance": false,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0
+  },
+  "matching": "All11 original stream seeds, initial G/D/rawP.z, replacement particle-index sampling, uniform fitting donors, stage/library laws, native optimizedBISPF factories/penalty/policy,150features/direct integer-count inference. Native frozen policy excludes prior optimizer group and disables prior regularization by design. No output correction/resampling/new task loss.",
+  "scope": "Native fixed finite particle control (512 Gaussian-initialized locations), not an infinite Gaussian prior or learned ParticleGAN formulation; native public prior_update option, not a seventh trainer preset.",
+  "qualification_required": [
+    "Exact public recipe/factory/frozen-buffer ownership and no prior optimizer group",
+    "Same initial G/D/P.z and 11 streams as PG8",
+    "Exact first D and G update parity at common initial state if supported by native per-role normalization; verify rather than assume",
+    "Repeated native updates leave all prior rows bitwise unchanged while G/D and dispersion train",
+    "Full serialized next-update bitwise replay and frozen configuration refusals",
+    "Unchanged Context/fit/inference and only explicit freeze-related update guards/diagnostics change"
+  ],
+  "selection": "Unchanged strict lower ES, no worse pooled cellED, spread band nonregression, counts/complete endpoint/exact cohort. Single fixed20k candidate, two saved generation replicas and full checkpoint/count/score/cleanup/charge audit. Commit negative evidence then revert activation on regression. Stable multi-seed result remains required.",
+  "original_PG8_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_latent8_v1_f0_pg_s0-result.json",
+  "original_PG8_result_SHA256": "7be1feafb97bcb0647086e009872576723df880f569e30c8b304b3297eb7accd",
+  "GPU_launched": false,
+  "native_quality_known": false,
+  "MoG_quality_known": false,
+  "evaluation_donors_accessed": false
+}
