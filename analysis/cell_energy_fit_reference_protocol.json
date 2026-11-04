@@ -1,0 +1,41 @@
+{
+  "status": "PREDECLARED_DESCRIPTIVE_FITTING_REFERENCE_CHECK",
+  "utc": "2026-11-04T13:10:15.576956+00:00",
+  "question": "Does the failed cell-energy extension regress relative to PG8 against a fixed fitting-population cell reference too, under the same already-saved calibration generation law?",
+  "fitting_reference": {
+    "fold": 0,
+    "fitting_donors": 33,
+    "stage_donor_counts": [
+      3,
+      4,
+      8,
+      18
+    ],
+    "points_per_stage": 375,
+    "sampling": "For each stage, donor uniformly with replacement among fitting donors at that stage; then cell uniformly with replacement within that donor. No data-dependent reservoir selection.",
+    "numpy_seed_sequence_prefix": [
+      20261104,
+      0,
+      2026110405
+    ],
+    "last_seed_sequence_item": "stage0..3",
+    "PC_space": "Unchanged fitting-only standardized50PC transform used by original Context."
+  },
+  "saved_models": [
+    "original_PG8",
+    "cell_energy_task_extension",
+    "selected_pure_incumbent"
+  ],
+  "generation_replicates": [
+    0,
+    1
+  ],
+  "metrics": "Same fixed four-stage symmetric energy-kernel identity and pooled/per-stage cellED; verify original calibration metrics separately. Report paired candidate-minus-PG8 differences against both real reference populations. No replacement scorer or new candidate.",
+  "interpretation": "If auxiliary also regresses against fitting reference, that is inconsistent with an explanation solely involving calibration population mismatch. If auxiliary improves fitting-reference ED but regresses calibration-reference ED, that is consistent with a population/reference shift. Neither result proves causality or training-objective optimization because saved generations use the calibration query/library law and finite reservoirs, and task gradients are biased surrogates.",
+  "no_selection": "No training, generation, masks, weights, targets, incumbent or selection-rule changes; no evaluation donor access. MoG trial not included in this diagnostic.",
+  "input_SHA256": {
+    "/ml2/alz/analysis/CAL_GPU0_V1_cell_energy_aux_v1_f0_pg_s0-result.json": "770e34dc78999c9b9c8c1f8cea6fc6fef1967728130f04ce8c0e437dd0e0b878",
+    "/ml2/alz/analysis/CAL_GPU0_V1_latent8_v1_f0_pg_s0-result.json": "7be1feafb97bcb0647086e009872576723df880f569e30c8b304b3297eb7accd",
+    "/ml2/alz/analysis/cell_energy_cell_failure_decomposition.json": "b61893fa028ba46c1fd3c6dc0eba9163661ad8369a729ef80a9a09ca494c2b6a"
+  }
+}
