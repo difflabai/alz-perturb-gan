@@ -1,0 +1,92 @@
+{
+  "status": "ACTUAL_RELEASED_API_RATE_TRIAL_ACTIVE_GPU0",
+  "utc": "2026-11-04T19:35:11.982802+00:00",
+  "attempt": "CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0",
+  "candidate_id": "lr_g050_d050_p050",
+  "owner_pid": 2245322,
+  "audit_waiter_pid": 2248490,
+  "owner_live_handle_checked": true,
+  "GPU_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+  "native_recipe": "bispf_optimized",
+  "ParticleGAN_public_version": "0.9.4",
+  "nominal_hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "actual_progress_snapshot": {
+    "step": 1251,
+    "D_adversarial": 0.2774907946586609,
+    "D_penalty": 0.019371813163161278,
+    "D_total": 0.2968626022338867,
+    "G_adversarial": 3.0910098552703857,
+    "prior_regularization_unweighted": 0.1322213113307953,
+    "G_total": 3.092332124710083,
+    "G_prior_LRs": [
+      0.006,
+      0.015
+    ],
+    "D_LRs": [
+      0.009000000000000001
+    ],
+    "critic_gap": 6.824707508087158,
+    "D_gradient_norm": 7.058529853820801,
+    "G_gradient_norm": 10.99428939819336,
+    "prior_gradient_norm": 1.2717138528823853,
+    "penalty_stats": {
+      "applied": true,
+      "pen": 0.019371813163161278,
+      "center": 1.0,
+      "phase": "bispf",
+      "mean_grad_norm": 0.6857762932777405,
+      "mean_logit": -0.7808599472045898,
+      "ebi_loss": 0.004128256347030401,
+      "gauge_loss": 0.015243557281792164,
+      "floor_pen": 0.002588267670944333,
+      "s_thermal": 1.0,
+      "ema_residual": 0.7117423056885599,
+      "ema_data_scale": 4.266860222434998
+    },
+    "penalty_diagnostics": {
+      "ema_residual": 0.7117423056885599,
+      "ema_data_scale": 4.266860222434998,
+      "s_thermal": 1.0
+    },
+    "particle_usage": {
+      "rows_drawn": 512,
+      "rows_moved": 512,
+      "total_draws": 40032,
+      "total_unsampled_row_moves": 0,
+      "particle_covariance_trace": 8.788795471191406,
+      "particle_mean_squared_norm": 8.803613662719727
+    }
+  },
+  "progress_snapshot_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/first_native_progress/progress.json",
+  "progress_snapshot_SHA256": "65f64e64e6c6036dab669eb76469d5a2deead7763302c1be97f4dcbb98fae791",
+  "authorization_SHA256": "1452a1a61e860f721cfdca8f9afaa968456855d2b6c6dafa3bb3e73e35c7c015",
+  "activation_commit": "999dc64b2f520e96f16d12ae65e4ca362c4c16f2",
+  "GPU1_alternative_plan_enabled": false,
+  "scientific_key_reused_or_duplicated": false,
+  "execution_source_archive_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/execution_source_archive.json",
+  "predeclared_checkpoints": [
+    5000,
+    10000,
+    20000
+  ],
+  "training_quality_evaluated": false,
+  "integer_generation_contract_tested_in_qualification": true,
+  "public_project_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 33.2022727652711,
+    "reserved_GPU_hours": 6.008333333333334,
+    "remaining_GPU_hours": 990.7977272347289,
+    "available_after_reservations_GPU_hours": 984.7893939013956,
+    "new_grant_GPU_hours": 1000.0
+  },
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "scope": "Native guarded GPU0 training, same raw count model/data/11streams and native published law. Only independent public learning rates changed for first grid setting. Actual finite gradients and all512 sampled/moved particles; no unsampled row moves. Complete20k plus all saved-score/count/checkpoint/charge audits still pending."
+}
