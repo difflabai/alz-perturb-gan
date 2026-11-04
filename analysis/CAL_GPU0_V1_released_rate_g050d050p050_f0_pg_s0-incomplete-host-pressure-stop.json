@@ -1,0 +1,33 @@
+{
+  "status": "GUARDED_HOST_PRESSURE_STOP_WITH_CLEAN_SETTLEMENT_AND_PRESERVED_NATIVE_STATE",
+  "utc": "2026-11-04T19:55:20.271227+00:00",
+  "attempt": "CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0",
+  "completed_updates": 10842,
+  "fixed_endpoint": 20000,
+  "primary_endpoint_complete": false,
+  "quality_comparison_completed": false,
+  "reason": "MemoryError: Actual full memory PSI>=10 sustained30s",
+  "cause_attribution": "Recorded host-wide guard condition only; no claim attributing pressure to ALZ or a foreign process.",
+  "owned_processes_absent": true,
+  "owned_process_PIDs": [
+    2245322,
+    2245383,
+    2248490
+  ],
+  "owned_registry_empty": true,
+  "canonical_reservation_released": true,
+  "clean_settlement_verified": true,
+  "charged_GPU_seconds": 802.8628973890009,
+  "original_absolute_training_deadline_unix": 1793842420.7565928,
+  "recovery_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/terminal10842/recovery10842.pt",
+  "recovery_SHA256": "759025f4a281f77da665448be0f6140dbd01bdeb61d58196a313e52f794c6664",
+  "diagnostic_updates_preserved": [
+    5000,
+    10000
+  ],
+  "original_training_log_preserved": true,
+  "native_model_restarted": false,
+  "scientific_key_completed": false,
+  "GPU_context_created_by_stop_audit": false,
+  "scope": "Operational stop, no final calibration score. Same-model exact native continuation to original20k remains necessary; all guard thresholds and original deadline retained. Commit stop evidence and revert activation before continuation deployment."
+}
