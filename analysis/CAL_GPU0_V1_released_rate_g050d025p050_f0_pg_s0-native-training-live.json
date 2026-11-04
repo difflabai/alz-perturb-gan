@@ -1,0 +1,52 @@
+{
+  "status": "NATIVE_CUDA_TRAINING_LIVE_NOT_A_QUALITY_RESULT",
+  "utc": "2026-11-04T21:10:11.870918+00:00",
+  "attempt": "CAL_GPU0_V1_released_rate_g050d025p050_f0_pg_s0",
+  "candidate_id": "lr_g050_d025_p050",
+  "released_hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.0045,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "owner_PID": 2557457,
+  "owner_process_live_verified": true,
+  "CPU_audit_waiter_PID": 2564416,
+  "CPU_audit_waiter_live_verified": true,
+  "latest_logged_updates": 251,
+  "learning_rates_actual": {
+    "generator": 0.006,
+    "critic": 0.0045000000000000005,
+    "particles": 0.015
+  },
+  "particle_usage": {
+    "rows_drawn": 512,
+    "rows_moved": 512,
+    "total_draws": 8032,
+    "total_unsampled_row_moves": 0,
+    "particle_covariance_trace": 8.243399620056152,
+    "particle_mean_squared_norm": 8.251220703125
+  },
+  "native_ledger_status": "active",
+  "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g050d025p050_f0_pg_s0/authorization.json",
+  "authorization_SHA256": "3a2a0cd6db773b798bc3abfd1b13d1833407fc941c5220a36cb3efaa51f44a6d",
+  "activation_commit": "ec0c56644729e38c27ce4a7edcf9bd7b403c6de7",
+  "execution_source_archive_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g050d025p050_f0_pg_s0/execution_source_archive.json",
+  "execution_source_archive_SHA256": "aee804b196df4b8a30d3bc60a807a78607f37fdbb47aa97c707a72b849ed175f",
+  "archived_Python_sources": 397,
+  "previous_negative_result_commit": "f973473",
+  "previous_activation_actual_revert": "64dfd4a",
+  "project_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 34.03505480133109,
+    "reserved_GPU_hours": 6.008333333333334,
+    "remaining_GPU_hours": 989.9649451986688,
+    "available_after_reservations_GPU_hours": 983.9566118653355,
+    "new_grant_GPU_hours": 1000.0
+  },
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "scope": "A concrete live native20k run after audited scalar failure, not qualification-only or a final quality claim. Checkpoint curves scored after training; fixed selection and original3seedconfirmation preserved. Foreign work and guard thresholds unchanged."
+}
