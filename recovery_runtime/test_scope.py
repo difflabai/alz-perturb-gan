@@ -12,14 +12,14 @@ class RecoveryScope(unittest.TestCase):
   auth.pop('checkpoint_path',None);auth.pop('checkpoint_SHA256',None)
   auth.update(cell=c,allocation_id=scope.allocation(c),attempt_id=scope.attempt(c),label=scope.attempt(c),operation={'qualify':'qualify_interrupted_pg8','resume':'resume_pure_ensemble','seed2':'confirm_frozen_ensemble_seed2'}[mode],
    qualification_only=mode=='qualify',cap_seconds=900 if mode=='qualify' else 21600,fixed_endpoint=20000 if mode=='qualify' else 40000,
-   initial_completed_updates=0 if mode=='seed2' else 8942,new_model_updates={'qualify':2,'resume':31058,'seed2':40000}[mode],
+   initial_completed_updates=0 if mode=='seed2' else scope.INITIAL,new_model_updates={'qualify':2,'resume':40000-scope.INITIAL,'seed2':40000}[mode],
    expires_unix=p['wall_clock_envelope']['absolute_recovery_deadline_unix'],hybrid_config=None,variant_config=f['seed0_candidate']['variant_config'],pure_formulation='pg8_learned_ensemble75',ensemble_config=p['frozen_ensemble_config'],recovery_protocol_SHA256=scope.sha(scope.PROTOCOL))
   if mode!='seed2':auth.update(checkpoint_path=p['checkpoint_path'],checkpoint_SHA256=p['checkpoint_SHA256'])
   research={str(path):b.sha(path) for folder in [ROOT,ROOT/'model',ROOT/'runtime',ROOT/'confirmation_runtime',scope.HERE] for path in folder.glob('*.py')};auth['research_source_SHA256']=research;pins=auth['files_SHA256'];pins.update(research)
   history=scope.read(ROOT/'analysis/interrupted_seed1_source_history.json')
   paths=[scope.PROTOCOL,Path(p['original_confirmation_freeze']),Path(p['original_failed_ledger']),Path(p['original_interruption_evidence']),Path(p['checkpoint_path']),ROOT/'analysis/interrupted_seed1_source_history.json',ROOT/'analysis/failed_seed1_full_state_audit.json',ROOT/'analysis/exact_interrupted_resume_cpu_qualification.json',ROOT/'pure_incumbent.json',ROOT/'incumbent.json',ROOT/'analysis/pure_confirmation_protocol.json',Path(history['authorization_path']),*map(Path,history['verification_source_SHA256'])]
   paths.extend(Path(q['path']) for q in f['matched_baselines'].values())
-  for path in paths:pins[str(path)]=b.sha(path)
+  for path in paths+scope.continuation_paths(p):pins[str(path)]=b.sha(path)
   return auth
  def test_exact_qualification_recovery_and_original_seed2_identity_source_scope(self):
   for mode in ('qualify','resume','seed2'):
@@ -60,10 +60,10 @@ class RecoveryScope(unittest.TestCase):
    for index,label in enumerate(['pg8','learned']):
     path=root/'runs'/name/'fit'/label/'final.pt';path.parent.mkdir(parents=True);path.write_bytes(b'PRIVATE_WIRE_NOT_A_TORCH_MODEL')
     receipt={'status':'completed','path':'final.pt','completed_updates':20000,'SHA256':scope.sha(path)}
-    if index==0:receipt.update(resume_parent_checkpoint_SHA256=p['checkpoint_SHA256'],initial_completed_updates=8942,new_model_updates=11058)
+    if index==0:receipt.update(resume_parent_checkpoint_SHA256=p['checkpoint_SHA256'],initial_completed_updates=scope.INITIAL,new_model_updates=20000-scope.INITIAL)
     path.with_name('checkpoint_receipt.json').write_text(json.dumps(receipt));parents.append({'name':['PG8','learned_observation'][index],'checkpoint_path':str(path),'checkpoint_SHA256':scope.sha(path),'completed_updates':20000})
    with patch.object(scope,'ROOT',root),patch.object(scope,'lineage',return_value=(p,f)):
-    reference=scope.reference_payload(1,parents);self.assertEqual(reference['new_model_updates'],31058)
+    reference=scope.reference_payload(1,parents);self.assertEqual(reference['new_model_updates'],40000-scope.INITIAL)
     bad=Path(parents[0]['checkpoint_path']).with_name('checkpoint_receipt.json');receipt=json.loads(bad.read_text());receipt['initial_completed_updates']=0;bad.write_text(json.dumps(receipt))
     with self.assertRaises(AssertionError):scope.reference_payload(1,parents)
  def test_seed2_reference_rejects_resume_tagged_parent(self):
@@ -76,6 +76,18 @@ class RecoveryScope(unittest.TestCase):
     if index==0:receipt['resume_parent_checkpoint_SHA256']=p['checkpoint_SHA256']
     path.with_name('checkpoint_receipt.json').write_text(json.dumps(receipt));parents.append({'name':['PG8','learned_observation'][index],'checkpoint_path':str(path),'checkpoint_SHA256':scope.sha(path),'completed_updates':20000})
    with patch.object(scope,'ROOT',root),patch.object(scope,'lineage',return_value=(p,f)),self.assertRaises(AssertionError):scope.reference_payload(2,parents)
+ def test_retained_intermediate_segment_and_parent_cannot_be_dropped(self):
+  p=scope.read(scope.PROTOCOL);target=p['latest_interruption_evidence'];original_read=scope.read
+  for change in [{'initial_completed_updates':0},{'completed_updates':scope.INITIAL-1},{'new_model_updates':scope.INITIAL},{'original_parent_checkpoint_SHA256':p['checkpoint_SHA256']}]:
+   def changed(path):return {**original_read(path),**change} if str(path)==target else original_read(path)
+   with patch.object(scope,'read',side_effect=changed),self.assertRaises(AssertionError):scope.lineage()
+ def test_retained_intermediate_canonical_charge_cannot_be_zeroed(self):
+  p=scope.read(scope.PROTOCOL);target=p['latest_interruption_evidence'];original_read=scope.read
+  def changed(path):return {**original_read(path),'charged_GPU_seconds':0} if str(path)==target else original_read(path)
+  with patch.object(scope,'read',side_effect=changed),self.assertRaises(AssertionError):scope.lineage()
+ def test_actual_executed_source_archive_required_before_new_phase(self):
+  p=scope.read(scope.PROTOCOL);latest=scope.read(p['latest_interruption_evidence']);source=next(iter(latest['execution_source_SHA256']));archive=Path(latest['archived_checkpoint']).parent/'source'/source.lstrip('/');original_sha=scope.sha
+  with patch.object(scope,'sha',side_effect=lambda path:'0'*64 if Path(path)==archive else original_sha(path)),self.assertRaises(AssertionError):scope.lineage()
  def test_real_failed_allocation_and_checkpoint_not_a_quality_result(self):
   p,f=scope.lineage();failure=scope.read(p['original_interruption_evidence']);self.assertFalse(failure['quality_result_created']);self.assertEqual(failure['completed_updates'],8942)
   self.assertTrue(failure['owned_release_and_clean_settlement_verified'])

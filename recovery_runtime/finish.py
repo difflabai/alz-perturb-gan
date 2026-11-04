@@ -16,7 +16,7 @@ def verify(attempt):
  assert type(seed) is int and seed==auth['cell']['seed'] and candidate['operation']==('resume_pure_ensemble' if seed==1 else 'confirm_frozen_ensemble_seed2') and candidate['qualification_only'] is False
  assert candidate['pure_only'] is True and candidate['real_bag_replacements']==0 and candidate['hybrid_config'] is None
  assert candidate['method']=='pg_pure_ensemble75' and candidate['generation']=='iter_pg_whole_bag_ensemble'
- assert candidate['native_recipe']=='bispf_optimized' and candidate['parent_completed_updates']==[20000,20000] and candidate['initial_completed_updates']==(8942 if seed==1 else 0)
+ assert candidate['native_recipe']=='bispf_optimized' and candidate['parent_completed_updates']==[20000,20000] and candidate['initial_completed_updates']==(scope.INITIAL if seed==1 else 0)
  assert candidate['completed_updates']==candidate['fixed_endpoint']==40000
  assert candidate['original_confirmation_freeze_SHA256']==scope.lineage()[0]['original_confirmation_freeze_SHA256'] and candidate['recovery_protocol_SHA256']==scope.sha(scope.PROTOCOL)
  assert scientific_sources(auth)==f['scientific_source_SHA256'];frozen_input_pins(auth,candidate)

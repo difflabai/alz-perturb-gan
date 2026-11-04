@@ -2,9 +2,10 @@
 import hashlib,json,sys,time
 from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=ROOT/'recovery_runtime'
-PROTOCOL=ROOT/'analysis/exact_seed1_recovery_protocol.json'
-CPU_PROOF=ROOT/'analysis/recovery_runtime_cpu_qualification.json'
-NATIVE_PROOF=ROOT/'analysis/exact_seed1_native_restore_verification.json'
+PROTOCOL=ROOT/'analysis/exact_seed1_recovery_protocol_v2.json'
+CPU_PROOF=ROOT/'analysis/recovery_runtime_cpu_qualification_v2.json'
+NATIVE_PROOF=ROOT/'analysis/exact_seed1_native_restore_verification_v2.json'
+INITIAL=14410
 def read(p):return json.loads(Path(p).read_bytes())
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def frozen():
@@ -15,23 +16,65 @@ def lineage():
  p=read(PROTOCOL);f=frozen()
  assert sha(p['original_confirmation_freeze'])==p['original_confirmation_freeze_SHA256']
  assert p['scientific_source_SHA256']==f['scientific_source_SHA256'] and p['frozen_baseline_pins']==f['matched_baselines']
- assert p['initial_parent_updates']==[8942,0] and p['fixed_parent_endpoints']==[20000,20000] and p['new_training_updates_required']==31058
+ assert p['initial_parent_updates']==[INITIAL,0] and p['fixed_parent_endpoints']==[20000,20000] and p['new_training_updates_required']==40000-INITIAL
  assert p['training_seed']==1 and p['frozen_ensemble_config']==f['seed0_candidate']['ensemble_config']
  assert sha(p['original_failed_ledger'])==p['original_failed_ledger_SHA256']
  assert sha(p['original_interruption_evidence'])==p['original_interruption_evidence_SHA256']
  failure=read(p['original_interruption_evidence']);assert failure['completed_updates']==8942 and failure['quality_result_created'] is False and failure['learned_parent_started'] is False
  for path,pin in failure['source_SHA256'].items():assert sha(path)==pin
- assert p['checkpoint_path']==failure['archived_checkpoint'] and sha(p['checkpoint_path'])==p['checkpoint_SHA256']==failure['checkpoint_SHA256']
+ latest=read(p['latest_interruption_evidence']);assert sha(p['latest_interruption_evidence'])==p['latest_interruption_evidence_SHA256']
+ assert latest['status']=='FROZEN_CLEAN_EXTERNAL_PEER_INTERRUPTION_NEWEST_EXACT_PG8_STATE_NO_QUALITY'
+ assert latest['initial_completed_updates']==8942 and latest['completed_updates']==INITIAL and latest['new_model_updates']==INITIAL-8942
+ assert latest['original_parent_checkpoint_SHA256']==failure['checkpoint_SHA256']
+ assert p['checkpoint_path']==latest['archived_checkpoint'] and sha(p['checkpoint_path'])==p['checkpoint_SHA256']==latest['checkpoint_SHA256']
+ assert latest['quality_result_created'] is False and latest['learned_parent_started'] is False and latest['owned_cleanup_and_settlement_verified']
+ prior_dep=read(ROOT/'artifacts/allocations'/latest['attempt']/'deployment.json');prior_auth=read(prior_dep['authorization_path'])
+ prior_job=read(prior_dep['ledger_path'])['jobs'][0];prior_settlement=read(Path(prior_dep['ledger_path']).with_name(latest['attempt']+'-settlement.json'))
+ assert prior_job['status']=='failed' and prior_job['reservation_released'] and prior_job['error']=="Refusal('protected peer identity changed')"
+ assert prior_settlement['uncertain'] is None and prior_settlement['settlement']['status']=='settled'
+ assert prior_job['charged_seconds']==latest['charged_GPU_seconds']==prior_settlement['settlement']['charged_GPU_seconds']
+ assert sha(prior_dep['authorization_path'])==prior_dep['authorization_SHA256'] and prior_auth['initial_completed_updates']==8942
+ assert sha(p['previous_protocol_path'])==p['previous_protocol_SHA256'] and sha(p['previous_native_qualification_path'])==p['previous_native_qualification_SHA256']
+ assert read(p['previous_native_qualification_path'])['complete_clean_settlement_verified'] is True
+ for path,pin in latest['canonical_input_SHA256'].items():assert sha(path)==pin
+ archive=Path(latest['archived_checkpoint']).parent/'source'
+ for path,pin in latest['execution_source_SHA256'].items():assert sha(archive/path.lstrip('/'))==pin==prior_auth['research_source_SHA256'][path]
  job=read(p['original_failed_ledger'])['jobs'][0]
  assert job['status']=='failed' and job['reservation_released'] and job['exit_code']==1
  assert job['error']=="Conflict('Unregistered GPU allocation(s): [2156154]')"
  wall=p['wall_clock_envelope'];assert wall['original_started_unix']==job['started_unix'] and wall['absolute_recovery_deadline_unix']==job['started_unix']+21600
  assert wall['original_charged_GPU_seconds']==failure['charged_GPU_seconds']==job['charged_seconds']
+ assert prior_auth['expires_unix']==wall['absolute_recovery_deadline_unix']==latest['original_absolute_deadline_unix']
+ oldqual=read(p['previous_native_qualification_path']);assert oldqual['checkpoint_SHA256']==failure['checkpoint_SHA256']
+ previous=read(p['previous_protocol_path']);assert previous['checkpoint_SHA256']==failure['checkpoint_SHA256']
+ assert attempt(previous['recovery_cell'])==latest['attempt'] and attempt(previous['qualification_cell'])==oldqual['attempt']
+ assert oldqual['status']=='VERIFIED_ACTUAL_CUDA_INTERRUPTED_STATE_AND_NEXT_UPDATE'
+ assert oldqual['complete_initial_state_restored_exactly'] and oldqual['independent_saved_branch_states_bitwise_equal']
+ assert oldqual['qualified_execution_source_SHA256']==prior_auth['research_source_SHA256']
+ for path,pin in oldqual['verification_source_SHA256'].items():assert sha(archive/path.lstrip('/'))==pin
+ oldqual_settle=read(Path(prior_dep['ledger_path']).with_name(oldqual['attempt']+'-settlement.json'))
+ assert oldqual_settle['uncertain'] is None and oldqual_settle['settlement']['status']=='settled' and oldqual_settle['settlement']['charged_GPU_seconds']==oldqual['charged_GPU_seconds']
+ oldqual_job=read(Path(prior_dep['ledger_path']).with_name(oldqual['attempt']+'.json'))['jobs'][0]
+ assert oldqual_job['status']=='completed' and oldqual_job['exit_code']==0 and oldqual_job['reservation_released'] and oldqual_job['charged_seconds']==oldqual['charged_GPU_seconds']
+ assert wall['original_charged_GPU_seconds']+latest['charged_GPU_seconds']+oldqual['charged_GPU_seconds']<21600
  out=ROOT/'runs'/p['original_attempt'];assert not (out/'completed.json').exists() and not (out/'r0').exists() and not (out/'r1').exists(),'No quality result may precede infrastructure bridge'
  history=read(ROOT/'analysis/interrupted_seed1_source_history.json');assert history['status']=='VERIFIED_INTERRUPTED_ALLOCATION_COMMITTED_SOURCE_HISTORY'
  assert history['attempt']==p['original_attempt'] and history['original_freeze_SHA256']==p['original_confirmation_freeze_SHA256']
  assert sha(history['authorization_path'])==history['authorization_SHA256']
  return p,f
+
+def continuation_paths(p):
+ latest=read(p['latest_interruption_evidence']);archive=Path(latest['archived_checkpoint']).parent/'source'
+ paths=[Path(p['latest_interruption_evidence']),Path(p['previous_protocol_path']),Path(p['previous_native_qualification_path']),ROOT/'analysis/turnover_seed1_full_state_audit.json',ROOT/'artifacts/allocations'/latest['attempt']/'deployment.json']
+ previous=read(p['previous_native_qualification_path']);prior_dep=read(paths[-1]);ledger=Path(prior_dep['ledger_path'])
+ paths.extend([ledger.with_name(previous['attempt']+'.json'),ledger.with_name(previous['attempt']+'-settlement.json')])
+ paths.extend(map(Path,latest['canonical_input_SHA256']))
+ paths.extend(archive/path.lstrip('/') for path in latest['execution_source_SHA256'])
+ audit=read(ROOT/'analysis/turnover_seed1_full_state_audit.json')
+ assert audit['status']=='VERIFIED_TURNOVER_NATIVE_PG8_EXACT_STATE_CPU_ONLY' and audit['completed_updates']==INITIAL and audit['checkpoint_SHA256']==p['checkpoint_SHA256']
+ assert audit['strict_complete_G_D_prior_load_verified'] and audit['finite_model_floating_values']==371177 and audit['CUDA_initialized'] is False
+ paths.extend(map(Path,audit['source_SHA256']))
+ return list(dict.fromkeys(paths))
 
 def cell_for(mode):
  p,f=lineage()
@@ -46,8 +89,8 @@ def validate_authorization(auth,*,require_proof=True):
  assert auth['pure_formulation']=='pg8_learned_ensemble75' and auth['hybrid_config'] is None and auth['ensemble_config']==p['frozen_ensemble_config']
  assert auth['qualification_only']==(mode=='qualify') and auth['cap_seconds']==(900 if mode=='qualify' else 21600)
  assert auth['fixed_endpoint']==(20000 if mode=='qualify' else 40000)
- assert auth['initial_completed_updates']==(0 if mode=='seed2' else 8942)
- assert auth['new_model_updates']==({'qualify':2,'resume':31058,'seed2':40000}[mode])
+ assert auth['initial_completed_updates']==(0 if mode=='seed2' else INITIAL)
+ assert auth['new_model_updates']==({'qualify':2,'resume':40000-INITIAL,'seed2':40000}[mode])
  assert auth['recovery_protocol_SHA256']==sha(PROTOCOL)
  if mode!='seed2':
   assert auth['checkpoint_path']==p['checkpoint_path'] and auth['checkpoint_SHA256']==p['checkpoint_SHA256']
@@ -57,7 +100,7 @@ def validate_authorization(auth,*,require_proof=True):
  paths=[PROTOCOL,Path(p['original_confirmation_freeze']),Path(p['original_failed_ledger']),Path(p['original_interruption_evidence']),Path(p['checkpoint_path']),ROOT/'analysis/interrupted_seed1_source_history.json',ROOT/'analysis/failed_seed1_full_state_audit.json',ROOT/'analysis/exact_interrupted_resume_cpu_qualification.json',ROOT/'pure_incumbent.json',ROOT/'incumbent.json',ROOT/'analysis/pure_confirmation_protocol.json']
  paths.extend(Path(q['path']) for q in f['matched_baselines'].values())
  history=read(ROOT/'analysis/interrupted_seed1_source_history.json');paths.append(Path(history['authorization_path']));paths.extend(map(Path,history['verification_source_SHA256']))
- for path in paths:assert pins[str(path)]==sha(path)
+ for path in paths+continuation_paths(p):assert pins[str(path)]==sha(path)
  for path,pin in f['scientific_source_SHA256'].items():assert research[path]==pins[path]==pin==sha(path)
  for folder in [HERE,ROOT/'confirmation_runtime']:
   for path in folder.glob('*.py'):assert research[str(path)]==pins[str(path)]==sha(path)
@@ -82,10 +125,10 @@ def reference_payload(seed,parents):
   assert parent['name']==['PG8','learned_observation'][index] and parent['completed_updates']==20000
   assert parent['checkpoint_path']==str(path) and sha(path)==parent['checkpoint_SHA256']
   receipt=read(path.with_name('checkpoint_receipt.json'));assert receipt['status']=='completed' and receipt['completed_updates']==20000 and receipt['SHA256']==parent['checkpoint_SHA256']
-  if seed==1 and index==0:assert receipt['resume_parent_checkpoint_SHA256']==p['checkpoint_SHA256'] and receipt['initial_completed_updates']==8942 and receipt['new_model_updates']==11058
+  if seed==1 and index==0:assert receipt['resume_parent_checkpoint_SHA256']==p['checkpoint_SHA256'] and receipt['initial_completed_updates']==INITIAL and receipt['new_model_updates']==20000-INITIAL
   else:assert 'resume_parent_checkpoint_SHA256' not in receipt and receipt.get('initial_completed_updates',0)==0
  return {'schema':1,'type':'frozen_exact_recovery_or_seed2_complete_parent_references','status':'completed','fold':0,'seed':seed,'completed_updates':40000,'fixed_endpoint':40000,
-         'parent_training_updates_total':40000,'new_model_updates':31058 if seed==1 else 40000,'initial_completed_updates':8942 if seed==1 else 0,
+         'parent_training_updates_total':40000,'new_model_updates':40000-INITIAL if seed==1 else 40000,'initial_completed_updates':INITIAL if seed==1 else 0,
          'ensemble_config':p['frozen_ensemble_config'],'recovery_protocol_SHA256':sha(PROTOCOL),'original_confirmation_freeze_SHA256':p['original_confirmation_freeze_SHA256'],
          'original_interrupted_attempt':p['original_attempt'] if seed==1 else None,'resume_parent_checkpoint_SHA256':p['checkpoint_SHA256'] if seed==1 else None,'parents':parents}
 def verify_reference(candidate):

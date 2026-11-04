@@ -39,6 +39,26 @@ class RecoveryArtifacts(fixture_base.EnsembleArtifacts):
      'training_seed':1,'initial_parent_updates':[8942,0],'fixed_parent_endpoints':[20000,20000],'new_training_updates_required':31058,
      'qualification_cell':qualification_cell,'recovery_cell':recovery_cell,'scientific_source_SHA256':self.sources,'frozen_baseline_pins':common.read(self.freeze)['matched_baselines'],
      'frozen_ensemble_config':self.candidates[0]['ensemble_config'],'wall_clock_envelope':{'original_started_unix':1000.,'absolute_recovery_deadline_unix':22600.,'original_charged_GPU_seconds':100.},'fixture':'PRIVATE COUNTERFACTUAL METADATA, NOT A RECOVERY APPROVAL'}
+  # Add a separately retained intermediate infrastructure phase (wire metadata only).
+  old_protocol=self.root/'analysis/PRIVATE-original-recovery-protocol.json';prior_p=copy.deepcopy(p);prior_p['recovery_cell']={'fold':0,'method':'pg','seed':1,'experiment':'private_first_resume'};prior_p['qualification_cell']={**prior_p['recovery_cell'],'experiment':'private_first_qual'};self.write(old_protocol,prior_p)
+  root_cp_sha=cp_sha
+  phase=scope.attempt(prior_p['recovery_cell']);phase_dir=self.root/'artifacts/allocations'/phase;phase_dir.mkdir(parents=True)
+  phase_auth=copy.deepcopy(old_auth);phase_auth.update(initial_completed_updates=8942,expires_unix=22600.)
+  phase_auth_path=phase_dir/'authorization.json';self.write(phase_auth_path,phase_auth)
+  phase_ledger=self.root/'ledgers'/(phase+'.json');self.write(phase_ledger,{'jobs':[{'status':'failed','exit_code':1,'reservation_released':True,'error':"Refusal('protected peer identity changed')",'charged_seconds':100.}]})
+  self.write(phase_ledger.with_name(phase+'-settlement.json'),{'uncertain':None,'settlement':{'status':'settled','charged_GPU_seconds':100.}})
+  self.write(phase_dir/'deployment.json',{'authorization_path':str(phase_auth_path),'authorization_SHA256':common.sha(phase_auth_path),'ledger_path':str(phase_ledger)})
+  oldqual=self.root/'analysis/PRIVATE-first-qualification.json';qualname=scope.attempt(prior_p['qualification_cell'])
+  self.write(oldqual,{'status':'VERIFIED_ACTUAL_CUDA_INTERRUPTED_STATE_AND_NEXT_UPDATE','complete_initial_state_restored_exactly':True,'independent_saved_branch_states_bitwise_equal':True,'attempt':qualname,'checkpoint_SHA256':root_cp_sha,'complete_clean_settlement_verified':True,'qualified_execution_source_SHA256':phase_auth['research_source_SHA256'],'verification_source_SHA256':{},'charged_GPU_seconds':1.,'fixture':'COUNTERFACTUAL WIRE NOT CUDA'})
+  self.write(phase_ledger.with_name(qualname+'.json'),{'jobs':[{'status':'completed','exit_code':0,'reservation_released':True,'charged_seconds':1.}]})
+  self.write(phase_ledger.with_name(qualname+'-settlement.json'),{'uncertain':None,'settlement':{'status':'settled','charged_GPU_seconds':1.}})
+  archived=self.root/'artifacts/phase14410/pg8-step14410.pt';archived.parent.mkdir(parents=True);archived.write_bytes(b'COUNTERFACTUAL_WIRE_NOT_A_MODEL_14410');cp_sha=common.sha(archived)
+  for source,pin in phase_auth['research_source_SHA256'].items():
+   dest=archived.parent/'source'/source.lstrip('/');dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(Path(source).read_bytes());assert common.sha(dest)==pin
+  latest=self.root/'analysis/PRIVATE-turnover-interruption.json';self.write(latest,{'status':'FROZEN_CLEAN_EXTERNAL_PEER_INTERRUPTION_NEWEST_EXACT_PG8_STATE_NO_QUALITY','attempt':phase,'initial_completed_updates':8942,'completed_updates':scope.INITIAL,'new_model_updates':scope.INITIAL-8942,'original_parent_checkpoint_SHA256':root_cp_sha,'archived_checkpoint':str(archived),'checkpoint_SHA256':cp_sha,'quality_result_created':False,'learned_parent_started':False,'owned_cleanup_and_settlement_verified':True,'charged_GPU_seconds':100.,'original_absolute_deadline_unix':22600.,'canonical_input_SHA256':{},'execution_source_SHA256':phase_auth['research_source_SHA256'],'fixture':'COUNTERFACTUAL LINEAGE WIRE'})
+  self.write(self.root/'analysis/turnover_seed1_full_state_audit.json',{'status':'VERIFIED_TURNOVER_NATIVE_PG8_EXACT_STATE_CPU_ONLY','completed_updates':scope.INITIAL,'checkpoint_SHA256':cp_sha,'strict_complete_G_D_prior_load_verified':True,'finite_model_floating_values':371177,'CUDA_initialized':False,'source_SHA256':{},'fixture':'COUNTERFACTUAL MODEL-AUDIT WIRE, NO ACTUAL TENSORS'})
+  p.update(checkpoint_path=str(archived),checkpoint_SHA256=cp_sha,initial_parent_updates=[scope.INITIAL,0],new_training_updates_required=40000-scope.INITIAL,latest_interruption_evidence=str(latest),latest_interruption_evidence_SHA256=common.sha(latest),previous_protocol_path=str(old_protocol),previous_protocol_SHA256=common.sha(old_protocol),previous_native_qualification_path=str(oldqual),previous_native_qualification_SHA256=common.sha(oldqual))
+  self.previous_phase_ledger=phase_ledger;self.latest_interruption=latest
   self.write(self.recovery_protocol,p);self.bridge=p
   self.write(self.root/'analysis/interrupted_seed1_source_history.json',{'status':'VERIFIED_INTERRUPTED_ALLOCATION_COMMITTED_SOURCE_HISTORY','attempt':old_attempt,'original_freeze_SHA256':freeze_pin,
        'authorization_path':original['authorization_path'],'authorization_SHA256':common.sha(original['authorization_path']),'verification_source_SHA256':{str(self.root/'scorer.py'):common.sha(self.root/'scorer.py')},'fixture':'PRIVATE WIRE, NO GIT AUDIT'})
@@ -52,7 +72,7 @@ class RecoveryArtifacts(fixture_base.EnsembleArtifacts):
   for seed in (1,2):
    candidate=self.candidates[seed];dep=self.deployments[seed];auth=self.auths[seed];mode='resume' if seed==1 else 'seed2';c=recovery_cell if seed==1 else self.ids['2']['cell'];attempt=scope.attempt(c)
    auth.update(cell=c,allocation_id=scope.allocation(c),attempt_id=attempt,label=attempt,operation='resume_pure_ensemble' if seed==1 else 'confirm_frozen_ensemble_seed2',qualification_only=False,
-      cap_seconds=21600,fixed_endpoint=40000,initial_completed_updates=8942 if seed==1 else 0,new_model_updates=31058 if seed==1 else 40000,
+      cap_seconds=21600,fixed_endpoint=40000,initial_completed_updates=scope.INITIAL if seed==1 else 0,new_model_updates=40000-scope.INITIAL if seed==1 else 40000,
       expires_unix=22600.,recovery_protocol_SHA256=common.sha(self.recovery_protocol),recovery_CPU_proof_SHA256=common.sha(self.recovery_cpu),native_restore_proof_SHA256=common.sha(self.native_restore))
    if seed==1:auth.update(checkpoint_path=str(archived),checkpoint_SHA256=cp_sha)
    else:auth.pop('checkpoint_path',None);auth.pop('checkpoint_SHA256',None)
@@ -61,7 +81,7 @@ class RecoveryArtifacts(fixture_base.EnsembleArtifacts):
    parents=[]
    for index,label in enumerate(['pg8','learned']):
     path=Path(dep['output_dir'])/'fit'/label/'final.pt';receipt=common.read(path.with_name('checkpoint_receipt.json'))
-    if seed==1 and index==0:receipt.update(resume_parent_checkpoint_SHA256=cp_sha,initial_completed_updates=8942,new_model_updates=11058)
+    if seed==1 and index==0:receipt.update(resume_parent_checkpoint_SHA256=cp_sha,initial_completed_updates=scope.INITIAL,new_model_updates=20000-scope.INITIAL)
     self.write(path.with_name('checkpoint_receipt.json'),receipt)
     parents.append({'name':['PG8','learned_observation'][index],'checkpoint_path':str(path),'checkpoint_SHA256':common.sha(path),'completed_updates':20000})
    reference={'schema':1,'type':'frozen_exact_recovery_or_seed2_complete_parent_references','status':'completed','fold':0,'seed':seed,'completed_updates':40000,'fixed_endpoint':40000,
@@ -70,6 +90,8 @@ class RecoveryArtifacts(fixture_base.EnsembleArtifacts):
    cp=Path(dep['output_dir'])/'fit/ensemble.json';self.write(cp,reference);candidate.update(checkpoint_path=str(cp),checkpoint_SHA256=common.sha(cp))
    paths=[self.recovery_protocol,self.freeze,original_ledger,failure,archived,self.root/'analysis/interrupted_seed1_source_history.json',self.root/'analysis/failed_seed1_full_state_audit.json',self.root/'analysis/exact_interrupted_resume_cpu_qualification.json',self.root/'pure_incumbent.json',self.root/'incumbent.json',self.protocol,Path(original['authorization_path']),self.root/'scorer.py',self.recovery_cpu,self.native_restore]
    paths.extend(Path(q['path']) for q in common.read(self.freeze)['matched_baselines'].values())
+   paths.extend([latest,old_protocol,oldqual,self.root/'analysis/turnover_seed1_full_state_audit.json',phase_dir/'deployment.json',phase_ledger.with_name(qualname+'.json'),phase_ledger.with_name(qualname+'-settlement.json')])
+   paths.extend(archived.parent/'source'/source.lstrip('/') for source in phase_auth['research_source_SHA256'])
    for path in paths:auth['files_SHA256'][str(path)]=common.sha(path)
    self.write(dep['authorization_path'],auth);dep['authorization_SHA256']=common.sha(dep['authorization_path']);self.write(Path(dep['authorization_path']).with_name('deployment.json'),dep);self.write(Path(dep['output_dir'])/'completed.json',candidate)
    ledger=Path(dep['ledger_path']);self.write(ledger,{'jobs':[{'status':'completed','exit_code':0,'reservation_released':True,'ended_unix':1300.}]});self.write(ledger.with_name(attempt+'-settlement.json'),{'uncertain':None,'settlement':{'status':'settled','charged_GPU_seconds':100.}})
@@ -105,7 +127,7 @@ class RecoveryArtifacts(fixture_base.EnsembleArtifacts):
   self.assertFalse(self.output.exists())
  def test_digest_inventory_and_canonical_charges_are_separate(self):
   self.run_aggregate();q=common.read(self.output)
-  self.assertEqual(q['seed1_total_charged_GPU_seconds_including_failure_and_qualification'],201.)
+  self.assertEqual(q['seed1_total_charged_GPU_seconds_including_failure_and_qualification'],302.)
   self.assertTrue(all(isinstance(v,str) and len(v)==64 and all(c in '0123456789abcdef' for c in v) for v in q['evidence_SHA256'].values()))
  def test_confirmation_charge_cannot_disagree_with_canonical_settlement(self):
   path=self.root/'analysis'/(self.ids['1']['attempt_id']+'-confirmation.json');q=common.read(path);q['charged_GPU_seconds']=0.;self.write(path,q)

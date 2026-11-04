@@ -300,7 +300,7 @@ def verify(auth_path,layout=NATIVE_LAYOUT):
         paths=[auth_path,policy_path,*wanted_paths.values(),Path(auth['registry_path']),*map(Path,policy['locks'])]
         require(all(p.resolve().is_relative_to(root) for p in paths),'CPU fixture path escapes its isolated root')
     else:
-        expected_registry=HERE.parent/'artifacts/gpu0-parallel-20261104/live_registry' if auth.get('parallel_profile') is True else PROJECT/'cooperative_gpu0_20261103_v2/live_registry'
+        expected_registry=parallel_profile.REGISTRY if auth.get('parallel_profile') is True else PROJECT/'cooperative_gpu0_20261103_v2/live_registry'
         require(layout==NATIVE_LAYOUT and Path(auth['registry_path']).resolve()==expected_registry,'native GPU0 root/registry differs')
     source_closure(auth,layout)
     return auth,hashlib.sha256(raw).hexdigest()

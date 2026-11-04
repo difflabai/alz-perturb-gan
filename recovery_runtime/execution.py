@@ -25,7 +25,7 @@ def run(auth,out,end,admission,validate_reference):
         checkpoint=torch.load(auth['checkpoint_path'],map_location='cpu',weights_only=False)
     if mode=='qualify':
         ctx=BaseContext(cache,'cuda:0')
-        result,state=qualify_exact(ctx,checkpoint,expected_initial=8942,branch_directory=out/'qualification_branches')
+        result,state=qualify_exact(ctx,checkpoint,expected_initial=scope.INITIAL,branch_directory=out/'qualification_branches')
         result.update(status='ACTUAL_CUDA_EXACT_INTERRUPTED_STATE_AND_NEXT_UPDATE_BITWISE_VERIFIED',checkpoint_SHA256=p['checkpoint_SHA256'],
                       recovery_protocol_SHA256=scope.sha(scope.PROTOCOL),allocation_id=admission['allocation_id'],training_seed=1,
                       branch_SHA256={str(out/'qualification_branches'/f'branch{i}.pt'):sha(out/'qualification_branches'/f'branch{i}.pt') for i in (0,1)})
@@ -33,9 +33,9 @@ def run(auth,out,end,admission,validate_reference):
         return
     def release():gc.collect();torch.cuda.empty_cache()
     def phase(index):dump(out/'training_phase.json',{'parent':['PG8','learned_observation'][index],'parent_index':index,'training_seed':seed,
-                         'completed_parent_updates':(8942 if mode=='resume' else 0) if index==0 else 20000,'new_updates_planned':auth['new_model_updates']})
+                         'completed_parent_updates':(scope.INITIAL if mode=='resume' else 0) if index==0 else 20000,'new_updates_planned':auth['new_model_updates']})
     def resume_first(ctx,folder,seed,*,end_monotonic):
-        return fit_resume(ctx,folder,seed,checkpoint=checkpoint,checkpoint_SHA256=p['checkpoint_SHA256'],expected_initial=8942,end_monotonic=end_monotonic)
+        return fit_resume(ctx,folder,seed,checkpoint=checkpoint,checkpoint_SHA256=p['checkpoint_SHA256'],expected_initial=scope.INITIAL,end_monotonic=end_monotonic)
     bundles,paths=fit_pair([lambda:BaseContext(cache,'cuda:0'),lambda:LearnedContext(cache,'cuda:0')],[resume_first if mode=='resume' else fit_base,fit_learned],seed,out,end,release,phase)
     parents=[]
     for index,path in enumerate(paths):

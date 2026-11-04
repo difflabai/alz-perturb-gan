@@ -1,0 +1,359 @@
+--- /ml2/alz/recovery_runtime/finish.py @ v2
++++ /ml2/alz/recovery_runtime/finish.py @ turnover
+@@ -16,7 +16,7 @@
+  assert type(seed) is int and seed==auth['cell']['seed'] and candidate['operation']==('resume_pure_ensemble' if seed==1 else 'confirm_frozen_ensemble_seed2') and candidate['qualification_only'] is False
+  assert candidate['pure_only'] is True and candidate['real_bag_replacements']==0 and candidate['hybrid_config'] is None
+  assert candidate['method']=='pg_pure_ensemble75' and candidate['generation']=='iter_pg_whole_bag_ensemble'
+- assert candidate['native_recipe']=='bispf_optimized' and candidate['parent_completed_updates']==[20000,20000] and candidate['initial_completed_updates']==(8942 if seed==1 else 0)
++ assert candidate['native_recipe']=='bispf_optimized' and candidate['parent_completed_updates']==[20000,20000] and candidate['initial_completed_updates']==(scope.INITIAL if seed==1 else 0)
+  assert candidate['completed_updates']==candidate['fixed_endpoint']==40000
+  assert candidate['original_confirmation_freeze_SHA256']==scope.lineage()[0]['original_confirmation_freeze_SHA256'] and candidate['recovery_protocol_SHA256']==scope.sha(scope.PROTOCOL)
+  assert scientific_sources(auth)==f['scientific_source_SHA256'];frozen_input_pins(auth,candidate)
+--- /ml2/alz/recovery_runtime/aggregate.py @ v2
++++ /ml2/alz/recovery_runtime/aggregate.py @ turnover
+@@ -44,17 +44,19 @@
+    for source,pin in proof['array_and_exemplar_SHA256'].items():assert scope.sha(source)==pin
+    evidence.update({str(path):scope.sha(path),audit['path']:audit['SHA256']})
+    if seed==1:
+-    assert candidate['new_model_updates']==31058 and candidate['initial_completed_updates']==8942
++    assert candidate['new_model_updates']==40000-scope.INITIAL and candidate['initial_completed_updates']==scope.INITIAL
+     assert candidate['resume_parent_checkpoint_SHA256']==p['checkpoint_SHA256'] and candidate['original_interrupted_attempt']==p['original_attempt']
+     qualification=scope.read(scope.NATIVE_PROOF)
+     ledger=Path(dep['ledger_path']);settlement=scope.read(ledger.with_name(name+'-settlement.json'))
+     assert proof['charged_GPU_seconds']==settlement['settlement']['charged_GPU_seconds'],'Confirmation charge differs from canonical settlement'
+-    seed1_total_charge=p['wall_clock_envelope']['original_charged_GPU_seconds']+settlement['settlement']['charged_GPU_seconds']+qualification['charged_GPU_seconds']
++    previous=scope.read(p['latest_interruption_evidence']);previous_qual=scope.read(p['previous_native_qualification_path'])
++    seed1_total_charge=p['wall_clock_envelope']['original_charged_GPU_seconds']+previous['charged_GPU_seconds']+previous_qual['charged_GPU_seconds']+settlement['settlement']['charged_GPU_seconds']+qualification['charged_GPU_seconds']
++    evidence.update({p['latest_interruption_evidence']:scope.sha(p['latest_interruption_evidence']),p['previous_native_qualification_path']:scope.sha(p['previous_native_qualification_path'])})
+     assert seed1_total_charge<=21600 and scope.read(ledger)['jobs'][0]['ended_unix']<=p['wall_clock_envelope']['absolute_recovery_deadline_unix']
+    else:assert candidate['new_model_updates']==40000 and candidate['initial_completed_updates']==0
+   records.append({'seed':seed,'attempt':name,'energy_score':candidate['energy_score'],'matched_baseline_energy_score':baseline['energy_score'],
+                   'cell_energy_distance':candidate['cell_energy_distance'],'matched_baseline_cell_energy_distance':baseline['cell_energy_distance'],'spread_ratio':candidate['spread_ratio']})
+- result={**stable_target(records),'records':records,'evidence_SHA256':evidence,'seed1_total_charged_GPU_seconds_including_failure_and_qualification':seed1_total_charge,'original_failed_seed1_attempt_retained':p['original_attempt'],'original_confirmation_freeze_SHA256':p['original_confirmation_freeze_SHA256'],
++ result={**stable_target(records),'records':records,'evidence_SHA256':evidence,'seed1_total_charged_GPU_seconds_including_failure_and_qualification':seed1_total_charge,'original_failed_seed1_attempt_retained':p['original_attempt'],'previous_failed_recovery_attempt_retained':scope.read(p['latest_interruption_evidence'])['attempt'],'original_confirmation_freeze_SHA256':p['original_confirmation_freeze_SHA256'],
+          'pure_incumbent_SHA256':f['pure_incumbent_SHA256'],'incumbent_unchanged':True,'training_seeds_were_not_ranked':True,'each_seed_parent_training_updates':[20000,20000],
+          'scope':'All three frozen training seeds and same four adaptive calibration donors, not twelve independent donors or external SOTA. Interrupted seed1 preserved and exactly continued; no replacement seed, fromscratch rerun or outcome dropping. Evaluation donors excluded.'}
+  assert scope.sha(ROOT/'pure_incumbent.json')==f['pure_incumbent_SHA256']
+--- /ml2/alz/recovery_runtime/verify_qualification.py @ v2
++++ /ml2/alz/recovery_runtime/verify_qualification.py @ turnover
+@@ -16,14 +16,14 @@
+  out=Path(dep['output_dir']);result=scope.read(out/'qualification.json');assert not (out/'completed.json').exists()
+  assert result['status']=='ACTUAL_CUDA_EXACT_INTERRUPTED_STATE_AND_NEXT_UPDATE_BITWISE_VERIFIED' and result['qualification_only'] is True
+  assert result['checkpoint_SHA256']==p['checkpoint_SHA256'] and result['recovery_protocol_SHA256']==scope.sha(scope.PROTOCOL)
+- assert result['parent_completed_updates']==8942 and result['qualified_completed_updates']==8943 and result['executed_optimizer_pairs']==2
++ assert result['parent_completed_updates']==scope.INITIAL and result['qualified_completed_updates']==scope.INITIAL+1 and result['executed_optimizer_pairs']==2
+  assert result['complete_initial_state_restored_exactly'] and result['complete_next_state_and_metrics_bitwise_equal']
+  assert result['calibration_or_evaluation_scores_generated'] is False
+  files=[out/'qualification_branches'/f'branch{i}.pt' for i in (0,1)];branches=[]
+  for path in files:
+   assert scope.sha(path)==result['branch_SHA256'][str(path)]
+   q=torch.load(path,map_location='cpu',weights_only=False);assert q['seed']==1 and q['fold']==0 and q['status']=='qualification_only'
+-  assert q['completed_updates']==q['policy']['completed_steps']==8943 and q['fixed_endpoint']==q['recipe']['total_steps']==20000
++  assert q['completed_updates']==q['policy']['completed_steps']==scope.INITIAL+1 and q['fixed_endpoint']==q['recipe']['total_steps']==20000
+   for model in q['policy']['models'].values():
+    for v in model.values():
+     if v.is_floating_point():assert torch.isfinite(v).all()
+@@ -34,6 +34,6 @@
+         'independent_saved_branch_states_bitwise_equal':True,'complete_clean_settlement_verified':True,'qualified_execution_source_SHA256':auth['research_source_SHA256'],
+         'qualification_branch_SHA256':result['branch_SHA256'],'charged_GPU_seconds':settlement['settlement']['charged_GPU_seconds'],'authorization_SHA256':scope.sha(dep['authorization_path']),
+         'verification_source_SHA256':{str(Path(__file__).resolve()):scope.sha(Path(__file__).resolve())},
+-        'scope':'Actual guarded sameGPU8942 fullstate restoration and two one-update branches. Independent CPU equality of both complete saved8943 states after native success/release/settlement. Throwaway qualification states MUST NOT initialize scientific recovery; use original8942 state. No quality generation/modelselection.'}
++        'scope':'Actual guarded sameGPU14410 fullstate restoration and two one-update branches. Independent CPU equality of both complete saved14411 states after native success/release/settlement. Throwaway qualification states MUST NOT initialize scientific recovery; use newest14410 state. No quality generation/modelselection.'}
+  assert not scope.NATIVE_PROOF.exists();scope.NATIVE_PROOF.write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps({k:v for k,v in proof.items() if k!='qualified_execution_source_SHA256'},indent=2))
+ if __name__=='__main__':verify()
+--- /ml2/alz/recovery_runtime/test_scope.py @ v2
++++ /ml2/alz/recovery_runtime/test_scope.py @ turnover
+@@ -12,14 +12,14 @@
+   auth.pop('checkpoint_path',None);auth.pop('checkpoint_SHA256',None)
+   auth.update(cell=c,allocation_id=scope.allocation(c),attempt_id=scope.attempt(c),label=scope.attempt(c),operation={'qualify':'qualify_interrupted_pg8','resume':'resume_pure_ensemble','seed2':'confirm_frozen_ensemble_seed2'}[mode],
+    qualification_only=mode=='qualify',cap_seconds=900 if mode=='qualify' else 21600,fixed_endpoint=20000 if mode=='qualify' else 40000,
+-   initial_completed_updates=0 if mode=='seed2' else 8942,new_model_updates={'qualify':2,'resume':31058,'seed2':40000}[mode],
++   initial_completed_updates=0 if mode=='seed2' else scope.INITIAL,new_model_updates={'qualify':2,'resume':40000-scope.INITIAL,'seed2':40000}[mode],
+    expires_unix=p['wall_clock_envelope']['absolute_recovery_deadline_unix'],hybrid_config=None,variant_config=f['seed0_candidate']['variant_config'],pure_formulation='pg8_learned_ensemble75',ensemble_config=p['frozen_ensemble_config'],recovery_protocol_SHA256=scope.sha(scope.PROTOCOL))
+   if mode!='seed2':auth.update(checkpoint_path=p['checkpoint_path'],checkpoint_SHA256=p['checkpoint_SHA256'])
+   research={str(path):b.sha(path) for folder in [ROOT,ROOT/'model',ROOT/'runtime',ROOT/'confirmation_runtime',scope.HERE] for path in folder.glob('*.py')};auth['research_source_SHA256']=research;pins=auth['files_SHA256'];pins.update(research)
+   history=scope.read(ROOT/'analysis/interrupted_seed1_source_history.json')
+   paths=[scope.PROTOCOL,Path(p['original_confirmation_freeze']),Path(p['original_failed_ledger']),Path(p['original_interruption_evidence']),Path(p['checkpoint_path']),ROOT/'analysis/interrupted_seed1_source_history.json',ROOT/'analysis/failed_seed1_full_state_audit.json',ROOT/'analysis/exact_interrupted_resume_cpu_qualification.json',ROOT/'pure_incumbent.json',ROOT/'incumbent.json',ROOT/'analysis/pure_confirmation_protocol.json',Path(history['authorization_path']),*map(Path,history['verification_source_SHA256'])]
+   paths.extend(Path(q['path']) for q in f['matched_baselines'].values())
+-  for path in paths:pins[str(path)]=b.sha(path)
++  for path in paths+scope.continuation_paths(p):pins[str(path)]=b.sha(path)
+   return auth
+  def test_exact_qualification_recovery_and_original_seed2_identity_source_scope(self):
+   for mode in ('qualify','resume','seed2'):
+@@ -60,10 +60,10 @@
+    for index,label in enumerate(['pg8','learned']):
+     path=root/'runs'/name/'fit'/label/'final.pt';path.parent.mkdir(parents=True);path.write_bytes(b'PRIVATE_WIRE_NOT_A_TORCH_MODEL')
+     receipt={'status':'completed','path':'final.pt','completed_updates':20000,'SHA256':scope.sha(path)}
+-    if index==0:receipt.update(resume_parent_checkpoint_SHA256=p['checkpoint_SHA256'],initial_completed_updates=8942,new_model_updates=11058)
++    if index==0:receipt.update(resume_parent_checkpoint_SHA256=p['checkpoint_SHA256'],initial_completed_updates=scope.INITIAL,new_model_updates=20000-scope.INITIAL)
+     path.with_name('checkpoint_receipt.json').write_text(json.dumps(receipt));parents.append({'name':['PG8','learned_observation'][index],'checkpoint_path':str(path),'checkpoint_SHA256':scope.sha(path),'completed_updates':20000})
+    with patch.object(scope,'ROOT',root),patch.object(scope,'lineage',return_value=(p,f)):
+-    reference=scope.reference_payload(1,parents);self.assertEqual(reference['new_model_updates'],31058)
++    reference=scope.reference_payload(1,parents);self.assertEqual(reference['new_model_updates'],40000-scope.INITIAL)
+     bad=Path(parents[0]['checkpoint_path']).with_name('checkpoint_receipt.json');receipt=json.loads(bad.read_text());receipt['initial_completed_updates']=0;bad.write_text(json.dumps(receipt))
+     with self.assertRaises(AssertionError):scope.reference_payload(1,parents)
+  def test_seed2_reference_rejects_resume_tagged_parent(self):
+@@ -76,6 +76,18 @@
+     if index==0:receipt['resume_parent_checkpoint_SHA256']=p['checkpoint_SHA256']
+     path.with_name('checkpoint_receipt.json').write_text(json.dumps(receipt));parents.append({'name':['PG8','learned_observation'][index],'checkpoint_path':str(path),'checkpoint_SHA256':scope.sha(path),'completed_updates':20000})
+    with patch.object(scope,'ROOT',root),patch.object(scope,'lineage',return_value=(p,f)),self.assertRaises(AssertionError):scope.reference_payload(2,parents)
++ def test_retained_intermediate_segment_and_parent_cannot_be_dropped(self):
++  p=scope.read(scope.PROTOCOL);target=p['latest_interruption_evidence'];original_read=scope.read
++  for change in [{'initial_completed_updates':0},{'completed_updates':scope.INITIAL-1},{'new_model_updates':scope.INITIAL},{'original_parent_checkpoint_SHA256':p['checkpoint_SHA256']}]:
++   def changed(path):return {**original_read(path),**change} if str(path)==target else original_read(path)
++   with patch.object(scope,'read',side_effect=changed),self.assertRaises(AssertionError):scope.lineage()
++ def test_retained_intermediate_canonical_charge_cannot_be_zeroed(self):
++  p=scope.read(scope.PROTOCOL);target=p['latest_interruption_evidence'];original_read=scope.read
++  def changed(path):return {**original_read(path),'charged_GPU_seconds':0} if str(path)==target else original_read(path)
++  with patch.object(scope,'read',side_effect=changed),self.assertRaises(AssertionError):scope.lineage()
++ def test_actual_executed_source_archive_required_before_new_phase(self):
++  p=scope.read(scope.PROTOCOL);latest=scope.read(p['latest_interruption_evidence']);source=next(iter(latest['execution_source_SHA256']));archive=Path(latest['archived_checkpoint']).parent/'source'/source.lstrip('/');original_sha=scope.sha
++  with patch.object(scope,'sha',side_effect=lambda path:'0'*64 if Path(path)==archive else original_sha(path)),self.assertRaises(AssertionError):scope.lineage()
+  def test_real_failed_allocation_and_checkpoint_not_a_quality_result(self):
+   p,f=scope.lineage();failure=scope.read(p['original_interruption_evidence']);self.assertFalse(failure['quality_result_created']);self.assertEqual(failure['completed_updates'],8942)
+   self.assertTrue(failure['owned_release_and_clean_settlement_verified'])
+--- /ml2/alz/recovery_runtime/prepare.py @ v2
++++ /ml2/alz/recovery_runtime/prepare.py @ turnover
+@@ -29,15 +29,15 @@
+                 expires_unix=expiry,cap_seconds=cap,operation={'qualify':'qualify_interrupted_pg8','resume':'resume_pure_ensemble','seed2':'confirm_frozen_ensemble_seed2'}[args.mode],fixed_endpoint=20000 if qualify else 40000,
+                 output_dir=str(b.output_path(b.NATIVE_LAYOUT,value)),ledger_path=str(b.ledger_path(b.NATIVE_LAYOUT,value)),variant_config=f['seed0_candidate']['variant_config'],hybrid_config=None,candidate_commit=commit,
+                 pure_formulation='pg8_learned_ensemble75',ensemble_config=p['frozen_ensemble_config'],qualification_only=qualify,
+-                initial_completed_updates=0 if seed2 else 8942,new_model_updates={'qualify':2,'resume':31058,'seed2':40000}[args.mode],
++                initial_completed_updates=0 if seed2 else scope.INITIAL,new_model_updates={'qualify':2,'resume':40000-scope.INITIAL,'seed2':40000}[args.mode],
+                 recovery_protocol_SHA256=b.sha(scope.PROTOCOL),recovery_CPU_proof_SHA256=b.sha(scope.CPU_PROOF),
+-                source_review='Single exact saved8942 trajectory after external GPU0guard conflict, failedallocation retained. Original frozen46 model/scorer sources and inputs unchanged. Fullstate CPU audit plus synthetic serialization/next-update parity and guarded/source tests qualified. Actual sameGPU initial/two-next-branch bitwise CUDA restoration mandatory before resume; replaybranch8943 never used for training. Resume to original20kPG8+fresh20klearned, frozen75/25 wholebags and2reps; original absolute6h seed1 deadline. Seed2 keeps exact originalidentity/fresh bothparents. No seedranking/incumbent mutation/foreignsignals; independently reviewed separate ALZ-owned exact9peer profile/registry, original task11 policy/registry/admission/referenceguard and Controller untouched; separate ALZ-owned runner retains original admission/health/finite/accounting gates with exact owned-only cleanup after foreign departure.')
++                source_review='Second exact saved14410 continuation after reviewed MOSSfit identity turnover. Originalfailed8942 and first8942to14410 phases/history/charges retained. Original frozen46 model/scorer sources and inputs unchanged. Fullstate CPU audit plus synthetic serialization/next-update parity and guarded/source tests qualified. Actual sameGPU initial/two-next-branch bitwise CUDA restoration mandatory before resume; replaybranch14411 never used for training. Resume to original20kPG8+fresh20klearned, frozen75/25 wholebags and2reps; original absolute6h seed1 deadline. Seed2 keeps exact originalidentity/fresh bothparents. No seedranking/incumbent mutation/foreignsignals; independently reviewed separate ALZ-owned exact current8peer profile/registry, original task11 policy/registry/admission/referenceguard and Controller untouched; separate ALZ-owned runner retains original admission/health/finite/accounting gates with exact owned-only cleanup after foreign departure.')
+     if not seed2:auth.update(checkpoint_path=p['checkpoint_path'],checkpoint_SHA256=p['checkpoint_SHA256'])
+     auth['command']=b.expected_command(b.NATIVE_LAYOUT,auth_path,value)
+     parallel.configure(auth,check_only=args.check_only)
+     research={str(path):b.sha(path) for folder_source in [ROOT,ROOT/'model',ROOT/'runtime',ROOT/'confirmation_runtime',scope.HERE] for path in folder_source.glob('*.py')};auth['research_source_SHA256']=research;pins=auth['files_SHA256'];pins.update(research)
+     paths=[scope.PROTOCOL,scope.CPU_PROOF,Path(p['original_confirmation_freeze']),Path(p['original_failed_ledger']),Path(p['original_interruption_evidence']),Path(p['checkpoint_path']),ROOT/'analysis/interrupted_seed1_source_history.json',ROOT/'analysis/failed_seed1_full_state_audit.json',ROOT/'analysis/exact_interrupted_resume_cpu_qualification.json',ROOT/'pure_incumbent.json',ROOT/'incumbent.json',ROOT/'analysis/pure_confirmation_protocol.json']
+-    paths.extend(Path(q['path']) for q in f['matched_baselines'].values())
++    paths.extend(scope.continuation_paths(p));paths.extend(Path(q['path']) for q in f['matched_baselines'].values())
+     for proof_path in [scope.CPU_PROOF,ROOT/'analysis/exact_interrupted_resume_cpu_qualification.json',ROOT/'analysis/failed_seed1_full_state_audit.json']:
+         paths.extend(map(Path,b.read(proof_path)['source_SHA256']))
+     history=b.read(ROOT/'analysis/interrupted_seed1_source_history.json');paths.append(Path(history['authorization_path']));paths.extend(map(Path,history['verification_source_SHA256']))
+--- /ml2/alz/recovery_runtime/qualify.py @ v2
++++ /ml2/alz/recovery_runtime/qualify.py @ turnover
+@@ -10,8 +10,8 @@
+ assert 'torch' not in sys.modules
+ synthetic=scope.read(ROOT/'analysis/exact_interrupted_resume_cpu_qualification.json');assert synthetic['status']=='PASSED_SYNTHETIC_CPU_EXACT_INTERRUPTED_STATE_PARITY'
+ for path,pin in synthetic['source_SHA256'].items():assert scope.sha(path)==pin
+-paths=[*scope.HERE.glob('*.py'),ROOT/'runtime/binding.py',ROOT/'runtime/worker_gpu0.py',ROOT/'runtime/project_runner_gpu0.py',scope.HERE/'parallel_policy.prepared.json']
++paths=[*scope.HERE.glob('*.py'),ROOT/'runtime/binding.py',ROOT/'runtime/worker_gpu0.py',ROOT/'runtime/project_runner_gpu0.py',scope.HERE/'parallel_policy.turnover.prepared.json']
+ proof={'status':'PASSED_CPU_FROZEN_EXACT_RECOVERY_RUNTIME','utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope_checks_passed':result.testsRun,'synthetic_serialized_restore_checks_passed':synthetic['tests_passed'],
+        'recovery_protocol_SHA256':scope.sha(scope.PROTOCOL),'native_CUDA_restore_verified':False,'GPU_allocation_created':False,'native_recovery_started':False,
+-       'source_SHA256':{str(path):scope.sha(path) for path in paths},'scope':'CPU exact lineage/deadline/source/seed/checkpoint refusals and native source closure through private proof-wire fixtures only. Original frozen scientific sources remain identical. Actual saved8942 CUDA fullstate/nextstate qualification and clean settlement are mandatory before recovery; Separate independently reviewed exact9peer ALZ profile; original task11 nativepolicy/registry unchanged. No incumbent/quality-result mutation.'}
++       'source_SHA256':{str(path):scope.sha(path) for path in paths},'scope':'CPU exact lineage/deadline/source/seed/checkpoint refusals and native source closure through private proof-wire fixtures only. Original frozen scientific sources remain identical. Actual saved14410 CUDA fullstate/nextstate qualification and clean settlement are mandatory before recovery; Separate independently reviewed exact8peer ALZ profile; original task11 nativepolicy/registry unchanged. No incumbent/quality-result mutation.'}
+ scope.CPU_PROOF.write_text(json.dumps(proof,indent=2)+'\n');print(json.dumps(proof,indent=2))
+--- /ml2/alz/recovery_runtime/execution.py @ v2
++++ /ml2/alz/recovery_runtime/execution.py @ turnover
+@@ -25,7 +25,7 @@
+         checkpoint=torch.load(auth['checkpoint_path'],map_location='cpu',weights_only=False)
+     if mode=='qualify':
+         ctx=BaseContext(cache,'cuda:0')
+-        result,state=qualify_exact(ctx,checkpoint,expected_initial=8942,branch_directory=out/'qualification_branches')
++        result,state=qualify_exact(ctx,checkpoint,expected_initial=scope.INITIAL,branch_directory=out/'qualification_branches')
+         result.update(status='ACTUAL_CUDA_EXACT_INTERRUPTED_STATE_AND_NEXT_UPDATE_BITWISE_VERIFIED',checkpoint_SHA256=p['checkpoint_SHA256'],
+                       recovery_protocol_SHA256=scope.sha(scope.PROTOCOL),allocation_id=admission['allocation_id'],training_seed=1,
+                       branch_SHA256={str(out/'qualification_branches'/f'branch{i}.pt'):sha(out/'qualification_branches'/f'branch{i}.pt') for i in (0,1)})
+@@ -33,9 +33,9 @@
+         return
+     def release():gc.collect();torch.cuda.empty_cache()
+     def phase(index):dump(out/'training_phase.json',{'parent':['PG8','learned_observation'][index],'parent_index':index,'training_seed':seed,
+-                         'completed_parent_updates':(8942 if mode=='resume' else 0) if index==0 else 20000,'new_updates_planned':auth['new_model_updates']})
++                         'completed_parent_updates':(scope.INITIAL if mode=='resume' else 0) if index==0 else 20000,'new_updates_planned':auth['new_model_updates']})
+     def resume_first(ctx,folder,seed,*,end_monotonic):
+-        return fit_resume(ctx,folder,seed,checkpoint=checkpoint,checkpoint_SHA256=p['checkpoint_SHA256'],expected_initial=8942,end_monotonic=end_monotonic)
++        return fit_resume(ctx,folder,seed,checkpoint=checkpoint,checkpoint_SHA256=p['checkpoint_SHA256'],expected_initial=scope.INITIAL,end_monotonic=end_monotonic)
+     bundles,paths=fit_pair([lambda:BaseContext(cache,'cuda:0'),lambda:LearnedContext(cache,'cuda:0')],[resume_first if mode=='resume' else fit_base,fit_learned],seed,out,end,release,phase)
+     parents=[]
+     for index,path in enumerate(paths):
+--- /ml2/alz/recovery_runtime/recovery_scope.py @ v2
++++ /ml2/alz/recovery_runtime/recovery_scope.py @ turnover
+@@ -2,9 +2,10 @@
+ import hashlib,json,sys,time
+ from pathlib import Path
+ ROOT=Path('/ml2/alz');HERE=ROOT/'recovery_runtime'
+-PROTOCOL=ROOT/'analysis/exact_seed1_recovery_protocol.json'
+-CPU_PROOF=ROOT/'analysis/recovery_runtime_cpu_qualification.json'
+-NATIVE_PROOF=ROOT/'analysis/exact_seed1_native_restore_verification.json'
++PROTOCOL=ROOT/'analysis/exact_seed1_recovery_protocol_v2.json'
++CPU_PROOF=ROOT/'analysis/recovery_runtime_cpu_qualification_v2.json'
++NATIVE_PROOF=ROOT/'analysis/exact_seed1_native_restore_verification_v2.json'
++INITIAL=14410
+ def read(p):return json.loads(Path(p).read_bytes())
+ def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+ def frozen():
+@@ -15,23 +16,65 @@
+  p=read(PROTOCOL);f=frozen()
+  assert sha(p['original_confirmation_freeze'])==p['original_confirmation_freeze_SHA256']
+  assert p['scientific_source_SHA256']==f['scientific_source_SHA256'] and p['frozen_baseline_pins']==f['matched_baselines']
+- assert p['initial_parent_updates']==[8942,0] and p['fixed_parent_endpoints']==[20000,20000] and p['new_training_updates_required']==31058
++ assert p['initial_parent_updates']==[INITIAL,0] and p['fixed_parent_endpoints']==[20000,20000] and p['new_training_updates_required']==40000-INITIAL
+  assert p['training_seed']==1 and p['frozen_ensemble_config']==f['seed0_candidate']['ensemble_config']
+  assert sha(p['original_failed_ledger'])==p['original_failed_ledger_SHA256']
+  assert sha(p['original_interruption_evidence'])==p['original_interruption_evidence_SHA256']
+  failure=read(p['original_interruption_evidence']);assert failure['completed_updates']==8942 and failure['quality_result_created'] is False and failure['learned_parent_started'] is False
+  for path,pin in failure['source_SHA256'].items():assert sha(path)==pin
+- assert p['checkpoint_path']==failure['archived_checkpoint'] and sha(p['checkpoint_path'])==p['checkpoint_SHA256']==failure['checkpoint_SHA256']
++ latest=read(p['latest_interruption_evidence']);assert sha(p['latest_interruption_evidence'])==p['latest_interruption_evidence_SHA256']
++ assert latest['status']=='FROZEN_CLEAN_EXTERNAL_PEER_INTERRUPTION_NEWEST_EXACT_PG8_STATE_NO_QUALITY'
++ assert latest['initial_completed_updates']==8942 and latest['completed_updates']==INITIAL and latest['new_model_updates']==INITIAL-8942
++ assert latest['original_parent_checkpoint_SHA256']==failure['checkpoint_SHA256']
++ assert p['checkpoint_path']==latest['archived_checkpoint'] and sha(p['checkpoint_path'])==p['checkpoint_SHA256']==latest['checkpoint_SHA256']
++ assert latest['quality_result_created'] is False and latest['learned_parent_started'] is False and latest['owned_cleanup_and_settlement_verified']
++ prior_dep=read(ROOT/'artifacts/allocations'/latest['attempt']/'deployment.json');prior_auth=read(prior_dep['authorization_path'])
++ prior_job=read(prior_dep['ledger_path'])['jobs'][0];prior_settlement=read(Path(prior_dep['ledger_path']).with_name(latest['attempt']+'-settlement.json'))
++ assert prior_job['status']=='failed' and prior_job['reservation_released'] and prior_job['error']=="Refusal('protected peer identity changed')"
++ assert prior_settlement['uncertain'] is None and prior_settlement['settlement']['status']=='settled'
++ assert prior_job['charged_seconds']==latest['charged_GPU_seconds']==prior_settlement['settlement']['charged_GPU_seconds']
++ assert sha(prior_dep['authorization_path'])==prior_dep['authorization_SHA256'] and prior_auth['initial_completed_updates']==8942
++ assert sha(p['previous_protocol_path'])==p['previous_protocol_SHA256'] and sha(p['previous_native_qualification_path'])==p['previous_native_qualification_SHA256']
++ assert read(p['previous_native_qualification_path'])['complete_clean_settlement_verified'] is True
++ for path,pin in latest['canonical_input_SHA256'].items():assert sha(path)==pin
++ archive=Path(latest['archived_checkpoint']).parent/'source'
++ for path,pin in latest['execution_source_SHA256'].items():assert sha(archive/path.lstrip('/'))==pin==prior_auth['research_source_SHA256'][path]
+  job=read(p['original_failed_ledger'])['jobs'][0]
+  assert job['status']=='failed' and job['reservation_released'] and job['exit_code']==1
+  assert job['error']=="Conflict('Unregistered GPU allocation(s): [2156154]')"
+  wall=p['wall_clock_envelope'];assert wall['original_started_unix']==job['started_unix'] and wall['absolute_recovery_deadline_unix']==job['started_unix']+21600
+  assert wall['original_charged_GPU_seconds']==failure['charged_GPU_seconds']==job['charged_seconds']
++ assert prior_auth['expires_unix']==wall['absolute_recovery_deadline_unix']==latest['original_absolute_deadline_unix']
++ oldqual=read(p['previous_native_qualification_path']);assert oldqual['checkpoint_SHA256']==failure['checkpoint_SHA256']
++ previous=read(p['previous_protocol_path']);assert previous['checkpoint_SHA256']==failure['checkpoint_SHA256']
++ assert attempt(previous['recovery_cell'])==latest['attempt'] and attempt(previous['qualification_cell'])==oldqual['attempt']
++ assert oldqual['status']=='VERIFIED_ACTUAL_CUDA_INTERRUPTED_STATE_AND_NEXT_UPDATE'
++ assert oldqual['complete_initial_state_restored_exactly'] and oldqual['independent_saved_branch_states_bitwise_equal']
++ assert oldqual['qualified_execution_source_SHA256']==prior_auth['research_source_SHA256']
++ for path,pin in oldqual['verification_source_SHA256'].items():assert sha(archive/path.lstrip('/'))==pin
++ oldqual_settle=read(Path(prior_dep['ledger_path']).with_name(oldqual['attempt']+'-settlement.json'))
++ assert oldqual_settle['uncertain'] is None and oldqual_settle['settlement']['status']=='settled' and oldqual_settle['settlement']['charged_GPU_seconds']==oldqual['charged_GPU_seconds']
++ oldqual_job=read(Path(prior_dep['ledger_path']).with_name(oldqual['attempt']+'.json'))['jobs'][0]
++ assert oldqual_job['status']=='completed' and oldqual_job['exit_code']==0 and oldqual_job['reservation_released'] and oldqual_job['charged_seconds']==oldqual['charged_GPU_seconds']
++ assert wall['original_charged_GPU_seconds']+latest['charged_GPU_seconds']+oldqual['charged_GPU_seconds']<21600
+  out=ROOT/'runs'/p['original_attempt'];assert not (out/'completed.json').exists() and not (out/'r0').exists() and not (out/'r1').exists(),'No quality result may precede infrastructure bridge'
+  history=read(ROOT/'analysis/interrupted_seed1_source_history.json');assert history['status']=='VERIFIED_INTERRUPTED_ALLOCATION_COMMITTED_SOURCE_HISTORY'
+  assert history['attempt']==p['original_attempt'] and history['original_freeze_SHA256']==p['original_confirmation_freeze_SHA256']
+  assert sha(history['authorization_path'])==history['authorization_SHA256']
+  return p,f
++
++def continuation_paths(p):
++ latest=read(p['latest_interruption_evidence']);archive=Path(latest['archived_checkpoint']).parent/'source'
++ paths=[Path(p['latest_interruption_evidence']),Path(p['previous_protocol_path']),Path(p['previous_native_qualification_path']),ROOT/'analysis/turnover_seed1_full_state_audit.json',ROOT/'artifacts/allocations'/latest['attempt']/'deployment.json']
++ previous=read(p['previous_native_qualification_path']);prior_dep=read(paths[-1]);ledger=Path(prior_dep['ledger_path'])
++ paths.extend([ledger.with_name(previous['attempt']+'.json'),ledger.with_name(previous['attempt']+'-settlement.json')])
++ paths.extend(map(Path,latest['canonical_input_SHA256']))
++ paths.extend(archive/path.lstrip('/') for path in latest['execution_source_SHA256'])
++ audit=read(ROOT/'analysis/turnover_seed1_full_state_audit.json')
++ assert audit['status']=='VERIFIED_TURNOVER_NATIVE_PG8_EXACT_STATE_CPU_ONLY' and audit['completed_updates']==INITIAL and audit['checkpoint_SHA256']==p['checkpoint_SHA256']
++ assert audit['strict_complete_G_D_prior_load_verified'] and audit['finite_model_floating_values']==371177 and audit['CUDA_initialized'] is False
++ paths.extend(map(Path,audit['source_SHA256']))
++ return list(dict.fromkeys(paths))
+ 
+ def cell_for(mode):
+  p,f=lineage()
+@@ -46,8 +89,8 @@
+  assert auth['pure_formulation']=='pg8_learned_ensemble75' and auth['hybrid_config'] is None and auth['ensemble_config']==p['frozen_ensemble_config']
+  assert auth['qualification_only']==(mode=='qualify') and auth['cap_seconds']==(900 if mode=='qualify' else 21600)
+  assert auth['fixed_endpoint']==(20000 if mode=='qualify' else 40000)
+- assert auth['initial_completed_updates']==(0 if mode=='seed2' else 8942)
+- assert auth['new_model_updates']==({'qualify':2,'resume':31058,'seed2':40000}[mode])
++ assert auth['initial_completed_updates']==(0 if mode=='seed2' else INITIAL)
++ assert auth['new_model_updates']==({'qualify':2,'resume':40000-INITIAL,'seed2':40000}[mode])
+  assert auth['recovery_protocol_SHA256']==sha(PROTOCOL)
+  if mode!='seed2':
+   assert auth['checkpoint_path']==p['checkpoint_path'] and auth['checkpoint_SHA256']==p['checkpoint_SHA256']
+@@ -57,7 +100,7 @@
+  paths=[PROTOCOL,Path(p['original_confirmation_freeze']),Path(p['original_failed_ledger']),Path(p['original_interruption_evidence']),Path(p['checkpoint_path']),ROOT/'analysis/interrupted_seed1_source_history.json',ROOT/'analysis/failed_seed1_full_state_audit.json',ROOT/'analysis/exact_interrupted_resume_cpu_qualification.json',ROOT/'pure_incumbent.json',ROOT/'incumbent.json',ROOT/'analysis/pure_confirmation_protocol.json']
+  paths.extend(Path(q['path']) for q in f['matched_baselines'].values())
+  history=read(ROOT/'analysis/interrupted_seed1_source_history.json');paths.append(Path(history['authorization_path']));paths.extend(map(Path,history['verification_source_SHA256']))
+- for path in paths:assert pins[str(path)]==sha(path)
++ for path in paths+continuation_paths(p):assert pins[str(path)]==sha(path)
+  for path,pin in f['scientific_source_SHA256'].items():assert research[path]==pins[path]==pin==sha(path)
+  for folder in [HERE,ROOT/'confirmation_runtime']:
+   for path in folder.glob('*.py'):assert research[str(path)]==pins[str(path)]==sha(path)
+@@ -82,10 +125,10 @@
+   assert parent['name']==['PG8','learned_observation'][index] and parent['completed_updates']==20000
+   assert parent['checkpoint_path']==str(path) and sha(path)==parent['checkpoint_SHA256']
+   receipt=read(path.with_name('checkpoint_receipt.json'));assert receipt['status']=='completed' and receipt['completed_updates']==20000 and receipt['SHA256']==parent['checkpoint_SHA256']
+-  if seed==1 and index==0:assert receipt['resume_parent_checkpoint_SHA256']==p['checkpoint_SHA256'] and receipt['initial_completed_updates']==8942 and receipt['new_model_updates']==11058
++  if seed==1 and index==0:assert receipt['resume_parent_checkpoint_SHA256']==p['checkpoint_SHA256'] and receipt['initial_completed_updates']==INITIAL and receipt['new_model_updates']==20000-INITIAL
+   else:assert 'resume_parent_checkpoint_SHA256' not in receipt and receipt.get('initial_completed_updates',0)==0
+  return {'schema':1,'type':'frozen_exact_recovery_or_seed2_complete_parent_references','status':'completed','fold':0,'seed':seed,'completed_updates':40000,'fixed_endpoint':40000,
+-         'parent_training_updates_total':40000,'new_model_updates':31058 if seed==1 else 40000,'initial_completed_updates':8942 if seed==1 else 0,
++         'parent_training_updates_total':40000,'new_model_updates':40000-INITIAL if seed==1 else 40000,'initial_completed_updates':INITIAL if seed==1 else 0,
+          'ensemble_config':p['frozen_ensemble_config'],'recovery_protocol_SHA256':sha(PROTOCOL),'original_confirmation_freeze_SHA256':p['original_confirmation_freeze_SHA256'],
+          'original_interrupted_attempt':p['original_attempt'] if seed==1 else None,'resume_parent_checkpoint_SHA256':p['checkpoint_SHA256'] if seed==1 else None,'parents':parents}
+ def verify_reference(candidate):
+--- /ml2/alz/recovery_runtime/parallel_profile.py @ v2
++++ /ml2/alz/recovery_runtime/parallel_profile.py @ turnover
+@@ -6,10 +6,10 @@
+ import hashlib,json,sys,subprocess
+ from pathlib import Path
+ ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent
+-PREPARED=HERE/'parallel_policy.prepared.json'
+-DEPLOYED=ROOT/'artifacts/gpu0-parallel-20261104/policy.deployed.json'
++PREPARED=HERE/'parallel_policy.turnover.prepared.json'
++DEPLOYED=ROOT/'artifacts/gpu0-turnover-20261104/policy.deployed.json'
+ REGISTRY=DEPLOYED.parent/'live_registry'
+-REVIEW=ROOT/'analysis/gpu0_parallel_independent_review.json'
++REVIEW=ROOT/'analysis/gpu0_turnover_independent_review.json'
+ OLD=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json')
+ OLD_SHA='5a4dfd1d5288bde24964ee680c003dd75f13fefe1a83ac55b27b49e6a05d125e'
+ MOSS=Path('/ml2/particlesliders-working/moss_training/train_concept.py')
+@@ -23,21 +23,19 @@
+  return (json.dumps(p,indent=2)+'\n').encode()
+ def policy_sha():return hashlib.sha256(deployed_bytes()).hexdigest()
+ def review_sources():
+- paths=[*HERE.glob('*.py'),PREPARED,* (ROOT/'runtime').glob('*.py'),ROOT/'analysis/exact_seed1_recovery_protocol.json']
++ paths=[*HERE.glob('*.py'),PREPARED,* (ROOT/'runtime').glob('*.py'),ROOT/'analysis/exact_seed1_recovery_protocol_v2.json']
+  return {str(p):sha(p) for p in paths}
+ def validate_proposal():
+- assert sha(OLD)==OLD_SHA and sha(MOSS)==MOSS_SHA,'Original policy or exact MOSS source changed'
++ assert sha(OLD)==OLD_SHA,'Original policy changed'
+  old=read(OLD);p=read(PREPARED)
+  assert p['gpu']==old['gpu'] and p['locks']==old['locks'] and p['registry_path']==str(REGISTRY)
+  assert p['roles']=={'alz_core_pg':old['roles']['alz_core_pg']}
+  assert p['driver_headroom_bytes']==3*2**30 and p['host_free_floor_bytes']==12*2**30
+  expected={str(OLD.parent.parent/'v2'/name):sha(OLD.parent.parent/'v2'/name) for name in ['gpu0_admission.py','gpu0_runner.py']}
+  expected[str(HERE/'parallel_runner.py')]=sha(HERE/'parallel_runner.py')
++ assert not p['resource_basis'].get('foreign_source_SHA256',{})
+  assert p['source_sha256']==expected,'Complete exact active guard and original reference sources required'
+- assert len(p['protected_peers'])==9
+- assert [v['identity'] for v in p['protected_peers'][:8]]==[v['identity'] for v in old['protected_peers']]
+- assert [v['gpu_kinds'] for v in p['protected_peers'][:8]]==[v['gpu_kinds'] for v in old['protected_peers']]
+- assert p['protected_peers'][-1]['identity']['pid']==2156154
++ assert not read(ROOT/'artifacts/gpu0-parallel-20261104/live_registry/registry.json')['jobs'],'Prior own namespace must be empty after clean turnover'
+  assert not read(Path(old['registry_path'])/'registry.json')['jobs'],'Old resource registry has active work; no parallel namespace bypass'
+  return p
+ def free_floor():
+@@ -62,7 +60,7 @@
+ def configure(auth,*,check_only=False):
+  p=validate_proposal();path=PREPARED if check_only else DEPLOYED;pin=sha(PREPARED) if check_only else policy_sha()
+  auth.update(policy_path=str(path),policy_SHA256=pin,protected_peers=p['protected_peers'],registry_path=str(REGISTRY),parallel_profile=True)
+- auth['files_SHA256'].update({str(PREPARED):sha(PREPARED),str(path):pin,str(MOSS):MOSS_SHA})
++ auth['files_SHA256'].update({str(PREPARED):sha(PREPARED),str(path):pin})
+  if REVIEW.exists():auth['files_SHA256'][str(REVIEW)]=sha(REVIEW)
+  return p
+ def validate(auth):
+@@ -72,7 +70,7 @@
+  assert sha(DEPLOYED)==auth['policy_SHA256']==policy_sha()
+  assert auth['protected_peers']==p['protected_peers']
+  assert auth['files_SHA256'].get(str(REVIEW))==sha(REVIEW),'Independent review evidence changed'
+- for path,pin in {str(PREPARED):sha(PREPARED),str(DEPLOYED):policy_sha(),str(MOSS):MOSS_SHA}.items():
++ for path,pin in {str(PREPARED):sha(PREPARED),str(DEPLOYED):policy_sha()}.items():
+   assert auth['files_SHA256'].get(path)==pin
+  return p
+ def capacity(obs,admission):
+--- /ml2/alz/runtime/binding.py @ v2
++++ /ml2/alz/runtime/binding.py @ turnover
+@@ -300,7 +300,7 @@
+         paths=[auth_path,policy_path,*wanted_paths.values(),Path(auth['registry_path']),*map(Path,policy['locks'])]
+         require(all(p.resolve().is_relative_to(root) for p in paths),'CPU fixture path escapes its isolated root')
+     else:
+-        expected_registry=HERE.parent/'artifacts/gpu0-parallel-20261104/live_registry' if auth.get('parallel_profile') is True else PROJECT/'cooperative_gpu0_20261103_v2/live_registry'
++        expected_registry=parallel_profile.REGISTRY if auth.get('parallel_profile') is True else PROJECT/'cooperative_gpu0_20261103_v2/live_registry'
+         require(layout==NATIVE_LAYOUT and Path(auth['registry_path']).resolve()==expected_registry,'native GPU0 root/registry differs')
+     source_closure(auth,layout)
+     return auth,hashlib.sha256(raw).hexdigest()

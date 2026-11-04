@@ -7,8 +7,9 @@ import parallel_profile as p
 import gpu0_admission as a
 class Parallel(unittest.TestCase):
  def setUp(self):
-  s=p.read(R/'analysis/gpu0_parallel_profile_observation.json');peers=[v for v in s['peers'] if v['GPU_kinds']]
+  s=p.read(R/'analysis/turnover_profile_observation.json');peers=[v for v in s['peers'] if v['GPU_kinds']]
   self.obs={'gpu':s['gpu'],'total':s['total'],'used':s['used'],'available_ram':s['available_ram'],'total_ram':128*2**30,'complete':True,'procs':{v['pid']:{k:v[k] for k in a.IDENTITY_KEYS+('rss','hwm')} for v in peers},'gpu_memory':{v['pid']:v['GPU_bytes'] for v in peers},'gpu_kinds':{v['pid']:v['GPU_kinds'] for v in peers}}
+  self.peer_pid=p.read(p.PREPARED)['protected_peers'][-1]['identity']['pid']
   for pid,v in self.obs['procs'].items():v.update(sid=pid,pgid=pid)
  def test_snapshot_capacity_fits_with_remaining_foreign_growth(self):
   q=p.capacity(self.obs,a);self.assertTrue(q['GPU_fits'] and q['host_fits']);self.assertFalse(q['allocation_or_lease_created']);self.assertGreater(q['GPU_required_bytes'],self.obs['used']+4*2**30)
@@ -17,17 +18,17 @@ class Parallel(unittest.TestCase):
   with self.assertRaises(a.Conflict):p.capacity(self.obs,a)
  def test_missing_reused_changed_identity_or_kinds_refuses(self):
   for key,value in [('birth',0),('exe','/tmp/other'),('argv_sha256','0'*64),('uid',0)]:
-   obs=copy.deepcopy(self.obs);obs['procs'][2156154][key]=value
+   obs=copy.deepcopy(self.obs);obs['procs'][self.peer_pid][key]=value
    with self.assertRaises(a.Conflict):p.capacity(obs,a)
-  self.obs['gpu_kinds'][2156154]=['graphics']
+  self.obs['gpu_kinds'][self.peer_pid]=['compute'] if self.obs['gpu_kinds'][self.peer_pid]==['graphics'] else ['graphics']
   with self.assertRaises(a.Conflict):p.capacity(self.obs,a)
  def test_host_remaining_growth_and_hwm_protected(self):
   self.obs['available_ram']=1
   with self.assertRaises(AssertionError):p.capacity(self.obs,a)
  def test_device_growth_refuses_instead_of_reducing_foreign_usage(self):
-  self.obs['gpu_memory'][2156154]=45*2**30;self.obs['used']=47*2**30
+  self.obs['gpu_memory'][self.peer_pid]=45*2**30;self.obs['used']=47*2**30
   with self.assertRaises(AssertionError):p.capacity(self.obs,a)
-  self.assertEqual(self.obs['gpu_memory'][2156154],45*2**30)
+  self.assertEqual(self.obs['gpu_memory'][self.peer_pid],45*2**30)
  def test_original_guard_reserve_and_health_stop_own_only_cpu_fixture(self):
   with tempfile.TemporaryDirectory(prefix='alz-parallel-fixture-') as t:
    root=Path(t);locks=[root/'a.lock',root/'b.lock']
