@@ -1,0 +1,47 @@
+{
+  "status": "PREDECLARED_NATIVE_FROZEN_PARTICLE_CONTROL_PROTOCOL",
+  "utc": "2026-11-04T13:40:07.824036+00:00",
+  "native_API": "ParticleGAN0.9.4 get_recipe(total_steps=20000,batch_size=32,num_particles=512,z_dim=8,prior_update='frozen'); no other recipe overrides",
+  "experiment": "frozen_prior_v1",
+  "operation": "train_frozen_prior",
+  "task": {
+    "fold": 0,
+    "training_seed": 0,
+    "updates": 20000,
+    "cap_seconds": 21600,
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    }
+  },
+  "frozen_prior_config": {
+    "prior_update": "frozen",
+    "prior_kind": "particles",
+    "num_particles": 512
+  },
+  "source_model_directory": "/ml2/alz/frozen_model",
+  "model_qualification_path": "/ml2/alz/analysis/frozen_prior_model_CPU_qualification.json",
+  "model_qualification_SHA256": "b4e6142e9ceffc675249ed649b8944a647a447881a4e782fbc72daf88df19bde",
+  "shared_GPU0_engine_proof_path": "/ml2/alz/analysis/shared_gpu0_candidate_CPU_qualification.json",
+  "shared_GPU0_engine_proof_SHA256": "fb8d6e6243ad9b13da0337c2b0194cb875d550e920d2886c89429ec3a8b29995",
+  "hypothesis_path": "/ml2/alz/analysis/frozen_prior_control_hypothesis.json",
+  "hypothesis_SHA256": "5e2260487dadeef4750f9ad7578dd1c790abcf10ab639eaa6c1188959b9036cf",
+  "failed_mog_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_mog_prior_v1_f0_pg_s0-result.json",
+  "failed_mog_result_SHA256": "324bc395c2009247f0f1f632637cfa735063c9f17e6b92cb091bec0f18dad5d8",
+  "mog_negative_result_commit": "92f45ec",
+  "mog_actual_activation_revert_commit": "c8906a4",
+  "reverted_mog_plan_path": "/ml2/alz/mog_runtime/plan.json",
+  "reverted_mog_plan_SHA256": "a94d1b22bd5f99d1aa05cffa78f179bac5cf51c075adec3dc182b43fe2a1b673",
+  "original_failed_confirmation_path": "/ml2/alz/analysis/pure_ensemble_confirmation_v6_all_seeds.json",
+  "original_failed_confirmation_SHA256": "d9b31c4ab50eef50fbd69fa63cda7e7e424120ba6a59fac6dd3ec410c8165aa1",
+  "uniform_ensemble_negative_screen_path": "/ml2/alz/analysis/uniform_training_seed_ensemble_estimate.json",
+  "uniform_ensemble_negative_screen_SHA256": "5d89f36e8fe58aa3e9e13d7977624846c2e14862ff5dcb183d789762b4c706d4",
+  "current_pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+  "selection": "Unchanged strict lower donor ES and no worse pooled cell ED, spreadband nonregression, exact cohort/traces, complete native20k endpoint, two generation replicas, direct integercounts/zero empirical replacements, full source/checkpoint/saved-score/cleanup/settled-charge audit. Record negative evidence then revert activation on rejection. All-three-seed fixed confirmation remains necessary.",
+  "scope": "Native fixed finite512Gaussian-initialized particle bank control, not a learned-prior ParticleGAN formulation or fresh infinite Gaussian sampling. Same initial G/D/Pz and11streams as PG8, same count/data/critic/library law and native optimizedBISPF trainer. Native frozen policy removes prior optimizer group and disables prior regularization; no task loss extension, parameter grid, donor/seed ranking or evaluation donor access.20k singleparent versus40k selectedensemble. SharedGPU0 uses owned3GPU/6hostGiB/driver3GiB/host12GiB/free3.5GiB with complete dynamic UID1000 foreign observations/physicalREADlocks/canonicalController/globalcorelock and owner5day/1024hcap. Fresh native launch qualification still required.",
+  "GPU_launched": false,
+  "quality_known": false
+}

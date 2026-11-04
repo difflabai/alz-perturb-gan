@@ -1,0 +1,166 @@
+{
+  "status": "OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS",
+  "utc": "2026-11-04T13:46:45.897421+00:00",
+  "reviewer_session": "01a1a22b-f310-7190-a7c6-8697ecabae6c",
+  "independent_review_claimed": false,
+  "owner_authorization": {
+    "available_capacity": "I authorize using the available GPU capacity.",
+    "both_cards": "You can use both gpus without permission.",
+    "sharing": "you dont need solo access",
+    "continuation": "contineue",
+    "deadline_extension": "extend it to 5 days"
+  },
+  "scope": "ONE_NATIVE_FIXED_PARTICLE_CONTROL_SEED0_TRIAL_ONLY",
+  "policy_SHA256": "af2e78a27724e604692ed2beeec0be9c43ecb4e099d5f9b815d132740d8ac87d",
+  "source_SHA256": {
+    "/ml2/alz/frozen_runtime/resource_profile.py": "58249dc4e5b352c662066d9e1817182f94313ac2d03288cf15a9a74d0f97255e",
+    "/ml2/alz/frozen_runtime/finish.py": "966db638e59dea09990a62c90a733059e19b630ed6fbfd896fc7dc2ab58d9b72",
+    "/ml2/alz/frozen_runtime/launch_core_gpu0.py": "f4de7b30d845886c30307dc23fad0b79c8a2f7c67f2afa3a9fcad8ae2c4aaaa4",
+    "/ml2/alz/frozen_runtime/project_runner_gpu0.py": "562507e0d1e5554dfa71e7f32ae16322bcf460caee2b3fc440681534e2c86fb5",
+    "/ml2/alz/frozen_runtime/preset_scope.py": "31ca95ebd22d4871d655ae4cbf947d58e90f296ebaed31506ad19ce1a024cc4e",
+    "/ml2/alz/frozen_runtime/test_scope.py": "a12c9be82fc4394c349dbbbaf2fc781c9efbf1b85a56cbfdcd178c6678244dc1",
+    "/ml2/alz/frozen_runtime/prepare.py": "59d8fb307960e5661fe4cbc486da3541c771f2999fc7a36cf038ef9a76fc4bae",
+    "/ml2/alz/frozen_runtime/worker_gpu0.py": "2c308cbc837f5456f6fca9e42ef4a2d2a801e988dcbee64ad2484e58afa541eb",
+    "/ml2/alz/frozen_runtime/qualify.py": "b73c49442863552d31ae60921d0169ccba0a6f607db40843d39a2db8ce1f6331",
+    "/ml2/alz/frozen_runtime/test_integration.py": "7219a1de16e0a209fb8c592cb72d2c7958e42c3e0d195f33cd39b6d85d599822",
+    "/ml2/alz/frozen_runtime/binding.py": "bd93a5b6f8c8d785f171370c1e10b4cd9dcca9f3cfa7c5f6eb5e91f3f2769831",
+    "/ml2/alz/frozen_runtime/policy.prepared.json": "3efd1d0a54b447588619fb70e27f11efe3fe181232470ac7b6649483f9871079",
+    "/ml2/alz/frozen_model/frozen_pg_update.py": "918d60066a729e3a654d0a899cabc66bc1310fcdf86ea66a273ba97bbc7ce688",
+    "/ml2/alz/frozen_model/frozen_pg_adapter.py": "4ce278536ed357cc91a955288dceb1189cc3a9b869c56390b053a9bf6e6881c3",
+    "/ml2/alz/analysis/frozen_prior_protocol.json": "ef1d57610e8a0671ae74fa9195323265df8c86c83fb9ccc699b6fbf2ec0891b3",
+    "/ml2/alz/analysis/frozen_prior_model_CPU_qualification.json": "b4e6142e9ceffc675249ed649b8944a647a447881a4e782fbc72daf88df19bde",
+    "/ml2/alz/analysis/frozen_prior_runtime_CPU_qualification.json": "8dfd760d8aab5fa94109f53cef2317ccb58b7d83bb36587770a3ea295d690f11",
+    "/ml2/alz/analysis/research_window_20261104_five_days.json": "2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1",
+    "/ml2/alz/analysis/shared_gpu0_candidate_CPU_qualification.json": "fb8d6e6243ad9b13da0337c2b0194cb875d550e920d2886c89429ec3a8b29995",
+    "/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_admission.py": "d6300693ca6afcfc94fb7cfe33513adaa0e30a3a393935b74eec73bee6922998",
+    "/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_runner.py": "019bc2a2f8c03032eeeddf8a0b3bd9c68c4d105dcc6b3e393c4788f787fe1238",
+    "/ml2/alz/analysis/frozen_prior_initial_resource_observation.json": "360e370d4b0ed0e7beade42fc4ef9f2533ffc917c86770fbfb94bccae2b8a755"
+  },
+  "verification": {
+    "actual_final_model_path_CPU_checks_passed": 7,
+    "dynamic_shared_GPU0_engine_CPU_tests_passed": 10,
+    "isolated_runtime_CPU_tests_passed": 22,
+    "qualified_model_import_origin_guards_present": true,
+    "native_dynamic_GPU0_source_wire_verified": true,
+    "old_execution_sources_unchanged": true,
+    "prior_MoG_joint_negative_result_commit": "92f45ec",
+    "prior_MoG_actual_activation_revert_commit": "c8906a4",
+    "plan_enabled_at_review_creation": false,
+    "forecast": {
+      "GPU_required_bytes": 9462333440,
+      "GPU_total_bytes": 51527024640,
+      "host_remaining_growth_required_bytes": 30443954176,
+      "host_available_bytes": 107396599808,
+      "GPU_fits": true,
+      "host_fits": true,
+      "allocation_or_lease_created": false,
+      "observed_foreign": [
+        {
+          "identity": {
+            "pid": 10392,
+            "birth": 2225,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/home/mikkel/nano-work-server/target/release/nano-work-server",
+            "argv_sha256": "2d9f9156b44ba5e54d03c8effa7b25c58ce2328ce40153543b2a143edad5901e",
+            "ppid": 1
+          },
+          "gpu_kinds": [
+            "compute"
+          ],
+          "gpu_budget_bytes": 811597824,
+          "ram_budget_bytes": 2361503744,
+          "observed_gpu_bytes": 274726912,
+          "observed_rss_bytes": 196190208,
+          "GPU_growth_allowance_bytes": 536870912,
+          "foreign_control": "NONE"
+        },
+        {
+          "identity": {
+            "pid": 146094,
+            "birth": 534000,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/usr/bin/gnome-shell (deleted)",
+            "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+            "ppid": 7650
+          },
+          "gpu_kinds": [
+            "graphics"
+          ],
+          "gpu_budget_bytes": 614993920,
+          "ram_budget_bytes": 2575880192,
+          "observed_gpu_bytes": 346558464,
+          "observed_rss_bytes": 306745344,
+          "GPU_growth_allowance_bytes": 268435456,
+          "foreign_control": "NONE"
+        },
+        {
+          "identity": {
+            "pid": 147551,
+            "birth": 534311,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/home/mikkel/.local/opt/listener-brave/brave",
+            "argv_sha256": "1aa41d6ece5abc24b5be91dac291a8a75082e52136f0b950b22d81906ae15c8a",
+            "ppid": 146967
+          },
+          "gpu_kinds": [
+            "compute",
+            "graphics"
+          ],
+          "gpu_budget_bytes": 610897920,
+          "ram_budget_bytes": 2466926592,
+          "observed_gpu_bytes": 74027008,
+          "observed_rss_bytes": 164581376,
+          "GPU_growth_allowance_bytes": 536870912,
+          "foreign_control": "NONE"
+        },
+        {
+          "identity": {
+            "pid": 147560,
+            "birth": 534312,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/usr/bin/Xwayland",
+            "argv_sha256": "de126b621b3161a113e53b9f6b8d032626ae1c5197b8699f3bd076e63b7af9d8",
+            "ppid": 146094
+          },
+          "gpu_kinds": [
+            "graphics"
+          ],
+          "gpu_budget_bytes": 273223680,
+          "ram_budget_bytes": 2303303680,
+          "observed_gpu_bytes": 4788224,
+          "observed_rss_bytes": 70979584,
+          "GPU_growth_allowance_bytes": 268435456,
+          "foreign_control": "NONE"
+        },
+        {
+          "identity": {
+            "pid": 164844,
+            "birth": 593699,
+            "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+            "uid": 1000,
+            "exe": "/usr/lib/chatgpt/ChatGPT",
+            "argv_sha256": "048c2b736b5eeaba3c1a82da1432ffbcd7bfc44092cce858d54efa8997739a59",
+            "ppid": 164705
+          },
+          "gpu_kinds": [
+            "graphics"
+          ],
+          "gpu_budget_bytes": 709169152,
+          "ram_budget_bytes": 2375680000,
+          "observed_gpu_bytes": 440733696,
+          "observed_rss_bytes": 228196352,
+          "GPU_growth_allowance_bytes": 268435456,
+          "foreign_control": "NONE"
+        }
+      ]
+    },
+    "GPU_free_bytes": 49546264576,
+    "host_available_bytes": 107393024000,
+    "native_quality_unproven": true
+  },
+  "limitations": "Owner-authorized exact source/resource verification, not independent peer approval. Native fixed finite512particle-bank control, not learned ParticleGAN or an infinite Gaussian prior. CPU tests do not prove GPU quality. Forecasts reserve observed foreign growth without controlling foreign jobs or guaranteeing abrupt changes. No automatic successor."
+}
