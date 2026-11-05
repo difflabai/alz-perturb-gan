@@ -1,0 +1,205 @@
+{
+  "status": "DESCRIPTIVE_MATCHED_DONOR_DELTAS_FROM_FOUR_AUDITED_RELEASED_RATES",
+  "utc": "2026-11-05T01:50:33.965912+00:00",
+  "reference_candidate_id": "lr_g050_d050_p050",
+  "reference_parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "comparisons": [
+    {
+      "candidate_id": "lr_g050_d050_p050",
+      "changed_public_scalar_fields": {},
+      "energy_score": 1.892340501897739,
+      "cell_energy_distance": 0.23846028322414625,
+      "spread_ratio": 0.9980943742116393,
+      "energy_difference_vs_reference": 0.0,
+      "pooled_cell_ED_difference_vs_reference": 0.0,
+      "per_donor_energy_score": {
+        "H20.33.032": 1.2296001164185708,
+        "H21.33.001": 2.753514836039308,
+        "H21.33.023": 1.6888580991581885,
+        "H21.33.025": 1.8973889559748889
+      },
+      "per_donor_energy_difference_vs_reference": {
+        "H20.33.032": 0.0,
+        "H21.33.001": 0.0,
+        "H21.33.023": 0.0,
+        "H21.33.025": 0.0
+      },
+      "donors_improved_vs_reference": 0,
+      "donors_worsened_vs_reference": 0,
+      "decision": {
+        "accept": false,
+        "reasons": [
+          "cell distribution match worsened"
+        ]
+      },
+      "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json",
+      "result_SHA256": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc"
+    },
+    {
+      "candidate_id": "network_rate_half",
+      "changed_public_scalar_fields": {
+        "particle_lr": {
+          "reference": 0.015,
+          "compared": 0.03
+        }
+      },
+      "energy_score": 1.9101423308956023,
+      "cell_energy_distance": 0.2711466659298969,
+      "spread_ratio": 0.9992522419718627,
+      "energy_difference_vs_reference": 0.0178018289978632,
+      "pooled_cell_ED_difference_vs_reference": 0.03268638270575064,
+      "per_donor_energy_score": {
+        "H20.33.032": 1.07849206856487,
+        "H21.33.001": 2.8456040951023382,
+        "H21.33.023": 1.6314740710089795,
+        "H21.33.025": 2.084999088906221
+      },
+      "per_donor_energy_difference_vs_reference": {
+        "H20.33.032": -0.1511080478537008,
+        "H21.33.001": 0.09208925906303023,
+        "H21.33.023": -0.057384028149209065,
+        "H21.33.025": 0.187610132931332
+      },
+      "donors_improved_vs_reference": 2,
+      "donors_worsened_vs_reference": 2,
+      "decision": {
+        "accept": false,
+        "reasons": [
+          "cell distribution match worsened"
+        ]
+      },
+      "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0-result.json",
+      "result_SHA256": "15b3e85ac642deb0dcdb7ed77818bcfe40e40e582f0de93fb2e43847ba250a52"
+    },
+    {
+      "candidate_id": "lr_g050_d050_p025",
+      "changed_public_scalar_fields": {
+        "particle_lr": {
+          "reference": 0.015,
+          "compared": 0.0075
+        }
+      },
+      "energy_score": 1.9970420088351366,
+      "cell_energy_distance": 0.24978588768115273,
+      "spread_ratio": 0.9662362952633186,
+      "energy_difference_vs_reference": 0.10470150693739755,
+      "pooled_cell_ED_difference_vs_reference": 0.011325604457006477,
+      "per_donor_energy_score": {
+        "H20.33.032": 1.1692326166845608,
+        "H21.33.001": 2.9435840038331853,
+        "H21.33.023": 1.8665070704450262,
+        "H21.33.025": 2.008844344377774
+      },
+      "per_donor_energy_difference_vs_reference": {
+        "H20.33.032": -0.06036749973401001,
+        "H21.33.001": 0.19006916779387728,
+        "H21.33.023": 0.17764897128683765,
+        "H21.33.025": 0.11145538840288527
+      },
+      "donors_improved_vs_reference": 1,
+      "donors_worsened_vs_reference": 3,
+      "decision": {
+        "accept": false,
+        "reasons": [
+          "energy score did not improve",
+          "cell distribution match worsened"
+        ]
+      },
+      "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p025_f0_pg_s0-result.json",
+      "result_SHA256": "af890e6c9ccad005319413d8d5cad2d444b0a8ae167adfaf5499a0e0cedfcbb3"
+    },
+    {
+      "candidate_id": "lr_g025_d050_p050",
+      "changed_public_scalar_fields": {
+        "generator_lr": {
+          "reference": 0.006,
+          "compared": 0.003
+        }
+      },
+      "energy_score": 2.0493267287199446,
+      "cell_energy_distance": 0.25296123568028683,
+      "spread_ratio": 1.008358102534853,
+      "energy_difference_vs_reference": 0.15698622682220553,
+      "pooled_cell_ED_difference_vs_reference": 0.014500952456140581,
+      "per_donor_energy_score": {
+        "H20.33.032": 1.660241080316161,
+        "H21.33.001": 2.69375371642266,
+        "H21.33.023": 1.628531576027516,
+        "H21.33.025": 2.214780542113441
+      },
+      "per_donor_energy_difference_vs_reference": {
+        "H20.33.032": 0.4306409638975901,
+        "H21.33.001": -0.059761119616648095,
+        "H21.33.023": -0.06032652313067244,
+        "H21.33.025": 0.3173915861385521
+      },
+      "donors_improved_vs_reference": 2,
+      "donors_worsened_vs_reference": 2,
+      "decision": {
+        "accept": false,
+        "reasons": [
+          "energy score did not improve",
+          "cell distribution match worsened"
+        ]
+      },
+      "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0-result.json",
+      "result_SHA256": "930d5d9daa7cf1ab28756df84c26dae564a6eac3cf268a01e93aa42a42e3c817"
+    },
+    {
+      "candidate_id": "lr_g050_d025_p050",
+      "changed_public_scalar_fields": {
+        "critic_lr": {
+          "reference": 0.009,
+          "compared": 0.0045
+        }
+      },
+      "energy_score": 2.239555446866984,
+      "cell_energy_distance": 0.32468380193931967,
+      "spread_ratio": 1.0360286709361675,
+      "energy_difference_vs_reference": 0.347214944969245,
+      "pooled_cell_ED_difference_vs_reference": 0.08622351871517342,
+      "per_donor_energy_score": {
+        "H20.33.032": 1.2911667554986337,
+        "H21.33.001": 3.30298156095205,
+        "H21.33.023": 1.6978882313188937,
+        "H21.33.025": 2.6661852396983585
+      },
+      "per_donor_energy_difference_vs_reference": {
+        "H20.33.032": 0.06156663908006288,
+        "H21.33.001": 0.5494667249127421,
+        "H21.33.023": 0.00903013216070514,
+        "H21.33.025": 0.7687962837234696
+      },
+      "donors_improved_vs_reference": 0,
+      "donors_worsened_vs_reference": 4,
+      "decision": {
+        "accept": false,
+        "reasons": [
+          "energy score did not improve",
+          "cell distribution match worsened"
+        ]
+      },
+      "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d025p050_f0_pg_s0-result.json",
+      "result_SHA256": "7a37e65f9f900ce4707babfbc14a6dd9e15dceae585eddf7d522ac0198856075"
+    }
+  ],
+  "source_SHA256": {
+    "/ml2/alz/analysis/analyze_completed_released_rate_donor_deltas.py": "39018c0ea92ec746ec3c6fe6cdd612bce9515a52197ee3a62a9c2fd4ad058ce2",
+    "/ml2/alz/analysis/pure_formulations_leaderboard_after_fourth_released_rate.json": "172240642dc108451011c956adbae71b2c734348319c7293f11e8f6503b89eb9",
+    "/ml2/alz/pure_incumbent.json": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+    "/ml2/alz/analysis/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0-result.json": "15b3e85ac642deb0dcdb7ed77818bcfe40e40e582f0de93fb2e43847ba250a52",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p025_f0_pg_s0-result.json": "af890e6c9ccad005319413d8d5cad2d444b0a8ae167adfaf5499a0e0cedfcbb3",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g025d050p050_resume1_f0_pg_s0-result.json": "930d5d9daa7cf1ab28756df84c26dae564a6eac3cf268a01e93aa42a42e3c817",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d025p050_f0_pg_s0-result.json": "7a37e65f9f900ce4707babfbc14a6dd9e15dceae585eddf7d522ac0198856075"
+  },
+  "interpretation": "Negative deltas favor the compared setting. A lower aggregate energy score does not imply every calibration donor improved. One fixed training seed, four adaptive calibration donors and two generation replicates; no biological replication or statistical significance claim. Pooled cell ED is retained as scored, not reconstructed by averaging stage distances. No new training, generation, checkpoint selection, incumbent promotion, protocol change or evaluation access.",
+  "stable_joint_ATH_claimed": false
+}
