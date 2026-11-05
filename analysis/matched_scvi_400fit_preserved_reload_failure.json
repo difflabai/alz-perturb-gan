@@ -1,0 +1,36 @@
+{
+  "status": "MATCHED_SCVI400_NATIVE_FIT_PRESERVED_RELOAD_API_FAILURE_CLEAN_SETTLED",
+  "utc": "2026-11-05T07:44:25.180491+00:00",
+  "attempt": "CAL_GPU0_V1_matched_scvi_calibration_f0_scvi_s0",
+  "completed_native_fit_epochs": 400,
+  "fit_receipt_path": "/ml2/alz/runs/CAL_GPU0_V1_matched_scvi_calibration_f0_scvi_s0/fit/fit_receipt.json",
+  "fit_receipt_SHA256": "104591bb6b7f57d3645fb8a0bb724e6f660c85fc9bd0dfed9264419f5deb21d8",
+  "model_files_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_matched_scvi_calibration_f0_scvi_s0/fit/model/model.pt": "e413fe3a7290bfb16eef49ee80b6f15eeb893cc580daebb5931d54253233fa67",
+    "/ml2/alz/runs/CAL_GPU0_V1_matched_scvi_calibration_f0_scvi_s0/fit/model/adata.h5ad": "abae3234bea8d0f30146578a0493d3199ea03ad54d60a0912bbbb6550586e187"
+  },
+  "failure": {
+    "status": "incomplete",
+    "error": "MisconfigurationException('`Trainer(devices=0)` value is not a valid input using cuda accelerator.')",
+    "automatic_retry": false
+  },
+  "root_cause": "Unmodified old scvi_adapter.load_final passes device=0 to SCVI.load(accelerator=gpu); scVI1.3.3 forwards it as Lightning devices=0, which requests zero devices rather than GPU index0. Native default device=auto with one visible physical GPU resolves logicalcuda0.",
+  "registered_training_source_or_native_package_changed": false,
+  "new_native_load_argument_required": "device=auto",
+  "planned_recovery": "Separate evaluation-only oneuse allocation from the exact completed400epoch model. No refitting, no parameter update, no endpoint or seed selection. Preserve originalfailed allocation/charge and its absoluteexpiry; cap inference at900seconds within same originalexpiry.",
+  "parent_absolute_expiry_unix": 1793885846.783337,
+  "parent_charged_GPU_seconds": 277.26753457299856,
+  "canonical_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 40.224367073899714,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 983.7756329261003
+  },
+  "owned_registry_empty": true,
+  "all_owned_PIDs_absent": true,
+  "uncertain_settlement": false,
+  "calibration_quality_available": false,
+  "evaluation_used": false,
+  "activation_to_revert": "7545ba7",
+  "external_benchmark_goal_still_active": true
+}
