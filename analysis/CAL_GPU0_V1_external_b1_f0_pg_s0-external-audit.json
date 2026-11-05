@@ -1,0 +1,95 @@
+{
+  "status": "EXTERNAL_CORE_NATIVE_CHECKPOINT_COUNTS_SCORES_CLEAN_SETTLEMENT_AUDIT_PASS",
+  "UTC": "2026-11-05T19:37:10.014902+00:00",
+  "attempt": "CAL_GPU0_V1_external_b1_f0_pg_s0",
+  "cell": {
+    "experiment": "external_b1",
+    "fold": 0,
+    "method": "pg",
+    "seed": 0
+  },
+  "benchmark_protocol_SHA256": "7eb3efa1ed4d4dcc70de0fe08f94dfb18754b2d028da2b72d0dc5d59ca097856",
+  "completed": {
+    "status": "completed",
+    "metric_role": "final_evaluation",
+    "method": "pg",
+    "fold": 0,
+    "seed": 0,
+    "endpoint": 20000,
+    "generation_replicates": 2,
+    "cache_manifest_SHA256": "553fbe2ad8d901782e834a1e3a77fc959e95cf6aef51b9ca88528aea29f6c631",
+    "benchmark_protocol_SHA256": "7eb3efa1ed4d4dcc70de0fe08f94dfb18754b2d028da2b72d0dc5d59ca097856",
+    "reuse_completed_model": false,
+    "new_model_updates": 20000,
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "f40e4b351939ce3932180ab7d5b601902ac09f65a24e0547c3a3bbfcc63208f7",
+    "native_restore_SHA256": "0a244e91a6951441b03bf9cc981323548204320cd9077f8af7a9b884c14c5230",
+    "PG_configuration": {
+      "generator_lr": 0.006,
+      "critic_lr": 0.009,
+      "particle_lr": 0.015,
+      "reg_coeff": 1.0,
+      "reg_kappa": 0.5,
+      "prior_reg": 0.01
+    },
+    "real_bag_replacements": 0,
+    "automatic_successor": false
+  },
+  "summary": {
+    "evaluation_r0": {
+      "energy_score": 1.3956542626511974,
+      "cell_energy_distance": 0.17201120518423174,
+      "spread_ratio": 1.381776689589395
+    },
+    "evaluation_r1": {
+      "energy_score": 1.4034199261893368,
+      "cell_energy_distance": 0.1648005770625094,
+      "spread_ratio": 1.3977884410357806
+    },
+    "resampling_r0": {
+      "energy_score": 1.424427987860526,
+      "cell_energy_distance": 0.16732718553329917,
+      "spread_ratio": 1.511453080489813
+    },
+    "resampling_r1": {
+      "energy_score": 1.4161386888665262,
+      "cell_energy_distance": 0.15895682294921443,
+      "spread_ratio": 1.477679906034208
+    },
+    "stage_swap_r0": {
+      "energy_score": 1.4977129424521398,
+      "cell_energy_distance": 0.27340526999676307,
+      "spread_ratio": 1.502906420113433
+    }
+  },
+  "own_processes_absent": true,
+  "owned_registry_lease_absent": true,
+  "independent_CPU_saved_score_audit": true,
+  "native_saved_state_matches_GPU_restore": true,
+  "charged_GPU_seconds": 2136.158335854998,
+  "files_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/evaluation_r0/stage0_count_exemplar.npz": "7c6c4a27d59d4ff59e917acf513bc9b12f6a69f52196bf26f2365de72d30cfff",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/evaluation_r0/stage1_count_exemplar.npz": "20509f9efef8406d6e5d8137c9ef3ba095063c850b56cc29d8e198b9ebd132eb",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/evaluation_r0/stage2_count_exemplar.npz": "2e7a16de19e43136da7a7c28889daca06bb383da87a687b8977f8f4e3b55f1cb",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/evaluation_r0/stage3_count_exemplar.npz": "3a12c418499cedf8fb753e3ad72933b326e893c0c68ed4f63ab89560b1c72ba3",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/evaluation_r0/arrays.npz": "e956bca03d62bf74cbc95e34f5c0b488022a891ee55286a7e44193142712afcb",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/evaluation_r1/stage0_count_exemplar.npz": "aa38f87edb71fb167dd2fb5dec9eef7aa0d67d62f688863b5bb1e64f6867980a",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/evaluation_r1/stage1_count_exemplar.npz": "02eb06e088409bcc45323e085ccb85c5284019b7dcd543779e418c049416a5fd",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/evaluation_r1/stage2_count_exemplar.npz": "bb87c8db1241159f03b4fa54f9f2e1ae01e1738333756bbb13a67eed6b92370a",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/evaluation_r1/stage3_count_exemplar.npz": "42f6ba8e8d20a7165bac6e57cc6b6d2a81ae7fcc7a250fa91800ec96f1518b47",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/evaluation_r1/arrays.npz": "a5645e7e2307aff217ac5d32d35447afeb3f2fee53b6edd92ebd378e8447733e",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/resampling_r0/arrays.npz": "9744f08c08b32237a31bf990c7f07232882e4de3190109dd3d69cefa1fd8c3e9",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/resampling_r1/arrays.npz": "73409b9dd172899234a7e740d5b018afeadc6ef8e6061550c76f7ac0a65010ae",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/stage_swap_r0/stage0_count_exemplar.npz": "f65a50282c1e5dbbf77efc1ab351369de2d1d9c0551e1c08da84e9a61db1b45c",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/stage_swap_r0/stage1_count_exemplar.npz": "20a63152c7cd39cf8bc7de5fc882b51bd60a26a0c2a658156f95dd251331a455",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/stage_swap_r0/stage2_count_exemplar.npz": "076ca179e338822be796bed66afee7df26a725e6b9859edcf5347dfe8c97c287",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/stage_swap_r0/stage3_count_exemplar.npz": "bd5e34fa3fcbb2ea76497950bfadf49dca48b0f8dbfec466ed23660bee1f0b2c",
+    "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/stage_swap_r0/arrays.npz": "56de932313f43cb1d3a59a17327201f299ff5342770b119211a41c35ef0ebabc"
+  },
+  "conditional_partial_result_only": true,
+  "full_matrix_required_before_decision": true,
+  "SOTA_claim": false,
+  "source_SHA256": {
+    "/ml2/alz/external_core_runtime/finish.py": "77675b1f3f44bc3c1b0ef806c0c1e85051c9d4a0333855a7489b8cf32f8eff50"
+  }
+}
