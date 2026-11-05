@@ -1,0 +1,68 @@
+{
+  "status": "AUDITED_20K_RELEASED_API_HISTORICAL_CONTROL_REPRODUCTION_COMPARISON",
+  "utc": "2026-11-05T03:59:38.831314+00:00",
+  "old_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0-result.json",
+  "new_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p100_f0_pg_s0-result.json",
+  "native_policy_state_byte_exact": true,
+  "native_policy_fields_equal": {
+    "averaged_table": true,
+    "averages": true,
+    "birth_death": true,
+    "completed_steps": true,
+    "controller": true,
+    "cpu_rng": true,
+    "cuda_rng": true,
+    "device": true,
+    "dtype": true,
+    "initial_lrs": true,
+    "last_output_sigma": true,
+    "lr_settle": true,
+    "models": true,
+    "optimizers": true,
+    "output_noise": true,
+    "recipe": true,
+    "requires_grad": true,
+    "roles": true,
+    "routing": true,
+    "row_evidence": true,
+    "row_semantics": true,
+    "schema": true,
+    "served_source": true,
+    "streams": true,
+    "table": true,
+    "table_location": true,
+    "table_requires_grad": true
+  },
+  "all_scientific_state_byte_exact_after_two_declared_wrapper_fields_removed": false,
+  "removed_new_wrapper_fields": {
+    "native_recipe": "bispf_optimized",
+    "released_hyperparameters": {
+      "generator_lr": 0.006,
+      "critic_lr": 0.009,
+      "particle_lr": 0.03,
+      "reg_coeff": 1.0,
+      "reg_kappa": 1.0,
+      "prior_reg": 0.01
+    }
+  },
+  "old_native_policy_fingerprint": "13912641536ced2a20f63968d975edcb37bb86f97f307d27d34e1ecf04f381a5",
+  "new_native_policy_fingerprint": "13912641536ced2a20f63968d975edcb37bb86f97f307d27d34e1ecf04f381a5",
+  "metrics_difference_new_minus_old": {
+    "energy_score": 0.0,
+    "cell_energy_distance": 0.0,
+    "spread_ratio": 0.0
+  },
+  "native_device_metadata_relabelled": false,
+  "CUDA_initialized": false,
+  "new_training_or_generation": false,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_released_particle_control_reproduction.py": "850cb0fc9b259124d94787b815d85f1554f2e250db5ae2bd50a2c17b6869eda8",
+    "/ml2/alz/analysis/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0-result.json": "15b3e85ac642deb0dcdb7ed77818bcfe40e40e582f0de93fb2e43847ba250a52",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p100_f0_pg_s0-result.json": "b70328df9f582559fb57d719a2a3d7737288d81e7e7ce6bfbd57427ba16f2956",
+    "/ml2/alz/runs/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0/fit/final.pt": "7b312554f6b4f8c26da7bc1eeb22573b9d4045e628b5698212cc0bd2cf014be3",
+    "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p100_f0_pg_s0/fit/final.pt": "000a4221bf54a07e49e6cd646556cd27ebca2c00216dccf8dab76a7181e3bd5e"
+  },
+  "scope": "Actual completed20k fixedseed0 same-rate same-data control, as prospectively declared in the rate grid. Native policies and scientific state compared onCPU without relabelling CUDA metadata; equality or differences are reported, never used to discard a completed configuration. Four adaptive calibration donors; no biological replication/evaluation or jointATH claim."
+}

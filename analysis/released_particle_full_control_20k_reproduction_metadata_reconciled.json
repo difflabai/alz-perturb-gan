@@ -1,0 +1,42 @@
+{
+  "status": "EXACT_20K_NATIVE_AND_ALL_SCIENTIFIC_STATE_CONTROL_REPRODUCTION_PARAMETER_ENCODINGS_RECONCILED",
+  "utc": "2026-11-05T04:02:26.553839+00:00",
+  "native_policy_byte_exact": true,
+  "all_native_and_scientific_state_byte_exact": true,
+  "different_common_state_fields": [],
+  "old_parameter_wrapper": {
+    "lr": 0.006,
+    "prior_lr_mult": 5.0
+  },
+  "new_parameter_wrapper": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.03,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "old_normalized_full_state_fingerprint": "9cf4b0efc4ca8d5957c12e0d4a9f3cb07289c45a875a463881b5177aee599c96",
+  "new_normalized_full_state_fingerprint": "9cf4b0efc4ca8d5957c12e0d4a9f3cb07289c45a875a463881b5177aee599c96",
+  "only_declared_equivalent_parameter_wrappers_removed": true,
+  "native_recipe_and_device_metadata_retained_unchanged": true,
+  "metrics_difference_new_minus_old": {
+    "energy_score": 0.0,
+    "cell_energy_distance": 0.0,
+    "spread_ratio": 0.0
+  },
+  "initial_comparison_path": "/ml2/alz/analysis/released_particle_full_control_20k_reproduction.json",
+  "initial_comparison_SHA256": "89651d1a27d95bbb9ef13b29f66f2aaee338578a6b68fc51c7222b4378dc1ae7",
+  "initial_comparison_explanation": "The first comparison removed native_recipe only from the new checkpoint, even though both contain it, and left the old network_rate_config. Its false full-wrapper equality flag is preserved. This addendum keeps native_recipe in both and removes only the two explicitly validated equivalent parameter encodings. No model/optimizer/RNG/usage/clock/cache/scientific state is removed or rewritten.",
+  "CUDA_initialized": false,
+  "new_training_or_generation": false,
+  "incumbent_changed": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/reconcile_released_control_parameter_metadata.py": "179e24baae72e1766b13d59433fdbc713df78c80218d61d3c61f6410a4f9d997",
+    "/ml2/alz/analysis/released_particle_full_control_20k_reproduction.json": "89651d1a27d95bbb9ef13b29f66f2aaee338578a6b68fc51c7222b4378dc1ae7",
+    "/ml2/alz/analysis/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0-result.json": "15b3e85ac642deb0dcdb7ed77818bcfe40e40e582f0de93fb2e43847ba250a52",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p100_f0_pg_s0-result.json": "b70328df9f582559fb57d719a2a3d7737288d81e7e7ce6bfbd57427ba16f2956",
+    "/ml2/alz/runs/CAL_GPU0_V1_network_rate_half_v1_f0_pg_s0/fit/final.pt": "7b312554f6b4f8c26da7bc1eeb22573b9d4045e628b5698212cc0bd2cf014be3",
+    "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g050d050p100_f0_pg_s0/fit/final.pt": "000a4221bf54a07e49e6cd646556cd27ebca2c00216dccf8dab76a7181e3bd5e"
+  }
+}

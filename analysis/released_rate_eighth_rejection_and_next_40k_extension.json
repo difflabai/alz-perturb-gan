@@ -1,0 +1,65 @@
+{
+  "status": "AUDITED_EIGHTH_UPPER_PARTICLE_CONTROL_REJECTED",
+  "utc": "2026-11-05T04:00:35.277679+00:00",
+  "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p100_f0_pg_s0-result.json",
+  "result_SHA256": "b70328df9f582559fb57d719a2a3d7737288d81e7e7ce6bfbd57427ba16f2956",
+  "completed_updates": 20000,
+  "parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.03,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "energy_score": 1.9101423308956023,
+  "cell_energy_distance": 0.2711466659298969,
+  "spread_ratio": 0.9992522419718627,
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "cell distribution match worsened"
+    ]
+  },
+  "historical_control_reproduction_path": "/ml2/alz/analysis/released_particle_full_control_20k_reproduction.json",
+  "historical_control_reproduction_SHA256": "89651d1a27d95bbb9ef13b29f66f2aaee338578a6b68fc51c7222b4378dc1ae7",
+  "historical_native_policy_state_byte_exact": true,
+  "historical_scientific_state_byte_exact_after_two_wrapper_fields_removed": false,
+  "all_three_particle_rates_audited_at_G006_D009": [
+    0.0075,
+    0.015,
+    0.03
+  ],
+  "all_three_coordinate_slices_complete": true,
+  "best_completed_rate_on_both_metrics": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015
+  },
+  "global27point_grid_complete": false,
+  "charged_GPU_seconds": 1385.68511381,
+  "owned_processes_absent": true,
+  "owned_registry_empty": true,
+  "canonical_reservation_released": true,
+  "activation_to_revert": "9370af4",
+  "next_scientific_experiment": "Separately declared same-model completed20k->40k duration extension of G.006/D.009/P.015",
+  "next_candidate_id": "extend40k_lr_g050_d050_p050",
+  "next_native_runtime_CPU_tests_passed": 27,
+  "next_public_API_model_CPU_tests_passed": 4,
+  "next_trial_started": false,
+  "completed_rate_configurations": 8,
+  "registered_rate_configurations": 27,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "evaluation_used": false,
+  "canonical_budget_status_selected_fields": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 37.084682223528596,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 986.9153177764714,
+    "available_after_reservations_GPU_hours": 986.9153177764714
+  },
+  "reconciled_full_state_reproduction_path": "/ml2/alz/analysis/released_particle_full_control_20k_reproduction_metadata_reconciled.json",
+  "reconciled_full_state_reproduction_SHA256": "d6b79b20c28ea505d40d46ad687ca69147836e91100bb954ce97688c3308e346",
+  "historical_all_native_and_scientific_state_byte_exact_after_equivalent_parameter_metadata_reconciled": true
+}
