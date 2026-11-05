@@ -1,0 +1,64 @@
+{
+  "status": "PROSPECTIVE_NEXT_PENALTY_BRANCHES_BEFORE_STRONGER_STRENGTH_CALIBRATION",
+  "utc": "2026-11-05T05:45:23.254042+00:00",
+  "current_attempt": "CAL_GPU0_V1_released_v095_regcoeff200_f0_pg_s0",
+  "current_actual_logged_updates": 2251,
+  "current_native_worker_confirmed_live": true,
+  "current_calibration_result_available": false,
+  "reference_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0-result.json",
+  "reference_result_SHA256": "adb377b6cd894bda4e111d2d7e1ae9a1e731bd043899f7c3819f09445d489db8",
+  "targeted_protocol_path": "/ml2/alz/analysis/released_penalty_v095/protocol.json",
+  "targeted_protocol_SHA256": "9add7184faf6901953094f50acf19b03d0cf616dee3bbd261939b5f9ab79241d",
+  "if_current_joint_incumbent_gate_accepts": "Freeze exactconfiguration for the original all3seed confirmation before a stable target claim. No further scalar tuning until the fixed seed outcomes are retained.",
+  "if_current_joint_rejects_but_dominates_reference_on_ES_and_ED": {
+    "next_candidate": {
+      "id": "v095_penalty_reg_coeff_m400",
+      "changed_field": "reg_coeff",
+      "factor": 4.0,
+      "parameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 4.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      }
+    },
+    "rule": "Both ES strictly lower thanreference and pooledcellED nohigher thanreference; retain spread/count validity. Complete20k audited results only.",
+    "rationale": "Continue the improving strength direction to its predeclared4x setting."
+  },
+  "otherwise": {
+    "next_candidate": {
+      "id": "v095_penalty_reg_kappa_m050",
+      "changed_field": "reg_kappa",
+      "factor": 0.5,
+      "parameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      }
+    },
+    "rationale": "After strength.5 and2 bracket the default1, prioritize the distinct gradient-cap/scale field at its predeclaredhalfvalue. This changes sensitivity of the smoothnative cap without simultaneously changing the entirepenaltyweight, rates, priorregularization orarchitecture.",
+    "reference_parameters": {
+      "generator_lr": 0.006,
+      "critic_lr": 0.009,
+      "particle_lr": 0.015,
+      "reg_coeff": 1.0,
+      "reg_kappa": 1.0,
+      "prior_reg": 0.01
+    }
+  },
+  "all_twelve_declared_controls_retained": true,
+  "quarter_and_four_strength_controls_still_unmeasured_not_rejected": true,
+  "only_execution_order_amended": true,
+  "original_full27_rate_grid_complete": false,
+  "original_full_grid_stage2_anchor_selected": false,
+  "current_training_source_or_hyperparameters_changed": false,
+  "new_GPU_allocation_created": false,
+  "evaluation_used_for_tuning": false,
+  "stable_joint_ATH_claimed": false,
+  "scope": "Prospective scheduling decision within the12declared controls, frozen before any current stronger-arm calibration. No missing outcome is inferred; all executed models keep their full negative/positive evidence. Seed0jointacceptance still requires unchanged original all3seed confirmation."
+}
