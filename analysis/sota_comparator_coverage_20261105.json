@@ -1,0 +1,39 @@
+{
+  "status": "CURRENT_PRIMARY_LITERATURE_COVERAGE_REVIEW_IN_PROGRESS_CORE_BENCHMARK_RUNNING",
+  "UTC": "2026-11-05T19:05:34.725327+00:00",
+  "running_core_comparison": "Frozen nativeParticleGAN0.9.6,scVI1.3.3,hierarchicalresampling;3folds5seeds. All15PGfitsfresh20k,scVI400epochs; no evaluation-basedretuning.",
+  "completed_calibration_only": [
+    "ParticleGAN0.9.5",
+    "scVI1.3.3",
+    "CFGen official ICLR2025 source"
+  ],
+  "additional_count_comparator": "scDesign3 1.10.0 installed from exact retained official archive. Native namespace actually loaded; setup introspection used the wrong function name simulate_new instead of exported simu_new and retained that error. Synthetic qualification and actual matched fit remain outstanding.",
+  "newer_published_candidates": [
+    {
+      "method": "SAVE",
+      "paper": "SAVE: A Generalizable Framework for Multi-Condition Single-Cell Generation with Gene Block Attention",
+      "venue": "ICLR2026",
+      "primary_paper": "https://openreview.net/forum?id=l7QEoK4uDP",
+      "official_code": "https://github.com/fdu-wangfeilab/sc-save",
+      "status": "Primary source identified; exact native count, stage-only conditioning, depth and training-information contract not yet qualified. Not benchmarked."
+    },
+    {
+      "method": "scLDM",
+      "official_code": "https://github.com/czi-ai/scldm",
+      "status": "Official latent diffusion implementation identified; native count/conditioning/training contract and target-scale resources not yet qualified. Not benchmarked."
+    }
+  ],
+  "CFGen_primary_sources": [
+    "https://proceedings.iclr.cc/paper_files/paper/2025/hash/13079a5dd5c994a7e5f0cc691e0338e8-Abstract-Conference.html",
+    "https://github.com/theislab/CFGen"
+  ],
+  "next_after_core": [
+    "Complete matched CFGen and eligible scDesign3 comparison across folds/seeds, with prospectively frozen settings before reading their evaluation scores.",
+    "Qualify current additional methods against the actual stage-only native-count task; document exclusions precisely and do not silently weaken their implementation.",
+    "Assess an independent untouched donor cohort; the current57donor cohort is historically exposed."
+  ],
+  "claim_policy": "A passing core matrix establishes performance against its matched tested baselines in this fixed cohort. Broaderstate-of-the-art claims additionally require current comparator coverage, fair disclosed tuning and independent cohort evidence. No universalSOTA claim from the four calibration donors or core result alone.",
+  "SOTA_claim": false,
+  "original_calibration_results_preserved": true,
+  "new_GPU_allocation_created_by_this_review": false
+}
