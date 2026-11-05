@@ -1,0 +1,44 @@
+{
+  "status": "AUDITED_40K_DURATION_REJECTED_NATIVE_RELEASED_PENDING_ACTUAL_ACTIVATION_REVERT",
+  "utc": "2026-11-05T04:33:20.330475+00:00",
+  "attempt": "CAL_GPU0_V1_released_best_extend40k_f0_pg_s0",
+  "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_best_extend40k_f0_pg_s0-result.json",
+  "result_SHA256": "65ff96dfef08f2052a22154c77bbe108defd09f5fea513f4b873ffe47500419b",
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "parent20k_ES": 1.892340501897739,
+  "parent20k_cell_ED": 0.23846028322414625,
+  "final40k_ES": 2.0630624971807405,
+  "final40k_cell_ED": 0.25530574271903905,
+  "new_phase_charged_GPU_seconds": 1401.8777133109998,
+  "total_model_charged_GPU_seconds": 2980.482368844003,
+  "canonical_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 37.47409269944832,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 986.5259073005517
+  },
+  "owned_registry_empty": true,
+  "owner_worker_audit_waiter_PIDs_absent": true,
+  "clean_settlement_verified": true,
+  "execution_sources_unchanged": true,
+  "postsettlement_audit_correction_path": "/ml2/alz/analysis/released_extension40k_postsettlement_audit/correction.json",
+  "postsettlement_audit_correction_SHA256": "e00df85774a473e85fcd55a7bd3ec98bc51421115f32c57fe5ea1354d547315a",
+  "failed_original_audit_preserved": true,
+  "passed_corrected_CPU_audit": true,
+  "visual_convergence_figure_checked": true,
+  "activation_to_revert": "0a30683",
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "completed_rate_configurations": 8,
+  "completed_pure_seed0_endpoint_comparisons": 33,
+  "new_same_model_duration_endpoint": 1,
+  "next_old_version_trial_not_started": true,
+  "latest_user_steering": "new particlegan elease make sure you are using it",
+  "new_priority": "Verify official0.9.5 release, install in isolated versioned ALZ overlay, review source/API changes and qualify new-version native adapter before further GPU training. Preserve original0.9.4 sources and results; do not silently mix versions."
+}

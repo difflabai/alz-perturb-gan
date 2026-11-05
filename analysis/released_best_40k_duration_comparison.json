@@ -1,0 +1,65 @@
+{
+  "status": "INDEPENDENTLY_AUDITED_RELEASED_20K_TO40K_DURATION_COMPARISON",
+  "utc": "2026-11-05T04:32:17.946228+00:00",
+  "attempt": "CAL_GPU0_V1_released_best_extend40k_f0_pg_s0",
+  "released_hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "parent20k": {
+    "energy_score": 1.892340501897739,
+    "cell_energy_distance": 0.23846028322414625,
+    "spread_ratio": 0.9980943742116393
+  },
+  "fixed40k": {
+    "energy_score": 2.0630624971807405,
+    "cell_energy_distance": 0.25530574271903905,
+    "spread_ratio": 0.9940865132247477
+  },
+  "difference40k_minus20k": {
+    "energy_score": 0.17072199528300147,
+    "cell_energy_distance": 0.0168454594948928,
+    "spread_ratio": -0.004007860986891543
+  },
+  "difference40k_minus_frozen_incumbent": {
+    "energy_score": 0.1275304575364271,
+    "cell_energy_distance": 0.023461133489175445,
+    "spread_ratio": -0.01985109548470987
+  },
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "baseline_comparison": {
+    "ES_improvement_percent": 0.7803002992377017,
+    "cell_ED_difference": 0.012527489635859368
+  },
+  "new_phase_charged_GPU_seconds": 1401.8777133109998,
+  "parent_charged_GPU_seconds": 1578.604655533003,
+  "total_model_charged_GPU_seconds": 2980.482368844003,
+  "sources_SHA256": {
+    "/ml2/alz/analysis/readout_released_40k_extension.py": "04befe1e4e02c9df8a27ce221a1c02077881bd037f210d757919500b29a3507f",
+    "/ml2/alz/analysis/released_best_rate_extension40k_protocol.json": "1086f78a60128734337f3f730ddc1588f8001225b923f14159b2e1b1ef1f4da1",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_best_extend40k_f0_pg_s0-result.json": "65ff96dfef08f2052a22154c77bbe108defd09f5fea513f4b873ffe47500419b",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+    "/ml2/alz/runs/CAL_GPU0_V1_released_best_extend40k_f0_pg_s0/convergence_curve.json": "46c87d7c7f68307c3f9f409e3579ae50a8c1532f591162bf5b12133e7d86eeef",
+    "/ml2/alz/pure_incumbent.json": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+    "/ml2/alz/analysis/baseline_calibration_seed0.json": "46babfb542f4ed09a4e08ff60d86da3049798f8f245e882716a50f950a513a18",
+    "/ml2/alz/analysis/pure_formulations_leaderboard_after_eighth_released_rate.json": "9ef0c3ee8acf2358a6e873c5bc593cb345aaafee6dd983bfbe9e62b17e4a1014"
+  },
+  "parent_calibration_informed_duration_hypothesis": true,
+  "only40k_extension_endpoint_selectable": true,
+  "rate_grid_completed": 8,
+  "regularization_stage2_anchor_selected": false,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "evaluation_used_for_tuning": false,
+  "finisher_scope_prose_correction": "The finisher retained an obsolete original20k scope sentence. Its executable assertions and prospective protocol require40k; only40k is the extension selection endpoint.30k is diagnostic."
+}
