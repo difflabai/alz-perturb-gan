@@ -1,0 +1,57 @@
+{
+  "status": "AUDITED_FULL_G_D_RATE_REJECTED",
+  "utc": "2026-11-05T03:33:26.194906+00:00",
+  "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g100d100p050_f0_pg_s0-result.json",
+  "result_SHA256": "35796b31c6103f0c67f7ab89a418044fa31edf1d212176c78a34511caaa32e53",
+  "completed_updates": 20000,
+  "parameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "energy_score": 2.0529338228406564,
+  "cell_energy_distance": 0.30768428655067126,
+  "spread_ratio": 1.017301069346992,
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "matched_best_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json",
+  "matched_best_result_SHA256": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+  "change_percent_vs_best_completed_rate": {
+    "energy_score": 8.486491769418137,
+    "cell_energy_distance": 29.02957355856879
+  },
+  "all_four_G_half_full_D_half_full_cells_audited": true,
+  "best_G_D_combination_in_completed_2x2_at_P015": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009
+  },
+  "charged_GPU_seconds": 1398.467285965,
+  "owned_processes_absent": true,
+  "owned_registry_empty": true,
+  "canonical_reservation_released": true,
+  "activation_to_revert": "4143c4e",
+  "next_registered_candidate": "lr_g050_d050_p100",
+  "next_prepared_GPU": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+  "next_reason": "Complete the three-level P{.0075,.015,.03} slice at fixedG.006/D.009, including the prospectively declared historicalcontrol rerun with saved5k/10k/20kcurves. Use idleGPU1 while separately finishing the newly qualified publicAPI40k extension guard scope. All27 retained; no delay or relabelling of oldnegative results.",
+  "next_trial_started": false,
+  "completed_rate_configurations": 7,
+  "registered_rate_configurations": 27,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "evaluation_used": false,
+  "canonical_budget_status_selected_fields": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 36.6997696919147,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 987.3002303080854,
+    "available_after_reservations_GPU_hours": 987.3002303080854
+  }
+}

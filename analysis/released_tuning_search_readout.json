@@ -1,12 +1,12 @@
 {
   "status": "RELEASED_RATE_GRID_READOUT",
-  "utc": "2026-11-05T03:08:52.524969+00:00",
+  "utc": "2026-11-05T03:32:51.797830+00:00",
   "source_SHA256": {
     "/ml2/alz/analysis/summarize_released_search.py": "b1316eaf59390c6f512a820ffc4770fdbd0bc777d29b48aeaeb3b946e8248d21",
     "/ml2/alz/analysis/released_tuning/protocol.json": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1"
   },
   "declared_configurations": 27,
-  "audited_complete_configurations": 6,
+  "audited_complete_configurations": 7,
   "rows": [
     {
       "id": "lr_g050_d050_p050",
@@ -56,14 +56,22 @@
         "reg_kappa": 1.0,
         "prior_reg": 0.01
       },
-      "state": "allocated_quality_not_audited",
-      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g100d100p050_f0_pg_s0/authorization.json",
-      "attempt": "CAL_GPU0_V1_released_rate_g100d100p050_f0_pg_s0",
-      "issued_unix": 1793848036.8033879,
-      "initial_completed_updates": 0,
-      "process_liveness_checked": false,
-      "latest_saved_progress_updates": 1001,
-      "latest_checkpoint_complete_updates": 1000
+      "state": "audited_complete",
+      "energy_score": 2.0529338228406564,
+      "cell_energy_distance": 0.30768428655067126,
+      "spread_ratio": 1.017301069346992,
+      "endpoint_decision": {
+        "accept": false,
+        "reasons": [
+          "energy score did not improve",
+          "cell distribution match worsened"
+        ]
+      },
+      "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g100d100p050_f0_pg_s0-result.json",
+      "result_SHA256": "35796b31c6103f0c67f7ab89a418044fa31edf1d212176c78a34511caaa32e53",
+      "charged_GPU_seconds": 1398.467285965,
+      "convergence_curve_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g100d100p050_f0_pg_s0/convergence_curve.json",
+      "convergence_curve_SHA256": "facfa75be103916d98fc586d909a7feaf21046f3d701e2268b5a2f250099289f"
     },
     {
       "id": "lr_g050_d100_p100",
