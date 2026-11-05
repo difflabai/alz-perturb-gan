@@ -1,0 +1,76 @@
+{
+  "status": "FIRST_ACTUAL_MATCHED_EXTERNAL_SCVI_COMPARISON_COMPLETE_AUDITED_CLEAN_SETTLED",
+  "utc": "2026-11-05T07:55:35.477888+00:00",
+  "reference_comparison_path": "/ml2/alz/analysis/matched_scvi_vs_released095_calibration.json",
+  "reference_comparison_SHA256": "64d1db4e8e1e1c69cff86b1bc2496bffc013f5c71cd2065e8d1da5f1a6852eff",
+  "scvi_audit_path": "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json",
+  "scvi_audit_SHA256": "5312be07c39064c56fb95f2c34726ce171399234679a7d5ed9e261b42aedcb10",
+  "matched_scvi400": {
+    "energy_score": 2.3489122410781658,
+    "cell_energy_distance": 0.22857870145323922,
+    "spread_ratio": 0.349303797578872
+  },
+  "released_PG095_best_energy20k": {
+    "energy_score": 1.892340501897739,
+    "cell_energy_distance": 0.23846028322414625,
+    "spread_ratio": 0.9980943742116393
+  },
+  "released_PG095_half_kappa20k": {
+    "energy_score": 1.9537118942286584,
+    "cell_energy_distance": 0.21992865338427325,
+    "spread_ratio": 1.0316557076122854
+  },
+  "half_kappa_vs_scvi_percent_change": {
+    "energy_score": -16.82482384561579,
+    "cell_energy_distance": -3.784275618844357
+  },
+  "half_kappa_lower_ES_and_ED_than_scvi": true,
+  "half_kappa_joint_incumbent_decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve"
+    ]
+  },
+  "half_kappa_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0-result.json",
+  "half_kappa_result_SHA256": "d8f95caa81827eb8cbebafea2bfd6f262994bc73a7d86dfeb8ff85ac19556e51",
+  "half_kappa_paired_donor_ES_minus_scvi": [
+    {
+      "donor": "H20.33.032",
+      "difference": -0.3945733283229613
+    },
+    {
+      "donor": "H21.33.001",
+      "difference": -0.732317259969113
+    },
+    {
+      "donor": "H21.33.023",
+      "difference": 0.13130348528624136
+    },
+    {
+      "donor": "H21.33.025",
+      "difference": -0.5852142843921975
+    }
+  ],
+  "scvi_spread_outside_prespecified_band": true,
+  "original400epoch_model_unchanged_and_no_refit": true,
+  "actual_native_CUDA_reload_verified": true,
+  "independent_CPU_saved_weights_reload_score_count_audit_passed": true,
+  "parent_training_GPU_seconds": 277.26753457299856,
+  "evaluation_GPU_seconds": 38.217761501000496,
+  "model_total_GPU_seconds": 315.48529607399905,
+  "canonical_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 40.2349831187611,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 983.7650168812389
+  },
+  "owned_registry_empty": true,
+  "all_owned_PIDs_absent": true,
+  "activation_to_disable_after_commit": "1f88b5e",
+  "scope": "Same4adaptivecalibrationdonors,fold0seed0,2generationreplicates; manyPGadaptiveconfigs versus one fixedscVI1.3.3recipe. Actual local fixed-recipe head-to-head, not equal tuning or completed3fold5seed final benchmark. All negatives and training/reload failure costs retained.",
+  "SOTA_claim": false,
+  "final_evaluation_used": false,
+  "incumbent_changed": false,
+  "stable_joint_ATH_goal_complete": false,
+  "next_work": "Keep external benchmarking requirement: finish CFGen nativeGPUinference/resource qualification from preservedfailure, then actual properly matchedmodel; resolve scDesign3 dependencies. FreezePG/configs/samplers before original3fold5seed finalcomparison. Continue nativePG scalar optimization under original jointgate afterward; half-kappa10k curve remains diagnostic, not retroactive endpoint selection."
+}

@@ -1,0 +1,96 @@
+{
+  "status": "AUDITED_EXTERNAL_SCVI_VS_RELEASED_PG_CALIBRATION_HEAD_TO_HEAD",
+  "utc": "2026-11-05T07:53:58.607504+00:00",
+  "methods": {
+    "resampling": {
+      "energy_score": 2.079287181278266,
+      "cell_energy_distance": 0.24277825308317968,
+      "spread_ratio": 1.086688043301637,
+      "per_donor_energy_score": [
+        1.272282323410263,
+        3.047641176747636,
+        1.95978725566323,
+        2.0374379692919344
+      ],
+      "per_stage_cell_energy_distance": [
+        0.9114143695390835,
+        1.8390837374697222,
+        1.132453828552058,
+        0.5532384176654261
+      ]
+    },
+    "released_PG095": {
+      "energy_score": 1.892340501897739,
+      "cell_energy_distance": 0.23846028322414625,
+      "spread_ratio": 0.9980943742116393,
+      "per_donor_energy_score": [
+        1.2296001164185708,
+        2.753514836039308,
+        1.6888580991581885,
+        1.8973889559748889
+      ],
+      "per_stage_cell_energy_distance": [
+        0.7980804213973123,
+        1.5962319634908688,
+        0.9958576240930102,
+        0.5921768211522798
+      ]
+    },
+    "scVI133": {
+      "energy_score": 2.3489122410781658,
+      "cell_energy_distance": 0.22857870145323922,
+      "spread_ratio": 0.349303797578872,
+      "per_donor_energy_score": [
+        1.5445622440695967,
+        3.3472854136175925,
+        1.9748013326906984,
+        2.528999973934776
+      ],
+      "per_stage_cell_energy_distance": [
+        0.6652876265802954,
+        1.687337107952679,
+        1.0861057903410751,
+        0.49830515436055745
+      ]
+    }
+  },
+  "PG_minus_scvi": {
+    "energy_score": -0.4565717391804267,
+    "cell_energy_distance": 0.009881581770907033,
+    "spread_ratio": 0.6487905766327673
+  },
+  "paired_donor_ES_PG_minus_scvi": [
+    {
+      "donor": "H20.33.032",
+      "difference": -0.31496212765102594
+    },
+    {
+      "donor": "H21.33.001",
+      "difference": -0.5937705775782844
+    },
+    {
+      "donor": "H21.33.023",
+      "difference": -0.28594323353250983
+    },
+    {
+      "donor": "H21.33.025",
+      "difference": -0.6316110179598873
+    }
+  ],
+  "PG_has_lower_ES_than_scvi": true,
+  "PG_has_no_higher_cell_ED_than_scvi": false,
+  "comparison_population": "Four adaptive calibration donors, first fold, one training seed each, two generation replicates; replicates do not add biological donors.",
+  "tuning_fairness": "Many adaptive PG configurations versus one prespecified scVI recipe. This is a fixed-recipe matched comparison, not equally tuned models.",
+  "source_SHA256": {
+    "/ml2/alz/analysis/compare_matched_scvi_calibration.py": "8017f0502d810e4c1c6ac2265e5bd055520655ad552d41cd9b0324f018037880",
+    "/ml2/alz/analysis/matched_scvi/protocol.json": "4dd85fb1f03f8164d0eff7fe27db21842c337b41eb57d62a795e778fa69c7c8c",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0-result.json": "adb377b6cd894bda4e111d2d7e1ae9a1e731bd043899f7c3819f09445d489db8",
+    "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json": "5312be07c39064c56fb95f2c34726ce171399234679a7d5ed9e261b42aedcb10",
+    "/ml2/alz/analysis/baseline_calibration_seed0.json": "46babfb542f4ed09a4e08ff60d86da3049798f8f245e882716a50f950a513a18"
+  },
+  "full_final_3fold_5seed_benchmark_complete": false,
+  "evaluation_used": false,
+  "SOTA_claim": false,
+  "incumbent_changed": false,
+  "scope": "Actual completed external fixed-recipe calibration comparison, not independent final evaluation, equal adaptive tuning, or general SOTA superiority. All failed PG settings and comparator qualification remain retained. No automatic selection or promotion."
+}
