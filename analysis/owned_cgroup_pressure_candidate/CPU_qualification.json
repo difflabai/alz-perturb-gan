@@ -1,0 +1,26 @@
+{
+  "status": "PASSED_CPU_OWNED_CGROUP_PRESSURE_READER_AND_UNCHANGED_RUNNER_AST_NOT_DEPLOYED",
+  "utc": "2026-11-05T03:05:54.729392+00:00",
+  "tests_passed": 5,
+  "actual_readonly_measurement": {
+    "owned_cgroup_full_avg10": 0.0,
+    "global_full_avg10": 0.0,
+    "cgroup_relative_path": "/user.slice/user-1000.slice/user@1000.service/tmux-spawn-75b75181-66f7-41c0-9ae4-62f4255521af.scope"
+  },
+  "actual_global_OOM_counter_retained": true,
+  "owned_stall_threshold_avg10": 10,
+  "owned_stall_sustain_seconds": 30,
+  "worker_membership_checked_before_CUDA_barrier": true,
+  "unknown_or_changed_scope_refuses": true,
+  "guarded_run_oom_budget_lock_lease_cleanup_AST_unchanged": true,
+  "source_SHA256": {
+    "/ml2/alz/analysis/owned_cgroup_pressure_candidate/owned_pressure.py": "1c2c69aed5454a346ccdfc81d6bfb694bdadef0418df30b7ccfb7a1cdf4c86a6",
+    "/ml2/alz/analysis/owned_cgroup_pressure_candidate/cgroup_shared_gpu1_runner.py": "170c94ce3c67d5c0d75e73542f8f9627def7bb593a83754664ee941ab61d02cf",
+    "/ml2/alz/analysis/owned_cgroup_pressure_candidate/test_pressure.py": "490a8ee23cad195e6602a1655537d8fb6d91040ba6b9fd5389cdc6e38fc5677b",
+    "/ml2/alz/recovery_runtime/shared_gpu1_runner.py": "621492363bafbb28181aa9b4c9faae46bfe87f353d69542a437c52abe344b362"
+  },
+  "GPU_context_created": false,
+  "GPU_job_or_allocation_started": false,
+  "native_runtime_wiring_and_full_qualification_pending": true,
+  "scope": "Private CPU telemetry and source-equivalence candidate only. Original shared engines remain untouched. Global pressure is retained as telemetry; scoped pressure detects actual inherited-group stalls. Original global host-OOM stop and original role/foreign-growth/physical GPU+RAM floors remain in the unchanged run/admission functions. This proof alone does not authorize or deploy a native runtime."
+}
