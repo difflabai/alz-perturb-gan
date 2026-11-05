@@ -1,4 +1,5 @@
 """Exercise each new one-field penalty control on a full-width synthetic model."""
+import ast
 import copy
 import datetime
 import hashlib
@@ -21,13 +22,25 @@ from release_env import activate, VERSION, PENALTY_OPTIONS
 native = activate()
 import numpy as np
 import torch
-from qualify_cpu import context  # Qualified common full-width synthetic fixture.
 import released_update as update
 import released_adapter as adapter
+from test_variant import fixture
 from state_fingerprint import fingerprint
 
 read = lambda p: json.loads(Path(p).read_bytes())
 sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+
+def context(cache, fullwidth=False):
+    ctx = fixture(cache)
+    ctx.__class__ = adapter.Context
+    if fullwidth:
+        ctx.X = torch.randint(1, 8, (24, 2000), generator=torch.Generator().manual_seed(774)).float()
+        ctx.mean, ctx.sd = torch.zeros(2000), torch.ones(2000)
+        ctx.W = torch.randn(2000, 50, generator=torch.Generator().manual_seed(775))/2000
+        ctx.trainpcs, ctx.mu = ctx.project(ctx.X), ctx.X.mean(0)
+        ctx.theta = (ctx.mu.square()/(ctx.X.var(0, unbiased=False)-ctx.mu).clamp_min(1e-4)).clamp(.1,10000)
+    return ctx
 
 
 def main():
@@ -38,6 +51,10 @@ def main():
     common_proof = MODEL/'CPU_qualification.json'
     assert read(common_proof)['tests_passed'] == 8
     for path, pin in read(common_proof)['source_SHA256'].items(): assert sha(path) == pin
+    def fixture_ast(path):
+        return ast.dump(next(n for n in ast.parse(Path(path).read_text()).body
+            if isinstance(n,ast.FunctionDef) and n.name=='context'),include_attributes=False)
+    assert fixture_ast(__file__) == fixture_ast(MODEL/'qualify_cpu.py')
     settings = protocol['stage1']['configs']
     assert len(settings) == 12 and len({s['id'] for s in settings}) == 12
     rows = []

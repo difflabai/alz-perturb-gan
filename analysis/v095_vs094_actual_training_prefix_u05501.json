@@ -1,0 +1,28 @@
+{
+  "status": "ACTUAL_NATIVE_VERSION_TRAINING_TELEMETRY_PREFIX_COMPARISON",
+  "utc": "2026-11-05T04:49:11.766638+00:00",
+  "historical_version": "0.9.4",
+  "current_version": "0.9.5",
+  "historical_attempt": "CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0",
+  "current_attempt": "CAL_GPU0_V1_released_v095_bridge_f0_pg_s0",
+  "same_rates": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "latest_saved_update": 5501,
+  "saved_rows_compared": 45,
+  "all_compared_telemetry_exactly_equal": true,
+  "different_field_records": [],
+  "latest_log_snapshot_path": "/ml2/alz/artifacts/diagnostics/v095_training_prefix_u05501/latest_learning_curve.jsonl",
+  "latest_log_snapshot_SHA256": "4086cb9b90948025e5fa3e776fff06f4094455f630d5a72ef3bbf0533460a122",
+  "historical_training_log_path": "/ml2/alz/artifacts/diagnostics/released_best_rate_20k_to40k_parent/learning_curve.jsonl",
+  "historical_training_log_SHA256": "566a1f6efb6994d91974b8cb714db2bbca705139d1f1e226b2e20b2aa757a0e3",
+  "comparison_source_SHA256": "03eb0245e477898e1544492293e4f10af346ba7867f1e0512610fe5e575ee219",
+  "entire_checkpoint_state_parity_established": false,
+  "latest_release_quality_established": false,
+  "scope": "Read-only comparison of the actually saved loss/rate/gradient/usage diagnostics at matched update numbers. Equal telemetry does not prove complete model/RNG/optimizer state or final calibration parity. The fixed20k native run and independent saved-state/count/score audit must complete."
+}
