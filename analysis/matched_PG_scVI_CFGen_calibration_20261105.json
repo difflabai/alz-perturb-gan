@@ -1,0 +1,121 @@
+{
+  "status": "THREE_NATIVE_MODELS_COMPLETED_MATCHED_CALIBRATION_COMPARISON",
+  "UTC": "2026-11-05T18:13:27.460369+00:00",
+  "methods": {
+    "resampling": {
+      "energy_score": 2.079287181278266,
+      "cell_energy_distance": 0.24277825308317968,
+      "spread_ratio": 1.086688043301637,
+      "coverage80": 0.6778846153846154,
+      "per_donor_energy_score": [
+        1.272282323410263,
+        3.047641176747636,
+        1.95978725566323,
+        2.0374379692919344
+      ],
+      "per_stage_cell_energy_distance": [
+        0.9114143695390835,
+        1.8390837374697222,
+        1.132453828552058,
+        0.5532384176654261
+      ]
+    },
+    "PG095_half_kappa": {
+      "energy_score": 1.9537118942286584,
+      "cell_energy_distance": 0.21992865338427325,
+      "spread_ratio": 1.0316557076122854,
+      "coverage80": 0.6826923076923077,
+      "per_donor_energy_score": [
+        1.1499889157466354,
+        2.6149681536484795,
+        2.1061048179769397,
+        1.9437856895425787
+      ],
+      "per_stage_cell_energy_distance": [
+        1.1003814798779246,
+        1.427898486002821,
+        1.0663081631141367,
+        0.5443863623639995
+      ]
+    },
+    "scVI133": {
+      "energy_score": 2.3489122410781658,
+      "cell_energy_distance": 0.22857870145323922,
+      "spread_ratio": 0.349303797578872,
+      "coverage80": 0.17307692307692307,
+      "per_donor_energy_score": [
+        1.5445622440695967,
+        3.3472854136175925,
+        1.9748013326906984,
+        2.528999973934776
+      ],
+      "per_stage_cell_energy_distance": [
+        0.6652876265802954,
+        1.687337107952679,
+        1.0861057903410751,
+        0.49830515436055745
+      ]
+    },
+    "CFGen": {
+      "energy_score": 2.283138111608369,
+      "cell_energy_distance": 0.2513296992803724,
+      "spread_ratio": 0.2692438880627546,
+      "coverage80": 0.21153846153846154,
+      "per_donor_energy_score": [
+        1.4441398246659407,
+        3.3706077050049217,
+        1.8423475966405944,
+        2.4754573201220182
+      ],
+      "per_stage_cell_energy_distance": [
+        0.5682371272456974,
+        1.5919988226849169,
+        1.1478464065272513,
+        0.5052083306515449
+      ]
+    }
+  },
+  "PG_half_kappa_percent_lower": {
+    "resampling": {
+      "energy_score": 6.039343106631801,
+      "cell_energy_distance": 9.411716003689097
+    },
+    "scVI133": {
+      "energy_score": 16.82482384561579,
+      "cell_energy_distance": 3.784275618844357
+    },
+    "CFGen": {
+      "energy_score": 14.428659208340422,
+      "cell_energy_distance": 12.493965490751457
+    }
+  },
+  "scope": "Same4adaptivecalibrationdonors,fold0seed0,2generationreplicates. Unequal adaptivePG versus fixedscVI/CFGen tuning. No final evaluation, seed-stability or SOTA claim.",
+  "full_core_matrix": "Frozen3fold5seed PG/scVI/resampling comparison remains outstanding; prepare its actual evaluation runtime next before further PG-only tuning.",
+  "CFGen_actual_optimizer_updates": 102600,
+  "CFGen_actual_GPU_seconds": 6488.181304419999,
+  "CFGen_completed_and_clean_settled": true,
+  "CFGen_owned_processes_absent": true,
+  "CFGen_spread_outside_band": true,
+  "scVI_spread_outside_band": true,
+  "all_negative_comparator_results_retained": true,
+  "incumbent_changed": false,
+  "PG_internal_incumbent_gate_passed": false,
+  "goal_complete": false,
+  "SOTA_claim": false,
+  "canonical_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 42.042922056766095,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 981.9570779432339
+  },
+  "activation_to_disable_after_commit": "3e97e64",
+  "evidence_SHA256": {
+    "/ml2/alz/analysis/compare_completed_external_calibration.py": "14a07b576a45a4bb38d795f9d7a324d57e080fef0af07d0936cf848f246e351a",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0-result.json": "d8f95caa81827eb8cbebafea2bfd6f262994bc73a7d86dfeb8ff85ac19556e51",
+    "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json": "5312be07c39064c56fb95f2c34726ce171399234679a7d5ed9e261b42aedcb10",
+    "/ml2/alz/analysis/CAL_GPU0_V1_matched_cfgen_f0_cfgen_s0-result.json": "bdc56e64a36ff3f17a0791fe731da986477e8153bb19709b33b2fc3ff534abba",
+    "/ml2/alz/analysis/baseline_calibration_seed0.json": "46babfb542f4ed09a4e08ff60d86da3049798f8f245e882716a50f950a513a18",
+    "/ml2/alz/analysis/external_benchmark_frozen_candidate_20261105.json": "4bc489983fc33d7604d059d022610102f07edb4572f1fdede9fb3f35d898862c",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/project_budget.py": "85ea495a54dfc524fb493a34002305b534964cf1992fc659d07d2c38951e4872"
+  }
+}
