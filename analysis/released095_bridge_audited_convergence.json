@@ -1,0 +1,49 @@
+{
+  "status": "SAVED_NATIVE_CONVERGENCE_READOUT",
+  "utc": "2026-11-05T05:06:11.274359+00:00",
+  "native_version": "0.9.5",
+  "penalty_options": {
+    "input_domain": "continuous"
+  },
+  "protocol_path": "/ml2/alz/analysis/released_tuning_v095/protocol.json",
+  "protocol_SHA256": "e71bcc83c9e3cedfb42eb391b8133de8f3ecd5c2044301d979d58eeaff60eae5",
+  "attempt": "CAL_GPU0_V1_released_v095_bridge_f0_pg_s0",
+  "candidate_id": "v095_lr_g050_d050_p050",
+  "nominal_hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "latest_saved_update": 20000,
+  "saved_records": 160,
+  "audited_calibration_endpoints": 3,
+  "zero_gradient_norm_records": {
+    "G_gradient_norm": 0,
+    "D_gradient_norm": 0,
+    "prior_gradient_norm": 0
+  },
+  "training_complete": true,
+  "calibration_audited": true,
+  "truncated_trailing_line_ignored": false,
+  "plot_source_path": "/ml2/alz/analysis/plot_released095_convergence.py",
+  "plot_source_SHA256": "75a01d0b30b63b2ee2bcaf7408d12156732e6f971c21841de78c891badcdb3ff",
+  "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0/authorization.json",
+  "authorization_SHA256": "7ba8a82270b935396db38869503e501f50f72be4b11995b377e1856bb3ef9133",
+  "original_learning_curve_path": "/ml2/alz/runs/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0/fit/learning_curve.jsonl",
+  "learning_curve_snapshot_path": "/ml2/alz/analysis/released095_bridge_audited_convergence.learning_curve.jsonl",
+  "learning_curve_snapshot_SHA256": "566a1f6efb6994d91974b8cb714db2bbca705139d1f1e226b2e20b2aa757a0e3",
+  "calibration_curve_path": "/ml2/alz/runs/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0/convergence_curve.json",
+  "calibration_curve_SHA256": "68e2b6c873da88b11865e7c48ec98adc2eff1fea22d9efd31ebde22d5e2b88ea",
+  "audited_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0-result.json",
+  "audited_result_SHA256": "adb377b6cd894bda4e111d2d7e1ae9a1e731bd043899f7c3819f09445d489db8",
+  "PNG_path": "/ml2/alz/analysis/released095_bridge_audited_convergence.png",
+  "PNG_SHA256": "024aa356e166d4ae2cc4741d8235cf2547e11cbd0d0456c83aad8f2bf2e12e99",
+  "PDF_path": "/ml2/alz/analysis/released095_bridge_audited_convergence.pdf",
+  "PDF_SHA256": "054936e5c208380f057e62f85d4d7a82c12c498563ebefbbe887e02276031d13",
+  "incumbent_changed": false,
+  "ATH_claimed": false,
+  "scope": "Read-only saved measurements. Raw loss/gradient/latent covariance curves diagnose optimization; they do not establish count distribution quality. Calibration shown only after all three checkpoint scores pass independent saved-array/count/settlement audit. No early stopping or best-checkpoint selection."
+}

@@ -1,22 +1,50 @@
 {
   "status": "LATEST_RELEASE095_AUDITED_SEARCH_READOUT",
-  "utc": "2026-11-05T04:53:50.770314+00:00",
+  "utc": "2026-11-05T05:06:10.005856+00:00",
   "native_version": "0.9.5",
-  "completed_latest_release_seed0_endpoints": 0,
-  "completed_latest_rate_grid_configurations": 0,
+  "completed_latest_release_seed0_endpoints": 1,
+  "completed_latest_rate_grid_configurations": 1,
   "declared_latest_rate_grid_configurations": 27,
   "completed_targeted_penalty_configurations": 0,
   "declared_targeted_penalty_configurations": 12,
   "historical0_9_4_rate_configurations": 8,
   "historical0_9_4_endpoints_counted_as0_9_5": false,
-  "rows": [],
+  "rows": [
+    {
+      "candidate_id": "v095_lr_g050_d050_p050",
+      "study": "rate_grid",
+      "energy_score": 1.892340501897739,
+      "cell_energy_distance": 0.23846028322414625,
+      "spread_ratio": 0.9980943742116393,
+      "released_hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "decision": {
+        "accept": false,
+        "reasons": [
+          "cell distribution match worsened"
+        ]
+      },
+      "charged_GPU_seconds": 1381.7676380190005,
+      "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0-result.json",
+      "result_SHA256": "adb377b6cd894bda4e111d2d7e1ae9a1e731bd043899f7c3819f09445d489db8",
+      "protocol_path": "/ml2/alz/analysis/released_tuning_v095/protocol.json",
+      "ES_improvement_vs_resampling_percent": 8.99090231805303,
+      "cell_ED_difference_vs_resampling": -0.0043179698590334326
+    }
+  ],
   "allocations": [
     {
       "attempt": "CAL_GPU0_V1_released_v095_bridge_f0_pg_s0",
       "candidate_id": "v095_lr_g050_d050_p050",
-      "ledger_status": "active",
-      "reservation_released": null,
-      "independently_audited_result_present": false,
+      "ledger_status": "completed",
+      "reservation_released": true,
+      "independently_audited_result_present": true,
       "process_liveness_checked": false
     }
   ],
