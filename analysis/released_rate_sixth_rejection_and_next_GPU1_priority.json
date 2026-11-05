@@ -1,0 +1,58 @@
+{
+  "status": "AUDITED_UPPER_CRITIC_RATE_REJECTED",
+  "utc": "2026-11-05T02:51:19.033625+00:00",
+  "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d100p050_f0_pg_s0-result.json",
+  "result_SHA256": "a608943eb73b2fc6c8b6357ddf622d7ef4363b4e96260e26ab1a5317410825e7",
+  "completed_updates": 20000,
+  "parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.018,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "energy_score": 2.1698795131119373,
+  "cell_energy_distance": 0.29846104338699586,
+  "spread_ratio": 0.8873889573920163,
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "matched_reference_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json",
+  "matched_reference_result_SHA256": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+  "change_percent_vs_critic_half": {
+    "energy_score": 14.666441421925258,
+    "cell_energy_distance": 25.161741549409513
+  },
+  "all_three_critic_levels_audited": [
+    0.0045,
+    0.009,
+    0.018
+  ],
+  "best_completed_critic_level_at_fixed_G006_P015": 0.009,
+  "all3_checkpoints_two_generation_replicas_and_native_CUDA_reload_audited": true,
+  "charged_GPU_seconds": 2029.4714715740001,
+  "owned_processes_absent": true,
+  "owned_registry_empty": true,
+  "canonical_reservation_released": true,
+  "activation_to_revert": "3ea4f72",
+  "next_registered_candidate": "lr_g100_d100_p050",
+  "next_prepared_GPU": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+  "next_trial_started": false,
+  "completed_rate_configurations": 6,
+  "registered_rate_configurations": 27,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "evaluation_used": false,
+  "canonical_budget_status_selected_fields": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 36.311306556924436,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 987.6886934430756,
+    "available_after_reservations_GPU_hours": 987.6886934430756
+  }
+}
