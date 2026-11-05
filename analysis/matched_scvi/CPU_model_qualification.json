@@ -1,0 +1,34 @@
+{
+  "status": "MATCHED_SCVI_NATIVE_CPU_MODEL_AND_FULLWIDTH_SAMPLER_QUALIFIED",
+  "utc": "2026-11-05T07:05:20.875019+00:00",
+  "scvi_version": "1.3.3",
+  "native_scvi_tests_passed": 2,
+  "native_test_stdout": "INFO     File /tmp/tmpl4u1r9ty/native/model.pt already downloaded               \n",
+  "native_test_stderr": "test_forbidden_donor_and_zero_rows_rejected (__main__.SCVI.test_forbidden_donor_and_zero_rows_rejected) ... ok\ntest_native_stage_only_all_optimization_split_two_epoch_fixture (__main__.SCVI.test_native_stage_only_all_optimization_split_two_epoch_fixture) ... Seed set to 0\nGPU available: False, used: False\nTPU available: False, using: 0 TPU cores\n\ud83d\udca1 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.\n/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/isolated/cfgen-py311/lib/python3.11/site-packages/lightning/pytorch/trainer/connectors/data_connector.py:434: The 'train_dataloader' does not have many workers which may be a bottleneck. Consider increasing the value of the `num_workers` argument` to `num_workers=23` in the `DataLoader` to improve performance.\n`Trainer.fit` stopped: `max_epochs=2` reached.\nok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.156s\n\nOK\n",
+  "full2000gene_prior_sampling_replay_passed": true,
+  "fullwidth_sample_exemplar_shape": [
+    1,
+    400,
+    2000
+  ],
+  "fullwidth_generated_chunk_cells": 2000,
+  "CUDA_initialized": false,
+  "GPU_job_created": false,
+  "real_donor_model_fitted": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/matched_scvi/qualify_model_cpu.py": "465120f760458134fd3766065bc2bf1bf097a0cca7cfcbe39f6a24ec9fd9c866",
+    "/ml2/alz/analysis/matched_scvi/protocol.json": "4dd85fb1f03f8164d0eff7fe27db21842c337b41eb57d62a795e778fa69c7c8c",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/CORE_PROTOCOL.json": "c2be2ccdf137da66b6e57f20fc5aaebb5bafbc0702910fb389d0f12a2faa99d0",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/scvi_adapter.py": "42bbab234ab5f9f7f75909d0f978e57e64d679a2794668ddb8b36a59d6011eb9",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/sampling_context.py": "ca12610a0c1ba784a2843f26a23e3d98df216a9675e48c367ae41316ccf836cb",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/generation.py": "4d092c75060eff24aa19e3ccbb8c6fdb8f592edd8e8b3b3c7f2084aa52a5f085",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/SCVI_REAL_CACHE_INTEGRATION.json": "a5865fb83ced701b2185cbe52e573ff7a285d16fab56844b898762fb8d82834e",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/SCVI_CPU_CUDA_SOURCE_PARITY.json": "37cbdd8a1af4be1557768847df07d6405715f4956c790709379e28819bb18e7b",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/qualification_scvi/reader.json": "43c9900cb0a1f5867f725f3ab7cac4c784ccb976250aa477ded21d75efe8f0cb",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/qualification_scvi/writer.json": "91de120fb6eea06610c0d4b94834ad8e71a4c3aa30e0ccd3dcad8de5c320197c",
+    "/ml2/alz/calibration.py": "ce1ea5d5086db11712aa075b81daca799f2101a9ca3d8df3ff03e0b3d45da747",
+    "/ml2/alz/analysis/external_comparator_gap_and_reprioritization_20261105.json": "c6a5d6f00b5d62a10a095dff04263a34e3cd5b5a393f4ee57b6edc1708812ede",
+    "/ml2/alz/analysis/research_window_20261104_five_days.json": "2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1"
+  },
+  "scope": "Actual native synthetic two-epoch fit/freshload/category/count tests plus full2000gene prior generation/replay via unchanged iter_scvi. No real donor fitting or quality score; CUDA runtime resource/performance still requires bounded actual admission."
+}

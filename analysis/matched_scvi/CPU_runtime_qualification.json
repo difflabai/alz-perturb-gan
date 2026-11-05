@@ -1,0 +1,44 @@
+{
+  "status": "MATCHED_SCVI_ISOLATED_RUNTIME_CPU_QUALIFIED",
+  "utc": "2026-11-05T07:08:12.583255+00:00",
+  "tests_passed": 23,
+  "GPU_allocation_created": false,
+  "model_imported": false,
+  "test_processes": [
+    {
+      "test_file": "/ml2/alz/scvi_calibration_runtime/test_integration.py",
+      "returncode": 0,
+      "tests": 15,
+      "stdout": "",
+      "stderr": "test_any_old_or_new_matrix_consumption_or_output_refuses_duplicate (__main__.Integration.test_any_old_or_new_matrix_consumption_or_output_refuses_duplicate) ... ok\ntest_calibration_worker_refuses_partial_or_wrong_reference (__main__.Integration.test_calibration_worker_refuses_partial_or_wrong_reference) ... ok\ntest_complete_native_inventory_and_input_pins_required (__main__.Integration.test_complete_native_inventory_and_input_pins_required) ... ok\ntest_core_180hour_budget_includes_closed_and_open_card_hours (__main__.Integration.test_core_180hour_budget_includes_closed_and_open_card_hours) ... ok\ntest_end_to_end_cpu_owner_worker_settle_then_unchanged_gpu1_key_refuses (__main__.Integration.test_end_to_end_cpu_owner_worker_settle_then_unchanged_gpu1_key_refuses) ... ok\ntest_failed_cpu_attempt_is_charged_and_consumes_same_scientific_key (__main__.Integration.test_failed_cpu_attempt_is_charged_and_consumes_same_scientific_key) ... ok\ntest_fixture_cannot_select_canonical_root (__main__.Integration.test_fixture_cannot_select_canonical_root) ... ok\ntest_held_owner_and_worker_refuse_before_reservation_or_model_import (__main__.Integration.test_held_owner_and_worker_refuse_before_reservation_or_model_import) ... ok\ntest_missing_live_reservation_or_lease_refuses_worker (__main__.Integration.test_missing_live_reservation_or_lease_refuses_worker) ... ok\ntest_native_runtime_import_roots_find_packages_without_importing_models (__main__.Integration.test_native_runtime_import_roots_find_packages_without_importing_models) ... ok\ntest_old_gpu1_phase_lock_prevents_new_gpu0_race (__main__.Integration.test_old_gpu1_phase_lock_prevents_new_gpu0_race) ... ok\ntest_source_or_cache_drift_refused_before_budget_or_model (__main__.Integration.test_source_or_cache_drift_refused_before_budget_or_model) ... ok\ntest_uncertain_resource_cleanup_preserves_canonical_reservation (__main__.Integration.test_uncertain_resource_cleanup_preserves_canonical_reservation) ... ok\ntest_worker_checks_private_canonical_lease_command_device_and_ancestor_bindings (__main__.Integration.test_worker_checks_private_canonical_lease_command_device_and_ancestor_bindings) ... ok\ntest_wrong_device_expiry_endpoint_command_or_backend_binding_refused (__main__.Integration.test_wrong_device_expiry_endpoint_command_or_backend_binding_refused) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 2.903s\n\nOK\n"
+    },
+    {
+      "test_file": "/ml2/alz/scvi_calibration_runtime/test_scope.py",
+      "returncode": 0,
+      "tests": 8,
+      "stdout": "",
+      "stderr": "test_active_predecessor_blocks_deployment (__main__.Scope.test_active_predecessor_blocks_deployment) ... ok\ntest_current_PG_execution_pins_unchanged (__main__.Scope.test_current_PG_execution_pins_unchanged) ... ok\ntest_disabled_plan_and_unqualified_native_source_refused (__main__.Scope.test_disabled_plan_and_unqualified_native_source_refused) ... ok\ntest_fixed_native_comparator_configuration (__main__.Scope.test_fixed_native_comparator_configuration) ... ok\ntest_original_expiry_cannot_expand (__main__.Scope.test_original_expiry_cannot_expand) ... ok\ntest_partial_or_selected_fit_cannot_satisfy_endpoint (__main__.Scope.test_partial_or_selected_fit_cannot_satisfy_endpoint) ... ok\ntest_scvi_runtime_and_import_roots_are_distinct (__main__.Scope.test_scvi_runtime_and_import_roots_are_distinct) ... ok\ntest_training_endpoint_information_and_version_changes_refused (__main__.Scope.test_training_endpoint_information_and_version_changes_refused) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.560s\n\nOK\n"
+    }
+  ],
+  "source_SHA256": {
+    "/ml2/alz/scvi_calibration_runtime/resource_profile.py": "6fcf01336847631b537c1751afb1eeb33bd7b0ce481ba09f5a0bd32c56014793",
+    "/ml2/alz/scvi_calibration_runtime/finish.py": "c82714aaef6453abb81afac3859f18472a866f4af20b290fde3df9fb38636524",
+    "/ml2/alz/scvi_calibration_runtime/launch_core_gpu0.py": "f4de7b30d845886c30307dc23fad0b79c8a2f7c67f2afa3a9fcad8ae2c4aaaa4",
+    "/ml2/alz/scvi_calibration_runtime/project_runner_gpu0.py": "562507e0d1e5554dfa71e7f32ae16322bcf460caee2b3fc440681534e2c86fb5",
+    "/ml2/alz/scvi_calibration_runtime/preset_scope.py": "96e3867a6df6b5c84b8590abc176386618fa8404fc5ece0f84e0be89ff31b876",
+    "/ml2/alz/scvi_calibration_runtime/test_scope.py": "d7d9b79a518b86479239e26dfd8466953c1ff0ff5689d050c089d7e8fd0aea2f",
+    "/ml2/alz/scvi_calibration_runtime/prepare.py": "5e8e4e3d79d19aa43de2f8b3b5265c55d14599b6fbe381d225ab1b74e5703313",
+    "/ml2/alz/scvi_calibration_runtime/worker_gpu0.py": "7669fb780e4c1030b48f1bf122fe94c1b927e51cffd4731a19e60c8ac7c23b0e",
+    "/ml2/alz/scvi_calibration_runtime/qualify.py": "f452b27c7349d8ad2512c6d4b8eeadfa2e9249ceab9f03437ecf013b8ad110e6",
+    "/ml2/alz/scvi_calibration_runtime/test_integration.py": "440d1e6f9282f50feffde6cad662607dc8240217048a5104755348caeb21253a",
+    "/ml2/alz/scvi_calibration_runtime/state_fingerprint.py": "29201ac7d98124296ec926fe6155903b30a8338e5e3875ae47d3276a7d61ae53",
+    "/ml2/alz/scvi_calibration_runtime/binding.py": "9009f72bfbcf11f043cab9d76c59054636329df821926420844d51a8427d17c3",
+    "/ml2/alz/analysis/matched_scvi/qualify_model_cpu.py": "465120f760458134fd3766065bc2bf1bf097a0cca7cfcbe39f6a24ec9fd9c866",
+    "/ml2/alz/analysis/matched_scvi/protocol.json": "4dd85fb1f03f8164d0eff7fe27db21842c337b41eb57d62a795e778fa69c7c8c",
+    "/ml2/alz/analysis/matched_scvi/CPU_model_qualification.json": "11a4fa7f844c5389243d0af4a2bcbf806726f8e66b7ec247ef1c9970901b7306",
+    "/ml2/alz/analysis/matched_scvi/CPU_CUDA_source_parity.json": "bb6d421ec2089f8bfdb4bd5e79c999828c4b6139f94fa8a39364e75926723687",
+    "/ml2/alz/analysis/shared_gpu0_candidate_CPU_qualification.json": "fb8d6e6243ad9b13da0337c2b0194cb875d550e920d2886c89429ec3a8b29995",
+    "/ml2/alz/analysis/research_window_20261104_five_days.json": "2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1"
+  },
+  "scope": "Actual confined synthetic owner/worker/budget/lease/cleanup tests and matched comparator endpoint/source/version/held-out-exclusion/refusal checks. Native real-data GPU performance and quality remain unmeasured."
+}
