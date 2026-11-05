@@ -1,0 +1,34 @@
+{
+  "status": "PROSPECTIVE_NEXT_CRITIC_RATE_SLICE_HELD_NOT_DEPLOYED",
+  "utc": "2026-11-05T01:52:35.357647+00:00",
+  "based_only_on_completed_rate_configurations": 4,
+  "candidate_id": "lr_g050_d100_p050",
+  "parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.018,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "reason": "Complete the three-level critic-rate slice at fixed G.006/P.015. D.0045 worsened final20k energy in all four calibration donors and worsened pooled cell ED relative to D.009. Test the remaining declared D.018 level. This priority is recorded before current G.012/D.009/P.015 endpoint quality is available; no use of partial checkpoints or evaluation donors. All27 configurations remain registered.",
+  "matched_completed_reference": "lr_g050_d050_p050",
+  "matched_completed_lower_critic": "lr_g050_d025_p050",
+  "runtime_directory": "/ml2/alz/released_rate_g050d100p050_runtime",
+  "actual_runtime_CPU_tests_passed": 24,
+  "all_CPU_proof_source_hashes_rechecked": true,
+  "plan_enabled": false,
+  "GPU_job_or_allocation_created": false,
+  "current_trial_must_settle_and_be_audited_before_any_successor": true,
+  "fresh_source_and_capacity_review_and_separate_activation_required": true,
+  "stage2_anchor_selected": false,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/released_rate_g050d100p050_runtime_CPU_qualification.json": "019450932afd2c6ede10b099d6b6ae8f2b56d5889844f7b76ee420d2bb3f0ae2",
+    "/ml2/alz/analysis/pure_formulations_leaderboard_after_fourth_released_rate.json": "172240642dc108451011c956adbae71b2c734348319c7293f11e8f6503b89eb9",
+    "/ml2/alz/analysis/released_tuning/protocol.json": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1",
+    "/ml2/alz/analysis/released_rate_four_completed_donor_deltas.json": "255a8637947ad98bd8d33e6ef87e28637c05be9ab8ea5c3e052b7f7a89601719",
+    "/ml2/alz/released_rate_g050d100p050_runtime/plan.json": "427a73b25518590df217918e8fd4466cb431f11035e2b622ddc765f3a2801863"
+  }
+}
