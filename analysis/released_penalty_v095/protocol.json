@@ -1,0 +1,300 @@
+{
+  "status": "PROSPECTIVE_OFFICIAL095_TARGETED_PENALTY_FOLLOWUP_NOT_LAUNCHED",
+  "utc": "2026-11-05T04:47:36.577383+00:00",
+  "owner_steering": "ah ok i think we need to make the released particlegan work. you can finish the e22 but im more interested in optimizing the variables like lr and alpahas and etc to choose the best converging",
+  "priority": "If current0.9.5best-rate20k bridge fails joint acceptance, prioritize one-field penalty tuning at its fixed rates. If accepted, freeze for original all3seed confirmation first.",
+  "native_API": "ParticleGAN0.9.5 get_recipe('gan',trainer='bispf_optimized',total_steps=20000,batch_size=32,num_particles=512,z_dim=8,lr=generator_lr,d_lr_mult=critic_lr/generator_lr,prior_lr_mult=particle_lr/generator_lr,reg_coeff=...,reg_kappa=...,prior_reg=...); public factories and UpdatePolicy; make_critic_penalty(...,input_domain=\"continuous\")",
+  "baseline_parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "baseline_family": "Matched pure PG8 original native BISPF optimized count-generator task adapter, learned empirical512x8 table, unchanged CountGenerator/150D critic, original11 seed streams and SBNP; zero empirical replacements. Native package sources remain official wheel bytes.",
+  "variables": {
+    "generator_lr": "recipe.lr; G step",
+    "critic_lr": "recipe.lr*recipe.d_lr_mult; D step",
+    "particle_lr": "recipe.lr*recipe.prior_lr_mult; sampled prior-row step",
+    "reg_coeff": "native Born-Infeld critic penalty coefficient",
+    "reg_kappa": "native critic gradient cap/scale parameter",
+    "prior_reg": "native SBNP prior regularization coefficient"
+  },
+  "alpha_API_finding": {
+    "alpha_bar": "Public decreasing diffusion schedule for DDGAN model family. Current GAN has no diffusion timestep; not varied in this fixed-family sweep.",
+    "BISPF_chord_alpha": "Native per-sample random chord interpolation, not a public scalar recipe tuning parameter. Preserve its sampling law.",
+    "torch_add_alpha": "Implementation scaling of optimizer update, not an extra independently tunable recipe parameter."
+  },
+  "stage1": {
+    "design": "Twelve one-field native scalar controls: reg_coeff,reg_kappa,prior_reg each times{.5,2,.25,4}; G.006,D.009,P.015 held fixed. All start fresh from same fold0seed0 initialization for20k updates.",
+    "candidate_count": 12,
+    "training_seed": 0,
+    "total_updates_each": 20000,
+    "configs": [
+      {
+        "id": "v095_penalty_reg_coeff_m050",
+        "changed_field": "reg_coeff",
+        "factor": 0.5,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 0.5,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.01
+        }
+      },
+      {
+        "id": "v095_penalty_reg_coeff_m200",
+        "changed_field": "reg_coeff",
+        "factor": 2.0,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 2.0,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.01
+        }
+      },
+      {
+        "id": "v095_penalty_reg_coeff_m025",
+        "changed_field": "reg_coeff",
+        "factor": 0.25,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 0.25,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.01
+        }
+      },
+      {
+        "id": "v095_penalty_reg_coeff_m400",
+        "changed_field": "reg_coeff",
+        "factor": 4.0,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 4.0,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.01
+        }
+      },
+      {
+        "id": "v095_penalty_reg_kappa_m050",
+        "changed_field": "reg_kappa",
+        "factor": 0.5,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 0.5,
+          "prior_reg": 0.01
+        }
+      },
+      {
+        "id": "v095_penalty_reg_kappa_m200",
+        "changed_field": "reg_kappa",
+        "factor": 2.0,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 2.0,
+          "prior_reg": 0.01
+        }
+      },
+      {
+        "id": "v095_penalty_reg_kappa_m025",
+        "changed_field": "reg_kappa",
+        "factor": 0.25,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 0.25,
+          "prior_reg": 0.01
+        }
+      },
+      {
+        "id": "v095_penalty_reg_kappa_m400",
+        "changed_field": "reg_kappa",
+        "factor": 4.0,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 4.0,
+          "prior_reg": 0.01
+        }
+      },
+      {
+        "id": "v095_penalty_prior_reg_m050",
+        "changed_field": "prior_reg",
+        "factor": 0.5,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.005
+        }
+      },
+      {
+        "id": "v095_penalty_prior_reg_m200",
+        "changed_field": "prior_reg",
+        "factor": 2.0,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.02
+        }
+      },
+      {
+        "id": "v095_penalty_prior_reg_m025",
+        "changed_field": "prior_reg",
+        "factor": 0.25,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.0025
+        }
+      },
+      {
+        "id": "v095_penalty_prior_reg_m400",
+        "changed_field": "prior_reg",
+        "factor": 4.0,
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.04
+        }
+      }
+    ]
+  },
+  "stage2": null,
+  "stage3": null,
+  "convergence_evidence": {
+    "checkpoints_at_updates": [
+      5000,
+      10000,
+      20000
+    ],
+    "logging_every_updates": 250,
+    "diagnostics": [
+      "actual G/D/prior learning rates",
+      "G/D losses and native critic penalty",
+      "G/D/prior gradient norms",
+      "particle usage/movement/diversity",
+      "independent saved calibration ES,cellED,spread curves at fixed checkpoints"
+    ],
+    "intermediate_scores": "Diagnostics only. No early model selection, no best-checkpoint cherry-picking. Compare and accept only full20000 endpoint. Evaluate preserved intermediate checkpoints after training using separate generation streams, so calibration cannot change training RNG/updates. All runs receive same checkpoints/traces and complete endpoint unless operational stop or nonfinite failure.",
+    "GAN_losses": "Useful diagnostics; lower adversarial loss alone is not proof of convergence or distribution quality."
+  },
+  "frozen_science": {
+    "fitting_donors": 33,
+    "calibration_donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "evaluation_donors": 20,
+    "evaluation_used_for_tuning": false,
+    "calibration_adaptive": true,
+    "fold": 0,
+    "selection_seed": 0,
+    "generation_replicates": 2,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "pure_incumbent_SHA256": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+    "fixed_confirmation_path": "/ml2/alz/analysis/pure_confirmation_protocol.json",
+    "fixed_confirmation_SHA256": "21345938f9e3201ef98ae045f3f1404037954f4851c540f5b610ee31656de430",
+    "acceptance": "Unchanged selection.decide: complete20k lower donorES AND no higher pooledcellED against unchanged incumbent, spreadband nonregression and valid integer counts/same traces. Prospective frozen same seeds0,1,2 confirmation required before stable ATH; no seed dropping.",
+    "limited_biological_evidence": "Four adaptive calibration donors remain four donors regardless of trial/replica count. Broad sweeps can overfit them; keep evaluation separate."
+  },
+  "execution": {
+    "per_phase_cap_seconds": 21600,
+    "research_window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+    "research_window_SHA256": "2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1",
+    "project_GPU_hour_cap": 1024,
+    "original_core_envelope_GPU_hours": 180,
+    "shared_GPU0_or_GPU1": true,
+    "foreign_controls": "NONE",
+    "existing_guards": "Same own3GPU6hostGiB/driver3GiB/host12GiB/freeGPU3.5GiB/PSI10for30s, physical READ locks, canonical one-use scientific accounting/phase lock. Fresh capacity each actual admission.",
+    "activation": "Each concrete config exact-source qualified, committed, one-use admission and endpoint/settlement audit; failures and rejected settings preserved then activation actually reverted. No automatic scientific promotion."
+  },
+  "source_SHA256": {
+    "/ml2/alz/model/variant_pg_adapter.py": "eb178d2fabfb143b32d188d9c1c3fc46f2b7accaa03f0065ff732917a62258aa",
+    "/ml2/alz/model/variant_pg_update.py": "65f85a1f17b9b1b5263ecf38f39d11d9960d50e65e667dc888c7c9b9b65ccc69",
+    "/ml2/alz/model/network_rate_adapter.py": "4069f0b33a09fd8f813797d24bd8fad5e0f0d540ee846a39239c3c880bafd895",
+    "/ml2/alz/model/network_rate_update.py": "fdc6dd9beb29937f0cf5a310037c635c2de4f2be7d4dce6717c336696a700b74"
+  },
+  "native_latest_verification_path": "/ml2/alz/analysis/particlegan_new_release_check_20261105T0434.json",
+  "native_latest_verification_SHA256": "3b47b3abbf361816f92171189a825ced92b12822f282be87b8212000945814dc",
+  "owner_latest_steering": "new particlegan elease make sure you are using it",
+  "native_version": "0.9.5",
+  "penalty_options": {
+    "input_domain": "continuous"
+  },
+  "prior0_9_4_protocol_path": "/ml2/alz/analysis/released_tuning/protocol.json",
+  "prior0_9_4_protocol_SHA256": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1",
+  "historical0_9_4_rate_results_completed": 8,
+  "historical0_9_4_results_counted_as0_9_5": false,
+  "version_bridge": {
+    "candidate_id": "v095_lr_g050_d050_p050",
+    "fixed_endpoint": 20000,
+    "seed": 0,
+    "parameters": {
+      "generator_lr": 0.006,
+      "critic_lr": 0.009,
+      "particle_lr": 0.015,
+      "reg_coeff": 1.0,
+      "reg_kappa": 1.0,
+      "prior_reg": 0.01
+    },
+    "historical_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json",
+    "use_historical_checkpoint_as_new_version_parent": false,
+    "rationale": "Best of8 prior-version rate settings. Test the released0.9.5 path with explicit continuous domain at the same20k budget.40k extension was negative; do not repeat it as the default."
+  },
+  "version_boundary": "New prefixed IDs; new-version metrics kept separate. Old results retain source/version/provenance and are contextual hypotheses only. This is prospective0.9.5 research, not retroactive0.9.4 qualification.",
+  "prospective_priority_amendment": {
+    "previous_rate_grid_protocol_path": "/ml2/alz/analysis/released_tuning_v095/protocol.json",
+    "previous_rate_grid_protocol_SHA256": "e71bcc83c9e3cedfb42eb391b8133de8f3ecd5c2044301d979d58eeaff60eae5",
+    "previous_grid_currently_complete": false,
+    "previous_grid_retained": true,
+    "previous_grid_stage2_anchor_selected": false,
+    "change": "Separate latest-release targeted penalty substudy is prioritized before exhausting all27 new-version rate combinations if bridge rejects. Does not claim the original grid or its stage2 gate completed.",
+    "reason": "Eight historical0.9.4rate experiments identify a coordinatewise best tested rate;40k extension worsened both objectives. User prioritizes native scalar optimization and latestrelease. Test regularization directly rather than assuming all rate interactions must be exhausted before any other native knob.",
+    "new0_9_5_calibration_available_when_declared": false,
+    "current_bridge_training_or_primary_endpoint_changed": false
+  },
+  "required_completed_reference_attempt": "CAL_GPU0_V1_released_v095_bridge_f0_pg_s0",
+  "required_reference_native_version": "0.9.5",
+  "required_reference_fixed_endpoint": 20000,
+  "prior_rate_selection_is_contextual_hypothesis_not_new_version_qualification": true,
+  "new_version_quality_endpoints_completed_when_declared": 0,
+  "model_source_directory": "/ml2/alz/analysis/released_tuning_v095",
+  "only_final20k_endpoint_eligible": true,
+  "intermediate_checkpoint_selection": false,
+  "successful_seed0_requires_original_all3seed_confirmation": true,
+  "biological_replication": "Four adaptive calibration donors; two generation replicates do not add biological donors. No evaluation access or stableATHclaim from this substudy alone."
+}
