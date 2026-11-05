@@ -1,0 +1,406 @@
+{
+  "status": "FROZEN_EXTERNAL_BENCHMARK_CANDIDATE_NOT_INCUMBENT_PROMOTION",
+  "UTC": "2026-11-05T09:22:28.945761+00:00",
+  "user_request": "Test how well we do against external methods, not only our own calibration incumbent.",
+  "selection": {
+    "candidate": "released_v095_regkappa050",
+    "data": "Four adaptive fold0 calibration donors only; no evaluation score used for this selection.",
+    "rule": "Among completed released0.9.5 fixed20k pure trials, require calibration ES at least5percent below matched resampling, valid0.7..1.3 spread and cellED no greater than matched fixed400epoch scVI; choose lowest ES among feasible endpoints.",
+    "rule_timing": "This selection rule is adaptive after calibration results, frozen prospectively before the new evaluation. It was not preregistered before calibration.",
+    "fixed_endpoint_only": true,
+    "intermediate_checkpoint_selection": false,
+    "original_internal_incumbent_gate_passed": false,
+    "incumbent_changed": false,
+    "purpose": "Measure the best current feasible released pure PG configuration in the external benchmark. This does not label it an internal ATH or waive its failed incumbent ES gate."
+  },
+  "PG": {
+    "version": "0.9.5",
+    "wheel_SHA256": "c1c0de7a635ac1b1634ba158eed050b6f6aed993e01f9b463435430c77d846ae",
+    "hyperparameters": {
+      "generator_lr": 0.006,
+      "critic_lr": 0.009,
+      "particle_lr": 0.015,
+      "reg_coeff": 1.0,
+      "reg_kappa": 0.5,
+      "prior_reg": 0.01
+    },
+    "variant_config": {
+      "z_dim": 8,
+      "stage_balance": false,
+      "cell_z_dim": 8,
+      "theta_init_scale": 1.0,
+      "fourier_feature_scale": 1.0
+    },
+    "fixed_updates": 20000,
+    "native_recipe": "bispf_optimized",
+    "penalty_options": {
+      "input_domain": "continuous"
+    },
+    "fold0_seed0_checkpoint": "/ml2/alz/runs/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0/fit/final.pt",
+    "fold0_seed0_checkpoint_SHA256": "7c1aad305ecb10235306b396d224429eab7a9842e1eb45c7a72d3115ff6a7e8b",
+    "training_initialization": "Fresh per fold/seed; unchanged registered training stream derivation; optimization donors only. Reuse already completed exact matched fold0seed0 model after qualification."
+  },
+  "scVI": {
+    "version": "1.3.3",
+    "fixed_epochs": 400,
+    "formulation": {
+      "version": "1.3.3",
+      "covariates": [
+        "stage"
+      ],
+      "hidden": 128,
+      "latent": 10,
+      "layers": 1,
+      "dropout": 0.1,
+      "likelihood": "nb",
+      "dispersion": "gene",
+      "optimizer": "Adam",
+      "lr": 0.001,
+      "weight_decay": 1e-06,
+      "eps": 0.01,
+      "KL_warmup_epochs": 400,
+      "training_cells": "all optimization only; validation_size0; validation/sanity loops explicitly disabled",
+      "checkpoint": "fixed final400epochs; no best-monitor callback; explicit periodic native recovery checkpoint only"
+    },
+    "fold0_seed0_model": "runs/CAL_GPU0_V1_matched_scvi_calibration_f0_scvi_s0/fit/model/model.pt",
+    "fold0_seed0_model_SHA256": "e413fe3a7290bfb16eef49ee80b6f15eeb893cc580daebb5931d54253233fa67",
+    "reload": "Already qualified device=auto helper for one visible CUDA card; no refit or data-driven endpoint adjustment."
+  },
+  "comparison": {
+    "folds": 3,
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "matrix_cells": 30,
+    "additional_comparators": "Finish live matched CFGen and prepare scDesign3 in parallel where CPU-only; optional readiness does not block the core PG/scVI/resampling matrix.",
+    "common_trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "original_evaluation_generation": {
+      "stage_ensembles": 4,
+      "bags_per_stage": 200,
+      "cells_per_bag": 400,
+      "replicates": 2,
+      "common_traces": "traces/manifest.json",
+      "traces_frozen_before_model_fitting": true,
+      "stage_information_only": true,
+      "expected_exposure_not_fixed_sampled_totals": true,
+      "sampling_batches": "5bagsx400cells; bounded native PG/scVI chunk; no fullcount concatenation",
+      "count_contract": "finite nonnegative integer counts; common CP10k/log/PCA/classifier; no repair",
+      "baseline": "common frozen CPU train-PC arrays and same trace, independent of methodTorch runtime",
+      "prespecified_conditioning_control": {
+        "permutation": [
+          2,
+          3,
+          0,
+          1
+        ],
+        "generation_replicate": 0,
+        "source_exposure_trace": "unchanged original-stage fitting donors and libraries",
+        "use": "diagnostic only; no checkpoint or advancement selection"
+      }
+    },
+    "original_statistics": {
+      "bootstrap_draws": 10000,
+      "bootstrap_seed": 20261105,
+      "strata": [
+        "fold",
+        "stage"
+      ],
+      "unit": "real donor; generation replicates then training seeds averaged within donor",
+      "primary_contrasts": 2,
+      "CI_percent_each": 97.5,
+      "interpretation": "Conditional fixed-model/fixed-cohort uncertainty; overlapping training folds and historical adaptation do not yield independent external confirmation"
+    },
+    "decision_rules": {
+      "complete_matrix": true,
+      "paired_contrast_intervals": "Both97.5percent two-sided paired donor bootstrap CIs upper<0; Bonferroni family for2contrasts. Conditional on fixed fitted models, not a fresh population confirmation.",
+      "practical_effect": "PG mean ES at least5percent below hierarchical resampling; prospective engineering target, not clinical significance.",
+      "seed_stability": "At least4of5 paired training-seed means favor PG over resampling.",
+      "spread": "Foldwise across-seed mean total spread ratio in[0.7,1.3].",
+      "cell_fidelity": "Foldwise across-seed mean cellED<=new matched scVI.",
+      "negative_or_uncertain": "If not met, report no demonstrated advantage, all attempts and uncertainty; no rescue checkpoint, endpoint or seven-donor tweaking. No automatic long continuation."
+    },
+    "no_calibration_equal_stage_reservoir_substitution": true,
+    "no_favorable_model_or_endpoint_replacement_after_evaluation": true,
+    "retain_failures_and_all_seeds": true,
+    "partial_results_are_descriptive_only": true,
+    "final_decision_requires_complete_matrix": true
+  },
+  "execution": {
+    "current_matched_CFGen_fit_unchanged": true,
+    "next_scientific_priority_after_current_phase": "Qualify and execute this frozen external core comparison before further PG-only calibration tuning.",
+    "launch_enabled": false,
+    "required_before_launch": "Exact source/runtime qualification for final evaluation, native saved-state restore, counts, common resampling, source/resource review and canonical admission. No artificial new owner approval.",
+    "project_GPU_hour_budget": 1024,
+    "core_GPU_hour_envelope": 180,
+    "finite_phase_cap_seconds": 21600,
+    "sharing_allowed": true,
+    "foreign_jobs_unchanged": true
+  },
+  "matrix": [
+    {
+      "fold": 0,
+      "method": "pg",
+      "training_seed": 0,
+      "fit_status": "EXISTING_MATCHED_FINAL_MODEL_AUDITED",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 0,
+      "method": "pg",
+      "training_seed": 1,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 0,
+      "method": "pg",
+      "training_seed": 2,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 0,
+      "method": "pg",
+      "training_seed": 3,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 0,
+      "method": "pg",
+      "training_seed": 4,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 0,
+      "method": "scvi",
+      "training_seed": 0,
+      "fit_status": "EXISTING_MATCHED_FINAL_MODEL_AUDITED",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 0,
+      "method": "scvi",
+      "training_seed": 1,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 0,
+      "method": "scvi",
+      "training_seed": 2,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 0,
+      "method": "scvi",
+      "training_seed": 3,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 0,
+      "method": "scvi",
+      "training_seed": 4,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 1,
+      "method": "pg",
+      "training_seed": 0,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 1,
+      "method": "pg",
+      "training_seed": 1,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 1,
+      "method": "pg",
+      "training_seed": 2,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 1,
+      "method": "pg",
+      "training_seed": 3,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 1,
+      "method": "pg",
+      "training_seed": 4,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 1,
+      "method": "scvi",
+      "training_seed": 0,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 1,
+      "method": "scvi",
+      "training_seed": 1,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 1,
+      "method": "scvi",
+      "training_seed": 2,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 1,
+      "method": "scvi",
+      "training_seed": 3,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 1,
+      "method": "scvi",
+      "training_seed": 4,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 2,
+      "method": "pg",
+      "training_seed": 0,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 2,
+      "method": "pg",
+      "training_seed": 1,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 2,
+      "method": "pg",
+      "training_seed": 2,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 2,
+      "method": "pg",
+      "training_seed": 3,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 2,
+      "method": "pg",
+      "training_seed": 4,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 2,
+      "method": "scvi",
+      "training_seed": 0,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 2,
+      "method": "scvi",
+      "training_seed": 1,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 2,
+      "method": "scvi",
+      "training_seed": 2,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 2,
+      "method": "scvi",
+      "training_seed": 3,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    },
+    {
+      "fold": 2,
+      "method": "scvi",
+      "training_seed": 4,
+      "fit_status": "NOT_FIT_FOR_THIS_FROZEN_COMPARISON",
+      "evaluation_status": "NOT_RUN_FOR_THIS_FROZEN_COMPARISON",
+      "fit_reuse_requires_native_identity_and_generation_qualification": true
+    }
+  ],
+  "limitations": [
+    "All57cohortdonors historically exposed; cross-fitting is not independent fresh-cohort confirmation.",
+    "PG received many adaptive calibration trials; scVI and CFGen currently fixed recipes, not equal tuning effort.",
+    "No single-cell/celltype replication can replace real donor replication.",
+    "No completed SOTA result or full-matrix claim at freeze time."
+  ],
+  "evaluation_target_values_read": false,
+  "SOTA_claim": false,
+  "goal_complete": false,
+  "evidence_SHA256": {
+    "/ml2/alz/analysis/freeze_external_benchmark_candidate.py": "1acb53f96bfac476397ed64985d77db5b1baae27eb0d4590131faa9977e5a4d5",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0-result.json": "d8f95caa81827eb8cbebafea2bfd6f262994bc73a7d86dfeb8ff85ac19556e51",
+    "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json": "5312be07c39064c56fb95f2c34726ce171399234679a7d5ed9e261b42aedcb10",
+    "/ml2/alz/analysis/baseline_calibration_seed0.json": "46babfb542f4ed09a4e08ff60d86da3049798f8f245e882716a50f950a513a18",
+    "/ml2/alz/artifacts/native-releases/latest_at_external_benchmark_freeze_20261105.json": "8cafe5021032f98e0deb9e5b098c3c7480b128abe19dfbf9259b700b8b91f3cb",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/CORE_PROTOCOL.json": "c2be2ccdf137da66b6e57f20fc5aaebb5bafbc0702910fb389d0f12a2faa99d0",
+    "/ml2/alz/analysis/released_tuning_v095/protocol.json": "e71bcc83c9e3cedfb42eb391b8133de8f3ecd5c2044301d979d58eeaff60eae5",
+    "/ml2/alz/analysis/released_tuning_v095/native_release.json": "a49b51f34ce3f5d129c24ded8ac5ece3b27befc193b473e2bb0a2412d329181c",
+    "/ml2/alz/analysis/matched_scvi/protocol.json": "4dd85fb1f03f8164d0eff7fe27db21842c337b41eb57d62a795e778fa69c7c8c",
+    "/ml2/alz/analysis/matched_external_scvi_first_result_and_tradeoffs.json": "65831b0f00c80e1d8faefae07b5cd60a31ae5a7843fe70d266adf937ac19905f"
+  }
+}
