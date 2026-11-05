@@ -1,0 +1,84 @@
+{
+  "status": "OFFICIAL095_PENALTY_HALF20K_AUDITED_REJECTED_CLEAN_RELEASE_PENDING_ACTUAL_REVERT",
+  "utc": "2026-11-05T05:34:14.558705+00:00",
+  "attempt": "CAL_GPU0_V1_released_v095_regcoeff050_f0_pg_s0",
+  "candidate_id": "v095_penalty_reg_coeff_m050",
+  "native_version": "0.9.5",
+  "parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 0.5,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_regcoeff050_f0_pg_s0-result.json",
+  "result_SHA256": "79fb1515a918c8e2af6e9087c7bfa9436953427a28f67603406110f343fa138c",
+  "comparison_path": "/ml2/alz/analysis/released095_regcoeff050_vs_reference_audited_comparison.json",
+  "comparison_SHA256": "d8ff0bce2e6b259d9e132779bb6cec02b49faf3cda1b9fd167e4271a55b4f339",
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "final20k": {
+    "energy_score": 1.9766587726640168,
+    "cell_energy_distance": 0.313329960402716,
+    "spread_ratio": 0.8535128633833553
+  },
+  "relative_worsening_vs_reference_percent": {
+    "energy_score": 4.455766321215382,
+    "cell_energy_distance": 31.39712666876029
+  },
+  "per_donor_ES_differences": [
+    {
+      "donor": "H20.33.032",
+      "ES_difference_candidate_minus_reference": -0.16565692335085602
+    },
+    {
+      "donor": "H21.33.001",
+      "ES_difference_candidate_minus_reference": 0.22300506774685758
+    },
+    {
+      "donor": "H21.33.023",
+      "ES_difference_candidate_minus_reference": 0.16105587944349398
+    },
+    {
+      "donor": "H21.33.025",
+      "ES_difference_candidate_minus_reference": 0.11886905922561608
+    }
+  ],
+  "charged_GPU_seconds": 1393.275430949001,
+  "canonical_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 38.24493799638387,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 985.7550620036161
+  },
+  "owned_registry_empty": true,
+  "all_owned_PIDs_absent": true,
+  "clean_settlement_verified": true,
+  "all_scientific_sources_equal_to_reference_and_current": true,
+  "one_changed_native_field_verified": "reg_coeff1->.5",
+  "visual_quality_comparison_checked": true,
+  "activation_to_revert": "9c00c73",
+  "next_predeclared_candidate": "v095_penalty_reg_coeff_m200",
+  "next_parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 2.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "next_rationale": "Predeclared opposite side of the same penalty-strength scalar: weaker penalty worsened pooledcellED31.397% and ES4.456% against reference,with3of4donorsworse. Test strongerpenaltyat2 ratherthanselecting an intermediatecheckpoint or changingrates. Allotherdeclaredcontrolsremainretained.",
+  "completed_latest_release_endpoints": 2,
+  "completed_targeted_penalty_endpoints": 1,
+  "original_full27_rate_grid_complete": false,
+  "original_stage2_anchor_selected": false,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "evaluation_used_for_tuning": false
+}

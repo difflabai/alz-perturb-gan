@@ -1,11 +1,11 @@
 {
   "status": "LATEST_RELEASE095_AUDITED_SEARCH_READOUT",
-  "utc": "2026-11-05T05:11:43.233480+00:00",
+  "utc": "2026-11-05T05:33:33.557631+00:00",
   "native_version": "0.9.5",
-  "completed_latest_release_seed0_endpoints": 1,
+  "completed_latest_release_seed0_endpoints": 2,
   "completed_latest_rate_grid_configurations": 1,
   "declared_latest_rate_grid_configurations": 27,
-  "completed_targeted_penalty_configurations": 0,
+  "completed_targeted_penalty_configurations": 1,
   "declared_targeted_penalty_configurations": 12,
   "historical0_9_4_rate_configurations": 8,
   "historical0_9_4_endpoints_counted_as0_9_5": false,
@@ -36,6 +36,34 @@
       "protocol_path": "/ml2/alz/analysis/released_tuning_v095/protocol.json",
       "ES_improvement_vs_resampling_percent": 8.99090231805303,
       "cell_ED_difference_vs_resampling": -0.0043179698590334326
+    },
+    {
+      "candidate_id": "v095_penalty_reg_coeff_m050",
+      "study": "targeted_penalty_followup",
+      "energy_score": 1.9766587726640168,
+      "cell_energy_distance": 0.313329960402716,
+      "spread_ratio": 0.8535128633833553,
+      "released_hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 0.5,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "decision": {
+        "accept": false,
+        "reasons": [
+          "energy score did not improve",
+          "cell distribution match worsened"
+        ]
+      },
+      "charged_GPU_seconds": 1393.275430949001,
+      "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_regcoeff050_f0_pg_s0-result.json",
+      "result_SHA256": "79fb1515a918c8e2af6e9087c7bfa9436953427a28f67603406110f343fa138c",
+      "protocol_path": "/ml2/alz/analysis/released_penalty_v095/protocol.json",
+      "ES_improvement_vs_resampling_percent": 4.9357495942988105,
+      "cell_ED_difference_vs_resampling": 0.0705517073195363
     }
   ],
   "allocations": [
@@ -50,9 +78,9 @@
     {
       "attempt": "CAL_GPU0_V1_released_v095_regcoeff050_f0_pg_s0",
       "candidate_id": "v095_penalty_reg_coeff_m050",
-      "ledger_status": "active",
-      "reservation_released": null,
-      "independently_audited_result_present": false,
+      "ledger_status": "completed",
+      "reservation_released": true,
+      "independently_audited_result_present": true,
       "process_liveness_checked": false
     }
   ],
