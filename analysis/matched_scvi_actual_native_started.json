@@ -1,0 +1,50 @@
+{
+  "status": "ACTUAL_MATCHED_SCVI_NATIVE_GPU_TRAINING_AND_CHECKPOINT_VERIFIED",
+  "utc": "2026-11-05T07:39:21.124283+00:00",
+  "attempt": "CAL_GPU0_V1_matched_scvi_calibration_f0_scvi_s0",
+  "method": "scvi1.3.3_stage_only",
+  "owner_identity": {
+    "pid": 1278054,
+    "birth": 2183018,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "native_worker_identity": {
+    "pid": 1278162,
+    "birth": 2183163,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "owner_and_worker_identity_verified_live": true,
+  "audit_waiter_PID": 1278055,
+  "physical_GPU_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+  "observed_worker_GPU_memory_MiB": 512,
+  "actual_native_checkpoint_path": "/ml2/alz/artifacts/diagnostics/matched-scvi-actual-native-checkpoint/checkpoint.ckpt",
+  "actual_native_checkpoint_SHA256": "f501f3096a971dcf73472027186e6115bf28404b1e8eba99ba4d36cd4aa70899",
+  "actual_saved_checkpoint_epoch_zero_based": 159,
+  "actual_saved_optimizer_steps": 4640,
+  "native_optimizer_state_present": true,
+  "fixed_final_endpoint_epochs": 400,
+  "checkpoint_selected_with_calibration": false,
+  "CPU_checkpoint_inspection_initialized_CUDA": false,
+  "exact_execution_sources_unchanged": true,
+  "native_CPU_model_tests_passed": 2,
+  "runtime_CPU_checks_passed": 23,
+  "CPU_CUDA_native_Python_sources_each": 210,
+  "Python_execution_sources_archived": 602,
+  "qualified_source_commit": "c2f70c7",
+  "owner_review_commit": "0eada91",
+  "activation_commit": "7545ba7",
+  "authorization_SHA256": "ca2f96ffe1a8160e0fc7c9d7d21a7260b807522aa9fb0c0c9f127c12e4ccf8f3",
+  "previous_PG_negative_evidence_commit": "df983e4",
+  "previous_PG_actual_activation_revert": "a2df8e3",
+  "previous_PG20k_metrics": {
+    "energy_score": 1.9537118942286584,
+    "cell_energy_distance": 0.21992865338427325,
+    "spread_ratio": 1.0316557076122854
+  },
+  "prior_settled_project_GPU_hours": 40.147348314296096,
+  "new_external_comparator_quality_available": false,
+  "evaluation_used": false,
+  "SOTA_claim": false,
+  "automatic_successor": false,
+  "scope": "Actual matched external scVI fit now executes on sharedGPU0; saved native training epoch/optimizer checkpoint confirms real progress. Complete400epochs, native CUDA reload, common-trace calibration, independent CPUscore/count audit, cleanup and charges still required. Original final3fold5seed benchmark remains outstanding."
+}
