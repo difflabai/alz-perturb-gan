@@ -45,7 +45,19 @@ def main():
     while time.time()<scope.CONTINUATION['original_absolute_deadline_unix']-180:
         auth,_=prepare.build_authorization(check_only=True)
         controller,ad,_=b.modules(auth)
-        obs=ad.snapshot()
+        try:
+            obs=ad.snapshot()
+        except Exception as error:
+            if type(error).__name__!='Uncertain' or str(error)!='GPU PID identity not observable':
+                raise
+            stable=None
+            dump('progress.json',{'status':'WAITING_OBSERVABLE_SHARED_RESOURCE_SNAPSHOT',
+                 'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+                 'observer_PID':os.getpid(),'gate_refusal':str(error),
+                 'CPU_qualification_passed':qualification,'checkpoint_updates':2747,
+                 'GPU_job_or_allocation_started':False,'foreign_controls_or_guard_changes':False})
+            time.sleep(10)
+            continue
         pressure=Path('/proc/pressure/memory').read_text()
         full=float(re.search(r'^full avg10=([0-9.]+)',pressure,re.M)[1])
         record={'status':'WAITING_UNCHANGED_SHARED_CAPACITY_AND_PSI',
