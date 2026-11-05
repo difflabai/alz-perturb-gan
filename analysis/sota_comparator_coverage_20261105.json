@@ -7,7 +7,7 @@
     "scVI1.3.3",
     "CFGen official ICLR2025 source"
   ],
-  "additional_count_comparator": "scDesign3 1.10.0 installed from exact retained official archive. Native namespace actually loaded; setup introspection used the wrong function name simulate_new instead of exported simu_new and retained that error. Synthetic qualification and actual matched fit remain outstanding.",
+  "additional_count_comparator": "scDesign31.10.0 actually installed and loaded; two actual native NB/copula synthetic replay and explicitstage/depth-offset sampler tests passed. No real matched fit or final evaluation yet.",
   "newer_published_candidates": [
     {
       "method": "SAVE",
@@ -35,5 +35,22 @@
   "claim_policy": "A passing core matrix establishes performance against its matched tested baselines in this fixed cohort. Broaderstate-of-the-art claims additionally require current comparator coverage, fair disclosed tuning and independent cohort evidence. No universalSOTA claim from the four calibration donors or core result alone.",
   "SOTA_claim": false,
   "original_calibration_results_preserved": true,
-  "new_GPU_allocation_created_by_this_review": false
+  "new_GPU_allocation_created_by_this_review": false,
+  "donor_aware_priority": {
+    "reason": "PG uses donor bags and targets donor-level variability. Cell-level scVI/CFGen recipe comparisons alone cannot establish superiority over donor-aware generative models. These candidates were identified before first benchmark evaluation scores.",
+    "scVIP": {
+      "paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13131499/",
+      "status": "2026preprint explicitly models joint individual state, expression and celltype composition; exact match candidate, not benchmarked. Primary codeavailability currently points to reference notebooks/tutorialcapsule, not a documented scvi-tools release. Qualify available source before inclusion; do not substitute a home-built reimplementation.",
+      "primary_code_route": "https://codeocean.allenneuraldynamics.org/capsule/4344243/tree"
+    },
+    "MrVI": {
+      "official_docs": "https://docs.scvi-tools.org/en/1.3.3/user_guide/models/mrvi.html",
+      "paper": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12615264/",
+      "status": "Donor/sample-aware native count model; qualify de novo donor/stage conditional generation and information contract before treating it as a comparator."
+    },
+    "splatPop": {
+      "primary_paper": "https://link.springer.com/article/10.1186/s13059-021-02546-1",
+      "status": "Population hierarchical count simulator; qualify stageconditional fitting and shared exposure/donor law."
+    }
+  }
 }
