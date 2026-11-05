@@ -1,0 +1,62 @@
+{
+  "status": "PROSPECTIVE_NEXT_GPU1_REGISTERED_G_D_INTERACTION_SETTING_NOT_DEPLOYED",
+  "utc": "2026-11-05T02:35:16.472782+00:00",
+  "candidate_id": "lr_g100_d100_p050",
+  "parameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "GPU_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+  "runtime_directory": "/ml2/alz/released_rate_g100d100p050_runtime",
+  "actual_runtime_CPU_tests_passed": 24,
+  "source_proof_hashes_match": true,
+  "prepared_plan_enabled": false,
+  "fresh_readonly_capacity_forecast": {
+    "GPU_required_bytes": 6715150336,
+    "GPU_total_bytes": 51527024640,
+    "host_remaining_growth_required_bytes": 21574053888,
+    "host_available_bytes": 97839931392,
+    "GPU_fits": true,
+    "host_fits": true,
+    "allocation_or_lease_created": false,
+    "observed_foreign": [
+      {
+        "identity": {
+          "pid": 9595,
+          "birth": 3260,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
+          "uid": 1000,
+          "exe": "/usr/bin/gnome-shell",
+          "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+          "ppid": 2942
+        },
+        "gpu_kinds": [
+          "graphics"
+        ],
+        "gpu_budget_bytes": 272699392,
+        "ram_budget_bytes": 2729988096,
+        "observed_gpu_bytes": 4263936,
+        "observed_rss_bytes": 483287040,
+        "GPU_growth_allowance_bytes": 268435456,
+        "foreign_control": "NONE"
+      }
+    ]
+  },
+  "current_phase_still_active": true,
+  "next_GPU_job_or_allocation_created": false,
+  "scientific_reason": "Complete the G{.006,.012} x D{.009,.018} factorial slice at fixed P.015. G.012/D.009/P.015 and G.006/D.009/P.015 have audited endpoints; current G.006/D.018/P.015 is unscored and still training. Proposed G.012/D.018/P.015 isolates G against current and D against the completed G.012 setting. Priority recorded before current quality is available; all27 configurations retained.",
+  "resource_reason": "Fresh nvidia-smi observation showed GPU0 fully utilized by shared workloads and GPU1 at0% utilization with ~48GiB free. This GPU1 proposal has a complete passing unchanged shared-growth forecast. Resource observations are transient and must be repeated after current phase settles.",
+  "required_before_launch": "Current model must finish or reach an audited operational boundary, canonical reservation and own leases must release, current result must be audited, and any rejected activation must be reverted; then fresh GPU1 source/capacity review, separate activation, one-use admission.",
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/released_rate_g100d100p050_runtime_CPU_qualification.json": "37503ea60984b862e16ec9734d76e513742744735d0bc1067e798e352cdde4a1",
+    "/ml2/alz/analysis/released_tuning/protocol.json": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1",
+    "/ml2/alz/released_rate_g100d100p050_runtime/plan.json": "cdef97d8f55574ec3a6ad1fa48da1772c5f8be0bc5c686183cd3cae85fac9cbf",
+    "/ml2/alz/analysis/pure_formulations_leaderboard_after_fifth_released_rate.json": "9eeea9cfbe4a7e471cfe5abfad8ccca31318899ac3c56bd59ac7249de163dbe6"
+  }
+}
