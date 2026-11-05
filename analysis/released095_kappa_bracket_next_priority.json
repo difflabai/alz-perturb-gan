@@ -1,0 +1,55 @@
+{
+  "status": "PROSPECTIVE_NEXT_KAPPA_BRACKET_BRANCHES_BEFORE_HALF_KAPPA_CALIBRATION",
+  "utc": "2026-11-05T06:46:06.660842+00:00",
+  "current_attempt": "CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0",
+  "current_actual_logged_updates": 3251,
+  "current_native_worker_confirmed_live": true,
+  "current_calibration_result_available": false,
+  "reference_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0-result.json",
+  "reference_result_SHA256": "adb377b6cd894bda4e111d2d7e1ae9a1e731bd043899f7c3819f09445d489db8",
+  "targeted_protocol_path": "/ml2/alz/analysis/released_penalty_v095/protocol.json",
+  "targeted_protocol_SHA256": "9add7184faf6901953094f50acf19b03d0cf616dee3bbd261939b5f9ab79241d",
+  "if_current_joint_incumbent_gate_accepts": "Freeze exact configuration for original all3seed confirmation; no additional scalar tuning before retaining the fixed seed outcomes.",
+  "if_current_joint_rejects_but_dominates_reference_on_ES_and_ED": {
+    "next_candidate": {
+      "id": "v095_penalty_reg_kappa_m025",
+      "changed_field": "reg_kappa",
+      "factor": 0.25,
+      "parameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.25,
+        "prior_reg": 0.01
+      }
+    },
+    "rule": "Completed audited20k only. ES strictly lower and pooledcellED no higher than reference; valid counts and spread within[.7,1.3].",
+    "rationale": "Extend the improving lower-kappa direction to its declaredquarter setting."
+  },
+  "otherwise": {
+    "next_candidate": {
+      "id": "v095_penalty_reg_kappa_m200",
+      "changed_field": "reg_kappa",
+      "factor": 2.0,
+      "parameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 2.0,
+        "prior_reg": 0.01
+      }
+    },
+    "rationale": "Bracket the distinct native cap/scale field around reference1 with its declaredopposite-side2 setting. All other fields reset to reference values. A failedhalf value does not establish monotonicity or reject the opposite direction."
+  },
+  "all_twelve_declared_controls_retained": true,
+  "only_execution_order_amended": true,
+  "original_full27_rate_grid_complete": false,
+  "original_full_grid_stage2_anchor_selected": false,
+  "current_training_source_or_hyperparameters_changed": false,
+  "new_GPU_allocation_created": false,
+  "evaluation_used_for_tuning": false,
+  "stable_joint_ATH_claimed": false,
+  "scope": "Prospective conditional scheduling within original12controls, declared before current endpoint calibration. Intermediate checkpoints will not select or truncate the arm; all executed negatives retained. Four adaptive donors, no biological replication claim."
+}
