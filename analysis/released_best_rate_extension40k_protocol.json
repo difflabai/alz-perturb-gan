@@ -1,0 +1,109 @@
+{
+  "parent_attempt": "CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0",
+  "parent_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json",
+  "parent_result_SHA256": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+  "parent_authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/authorization.json",
+  "parent_authorization_SHA256": "b7fa6cb85178901b6f5b464e85d81dca016455e3493138b163750abe44a626b4",
+  "checkpoint_path": "/ml2/alz/artifacts/diagnostics/released_best_rate_20k_to40k_parent/parent20000.pt",
+  "checkpoint_SHA256": "5a217979b77c801f27409500a1adf9da34e4d8de15937ade59db54bf6244f336",
+  "whole_parent_scientific_fingerprint": "de1b802adb8b03b9b9072321884f49702f078c652b29b347ff5d2918e94a5980",
+  "parent_policy_fingerprint": "e18732133a7961c856c8186a49883efc74ca65514861ae2479996a525be76306",
+  "parent_charged_GPU_seconds": 1578.604655533003,
+  "charged_prior_phases": [
+    {
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/authorization.json",
+      "authorization_SHA256": "1452a1a61e860f721cfdca8f9afaa968456855d2b6c6dafa3bb3e73e35c7c015",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0.json",
+      "ledger_SHA256": "3da9a67f7f6b00fa5c4d59ead86caade8488da5569d2a955d747a58cbff1cae5",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0-settlement.json",
+      "settlement_SHA256": "64b10846bf2a85ccf8f56088cfd2a74873f3ac9228b701ab8362bb7f52c735ff",
+      "charged_GPU_seconds": 802.8628973890009
+    },
+    {
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/authorization.json",
+      "authorization_SHA256": "b7fa6cb85178901b6f5b464e85d81dca016455e3493138b163750abe44a626b4",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0.json",
+      "ledger_SHA256": "66ea2bb32234b6ac560c627a5a6de82b6939e7067e7569fae6078b9d01695265",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-settlement.json",
+      "settlement_SHA256": "2733d58110ea35a4f83e5366c5ef5dbb89fe6ab18e734bbbb75cd698fa78d830",
+      "charged_GPU_seconds": 775.7417581440022
+    }
+  ],
+  "training_log": {
+    "immutable_copy_path": "/ml2/alz/artifacts/diagnostics/released_best_rate_20k_to40k_parent/learning_curve.jsonl",
+    "SHA256": "566a1f6efb6994d91974b8cb714db2bbca705139d1f1e226b2e20b2aa757a0e3"
+  },
+  "selection_readout_snapshot_path": "/ml2/alz/artifacts/diagnostics/released_best_rate_20k_to40k_parent/selection_readout_snapshot.json",
+  "selection_readout_snapshot_SHA256": "e69c196a422b249797f0c9e2a4567a62128544e12b1cdbf881e60ab369924d8d",
+  "released_hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "variant_config": {
+    "z_dim": 8,
+    "stage_balance": false,
+    "cell_z_dim": 8,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0
+  },
+  "status": "PROSPECTIVE_RELEASED_BEST_RATE_20K_TO40K_DURATION_EXTENSION_NOT_LAUNCHED",
+  "utc": "2026-11-05T03:29:28.281406+00:00",
+  "candidate_id": "extend40k_lr_g050_d050_p050",
+  "reference_rate_candidate_id": "lr_g050_d050_p050",
+  "initial_completed_updates": 20000,
+  "fixed_endpoint": 40000,
+  "new_model_updates": 20000,
+  "training_seed": 0,
+  "fold": 0,
+  "native_recipe": "bispf_optimized",
+  "native_recipe_schedule_horizon": 20000,
+  "public_execution_limit": 40000,
+  "parent_audit_path": "/ml2/alz/analysis/released_extension40k/parent20k_CPU_component_audit.json",
+  "parent_audit_SHA256": "6d6bd152860641ca20aeab71bf130f90a8efe989262792e07fcb2f7bc7ccbc82",
+  "completed_rate_endpoints_when_reference_frozen": 6,
+  "reference_dominates_all_six_on_both_metrics": true,
+  "scientific_hypothesis": "For the best completed rate setting, pooledcellED improved5k->10k->20k while final20kES remained below the incumbent. Test a fixed40k endpoint through public execution_limit, preserving the completed20k native/scientific state. A separate duration experiment, not a replacement20k result or premature stage2 anchor.",
+  "diagnostic_checkpoints_after_parent": [
+    30000
+  ],
+  "new_calibration_checkpoints_after_extension_training": [
+    30000,
+    40000
+  ],
+  "eligible_for_selection_updates": [
+    40000
+  ],
+  "generation_replicates": 2,
+  "parent_calibration_informed_extension_declaration": true,
+  "new_extension_calibration_only_after_full40k_training": true,
+  "no_best_intermediate_checkpoint_selection": true,
+  "no_new_training_model_or_seed": true,
+  "no_native_recipe_or_device_metadata_rewrite": true,
+  "new_scientific_extension_phase_cap_seconds": 21600,
+  "original_completed20k_phase_deadlines_not_reset_or_reopened": true,
+  "new_phase_expires_within_existing_five_day_window": true,
+  "original27_rate_settings_retained": true,
+  "regularization_stage2_anchor_selected": false,
+  "incumbent_promoted": false,
+  "evaluation_used_for_tuning": false,
+  "stable_joint_ATH_claimed": false,
+  "model_CPU_proof_path": "/ml2/alz/analysis/released_extension40k/CPU_qualification.json",
+  "model_CPU_proof_SHA256": "0257ffaec8fae0bf0702a07e3a1a686e3ffffc6c68311437d5dd6ad3159b4edb",
+  "native_runtime_scope_and_resource_qualification_still_pending": true,
+  "source_SHA256": {
+    "/ml2/alz/analysis/research_window_20261104_five_days.json": "2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1",
+    "/ml2/alz/analysis/released_tuning/protocol.json": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1",
+    "/ml2/alz/pure_incumbent.json": "869c9a55c3f3bb5628a9e0ab44357f83297a5b74b8cb7d67faf420794de487fa",
+    "/ml2/alz/selection.py": "4e4c00813f39780032df1faf01632c63ab80ff044a87eadeab65693472cd8edd",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/lib/python3.12/site-packages/particlegan/policy.py": "4eb130cb5982c8333eec1abac6829c76b8aeea8f4ce87bc90b06b805c7dede0c",
+    "/ml2/alz/analysis/routed_e22_model_CPU_qualification.json": "b939b31dacd4e9156d56391d1144db71b2eed99d7e8408881419e70bc7864235",
+    "/ml2/alz/analysis/released_extension40k/extension.py": "f3bf34e6b4287bffd524edd6c01a5379f8cc25e2b51891087090ffc064427c6d",
+    "/ml2/alz/analysis/released_extension40k/parent20k_CPU_component_audit.json": "6d6bd152860641ca20aeab71bf130f90a8efe989262792e07fcb2f7bc7ccbc82",
+    "/ml2/alz/analysis/released_extension40k/CPU_qualification.json": "0257ffaec8fae0bf0702a07e3a1a686e3ffffc6c68311437d5dd6ad3159b4edb"
+  },
+  "scope": "Four adaptive calibration donors,33fitting donors,20evaluation donors excluded. Fixed40k alone eligible under unchanged selection.decide. Observed parent calibration informed this duration hypothesis; new30k/40k scores occur only after extension fitting. Not an independent biological replicate, completed rate-grid endpoint or stableATH. Separate finite qualified allocation/admission required; no automatic launch/promotion."
+}

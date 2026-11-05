@@ -1,0 +1,69 @@
+{
+  "status": "ACTUAL_COMPLETED20K_RELEASED_PARENT_CPU_COMPONENT_ARCHIVE_AUDIT_PASSED",
+  "utc": "2026-11-05T03:24:33.191285+00:00",
+  "parent_attempt": "CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0",
+  "parent_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json",
+  "parent_result_SHA256": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+  "parent_authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/authorization.json",
+  "parent_authorization_SHA256": "b7fa6cb85178901b6f5b464e85d81dca016455e3493138b163750abe44a626b4",
+  "checkpoint_path": "/ml2/alz/artifacts/diagnostics/released_best_rate_20k_to40k_parent/parent20000.pt",
+  "checkpoint_SHA256": "5a217979b77c801f27409500a1adf9da34e4d8de15937ade59db54bf6244f336",
+  "whole_parent_scientific_fingerprint": "de1b802adb8b03b9b9072321884f49702f078c652b29b347ff5d2918e94a5980",
+  "parent_policy_fingerprint": "e18732133a7961c856c8186a49883efc74ca65514861ae2479996a525be76306",
+  "model_floating_values": 371177,
+  "completed_updates": 20000,
+  "native_recipe_schedule_horizon": 20000,
+  "parent_charged_GPU_seconds": 1578.604655533003,
+  "charged_prior_phases": [
+    {
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0/authorization.json",
+      "authorization_SHA256": "1452a1a61e860f721cfdca8f9afaa968456855d2b6c6dafa3bb3e73e35c7c015",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0.json",
+      "ledger_SHA256": "3da9a67f7f6b00fa5c4d59ead86caade8488da5569d2a955d747a58cbff1cae5",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g050d050p050_f0_pg_s0-settlement.json",
+      "settlement_SHA256": "64b10846bf2a85ccf8f56088cfd2a74873f3ac9228b701ab8362bb7f52c735ff",
+      "charged_GPU_seconds": 802.8628973890009
+    },
+    {
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0/authorization.json",
+      "authorization_SHA256": "b7fa6cb85178901b6f5b464e85d81dca016455e3493138b163750abe44a626b4",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0.json",
+      "ledger_SHA256": "66ea2bb32234b6ac560c627a5a6de82b6939e7067e7569fae6078b9d01695265",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-settlement.json",
+      "settlement_SHA256": "2733d58110ea35a4f83e5366c5ef5dbb89fe6ab18e734bbbb75cd698fa78d830",
+      "charged_GPU_seconds": 775.7417581440022
+    }
+  ],
+  "released_hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "variant_config": {
+    "z_dim": 8,
+    "stage_balance": false,
+    "cell_z_dim": 8,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0
+  },
+  "training_log": {
+    "immutable_copy_path": "/ml2/alz/artifacts/diagnostics/released_best_rate_20k_to40k_parent/learning_curve.jsonl",
+    "SHA256": "566a1f6efb6994d91974b8cb714db2bbca705139d1f1e226b2e20b2aa757a0e3"
+  },
+  "selection_readout_snapshot_path": "/ml2/alz/artifacts/diagnostics/released_best_rate_20k_to40k_parent/selection_readout_snapshot.json",
+  "selection_readout_snapshot_SHA256": "e69c196a422b249797f0c9e2a4567a62128544e12b1cdbf881e60ab369924d8d",
+  "completed_rate_settings_when_extension_declared": 6,
+  "reference_dominates_all_six_completed_rate_endpoints_on_both_metrics": true,
+  "CUDA_initialized": false,
+  "native_CUDA_full_restore_still_required_before_extension": true,
+  "native_device_metadata_relabelled": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/released_extension40k/audit_parent.py": "78734a7b8a83cfd0f6004e618041a0a8ac7b17ab1e503e73bb56ce5faf3b0886",
+    "/ml2/alz/analysis/released_tuning/released_adapter.py": "eefb9d37350f246a61baab6829ab558136aac0abbc1671c38d961176873c15cb",
+    "/ml2/alz/analysis/released_tuning/released_update.py": "0fb711bca17681b55b1393306ee6bc719796a6c3b5774e124bf0b0fb368986e8"
+  },
+  "scope": "Actual frozen20k CUDA checkpoint deserialized onCPU; models/optimizers, clocks, streams, usage and immutable source/log/charge lineage verified. No CUDA restore claimed or metadata relabelled. Full exact CUDA/scientific snapshot restoration remains mandatory inside a separately admitted extension worker before update20001."
+}
