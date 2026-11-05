@@ -1,0 +1,58 @@
+{
+  "status": "PROSPECTIVE_EXACT_RELEASED_RATE_2747_TO_20000_CONTINUATION",
+  "utc": "2026-11-05T01:12:38.071348+00:00",
+  "parent_attempt": "CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0",
+  "parent_authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0/authorization.json",
+  "parent_authorization_SHA256": "68c12623a244754ba764dfcaab2d2a38c5cd98f1cd6fcc373be70e3176b1e6f1",
+  "checkpoint_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0/terminal2747/recovery2747.pt",
+  "checkpoint_SHA256": "750371a25f322f38cd1fb103ce8b9177224e4abcb17f620a103b504e347d859b",
+  "completed_updates": 2747,
+  "original_absolute_deadline_unix": 1793853484.8359067,
+  "parent_charged_GPU_seconds": 240.99251038201328,
+  "charged_prior_phases": [
+    {
+      "attempt": "CAL_GPU0_V1_released_rate_g100d050p050_f0_pg_s0",
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g100d050p050_f0_pg_s0/authorization.json",
+      "authorization_SHA256": "decdd23984e645601142ac6a551821d7a78801a7c244dc8d6f04c804e05dc12c",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g100d050p050_f0_pg_s0.json",
+      "ledger_SHA256": "9e774230e1b41df2ff5555605a1e0d4efbe40c8e0f6a50f0d27988e6bfb4058d",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g100d050p050_f0_pg_s0-settlement.json",
+      "settlement_SHA256": "ef27c0ca04ab5e3bb2a4e680920d67ca44dd48c80d4b942caf310c606b56a988",
+      "charged_GPU_seconds": 222.94364277600835
+    },
+    {
+      "attempt": "CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0",
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0/authorization.json",
+      "authorization_SHA256": "68c12623a244754ba764dfcaab2d2a38c5cd98f1cd6fcc373be70e3176b1e6f1",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0.json",
+      "ledger_SHA256": "e43441ca82a29e0c173d27eeac778e52c310af60757f07135e8e585fa45ffd4f",
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0-settlement.json",
+      "settlement_SHA256": "65788de0665b7e314b1edabb3d25cc32340054656bb57ae43f0d024c72f3f81c",
+      "charged_GPU_seconds": 18.048867606004933
+    }
+  ],
+  "diagnostic_checkpoints": [],
+  "training_log": {
+    "original_path": "/ml2/alz/runs/CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0/fit/learning_curve.jsonl",
+    "immutable_copy_path": "/ml2/alz/artifacts/diagnostics/CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0/terminal2747/learning_curve.jsonl",
+    "SHA256": "06a3bf08d2a2d265b339bc4d1eb149e13ee912a52e6bedba7c65016225edf60c"
+  },
+  "whole_parent_scientific_fingerprint": "0142bfb812ad88d10f38e97dd7090ce58a38de34086c6df1d591a8b367372306",
+  "parent_stop_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0-incomplete-host-RAM-stop.json",
+  "parent_stop_SHA256": "524ab614f740a2850d059135c22dd89246bd214c7d24872c9ea0fdd7bc96ea0a",
+  "parent_audit_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g100d050p050_resume1_f0_pg_s0-checkpoint2747-native-state-audit.json",
+  "parent_audit_SHA256": "f6c5d52447a3a62acd87e1055e12aa8c1e72a6db163fc4ff021b9eac89fb4278",
+  "parent_reverted_plan_path": "/ml2/alz/released_rate_g100d050p050_resume1_runtime/plan.json",
+  "parent_reverted_plan_SHA256": "7919461f983e3013fd159705be34c283ab2516deedc2b9a4d68721b1a40b7aa1",
+  "parent_stop_evidence_commit": "a455d5f",
+  "parent_activation_actual_revert": "ef50be5",
+  "same_frozen_model_source_directory": "/ml2/alz/analysis/released_tuning",
+  "new_model_updates": 17253,
+  "fixed_endpoint": 20000,
+  "training_seed": 0,
+  "new_training_seed": false,
+  "new_training_model": false,
+  "source_physical_GPU": 0,
+  "destination_physical_GPU": 0,
+  "continuation_scope": "Same native policy/models/optimizers/samplers/usage/numpy/cell/count/CPU-CUDA Gamma state and11original streams. Original deadline and total20k endpoint retained. Preserve original log prefix; create pending5k/10k diagnostic snapshots during continuation and score all3checkpoints after full training. Byte-exact CUDA policy and complete scientific snapshot restore required before any update. No fresh model/seed, selection change, foreign control, or guard relaxation."
+}
