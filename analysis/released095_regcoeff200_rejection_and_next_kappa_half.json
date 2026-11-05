@@ -1,0 +1,87 @@
+{
+  "status": "OFFICIAL095_PENALTY_DOUBLE20K_AUDITED_REJECTED_CLEAN_RELEASE_PENDING_ACTUAL_REVERT",
+  "utc": "2026-11-05T06:38:07.405082+00:00",
+  "attempt": "CAL_GPU0_V1_released_v095_regcoeff200_f0_pg_s0",
+  "candidate_id": "v095_penalty_reg_coeff_m200",
+  "native_version": "0.9.5",
+  "parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 2.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_regcoeff200_f0_pg_s0-result.json",
+  "result_SHA256": "3fed43c28d28145679fc092670c64fe64df55a350d25b2eabd03f6c4bc95a7f9",
+  "comparison_path": "/ml2/alz/analysis/released095_regcoeff200_vs_reference_audited_comparison.json",
+  "comparison_SHA256": "c476d3db9b0f66d310c4ab9b84f80a4240c781d4f0dd6ba78590322b470de598",
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve",
+      "cell distribution match worsened"
+    ]
+  },
+  "final20k": {
+    "energy_score": 1.9672810440281818,
+    "cell_energy_distance": 0.3154896820702833,
+    "spread_ratio": 1.0548628049579745
+  },
+  "relative_worsening_vs_reference_percent": {
+    "energy_score": 3.960203888004754,
+    "cell_energy_distance": 32.30282116780489
+  },
+  "per_donor_ES_differences": [
+    {
+      "donor": "H20.33.032",
+      "ES_difference_candidate_minus_reference": 0.39051724265740884
+    },
+    {
+      "donor": "H21.33.001",
+      "ES_difference_candidate_minus_reference": -0.23207141361137484
+    },
+    {
+      "donor": "H21.33.023",
+      "ES_difference_candidate_minus_reference": 0.04332816877298029
+    },
+    {
+      "donor": "H21.33.025",
+      "ES_difference_candidate_minus_reference": 0.0979881707027559
+    }
+  ],
+  "charged_GPU_seconds": 3599.979660256,
+  "canonical_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 39.24493234645499,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 984.755067653545
+  },
+  "owned_registry_empty": true,
+  "all_owned_PIDs_absent": true,
+  "clean_settlement_verified": true,
+  "all_scientific_sources_equal_to_reference_and_current": true,
+  "one_changed_native_field_verified": "reg_coeff1->2",
+  "visual_quality_comparison_checked": true,
+  "activation_to_revert": "74d65b3",
+  "prospective_next_branch_record": "/ml2/alz/analysis/released095_strength_bracket_next_penalty_priority.json",
+  "prospective_next_branch_SHA256": "87a8ceabb3a85d5416fc289f1bf71329424d7b06374fea23130b5723d0ed5a2b",
+  "branch_applied": "otherwise",
+  "next_predeclared_candidate": "v095_penalty_reg_kappa_m050",
+  "next_parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 0.5,
+    "prior_reg": 0.01
+  },
+  "next_rationale": "Both strength.5 and2 worsened final ES and pooledcellED relative to1; execute predeclared distinct native kappa.5 control at reference strengths/rates. Quarter/four strength remain unmeasured, not inferred negative.",
+  "completed_latest_release_endpoints": 3,
+  "completed_targeted_penalty_endpoints": 2,
+  "original_full27_rate_grid_complete": false,
+  "original_stage2_anchor_selected": false,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "evaluation_used_for_tuning": false
+}
