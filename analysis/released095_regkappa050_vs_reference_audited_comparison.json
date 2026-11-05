@@ -1,0 +1,89 @@
+{
+  "status": "AUDITED_OFFICIAL095_ONE_FIELD_PENALTY_QUALITY_COMPARISON",
+  "utc": "2026-11-05T07:34:46.001865+00:00",
+  "reference_attempt": "CAL_GPU0_V1_released_v095_bridge_f0_pg_s0",
+  "attempt": "CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0",
+  "changed_field": "reg_kappa",
+  "factor": 0.5,
+  "reference_parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "candidate_parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 0.5,
+    "prior_reg": 0.01
+  },
+  "reference20k": {
+    "energy_score": 1.892340501897739,
+    "cell_energy_distance": 0.23846028322414625,
+    "spread_ratio": 0.9980943742116393
+  },
+  "candidate20k": {
+    "energy_score": 1.9537118942286584,
+    "cell_energy_distance": 0.21992865338427325,
+    "spread_ratio": 1.0316557076122854
+  },
+  "difference_candidate_minus_reference": {
+    "energy_score": 0.06137139233091937,
+    "cell_energy_distance": -0.018531629839873,
+    "spread_ratio": 0.033561333400646154
+  },
+  "per_donor_ES_differences": [
+    {
+      "donor": "H20.33.032",
+      "ES_difference_candidate_minus_reference": -0.07961120067193539
+    },
+    {
+      "donor": "H21.33.001",
+      "ES_difference_candidate_minus_reference": -0.13854668239082857
+    },
+    {
+      "donor": "H21.33.023",
+      "ES_difference_candidate_minus_reference": 0.4172467188187512
+    },
+    {
+      "donor": "H21.33.025",
+      "ES_difference_candidate_minus_reference": 0.04639673356768981
+    }
+  ],
+  "per_stage_cell_ED_differences": [
+    0.3023010584806123,
+    -0.16833347748804783,
+    0.07045053902112652,
+    -0.047790458788280255
+  ],
+  "pooled_cell_ED_is_not_the_mean_of_per_stage_ED": true,
+  "candidate_dominates_reference_ES_and_cell_ED": false,
+  "joint_frozen_incumbent_decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve"
+    ]
+  },
+  "all_scientific_source_hashes_equal_and_current": true,
+  "scientific_sources_count": 133,
+  "sources_SHA256": {
+    "/ml2/alz/analysis/compare_released095_penalty_control.py": "3efaaf344ecd83f85a7eb5a837108794fa71877461ec64d735f3c46870414d9a",
+    "/ml2/alz/analysis/released_penalty_v095/protocol.json": "9add7184faf6901953094f50acf19b03d0cf616dee3bbd261939b5f9ab79241d",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0-result.json": "adb377b6cd894bda4e111d2d7e1ae9a1e731bd043899f7c3819f09445d489db8",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0-result.json": "d8f95caa81827eb8cbebafea2bfd6f262994bc73a7d86dfeb8ff85ac19556e51",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0/authorization.json": "7ba8a82270b935396db38869503e501f50f72be4b11995b377e1856bb3ef9133",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0/authorization.json": "e2688fc993fc89c0706dc8c813bda6586baf710b2c7a57f99561de21caa1a88f",
+    "/ml2/alz/runs/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0/convergence_curve.json": "68e2b6c873da88b11865e7c48ec98adc2eff1fea22d9efd31ebde22d5e2b88ea",
+    "/ml2/alz/runs/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0/convergence_curve.json": "13d3e523ca730f793f31f1ae6ac09848b8c5857ee13a6cfbc3b32571459ec7be"
+  },
+  "only_final20k_checkpoint_eligible": true,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "scope": "Actual completed audited0.9.5one-field comparison, same four adaptive calibration donors and two generation replicates. Descriptive donor/stage differences, no biological replication or inference claim;5k/10kdiagnostics do not select the endpoint. Evaluation excluded.",
+  "PNG_SHA256": "0b05dfbc17016e175edd0c0f0aed1df1e99b075bff4db9f5a2bbdf4b0c5a16eb",
+  "PDF_SHA256": "145d82f3b3f277bdc2b85d07a33b4a7587e1fef2fb08a81f558149b6c06998df"
+}

@@ -1,0 +1,73 @@
+{
+  "status": "OFFICIAL095_HALF_KAPPA20K_AUDITED_JOINT_REJECTED_DISTRIBUTION_IMPROVED_PENDING_REVERT",
+  "utc": "2026-11-05T07:35:12.482156+00:00",
+  "attempt": "CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0",
+  "parameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 0.5,
+    "prior_reg": 0.01
+  },
+  "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0-result.json",
+  "result_SHA256": "d8f95caa81827eb8cbebafea2bfd6f262994bc73a7d86dfeb8ff85ac19556e51",
+  "comparison_path": "/ml2/alz/analysis/released095_regkappa050_vs_reference_audited_comparison.json",
+  "comparison_SHA256": "078d53b8f2210823e43fc35f92087e6cb8a10ecf1fea5a783d77ace673ac784b",
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "energy score did not improve"
+    ]
+  },
+  "final20k": {
+    "energy_score": 1.9537118942286584,
+    "cell_energy_distance": 0.21992865338427325,
+    "spread_ratio": 1.0316557076122854
+  },
+  "relative_change_vs_frozen_incumbent_percent": {
+    "energy_score": 0.9392691111269835,
+    "cell_energy_distance": -5.139630326179468
+  },
+  "per_donor_ES_differences_vs_reference": [
+    {
+      "donor": "H20.33.032",
+      "ES_difference_candidate_minus_reference": -0.07961120067193539
+    },
+    {
+      "donor": "H21.33.001",
+      "ES_difference_candidate_minus_reference": -0.13854668239082857
+    },
+    {
+      "donor": "H21.33.023",
+      "ES_difference_candidate_minus_reference": 0.4172467188187512
+    },
+    {
+      "donor": "H21.33.025",
+      "ES_difference_candidate_minus_reference": 0.04639673356768981
+    }
+  ],
+  "charged_GPU_seconds": 3248.6974842279997,
+  "canonical_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 40.147348314296096,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 983.8526516857039
+  },
+  "owned_registry_empty": true,
+  "all_owned_PIDs_absent": true,
+  "clean_settlement_verified": true,
+  "all_scientific_source_hashes_equal_to_reference_and_current": true,
+  "visual_comparison_checked": true,
+  "activation_to_revert": "254aaa7",
+  "prospective_kappa_branch_otherwise_if_PG_tuning_resumes": "v095_penalty_reg_kappa_m200",
+  "new_user_priority_override": "Matched external scVI comparator first, under commit6418ce9; do not auto-launch PG branch.",
+  "next_scientific_attempt": "CAL_GPU0_V1_matched_scvi_calibration_f0_scvi_s0",
+  "qualified_scvi_source_commit": "c2f70c7",
+  "checkpoint_and_tradeoff_retained": true,
+  "completed_latest_release_endpoints": 4,
+  "completed_latest_targeted_penalty_endpoints": 3,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "evaluation_used_for_tuning": false
+}
