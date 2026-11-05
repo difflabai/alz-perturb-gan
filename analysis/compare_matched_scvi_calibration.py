@@ -7,7 +7,7 @@ sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def compare():
  protocol_path=ROOT/'analysis/matched_scvi/protocol.json';protocol=read(protocol_path)
  pg_path=Path(protocol['PG_reference_result']);assert sha(pg_path)==protocol['PG_reference_result_SHA256']
- scvi_path=ROOT/'analysis/CAL_GPU0_V1_matched_scvi_calibration_f0_scvi_s0-result.json'
+ scvi_path=ROOT/'analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json'
  baseline_path=ROOT/'analysis/baseline_calibration_seed0.json'
  pg_audit=read(pg_path);scvi_audit=read(scvi_path)
  assert pg_audit['owned_release_and_clean_settlement_verified'] and pg_audit['independent_saved_scores_checkpoint_and_count_exemplars_verified']
@@ -16,6 +16,7 @@ def compare():
  baseline=read(baseline_path);pg=pg_audit['candidate'];scvi=scvi_audit['candidate']
  assert pg['status']==scvi['status']=='completed'
  assert pg['completed_updates']==20000 and scvi['completed_epochs']==400
+ assert scvi['source_model_training_attempt']=='CAL_GPU0_V1_matched_scvi_calibration_f0_scvi_s0' and scvi['new_model_updates']==0
  assert scvi['comparator_protocol_SHA256']==sha(protocol_path) and scvi['evaluation_used'] is False
  for key in ('donors','training_seed','generation_replicates','calibration_manifest_SHA256','trace_manifest_SHA256','sampling_contract'):
   assert pg[key]==scvi[key]==baseline[key],key
