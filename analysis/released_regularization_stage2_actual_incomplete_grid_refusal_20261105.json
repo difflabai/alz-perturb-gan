@@ -1,0 +1,26 @@
+{
+  "status": "ACTUAL_CURRENT_INCOMPLETE_RATE_GRID_REFUSES_PREMATURE_REGULARIZATION_MANIFEST",
+  "utc": "2026-11-05T02:26:16.196414+00:00",
+  "actual_audited_rate_configurations": 5,
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-S",
+    "-B",
+    "/ml2/alz/analysis/resolve_released_regularization_stage2.py",
+    "--readout",
+    "/ml2/alz/analysis/released_tuning_search_readout.json",
+    "--output",
+    "/ml2/alz/analysis/released_regularization_stage2_prospective_manifest.json"
+  ],
+  "returncode": 2,
+  "stderr": "Stage2 requires all27 independently audited fixed20k rate configurations; observed5\n",
+  "stage2_manifest_created": false,
+  "GPU_job_or_allocation_created": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/resolve_released_regularization_stage2.py": "1e3ff414f40633144e0ff29609dad9a4f0373e6533ec117f4849bb2804e7b76a",
+    "/ml2/alz/analysis/released_tuning_search_readout.json": "89f51d05c67ff6f0fcc7af3c79e3e13575930a357736b8573d57303501409b70",
+    "/ml2/alz/analysis/released_tuning/protocol.json": "e5ab9eba08fdd83cd4d0a5674ccc0d464a504f01086646f3912a0999cad28ad1"
+  },
+  "scope": "Actual incomplete5/27 readout refusal, not synthetic successful qualification. Full positive resolution and native-scope qualification remain pending until all27 audited endpoints exist."
+}
