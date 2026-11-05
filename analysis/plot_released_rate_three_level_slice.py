@@ -74,12 +74,12 @@ def plot(paths, prefix):
     fig.text(.07, .895, f"Released bispf_optimized | fixed {constants} | fold 0, seed 0", fontsize=10)
     fig.text(.07, .84, 'Same four calibration donors; two generation replicas per checkpoint. All three levels complete 20,000 updates.', fontsize=10, color='#444444')
     for ax, key, title in zip(axes, ('energy_score', 'cell_energy_distance'), ('Donor energy score', 'Pooled cell energy distance')):
-        ax.axhline(incumbent[key], color='#b66d16', linewidth=1.2, label='Frozen ensemble incumbent (40k total)')
+        ax.axhline(incumbent[key], color='#b66d16', linewidth=1.2, label='Frozen ensemble (40k total)')
         ax.axhline(baseline[key], color='#777777', linestyle='--', linewidth=1, label='Matched resampling, seed 0')
         for record, color in zip(records, ('#176ba0', '#21854c', '#a6529b')):
             entries = record['entries']; rate = record['candidate']['released_hyperparameters'][field]
             ax.plot([e['completed_updates'] for e in entries], [e['metrics'][key] for e in entries],
-                    color=color, marker='o', linewidth=1.8, label=f"{labels[field]} {rate:g} (20k: {entries[-1]['metrics'][key]:.5f})")
+                    color=color, marker='o', linewidth=1.8, label=f"{labels[field]} {rate:g}")
         ax.set_title(title+' (lower is better)', loc='left', fontsize=11)
         ax.set_xlim(4000, 21000); ax.set_xticks([5000, 10000, 15000, 20000]); ax.grid(alpha=.18)
         ax.set_xlabel('Completed optimizer pairs'); ax.legend(fontsize=8, loc='best')

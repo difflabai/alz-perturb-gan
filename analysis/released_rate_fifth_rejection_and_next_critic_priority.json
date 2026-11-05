@@ -1,0 +1,60 @@
+{
+  "status": "AUDITED_UPPER_GENERATOR_RATE_REJECTED",
+  "utc": "2026-11-05T02:13:20.350199+00:00",
+  "result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g100d050p050_resume2_f0_pg_s0-result.json",
+  "result_SHA256": "7f6729f5c9930030f40ba0f670897fe2c06a0d3c23798ccd4cc01c3544d4ac81",
+  "completed_updates": 20000,
+  "parameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "energy_score": 1.9306045864498274,
+  "cell_energy_distance": 0.28500832007986077,
+  "spread_ratio": 1.0134397090109764,
+  "decision": {
+    "accept": false,
+    "reasons": [
+      "cell distribution match worsened"
+    ]
+  },
+  "matched_reference_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_released_rate_g050d050p050_resume1_f0_pg_s0-result.json",
+  "matched_reference_result_SHA256": "980096dd26b16c69da00d5c729ee4c6c4eed55ffed0cf93ef5eda48605e13efc",
+  "change_percent_vs_generator_half": {
+    "energy_score": 2.0220507098862583,
+    "cell_energy_distance": 19.520247240485155
+  },
+  "all_three_generator_levels_audited": [
+    0.003,
+    0.006,
+    0.012
+  ],
+  "best_completed_generator_level_at_fixed_D009_P015": 0.006,
+  "all3_checkpoints_two_generation_replicas_and_native_CUDA_reload_audited": true,
+  "all_three_settled_execution_phases_charged_GPU_seconds": 1787.0158214620133,
+  "latest_phase_charged_GPU_seconds": 1546.02331108,
+  "prior_two_settled_phases_charged_GPU_seconds": 240.99251038201328,
+  "owned_processes_absent": true,
+  "owned_registry_empty": true,
+  "canonical_reservation_released": true,
+  "activation_to_revert": "71f1404",
+  "next_registered_candidate": "lr_g050_d100_p050",
+  "next_plan_enabled": false,
+  "next_trial_started": false,
+  "completed_rate_configurations": 5,
+  "registered_rate_configurations": 27,
+  "incumbent_changed": false,
+  "stable_joint_ATH_claimed": false,
+  "evaluation_used": false,
+  "canonical_budget_status_selected_fields": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 35.74756448148721,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 988.2524355185128,
+    "available_after_reservations_GPU_hours": 988.2524355185128,
+    "new_grant_GPU_hours": 1000.0
+  }
+}
