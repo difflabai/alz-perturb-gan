@@ -52,6 +52,9 @@ def main():
  assert len(matches)==1,'Selected seed0 allocation is ambiguous'
  attempt=matches[0];deployment,auth,candidate=verified_deployment(attempt)
  assert candidate=={k:v for k,v in selected.items() if k!='candidate_commit'}
+ if candidate.get('particlegan_version') is not None:
+  for key in ('released_hyperparameters','particlegan_version','penalty_options'):
+   assert auth.get(key)==candidate.get(key),'Native authorization differs from selected configuration: '+key
  assert candidate.get('qualification_only') is False,'A replay-only selection requires its explicit verified fitting-lineage bridge'
  decision_path=ROOT/'analysis'/(attempt+'-result.json');decision=read(decision_path)
  assert decision['decision']['accept'] and decision['independent_saved_scores_checkpoint_and_count_exemplars_verified']

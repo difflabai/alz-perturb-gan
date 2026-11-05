@@ -99,8 +99,12 @@ def main():
         assert candidate['pure_only'] is True and candidate['real_bag_replacements'] == 0 and candidate.get('hybrid_config') is None
         assert candidate['completed_updates'] == candidate0['completed_updates'] == candidate['fixed_endpoint']
         assert architecture(candidate['variant_config']) == architecture(candidate0['variant_config'])
-        for key in ['method', 'native_recipe', 'network_rate_config', 'semantic_config', 'learned_observation_config']:
+        for key in ['method', 'native_recipe', 'network_rate_config', 'semantic_config', 'learned_observation_config',
+                    'released_hyperparameters', 'particlegan_version', 'penalty_options']:
             assert candidate.get(key) == candidate0.get(key), 'Frozen model configuration changed: ' + key
+        if candidate0.get('particlegan_version') == '0.9.5':
+            for key in ('released_hyperparameters', 'particlegan_version', 'penalty_options'):
+                assert auth.get(key) == candidate0[key], 'Native authorization differs from frozen configuration: ' + key
         assert scientific_sources(auth) == freeze['scientific_source_SHA256']
         assert all(auth['files_SHA256'].get(path) == pin for path, pin in immutable_pins.items())
         if seed:

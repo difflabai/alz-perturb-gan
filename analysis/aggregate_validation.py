@@ -28,8 +28,25 @@ def architecture(value):
 
 
 def scientific_sources(auth):
-    return {path: pin for path, pin in auth['research_source_SHA256'].items()
-            if Path(path).parent in (ROOT, ROOT / 'model')}
+    model_dirs = (ROOT, ROOT / 'model', ROOT / 'analysis/released_tuning',
+                  ROOT / 'analysis/released_tuning_v095')
+    sources = {path: pin for path, pin in auth['research_source_SHA256'].items()
+               if Path(path).parent in model_dirs}
+    version = auth.get('particlegan_version')
+    assert version in (None, '0.9.4', '0.9.5'), 'Unqualified native release for confirmation'
+    if version == '0.9.5':
+        model = ROOT / 'analysis/released_tuning_v095'
+        for name in ('released_update.py', 'released_adapter.py', 'release_env.py'):
+            assert str(model / name) in sources, 'Latest-release scientific adapter is missing'
+        site = ROOT / 'artifacts/native-releases/particlegan-0.9.5/site-packages'
+        native = {path: pin for path, pin in auth['files_SHA256'].items()
+                  if Path(path).is_relative_to(site / 'particlegan') and Path(path).suffix == '.py'}
+        assert len(native) == 68, 'Complete qualified 0.9.5 native source inventory required'
+        metadata = str(site / 'particlegan-0.9.5.dist-info/METADATA')
+        assert metadata in auth['files_SHA256'], 'Native distribution metadata binding missing'
+        sources.update(native)
+        sources[metadata] = auth['files_SHA256'][metadata]
+    return sources
 
 
 def verified_deployment(attempt):
@@ -78,6 +95,8 @@ def main():
         assert architecture(candidate['variant_config']) == architecture(incumbent['variant_config'])
         assert candidate.get('hybrid_config') == incumbent.get('hybrid_config')
         assert candidate['method'] == incumbent['method']
+        for key in ('released_hyperparameters', 'particlegan_version', 'penalty_options'):
+            assert candidate.get(key) == incumbent.get(key), 'Frozen model configuration changed: ' + key
         assert scientific_sources(auth) == scientific_sources(auth0), 'Model/scorer sources changed between seeds'
         if seed:
             confirmation = read(ROOT / 'analysis' / (attempt + '-confirmation.json'))

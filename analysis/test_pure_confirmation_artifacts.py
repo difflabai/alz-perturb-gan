@@ -193,6 +193,87 @@ class ArtifactBindings(unittest.TestCase):
             self.run_aggregate()
         self.assertFalse(self.output.exists())
 
+    def make_latest_release_fixture(self):
+        """Private metadata only; no library, models or GPU jobs are executed."""
+        model = self.root / 'analysis/released_tuning_v095'
+        extra = {}
+        for name in ('released_update.py', 'released_adapter.py', 'release_env.py'):
+            p = model / name; p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text('COUNTERFACTUAL_SOURCE_NOT_EXECUTED = True\n'); extra[str(p)] = common.sha(p)
+        site = self.root / 'artifacts/native-releases/particlegan-0.9.5/site-packages'
+        native = {}
+        for index in range(68):
+            p = site / 'particlegan' / ('__init__.py' if index == 0 else f'fixture{index}.py')
+            p.parent.mkdir(parents=True, exist_ok=True); p.write_text('PRIVATE_NONEXECUTED_NATIVE_FIXTURE = True\n')
+            native[str(p)] = common.sha(p)
+        metadata = site / 'particlegan-0.9.5.dist-info/METADATA'
+        metadata.parent.mkdir(parents=True)
+        metadata.write_text('Name: particlegan\nVersion: 0.9.5\nFixture: not a native installation\n')
+        native[str(metadata)] = common.sha(metadata)
+        hyper = {'generator_lr': .006, 'critic_lr': .009, 'particle_lr': .015,
+                 'reg_coeff': .5, 'reg_kappa': 1., 'prior_reg': .01}
+        fields = {'particlegan_version': '0.9.5', 'penalty_options': {'input_domain': 'continuous'},
+                  'released_hyperparameters': hyper}
+        for seed in (0, 1, 2):
+            candidate = self.candidates[seed]; candidate.update(copy.deepcopy(fields), method='pg_released_params')
+            if seed == 0: candidate['operation'] = 'train_released_hyperparameters'
+            self.write(Path(self.deployments[seed]['output_dir']) / 'completed.json', candidate)
+            auth = self.auths[seed]; auth.update(copy.deepcopy(fields))
+            auth['research_source_SHA256'].update(extra); auth['files_SHA256'].update({**extra, **native})
+            auth['operation'] = candidate['operation']
+            if seed: auth['frozen_seed0_operation'] = 'train_released_hyperparameters'
+            self.write(self.deployments[seed]['authorization_path'], auth)
+        selected = self.root / 'pure_incumbent.json'
+        self.write(selected, {**self.candidates[0], 'candidate_commit': 'PRIVATE_FIXTURE_ONLY'})
+        decision_path = self.root / 'analysis' / (self.attempt0 + '-result.json')
+        decision = common.read(decision_path); decision['candidate'] = self.candidates[0]; self.write(decision_path, decision)
+        freeze = common.read(self.freeze)
+        with patch.object(common, 'ROOT', self.root):
+            frozen_sources = common.scientific_sources(self.auths[0])
+        freeze.update(seed0_candidate=self.candidates[0], pure_incumbent_SHA256=common.sha(selected),
+                      seed0_authorization_SHA256=common.sha(self.deployments[0]['authorization_path']),
+                      seed0_decision_SHA256=common.sha(decision_path),
+                      scientific_source_SHA256=frozen_sources)
+        self.write(self.freeze, freeze)
+        for seed in (1, 2):
+            auth = self.auths[seed]; auth['pure_confirmation_freeze_SHA256'] = common.sha(self.freeze)
+            auth['files_SHA256'].update({str(self.freeze): common.sha(self.freeze), str(selected): common.sha(selected)})
+            self.write(self.deployments[seed]['authorization_path'], auth)
+            p = self.root / 'analysis' / (self.ids[str(seed)]['attempt_id'] + '-confirmation.json')
+            confirmation = common.read(p)
+            confirmation.update(candidate=self.candidates[seed], pure_confirmation_freeze_SHA256=common.sha(self.freeze))
+            self.write(p, confirmation)
+        return model, site
+
+    def test_latest_release_consistent_parameters_and_sources_aggregate(self):
+        self.make_latest_release_fixture(); self.run_aggregate()
+        self.assertTrue(common.read(self.output)['stable_joint_target_passed'])
+
+    def test_latest_release_changed_scalar_version_or_domain_refuses(self):
+        self.make_latest_release_fixture()
+        changes = [('released_hyperparameters', {**self.candidates[1]['released_hyperparameters'], 'reg_coeff': 1.}),
+                   ('particlegan_version', '0.9.4'), ('penalty_options', {'input_domain': 'auto'})]
+        for field, value in changes:
+            candidate = copy.deepcopy(self.candidates[1]); candidate[field] = value
+            self.write(Path(self.deployments[1]['output_dir']) / 'completed.json', candidate)
+            p = self.root / 'analysis' / (self.ids['1']['attempt_id'] + '-confirmation.json')
+            confirmation = common.read(p); confirmation['candidate'] = candidate; self.write(p, confirmation)
+            auth = copy.deepcopy(self.auths[1]); auth[field] = value
+            self.write(self.deployments[1]['authorization_path'], auth)
+            with self.subTest(field=field), self.assertRaisesRegex(AssertionError, 'Frozen model configuration changed: ' + field):
+                self.run_aggregate()
+            self.assertFalse(self.output.exists())
+
+    def test_latest_release_adapter_and_native_sources_are_frozen(self):
+        model, site = self.make_latest_release_fixture()
+        frozen = common.read(self.freeze)['scientific_source_SHA256']
+        self.assertIn(str(model / 'released_update.py'), frozen)
+        self.assertIn(str(site / 'particlegan/__init__.py'), frozen)
+        self.assertIn(str(site / 'particlegan-0.9.5.dist-info/METADATA'), frozen)
+        p = model / 'released_update.py'; p.write_text('CHANGED_PRIVATE_UPDATE_NOT_EXECUTED = True\n')
+        with self.assertRaises(AssertionError): self.run_aggregate()
+        self.assertFalse(self.output.exists())
+
 
 if __name__ == '__main__':
     unittest.main()

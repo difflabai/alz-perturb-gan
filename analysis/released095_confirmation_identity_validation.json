@@ -1,0 +1,40 @@
+{
+  "status": "LATEST095_FROZEN_CONFIRMATION_PARAMETER_AND_SCIENTIFIC_SOURCE_IDENTITY_GAPS_FIXED",
+  "utc": "2026-11-05T05:20:08.802840+00:00",
+  "actual_regression_reproduced_before_fix": {
+    "consistent_private_latest_fixture_passed": true,
+    "changed_reg_coeff_private_seed_was_wrongly_accepted": true,
+    "latest_adapter_source_was_omitted_from_frozen_source_list": true,
+    "log_path": "/ml2/alz/artifacts/native-releases/particlegan-0.9.5/confirmation_identity_gap_reproduced.stderr",
+    "log_SHA256": "acd026a5c04737dc9ff970f42257cee7b6e442184dd6dc2c373d8585f9090b7f"
+  },
+  "actual_after_fix_CPU_tests_passed": 24,
+  "after_fix_log_path": "/ml2/alz/artifacts/native-releases/particlegan-0.9.5/confirmation_identity_after_fix.stderr",
+  "after_fix_log_SHA256": "e79f0a93a5e7514719975de65103769f65569f2eb72e6734e97452147dbdf8b2",
+  "new_refusals": [
+    "changed released_hyperparameters across seeds",
+    "changed native package version across seeds",
+    "changed input domain across seeds",
+    "changed latest adapter source after freezing"
+  ],
+  "actual_active_latest_authorization_scientific_sources_recomputed_and_all_current_hashes_match": true,
+  "actual_active_latest_native_Python_sources_now_covered": 68,
+  "actual_active_latest_total_scientific_sources_now_covered": 133,
+  "protected_real_incumbent_files_unchanged_by_all_private_fixtures": true,
+  "current_native_training_sources_or_state_changed": false,
+  "all_changed_analysis_files_verified_absent_from_active_execution_source_pins": true,
+  "native_worker_still_alive": true,
+  "actual_current_training_updates": 9251,
+  "latest_seed1_or_seed2_training_started": false,
+  "confirmation_target_thresholds_changed": false,
+  "ranking_seeds_allowed": false,
+  "evaluation_used": false,
+  "stable_joint_ATH_claimed": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/aggregate_validation.py": "3cb7e9a53eaac27d7fa040484aab52fdcaa420224fac3532ddd8ac86aef57dff",
+    "/ml2/alz/analysis/aggregate_pure_confirmation.py": "6719311d362aef1f25c07a6e60fcb30d6aa9cba74bd3bc545cd49b273463242c",
+    "/ml2/alz/analysis/freeze_pure_confirmation.py": "fbd3827f6ce1c471ec92710a2c471b02d31eace8ebc7bab0a4dd693d86edcd34",
+    "/ml2/alz/analysis/test_pure_confirmation_artifacts.py": "d761ee78753b07d028276ba662b141fe2ffff65149f92af51ac4c1256eb3c44a"
+  },
+  "scope": "CPU/private-metadata artifact validation plus actual source-inventory binding only. No synthetic fixture is a biological result, native run or model qualification. Actual latest-release seed1/2 execution still requires an accepted seed0 model, frozen exact configuration and separately qualified bounded runtimes."
+}
