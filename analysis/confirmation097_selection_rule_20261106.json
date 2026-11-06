@@ -1,0 +1,34 @@
+{
+  "status": "PRESPECIFIED_FRESH_INITIALIZATION_CONFIRMATION_RULE_BEFORE_SEED_RESULTS",
+  "UTC": "2026-11-06T23:10:35.685137+00:00",
+  "selection_requires_all_six_full20k_seed0_outcomes": true,
+  "configurations": "Pooled-distance winner, joint ES/spread-qualified distance winner and original d000 reference, deduplicated by exact six-scalar configuration; retain collapsed/negative distance winners visibly.",
+  "maximum_distinct_configurations": 3,
+  "fresh_training_seeds": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "maximum_new_fits": 12,
+  "all_new_training_from_scratch": true,
+  "initial_completed_updates": 0,
+  "source_checkpoint": null,
+  "endpoint": 20000,
+  "matched_controls": "Compute and independently rescore hierarchical resampling with the same seed, two generationreplicates, four calibration targets and frozen traces; require exact baseline agreement across configurations.",
+  "ranking": "Require all four fresh seeds finite for eligibility; rank by mean full20k cell-energy distance across seeds1..4, then donor energy. Selection seed0 remains displayed separately and does not enter this confirmation ranking. Report initialization sample SD, every seed, all failures, energy and spread tradeoffs; no failed-seed omission or replacement.",
+  "external_candidate_freeze": "Propose the best complete fresh-seed-mean distance configuration; report a distinct joint-quality alternative and any spread/energy failure. Actual freeze and real native benchmark qualification remain mandatory before new heldout evaluation.",
+  "metric_role": "calibration_selection",
+  "not_independent_biological_confirmation": true,
+  "heldout_used": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/confirmation097_selection.py": "54784654663962321580cbc0c3dcadd7b666cc68bffe8a7591d7ff9dd727ee37",
+    "/ml2/alz/analysis/test_confirmation097_selection.py": "479247e917cf642bd7bdfd3d434c6d6126b1883b0a856f174503a47742dc960c"
+  },
+  "actual_synthetic_rule_tests_passed": 6,
+  "project_GPU_hour_cap": 1024,
+  "core_GPU_hour_cap": 180,
+  "window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+  "SOTA_claim": false,
+  "full_goal_complete": false
+}

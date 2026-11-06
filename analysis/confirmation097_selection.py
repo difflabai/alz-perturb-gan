@@ -26,8 +26,10 @@ def choose_configurations(rows,baseline_seed0_energy):
  for role,row in roles:
   if row is None:continue
   key=vector(row['hyperparameters'])
-  if key not in unique:unique[key]=dict(candidate_id=row['candidate_id'],hyperparameters=dict(row['hyperparameters']),roles=[])
+  canonical=reference['candidate_id'] if key==vector(reference['hyperparameters']) else row['candidate_id']
+  if key not in unique:unique[key]=dict(candidate_id=canonical,hyperparameters=dict(row['hyperparameters']),roles=[],role_source_candidate_ids={})
   unique[key]['roles'].append(role)
+  unique[key]['role_source_candidate_ids'][role]=row['candidate_id']
  selected=list(unique.values())
  assert 1<=len(selected)<=3
  return selected
@@ -50,7 +52,7 @@ independent biological confirmation or a final SOTA comparison.
    if r['hyperparameters']!=choice['hyperparameters'] or r['endpoint']!=20000 or r['initial_completed_updates']!=0 or not r['from_scratch']:raise ValueError('Fresh complete-horizon configuration/seed provenance differs')
    if r['finite']:
     for m in (r['metrics'],r['baseline_metrics']):
-     if m['training_seed']!=r['seed'] or any(not math.isfinite(m[k]) for k in ('cell_energy_distance','energy_score','spread_ratio')):raise ValueError('Finite matched-seed metrics required')
+     if m['training_seed']!=r['seed'] or m['metric_role']!='calibration_selection' or m['generation_replicates']!=2 or any(not math.isfinite(m[k]) for k in ('cell_energy_distance','energy_score','spread_ratio','within_condition_spread_ratio','coverage80')):raise ValueError('Finite matched-seed calibration metrics required')
     for k in ('donors','calibration_manifest_SHA256','trace_manifest_SHA256','sampling_contract'):
      if r['metrics'][k]!=r['baseline_metrics'][k]:raise ValueError('PG and baseline target/trace contracts differ')
     if r['seed'] in baselines and baselines[r['seed']]!=r['baseline_metrics']:raise ValueError('Matched resampling differs across configurations')
@@ -60,6 +62,7 @@ independent biological confirmation or a final SOTA comparison.
   if finite:
    keys=('cell_energy_distance','energy_score','spread_ratio','within_condition_spread_ratio','coverage80')
    entry['fresh_seed_mean']={k:sum(r['metrics'][k] for r in runs)/4 for k in keys}
+   entry['fresh_seed_SD']={k:math.sqrt(sum((r['metrics'][k]-entry['fresh_seed_mean'][k])**2 for r in runs)/3) for k in keys}
    entry['mean_matched_resampling']={k:sum(r['baseline_metrics'][k] for r in runs)/4 for k in keys}
    entry['per_seed']=[dict(seed=r['seed'],metrics=r['metrics'],baseline_metrics=r['baseline_metrics'],PG_minus_resampling={k:r['metrics'][k]-r['baseline_metrics'][k] for k in ('cell_energy_distance','energy_score')}) for r in runs]
    entry['joint_quality']=all(.7<=r['metrics']['spread_ratio']<=1.3 for r in runs) and entry['fresh_seed_mean']['energy_score']<=entry['mean_matched_resampling']['energy_score']
