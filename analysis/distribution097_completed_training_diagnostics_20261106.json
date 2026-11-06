@@ -1,6 +1,6 @@
 {
   "status": "READ_ONLY_COMPLETED_FRESH20K_TRAINING_STATE_DIAGNOSTICS",
-  "UTC": "2026-11-06T21:55:56.200750+00:00",
+  "UTC": "2026-11-06T22:15:45.890121+00:00",
   "completed_runs": [
     {
       "fit": "/ml2/alz/runs/CAL_GPU0_V1_h20_c014_f0_pg_s0/fit",
@@ -219,6 +219,115 @@
         }
       ],
       "learning_curve_SHA256": "48e481feb48a6b67976cc40f21b1b7a2f03e015ca83d281ac7215cd2a23379b3"
+    },
+    {
+      "fit": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d001_f0_pg_s0/fit",
+      "native_version": "0.9.7",
+      "hyperparameters": {
+        "generator_lr": 0.0072242016931078614,
+        "critic_lr": 0.014833286696429858,
+        "particle_lr": 0.013678610104321594,
+        "reg_coeff": 1.275280261299054,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.006567934215110022
+      },
+      "fixed_observed_rates": {
+        "G_prior_LRs": [
+          0.0072242016931078614,
+          0.013678610104321596
+        ],
+        "D_LRs": [
+          0.014833286696429858
+        ]
+      },
+      "windows": [
+        {
+          "after_update": 0,
+          "through_update": 5000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.4415620118379593,
+            "D_penalty": 0.026063235476613045,
+            "G_adversarial": 3.121966004371643,
+            "critic_gap": 5.897566080093384,
+            "D_gradient_norm": 6.110225200653076,
+            "G_gradient_norm": 12.178365707397461,
+            "prior_gradient_norm": 0.9213285446166992
+          }
+        },
+        {
+          "after_update": 5000,
+          "through_update": 10000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.5786546766757965,
+            "D_penalty": 0.03194791730493307,
+            "G_adversarial": 2.7788143157958984,
+            "critic_gap": 4.98683500289917,
+            "D_gradient_norm": 9.694844722747803,
+            "G_gradient_norm": 11.63884687423706,
+            "prior_gradient_norm": 0.8396935164928436
+          }
+        },
+        {
+          "after_update": 10000,
+          "through_update": 15000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.6369922459125519,
+            "D_penalty": 0.03823723830282688,
+            "G_adversarial": 2.4307637214660645,
+            "critic_gap": 4.1547136306762695,
+            "D_gradient_norm": 11.108022212982178,
+            "G_gradient_norm": 11.133626461029053,
+            "prior_gradient_norm": 0.8362084627151489
+          }
+        },
+        {
+          "after_update": 15000,
+          "through_update": 20000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.6590425968170166,
+            "D_penalty": 0.03127452917397022,
+            "G_adversarial": 2.2537436485290527,
+            "critic_gap": 3.7509281635284424,
+            "D_gradient_norm": 7.997298955917358,
+            "G_gradient_norm": 9.784909725189209,
+            "prior_gradient_norm": 0.817566305398941
+          }
+        }
+      ],
+      "snapshots": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d001_f0_pg_s0/fit/checkpoint05000.pt",
+          "SHA256": "05647967509cb5f2d06ab24040cc36ee5e0db340bb551fa6e07be95ba1c5e5c3",
+          "completed_updates": 5000,
+          "total_particle_draws": 160000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 8.160438537597656,
+          "particle_mean_squared_norm": 8.18047046661377
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d001_f0_pg_s0/fit/checkpoint10000.pt",
+          "SHA256": "dd98e386c704c94093514aa35d50fc95dea80562d47934e4a96da62f47ba0cb9",
+          "completed_updates": 10000,
+          "total_particle_draws": 320000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 7.603381156921387,
+          "particle_mean_squared_norm": 7.63282585144043
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d001_f0_pg_s0/fit/final.pt",
+          "SHA256": "a396cfcb603aa2863238eb018dfc83a3a58a5b6d40f94068970054a46fc3071e",
+          "completed_updates": 20000,
+          "total_particle_draws": 640000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 6.844512462615967,
+          "particle_mean_squared_norm": 6.86647891998291
+        }
+      ],
+      "learning_curve_SHA256": "9cf0aee408e25a5c96482a73ae395695a3b018e256e92dc9164b3245b0dc0952"
     }
   ],
   "source_SHA256": "f11781403e1b2ca79b2584eb5fe48a114dcb3510dd9720059958c3a36f95bdf7",

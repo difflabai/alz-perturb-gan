@@ -1,0 +1,25 @@
+{
+  "status": "NATIVE_CFGEN_REGISTERED_AND_EXTERNAL_FEATURE_EXACT_CPU_RESTORE_PASS",
+  "UTC": "2026-11-06T22:15:28.323310+00:00",
+  "historical_checkpoint": "/ml2/alz/runs/CAL_GPU0_V1_matched_cfgen_f0_cfgen_s0/fit/FM/final.ckpt",
+  "native_state_fingerprint": "24e998eaa5105b951bebca36695cfa485cc17f49342a37b2fb3d9c80e62a88b2",
+  "external_feature_fingerprint": "3cab62b4daae5a861d78e84eb087d65472b4c0beab8c3788a9e745b49029b04a",
+  "checkpoint_SHA256": "9c4fc7242c50bc5fce5a81f4e4ba4b1296c55adc1cef7d6f5d9d7e0ae42366c6",
+  "native_global_step": 85500,
+  "native_epoch": 1500,
+  "explicit_device": "cpu",
+  "original_historical_receipt_rejected_as_new_benchmark_fit": true,
+  "fresh_training_performed": false,
+  "historical_weights_used_for_training": false,
+  "evaluation_targets_read": false,
+  "CUDA_initialized": false,
+  "GPU_allocation_created": false,
+  "runtime_deployment_qualified": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/benchmark097_cfgen/qualify_exact_reload.py": "8b87318f508d3c161777d389577c17c0c98f00ec142c5f6f5ac6eb955c211de8",
+    "/ml2/alz/analysis/benchmark097_cfgen/native_reload.py": "6bad629fcdff5b4c94a4a1489fdd343d3f544b6d643a0862583132d203aee60c",
+    "/ml2/alz/analysis/benchmark097_cfgen/fit_adapter.py": "efa11816242490a1c726b3342e13f8bac41903027ba72cd15a5c1c4d00a4ceae",
+    "/ml2/alz/analysis/benchmark097_cfgen/protocol.json": "dc063f295ecbf9dc1bacdf5f359397a09f67b901761f14a2cf5df3c5d4a18460"
+  },
+  "limitation": "Read-only historical checkpoint verifies strict registered state, unregistered categorical embeddings, frozen encoder, explicit CPU device and actual85500-step/1500-epoch native clocks. New complete fresh-fit receipts and guarded CUDA runtime remain to be exercised by the benchmark; this is not a new training run."
+}

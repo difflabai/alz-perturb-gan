@@ -1,0 +1,128 @@
+{
+  "status": "TWO_FRESH20K_NATIVE097_ARMS_AUDITED_THIRD_FRESH_FIT_RUNNING",
+  "UTC": "2026-11-06T22:15:46.279230+00:00",
+  "rows": [
+    {
+      "candidate_id": "d000",
+      "metrics": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 0,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 1.9537118942286584,
+        "cell_energy_distance": 0.21992865338427325,
+        "spread_ratio": 1.0316557076122854,
+        "within_condition_spread_ratio": 0.9670804123928186,
+        "coverage80": 0.6826923076923077,
+        "generated_zero_count_rate": 3.125e-06,
+        "per_donor_energy_score": [
+          1.1499889157466354,
+          2.6149681536484795,
+          2.1061048179769397,
+          1.9437856895425787
+        ],
+        "per_stage_cell_energy_distance": [
+          1.1003814798779246,
+          1.427898486002821,
+          1.0663081631141367,
+          0.5443863623639995
+        ]
+      },
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "charged_GPU_seconds": 1419.5743142199935,
+      "endpoint": 20000,
+      "from_scratch": true
+    },
+    {
+      "candidate_id": "d001",
+      "metrics": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 0,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 2.179732007493387,
+        "cell_energy_distance": 0.3066746804758864,
+        "spread_ratio": 0.9723630822509273,
+        "within_condition_spread_ratio": 0.8463119018972569,
+        "coverage80": 0.6009615384615384,
+        "generated_zero_count_rate": 1.8750000000000002e-05,
+        "per_donor_energy_score": [
+          1.157745691762307,
+          2.9031863320048963,
+          1.9907118902762937,
+          2.667284115930051
+        ],
+        "per_stage_cell_energy_distance": [
+          0.9927814818291303,
+          1.767103236180204,
+          1.590602577009764,
+          0.6142386638887247
+        ]
+      },
+      "hyperparameters": {
+        "generator_lr": 0.0072242016931078614,
+        "critic_lr": 0.014833286696429858,
+        "particle_lr": 0.013678610104321594,
+        "reg_coeff": 1.275280261299054,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.006567934215110022
+      },
+      "charged_GPU_seconds": 1401.650513597997,
+      "endpoint": 20000,
+      "from_scratch": true
+    }
+  ],
+  "ranked_by_primary_distance": [
+    "d000",
+    "d001"
+  ],
+  "d001_minus_d000": {
+    "cell_energy_distance": 0.08674602709161316,
+    "energy_score": 0.22602011326472837,
+    "spread_ratio": -0.05929262536135815
+  },
+  "d001_vs_original_c014": {
+    "only_hyperparameter_changed": [
+      "reg_kappa"
+    ],
+    "old_kappa": 0.13400397049569038,
+    "new_kappa": 0.5,
+    "distance_delta": -0.03594623723652646,
+    "energy_delta": 0.03885421563928393
+  },
+  "independent_audit_path": "/ml2/alz/artifacts/distribution097-stage1/d000_d001_independent_audit_20261106.json",
+  "independent_audit_SHA256": "da6f01a24d8bee498d31caec3f103b7a08e0404f3afae59ba6f7f4e0ff560fd2",
+  "actual_GPU_seconds": 2821.2248278179904,
+  "historical_reference_replication": "/ml2/alz/analysis/distribution097_d000_historical_replication_20261106.json",
+  "new_best": false,
+  "new_training_seed_confirmation_complete": false,
+  "stage1_complete": false,
+  "external_benchmark_complete": false,
+  "heldout_used": false,
+  "SOTA_claim": false,
+  "goal_complete": false,
+  "next": "Complete d002 from scratch, audit all stage1 endpoints and actual rollback, then materialize and qualify the frozen fresh20k rate/penalty refinement rule. Fresh seeds and full external comparison remain."
+}

@@ -1,6 +1,6 @@
 {
   "status": "MATCHED_SEED0_CALIBRATION_POOLED_STAGE_AND_DONOR_TRADEOFFS",
-  "UTC": "2026-11-06T21:58:05.530009+00:00",
+  "UTC": "2026-11-06T22:15:46.216545+00:00",
   "rows": [
     {
       "method": "scVI400",
@@ -121,6 +121,30 @@
       "diagnostic_macro_stage_distance": 1.0347436228397204,
       "source": "/ml2/alz/analysis/distribution097/results/CAL_GPU0_V1_dist097_d000_f0_pg_s0.json",
       "source_SHA256": "e84ec67bb5233c95100488fae89d03faf029d5ee1c2801c69ec29ee214330a14"
+    },
+    {
+      "method": "d001_native097_20k",
+      "finite": true,
+      "cell_energy_distance": 0.3066746804758864,
+      "energy_score": 2.179732007493387,
+      "spread_ratio": 0.9723630822509273,
+      "within_condition_spread_ratio": 0.8463119018972569,
+      "coverage80": 0.6009615384615384,
+      "per_donor_energy_score": [
+        1.157745691762307,
+        2.9031863320048963,
+        1.9907118902762937,
+        2.667284115930051
+      ],
+      "per_stage_cell_energy_distance": [
+        0.9927814818291303,
+        1.767103236180204,
+        1.590602577009764,
+        0.6142386638887247
+      ],
+      "diagnostic_macro_stage_distance": 1.2411814897269557,
+      "source": "/ml2/alz/analysis/distribution097/results/CAL_GPU0_V1_dist097_d001_f0_pg_s0.json",
+      "source_SHA256": "6ae876f5e9ca9e943819bd7edc3aadda667555ae70b30c06809482e0943880c3"
     }
   ],
   "primary_pooled_mixture_distance_ranking": [
@@ -128,6 +152,7 @@
     "scVI400",
     "hierarchical_resampling",
     "CFGen300AE1500FM",
+    "d001_native097_20k",
     "c014_native096_20k"
   ],
   "diagnostic_per_stage_rankings": [
@@ -136,12 +161,14 @@
       "scVI400",
       "c014_native096_20k",
       "hierarchical_resampling",
+      "d001_native097_20k",
       "d000_native097_20k"
     ],
     [
       "d000_native097_20k",
       "CFGen300AE1500FM",
       "scVI400",
+      "d001_native097_20k",
       "hierarchical_resampling",
       "c014_native096_20k"
     ],
@@ -150,14 +177,16 @@
       "scVI400",
       "hierarchical_resampling",
       "c014_native096_20k",
-      "CFGen300AE1500FM"
+      "CFGen300AE1500FM",
+      "d001_native097_20k"
     ],
     [
       "scVI400",
       "CFGen300AE1500FM",
       "c014_native096_20k",
       "d000_native097_20k",
-      "hierarchical_resampling"
+      "hierarchical_resampling",
+      "d001_native097_20k"
     ]
   ],
   "diagnostic_macro_stage_ranking": [
@@ -165,12 +194,14 @@
     "scVI400",
     "d000_native097_20k",
     "hierarchical_resampling",
-    "c014_native096_20k"
+    "c014_native096_20k",
+    "d001_native097_20k"
   ],
   "donor_energy_ranking": [
     "d000_native097_20k",
     "hierarchical_resampling",
     "c014_native096_20k",
+    "d001_native097_20k",
     "CFGen300AE1500FM",
     "scVI400"
   ],
