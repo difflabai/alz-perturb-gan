@@ -1,0 +1,27 @@
+{
+  "status": "READ_ONLY_ROUGH_FULL_MATRIX_RUNTIME_FORECAST_NOT_A_RESOURCE_ADMISSION",
+  "UTC": "2026-11-06T22:00:25.683503+00:00",
+  "budget_snapshot": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 52.675460861556054,
+    "reserved_GPU_hours": 6.008333333333334,
+    "available_after_reservations_GPU_hours": 965.3162058051106
+  },
+  "window_expires_UTC": "2026-11-09T06:26:46.606656+00:00",
+  "remaining_wall_hours": 56.439145314362314,
+  "observed_full_model_calibration_GPU_hours": {
+    "pg": 0.39432619839444266,
+    "cfgen": 1.8022725845611107,
+    "scvi": 0.08763480446499973
+  },
+  "required_fresh_fits_per_method": 15,
+  "rough_serial_matrix_GPU_and_wall_hours": 34.263503811308304,
+  "rough_with_50percent_slower_runtime_hours": 51.39525571696245,
+  "rough_with_double_runtime_hours": 68.52700762261661,
+  "all_new_fits_from_scratch": true,
+  "existing_global_scientific_serialization_preserved": true,
+  "allocation_or_reservation_created": false,
+  "no_foreign_controls": true,
+  "no_window_extension": true,
+  "limitations": "Extrapolation from one completed fit per method under different sharing conditions; excludes remaining selection/confirmation, new heldout sampling changes, source/runtime qualification, scoring and audit overhead, failures and capacity waits. The estimates are not a guarantee or an authorization. Every actual cell must independently fit the unchanged finite cap, window, canonical project/core budget and observed shared resource forecasts."
+}
