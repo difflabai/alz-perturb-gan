@@ -1,0 +1,182 @@
+{
+  "status": "MATCHED_SEED0_CALIBRATION_POOLED_STAGE_AND_DONOR_TRADEOFFS",
+  "UTC": "2026-11-06T21:58:05.530009+00:00",
+  "rows": [
+    {
+      "method": "scVI400",
+      "finite": true,
+      "cell_energy_distance": 0.22857870145323922,
+      "energy_score": 2.3489122410781658,
+      "spread_ratio": 0.349303797578872,
+      "within_condition_spread_ratio": 0.18403745969334231,
+      "coverage80": 0.17307692307692307,
+      "per_donor_energy_score": [
+        1.5445622440695967,
+        3.3472854136175925,
+        1.9748013326906984,
+        2.528999973934776
+      ],
+      "per_stage_cell_energy_distance": [
+        0.6652876265802954,
+        1.687337107952679,
+        1.0861057903410751,
+        0.49830515436055745
+      ],
+      "diagnostic_macro_stage_distance": 0.9842589198086518,
+      "source": "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json",
+      "source_SHA256": "5312be07c39064c56fb95f2c34726ce171399234679a7d5ed9e261b42aedcb10"
+    },
+    {
+      "method": "CFGen300AE1500FM",
+      "finite": true,
+      "cell_energy_distance": 0.2513296992803724,
+      "energy_score": 2.283138111608369,
+      "spread_ratio": 0.2692438880627546,
+      "within_condition_spread_ratio": 0.1652430757753246,
+      "coverage80": 0.21153846153846154,
+      "per_donor_energy_score": [
+        1.4441398246659407,
+        3.3706077050049217,
+        1.8423475966405944,
+        2.4754573201220182
+      ],
+      "per_stage_cell_energy_distance": [
+        0.5682371272456974,
+        1.5919988226849169,
+        1.1478464065272513,
+        0.5052083306515449
+      ],
+      "diagnostic_macro_stage_distance": 0.9533226717773526,
+      "source": "/ml2/alz/analysis/CAL_GPU0_V1_matched_cfgen_f0_cfgen_s0-result.json",
+      "source_SHA256": "bdc56e64a36ff3f17a0791fe731da986477e8153bb19709b33b2fc3ff534abba"
+    },
+    {
+      "method": "hierarchical_resampling",
+      "finite": true,
+      "cell_energy_distance": 0.24277825308317968,
+      "energy_score": 2.079287181278266,
+      "spread_ratio": 1.086688043301637,
+      "within_condition_spread_ratio": 0.9935126950887428,
+      "coverage80": 0.6778846153846154,
+      "per_donor_energy_score": [
+        1.272282323410263,
+        3.047641176747636,
+        1.95978725566323,
+        2.0374379692919344
+      ],
+      "per_stage_cell_energy_distance": [
+        0.9114143695390835,
+        1.8390837374697222,
+        1.132453828552058,
+        0.5532384176654261
+      ],
+      "diagnostic_macro_stage_distance": 1.1090475883065725,
+      "source": "/ml2/alz/analysis/baseline_calibration_seed0.json",
+      "source_SHA256": "46babfb542f4ed09a4e08ff60d86da3049798f8f245e882716a50f950a513a18"
+    },
+    {
+      "method": "c014_native096_20k",
+      "finite": true,
+      "cell_energy_distance": 0.3426209177124129,
+      "energy_score": 2.140877791854103,
+      "spread_ratio": 0.8007064268554454,
+      "within_condition_spread_ratio": 0.7317261429446565,
+      "coverage80": 0.6153846153846154,
+      "per_donor_energy_score": [
+        1.1010725344340766,
+        3.406126284598753,
+        1.8814133926025012,
+        2.1748989557810803
+      ],
+      "per_stage_cell_energy_distance": [
+        0.8462513613577656,
+        2.0299723995861783,
+        1.1332835683199196,
+        0.5315226042715704
+      ],
+      "diagnostic_macro_stage_distance": 1.1352574833838585,
+      "source": "/ml2/alz/analysis/hpo20k/results/CAL_GPU0_V1_h20_c014_f0_pg_s0.json",
+      "source_SHA256": "160893a339e238dd2e42d433354d117240a5a5b538565bb0a6c989e3423b0011"
+    },
+    {
+      "method": "d000_native097_20k",
+      "finite": true,
+      "cell_energy_distance": 0.21992865338427325,
+      "energy_score": 1.9537118942286584,
+      "spread_ratio": 1.0316557076122854,
+      "within_condition_spread_ratio": 0.9670804123928186,
+      "coverage80": 0.6826923076923077,
+      "per_donor_energy_score": [
+        1.1499889157466354,
+        2.6149681536484795,
+        2.1061048179769397,
+        1.9437856895425787
+      ],
+      "per_stage_cell_energy_distance": [
+        1.1003814798779246,
+        1.427898486002821,
+        1.0663081631141367,
+        0.5443863623639995
+      ],
+      "diagnostic_macro_stage_distance": 1.0347436228397204,
+      "source": "/ml2/alz/analysis/distribution097/results/CAL_GPU0_V1_dist097_d000_f0_pg_s0.json",
+      "source_SHA256": "e84ec67bb5233c95100488fae89d03faf029d5ee1c2801c69ec29ee214330a14"
+    }
+  ],
+  "primary_pooled_mixture_distance_ranking": [
+    "d000_native097_20k",
+    "scVI400",
+    "hierarchical_resampling",
+    "CFGen300AE1500FM",
+    "c014_native096_20k"
+  ],
+  "diagnostic_per_stage_rankings": [
+    [
+      "CFGen300AE1500FM",
+      "scVI400",
+      "c014_native096_20k",
+      "hierarchical_resampling",
+      "d000_native097_20k"
+    ],
+    [
+      "d000_native097_20k",
+      "CFGen300AE1500FM",
+      "scVI400",
+      "hierarchical_resampling",
+      "c014_native096_20k"
+    ],
+    [
+      "d000_native097_20k",
+      "scVI400",
+      "hierarchical_resampling",
+      "c014_native096_20k",
+      "CFGen300AE1500FM"
+    ],
+    [
+      "scVI400",
+      "CFGen300AE1500FM",
+      "c014_native096_20k",
+      "d000_native097_20k",
+      "hierarchical_resampling"
+    ]
+  ],
+  "diagnostic_macro_stage_ranking": [
+    "CFGen300AE1500FM",
+    "scVI400",
+    "d000_native097_20k",
+    "hierarchical_resampling",
+    "c014_native096_20k"
+  ],
+  "donor_energy_ranking": [
+    "d000_native097_20k",
+    "hierarchical_resampling",
+    "c014_native096_20k",
+    "CFGen300AE1500FM",
+    "scVI400"
+  ],
+  "primary_objective_unchanged": true,
+  "heldout_used": false,
+  "SOTA_claim": false,
+  "source_SHA256": "9c0f36893c39be9ab94b31c02f4cd7834dfd738ab9e1aaa5bc2fb5609e28d80c",
+  "limitations": "Four adaptively reused calibration donors, one training seed, two generation replicates. Pooled mixture distance is the declared primary objective. A pooled win is not a win in every stage; stage-specific distances and donor-level energy/spread remain visible. Macro-stage distance is diagnostic only and does not replace the declared primary objective."
+}
