@@ -20,7 +20,7 @@ def live(identity):
     return s[0]!='Z' and int(s[19])==identity['birth'] and Path('/proc/sys/kernel/random/boot_id').read_text().strip()==identity['boot']
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--minimum-selection',type=int,required=True);parser.add_argument('--name',required=True);args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--minimum-selection',type=int,required=True);parser.add_argument('--name',required=True);parser.add_argument('--state-root',type=Path,default=ROOT/'artifacts/hpo500-r4');args=parser.parse_args()
     path=ROOT/'analysis'/(args.name+'.json');assert not path.exists()
     native=read(ROOT/'analysis/released_tuning_v096/native_release.json')
     for source,pin in native['official_wheel_source_SHA256'].items():assert sha(source)==pin
@@ -85,7 +85,7 @@ def main():
         row['metrics']=d['metrics'];rows.append(row);del q;gc.collect()
     control=selected[0]['metrics'];valid=[d for d in selected if search.feasible(d,control)]
     best=min(valid,key=lambda d:(d['metrics']['energy_score'],d['metrics']['cell_energy_distance'],d['candidate_id']))
-    current=read(ROOT/'artifacts/hpo500-r4/progress.json');driver=read(ROOT/'artifacts/hpo500-r4/driver_identity.json')
+    current=read(args.state_root/'progress.json');driver=read(args.state_root/'driver_identity.json')
     running=None
     if current['status']=='NATIVE500STEP_FIT_OR_CALIBRATION_ACTIVE':
         auth=read(ROOT/'artifacts/allocations'/current['attempt']/'authorization.json');job=read(auth['ledger_path'])['jobs'][0]
