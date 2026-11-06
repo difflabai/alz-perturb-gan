@@ -54,7 +54,8 @@ def fit(value,completed_count):
  return q
 def main():
  p=argparse.ArgumentParser();p.add_argument('--activation',required=True);args=p.parse_args()
- scope.protocol();assert read(scope.PLAN)==scope.ENABLED
+ protocol=scope.protocol();assert read(scope.PLAN)==scope.ENABLED
+ disk=os.statvfs(ROOT);assert disk.f_bavail*disk.f_frsize>=protocol['retained_PC_disk_bytes']+10*2**30,'Insufficient local output space for declared full-PC retention'
  cells=matrix();assert len(cells)==45 and len({b.allocation_key(c) for c in cells})==45
  STATE.mkdir(exist_ok=True)
  with (STATE/'driver.lock').open('a+') as lock:

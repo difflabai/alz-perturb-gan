@@ -62,6 +62,7 @@ def finish(attempt):
   import numpy as np
   from scoring import score_summary_arrays
   from bench_core import cell_energy
+  from evaluation import Reservoir
   from state_fingerprint import fingerprint
   completed=b.read(out/'completed.json');native=b.read(out/'native_restore.json')
   assert completed['status']=='completed' and completed['metric_role']=='final_evaluation'
@@ -103,6 +104,13 @@ def finish(attempt):
     assert a['donors'].tolist()==m['donors']
     assert a['generated_cell_reservoir'].shape==(1500,50) and a['real_cell_reservoir'].shape==(1500,50)
     recomputed['cell_energy_distance']=cell_energy(a['generated_cell_reservoir'],a['real_cell_reservoir'])
+    if name.startswith('evaluation'):
+     reconstructed=Reservoir()
+     for stage in range(4):
+      full=np.load(dest/f'stage{stage}_all_generated_PCs.npy',mmap_mode='r',allow_pickle=False)
+      assert full.shape==(200,400,50) and full.dtype==np.float32 and np.isfinite(full).all()
+      for _ in range(int((a['stage']==stage).sum())):reconstructed.add(full)
+     np.testing.assert_array_equal(reconstructed.cells,a['generated_cell_reservoir'])
    for key,value in recomputed.items():
     if isinstance(value,(int,float,list)):np.testing.assert_allclose(m[key],value,rtol=0,atol=1e-10)
    if not name.startswith('resampling'):

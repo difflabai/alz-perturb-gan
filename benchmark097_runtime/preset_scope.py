@@ -16,7 +16,7 @@ PROOFS=[MODEL_PROOF,ENGINE_PROOF,
         ROOT/'analysis/matched_scvi/CPU_model_qualification.json',
         ROOT/'analysis/external_core_scvi_model_v096_CPU.json',
         CFGEN_DIR/'CPU_model_qualification.json',CFGEN_DIR/'CPU_saved_sampling_qualification.json',CFGEN_DIR/'CPU_exact_reload_qualification.json',
-        STUDY/'fit_evidence_CPU_qualification.json']
+        STUDY/'fit_evidence_CPU_qualification_v2.json']
 def read(p):return json.loads(Path(p).read_bytes())
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def cell(fold,method,seed):
@@ -38,6 +38,7 @@ def protocol():
  assert p['PG_formulation']==dict(recipe='bispf_optimized',EMA_decay=0,generator_gradient_response='none',penalty_input_domain='continuous',architecture='unchanged PG8 count generator and150D VectorCritic')
  assert p['endpoints']==dict(pg=20000,scvi=400,cfgen=dict(AE_epochs=300,FM_epochs=1500))
  assert p['cap_seconds']==21600 and not p['automatic_promotion'] and not p['SOTA_claim']
+ assert p['retain_full_generated_stage_PCs'] is True
  assert p['PG_frozen_selection_evidence_SHA256']
  for path,pin in p['PG_frozen_selection_evidence_SHA256'].items():assert Path(path).is_absolute() and sha(path)==pin
  return p

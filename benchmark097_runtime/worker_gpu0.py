@@ -85,7 +85,8 @@ def scientific(auth,admission,layout):
      yield item
    return run
   for rep in (0,1):
-   evaluate(ctx,method,seed,rep,finite(iterator),out/f'evaluation_r{rep}')
+   from retained_pcs import retain
+   evaluate(ctx,method,seed,rep,finite(retain(iterator,out/f'evaluation_r{rep}')),out/f'evaluation_r{rep}')
    evaluate(ctx,'hierarchical_resampling',seed,rep,finite(lambda schedule,c,s:iter_resampling(ctx,schedule,c,s)),out/f'resampling_r{rep}')
   evaluate(ctx,method,seed,0,finite(iterator),out/'stage_swap_r0',stage_swap=True)
   dump(out/'completed.json',dict(status='completed',metric_role='final_evaluation',method=method,fold=v['fold'],seed=seed,
