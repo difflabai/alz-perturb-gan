@@ -13,4 +13,3 @@ def validate_pg(q,auth):
     b.require(q['cache_manifest_SHA256']==b.sha(Path(auth['cache_dir'])/'manifest.json'),'Checkpoint optimization cache differs')
     b.require(q['particlegan_version']=='0.9.6' and q['penalty_options']=={'input_domain':'continuous'},'Native release/domain differs')
     b.require(q['released_hyperparameters']==scope.HYPER and q['variant_config']==scope.CFG,'Frozen configuration differs')
-
