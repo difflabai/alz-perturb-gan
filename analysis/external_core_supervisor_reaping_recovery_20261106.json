@@ -1,0 +1,23 @@
+{
+  "status": "SETTLED_SCVI_CELL_WAITED_ON_UNREAPED_OWN_GUARD_ZOMBIE",
+  "UTC": "2026-11-06T00:11:08.321034+00:00",
+  "scientific_cell_completed": true,
+  "native_exit_code": 0,
+  "canonical_reservations": 0,
+  "model_settings_changed": false,
+  "scientific_refit": false,
+  "stopped_only_exact_owned_batch_driver": {
+    "pid": 4158939,
+    "birth": 8126706,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
+    "source_SHA256": "88949ed358b171f42fc4b65668d91070b0c835f59a06a420e15f5c3e84682a1b",
+    "protocol_SHA256": "7eb3efa1ed4d4dcc70de0fe08f94dfb18754b2d028da2b72d0dc5d59ca097856",
+    "finite_cells": 30
+  },
+  "fix": "Reap already-exited direct-child guard before requiring process disappearance and starting independent audit. Preserve completed scVI cell; resume without refitting.",
+  "actual_supervisor_regression_tests_passed": 6,
+  "source_SHA256": {
+    "/ml2/alz/analysis/external_benchmark_driver.py": "17d9ac8dea1f33d8eeac97d556df7beed7ad88734c556997f5d5ab1deb651824",
+    "/ml2/alz/analysis/test_external_benchmark_driver.py": "667a036b59bb4a6fc4515a44bf003d85ca439102ef1d6a719060b30612fc768d"
+  }
+}

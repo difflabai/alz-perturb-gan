@@ -1,5 +1,5 @@
 """Ensure the finite queue retains negatives and requires all audited identities."""
-import copy,sys,unittest
+import copy,sys,unittest,subprocess,time
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import external_benchmark_driver as d
@@ -28,4 +28,20 @@ class Queue(unittest.TestCase):
             with self.assertRaises(AssertionError):d.validate_audit(q,(0,'pg',0))
         with self.assertRaises(AssertionError):d.validate_audit(original,(1,'pg',0))
     def test_import_does_not_expose_models_or_cuda(self):self.assertNotIn('torch',sys.modules)
+    def test_settled_zombie_direct_child_is_reaped_before_audit(self):
+        child=subprocess.Popen([sys.executable,'-I','-S','-c','pass'])
+        path=Path('/proc',str(child.pid),'stat')
+        identity=dict(pid=child.pid,birth=int(path.read_text().rsplit(')',1)[1].split()[19]),boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip())
+        for _ in range(100):
+            if path.read_text().rsplit(')',1)[1].split()[0]=='Z':break
+            time.sleep(.01)
+        self.assertTrue(d.reap_settled_guard(identity));self.assertFalse(path.exists())
+        child.wait()
+    def test_live_guard_is_never_signalled_or_reaped_early(self):
+        child=subprocess.Popen([sys.executable,'-I','-S','-c','import time;time.sleep(10)'])
+        try:
+            path=Path('/proc',str(child.pid),'stat')
+            identity=dict(pid=child.pid,birth=int(path.read_text().rsplit(')',1)[1].split()[19]),boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip())
+            self.assertFalse(d.reap_settled_guard(identity));self.assertTrue(path.exists())
+        finally:child.terminate();child.wait()
 if __name__=='__main__':unittest.main(verbosity=2)

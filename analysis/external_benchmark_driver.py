@@ -36,6 +36,16 @@ def run(command,*,timeout=None):
     p=subprocess.run(list(map(str,command)),cwd=ROOT,env=dict(os.environ,CUDA_VISIBLE_DEVICES='',OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1'),capture_output=True,text=True,timeout=timeout)
     if p.returncode:raise RuntimeError(f'Command failed ({p.returncode}): {command[0]}: {p.stderr[-2500:]}')
     return p
+def reap_settled_guard(identity):
+    """Reap an exited direct child so its zombie cannot stall a settled cell."""
+    path=Path('/proc',str(identity['pid']),'stat')
+    if not path.exists():return True
+    stat=path.read_text().rsplit(')',1)[1].split()
+    if stat[19]!=str(identity['birth']):return True
+    if identity['boot']!=Path('/proc/sys/kernel/random/boot_id').read_text().strip():return True
+    try:os.waitpid(identity['pid'],os.WNOHANG)
+    except ChildProcessError:pass
+    return not path.exists()
 def commit(paths,message):
     run(['git','add','--',*map(str,paths)]);run(['git','commit','-m',message])
 def report(kind,event,summary,details):
@@ -66,7 +76,7 @@ def wait_and_audit(value,folder):
             else:
                 exe=PG if value[1]=='pg' else SCVI
                 # Allow the owned guardian to exit after writing settlement.
-                if Path('/proc',str(jobs[0]['guard_identity']['pid'])).exists():time.sleep(1);continue
+                if not reap_settled_guard(jobs[0]['guard_identity']):time.sleep(1);continue
                 env=dict(os.environ,CUDA_VISIBLE_DEVICES='',OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1')
                 with (folder/'audit.stdout').open('xb') as out,(folder/'audit.stderr').open('xb') as err:
                     p=subprocess.run([str(exe),'-I','-S','-B',str(RUNTIME/'finish.py'),'--attempt',attempt(*value)],cwd=ROOT,env=env,stdin=subprocess.DEVNULL,stdout=out,stderr=err,timeout=600)
