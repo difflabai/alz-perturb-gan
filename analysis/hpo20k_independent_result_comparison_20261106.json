@@ -1,0 +1,59 @@
+{
+  "status": "INDEPENDENT_NATIVE20K_ENDPOINT_COUNTS_SCORES_AND_MATCHED500STEP_COMPARISON_PASS",
+  "UTC": "2026-11-06T21:11:24.945105+00:00",
+  "result_path": "/ml2/alz/analysis/hpo20k/results/CAL_GPU0_V1_h20_c014_f0_pg_s0.json",
+  "result_SHA256": "160893a339e238dd2e42d433354d117240a5a5b538565bb0a6c989e3423b0011",
+  "matched500step_result_path": "/ml2/alz/analysis/hpo500/results/CAL_GPU0_V1_h5_c014_search_f0_pg_s0.json",
+  "matched500step_result_SHA256": "42bc04a554c9fede93b46452749ab4d19620e0e2adafffb3b369ee30a263a820",
+  "matched_seed": 0,
+  "same_hyperparameters": true,
+  "same_formulation": true,
+  "same_data_and_generation_contract": true,
+  "complete_native_updates": 20000,
+  "native_version": "0.9.6",
+  "official_native_source_hashes_verified": 69,
+  "EMA_decay": 0,
+  "generator_gradient_response": "none",
+  "independent_generated_replicates_rescored": 2,
+  "total_generated_cells": 640000,
+  "from_scratch": true,
+  "metrics_at500": {
+    "energy_score": 1.8963749844196591,
+    "cell_energy_distance": 0.4496186549803438,
+    "spread_ratio": 0.8362298771942833,
+    "coverage80": 0.6971153846153846,
+    "per_donor_energy_score": [
+      1.3002794218925704,
+      2.858772821039165,
+      1.3673982829958753,
+      2.0590494117510265
+    ]
+  },
+  "metrics_at20000": {
+    "energy_score": 2.140877791854103,
+    "cell_energy_distance": 0.3426209177124129,
+    "spread_ratio": 0.8007064268554454,
+    "coverage80": 0.6153846153846154,
+    "per_donor_energy_score": [
+      1.1010725344340766,
+      3.406126284598753,
+      1.8814133926025012,
+      2.1748989557810803
+    ]
+  },
+  "energy_increase_percent": 12.893167724909006,
+  "cell_distance_reduction_percent": 23.797441694808818,
+  "per_donor_energy_deltas": [
+    -0.1992068874584938,
+    0.5473534635595878,
+    0.5140151096066259,
+    0.11584954403005376
+  ],
+  "actual_GPU_seconds": 10433.874065807991,
+  "actual_GPU_hours": 2.898298351613331,
+  "activation_revert_commit": "37bde935de0c1074b44607bb8e620aba878e0341",
+  "owned_resources_released": true,
+  "canonical_open_reservations": 0,
+  "CUDA_initialized": false,
+  "conclusion": "Longer training improved pooled cell-distribution distance but worsened donor-level energy on the same seed. One20k initialization and four adaptive calibration donors; not a SOTA/independentcohort or general longer-training conclusion."
+}
