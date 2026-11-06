@@ -1,0 +1,73 @@
+{
+  "status": "PROSPECTIVE_MATCHED_NATIVE096_DURATION_EXPERIMENT",
+  "UTC": "2026-11-06T00:54:12.100069+00:00",
+  "experiment": "duration096",
+  "ParticleGAN_version": "0.9.6",
+  "EMA_decay": 0.0,
+  "fold": 0,
+  "training_seed": 0,
+  "hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 0.5,
+    "prior_reg": 0.01
+  },
+  "variant_config": {
+    "z_dim": 8,
+    "stage_balance": false,
+    "cell_z_dim": 8,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0
+  },
+  "extension": {
+    "initial_completed_updates": 20000,
+    "fixed_endpoint": 40000,
+    "new_model_updates": 20000,
+    "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/fit/final.pt",
+    "checkpoint_SHA256": "f40e4b351939ce3932180ab7d5b601902ac09f65a24e0547c3a3bbfcc63208f7",
+    "training_log": {
+      "immutable_copy_path": "/ml2/alz/runs/CAL_GPU0_V1_external_b1_f0_pg_s0/fit/learning_curve.jsonl",
+      "SHA256": "48e481feb48a6b67976cc40f21b1b7a2f03e015ca83d281ac7215cd2a23379b3"
+    },
+    "whole_parent_scientific_fingerprint": "bd42b28a257a8054751daab76b32ae00719c70495e4a475e8c16703eb0394a24"
+  },
+  "parent_audit_path": "/ml2/alz/analysis/CAL_GPU0_V1_external_b1_f0_pg_s0-external-audit.json",
+  "parent_audit_SHA256": "446d1ef16402288c882014b59b959f1aeb2ebb6e6090f92735e4eb63b2808fd0",
+  "training_endpoints_to_score": [
+    20000,
+    30000,
+    40000
+  ],
+  "primary_contrast": "40000 minus20000, same model/seed and original continuous native recipe, live weights, all optimizer/random/usage state preserved through public execution_limit; no recipe horizon rewrite",
+  "metric_role": "calibration_selection",
+  "calibration_donors": [
+    "H20.33.032",
+    "H21.33.001",
+    "H21.33.023",
+    "H21.33.025"
+  ],
+  "generation_replicates": [
+    0,
+    1
+  ],
+  "sampling_contract": "calibration_equal_stage375_priority_v1",
+  "target_scores": [
+    "energy_score",
+    "cell_energy_distance",
+    "spread_ratio"
+  ],
+  "primary_improvement": "ES40k<ES20k and cellED40k<=cellED20k; report all deltas and both replicate results regardless of sign",
+  "checkpoint_selection": "40k is the sole extension endpoint;30k diagnostic only; no adaptive early stopping or best-checkpoint substitution",
+  "inference_limits": "One adaptive calibration seed with4donors. Prior held-out20k scores known before duration hypothesis; this is exploratory and cannot change, select, or replace the existing frozen30-cell external benchmark. No claim that matching20k->40k fixedrecipe is independent validation or that longer training generally improves. Confirm duration across new seeds before adoption.",
+  "evaluation_target_values_read_by_this_experiment": false,
+  "cap_seconds": 21600,
+  "research_window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+  "GPU_job_created_at_declaration": false,
+  "latest_release_checked_UTC": "2026-11-06T00:54:12.104118+00:00",
+  "official_release_source": "https://pypi.org/pypi/particlegan/json",
+  "official_latest_version": "0.9.6",
+  "wheel_SHA256": "51fc7c6225815c645ceda5203e18ccf787bc979f32b34768e444dec7134941be",
+  "earlier_unmatched40k_result_retained": "/ml2/alz/analysis/released_best_40k_duration_comparison.json"
+}
