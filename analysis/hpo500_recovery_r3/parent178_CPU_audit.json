@@ -1,0 +1,50 @@
+{
+  "status": "ACTUAL_HPO500_RESOURCE_INTERRUPTION_NATIVE178_CPU_AUDIT_PASS",
+  "UTC": "2026-11-06T03:11:21.139243+00:00",
+  "parent_attempt": "CAL_GPU0_V1_h5_c008_search_f0_pg_s0",
+  "parent_authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_c008_search_f0_pg_s0/authorization.json",
+  "parent_authorization_SHA256": "730e1047b8a5ed5f66cc7f9ac0ec7256774bf888cce6771031948a779df90be3",
+  "parent_ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_h5_c008_search_f0_pg_s0.json",
+  "parent_ledger_SHA256": "e3a53efa2bfbedd3378eaa04f59e8211f0a8f8cd95cbefe6e4cc803f3105f16a",
+  "parent_settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_h5_c008_search_f0_pg_s0-settlement.json",
+  "parent_settlement_SHA256": "a2a62ab78b3b44270182ad3d1ca82ea01eb46345cebc97382f87248c1f87c1c9",
+  "checkpoint_path": "/ml2/alz/artifacts/hpo500-recovery-r3/parent/native178.pt",
+  "checkpoint_SHA256": "b14934c3ee0095d3a3445b442853a53e668c78848f298660304f2f6a75221e90",
+  "learning_curve_path": "/ml2/alz/artifacts/hpo500-recovery-r3/parent/learning_curve.jsonl",
+  "learning_curve_SHA256": "65e4f773475c5eed688e3161a79c499c321ffa365ce3c06aece1f4463237833f",
+  "whole_parent_scientific_fingerprint": "2cf023d81f2e85c46138bb57cc5ea3025823c24ba1b590a85e439f51f1ffc3ff",
+  "native_policy_fingerprint": "08fea73b396c201a8d5697c2f3e59ff5ff6eaffb9a3613ad30931538215eba02",
+  "completed_updates": 178,
+  "fixed_endpoint": 500,
+  "seed": 0,
+  "hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 2.0,
+    "reg_kappa": 0.5,
+    "prior_reg": 0.01
+  },
+  "variant_config": {
+    "z_dim": 8,
+    "stage_balance": false,
+    "cell_z_dim": 8,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0
+  },
+  "cache_dir": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0",
+  "parent_charged_GPU_seconds": 170.67086778700468,
+  "remaining_trial_cap_seconds": 3429,
+  "parent_expiry_unix": 1793937928.1176183,
+  "owned_processes_and_lease_absent": true,
+  "clean_settlement": true,
+  "scientific_nonfinite_failure": false,
+  "native_device_metadata_relabelled": false,
+  "CUDA_initialized": false,
+  "same_model_and_all_random_state_CUDA_restore_required_before179": true,
+  "source_SHA256": {
+    "/ml2/alz/analysis/hpo500_recovery_r3/audit_parent_cpu.py": "afe1ec0c62ff6687da37e554a8dba4721a852572ced6c628ed7861b5c9597bc6",
+    "/ml2/alz/analysis/hpo500/model/released_adapter.py": "c69e7e24f793258a6f07c9ec922eaffda22fd9cffcbf035d82e92066a80c6f37",
+    "/ml2/alz/analysis/hpo500/model/released_update.py": "bfc4c774ebc0b42b9d9a27ce8405fe03216af8a52df0062abd35243d6b04211e"
+  }
+}
