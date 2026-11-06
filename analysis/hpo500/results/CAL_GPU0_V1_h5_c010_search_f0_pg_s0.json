@@ -1,0 +1,209 @@
+{
+  "UTC": "2026-11-06T03:58:48.613512+00:00",
+  "attempt": "CAL_GPU0_V1_h5_c010_search_f0_pg_s0",
+  "physical_attempt": "CAL_GPU0_V1_h5_c010_search_f0_pg_s0",
+  "resumed_same_trial": false,
+  "candidate_id": "c010",
+  "phase": "search",
+  "seed": 0,
+  "hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "protocol_SHA256": "9c032b64740d3bc28df813a1a950c22d331f0c3e94e320e9833e6969352304ec",
+  "proposal_SHA256": "8be2270af93b6a6681349aab84c29e69927e983031f5a43877da8c53bcca8983",
+  "owned_processes_and_lease_absent": true,
+  "clean_settlement": true,
+  "charged_GPU_seconds": 929.6109814810043,
+  "phase_charged_GPU_seconds": 929.6109814810043,
+  "calibration_only": true,
+  "endpoint": 500,
+  "automatic_promotion": false,
+  "status": "HPO500_NATIVE_COUNTS_SCORES_CLEAN_AUDIT_PASS",
+  "finite": true,
+  "metrics": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 2.42750970031772,
+    "cell_energy_distance": 1.2462862650156872,
+    "spread_ratio": 0.941733804938819,
+    "within_condition_spread_ratio": 0.9375557350018642,
+    "coverage80": 0.6105769230769231,
+    "generated_zero_count_rate": 0.0,
+    "per_donor_energy_score": [
+      2.3029718643652535,
+      3.186995182798227,
+      1.86860324912334,
+      2.3514685049840587
+    ],
+    "per_stage_cell_energy_distance": [
+      1.2984006554892105,
+      2.492523599905719,
+      1.867125265668748,
+      2.015402584915976
+    ]
+  },
+  "replicate_metrics": [
+    {
+      "metric_role": "calibration_selection",
+      "donors": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "stage": [
+        3,
+        1,
+        0,
+        2
+      ],
+      "per_donor_energy_score": [
+        2.284172579901136,
+        3.1939206286194484,
+        1.8807878200578034,
+        2.359502557764641
+      ],
+      "energy_score": 2.429595896585757,
+      "cell_energy_distance": 1.249025842785617,
+      "per_stage_cell_energy_distance": [
+        1.357304345745435,
+        2.4475847543675417,
+        1.8881731235056316,
+        1.9748742849700944
+      ],
+      "spread_ratio": 0.9480060755782377,
+      "within_condition_spread_ratio": 0.9452169058284109,
+      "coverage80": 0.6153846153846154,
+      "per_stage_composition_L1": [
+        0.38658298429319365,
+        0.765920823095823,
+        0.49877257505773664,
+        0.7714134615384617
+      ],
+      "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+      "not_independent_confirmation": true,
+      "status": "completed",
+      "method": "pg_hpo500",
+      "training_seed": 0,
+      "generation_replicate": 0,
+      "generated_cells": 320000,
+      "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+      "sampling_contract": "calibration_equal_stage375_priority_v1",
+      "generated_zero_count_rate": 0.0,
+      "actual_library_quantiles": [
+        7.0,
+        88.0,
+        214.0,
+        477.0,
+        4011.0
+      ],
+      "supplied_exposure_quantiles": [
+        18.0,
+        92.0,
+        218.0,
+        471.0,
+        2189.0
+      ],
+      "arrays_SHA256": "fa984b6c268e9b1b6882a119993994bdedea0404a1338dd045048a9292a48245"
+    },
+    {
+      "metric_role": "calibration_selection",
+      "donors": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "stage": [
+        3,
+        1,
+        0,
+        2
+      ],
+      "per_donor_energy_score": [
+        2.3217711488293715,
+        3.1800697369770052,
+        1.8564186781888765,
+        2.343434452203476
+      ],
+      "energy_score": 2.4254235040496823,
+      "cell_energy_distance": 1.2435466872457575,
+      "per_stage_cell_energy_distance": [
+        1.239496965232986,
+        2.5374624454438965,
+        1.8460774078318645,
+        2.0559308848618576
+      ],
+      "spread_ratio": 0.9354615342994003,
+      "within_condition_spread_ratio": 0.9298945641753176,
+      "coverage80": 0.6057692307692307,
+      "per_stage_composition_L1": [
+        0.3438079842931937,
+        0.7649708230958228,
+        0.5100642609699767,
+        0.8183384615384613
+      ],
+      "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+      "not_independent_confirmation": true,
+      "status": "completed",
+      "method": "pg_hpo500",
+      "training_seed": 0,
+      "generation_replicate": 1,
+      "generated_cells": 320000,
+      "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+      "sampling_contract": "calibration_equal_stage375_priority_v1",
+      "generated_zero_count_rate": 0.0,
+      "actual_library_quantiles": [
+        6.0,
+        88.0,
+        214.0,
+        476.0,
+        4470.0
+      ],
+      "supplied_exposure_quantiles": [
+        18.0,
+        92.0,
+        219.0,
+        470.0,
+        2189.0
+      ],
+      "arrays_SHA256": "c889a916657b5a2440e3bc027634146cd73e9b60c68c2285ce9887e2e768c5ce"
+    }
+  ],
+  "files_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/fit/final.pt": "80d14cc666614e79633b71608de06df59f7105c6dc5f0d380be5a098495d21f6",
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/r0/stage0_exemplar.npz": "a782ee6a9dd26ab4bc7db5a2e3d6f8b5aaa5cb4144bc594b3c20330779469a2d",
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/r0/stage1_exemplar.npz": "65d31eb70a967601af84a13eaddf97e3e23e2cbb9d94f72e071a0877249068ea",
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/r0/stage2_exemplar.npz": "daa89b9cfa60ca9b12c278e14282afc1bd461452d610660c3803223d731124da",
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/r0/stage3_exemplar.npz": "06df3ecacba17d3ba6b1dd1ab2a9680ee520c6a55d41237586af22e54cc13a42",
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/r0/arrays.npz": "fa984b6c268e9b1b6882a119993994bdedea0404a1338dd045048a9292a48245",
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/r1/stage0_exemplar.npz": "6eb90ddac7e5247e595712d040beca2f086877f67570d30392e9e43a017ce734",
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/r1/stage1_exemplar.npz": "c6fcbd3d3235c62568b3c7498afbb322f995526a7a72c0af58f91e74cf5226fb",
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/r1/stage2_exemplar.npz": "c999638bdb7504f97e40ebd9475f61ba9f68924768d855c75583e209de1f5e1f",
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/r1/stage3_exemplar.npz": "e7065b32d69ef0eb3ddeeefd48b1ad8fbfce8b7b4d9548aaf5cbe0dd4e3568b9",
+    "/ml2/alz/runs/CAL_GPU0_V1_h5_c010_search_f0_pg_s0/r1/arrays.npz": "c889a916657b5a2440e3bc027634146cd73e9b60c68c2285ce9887e2e768c5ce"
+  },
+  "from_scratch": true,
+  "physical_start_update": 0,
+  "new_phase_model_updates": 500,
+  "GPU_peak_allocated_bytes": 568960000,
+  "GPU_peak_reserved_bytes": 761266176,
+  "GPU_allocator_limit_bytes": 2147483648,
+  "independent_saved_score_audit": true,
+  "native_saved_state_matches_GPU_restore": true
+}
