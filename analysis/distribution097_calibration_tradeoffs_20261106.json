@@ -1,6 +1,6 @@
 {
   "status": "MATCHED_SEED0_CALIBRATION_POOLED_STAGE_AND_DONOR_TRADEOFFS",
-  "UTC": "2026-11-06T22:40:41.130744+00:00",
+  "UTC": "2026-11-06T23:42:32.154331+00:00",
   "rows": [
     {
       "method": "scVI400",
@@ -169,6 +169,54 @@
       "diagnostic_macro_stage_distance": 1.1251495740129482,
       "source": "/ml2/alz/analysis/distribution097/results/CAL_GPU0_V1_dist097_d002_f0_pg_s0.json",
       "source_SHA256": "01bf57c803b197309a6af4b83857883b120a76117c9d04934f77c2990fd039eb"
+    },
+    {
+      "method": "d003_native097_20k",
+      "finite": true,
+      "cell_energy_distance": 0.29336267865523435,
+      "energy_score": 1.9804881655393065,
+      "spread_ratio": 0.822267897284696,
+      "within_condition_spread_ratio": 0.7723501593288041,
+      "coverage80": 0.6490384615384616,
+      "per_donor_energy_score": [
+        1.0906757134673875,
+        3.196603711187474,
+        1.700501239525817,
+        1.9341719979765477
+      ],
+      "per_stage_cell_energy_distance": [
+        0.7762729656685687,
+        1.847069131459027,
+        0.9827303028206362,
+        0.5216821384085337
+      ],
+      "diagnostic_macro_stage_distance": 1.0319386345891914,
+      "source": "/ml2/alz/analysis/distribution097b/results/CAL_GPU0_V1_dist097_d003_f0_pg_s0.json",
+      "source_SHA256": "956ccad1d13de99ce5e43fc99e1535790e15af21afb0738c82cb7ebb55dad0ca"
+    },
+    {
+      "method": "d004_native097_20k",
+      "finite": true,
+      "cell_energy_distance": 0.29173898199550674,
+      "energy_score": 2.0761000214121434,
+      "spread_ratio": 0.8446463006894037,
+      "within_condition_spread_ratio": 0.7826114330220615,
+      "coverage80": 0.6057692307692308,
+      "per_donor_energy_score": [
+        1.1927486487479995,
+        3.172644039615979,
+        1.7510993256300253,
+        2.1879080716545705
+      ],
+      "per_stage_cell_energy_distance": [
+        0.7826976949071192,
+        1.819349002822821,
+        1.1451249012998863,
+        0.5451068691823622
+      ],
+      "diagnostic_macro_stage_distance": 1.0730696170530472,
+      "source": "/ml2/alz/analysis/distribution097b/results/CAL_GPU0_V1_dist097_d004_f0_pg_s0.json",
+      "source_SHA256": "25aea466d0d3fdf8a2e44d0df0ffda1bae19ac0fdcfbc570314d27cfb042ae35"
     }
   ],
   "primary_pooled_mixture_distance_ranking": [
@@ -176,6 +224,8 @@
     "scVI400",
     "hierarchical_resampling",
     "CFGen300AE1500FM",
+    "d004_native097_20k",
+    "d003_native097_20k",
     "d001_native097_20k",
     "d002_native097_20k",
     "c014_native096_20k"
@@ -184,6 +234,8 @@
     [
       "CFGen300AE1500FM",
       "scVI400",
+      "d003_native097_20k",
+      "d004_native097_20k",
       "c014_native096_20k",
       "d002_native097_20k",
       "hierarchical_resampling",
@@ -195,15 +247,19 @@
       "CFGen300AE1500FM",
       "scVI400",
       "d001_native097_20k",
+      "d004_native097_20k",
       "hierarchical_resampling",
+      "d003_native097_20k",
       "d002_native097_20k",
       "c014_native096_20k"
     ],
     [
+      "d003_native097_20k",
       "d000_native097_20k",
       "scVI400",
       "hierarchical_resampling",
       "c014_native096_20k",
+      "d004_native097_20k",
       "CFGen300AE1500FM",
       "d002_native097_20k",
       "d001_native097_20k"
@@ -211,8 +267,10 @@
     [
       "scVI400",
       "CFGen300AE1500FM",
+      "d003_native097_20k",
       "c014_native096_20k",
       "d000_native097_20k",
+      "d004_native097_20k",
       "d002_native097_20k",
       "hierarchical_resampling",
       "d001_native097_20k"
@@ -221,7 +279,9 @@
   "diagnostic_macro_stage_ranking": [
     "CFGen300AE1500FM",
     "scVI400",
+    "d003_native097_20k",
     "d000_native097_20k",
+    "d004_native097_20k",
     "hierarchical_resampling",
     "d002_native097_20k",
     "c014_native096_20k",
@@ -229,6 +289,8 @@
   ],
   "donor_energy_ranking": [
     "d000_native097_20k",
+    "d003_native097_20k",
+    "d004_native097_20k",
     "hierarchical_resampling",
     "d002_native097_20k",
     "c014_native096_20k",
@@ -239,6 +301,6 @@
   "primary_objective_unchanged": true,
   "heldout_used": false,
   "SOTA_claim": false,
-  "source_SHA256": "9c0f36893c39be9ab94b31c02f4cd7834dfd738ab9e1aaa5bc2fb5609e28d80c",
+  "source_SHA256": "ec2e39988b2c4b2037e2912ec0ada65ec890f94aa9d2d67210e3d42a2934deaf",
   "limitations": "Four adaptively reused calibration donors, one training seed, two generation replicates. Pooled mixture distance is the declared primary objective. A pooled win is not a win in every stage; stage-specific distances and donor-level energy/spread remain visible. Macro-stage distance is diagnostic only and does not replace the declared primary objective."
 }

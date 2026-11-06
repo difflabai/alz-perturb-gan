@@ -63,7 +63,7 @@ def summarize(fit):
                 learning_curve_SHA256=sha(fit / 'learning_curve.jsonl'))
 
 def main():
-    names = ['CAL_GPU0_V1_h20_c014_f0_pg_s0'] + [f'CAL_GPU0_V1_dist097_{cid}_f0_pg_s0' for cid in ('d000', 'd001', 'd002')]
+    names = ['CAL_GPU0_V1_h20_c014_f0_pg_s0'] + [f'CAL_GPU0_V1_dist097_d00{i}_f0_pg_s0' for i in range(6)]
     completed = [summarize(ROOT / 'runs' / name / 'fit') for name in names
                  if (ROOT / 'runs' / name / 'fit/final.pt').exists()]
     assert not torch.cuda.is_initialized()

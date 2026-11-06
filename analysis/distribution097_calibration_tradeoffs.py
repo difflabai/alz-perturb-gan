@@ -15,8 +15,8 @@ def main():
                ('CFGen300AE1500FM', ROOT / 'analysis/CAL_GPU0_V1_matched_cfgen_f0_cfgen_s0-result.json'),
                ('hierarchical_resampling', ROOT / 'analysis/baseline_calibration_seed0.json'),
                ('c014_native096_20k', ROOT / 'analysis/hpo20k/results/CAL_GPU0_V1_h20_c014_f0_pg_s0.json')]
-    sources += [(f'{cid}_native097_20k', ROOT / f'analysis/distribution097/results/CAL_GPU0_V1_dist097_{cid}_f0_pg_s0.json')
-                for cid in ('d000', 'd001', 'd002')]
+    sources += [(f'd00{i}_native097_20k', ROOT / f'analysis/{"distribution097" if i < 3 else "distribution097b"}/results/CAL_GPU0_V1_dist097_d00{i}_f0_pg_s0.json')
+                for i in range(6)]
     rows = []
     reference = read(ROOT / 'analysis/baseline_calibration_seed0.json')
     for name, path in sources:

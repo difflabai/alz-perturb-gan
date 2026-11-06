@@ -1,6 +1,6 @@
 {
   "status": "READ_ONLY_COMPLETED_FRESH20K_TRAINING_STATE_DIAGNOSTICS",
-  "UTC": "2026-11-06T22:40:40.672963+00:00",
+  "UTC": "2026-11-06T23:42:31.834303+00:00",
   "completed_runs": [
     {
       "fit": "/ml2/alz/runs/CAL_GPU0_V1_h20_c014_f0_pg_s0/fit",
@@ -437,9 +437,227 @@
         }
       ],
       "learning_curve_SHA256": "5fc57e82d32f992687b90d17c84b279b0f899dbf3c59c095a1f704aa0ca59678"
+    },
+    {
+      "fit": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d003_f0_pg_s0/fit",
+      "native_version": "0.9.7",
+      "hyperparameters": {
+        "generator_lr": 0.003,
+        "critic_lr": 0.0045,
+        "particle_lr": 0.0075,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "fixed_observed_rates": {
+        "G_prior_LRs": [
+          0.003,
+          0.0075
+        ],
+        "D_LRs": [
+          0.0045000000000000005
+        ]
+      },
+      "windows": [
+        {
+          "after_update": 0,
+          "through_update": 5000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.386502206325531,
+            "D_penalty": 0.013517184648662806,
+            "G_adversarial": 2.9947015047073364,
+            "critic_gap": 5.978284597396851,
+            "D_gradient_norm": 3.362579107284546,
+            "G_gradient_norm": 10.87070608139038,
+            "prior_gradient_norm": 1.1223748326301575
+          }
+        },
+        {
+          "after_update": 5000,
+          "through_update": 10000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.3646063506603241,
+            "D_penalty": 0.02069508656859398,
+            "G_adversarial": 3.2265130281448364,
+            "critic_gap": 6.558055877685547,
+            "D_gradient_norm": 8.211178302764893,
+            "G_gradient_norm": 14.135237693786621,
+            "prior_gradient_norm": 1.2013168334960938
+          }
+        },
+        {
+          "after_update": 10000,
+          "through_update": 15000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.4739978611469269,
+            "D_penalty": 0.026816489174962044,
+            "G_adversarial": 2.9917068481445312,
+            "critic_gap": 5.29892110824585,
+            "D_gradient_norm": 9.88474988937378,
+            "G_gradient_norm": 14.799059867858887,
+            "prior_gradient_norm": 1.0925673246383667
+          }
+        },
+        {
+          "after_update": 15000,
+          "through_update": 20000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.595052182674408,
+            "D_penalty": 0.02914151456207037,
+            "G_adversarial": 2.6819950342178345,
+            "critic_gap": 4.670125484466553,
+            "D_gradient_norm": 11.506823539733887,
+            "G_gradient_norm": 13.931078433990479,
+            "prior_gradient_norm": 1.1032758951187134
+          }
+        }
+      ],
+      "snapshots": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d003_f0_pg_s0/fit/checkpoint05000.pt",
+          "SHA256": "bbffb0846db694492463e46d994fe28a8863b7e939d95cb6ecf27581e0a44926",
+          "completed_updates": 5000,
+          "total_particle_draws": 160000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 8.645028114318848,
+          "particle_mean_squared_norm": 8.662986755371094
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d003_f0_pg_s0/fit/checkpoint10000.pt",
+          "SHA256": "08e6ae722d2054b6ef6b1c90a1d0c230cb5bb28a18165526eaaa68258efcf798",
+          "completed_updates": 10000,
+          "total_particle_draws": 320000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 8.487462997436523,
+          "particle_mean_squared_norm": 8.514591217041016
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d003_f0_pg_s0/fit/final.pt",
+          "SHA256": "b2b08298fcf989158ef08a43b8b461c3c783d0b000890a59e8c9030cf2437137",
+          "completed_updates": 20000,
+          "total_particle_draws": 640000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 8.33333683013916,
+          "particle_mean_squared_norm": 8.361613273620605
+        }
+      ],
+      "learning_curve_SHA256": "f458ee1970560c484d064a1e02bf283cac69b04275b1e61e749185ca7ad0c733"
+    },
+    {
+      "fit": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d004_f0_pg_s0/fit",
+      "native_version": "0.9.7",
+      "hyperparameters": {
+        "generator_lr": 0.009000000000000001,
+        "critic_lr": 0.013499999999999998,
+        "particle_lr": 0.0225,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "fixed_observed_rates": {
+        "G_prior_LRs": [
+          0.009000000000000001,
+          0.0225
+        ],
+        "D_LRs": [
+          0.013499999999999998
+        ]
+      },
+      "windows": [
+        {
+          "after_update": 0,
+          "through_update": 5000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.47388437390327454,
+            "D_penalty": 0.026889333501458168,
+            "G_adversarial": 3.0024051666259766,
+            "critic_gap": 5.433907508850098,
+            "D_gradient_norm": 8.8604097366333,
+            "G_gradient_norm": 12.194349765777588,
+            "prior_gradient_norm": 0.902985155582428
+          }
+        },
+        {
+          "after_update": 5000,
+          "through_update": 10000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.6552263796329498,
+            "D_penalty": 0.03256453014910221,
+            "G_adversarial": 2.469434380531311,
+            "critic_gap": 4.331753253936768,
+            "D_gradient_norm": 8.61843490600586,
+            "G_gradient_norm": 11.592337608337402,
+            "prior_gradient_norm": 0.946668803691864
+          }
+        },
+        {
+          "after_update": 10000,
+          "through_update": 15000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.6238722801208496,
+            "D_penalty": 0.03127782233059406,
+            "G_adversarial": 2.420303702354431,
+            "critic_gap": 4.219069957733154,
+            "D_gradient_norm": 6.43917441368103,
+            "G_gradient_norm": 9.356412410736084,
+            "prior_gradient_norm": 0.8028284311294556
+          }
+        },
+        {
+          "after_update": 15000,
+          "through_update": 20000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.642276793718338,
+            "D_penalty": 0.031047005206346512,
+            "G_adversarial": 2.3804876804351807,
+            "critic_gap": 4.166714906692505,
+            "D_gradient_norm": 5.88224458694458,
+            "G_gradient_norm": 8.65113639831543,
+            "prior_gradient_norm": 0.9160820543766022
+          }
+        }
+      ],
+      "snapshots": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d004_f0_pg_s0/fit/checkpoint05000.pt",
+          "SHA256": "88a81167cab16c7f7432485c4a2d06e389c0e0140f9cae876922befb1c53e71e",
+          "completed_updates": 5000,
+          "total_particle_draws": 160000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 8.073354721069336,
+          "particle_mean_squared_norm": 8.095728874206543
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d004_f0_pg_s0/fit/checkpoint10000.pt",
+          "SHA256": "b66078d3851256dc93b0c474d7394b7d3fc53186cbd430702403ffaabe974f6d",
+          "completed_updates": 10000,
+          "total_particle_draws": 320000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 7.392069339752197,
+          "particle_mean_squared_norm": 7.414913177490234
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d004_f0_pg_s0/fit/final.pt",
+          "SHA256": "5311e716a5c77818999fa0fa5bea88b833f9df0d26a8dc1cd5be1eddeaa1c32a",
+          "completed_updates": 20000,
+          "total_particle_draws": 640000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 6.366499900817871,
+          "particle_mean_squared_norm": 6.404148101806641
+        }
+      ],
+      "learning_curve_SHA256": "b5aa158c2b2203403faf573837994e817509022667c321cc9edcd4f22cc73c81"
     }
   ],
-  "source_SHA256": "f11781403e1b2ca79b2584eb5fe48a114dcb3510dd9720059958c3a36f95bdf7",
+  "source_SHA256": "124e5f55eaac7ce81cdf4eaf8b9c5d041aa3a598770482e0c3a88f97b3afbc39",
   "no_optimizer_or_model_constructed": true,
   "CUDA_initialized": false,
   "checkpoint_initialization_used": false,
