@@ -1,0 +1,143 @@
+{
+  "status": "PROSPECTIVE_FULL20K_DISTRIBUTION_PRIMARY_FRESH_NATIVE097_SEARCH",
+  "UTC": "2026-11-06T21:18:09.740638+00:00",
+  "owner_goal": "Use the PG formulation to get SOTA",
+  "owner_initialization_instruction": "start from scratch on the training on your experiments",
+  "native_version": "0.9.7",
+  "native_recipe": "bispf_optimized",
+  "EMA_decay": 0,
+  "generator_gradient_response": "none",
+  "penalty_input_domain": "continuous",
+  "endpoint": 20000,
+  "native_recipe_horizon": 20000,
+  "execution_limit": 20000,
+  "all_new_training_from_scratch": true,
+  "initial_completed_updates": 0,
+  "checkpoint_initialization_for_new_experiments": false,
+  "fresh_model_critic_particle_prior_and_optimizer_state": true,
+  "matching": "Same fold0 optimization/calibration split and11 training streams for matched seed0 trials, native counts, two320000cell generation replicates, fixed equal-stage375 scorer.",
+  "fixed_architecture": {
+    "family": "gan",
+    "trainer": "bispf_optimized",
+    "EMA_decay": 0.0,
+    "generator_gradient_response": "none",
+    "batch_size": 32,
+    "num_particles": 512,
+    "z_dim": 8,
+    "cell_z_dim": 8,
+    "stage_balance": false,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0,
+    "penalty_input_domain": "continuous",
+    "architecture": "unchanged CountGenerator/VectorCritic150D",
+    "optimization_donors": 33,
+    "calibration_donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "native_loss_penalty_prior_optimizer_families": "unchanged non-saturating BISPF/SBNP/zero-momentum DualNorm",
+    "preprocessing_and_splits": "unchanged original fold0 cache and four calibration donors",
+    "training_seed_streams": "unchanged original11stream mapping, common seed0 across selection candidates",
+    "sampling_and_scoring": "unchanged calibration.evaluate, two generationreplicates,200bags/stage400cells/bag, equal_stage375 reservoir; generated native integer counts only"
+  },
+  "primary_objective": "Minimize pooled cell_energy_distance at the fixed20000-update endpoint.",
+  "quality_controls": {
+    "spread_band": [
+      0.7,
+      1.3
+    ],
+    "donor_energy_reported": true,
+    "donor_energy_ceiling_for_joint_success": "Matched hierarchical resampling on same calibration donors,2.079287181278266 at seed0; fresh matched-seed controls for confirmation."
+  },
+  "selection_stage1": {
+    "configurations": [
+      {
+        "id": "d000",
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 0.5,
+          "prior_reg": 0.01
+        },
+        "reason": "Fresh full20k matched native0.9.7 reference: baseline rates and kappa0.5, no reuse of historical or heldout model."
+      },
+      {
+        "id": "d001",
+        "parameters": {
+          "generator_lr": 0.0072242016931078614,
+          "critic_lr": 0.014833286696429858,
+          "particle_lr": 0.013678610104321594,
+          "reg_coeff": 1.275280261299054,
+          "reg_kappa": 0.5,
+          "prior_reg": 0.006567934215110022
+        },
+        "reason": "Isolate whether stronger penalty center fixes the distribution degradation seen with c014 kappa0.134; otherfive c014 scalars unchanged."
+      },
+      {
+        "id": "d002",
+        "parameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 0.25,
+          "prior_reg": 0.01
+        },
+        "reason": "Bracket baseline penalty center between0.25and0.5 at fixed baseline rates, informed by full20k historical kappa sensitivity rather than500step ES."
+      }
+    ],
+    "selection_seed": 0,
+    "every_arm_fresh20k": true,
+    "maximum_initial_fits": 3,
+    "record_all_outcomes": true,
+    "intermediate_snapshots": "Save5000/10000; read-only diagnostic evidence, no warmstart or rescue endpoint selection."
+  },
+  "next_adaptation": "After full20k endpoints, inspect paired distribution/energy/spread and the best region. Freeze each additional hypothesis and parameter choice before its fresh fit. No500-step endpoint selection.",
+  "confirmation": {
+    "before_frozen_external_benchmark": "Freeze best feasible full20k candidate and run fresh seeds1,2,3,4 along with matched current-reference seeds; retain all outcomes, compare paired distance/energy/spread and initialization variability."
+  },
+  "heldout_benchmark": {
+    "configuration_frozen_before_new_evaluation": true,
+    "folds": [
+      0,
+      1,
+      2
+    ],
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "comparators": [
+      "scVI",
+      "CFGen",
+      "hierarchical_resampling"
+    ],
+    "all_required_cells_needed_for_final_claim": true,
+    "training_fresh_for_every_new_model": true,
+    "calibration_and_evaluation_not_pooled": true,
+    "no_heldout_driven_parameter_reselection": true,
+    "decision": "Claim a state-of-the-art comparison result only if complete matched external results support it; report scope and uncertainty, including overlap/adaptation of cohort."
+  },
+  "historical_evidence": [
+    "/ml2/alz/analysis/hpo20k_independent_result_comparison_20261106.json",
+    "/ml2/alz/analysis/hpo20k_matched_algorithm_distribution_ranking_20261106.json",
+    "/ml2/alz/analysis/released_tuning_search_readout.json"
+  ],
+  "historical_checkpoints": "May be inspected or explicitly scored as diagnostic evidence; never become initial state for a new training trial.",
+  "finite_phase_cap_seconds": 21600,
+  "project_GPU_hour_cap": 1024,
+  "original_core_GPU_hour_envelope": 180,
+  "research_window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+  "shared_GPU0_and_GPU1_authorized": true,
+  "foreign_work_controls": false,
+  "canonical_resource_accounting_unchanged": true,
+  "automatic_incumbent_promotion": false,
+  "unresolved_execution_planning": "Existing guarded ALZ runtime serializes scientific phases; fullmatrix timing and safe two-card execution must be planned without bypassing guards or extending the owner window implicitly."
+}
