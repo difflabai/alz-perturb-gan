@@ -38,7 +38,10 @@
   "correction": "Require every original tensor fingerprint unchanged, the exact expected26-node alias set, equal tensor values and shared data_ptr for each alias, and unchanged external feature embeddings. No change to native model, sampling, optimizer or training.",
   "probe_stdout_SHA256": "fc22d7bee950a7d8eaad143c509ec418074f0f4f9aa733ac74f265ca35e68673",
   "probe_stderr_SHA256": "df8e09cecf3177e3df0e4ed1a0f15bbc43d2749f316f12bdfdaa496912ba0a30",
-  "qualification_rerun_required": true,
+  "qualification_rerun_required": false,
   "GPU_allocation_created": false,
-  "training_updates": 0
+  "training_updates": 0,
+  "resolution": "Corrected exact native-alias audit passed all four stages with deterministic native count/PCA replay, unchanged original tensors and external features; no model/sampler/training changes.",
+  "resolved_by": "/ml2/alz/analysis/benchmark097_cfgen/CPU_saved_sampling_qualification.json",
+  "resolved_by_SHA256": "8b0e19dd2be784c1b1e79c7becd4fd932d8a0818b8ef34bb830dd5c73cdb41f9"
 }
