@@ -1,9 +1,10 @@
 {
-  "status": "TWO_FRESH20K_NATIVE097_ARMS_AUDITED_THIRD_FRESH_FIT_RUNNING",
-  "UTC": "2026-11-06T22:15:46.279230+00:00",
+  "status": "ALL_THREE_STAGE1_FRESH20K_ARMS_AUDITED_STAGE2_FRESH_RATE_TRIAL_RUNNING",
+  "UTC": "2026-11-06T22:52:18.280336+00:00",
   "rows": [
     {
       "candidate_id": "d000",
+      "finite": true,
       "metrics": {
         "metric_role": "calibration_selection",
         "generation_replicates": 2,
@@ -44,12 +45,11 @@
         "reg_kappa": 0.5,
         "prior_reg": 0.01
       },
-      "charged_GPU_seconds": 1419.5743142199935,
-      "endpoint": 20000,
-      "from_scratch": true
+      "charged_GPU_seconds": 1419.5743142199935
     },
     {
       "candidate_id": "d001",
+      "finite": true,
       "metrics": {
         "metric_role": "calibration_selection",
         "generation_replicates": 2,
@@ -90,14 +90,58 @@
         "reg_kappa": 0.5,
         "prior_reg": 0.006567934215110022
       },
-      "charged_GPU_seconds": 1401.650513597997,
-      "endpoint": 20000,
-      "from_scratch": true
+      "charged_GPU_seconds": 1401.650513597997
+    },
+    {
+      "candidate_id": "d002",
+      "finite": true,
+      "metrics": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 0,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 2.126055182316051,
+        "cell_energy_distance": 0.336240674851096,
+        "spread_ratio": 0.7653687070285173,
+        "within_condition_spread_ratio": 0.6855447431021253,
+        "coverage80": 0.5769230769230769,
+        "generated_zero_count_rate": 0.0,
+        "per_donor_energy_score": [
+          1.1500110751137762,
+          3.273777478119478,
+          1.9009995002444948,
+          2.179432675786457
+        ],
+        "per_stage_cell_energy_distance": [
+          0.8470928271173603,
+          1.9401913095236427,
+          1.1639350641406132,
+          0.5493790952701767
+        ]
+      },
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.25,
+        "prior_reg": 0.01
+      },
+      "charged_GPU_seconds": 1411.6862407079898
     }
   ],
   "ranked_by_primary_distance": [
     "d000",
-    "d001"
+    "d001",
+    "d002"
   ],
   "d001_minus_d000": {
     "cell_energy_distance": 0.08674602709161316,
@@ -113,16 +157,16 @@
     "distance_delta": -0.03594623723652646,
     "energy_delta": 0.03885421563928393
   },
-  "independent_audit_path": "/ml2/alz/artifacts/distribution097-stage1/d000_d001_independent_audit_20261106.json",
-  "independent_audit_SHA256": "da6f01a24d8bee498d31caec3f103b7a08e0404f3afae59ba6f7f4e0ff560fd2",
-  "actual_GPU_seconds": 2821.2248278179904,
+  "independent_audit_path": "/ml2/alz/analysis/distribution097_stage1_final_independent_audit_20261106.json",
+  "independent_audit_SHA256": "3e8803c82c6a99fb4495e17480708a3fda43dfe44bcebec05904633c2fa22ead",
+  "actual_GPU_seconds": 4232.91106852598,
   "historical_reference_replication": "/ml2/alz/analysis/distribution097_d000_historical_replication_20261106.json",
   "new_best": false,
   "new_training_seed_confirmation_complete": false,
-  "stage1_complete": false,
+  "stage1_complete": true,
   "external_benchmark_complete": false,
   "heldout_used": false,
   "SOTA_claim": false,
   "goal_complete": false,
-  "next": "Complete d002 from scratch, audit all stage1 endpoints and actual rollback, then materialize and qualify the frozen fresh20k rate/penalty refinement rule. Fresh seeds and full external comparison remain."
+  "next": "New d003 half-rate fresh20k running; d0041.5x rates and d005kappa midpoint queued. All settings from0; matched fresh-seed confirmation and full45-model external comparison remain."
 }
