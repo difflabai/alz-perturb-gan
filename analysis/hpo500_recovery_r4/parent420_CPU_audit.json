@@ -1,0 +1,66 @@
+{
+  "status": "ACTUAL_HPO500_RESOURCE_INTERRUPTION_NATIVE420_CPU_AUDIT_PASS",
+  "UTC": "2026-11-06T03:21:49.706304+00:00",
+  "parent_attempt": "CAL_GPU0_V1_h5_c008_search_r1_f0_pg_s0",
+  "parent_authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_c008_search_r1_f0_pg_s0/authorization.json",
+  "parent_authorization_SHA256": "ba9bcdd455b6729538cbc2e236198bd5023fc272f5b3bfe013adc3620dcb16e5",
+  "parent_ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_h5_c008_search_r1_f0_pg_s0.json",
+  "parent_ledger_SHA256": "64087410ec999655d2614239acb2e1ab09cfef799be440d3e04f37e64a40ec61",
+  "parent_settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_h5_c008_search_r1_f0_pg_s0-settlement.json",
+  "parent_settlement_SHA256": "c42aa76d219361e4ac16a7510fc22218ea1c045eab0c0fe941ab6a906dcff8f7",
+  "checkpoint_path": "/ml2/alz/artifacts/hpo500-recovery-r4/parent/native420.pt",
+  "checkpoint_SHA256": "6bce895e5504a5f3a2e663ed1a8b9bb49c2bcd343241760bcff381ea11033056",
+  "learning_curve_path": "/ml2/alz/artifacts/hpo500-recovery-r4/parent/learning_curve.jsonl",
+  "learning_curve_SHA256": "a57bacc7af30c8b8792f31125369188961d7a7b2a4be9ab183479e5be0170f9a",
+  "whole_parent_scientific_fingerprint": "1fa25ca4ce307ded656f17d74877577159f033ae365e349f9dce7419f6511ce0",
+  "native_policy_fingerprint": "f7752aca62c41a2f9d1f6905f92298b5c62b6620f89e5663468fdfda61692669",
+  "completed_updates": 420,
+  "fixed_endpoint": 500,
+  "seed": 0,
+  "hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 2.0,
+    "reg_kappa": 0.5,
+    "prior_reg": 0.01
+  },
+  "variant_config": {
+    "z_dim": 8,
+    "stage_balance": false,
+    "cell_z_dim": 8,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0
+  },
+  "cache_dir": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0",
+  "parent_charged_GPU_seconds": 460.73722100000305,
+  "remaining_trial_cap_seconds": 3139,
+  "parent_expiry_unix": 1793937928.1176183,
+  "owned_processes_and_lease_absent": true,
+  "clean_settlement": true,
+  "scientific_nonfinite_failure": false,
+  "native_device_metadata_relabelled": false,
+  "CUDA_initialized": false,
+  "same_model_and_all_random_state_CUDA_restore_required_before421": true,
+  "source_SHA256": {
+    "/ml2/alz/analysis/hpo500_recovery_r4/audit_parent_cpu.py": "63062856b6c576eaecda0af0687a82b8eca6079444825b28dd3e57b5c06c4907",
+    "/ml2/alz/analysis/hpo500/model/released_adapter.py": "c69e7e24f793258a6f07c9ec922eaffda22fd9cffcbf035d82e92066a80c6f37",
+    "/ml2/alz/analysis/hpo500/model/released_update.py": "bfc4c774ebc0b42b9d9a27ce8405fe03216af8a52df0062abd35243d6b04211e"
+  },
+  "cumulative_parent_charge_lineage": [
+    {
+      "attempt": "CAL_GPU0_V1_h5_c008_search_f0_pg_s0",
+      "charged_GPU_seconds": 170.67086778700468,
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_h5_c008_search_f0_pg_s0-settlement.json",
+      "settlement_SHA256": "a2a62ab78b3b44270182ad3d1ca82ea01eb46345cebc97382f87248c1f87c1c9"
+    },
+    {
+      "attempt": "CAL_GPU0_V1_h5_c008_search_r1_f0_pg_s0",
+      "charged_GPU_seconds": 290.06635321299837,
+      "settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_h5_c008_search_r1_f0_pg_s0-settlement.json",
+      "settlement_SHA256": "c42aa76d219361e4ac16a7510fc22218ea1c045eab0c0fe941ab6a906dcff8f7"
+    }
+  ],
+  "previous_parent_proof_path": "/ml2/alz/analysis/hpo500_recovery_r3/parent178_CPU_audit.json",
+  "previous_parent_proof_SHA256": "0c99b62247ca708705bb171909cada6fb8001c6db1620765e0be1fd5db44857f"
+}
