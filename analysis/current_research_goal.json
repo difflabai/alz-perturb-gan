@@ -1,0 +1,11 @@
+{
+  "status": "USER_REPLACED_RESEARCH_OBJECTIVE",
+  "UTC": "2026-11-06T01:14:07.654130+00:00",
+  "objective": "Optimize only the six existing public hyperparameters of the current ParticleGAN0.9.6 non-EMA bispf_optimized ALZ formulation for best calibrated donor energy score at exactly500 fresh optimizer updates, with cell distribution matching as a nonregression constraint. Use reproducible sequential search and independent training-seed confirmation.",
+  "owner_instruction": "set the goal to use / adjust the current hyperparams without changing the formulation to do best at step 500. this is to optimize the hyperparams. do this intelligently.",
+  "native_goal_entry_updated": false,
+  "native_goal_blocker": "create_goal refused because older blocked goal is unfinished; update_goal exposes status only and cannot edit its objective. Old goal has not been falsely marked complete.",
+  "priority": "500step HPO replaces queued40k/remaining20k benchmark scheduling. Gracefully checkpoint only the owned current20k worker; retain native state/cost/results. New500step candidates start fresh.",
+  "protocol": "/ml2/alz/analysis/hpo500/protocol.json",
+  "existing_results_preserved": true
+}

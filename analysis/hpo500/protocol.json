@@ -1,0 +1,104 @@
+{
+  "status": "PROSPECTIVE_NATIVE096_FIXED_FORMULATION_500STEP_HPO",
+  "UTC": "2026-11-06T01:14:07.654242+00:00",
+  "native_version": "0.9.6",
+  "endpoint": 500,
+  "native_recipe_schedule_horizon": 20000,
+  "public_execution_limit": 500,
+  "rationale": "Constant native rates and unchanged20k recipe horizon; stop at500 complete optimizer pairs. This optimizes early quality rather than changing formulation or claiming eventual convergence.",
+  "baseline_hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.015,
+    "reg_coeff": 1.0,
+    "reg_kappa": 0.5,
+    "prior_reg": 0.01
+  },
+  "parameter_order": [
+    "generator_lr",
+    "critic_lr",
+    "particle_lr",
+    "reg_coeff",
+    "reg_kappa",
+    "prior_reg"
+  ],
+  "log2_bounds_relative_to_baseline": [
+    -2,
+    2
+  ],
+  "fixed": {
+    "family": "gan",
+    "trainer": "bispf_optimized",
+    "EMA_decay": 0.0,
+    "generator_gradient_response": "none",
+    "batch_size": 32,
+    "num_particles": 512,
+    "z_dim": 8,
+    "cell_z_dim": 8,
+    "stage_balance": false,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0,
+    "penalty_input_domain": "continuous",
+    "architecture": "unchanged CountGenerator/VectorCritic150D",
+    "optimization_donors": 33,
+    "calibration_donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "native_loss_penalty_prior_optimizer_families": "unchanged non-saturating BISPF/SBNP/zero-momentum DualNorm",
+    "preprocessing_and_splits": "unchanged original fold0 cache and four calibration donors",
+    "training_seed_streams": "unchanged original11stream mapping, common seed0 across selection candidates",
+    "sampling_and_scoring": "unchanged calibration.evaluate, two generationreplicates,200bags/stage400cells/bag, equal_stage375 reservoir; generated native integer counts only"
+  },
+  "search": {
+    "selection_seed": 0,
+    "maximum_candidates": 25,
+    "initial_design": "c000=current settings; c001..c012 vary one log2 parameter by-1,+1 in parameter order; every fit fresh500steps",
+    "adaptive_candidates": 12,
+    "adaptive_design": "After13 complete candidates, fixed Matern5/2 Gaussian process models of normalized ES and cellED in6D log2 space, plus spread feasibility model; constrained expected improvement on ES with probability(cellED<=current control and spread in[.7,1.3]); deterministic Sobol4096point pool and max-uncertainty fallback when no feasible improvement; no hyperparameter tuning of surrogate kernel, no reuse of20k outcomes as500step evidence.",
+    "search_domain": "Each scalar in[baseline/4,baseline*4]; native public recipe validation authoritative. Fixed rates throughout500steps.",
+    "finite_or_failed": "Retain every attempt; classify scientific nonfinite/quality failures after clean settlement. Stop on resource/admission/source/audit uncertainty; never retry same scientific key automatically."
+  },
+  "confirmation": {
+    "shortlist": 2,
+    "selection": "After all25 seed0 endpoints audited: among spread[.7,1.3] and cellED<=control, choose lowestES then cellED then stableid. If no feasible candidate, retain up to2 Pareto/minimax candidates explicitly exploratory; do not declare joint improvement.",
+    "seeds": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "control_always_included": true,
+    "all_from_scratch": true,
+    "criterion": "Paired across4 fresh trainingseeds: lower mean ES, no higher mean cellED, mean spread in[.7,1.3], at least3/4 ES deltas negative. Report all paired deltas and95% seed-bootstrap interval; calibration improvement only, no independent biological validation/global-optimum/SOTA claim.",
+    "no_seed_dropping": true
+  },
+  "objective": {
+    "primary": "minimize donor-level calibration energy_score at exactly500updates",
+    "constraint": "cell_energy_distance <= matched500step current-hyperparameter control",
+    "dispersion_guard": [
+      0.7,
+      1.3
+    ],
+    "report": [
+      "per_donor_energy_score",
+      "energy_score",
+      "cell_energy_distance",
+      "spread_ratio",
+      "both_generation_replicates",
+      "training_seed_deltas",
+      "actual_GPU_seconds"
+    ]
+  },
+  "evaluation_used_for_tuning": false,
+  "historical_heldout_metrics_not_used_for_selection": true,
+  "previous_duration_study_superseded_before_launch": true,
+  "per_phase_cap_seconds": 3600,
+  "study_GPU_hour_cap": 24,
+  "research_window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+  "project_GPU_hour_cap": 1024,
+  "canonical_accounting_and_shared_guards_unchanged": true,
+  "automatic_ATH_or_incumbent_promotion": false
+}
