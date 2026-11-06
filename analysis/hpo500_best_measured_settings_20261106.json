@@ -1,0 +1,129 @@
+{
+  "status": "BEST_MEASURED_FRESH500STEP_HYPERPARAMETERS_AFTER47_FITS",
+  "UTC": "2026-11-06T07:56:16.845681+00:00",
+  "selected_candidate": "c014",
+  "native_version": "0.9.6",
+  "EMA_decay": 0,
+  "generator_gradient_response": "none",
+  "endpoint_updates": 500,
+  "from_scratch": true,
+  "hyperparameters": {
+    "generator_lr": 0.0072242016931078614,
+    "critic_lr": 0.014833286696429858,
+    "particle_lr": 0.013678610104321594,
+    "reg_coeff": 1.275280261299054,
+    "reg_kappa": 0.13400397049569038,
+    "prior_reg": 0.006567934215110022
+  },
+  "public_API": {
+    "recipe_name": "gan",
+    "get_recipe_kwargs": {
+      "trainer": "bispf_optimized",
+      "total_steps": 20000,
+      "batch_size": 32,
+      "num_particles": 512,
+      "z_dim": 8,
+      "lr": 0.0072242016931078614,
+      "d_lr_mult": 2.0532769330874756,
+      "prior_lr_mult": 1.8934424432489838,
+      "reg_coeff": 1.275280261299054,
+      "reg_kappa": 0.13400397049569038,
+      "prior_reg": 0.006567934215110022
+    },
+    "caller_execution_limit": 500
+  },
+  "fixed_architecture": {
+    "family": "gan",
+    "trainer": "bispf_optimized",
+    "EMA_decay": 0.0,
+    "generator_gradient_response": "none",
+    "batch_size": 32,
+    "num_particles": 512,
+    "z_dim": 8,
+    "cell_z_dim": 8,
+    "stage_balance": false,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0,
+    "penalty_input_domain": "continuous",
+    "architecture": "unchanged CountGenerator/VectorCritic150D",
+    "optimization_donors": 33,
+    "calibration_donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "native_loss_penalty_prior_optimizer_families": "unchanged non-saturating BISPF/SBNP/zero-momentum DualNorm",
+    "preprocessing_and_splits": "unchanged original fold0 cache and four calibration donors",
+    "training_seed_streams": "unchanged original11stream mapping, common seed0 across selection candidates",
+    "sampling_and_scoring": "unchanged calibration.evaluate, two generationreplicates,200bags/stage400cells/bag, equal_stage375 reservoir; generated native integer counts only"
+  },
+  "confirmation_seeds": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "control_means": {
+    "energy_score": 2.282250701616535,
+    "cell_energy_distance": 1.0246291586447982,
+    "spread_ratio": 0.9939029829142604
+  },
+  "selected_confirmation": {
+    "candidate": "c014",
+    "eligible": true,
+    "mean_energy_score": 1.8789089275496034,
+    "mean_cell_energy_distance": 0.45198978514660815,
+    "mean_spread_ratio": 0.8558107176715631,
+    "paired_seed_ES_deltas": [
+      -0.45681570967167495,
+      -0.5100893471380075,
+      -0.11924619219405042,
+      -0.5272158472639927
+    ],
+    "paired_seed_cellED_deltas": [
+      -0.5470166538248202,
+      -0.908856241336018,
+      -0.3510097171561206,
+      -0.4836748816758014
+    ],
+    "mean_ES_delta": -0.4033417740669314,
+    "mean_cellED_delta": -0.57263937349819,
+    "ES_delta95percent_seed_bootstrap_interval": [
+      -0.5186525972010001,
+      -0.21695698093003968
+    ],
+    "seeds_improved": 4
+  },
+  "relative_mean_energy_reduction_percent": 17.67298280514238,
+  "relative_mean_cell_distance_reduction_percent": 55.88747584107192,
+  "lower_kappa_tradeoff": {
+    "candidate": "k002",
+    "reg_kappa": 0.016750496311961297,
+    "mean_energy_score": 1.8828944708221664,
+    "mean_cell_energy_distance": 0.43967451574764316,
+    "mean_energy_delta_vs_selected": 0.0039855432725628415,
+    "ES_delta95percent_seed_bootstrap_vs_selected": [
+      -0.029756367299772712,
+      0.03498181744668516
+    ],
+    "interpretation": "Lower cell distance, slightly higher mean energy; overlapping training-seed uncertainty. Seed0 improvement did not become a lower four-seed mean energy."
+  },
+  "total_models": 47,
+  "selection_models": 31,
+  "confirmation_models": 16,
+  "total_model_updates": 23500,
+  "actual_study_GPU_hours": 5.582796223413336,
+  "project_budget_at_completion": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 49.38283631154828,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 974.6171636884517
+  },
+  "independent_audit_path": "/ml2/alz/analysis/hpo500_final_independent_audit_20261106.json",
+  "result_report_path": "/ml2/alz/analysis/hpo500_boundary/complete_report.json",
+  "formulation_changed": false,
+  "heldout_evaluation_used": false,
+  "automatic_promotion": false,
+  "scope_limit": "Best measured in this finite adaptive search on four calibration donors; no claim of global optimality, independent-cohort validation, or SOTA."
+}

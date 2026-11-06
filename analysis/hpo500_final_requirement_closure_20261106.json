@@ -1,0 +1,73 @@
+{
+  "status": "FINAL_REQUIREMENT_SOURCE_CHRONOLOGY_RAW_ARTIFACT_AND_RESOURCE_CLOSURE_PASS",
+  "UTC": "2026-11-06T07:56:16.846156+00:00",
+  "scientific_audit_path": "/ml2/alz/analysis/hpo500_final_independent_audit_20261106.json",
+  "scientific_audit_SHA256": "70b82555e0f79694eafab7e054d14c022f820fdb9a7a67186b01e02fc6ee1de2",
+  "settings_path": "/ml2/alz/analysis/hpo500_best_measured_settings_20261106.json",
+  "settings_SHA256": "58ed2c75ca6578bef9c01a4dd5510fcfb25ff09b5ef44446417604deb051dee4",
+  "all_original_and_new_saved_artifact_hashes_rechecked": 517,
+  "distinct_current_authorized_source_and_data_files_rehashed": 700,
+  "unchanged_authorized_files": 699,
+  "only_intentional_post_execution_pin_difference": {
+    "path": "/ml2/alz/hpo500_boundary_runtime/plan.json",
+    "reason": "Actual committed activation revert restores original disabled flag; no model/source/data change",
+    "enabled_bytes_SHA256": "68f9436349be000d642e6ece04d34f9605c703e0be775e00f5f72ef1e57d3f59",
+    "current_disabled_bytes_SHA256": "89accb8194c28b21520fed6c7e8e107da35c6dfc8b3b9ef2691d547d527e96df"
+  },
+  "authorization_SHA256": {
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_k000_search_f0_pg_s0/authorization.json": "522f160629095cf048eac9023f3de1432f3479bf74bbce0aa7b0d0287ddc910b",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_k001_search_f0_pg_s0/authorization.json": "c6ffd9bb7d267a24385a17c835d9cca8e7fc450abcd1a3ae0f17a5554f649e7c",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_k002_confirm_f0_pg_s1/authorization.json": "a06ef2895749225e17f12457d486f136091188491de0f635bbe518186b35b6c6",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_k002_confirm_f0_pg_s2/authorization.json": "6f953d56a1efd95ced468f3e5b8e23ddee28c7f1fd1e4684da7ce2df8fb9cd11",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_k002_confirm_f0_pg_s3/authorization.json": "ebc32ff2989651d750f569ca04f947b55681af114fd4d9a24da2bbb20a520ce4",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_k002_confirm_f0_pg_s4/authorization.json": "8603f9e81772c9eee59a6d51933129d857b1a44b7724f0e101333834152543b6",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_k002_search_f0_pg_s0/authorization.json": "5b68a1556863c55c6db1020c451ccb8308ca9dcd2398cdf90164e96134d46d9c",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_k003_search_f0_pg_s0/authorization.json": "dcaf35f1311cd9b8d6e97026364e316c88a6fc6aa66a5ccc0ac1826a23afc9a4",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_k004_search_f0_pg_s0/authorization.json": "a35c19993cabb6c9404921bdb5c9c2a6bf003ef34b692af2751245192bc1759c",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_k005_search_f0_pg_s0/authorization.json": "1a5ec244933e46b833785bf5ebe20a2ecedce698e7719930955d2e8ab2b492a2"
+  },
+  "freeze_commit": "edacbf0822b50084cee5e035018b478f10dfba53",
+  "freeze_committed_before_each_fresh_confirmation_authorization_candidate": {
+    "1": "edacbf0822b50084cee5e035018b478f10dfba53",
+    "2": "56a697f0877794514e97e313d654b13b7c062558",
+    "3": "19d8a22c14e5fdadfea692e848fe28d8048f0a5f",
+    "4": "ac91683683aac94dc332a52a44ffb29fcccbff9b"
+  },
+  "actual_activation_revert_commits": {
+    "hpo500_runtime": "78202bfbab8a2f5c6875813b49869294af187588",
+    "hpo500_r2_runtime": "3849b230d081f0c52622114ded7a4ed662f26e13",
+    "hpo500_r3_runtime": "9533b2ef91a6fb76706827562fb8acd0d012a6da",
+    "hpo500_r4_runtime": "6a6c3e9b62dbd14ab3c622d2224abb77460bed87",
+    "hpo500_boundary_runtime": "9dfa7bd0f6c51c8953a6caac2dc221eb4c031234"
+  },
+  "empty_own_resource_registry_SHA256": {
+    "/ml2/alz/artifacts/gpu1-hpo500-r4-20261106/live_registry/registry.json": "ad07d48656c87c957740c164ea5cff1323e1f2e75741eb90d927ee233466c0f0",
+    "/ml2/alz/artifacts/gpu1-hpo500-boundary-20261106/live_registry/registry.json": "eff841dbdfb5df506c5d023100980d0b13acbde563e74726fed388dd8755445c"
+  },
+  "boundary_driver_exact_identity_terminal": true,
+  "canonical_open_reservations": 0,
+  "project_budget": {
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 49.38283631154828,
+    "reserved_GPU_hours": 0.0,
+    "remaining_GPU_hours": 974.6171636884517
+  },
+  "study_actual_GPU_hours": 5.582796223413336,
+  "requirements": {
+    "current_native_nonEMA_formulation": "Native release69source hashes, package metadata, unchanged update and all47checkpoint recipes independently verified",
+    "only_current_six_hyperparameters_tuned": "Original25proposal sequence reproduced; supplemental6proposals reproduced and onlyreg_kappa differs from frozenanchor",
+    "exact500updates_from_scratch": "47finite native endpoints; new boundary10 allinitial0/no source model; retained originalresource-yield lineages preserve exact500 total",
+    "intelligent_reproducible_search": "Coordinate screening then12constrained-GP expected-improvement proposals; prospective lower-bound kappa grid and two geometric refinements",
+    "matched_controls_and_fresh_seeds": "c000/c014/c004/k002 measured on same freshseeds1,2,3,4; all paired deltas and seed-bootstrap intervals independently recomputed",
+    "distribution_not_worsened": "Selected mean cellED0.45198978514660815 vs matched initialcontrol1.0246291586447982; all4pairedseeds improved",
+    "kept_formulation_architecture_losses_optimizer_families_data_preprocessing": "699currentauthorized files match; onlypost-execution planactivation revert differs, and all nativeRecipe/config/cache/source checks pass",
+    "no_heldout_selection": "Frozen calibration-only protocols and allcompleted/replicate manifests verify calibration role; heldout benchmark scheduling remains deferred",
+    "retained_unsuccessful_outcomes": "All31selection results retained including worse points; all47finite; original resource-yield checkpoints/logs/charges retained, no failed seed dropping",
+    "actual_results_and_cost": "Saved counts independently rescored for94fullreplicates across original/final audits; all517savedartifacts rehashed; charged20098.06640428801GPU-seconds including resource-yield parents",
+    "cleanup": "Allfive actualactivationreverts verified, own registriesempty, noownedlive workers ordriver, canonicalzeroopenreservations",
+    "limitations": "Fouradaptivecalibrationdonors, fourfreshtrainingseeds; no independentcohort/globaloptimum/SOTA claim"
+  },
+  "figure_PNG_SHA256": "1d0852d4aff7d5375c65354a557840160b606c929b45d14c8c1f1f7287426fed",
+  "figure_PDF_SHA256": "5a192f3ab8a71a67f08e30bb6cffde56ee969a2d4cf65549bfb9eb33caf4338d",
+  "figure_visually_reviewed": true
+}

@@ -1,0 +1,111 @@
+{
+  "status": "INDEPENDENT_ORIGINAL_AND_BOUNDARY500STEP_NATIVE_COUNTS_AND_FRESH_SEED_AUDIT_PASS",
+  "original_audit_path": "/ml2/alz/analysis/hpo500_original37_independent_audit_20261106.json",
+  "original_audit_SHA256": "03ac64e42a4324790225121ac7c3d932d981e96f15d9c108b33ec47299053316",
+  "boundary_report_SHA256": "14da4e3b65e7b6a58378faf205f0491447b3004d6d88394a950b2b534aef47f7",
+  "source_SHA256": "dca208d408312c0b59f743120247c7107fd5ad58d25e3ecb108c8e3ca7c583fc",
+  "new_saved_artifacts_hashed": 110,
+  "new_full_calibration_replicates_rescored": 20,
+  "new_finite_models_at500": 10,
+  "new_failed_trials_retained": 0,
+  "original_and_new_model_count": 47,
+  "comparisons": [
+    {
+      "candidate": "c014",
+      "eligible": true,
+      "mean_ES": 1.8789089275496034,
+      "mean_cellED": 0.45198978514660815,
+      "mean_spread": 0.8558107176715631,
+      "paired_ES_deltas": [
+        -0.45681570967167495,
+        -0.5100893471380075,
+        -0.11924619219405042,
+        -0.5272158472639927
+      ],
+      "paired_cellED_deltas": [
+        -0.5470166538248202,
+        -0.908856241336018,
+        -0.3510097171561206,
+        -0.4836748816758014
+      ],
+      "seed_bootstrap95": [
+        -0.5186525972010001,
+        -0.21695698093003968
+      ]
+    },
+    {
+      "candidate": "c004",
+      "eligible": true,
+      "mean_ES": 1.9028636715797798,
+      "mean_cellED": 0.5055353696089468,
+      "mean_spread": 0.7990470884335658,
+      "paired_ES_deltas": [
+        -0.3916365800130739,
+        -0.2900099133189942,
+        -0.14161135724716445,
+        -0.6942902695677868
+      ],
+      "paired_cellED_deltas": [
+        -0.4544843223178665,
+        -0.6099903357819931,
+        -0.28174163518711826,
+        -0.7301588628564275
+      ],
+      "seed_bootstrap95": [
+        -0.5932201805055887,
+        -0.2041176629386418
+      ]
+    },
+    {
+      "candidate": "k002",
+      "eligible": true,
+      "mean_ES": 1.8828944708221664,
+      "mean_cellED": 0.43967451574764316,
+      "mean_spread": 0.8330173365673426,
+      "paired_ES_deltas": [
+        -0.46272128819776137,
+        -0.55820523041504,
+        -0.09392401156204366,
+        -0.48257439300262917
+      ],
+      "paired_cellED_deltas": [
+        -0.5368056922903266,
+        -0.9742022966514643,
+        -0.2993951590120032,
+        -0.5294154236348261
+      ],
+      "seed_bootstrap95": [
+        -0.5343342448607203,
+        -0.19108660692219004
+      ]
+    }
+  ],
+  "selected_candidate": "c014",
+  "selected_hyperparameters": {
+    "generator_lr": 0.0072242016931078614,
+    "critic_lr": 0.014833286696429858,
+    "particle_lr": 0.013678610104321594,
+    "reg_coeff": 1.275280261299054,
+    "reg_kappa": 0.13400397049569038,
+    "prior_reg": 0.006567934215110022
+  },
+  "total_actual_GPU_seconds": 20098.06640428801,
+  "all_activation_flags_reverted": true,
+  "owned_resource_registries_empty": true,
+  "canonical_open_reservations": 0,
+  "heldout_used": false,
+  "formulation_changed": false,
+  "native_version": "0.9.6",
+  "EMA_decay": 0,
+  "calibration_donors": 4,
+  "fresh_confirmation_seeds": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "all_original_and_new_raw_result_hashes_verified": true,
+  "CUDA_initialized": false,
+  "limitation": "Same four adaptive calibration donors; bootstrap is over training seeds and is not independent biological validation or a SOTA claim.",
+  "UTC": "2026-11-06T07:53:19.064388+00:00"
+}
