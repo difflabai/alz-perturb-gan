@@ -1,0 +1,52 @@
+{
+  "status": "PREPARED_NOT_FROZEN_PG_SELECTION_AND_CONFIRMATION_PENDING",
+  "native_version": "0.9.7",
+  "all_new_training_from_scratch": true,
+  "initial_completed_updates": 0,
+  "reuse_historical_models": false,
+  "folds": [
+    0,
+    1,
+    2
+  ],
+  "training_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "methods": [
+    "pg",
+    "scvi",
+    "cfgen"
+  ],
+  "PG_hyperparameters": null,
+  "PG_frozen_selection_evidence_SHA256": {},
+  "PG_formulation": {
+    "recipe": "bispf_optimized",
+    "EMA_decay": 0,
+    "generator_gradient_response": "none",
+    "penalty_input_domain": "continuous",
+    "architecture": "unchanged PG8 count generator and150D VectorCritic"
+  },
+  "endpoints": {
+    "pg": 20000,
+    "scvi": 400,
+    "cfgen": {
+      "AE_epochs": 300,
+      "FM_epochs": 1500
+    }
+  },
+  "sampling": "Original scoring.evaluate two replicates plus stage-swap diagnostic; full320000 native integer cells per method replicate, original1500pooled PCA50 reservoirs. Matched two resampling replicates.",
+  "primary": "Equal-fold mean pooled cell_energy_distance; show all fold/seed/replicate values and donor energy/spread/coverage tradeoffs.",
+  "analysis_plan_path": "/ml2/alz/analysis/distribution097_external_evaluation_plan_20261106.json",
+  "split_isolation": "Historical cohort and crossfold calibration/evaluation overlap disclosed; no automatic unqualified heldout or population SOTA claim.",
+  "cap_seconds": 21600,
+  "window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+  "project_GPU_hours": 1024,
+  "core_GPU_hours": 180,
+  "automatic_promotion": false,
+  "SOTA_claim": false,
+  "activation": false
+}
