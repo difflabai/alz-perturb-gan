@@ -1,0 +1,61 @@
+{
+  "status": "FRESH097_D000_EXACTLY_REPLICATES_HISTORICAL095_SEED0_REFERENCE",
+  "UTC": "2026-11-06T22:02:00.798166+00:00",
+  "old_result": "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0-result.json",
+  "old_result_SHA256": "d8f95caa81827eb8cbebafea2bfd6f262994bc73a7d86dfeb8ff85ac19556e51",
+  "new_result": "/ml2/alz/analysis/distribution097/results/CAL_GPU0_V1_dist097_d000_f0_pg_s0.json",
+  "new_result_SHA256": "e84ec67bb5233c95100488fae89d03faf029d5ee1c2801c69ec29ee214330a14",
+  "old_checkpoint_SHA256": "7c1aad305ecb10235306b396d224429eab7a9842e1eb45c7a72d3115ff6a7e8b",
+  "new_checkpoint_SHA256": "dd20202b89660c3af9619dabf8d431fabe3a662aae9b507c5fbd31fb498e8766",
+  "metric_equality": {
+    "energy_score": true,
+    "cell_energy_distance": true,
+    "spread_ratio": true,
+    "within_condition_spread_ratio": true,
+    "coverage80": true,
+    "per_donor_energy_score": true,
+    "per_stage_cell_energy_distance": true
+  },
+  "native_state_equality": {
+    "models": true,
+    "table": true,
+    "optimizers": true,
+    "streams": true
+  },
+  "generation_replicate_equality": [
+    {
+      "replicate": 0,
+      "identical_keys": true,
+      "all_arrays_elementwise_identical": true,
+      "array_equality": {
+        "stage_synthetic_summaries": true,
+        "generated_cells_by_stage": true
+      },
+      "old_path": "/ml2/alz/runs/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0/r0/arrays.npz",
+      "new_path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d000_f0_pg_s0/r0/arrays.npz",
+      "old_SHA256": "d6ea8e5d3ce0f33d8be788bfac946696a0bef6ab6cd163e46364ecc52c2eb1df",
+      "new_SHA256": "d6ea8e5d3ce0f33d8be788bfac946696a0bef6ab6cd163e46364ecc52c2eb1df"
+    },
+    {
+      "replicate": 1,
+      "identical_keys": true,
+      "all_arrays_elementwise_identical": true,
+      "array_equality": {
+        "stage_synthetic_summaries": true,
+        "generated_cells_by_stage": true
+      },
+      "old_path": "/ml2/alz/runs/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0/r1/arrays.npz",
+      "new_path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d000_f0_pg_s0/r1/arrays.npz",
+      "old_SHA256": "6ce413aac928ab94cd8b47aea27d0128adb0960ff1cc81078b84aac963a7c609",
+      "new_SHA256": "6ce413aac928ab94cd8b47aea27d0128adb0960ff1cc81078b84aac963a7c609"
+    }
+  ],
+  "new_fit_still_from_scratch": true,
+  "old_checkpoint_loaded_into_new_training": false,
+  "old_and_new_native_versions": [
+    "0.9.5",
+    "0.9.7"
+  ],
+  "CUDA_initialized": false,
+  "interpretation": "The new20k seed0 reference is a fresh deterministic replication of an existing result, not a newly improved all-time score or an independent random-seed confirmation. Identical weights/particles/optimizer states/count arrays support runtime comparability for this particular native recipe and seed; do not infer equivalence for all other recipes or versions. External calibration ranking remains as previously measured; d001/d002 and fresh seeds are needed to assess new improvements."
+}
