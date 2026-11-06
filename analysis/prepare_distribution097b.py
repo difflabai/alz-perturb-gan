@@ -85,7 +85,7 @@ def main():
     (NEXT / 'model').mkdir()
     (NEXT / 'proposals').mkdir()
     RUNTIME.mkdir()
-    evidence = [args.stage1_audit.resolve(), STAGE1 / 'stage1_report.json', RULE, old_path]
+    evidence = [args.stage1_audit.resolve(), STAGE1 / 'stage1_report.json', RULE, old_path, Path(__file__).resolve()]
     protocol = copy.deepcopy(read(STAGE1 / 'protocol.json'))
     protocol.update(UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),
                     stage='SECOND_DISTRIBUTION_SEARCH_FRESH_RATE_AND_PENALTY_REFINEMENT',
@@ -122,6 +122,20 @@ def main():
             # repr(Path) would need PosixPath imported; use plain Path calls.
             code = code.replace(repr(evidence), '[' + ','.join('Path(' + repr(str(p)) + ')' for p in evidence) + ']')
             code = code.replace("ROOT/'analysis/particlegan097_runtime_equivalence_20261106.json']", "ROOT/'analysis/particlegan097_runtime_equivalence_20261106.json',*SELECTION_EVIDENCE]")
+            code = code.replace("p=read(PROTOCOL);assert p['status']", "validate_adaptation();p=read(PROTOCOL);assert p['status']")
+            code += '''
+def validate_adaptation():
+ import importlib.util
+ p=read(PROTOCOL)
+ for path,pin in p['selection_evidence_SHA256'].items():assert sha(path)==pin
+ proof=read(SELECTION_EVIDENCE[0]);assert proof['complete_stage1'] and proof['all_new_models_from_update_zero'] and not proof['heldout_values_read']
+ spec=importlib.util.spec_from_file_location('pinned_fresh097_adaptation',ROOT/'analysis/prepare_distribution097b.py')
+ materializer=importlib.util.module_from_spec(spec);spec.loader.exec_module(materializer)
+ historical=read(ROOT/'analysis/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0-result.json')['candidate']
+ anchor,proposals=materializer.derive(proof['rows'],[dict(finite=True,hyperparameters=historical['released_hyperparameters'])])
+ assert p['anchor_candidate_id']==anchor['candidate_id'] and p['anchor_hyperparameters']==anchor['hyperparameters'] and p['anchor_metrics']==anchor['metrics']
+ assert p['selection_stage2']['configurations']==[dict(id=q['id'],parameters=q['hyperparameters'],reason=q['reason']) for q in proposals]
+'''
         if source.name == 'qualify.py':
             code = code.replace('paths=[*HERE.glob', 'paths=[*scope.SELECTION_EVIDENCE,*HERE.glob')
         compile(code, str(RUNTIME / source.name), 'exec')
