@@ -1,0 +1,54 @@
+{
+  "status": "PREPARED_DISABLED_REQUIRES_NEW_CPU_QUALIFICATION_AND_EXACT_SOURCE_REVIEW",
+  "UTC": "2026-11-06T22:35:54.151695+00:00",
+  "anchor": "d000",
+  "proposals": [
+    {
+      "id": "d003",
+      "hyperparameters": {
+        "generator_lr": 0.003,
+        "critic_lr": 0.0045,
+        "particle_lr": 0.0075,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "reason": "Joint native rate scale 0.5; all other anchor scalars fixed."
+    },
+    {
+      "id": "d004",
+      "hyperparameters": {
+        "generator_lr": 0.009000000000000001,
+        "critic_lr": 0.013499999999999998,
+        "particle_lr": 0.0225,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "reason": "Joint native rate scale 1.5; all other anchor scalars fixed."
+    },
+    {
+      "id": "d005",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.7071067811865476,
+        "prior_reg": 0.01
+      },
+      "reason": "Geometric penalty-center midpoint between anchor 0.5 and measured upper 1.0; other five scalars fixed."
+    }
+  ],
+  "source_SHA256": "472bf13c402ba98ab58fcdc6f9e072b61017ed6871a1b88d51dd1f9f08efc471",
+  "evidence_SHA256": {
+    "/ml2/alz/analysis/distribution097_stage1_final_independent_audit_20261106.json": "3e8803c82c6a99fb4495e17480708a3fda43dfe44bcebec05904633c2fa22ead",
+    "/ml2/alz/analysis/distribution097/stage1_report.json": "29bc5bdbed0574f0962279daaf4650068e6dc612a059b6ce287853a06cfd8331",
+    "/ml2/alz/analysis/distribution097_next_search_rule_20261106.json": "426512697105d30304d3896ff7065288dda881c06e7c7f816973f789e75f80ac",
+    "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_bridge_f0_pg_s0-result.json": "adb377b6cd894bda4e111d2d7e1ae9a1e731bd043899f7c3819f09445d489db8",
+    "/ml2/alz/analysis/prepare_distribution097b.py": "472bf13c402ba98ab58fcdc6f9e072b61017ed6871a1b88d51dd1f9f08efc471"
+  },
+  "activation": false,
+  "GPU_allocation_created": false,
+  "new_model_updates": 0
+}
