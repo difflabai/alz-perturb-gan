@@ -61,6 +61,7 @@ def proof_source_pins():
  return pins
 def validate_authorization(auth,*,require_runtime_proof=True):
  p=protocol();v=auth['cell'];assert v==cell(v['fold'],v['method'],v['seed'])
+ assert auth['role']=='alz_core_'+v['method']
  assert auth['operation']=='external097_benchmark_cell' and auth['metric_role']=='final_evaluation'
  assert auth['fixed_endpoint']==endpoint(v['method']) and auth['new_model_updates']==update_count(v)
  assert auth['new_model_update_unit']==update_unit(v['method']) and auth['initial_completed_updates']==0

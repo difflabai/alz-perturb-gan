@@ -231,9 +231,13 @@ def status(root):
     def test_benchmark_worker_refuses_partial_wrong_reference_or_changed_hyperparameters(self):
         import worker_gpu0
         import preset_scope
-        auth=copy.deepcopy(self.auth);auth.update(particlegan_version='0.9.7',penalty_options={'input_domain':'continuous'})
+        hyper={'generator_lr':.006,'critic_lr':.009,'particle_lr':.015,'reg_coeff':1.,'reg_kappa':.5,'prior_reg':.01}
+        recipe={'total_steps':20000,'ema_decay':0}
+        auth=copy.deepcopy(self.auth);auth.update(particlegan_version='0.9.7',penalty_options={'input_domain':'continuous'},released_hyperparameters=hyper)
         checkpoint={'particlegan_version':'0.9.7','penalty_options':{'input_domain':'continuous'},'schema':1,'method':'pg','fold':0,'seed':0,'status':'completed','completed_updates':20000,'fixed_endpoint':20000,'cache_manifest_SHA256':b.sha(Path(auth['cache_dir'])/'manifest.json'),
-                    'native_recipe':'bispf_optimized','policy':{'completed_steps':20000},'released_hyperparameters':preset_scope.HYPER,'variant_config':preset_scope.CFG}
+                    'native_recipe':'bispf_optimized','policy':{'completed_steps':20000,'recipe':recipe},'recipe':recipe,
+                    'usage':{'steps':20000,'draws':SimpleNamespace(sum=lambda:640000),'unsampled_moved_steps':SimpleNamespace(sum=lambda:0)},
+                    'released_hyperparameters':copy.deepcopy(hyper),'variant_config':preset_scope.CFG}
         worker_gpu0.validate_pg(checkpoint,auth)
         for key,value in [('particlegan_version','0.9.4'),('penalty_options',{'input_domain':'auto'}),('completed_updates',19000),('status','recovery'),('seed',1),('fold',1),('cache_manifest_SHA256','wrong')]:
             changed=copy.deepcopy(checkpoint);changed[key]=value
@@ -241,6 +245,20 @@ def status(root):
         changed=copy.deepcopy(checkpoint);changed['released_hyperparameters']['reg_kappa']=1.
         with self.assertRaises(b.Refusal):worker_gpu0.validate_pg(changed,auth)
         self.assertNotIn('torch',sys.modules)
+    def test_cfgen_epoch_endpoint_real_fixture_reservation_guard_worker_and_settlement(self):
+        self.value={**self.value,'method':'cfgen'};self.auth['cell']=self.value
+        self.auth.update(allocation_id=b.allocation_key(self.value),attempt_id=b.attempt_key(self.value),label=b.attempt_key(self.value),
+                         role='alz_core_cfgen',fixed_endpoint=1800,output_dir=str(b.output_path(self.layout,self.value)),ledger_path=str(b.ledger_path(self.layout,self.value)))
+        policy=b.read(self.policy);policy['roles']['alz_core_cfgen']={'gpu_bytes':G,'ram_bytes':G};dump(self.policy,policy)
+        self.auth['files_SHA256'][str(self.policy)]=b.sha(self.policy);self.auth['policy_SHA256']=b.sha(self.policy)
+        self.auth['command']=b.expected_command(self.layout,self.auth_path,self.value)
+        self.state['execution_controller']['calibration_backend'].update(files_SHA256=self.auth['files_SHA256'],policy_SHA256=self.auth['policy_SHA256'],
+             **{k:self.auth[k] for k in ('allocation_id','attempt_id','scheduler_allocation_id','expires_unix')})
+        dump(self.auth_path,self.auth);dump(self.layout.project/'project_gpu_budget.json',self.state)
+        result=self.run_child();self.assertEqual(result.returncode,0,result.stderr)
+        state=b.read(self.layout.project/'project_gpu_budget.json');self.assertEqual(state['open_reservations'],[])
+        ledger=b.read(self.auth['ledger_path']);self.assertEqual(ledger['jobs'][0]['role'],'alz_core_cfgen')
+        self.assertTrue(ledger['jobs'][0]['reservation_released']);self.assertNotIn('torch',sys.modules)
     def test_native_runtime_import_roots_find_packages_without_importing_models(self):
         # find_spec of top-level names does not execute their package bodies.
         for method,names in [('pg',['particlegan','torch','numpy','scipy']),('scvi',['scvi','torch','numpy','scipy'])]:

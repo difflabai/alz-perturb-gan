@@ -13,7 +13,7 @@ REGISTRY=DEPLOYED.parent/'live_registry'
 REVIEW=ROOT/'analysis/benchmark097_owner_execution_review.json'
 OLD=Path('/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/integration/policy.GPU0.CORE.PREPARED.json')
 OLD_SHA='5a4dfd1d5288bde24964ee680c003dd75f13fefe1a83ac55b27b49e6a05d125e'
-PREVIOUS_REGISTRY=Path('/ml2/alz/artifacts/gpu1-hpo20k-c014-20261106/live_registry/registry.json')
+PREVIOUS_REGISTRY=Path('/ml2/alz/artifacts/gpu1-distribution097b-stage2-20261106/live_registry/registry.json')
 OPS=('external097_benchmark_cell',)
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def read(path):return json.loads(Path(path).read_bytes())
