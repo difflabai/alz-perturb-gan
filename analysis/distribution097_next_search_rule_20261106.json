@@ -1,0 +1,47 @@
+{
+  "status": "PROSPECTIVE_ADAPTIVE_FULL20K_LOCAL_SEARCH_RULE_NOT_YET_MATERIALIZED",
+  "UTC": "2026-11-06T22:04:31.972043+00:00",
+  "stage1_required_before_materialization": "/ml2/alz/analysis/distribution097/stage1_report.json",
+  "independent_complete_stage1_audit_required": true,
+  "all_new_training_from_scratch": true,
+  "initial_completed_updates": 0,
+  "source_checkpoint": null,
+  "native_formulation_unchanged": true,
+  "endpoint": 20000,
+  "calibration_only": true,
+  "primary": "Pooled cell_energy_distance at the full20000-update endpoint; no500-step selection or warm-start.",
+  "anchor_rule": "Lowest finite stage1 pooled distance with spread0.7..1.3; if none, retain all outcomes and inspect the failure before scheduling adaptation. Report donor energy and joint-feasible alternative separately; do not silently discard a distance gain because energy differs.",
+  "new_hypotheses": [
+    {
+      "id": "d003",
+      "change": "Scale generator_lr, critic_lr and particle_lr jointly by0.5; keep all other selected-anchor scalars fixed.",
+      "reason": "Test slower native normalized-optimizer steps at the same20k endpoint while preserving G:D:particle step ratios."
+    },
+    {
+      "id": "d004",
+      "change": "Scale generator_lr, critic_lr and particle_lr jointly by1.5; keep all other selected-anchor scalars fixed.",
+      "reason": "Test faster convergence against the half-rate and anchor rates at the same fixed endpoint."
+    },
+    {
+      "id": "d005",
+      "change": "Set reg_kappa to geometric midpoint between the selected-anchor kappa and the nearest larger historically measured kappa, capped at1; keep otherfive selected-anchor scalars fixed. If no larger point exists, explicitly revise and freeze this hypothesis before any fit.",
+      "reason": "Refine penalty-center sensitivity using completed20k information, including prior kappa1 reference; avoid repeating a known identical parameter vector."
+    }
+  ],
+  "before_each_fit": "Materialize exact numeric six-scalar proposal and all source/protocol pins before its fresh launch; qualify the separate new runtime, maintain canonical accounting/physical guards and preserve stage1 sources. No allocation authorized by this planning record alone.",
+  "confirmation": "After additional20k endpoints, freeze the primary distance candidate and, if different, the joint-feasible candidate alongside the original d000 reference. Run each distinct configuration at fresh seeds1..4, from0, with matched initialization streams and reference outcomes; do not duplicate identical configurations under separate role names. Retain all successes, failures and energy/spread tradeoffs. Full external candidate must be frozen before new heldout evaluation.",
+  "maximum_new_selection_fits": 3,
+  "maximum_distinct_confirmation_configurations": 3,
+  "maximum_new_confirmation_fits": 12,
+  "resources": {
+    "window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+    "project_GPU_hours": 1024,
+    "core_GPU_hours": 180,
+    "no_implicit_window_extension": true,
+    "no_foreign_controls": true,
+    "global_ALZ_serialization_preserved": true
+  },
+  "heldout_split_isolation_resolution": "Pending Ember question remains; continue calibration/model/runtime work independently but do not claim globally isolated heldout validation for overlapping calibration/test donors.",
+  "SOTA_claim": false,
+  "goal_complete": false
+}
