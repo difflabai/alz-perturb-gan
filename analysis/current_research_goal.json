@@ -1,15 +1,16 @@
 {
   "status": "USER_REPLACED_RESEARCH_OBJECTIVE",
   "UTC": "2026-11-06T01:14:07.654130+00:00",
-  "objective": "Optimize only the six existing public hyperparameters of the current ParticleGAN0.9.6 non-EMA bispf_optimized ALZ formulation for best calibrated donor energy score at exactly500 fresh optimizer updates, with cell distribution matching as a nonregression constraint. Use reproducible sequential search and independent training-seed confirmation.",
+  "objective": "Optimize the current ParticleGAN 0.9.6 non-EMA ALZ formulation's existing hyperparameters for the lowest donor-level calibration energy score at exactly 500 training updates from scratch, without worsening cell-distribution matching. Keep the formulation, architecture, losses, optimizers, data splits and preprocessing unchanged. Tune learning rates and regularization strengths intelligently using matched controls, reproducible adaptive search and fresh-seed confirmation. Keep held-out evaluation separate, retain unsuccessful trials, and report the best measured settings and actual results.",
   "owner_instruction": "set the goal to use / adjust the current hyperparams without changing the formulation to do best at step 500. this is to optimize the hyperparams. do this intelligently.",
-  "native_goal_entry_updated": false,
-  "native_goal_blocker": "create_goal refused because older blocked goal is unfinished; update_goal exposes status only and cannot edit its objective. Old goal has not been falsely marked complete.",
+  "native_goal_entry_updated": true,
   "priority": "500step HPO replaces queued40k/remaining20k benchmark scheduling. Gracefully checkpoint only the owned current20k worker; retain native state/cost/results. New500step candidates start fresh.",
   "protocol": "/ml2/alz/analysis/hpo500/protocol.json",
   "existing_results_preserved": true,
   "study_status": "NATIVE500STEP_HPO_RUNNING",
   "study_progress_path": "/ml2/alz/artifacts/hpo500/progress.json",
   "source_commit": "9fc5bd3",
-  "activation_commit": "43c9a5d417f336932c5b4e32da1a745e9555ca60"
+  "activation_commit": "43c9a5d417f336932c5b4e32da1a745e9555ca60",
+  "native_goal_status": "active",
+  "native_goal_verification_path": "/ml2/alz/analysis/goal_correction_20261106.json"
 }

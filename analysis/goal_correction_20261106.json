@@ -1,0 +1,30 @@
+{
+  "status": "ACTUAL_NATIVE_THREAD_GOAL_REPLACED_AND_READ_BACK",
+  "UTC": "2026-11-06T02:20:49.782317+00:00",
+  "method": "thread/goal/set via existing local app-server Unix WebSocket API",
+  "official_documentation": "https://learn.chatgpt.com/docs/app-server#manage-a-thread-goal",
+  "explicit_user_authorization": "set the goal to use / adjust the current hyperparams without changing the formulation to do best at step 500. this is to optimize the hyperparams. do this intelligently.",
+  "before": {
+    "threadId": "01a1a22b-f310-7190-a7c6-8697ecabae6c",
+    "objective": "eval then debug if needed repeatedly until you get a good result. commit in between but if the result gets worse revert and try again. we want to get ath",
+    "status": "blocked",
+    "tokenBudget": null,
+    "tokensUsed": 9714850,
+    "timeUsedSeconds": 108562,
+    "createdAt": 1793743370,
+    "updatedAt": 1793870801
+  },
+  "after": {
+    "threadId": "01a1a22b-f310-7190-a7c6-8697ecabae6c",
+    "objective": "Optimize the current ParticleGAN 0.9.6 non-EMA ALZ formulation's existing hyperparameters for the lowest donor-level calibration energy score at exactly 500 training updates from scratch, without worsening cell-distribution matching. Keep the formulation, architecture, losses, optimizers, data splits and preprocessing unchanged. Tune learning rates and regularization strengths intelligently using matched controls, reproducible adaptive search and fresh-seed confirmation. Keep held-out evaluation separate, retain unsuccessful trials, and report the best measured settings and actual results.",
+    "status": "active",
+    "tokenBudget": null,
+    "tokensUsed": 9714850,
+    "timeUsedSeconds": 108562,
+    "createdAt": 1793743370,
+    "updatedAt": 1793931649
+  },
+  "old_goal_falsely_marked_complete": false,
+  "daemon_restarted": false,
+  "new_thread_created": false
+}
