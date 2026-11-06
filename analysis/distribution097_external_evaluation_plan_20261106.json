@@ -1,0 +1,84 @@
+{
+  "status": "PROSPECTIVE_DISTRIBUTION_PRIMARY_EXTERNAL_ANALYSIS_PLAN_BEFORE_NEW_HELDOUT_EVALUATION",
+  "UTC": "2026-11-06T21:38:32.452268+00:00",
+  "goal_path": "/ml2/alz/analysis/current_research_goal.json",
+  "PG_candidate_selection": "Freeze only after full20k calibration and fresh-seed confirmation; no new heldout-driven parameter selection.",
+  "all_new_training_from_scratch": true,
+  "folds": [
+    0,
+    1,
+    2
+  ],
+  "training_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "methods": [
+    "pg",
+    "scvi",
+    "cfgen",
+    "hierarchical_resampling"
+  ],
+  "required_generative_model_fits": 45,
+  "all_required_cells_before_final_claim": true,
+  "old_partial_benchmark_not_restarted": true,
+  "original_heldout_point_scoring_source": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/scoring.py",
+  "original_heldout_point_scoring_SHA256": "cb9e30877ef717046be411ef0b29efc9ec1ef2879e1a526f8a10d08ef205de4c",
+  "preserve_original_scoring": "Use original stage ensembles,200bagsx400cellsx4stages,two generationreplicates and fixed1500generated/1500real pooled PCA50 reservoir. Do not substitute the four-donor calibration equal-stage reservoir.",
+  "primary_statistic": "Equal-fold mean of cell_energy_distance; average generationreplicates then trainingseeds within fold. Report all15seed-by-fold values as well.",
+  "primary_contrasts": [
+    "pg_minus_scvi",
+    "pg_minus_cfgen",
+    "pg_minus_hierarchical_resampling"
+  ],
+  "uncertainty": {
+    "draws": 10000,
+    "seed": 20261106,
+    "familywise_alpha": 0.05,
+    "number_of_primary_contrasts": 3,
+    "two_sided_interval_percent_each": 98.33333333333333,
+    "unit": "Real-donor clusters within each fold/stage; generated reservoirs and fitted-model states fixed. Preserve unequal realcell counts by ratio of resampled cross-sums to resampled cell counts.",
+    "pairing": "Identical real target reservoirs across compared methods. Real-real term cancels exactly. Average paired model/replicate components before resampling real donors.",
+    "real_reservoir_donor_identity": "Reconstruct original1500 target-reservoir row indices with the original20261026 RNG and unchanged evaluation metadata; verify exact equality to saved real_cell_reservoir. Require all intended evaluation donor clusters present or report the interval unavailable; never silently drop donors.",
+    "seed_variability": "Report every paired training-seed distance difference separately; do not treat seeds/cells/replicates as biological donors.",
+    "limitations": "Fixed-model/reservoir conditional uncertainty, historically exposed cohort and overlapping fitting folds; not independent population confirmation."
+  },
+  "claim_rules": {
+    "distribution_comparison": "Completed required matrix, lower mean pooled distance than each of three matched comparators, all three Bonferroni paired-contrast upper bounds below0; show foldwise and seedwise consistency.",
+    "quality_tradeoffs": "Always report donor energy, coverage and total/within-condition spread; disclose any deterioration and any failure of the0.7..1.3 spread guard. A numerical distance win with collapsed donor spread is not an unqualified generative-quality win.",
+    "SOTA_scope": "Best among tested, disclosed fixed/tuned comparator recipes on this ALZ protocol only if supported. Broad universal or independent-cohort SOTA remains unsupported without corresponding evidence.",
+    "no_automatic_model_promotion": true
+  },
+  "comparator_readiness_gaps": [
+    "Existing matched CFGen caller hardcodes fold0/seed0/cell count14762 and must be generalized and qualified for all frozen folds/seeds before45cell execution.",
+    "Current historical PG/scVI-only aggregate is donor-energy primary and excludes CFGen; it cannot substantiate the new distribution-primary goal unchanged.",
+    "Comparator calibration settings and any tuning budgets must be disclosed and frozen before new heldout evaluation; historical tuning effort differs."
+  ],
+  "CFGen_sampler_check": {
+    "source": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/isolated/sources/CFGen-ee5ca0ccdd97a85a3d6bab9344063b77a8fc7af3/cfgen/models/fm/fm.py",
+    "source_SHA256": "208a6a4f680ba60e5ea91378c2f4ce8f42ed97e981ad453fae0009812b33ecd8",
+    "n_sample_steps": 2,
+    "meaning": "Two requested trajectory output times, not two Euler steps: native torchdyn NeuralODE uses adaptive dopri5 with atol=rtol=1e-5. Native on-test code also requests2 output times.",
+    "coarse_solver_accusation_supported": false
+  },
+  "paired_distance_statistics_source": "/ml2/alz/analysis/distribution_primary_statistics.py",
+  "paired_distance_statistics_SHA256": "1b8074e1a04e7e01b8448dc78e28ffda48856bdb9cb6534fed79dc710d2fa8e5",
+  "synthetic_tests": {
+    "source": "/ml2/alz/analysis/test_distribution_primary_statistics.py",
+    "source_SHA256": "0e7b892a30d0e78ff9aa3687e0e245aa7cc01916861ea1db04daa27d586e5b21",
+    "tests_passed": 7,
+    "real_heldout_target_values_read": false,
+    "GPU_allocation_created": false
+  },
+  "resource_constraints": {
+    "project_GPU_hours": 1024,
+    "core_GPU_hours": 180,
+    "window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
+    "no_implicit_window_extension": true,
+    "no_foreign_controls": true,
+    "existing_global_ALZ_scientific_phase_lock_preserved": true
+  }
+}
