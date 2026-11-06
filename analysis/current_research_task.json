@@ -1,55 +1,22 @@
 {
-  "status": "COMPLETE20K_C014_INDEPENDENTLY_VERIFIED_MIXED_CALIBRATION_RESULT",
-  "owner_instruction": "ok use the new hyperparams to train a 20k, where do we get",
-  "protocol_path": "/ml2/alz/analysis/hpo20k/protocol.json",
-  "runtime_path": "/ml2/alz/hpo20k_runtime",
-  "native_version": "0.9.6",
+  "status": "NATIVE097_FRESH20K_DISTRIBUTION_STAGE1_D000_RUNNING",
+  "owner_goal": "Use PG formulation for SOTA distribution matching",
+  "all_new_training_from_scratch": true,
+  "native_version": "0.9.7",
   "EMA_decay": 0,
-  "from_scratch": true,
-  "fixed_endpoint": 20000,
+  "source_commit": "60569ad",
+  "activation_commit": "0c4cce8ab274fa57c6d3d6a8e327b9235c1fb709",
+  "protocol_path": "/ml2/alz/analysis/distribution097/protocol.json",
+  "study_progress_path": "/ml2/alz/artifacts/distribution097-stage1/progress.json",
+  "started_evidence_path": "/ml2/alz/analysis/distribution097_started_20261106.json",
+  "stage1_candidates": [
+    "d000",
+    "d001",
+    "d002"
+  ],
+  "endpoint_per_training": 20000,
   "fold": 0,
-  "seed": 0,
-  "study_progress_path": "/ml2/alz/artifacts/hpo20k-c014-batch/progress.json",
-  "previous_hpo500_goal_completed": true,
-  "started_evidence_path": "/ml2/alz/analysis/hpo20k_started_20261106.json",
-  "first_verified_completed_update": 1,
-  "source_commit": "4d7a18f",
-  "activation_commit": "de18ddda1878900fde9eb12c5c46af9ca87623d7",
-  "progress_updates": "At5000-update milestones, completion, or actual operational failure; no claim of a20k score before full evaluation.",
-  "completed_updates": 20000,
-  "final_independent_result_path": "/ml2/alz/analysis/hpo20k_independent_result_comparison_20261106.json",
-  "actual_GPU_hours": 2.898298351613331,
-  "metrics": {
-    "metric_role": "calibration_selection",
-    "generation_replicates": 2,
-    "donors": [
-      "H20.33.032",
-      "H21.33.001",
-      "H21.33.023",
-      "H21.33.025"
-    ],
-    "training_seed": 0,
-    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
-    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
-    "sampling_contract": "calibration_equal_stage375_priority_v1",
-    "energy_score": 2.140877791854103,
-    "cell_energy_distance": 0.3426209177124129,
-    "spread_ratio": 0.8007064268554454,
-    "within_condition_spread_ratio": 0.7317261429446565,
-    "coverage80": 0.6153846153846154,
-    "generated_zero_count_rate": 1.5625e-06,
-    "per_donor_energy_score": [
-      1.1010725344340766,
-      3.406126284598753,
-      1.8814133926025012,
-      2.1748989557810803
-    ],
-    "per_stage_cell_energy_distance": [
-      0.8462513613577656,
-      2.0299723995861783,
-      1.1332835683199196,
-      0.5315226042715704
-    ]
-  },
-  "activation_reverted": true
+  "selection_seed": 0,
+  "heldout_benchmark_still_required": true,
+  "goal_active": true
 }
