@@ -1,6 +1,6 @@
 {
   "status": "READ_ONLY_COMPLETED_FRESH20K_TRAINING_STATE_DIAGNOSTICS",
-  "UTC": "2026-11-06T22:15:45.890121+00:00",
+  "UTC": "2026-11-06T22:40:40.672963+00:00",
   "completed_runs": [
     {
       "fit": "/ml2/alz/runs/CAL_GPU0_V1_h20_c014_f0_pg_s0/fit",
@@ -328,6 +328,115 @@
         }
       ],
       "learning_curve_SHA256": "9cf0aee408e25a5c96482a73ae395695a3b018e256e92dc9164b3245b0dc0952"
+    },
+    {
+      "fit": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d002_f0_pg_s0/fit",
+      "native_version": "0.9.7",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.25,
+        "prior_reg": 0.01
+      },
+      "fixed_observed_rates": {
+        "G_prior_LRs": [
+          0.006,
+          0.015
+        ],
+        "D_LRs": [
+          0.009000000000000001
+        ]
+      },
+      "windows": [
+        {
+          "after_update": 0,
+          "through_update": 5000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.433654248714447,
+            "D_penalty": 0.033496348187327385,
+            "G_adversarial": 3.1134241819381714,
+            "critic_gap": 5.5536885261535645,
+            "D_gradient_norm": 5.568525552749634,
+            "G_gradient_norm": 11.040346622467041,
+            "prior_gradient_norm": 0.8707637786865234
+          }
+        },
+        {
+          "after_update": 5000,
+          "through_update": 10000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.6103623807430267,
+            "D_penalty": 0.052347537130117416,
+            "G_adversarial": 2.3203558921813965,
+            "critic_gap": 4.479769229888916,
+            "D_gradient_norm": 10.501852989196777,
+            "G_gradient_norm": 10.937680721282959,
+            "prior_gradient_norm": 0.7615096569061279
+          }
+        },
+        {
+          "after_update": 10000,
+          "through_update": 15000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.6762526333332062,
+            "D_penalty": 0.04434747435152531,
+            "G_adversarial": 2.188067078590393,
+            "critic_gap": 3.977163314819336,
+            "D_gradient_norm": 7.768029451370239,
+            "G_gradient_norm": 8.890777587890625,
+            "prior_gradient_norm": 0.600145697593689
+          }
+        },
+        {
+          "after_update": 15000,
+          "through_update": 20000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.6525996327400208,
+            "D_penalty": 0.05076051689684391,
+            "G_adversarial": 2.0731632709503174,
+            "critic_gap": 3.7733503580093384,
+            "D_gradient_norm": 8.459786415100098,
+            "G_gradient_norm": 8.560388565063477,
+            "prior_gradient_norm": 0.5992052853107452
+          }
+        }
+      ],
+      "snapshots": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d002_f0_pg_s0/fit/checkpoint05000.pt",
+          "SHA256": "e8d2f9f9dd54b1c17ff46f9458536b3825cadb585b5c711bf208520c8af7d6d9",
+          "completed_updates": 5000,
+          "total_particle_draws": 160000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 8.322547912597656,
+          "particle_mean_squared_norm": 8.341251373291016
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d002_f0_pg_s0/fit/checkpoint10000.pt",
+          "SHA256": "619ebccc3e7142afc26bf522a3ae9495498726264de76d08d24bb71c44898816",
+          "completed_updates": 10000,
+          "total_particle_draws": 320000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 7.77439546585083,
+          "particle_mean_squared_norm": 7.793284893035889
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d002_f0_pg_s0/fit/final.pt",
+          "SHA256": "455f2845893cdf1cb4c6567a9599d9a4b8fa1a892c5bfc2398c1b495bb8551a2",
+          "completed_updates": 20000,
+          "total_particle_draws": 640000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 6.933839797973633,
+          "particle_mean_squared_norm": 6.9520087242126465
+        }
+      ],
+      "learning_curve_SHA256": "5fc57e82d32f992687b90d17c84b279b0f899dbf3c59c095a1f704aa0ca59678"
     }
   ],
   "source_SHA256": "f11781403e1b2ca79b2584eb5fe48a114dcb3510dd9720059958c3a36f95bdf7",
