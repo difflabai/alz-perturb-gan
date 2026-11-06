@@ -1,0 +1,141 @@
+{
+  "status": "ACTUAL_FROZEN_SPLIT_CALIBRATION_OVERLAP_AUDIT_REQUIRES_EXTERNAL_PLAN_RESOLUTION",
+  "UTC": "2026-11-06T21:44:32.804622+00:00",
+  "only_metadata_and_IDs_read": true,
+  "no_new_evaluation_target_values_or_scores_read": true,
+  "global_PG_selection_calibration_donors": [
+    "H20.33.032",
+    "H21.33.001",
+    "H21.33.023",
+    "H21.33.025"
+  ],
+  "folds": [
+    {
+      "fold": 0,
+      "calibration_donors": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "evaluation_donors": [
+        "H20.33.014",
+        "H20.33.018",
+        "H20.33.019",
+        "H20.33.025",
+        "H20.33.031",
+        "H20.33.035",
+        "H20.33.039",
+        "H21.33.006",
+        "H21.33.011",
+        "H21.33.012",
+        "H21.33.013",
+        "H21.33.016",
+        "H21.33.018",
+        "H21.33.030",
+        "H21.33.031",
+        "H21.33.036",
+        "H21.33.038",
+        "H21.33.039",
+        "H21.33.042",
+        "H21.33.046"
+      ],
+      "global_fold0_calibration_in_this_evaluation": [],
+      "global_fold0_calibration_in_this_training": [],
+      "manifest_SHA256": "553fbe2ad8d901782e834a1e3a77fc959e95cf6aef51b9ca88528aea29f6c631"
+    },
+    {
+      "fold": 1,
+      "calibration_donors": [
+        "H20.33.013",
+        "H21.33.003",
+        "H21.33.013",
+        "H21.33.038"
+      ],
+      "evaluation_donors": [
+        "H20.33.001",
+        "H20.33.012",
+        "H20.33.026",
+        "H20.33.027",
+        "H20.33.029",
+        "H20.33.030",
+        "H20.33.032",
+        "H20.33.033",
+        "H20.33.041",
+        "H20.33.043",
+        "H21.33.001",
+        "H21.33.009",
+        "H21.33.021",
+        "H21.33.023",
+        "H21.33.025",
+        "H21.33.029",
+        "H21.33.034",
+        "H21.33.040",
+        "H21.33.041",
+        "H21.33.047"
+      ],
+      "global_fold0_calibration_in_this_evaluation": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "global_fold0_calibration_in_this_training": [],
+      "manifest_SHA256": "2afea91705e37247e3fb07cb2f5e4568a13bad7e0ed096c2b3d56e4d997bf7c4"
+    },
+    {
+      "fold": 2,
+      "calibration_donors": [
+        "H20.33.027",
+        "H20.33.035",
+        "H21.33.038",
+        "H21.33.040"
+      ],
+      "evaluation_donors": [
+        "H20.33.005",
+        "H20.33.008",
+        "H20.33.011",
+        "H20.33.013",
+        "H20.33.015",
+        "H20.33.028",
+        "H20.33.044",
+        "H21.33.002",
+        "H21.33.003",
+        "H21.33.017",
+        "H21.33.026",
+        "H21.33.027",
+        "H21.33.033",
+        "H21.33.035",
+        "H21.33.037",
+        "H21.33.043",
+        "H21.33.044"
+      ],
+      "global_fold0_calibration_in_this_evaluation": [],
+      "global_fold0_calibration_in_this_training": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "manifest_SHA256": "2c9c96c44c0d1b5e2b3f1387bbd62ffaba72c2de6d3394d47d1d21b81e316bfa"
+    }
+  ],
+  "distinct_original_evaluation_donors": 57,
+  "calibration_donors_appearing_in_other_evaluation_folds": [
+    "H20.33.032",
+    "H21.33.001",
+    "H21.33.023",
+    "H21.33.025"
+  ],
+  "within_each_fold_optimization_calibration_evaluation_disjoint": true,
+  "global_candidate_selection_using_fold0_calibration_not_independent_of_all57_evaluation_donors": true,
+  "consequence": "A globally selected configuration tested across the original three folds cannot be labeled an independent57-donor heldout confirmation. All57 results can be retained with this limitation. Direct calibration overlap must be addressed explicitly before any stronger claim.",
+  "options_for_review": [
+    "Nested within-fold calibration/tuning with the complete procedure frozen before outer testing; this evaluates the selection procedure rather than one global hyperparameter vector.",
+    "Keep full57-donor matched descriptive matrix and separately disclose fold0-tuning-disjoint20-donor evaluation and calibration-excluded53-donor sensitivity; neither becomes fresh-population confirmation.",
+    "Add a genuinely independent cohort under a separate prospectively frozen data and comparison protocol."
+  ],
+  "active_three_arm_training_unchanged": true,
+  "goal_still_active": true,
+  "SOTA_claim": false
+}
