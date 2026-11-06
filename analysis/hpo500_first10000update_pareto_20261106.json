@@ -1,0 +1,109 @@
+{
+  "status": "DESCRIPTIVE_FIRST10000UPDATE_CALIBRATION_PARETO_FRONTIER",
+  "UTC": "2026-11-06T04:56:50.506145+00:00",
+  "source_audit_path": "/ml2/alz/analysis/hpo500_first10000update_readout_20261106.json",
+  "source_audit_SHA256": "660bc37b58f63a966eb9072d98b3bd5727e9bb5404bad98741d2b2db749aa706",
+  "frontier": [
+    {
+      "attempt": "CAL_GPU0_V1_h5_c014_search_f0_pg_s0",
+      "candidate_id": "c014",
+      "seed": 0,
+      "phase": "search",
+      "finite": true,
+      "hyperparameters": {
+        "generator_lr": 0.0072242016931078614,
+        "critic_lr": 0.014833286696429858,
+        "particle_lr": 0.013678610104321594,
+        "reg_coeff": 1.275280261299054,
+        "reg_kappa": 0.13400397049569038,
+        "prior_reg": 0.006567934215110022
+      },
+      "charged_GPU_seconds": 619.3714106330008,
+      "result_SHA256": "42bc04a554c9fede93b46452749ab4d19620e0e2adafffb3b369ee30a263a820",
+      "metrics": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 0,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 1.8963749844196591,
+        "cell_energy_distance": 0.4496186549803438,
+        "spread_ratio": 0.8362298771942833,
+        "within_condition_spread_ratio": 0.8289518773372382,
+        "coverage80": 0.6971153846153846,
+        "generated_zero_count_rate": 0.0,
+        "per_donor_energy_score": [
+          1.3002794218925704,
+          2.858772821039165,
+          1.3673982829958753,
+          2.0590494117510265
+        ],
+        "per_stage_cell_energy_distance": [
+          0.6436128257534097,
+          1.7387666264325272,
+          1.259131861676999,
+          0.8043134577672966
+        ]
+      }
+    },
+    {
+      "attempt": "CAL_GPU0_V1_h5_c019_search_f0_pg_s0",
+      "candidate_id": "c019",
+      "seed": 0,
+      "phase": "search",
+      "finite": true,
+      "hyperparameters": {
+        "generator_lr": 0.009603689912029105,
+        "critic_lr": 0.01861191024964088,
+        "particle_lr": 0.019614759421069602,
+        "reg_coeff": 1.216594491231935,
+        "reg_kappa": 0.13913722004706092,
+        "prior_reg": 0.00549250601954624
+      },
+      "charged_GPU_seconds": 79.5144809379999,
+      "result_SHA256": "5bb9c238800b457bed2b0d56ced982e2448780f2cb77891a29bd3bae0974bde6",
+      "metrics": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 0,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 1.9303494733492037,
+        "cell_energy_distance": 0.39477907099008824,
+        "spread_ratio": 0.8959494057424644,
+        "within_condition_spread_ratio": 0.8239738382832746,
+        "coverage80": 0.6730769230769231,
+        "generated_zero_count_rate": 1.875e-05,
+        "per_donor_energy_score": [
+          1.3586088470152635,
+          2.7086977641539516,
+          1.7077277749625956,
+          1.9463635072650038
+        ],
+        "per_stage_cell_energy_distance": [
+          0.9894736570595519,
+          1.7596212640727629,
+          1.2016742211022642,
+          0.7661083952281729
+        ]
+      }
+    }
+  ],
+  "fresh_seed_confirmation_pending": true,
+  "finalist_selection_rule_unchanged": "Original prospective top2 energy among matching/spread-feasible25seed0 candidates; descriptive frontier does not change that rule.",
+  "global_optimum_or_SOTA_claim": false
+}
