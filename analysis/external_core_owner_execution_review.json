@@ -1,6 +1,6 @@
 {
   "status": "OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS",
-  "UTC": "2026-11-05T19:00:27.312831+00:00",
+  "UTC": "2026-11-06T00:06:37.235120+00:00",
   "reviewer_session": "01a1a22b-f310-7190-a7c6-8697ecabae6c",
   "independent_review_claimed": false,
   "owner_authorization": {
@@ -21,13 +21,14 @@
     "/ml2/alz/external_core_runtime/preset_scope.py": "877f6dc6af18ac17e7d3e88820eb0f47ecb8bf2b07cb07666b58e0b49c23b650",
     "/ml2/alz/external_core_runtime/native_scvi_reload.py": "e25651033d6bb530d3d1659cab3fd41b94c8879ab14b4cb822e53fca779e2f0b",
     "/ml2/alz/external_core_runtime/qualify_saved_model_cpu.py": "f2ddf13ebf00dda4764bb9c4580570849f57374dd71e1a9092d3bd96e7b02301",
-    "/ml2/alz/external_core_runtime/test_scope.py": "6ec15356178ec69971e52982fbecdcb61f9673a9f4163a43de472120c39433e0",
+    "/ml2/alz/external_core_runtime/test_scope.py": "d2e81aad1fdf7c90bef1f620c5906977bd1f9d15ea69a1eb979dacc9bd448889",
     "/ml2/alz/external_core_runtime/prepare.py": "06c167c5fac75657776952f743edb590c05fb306227e5f2636c4139ea45dfa74",
     "/ml2/alz/external_core_runtime/worker_gpu0.py": "45dedefd8bfcf71cd20a1fa58b0ab76e344c1c975374ce3d1bb5711bfac2f163",
-    "/ml2/alz/external_core_runtime/qualify.py": "4229b33325dc6a8329c26cf022eff600a02e6b3a2468c42e4797abf32e63e829",
+    "/ml2/alz/external_core_runtime/qualify.py": "271daf1b3586053c8c4398103eb7c5673e1916529cfd2fe0bbba0972ae4f03f1",
+    "/ml2/alz/external_core_runtime/check_native_matrix_cpu.py": "8e2f126ba57e0c7309a6c7d0f142b4f2052c76e78f516e1b9c09ad65ec3db4c9",
     "/ml2/alz/external_core_runtime/test_integration.py": "109f96263f1fac4c8a7fe6a6c9af48d59d62b5ed3ca423cff42fab09dc6f6f76",
     "/ml2/alz/external_core_runtime/state_fingerprint.py": "29201ac7d98124296ec926fe6155903b30a8338e5e3875ae47d3276a7d61ae53",
-    "/ml2/alz/external_core_runtime/binding.py": "4584724cd258e3dbda950f0f42716bb5108187553276ed16e66a3528a8976e3a",
+    "/ml2/alz/external_core_runtime/binding.py": "3030c5024159858a64ee46171a89db29478acb897b1b0ba65aaa51f2167c1d1b",
     "/ml2/alz/external_core_runtime/policy.prepared.json": "ccdab0bf0365ad5223ce8e53331d38b403b50e947a588933a8d494f8a883dfe6",
     "/ml2/alz/analysis/released_tuning_v096/released_adapter.py": "b64b8d3eba2944383d470034b2e93bb2bb9e0e0c72fbcdaff95b285c2da5c731",
     "/ml2/alz/analysis/released_tuning_v096/released_update.py": "bfc4c774ebc0b42b9d9a27ce8405fe03216af8a52df0062abd35243d6b04211e",
@@ -43,9 +44,9 @@
     "/ml2/alz/analysis/matched_scvi/CPU_model_qualification.json": "11a4fa7f844c5389243d0af4a2bcbf806726f8e66b7ec247ef1c9970901b7306",
     "/ml2/alz/analysis/CAL_GPU0_V1_released_v095_regkappa050_f0_pg_s0-result.json": "d8f95caa81827eb8cbebafea2bfd6f262994bc73a7d86dfeb8ff85ac19556e51",
     "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json": "5312be07c39064c56fb95f2c34726ce171399234679a7d5ed9e261b42aedcb10",
-    "/ml2/alz/analysis/external_core_runtime_CPU_qualification.json": "8aa49f102af6009b3603056bfe3803c6fc8f3776ef1a196dd93e6614731043da"
+    "/ml2/alz/analysis/external_core_runtime_CPU_qualification.json": "d4e002833e111e07fd20cfb55ed5560f885ad7c208c467a81a0fce06df5403e7"
   },
-  "actual_CPU_runtime_tests": 20,
+  "actual_CPU_runtime_tests": 21,
   "actual_CPU_native096_model_tests": 8,
   "actual_CPU_saved_count_replay_methods": [
     "PG_latest_API_historical_checkpoint_probe_only",
@@ -59,5 +60,13 @@
   "shared_resources": "Unchangedguard andgrowthforecast,3GiBownGPU/6GiBownhost,driver3GiB/hostfree12GiB; noforeigncontrol",
   "launch_enabled_at_review": false,
   "automatic_promotion": false,
-  "SOTA_claim": false
+  "SOTA_claim": false,
+  "correction": "Native binding now admits exactly the frozen external_b1 operation across all3folds/2methods/5seeds. Regression reproduced previous rejection; first completedPGresult retained. Higherlevel all30tests now also exercise lowerbinding gate. No model/optimizer/sampler/scorer/hyperparameter change.",
+  "original_review_retained_in_git": true,
+  "actual_all30_full_native_authorization_verification": {
+    "path": "/ml2/alz/analysis/external_core_all30_native_wire_v2_CPU.json",
+    "SHA256": "ab1d9d5f8664fd6dfe039a495c0504330409c94f1b1f461bf5b9b1aa189a1b3b",
+    "canonical_allocation_created": false
+  },
+  "regression_reproduced_before_fix_log_SHA256": "ca040d9ae4095721e740b98c5f7e10b1a6a3e3a039ad70ad4e2d22d266639b0f"
 }

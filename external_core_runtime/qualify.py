@@ -14,7 +14,7 @@ def main():
     assert 'torch' not in sys.modules
     sources=[*HERE.glob('*.py'),*scope.MODEL_DIR.glob('*.py'),scope.PROTOCOL,scope.MODEL_PROOF,scope.NATIVE_PROOF,scope.ENGINE_PROOF]
     q=dict(status='EXTERNAL_CORE_CPU_RUNTIME_AND_MODEL_CHECKS_PASS',UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),
-           actual_runtime_tests=20,all30_matrix_authorizations_checked=True,tests=results,
+           actual_runtime_tests=21,all30_matrix_authorizations_checked=True,tests=results,
            GPU_allocation_created=False,old_execution_sources_changed=False,
            native_model_proofs='Pinned actual8PG tests, matched scVI native CPU qualification, and separately recorded full saved-model/count replay checks before deployment.',
            source_SHA256={str(p):b.sha(p) for p in sources})

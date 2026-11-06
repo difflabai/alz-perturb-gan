@@ -69,7 +69,8 @@ def cell(auth):
     if not auth.get('cpu_fixture'):
         import re
         require(isinstance(value.get('experiment'),str) and re.fullmatch(r'[a-z][a-z0-9_]{0,48}',value['experiment']),'safe unique calibration experiment identity required')
-        require(value['fold']==0 and value['method']=='pg','calibration experiments are first-fold PG only')
+        require(value['experiment']=='external_b1' and auth.get('operation')=='external_benchmark_cell',
+                'native admission is only the frozen external benchmark')
     return value
 
 def allocation_key(value):return f"ALZ_CAL_V1_{value.get('experiment','fixture')}_f{value['fold']}_{value['method']}_s{value['seed']}"

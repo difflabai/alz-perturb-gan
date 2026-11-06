@@ -17,6 +17,7 @@ class Scope(unittest.TestCase):
                 for seed in range(5):
                     a=self.auth(fold,method,seed)
                     scope.validate_authorization(a,require_runtime_proof=False)
+                    self.assertEqual(b.cell(a),scope.cell(fold,method,seed))
                     self.assertEqual(a['reuse_completed_model'],method=='scvi' and fold==seed==0)
                     self.assertEqual(a['fixed_endpoint'],20000 if method=='pg' else 400)
     def test_frozen_parameters_endpoint_and_role_cannot_be_changed(self):
@@ -38,5 +39,12 @@ class Scope(unittest.TestCase):
         with self.assertRaises(AssertionError):scope.validate_authorization(a,require_runtime_proof=False)
     def test_preparation_imports_no_models_or_cuda(self):
         self.auth();self.assertNotIn('torch',sys.modules);self.assertNotIn('scvi',sys.modules)
+    def test_lower_native_gate_refuses_unrelated_experiments_and_operations(self):
+        for fold,method,seed in ((0,'pg',0),(2,'scvi',4)):
+            a=self.auth(fold,method,seed)
+            changed=copy.deepcopy(a);changed['cell']['experiment']='calibration_retune'
+            with self.assertRaises(b.Refusal):b.cell(changed)
+            changed=copy.deepcopy(a);changed['operation']='train_released_hyperparameters'
+            with self.assertRaises(b.Refusal):b.cell(changed)
 
 if __name__=='__main__':unittest.main(verbosity=2)

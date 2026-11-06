@@ -1,0 +1,53 @@
+{
+  "status": "OPERATIONAL_NATIVE_MATRIX_SCOPE_BUG_FIRST_CELL_RESULT_RETAINED",
+  "UTC": "2026-11-06T00:05:43.472001+00:00",
+  "failure": {
+    "status": "BATCH_STOPPED_PRESERVING_ALL_EVIDENCE",
+    "UTC": "2026-11-05T19:37:12.410588+00:00",
+    "error": "RuntimeError('Command failed (1): /usr/bin/python3: Traceback (most recent call last):\\n  File \"/ml2/alz/external_core_runtime/prepare.py\", line 80, in <module>\\n    if __name__==\\'__main__\\':main()\\n                            ~~~~^^\\n  File \"/ml2/alz/external_core_runtime/prepare.py\", line 62, in main\\n    b.source_closure(auth,b.NATIVE_LAYOUT)\\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/ml2/alz/external_core_runtime/binding.py\", line 122, in source_closure\\n    value=cell(auth);cache=cache_path(layout,value);cache_manifest=cache/\\'manifest.json\\'\\n  File \"/ml2/alz/external_core_runtime/binding.py\", line 72, in cell\\n    require(value[\\'fold\\']==0 and value[\\'method\\']==\\'pg\\',\\'calibration experiments are first-fold PG only\\')\\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\\n  File \"/ml2/alz/external_core_runtime/binding.py\", line 47, in require\\n    if not value:raise Refusal(message)\\n                 ^^^^^^^^^^^^^^^^^^^^^^\\nbinding.Refusal: calibration experiments are first-fold PG only\\n')",
+    "audited_cells": 1,
+    "failed_or_pending_cell": [
+      0,
+      "scvi",
+      0
+    ],
+    "automatic_retry": false,
+    "automatic_promotion": false
+  },
+  "audited_cells": 1,
+  "models_refit_due_to_this_issue": 0,
+  "scientific_hyperparameters_changed": false,
+  "remaining_cell_admission_failed_before_reservation_or_GPU_model_import": true,
+  "open_project_reservations": 0,
+  "PG_seed0_completed_updates": 20000,
+  "PG_first_test_summary": {
+    "evaluation_r0": {
+      "energy_score": 1.3956542626511974,
+      "cell_energy_distance": 0.17201120518423174,
+      "spread_ratio": 1.381776689589395
+    },
+    "evaluation_r1": {
+      "energy_score": 1.4034199261893368,
+      "cell_energy_distance": 0.1648005770625094,
+      "spread_ratio": 1.3977884410357806
+    },
+    "resampling_r0": {
+      "energy_score": 1.424427987860526,
+      "cell_energy_distance": 0.16732718553329917,
+      "spread_ratio": 1.511453080489813
+    },
+    "resampling_r1": {
+      "energy_score": 1.4161386888665262,
+      "cell_energy_distance": 0.15895682294921443,
+      "spread_ratio": 1.477679906034208
+    },
+    "stage_swap_r0": {
+      "energy_score": 1.4977129424521398,
+      "cell_energy_distance": 0.27340526999676307,
+      "spread_ratio": 1.502906420113433
+    }
+  },
+  "root_cause": "Lowest binding.cell still imposed fold0/PG-only calibration scope; high-level all30 scope tests had not called this lower gate. Add a regression at that gate and a private full native verification for all30 cells before restarting the fixed batch.",
+  "automatic_retraining_or_selection_based_on_test_result": false,
+  "SOTA_claim": false
+}
