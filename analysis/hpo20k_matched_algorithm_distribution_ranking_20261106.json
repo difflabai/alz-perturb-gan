@@ -1,0 +1,58 @@
+{
+  "status": "SAME_DONORS_SEED0_REPLICATES_AND_SCORING_MATCHED_ALGORITHM_DISTRIBUTION_RANKING",
+  "UTC": "2026-11-06T21:14:07.464723+00:00",
+  "ranking": [
+    {
+      "method": "scVI (400 epochs)",
+      "cell_energy_distance": 0.22857870145323922,
+      "energy_score": 2.3489122410781658,
+      "spread_ratio": 0.349303797578872,
+      "source_path": "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json",
+      "source_SHA256": "5312be07c39064c56fb95f2c34726ce171399234679a7d5ed9e261b42aedcb10",
+      "rank_by_distribution_distance": 1
+    },
+    {
+      "method": "Hierarchical resampling",
+      "cell_energy_distance": 0.24277825308317968,
+      "energy_score": 2.079287181278266,
+      "spread_ratio": 1.086688043301637,
+      "source_path": "/ml2/alz/analysis/baseline_calibration_seed0.json",
+      "source_SHA256": "46babfb542f4ed09a4e08ff60d86da3049798f8f245e882716a50f950a513a18",
+      "rank_by_distribution_distance": 2
+    },
+    {
+      "method": "CFGen (300 AE + 1500 FM epochs)",
+      "cell_energy_distance": 0.2513296992803724,
+      "energy_score": 2.283138111608369,
+      "spread_ratio": 0.2692438880627546,
+      "source_path": "/ml2/alz/analysis/CAL_GPU0_V1_matched_cfgen_f0_cfgen_s0-result.json",
+      "source_SHA256": "bdc56e64a36ff3f17a0791fe731da986477e8153bb19709b33b2fc3ff534abba",
+      "rank_by_distribution_distance": 3
+    },
+    {
+      "method": "ParticleGAN (new c014, 20000 updates)",
+      "cell_energy_distance": 0.3426209177124129,
+      "energy_score": 2.140877791854103,
+      "spread_ratio": 0.8007064268554454,
+      "source_path": "/ml2/alz/analysis/hpo20k/results/CAL_GPU0_V1_h20_c014_f0_pg_s0.json",
+      "source_SHA256": "160893a339e238dd2e42d433354d117240a5a5b538565bb0a6c989e3423b0011",
+      "rank_by_distribution_distance": 4
+    }
+  ],
+  "latest_PG_rank": 4,
+  "method_count": 4,
+  "latest_PG_distance_above_resampling_percent": 41.12504450512935,
+  "independent_saved_replicates_rescored": 8,
+  "calibration_donors": [
+    "H20.33.032",
+    "H21.33.001",
+    "H21.33.023",
+    "H21.33.025"
+  ],
+  "training_seed": 0,
+  "generation_replicates": 2,
+  "same_scoring_contract": true,
+  "evaluation_population_mixed_in": false,
+  "baseline_legacy_trace_note": "Original baseline per-replicate files predate trace-field recording; seed0 aggregate trace contract and bitwise reproduction proof were verified, along with saved-array SHA256 and full score recomputation.",
+  "limitation": "Four adaptive calibration donors, one training seed each, different native fixed training budgets and unequal historical tuning; descriptive comparison, not independent heldout SOTA evidence."
+}
