@@ -4,6 +4,31 @@ from pathlib import Path
 HERE=Path(__file__).resolve().parent;sys.path.insert(0,str(HERE))
 import binding as b,preset_scope as scope
 
+def fit_evidence(out,method):
+ """Pin final fitting receipts/history as well as the sampled model weights."""
+ fit=Path(out)/'fit';paths=[]
+ if method=='pg':
+  receipt=b.read(fit/'checkpoint_receipt.json')
+  assert receipt['status']=='completed' and receipt['completed_updates']==20000 and receipt['path']=='final.pt'
+  assert receipt['SHA256']==b.sha(fit/'final.pt')
+  curve=[__import__('json').loads(x) for x in (fit/'learning_curve.jsonl').read_text().splitlines()]
+  steps=[x['step'] for x in curve];assert steps==sorted(set(steps)) and steps[0]==1 and steps[-1]==20000
+  paths=[fit/'checkpoint_receipt.json',fit/'learning_curve.jsonl',fit/'progress.json',fit/'final.pt']
+ else:
+  receipt=b.read(fit/'fit_receipt.json');assert receipt['status']=='completed'
+  paths=[fit/'fit_receipt.json']
+  if method=='scvi':
+   assert receipt['completed_epochs']==400 and receipt['validation_cells']==0 and not receipt['early_stopping']
+   for name,pin in receipt['model_files_SHA256'].items():
+    p=(fit/name).resolve();assert p.is_relative_to(fit.resolve()) and b.sha(p)==pin;paths.append(p)
+  else:
+   assert method=='cfgen' and receipt['AE_epochs']==300 and receipt['FM_epochs']==1500 and not receipt['synthetic']
+   for phase in ('AE','FM'):
+    p=fit/phase/'receipt.json';assert b.sha(p)==receipt[phase+'_receipt_SHA256'];q=b.read(p)
+    checkpoint=fit/phase/'final.ckpt';assert q['checkpoint_path']==str(checkpoint) and q['checkpoint_SHA256']==b.sha(checkpoint)
+    paths.extend([p,checkpoint])
+ return {str(p):b.sha(p) for p in paths}
+
 def finish(attempt):
  assert os.environ.get('CUDA_VISIBLE_DEVICES')==''
  folder=HERE.parent/'artifacts/allocations'/attempt;dep=b.read(folder/'deployment.json');auth=b.read(dep['authorization_path']);v=auth['cell']
@@ -65,7 +90,7 @@ def finish(attempt):
    model,receipt,state=load_complete(auth['cache_dir'],out/'fit',v['seed'],'cpu')
    assert receipt['fold']==v['fold'] and receipt['total_optimizer_updates']==auth['new_model_updates']
    for key in ('native_state_fingerprint','external_feature_fingerprint','checkpoint_SHA256','native_global_step','native_epoch'):assert native[key]==state[key]
-  pins={str(Path(completed['checkpoint_path'])):b.sha(completed['checkpoint_path'])};records={}
+  pins=fit_evidence(out,v['method']);records={}
   for name in ('evaluation_r0','evaluation_r1','resampling_r0','resampling_r1','stage_swap_r0'):
    dest=out/name;m=b.read(dest/'metrics.json');rep=0 if name.endswith('r0') else 1
    assert m['status']=='completed' and m['fold']==v['fold'] and m['training_seed']==v['seed'] and m['generation_replicate']==rep

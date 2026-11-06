@@ -15,7 +15,8 @@ ENABLED={'enabled':True,'benchmark':'external097','folds':[0,1,2],'training_seed
 PROOFS=[MODEL_PROOF,ENGINE_PROOF,
         ROOT/'analysis/matched_scvi/CPU_model_qualification.json',
         ROOT/'analysis/external_core_scvi_model_v096_CPU.json',
-        CFGEN_DIR/'CPU_model_qualification.json',CFGEN_DIR/'CPU_saved_sampling_qualification.json',CFGEN_DIR/'CPU_exact_reload_qualification.json']
+        CFGEN_DIR/'CPU_model_qualification.json',CFGEN_DIR/'CPU_saved_sampling_qualification.json',CFGEN_DIR/'CPU_exact_reload_qualification.json',
+        STUDY/'fit_evidence_CPU_qualification.json']
 def read(p):return json.loads(Path(p).read_bytes())
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def cell(fold,method,seed):

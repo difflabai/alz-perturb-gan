@@ -1,9 +1,11 @@
 """Confined controller tests plus synthetic selection scope; never a deployment."""
-import datetime,json,os,re,subprocess,sys
+import argparse,datetime,json,os,re,subprocess,sys
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;sys.path.insert(0,str(HERE))
 import binding as b,preset_scope as s
 def main():
+ parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=s.STUDY/'prepared_CPU_qualification.json');args=parser.parse_args()
+ assert args.output.resolve().parent==s.STUDY.resolve() and not args.output.exists()
  assert os.environ.get('CUDA_VISIBLE_DEVICES')=='' and not s.read(s.PLAN)['enabled']
  assert s.read(s.PROTOCOL)['status']=='PREPARED_NOT_FROZEN_PG_SELECTION_AND_CONFIRMATION_PENDING'
  results=[];count=0
@@ -20,6 +22,6 @@ def main():
         real_GPU_allocation_created=False,CUDA_initialized=False,plan_enabled=False,live_runtime_deployment_qualified=False,
         tests=results,source_SHA256={str(p):b.sha(p) for p in paths},
         remaining='Freeze the actual confirmed PG candidate, verify its evidence and selected native model, rerun actual all45-cell authorization/source qualification, review current shared resource forecast and exact source, then enable. This prepared proof cannot satisfy the deployment runtime-proof gate.')
- out=s.STUDY/'prepared_CPU_qualification.json';assert not out.exists();out.write_text(json.dumps(q,indent=2)+'\n')
+ out=args.output;out.write_text(json.dumps(q,indent=2)+'\n')
  print(json.dumps({k:q[k] for k in ('status','actual_tests','actual_frozen_PG_candidate_qualified','live_runtime_deployment_qualified')}))
 if __name__=='__main__':main()
