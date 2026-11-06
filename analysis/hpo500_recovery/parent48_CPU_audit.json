@@ -1,0 +1,81 @@
+{
+  "status": "ACTUAL_HPO500_RESOURCE_INTERRUPTION_NATIVE48_CPU_AUDIT_PASS",
+  "UTC": "2026-11-06T02:42:16.134000+00:00",
+  "parent_attempt": "CAL_GPU0_V1_h5_c006_search_f0_pg_s0",
+  "parent_authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_h5_c006_search_f0_pg_s0/authorization.json",
+  "parent_authorization_SHA256": "4a0abebcc418b7d9b793aa01e33901ab83f0eacc146aecdfb2d62b382cc0082a",
+  "parent_ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_h5_c006_search_f0_pg_s0.json",
+  "parent_ledger_SHA256": "2b83e88c5deba8cd281d3eb487d461a76b6ecfa5705851dd8e6f5ca831e253d3",
+  "parent_settlement_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_h5_c006_search_f0_pg_s0-settlement.json",
+  "parent_settlement_SHA256": "c7e6d9f0e457193aa9c1f028e116e58ff40fc65da1fbda57e1e5321741a8a5c4",
+  "checkpoint_path": "/ml2/alz/artifacts/hpo500-recovery/parent/native48.pt",
+  "checkpoint_SHA256": "5ac871bcebd908ef3f162434885b52550153158447b25eac2669d34a7f1454b9",
+  "learning_curve_path": "/ml2/alz/artifacts/hpo500-recovery/parent/learning_curve.jsonl",
+  "learning_curve_SHA256": "81950ee8124974a240151433e18fa90892dfe6890c04acf9630d31b7456aef4d",
+  "whole_parent_scientific_fingerprint": "b8a42bc7d0f6538b0ca51cbcc1f26dde9c2c60efb4958b1324a8c76d74211b84",
+  "native_policy_fingerprint": "5627ae9b11b257c702c61607caf7c4d641ddbe1d84b84fd8ea2d7078700f40d0",
+  "completed_updates": 48,
+  "fixed_endpoint": 500,
+  "seed": 0,
+  "hyperparameters": {
+    "generator_lr": 0.006,
+    "critic_lr": 0.009,
+    "particle_lr": 0.03,
+    "reg_coeff": 1.0,
+    "reg_kappa": 0.5,
+    "prior_reg": 0.01
+  },
+  "variant_config": {
+    "z_dim": 8,
+    "stage_balance": false,
+    "cell_z_dim": 8,
+    "theta_init_scale": 1.0,
+    "fourier_feature_scale": 1.0
+  },
+  "cache_dir": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0",
+  "parent_charged_GPU_seconds": 81.90682599000866,
+  "remaining_trial_cap_seconds": 3518,
+  "parent_expiry_unix": 1793935934.91327,
+  "owned_processes_and_lease_absent": true,
+  "clean_settlement": true,
+  "scientific_nonfinite_failure": false,
+  "native_device_metadata_relabelled": false,
+  "CUDA_initialized": false,
+  "same_model_and_all_random_state_CUDA_restore_required_before49": true,
+  "observed_prior_completed_trial_last_samples_not_peak_guarantees": [
+    {
+      "candidate": "c000",
+      "last_sample_own_GPU_bytes": 1159725056,
+      "last_sample_own_RAM_bytes": 1919881216
+    },
+    {
+      "candidate": "c001",
+      "last_sample_own_GPU_bytes": 1159725056,
+      "last_sample_own_RAM_bytes": 1927753728
+    },
+    {
+      "candidate": "c002",
+      "last_sample_own_GPU_bytes": 1159725056,
+      "last_sample_own_RAM_bytes": 1918873600
+    },
+    {
+      "candidate": "c003",
+      "last_sample_own_GPU_bytes": 1159725056,
+      "last_sample_own_RAM_bytes": 1924710400
+    },
+    {
+      "candidate": "c004",
+      "last_sample_own_GPU_bytes": 1159725056,
+      "last_sample_own_RAM_bytes": 1929576448
+    },
+    {
+      "candidate": "c005",
+      "last_sample_own_GPU_bytes": 1159725056,
+      "last_sample_own_RAM_bytes": 1922211840
+    }
+  ],
+  "source_SHA256": {
+    "/ml2/alz/analysis/hpo500/model/released_adapter.py": "c69e7e24f793258a6f07c9ec922eaffda22fd9cffcbf035d82e92066a80c6f37",
+    "/ml2/alz/analysis/hpo500/model/released_update.py": "bfc4c774ebc0b42b9d9a27ce8405fe03216af8a52df0062abd35243d6b04211e"
+  }
+}
