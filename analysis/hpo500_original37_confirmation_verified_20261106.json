@@ -1,0 +1,79 @@
+{
+  "status": "ORIGINAL37_ENDPOINTS_AND_FOUR_FRESH_SEED_COMPARISONS_INDEPENDENTLY_VERIFIED",
+  "UTC": "2026-11-06T06:53:40.705175+00:00",
+  "original_all37_native_and74replicate_audit_path": "/ml2/alz/analysis/hpo500_original37_independent_audit_20261106.json",
+  "original_all37_audit_SHA256": "03ac64e42a4324790225121ac7c3d932d981e96f15d9c108b33ec47299053316",
+  "original_report_SHA256": "c362acec9b7a5cc342dccb1ada78b1062f628ff2061505be5972661bd8d3628f",
+  "control_confirmation_means": {
+    "energy_score": 2.282250701616535,
+    "cell_energy_distance": 1.0246291586447982,
+    "spread_ratio": 0.9939029829142604
+  },
+  "recomputed_comparisons": [
+    {
+      "candidate": "c014",
+      "eligible": true,
+      "mean_ES": 1.8789089275496034,
+      "mean_cellED": 0.45198978514660815,
+      "spread": 0.8558107176715631,
+      "ES_deltas": [
+        -0.45681570967167495,
+        -0.5100893471380075,
+        -0.11924619219405042,
+        -0.5272158472639927
+      ],
+      "cellED_deltas": [
+        -0.5470166538248202,
+        -0.908856241336018,
+        -0.3510097171561206,
+        -0.4836748816758014
+      ],
+      "bootstrap95": [
+        -0.5186525972010001,
+        -0.21695698093003968
+      ]
+    },
+    {
+      "candidate": "c004",
+      "eligible": true,
+      "mean_ES": 1.9028636715797798,
+      "mean_cellED": 0.5055353696089468,
+      "spread": 0.7990470884335658,
+      "ES_deltas": [
+        -0.3916365800130739,
+        -0.2900099133189942,
+        -0.14161135724716445,
+        -0.6942902695677868
+      ],
+      "cellED_deltas": [
+        -0.4544843223178665,
+        -0.6099903357819931,
+        -0.28174163518711826,
+        -0.7301588628564275
+      ],
+      "bootstrap95": [
+        -0.5932201805055887,
+        -0.2041176629386418
+      ]
+    }
+  ],
+  "selected_candidate": "c014",
+  "selected_hyperparameters": {
+    "generator_lr": 0.0072242016931078614,
+    "critic_lr": 0.014833286696429858,
+    "particle_lr": 0.013678610104321594,
+    "reg_coeff": 1.275280261299054,
+    "reg_kappa": 0.13400397049569038,
+    "prior_reg": 0.006567934215110022
+  },
+  "mean_ES_reduction_percent": 17.67298280514238,
+  "mean_cellED_reduction_percent": 55.88747584107192,
+  "actual_GPU_seconds": 16708.71331187,
+  "original_all_four_activation_flags_reverted": true,
+  "owned_resource_registry_empty": true,
+  "canonical_open_reservations": 0,
+  "boundary_supplement_still_required": true,
+  "heldout_used": false,
+  "same_four_calibration_donors": true,
+  "limitation": "Training-seed bootstrap conditional on the same four adaptive calibration donors; not independent cohort validation or SOTA."
+}
