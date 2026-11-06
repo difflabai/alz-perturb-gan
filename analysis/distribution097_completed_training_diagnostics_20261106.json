@@ -1,0 +1,231 @@
+{
+  "status": "READ_ONLY_COMPLETED_FRESH20K_TRAINING_STATE_DIAGNOSTICS",
+  "UTC": "2026-11-06T21:55:56.200750+00:00",
+  "completed_runs": [
+    {
+      "fit": "/ml2/alz/runs/CAL_GPU0_V1_h20_c014_f0_pg_s0/fit",
+      "native_version": "0.9.6",
+      "hyperparameters": {
+        "generator_lr": 0.0072242016931078614,
+        "critic_lr": 0.014833286696429858,
+        "particle_lr": 0.013678610104321594,
+        "reg_coeff": 1.275280261299054,
+        "reg_kappa": 0.13400397049569038,
+        "prior_reg": 0.006567934215110022
+      },
+      "fixed_observed_rates": {
+        "G_prior_LRs": [
+          0.0072242016931078614,
+          0.013678610104321596
+        ],
+        "D_LRs": [
+          0.014833286696429858
+        ]
+      },
+      "windows": [
+        {
+          "after_update": 0,
+          "through_update": 5000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.49006254971027374,
+            "D_penalty": 0.06279417872428894,
+            "G_adversarial": 2.665045142173767,
+            "critic_gap": 5.30705189704895,
+            "D_gradient_norm": 6.210852146148682,
+            "G_gradient_norm": 7.472471714019775,
+            "prior_gradient_norm": 0.6697011291980743
+          }
+        },
+        {
+          "after_update": 5000,
+          "through_update": 10000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.6687617003917694,
+            "D_penalty": 0.0716753788292408,
+            "G_adversarial": 2.2226985692977905,
+            "critic_gap": 3.564704656600952,
+            "D_gradient_norm": 7.783595561981201,
+            "G_gradient_norm": 7.465352535247803,
+            "prior_gradient_norm": 0.5162891447544098
+          }
+        },
+        {
+          "after_update": 10000,
+          "through_update": 15000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.7495965361595154,
+            "D_penalty": 0.07225663214921951,
+            "G_adversarial": 1.76357102394104,
+            "critic_gap": 3.0559297800064087,
+            "D_gradient_norm": 7.293157339096069,
+            "G_gradient_norm": 6.440659046173096,
+            "prior_gradient_norm": 0.4920075535774231
+          }
+        },
+        {
+          "after_update": 15000,
+          "through_update": 20000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.7526489794254303,
+            "D_penalty": 0.06865362077951431,
+            "G_adversarial": 1.786585807800293,
+            "critic_gap": 2.9732543230056763,
+            "D_gradient_norm": 5.891147136688232,
+            "G_gradient_norm": 5.851767539978027,
+            "prior_gradient_norm": 0.4587341547012329
+          }
+        }
+      ],
+      "snapshots": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_h20_c014_f0_pg_s0/fit/checkpoint05000.pt",
+          "SHA256": "e5056704d75699b12ee275cef0607ec70dffefa2805c59b45a0af65db0a5b086",
+          "completed_updates": 5000,
+          "total_particle_draws": 160000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 8.12978744506836,
+          "particle_mean_squared_norm": 8.145865440368652
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_h20_c014_f0_pg_s0/fit/checkpoint10000.pt",
+          "SHA256": "ac0e4e767f3b68cd1954223a34ffbf3c043b682e2f64535a3b23e71c4b7d7b06",
+          "completed_updates": 10000,
+          "total_particle_draws": 320000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 7.675393104553223,
+          "particle_mean_squared_norm": 7.693094253540039
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_h20_c014_f0_pg_s0/fit/final.pt",
+          "SHA256": "c5652dc2380f0dc08bfd868e3310431c4f3fadf81f426afa100a4ebb7b4f0892",
+          "completed_updates": 20000,
+          "total_particle_draws": 640000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 7.0317254066467285,
+          "particle_mean_squared_norm": 7.057775020599365
+        }
+      ],
+      "learning_curve_SHA256": "2241850be5c79348e1fa8e3b3a91af967e18d6b80a9f2f213dfaa91e93503cb1"
+    },
+    {
+      "fit": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d000_f0_pg_s0/fit",
+      "native_version": "0.9.7",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "fixed_observed_rates": {
+        "G_prior_LRs": [
+          0.006,
+          0.015
+        ],
+        "D_LRs": [
+          0.009000000000000001
+        ]
+      },
+      "windows": [
+        {
+          "after_update": 0,
+          "through_update": 5000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.401688888669014,
+            "D_penalty": 0.017708097584545612,
+            "G_adversarial": 3.2779980897903442,
+            "critic_gap": 6.278724908828735,
+            "D_gradient_norm": 4.314146995544434,
+            "G_gradient_norm": 13.014095783233643,
+            "prior_gradient_norm": 1.1061174273490906
+          }
+        },
+        {
+          "after_update": 5000,
+          "through_update": 10000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.562967449426651,
+            "D_penalty": 0.031339637003839016,
+            "G_adversarial": 2.7305710315704346,
+            "critic_gap": 4.84251856803894,
+            "D_gradient_norm": 11.691012859344482,
+            "G_gradient_norm": 14.385705947875977,
+            "prior_gradient_norm": 1.0206127762794495
+          }
+        },
+        {
+          "after_update": 10000,
+          "through_update": 15000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.6431073248386383,
+            "D_penalty": 0.03254260681569576,
+            "G_adversarial": 2.4986352920532227,
+            "critic_gap": 4.233813524246216,
+            "D_gradient_norm": 14.438143730163574,
+            "G_gradient_norm": 13.239189624786377,
+            "prior_gradient_norm": 0.9540420174598694
+          }
+        },
+        {
+          "after_update": 15000,
+          "through_update": 20000,
+          "logged_pairs": 40,
+          "median": {
+            "D_adversarial": 0.6975556910037994,
+            "D_penalty": 0.031143497675657272,
+            "G_adversarial": 2.2720504999160767,
+            "critic_gap": 3.964017391204834,
+            "D_gradient_norm": 12.805679321289062,
+            "G_gradient_norm": 12.205363273620605,
+            "prior_gradient_norm": 0.8987880051136017
+          }
+        }
+      ],
+      "snapshots": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d000_f0_pg_s0/fit/checkpoint05000.pt",
+          "SHA256": "6ca088257241c765c44b8a2ceda4541411a29306c011404378617630ddb14779",
+          "completed_updates": 5000,
+          "total_particle_draws": 160000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 8.475320816040039,
+          "particle_mean_squared_norm": 8.495623588562012
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d000_f0_pg_s0/fit/checkpoint10000.pt",
+          "SHA256": "9b35bf46f3fcf9269759835bc16d15010a49695be87e3cb4fe4ed843c93dd319",
+          "completed_updates": 10000,
+          "total_particle_draws": 320000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 8.283407211303711,
+          "particle_mean_squared_norm": 8.30673885345459
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_dist097_d000_f0_pg_s0/fit/final.pt",
+          "SHA256": "dd20202b89660c3af9619dabf8d431fabe3a662aae9b507c5fbd31fb498e8766",
+          "completed_updates": 20000,
+          "total_particle_draws": 640000,
+          "unsampled_particle_moves": 0,
+          "particle_covariance_trace": 7.977071285247803,
+          "particle_mean_squared_norm": 8.008861541748047
+        }
+      ],
+      "learning_curve_SHA256": "48e481feb48a6b67976cc40f21b1b7a2f03e015ca83d281ac7215cd2a23379b3"
+    }
+  ],
+  "source_SHA256": "f11781403e1b2ca79b2584eb5fe48a114dcb3510dd9720059958c3a36f95bdf7",
+  "no_optimizer_or_model_constructed": true,
+  "CUDA_initialized": false,
+  "checkpoint_initialization_used": false,
+  "generated_counts": false,
+  "heldout_values_read": false,
+  "interpretation": "Native clock/particle coverage, rates and finite training diagnostics only. Losses, gradient norms and critic gap are not distribution-distance estimates or evidence of monotonic generative improvement. Compare separately scored fixed endpoints; snapshot inspection does not select an alternate endpoint or warm-start training."
+}
