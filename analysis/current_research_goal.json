@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T08:45:57.876868+00:00",
+  "UTC": "2026-11-07T09:07:08.994523+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/analysis/confirmfaith097/current_release_check_before_activation.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "ORIGINAL12_AUDITED_NINE_FRESH_CONFIRMATION_FITS_RUNNING",
+  "study_status": "NINE_FRESH_CONFIRMATION_FITS_RUNNING_ONE_COMPLETE",
   "study_protocol_path": "/ml2/alz/analysis/confirmfaith097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/confirmfaith097-paired-search/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/confirmfaith097-paired-search/identity.json",
@@ -104,7 +104,7 @@
   "conditional_local_search_design_CPU_proof_path": "/ml2/alz/analysis/released097_local_search_design_CPU_qualification_v2.json",
   "conditional_local_search_frozen": true,
   "conditional_local_search_activated": true,
-  "study_completed_attempts": 0,
+  "study_completed_attempts": 1,
   "latest_released_first20k_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json",
   "latest_released_first20k_mixture_diagnostic_path": "/ml2/alz/analysis/faithful097_first20k_mixture_diagnostic_20261107.json",
   "latest_released_calibration_readout": {
@@ -189,5 +189,25 @@
   "optional_followup_skip_design_path": "/ml2/alz/analysis/followfaith097/frozen_design.json",
   "optional_followup_real_GPU_fits": 0,
   "full_calibration_plot_path": "/ml2/alz/analysis/released097_full_calibration_search_20261107.png",
-  "full_calibration_plot_provenance_path": "/ml2/alz/analysis/released097_full_calibration_plot_provenance_20261107.json"
+  "full_calibration_plot_provenance_path": "/ml2/alz/analysis/released097_full_calibration_plot_provenance_20261107.json",
+  "latest_confirmation_result": {
+    "candidate_id": "t004",
+    "seed": 2,
+    "endpoint": 20000,
+    "metrics": {
+      "cell_energy_distance": 0.23764907311808336,
+      "energy_score": 2.1395910745687736,
+      "spread_ratio": 0.9227101394977113,
+      "coverage80": 0.6153846153846154
+    },
+    "matched_resampling": {
+      "cell_energy_distance": 0.2360664757860942,
+      "energy_score": 2.1189666465878148
+    },
+    "charged_GPU_seconds": 1439.8290422199934,
+    "source_result_path": "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s2.json",
+    "source_result_SHA256": "a8cb583e89575312c5f7c05741dd9d16bb9eddf8bbd0ba6b6be6477c99545f2d",
+    "one_fresh_seed_only": true,
+    "final_setting_selected": false
+  }
 }
