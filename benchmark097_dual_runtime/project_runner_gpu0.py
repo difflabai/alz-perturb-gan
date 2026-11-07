@@ -10,7 +10,7 @@ import binding as b
 def controller_gate(state,auth):
     entry=state.get('execution_controller',{})
     b.require(entry.get('status')=='REVIEWED_FOR_BOUNDED_EXECUTION' and state.get('future_accounting_policy',{}).get('current_launch_admission') is True,'canonical controller remains held')
-    extra=(entry.get('calibration_backend',{}) if auth.get('cpu_fixture') else entry.get('calibration_parallel_backends',{}).get(auth['allocation_id'],{}))
+    extra=(entry.get('calibration_backend',{}) if auth.get('cpu_fixture') and not auth.get('fixture_dual_backend_map') else entry.get('calibration_parallel_backends',{}).get(auth['allocation_id'],{}))
     required=[*b.HERE.glob('*.py'),b.GUARD/'gpu0_admission.py',b.GUARD/'gpu0_runner.py']
     b.require(extra.get('status')=='REVIEWED_FOR_BOUNDED_EXECUTION' and extra.get('path')==str(Path(__file__).resolve()) and all(extra.get('source_SHA256',{}).get(str(p))==auth['files_SHA256'].get(str(p)) for p in required),'canonical GPU0 backend source review/deployment binding absent')
     b.require(extra.get('files_SHA256')==auth['files_SHA256'] and extra.get('policy_SHA256')==auth['policy_SHA256'],'canonical reviewed full source/runtime/input/policy closure differs')
@@ -27,7 +27,7 @@ def run(auth_path,layout=b.NATIVE_LAYOUT,*,observe=None):
     code_paths+=list(auth.get('research_source_SHA256',{}))
     def protect():
         b.require(b.sha(auth_path)==auth_sha,'one-use authorization changed during execution')
-        if auth.get('parallel_profile') is True:
+        if auth.get('parallel_profile') is True and not layout.fixture_mode:
             import sys
             sys.path.insert(0,str(b.HERE))
             import resource_profile as parallel_profile

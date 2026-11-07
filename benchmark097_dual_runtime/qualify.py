@@ -7,12 +7,12 @@ def main():
  assert os.environ.get('CUDA_VISIBLE_DEVICES')=='' and not s.read(s.PLAN)['enabled']
  protocol=s.protocol();assert not s.RUNTIME_PROOF.exists()
  results=[];count=0
- for name in ('test_integration.py','test_scope_actual.py','test_factory.py','test_dual.py'):
+ for name in ('test_integration.py','test_scope_actual.py','test_factory.py','test_dual.py','test_driver.py'):
   cmd=[sys.executable,'-I','-S','-B','-c','import sys,runpy;sys.path.insert(0,sys.argv[1]);p=sys.argv[2];sys.argv=[p];runpy.run_path(p,run_name="__main__")',str(HERE),str(HERE/name)]
   p=subprocess.run(cmd,capture_output=True,text=True,timeout=300);print(p.stderr)
   results.append(dict(file=name,returncode=p.returncode,stdout=p.stdout,stderr=p.stderr));assert p.returncode==0,name
   count+=int(re.search(r'Ran (\d+) tests?',p.stderr).group(1))
- assert count==35 and 'torch' not in sys.modules
+ assert count==43 and 'torch' not in sys.modules
  paths=[*HERE.glob('*.py'),*s.MODEL_DIR.glob('*.py'),*s.CFGEN_DIR.glob('*.py'),HERE/'policy.prepared.json',HERE/'policy.gpu0.prepared.json',HERE/'policy.gpu1.prepared.json',s.ROOT/'analysis/benchmark097_dual_resource_protocol.json',s.ROOT/'benchmark097_runtime/resource_profile.py',
         *s.protocol_paths(protocol),s.ROOT/'analysis/run_benchmark097_dual.py',s.ROOT/'analysis/duration096/native_fixture.py',
         s.ROOT/'analysis/benchmark097/retained_PCs_CPU_qualification.json',s.ROOT/'analysis/benchmark097/aggregation_CPU_qualification.json']
@@ -21,6 +21,7 @@ def main():
  paths=[p for p in paths if p!=s.PLAN]
  q=dict(status='EXTERNAL097_ALL45_FRESH_CELLS_SCOPE_ACCOUNTING_CPU_PASS',UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),
    actual_tests=count,actual_frozen_PG_candidate_qualified=True,PG_candidate_id=protocol['PG_candidate_id'],
+   two_physical_policy_profiles=True,actual_two_concurrent_confined_CPU_guard_workers=True,actual_driver_failure_drain_and_observation_timeout_tests=True,
    actual_all45_authorizations_and_source_pins_checked=True,all_new_models_from_update_zero=True,
    fullwidth_native_optimizer_pairs=30,actual_all15_PG_fold_seed_initializations_qualified=True,
    native_model_source_unchanged_from_faithful_parity=True,prior_regularizer_domain="all512rows",identical_next_pair_state_at500_and20000_limits=True,
