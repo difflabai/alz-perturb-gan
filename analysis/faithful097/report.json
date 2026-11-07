@@ -1,0 +1,58 @@
+{
+  "status": "ALL4_FRESH_RELEASED_OBJECTIVE_BASELINE_FITS_AUDITED",
+  "UTC": "2026-11-07T03:40:31.461471+00:00",
+  "ranked_settings": [
+    {
+      "candidate_id": "f000",
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "finite_all_seeds": true,
+      "mean_metrics": {
+        "cell_energy_distance": 0.2913269319596661,
+        "energy_score": 1.999644588017866,
+        "spread_ratio": 0.9529591014928758,
+        "within_condition_spread_ratio": 0.882160731075073,
+        "coverage80": 0.6826923076923077
+      }
+    },
+    {
+      "candidate_id": "f001",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "finite_all_seeds": true,
+      "mean_metrics": {
+        "cell_energy_distance": 0.29514903139367377,
+        "energy_score": 2.056882372937778,
+        "spread_ratio": 0.8770023343383443,
+        "within_condition_spread_ratio": 0.8057372700580461,
+        "coverage80": 0.5985576923076923
+      }
+    }
+  ],
+  "actual_GPU_seconds": 5699.271528569021,
+  "protocol_SHA256": "aac06637de106c10e48a2ae76e04ac84ef5ef3b2bdf5c21e36e356cd46e68405",
+  "result_SHA256": {
+    "CAL_GPU0_V1_faith097_f000_f0_pg_s0": "090be880e2a9758348f2075419593b693523d9792db910d4bc69bb8bf5826ca4",
+    "CAL_GPU0_V1_faith097_f000_f0_pg_s1": "e05cdb19ecb41376c8e56317e6402fb8743aa545a52ca8dd79774531d6563f3c",
+    "CAL_GPU0_V1_faith097_f001_f0_pg_s0": "2dcf3551cb764457b7fb33970b9a9ad557009836801a84607d92c9b53d97a1f6",
+    "CAL_GPU0_V1_faith097_f001_f0_pg_s1": "feefa49805d6bb7aecf0379b671e0ee3b9fce2dfbb1815f23065bc9eacf21655"
+  },
+  "external_candidate_actually_frozen": false,
+  "formulation": "full512row_SBNP_native097_nonEMA",
+  "all_new_training_from_update_zero": true,
+  "automatic_promotion": false,
+  "SOTA_claim": false,
+  "full_goal_complete": false
+}
