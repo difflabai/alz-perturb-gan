@@ -85,7 +85,7 @@ def main():
             engine.command('freeze-fresh-confirmation',[engine.PG,'-I','-S','-B',ROOT/'analysis/prepare_confirmfaith097.py','--selection-audit',selection])
             engine.run_stage('confirmation',pins,expiry)
             confirmation=engine.audit_phase('confirmation','audit_confirmfaith097.py','INDEPENDENT_RELEASED097_MATCHED_CONFIRMATION_AUDIT_PASS')
-            engine.command('freeze-external-PG-before-evaluation',[engine.PG,'-I','-S','-B',ROOT/'analysis/prepare_benchmark097.py,
+            engine.command('freeze-external-PG-before-evaluation',[engine.PG,'-I','-S','-B',ROOT/'analysis/prepare_benchmark097.py',
                 '--selection-audit',selection,'--confirmation-audit',confirmation,
                 '--confirmation-protocol',ROOT/'analysis/confirmfaith097/protocol.json',
                 '--confirmation-report',ROOT/'analysis/confirmfaith097/report.json'])
