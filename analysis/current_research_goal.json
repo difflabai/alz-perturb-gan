@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T19:56:42.207366+00:00",
+  "UTC": "2026-11-07T21:52:09.016565+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/analysis/confirmfaith097/current_release_check_before_activation.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "FULL45_SIX_COMPLETE_ALL_THREE_PG_SEED0_FOLDS_FULL20K_TWO_CFGEN_ACTIVE",
+  "study_status": "FULL45_SEVEN_COMPLETE_CFGEN_FOLD1_GENERATING_SCVI_SEED1_ACTIVE",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/benchmark097-dual-fullmatrix/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-dual-fullmatrix/identity.json",
@@ -96,7 +96,7 @@
   "conditional_local_search_design_CPU_proof_path": "/ml2/alz/analysis/released097_local_search_design_CPU_qualification_v2.json",
   "conditional_local_search_frozen": true,
   "conditional_local_search_activated": true,
-  "study_completed_attempts": 6,
+  "study_completed_attempts": 7,
   "latest_released_first20k_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json",
   "latest_released_first20k_mixture_diagnostic_path": "/ml2/alz/analysis/faithful097_first20k_mixture_diagnostic_20261107.json",
   "conditional_local_search_prepared_protocol_path": "/ml2/alz/analysis/localfaith097/protocol.json",
@@ -131,7 +131,7 @@
   "calibration_excluded53_observer_started": true,
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
   "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory_v2.py",
-  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_six_external_fits_20261107.json",
+  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_seven_external_fits_20261107.json",
   "historical_recipe_disclosure_corrected_by_append_only_snapshot": true,
   "matched_seed0_calibration_comparison_path": "/ml2/alz/analysis/released097_matched_seed0_calibration_comparison_20261107.json",
   "current_calibration_distance_reference": {
@@ -152,7 +152,7 @@
   "latest_local_coordinate_tradeoff_path": "/ml2/alz/analysis/localfaith097_t001_seed0_tradeoff_20261107.json",
   "latest_release_recheck_path": "/ml2/alz/analysis/released097_particle_sliders_new_develop_compatibility_20261107.json",
   "lowest_observed_paired_distance_is_not_final_selection": true,
-  "latest_shared_capacity_observation_path": "/ml2/alz/artifacts/alz-shared-capacity-20261107T1944.json",
+  "latest_shared_capacity_observation_path": "/ml2/alz/artifacts/alz-shared-capacity-20261107T2151.json",
   "original_research_pipeline_superseded_evidence_path": "/ml2/alz/analysis/released097_adaptive_CPU_handoff_20261107.json",
   "optional_followup_prepared_protocol_path": "/ml2/alz/analysis/followfaith097/protocol.json",
   "optional_followup_design_source_path": "/ml2/alz/analysis/released097_followup_design.py",
@@ -257,38 +257,32 @@
       "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s0",
       "training_progress": {
         "phase": "FM",
-        "phase_optimizer_updates": 66000,
-        "total_optimizer_updates": 83700,
-        "completed_epochs": 1118,
-        "native_loss": 6.125899314880371
+        "phase_optimizer_updates": 88500,
+        "total_optimizer_updates": 106200,
+        "completed_epochs": 1499,
+        "native_loss": 5.843170166015625
       }
     },
     {
       "cell": {
         "experiment": "external097",
-        "fold": 2,
-        "method": "cfgen",
-        "seed": 0
+        "fold": 0,
+        "method": "scvi",
+        "seed": 1
       },
       "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
       "identity": {
-        "pid": 3392586,
-        "birth": 23888851,
+        "pid": 3881982,
+        "birth": 24580557,
         "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
       },
-      "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s0",
-      "training_progress": {
-        "phase": "AE",
-        "phase_optimizer_updates": 1750,
-        "total_optimizer_updates": 1750,
-        "completed_epochs": 30,
-        "native_loss": 456.6390686035156
-      }
+      "attempt": "CAL_GPU0_V1_external097_f0_scvi_s1",
+      "training_progress": null
     }
   ],
-  "external_benchmark_completed_fits": 6,
+  "external_benchmark_completed_fits": 7,
   "external_benchmark_running_fits": 2,
-  "external_benchmark_queued_fits": 37,
+  "external_benchmark_queued_fits": 36,
   "external_benchmark_first_completed_fit_audit_path": "/ml2/alz/analysis/benchmark097_first_completed_native_scvi_and_two_fresh_pg_workers_20261107.json",
   "full_confirmation_plot_path": "/ml2/alz/analysis/released097_full_confirmation_selection_20261107.png",
   "full_confirmation_plot_provenance_path": "/ml2/alz/analysis/released097_full_confirmation_plot_provenance_20261107.json",
@@ -298,7 +292,7 @@
   "external_benchmark_all_three_methods_actual_GPU_training_started": true,
   "external_benchmark_all_three_methods_full_endpoint_completed": true,
   "latest_external_full20k_PG_root_check_path": "/ml2/alz/analysis/benchmark097_all_three_pg_seed0_folds_full20k_root_check_20261107.json",
-  "latest_external_full_CFGen_endpoint_root_check_path": "/ml2/alz/analysis/benchmark097_first_full_cfgen_native_endpoint_root_check_20261107.json",
+  "latest_external_full_CFGen_endpoint_root_check_path": "/ml2/alz/analysis/benchmark097_seventh_complete_second_cfgen_endpoint_root_check_20261107.json",
   "completed_research_requirements": [
     "Diagnosed completed c014 saved checkpoints; preserved legacy variant distinction and negative results.",
     "Qualified exact released full512-row SBNP/thermal-bound formulation against native GANTrainer; four fresh full20k baseline fits independently audited.",
@@ -325,10 +319,11 @@
   "shared_resource_forecast_question": {
     "event_ref": "alz-current-shared-gpu-runtime-forecast-20261107",
     "revision": 4,
-    "state": "pending",
+    "state": "resolved",
     "message_id": "report_b7f4b37ad30d0b34187043f576001dda1a845e9daf57f1e759ac7b08f840d1e4",
     "recipient": "bits255.dots.ada_20261002",
     "permission_requested": false,
-    "production_blocked": false
+    "production_blocked": false,
+    "resolution": "Observed original GPU1 peer PID3282472 absent from both Nvidia allocations and /proc; no coordinator answer or foreign task completion inferred. Different peer remains shared. CFGen fold2 fully completed in6894.796149667003 GPU-s; forecast still load-dependent."
   }
 }

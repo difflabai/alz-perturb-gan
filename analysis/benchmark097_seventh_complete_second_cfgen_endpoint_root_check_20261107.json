@@ -1,0 +1,146 @@
+{
+  "status": "SEVENTH_COMPLETE_NATIVE_FIT_SECOND_CFGEN_FULL_ENDPOINT_ROOT_CHECK_PASS",
+  "UTC": "2026-11-07T21:51:30.855934+00:00",
+  "cell": {
+    "experiment": "external097",
+    "fold": 2,
+    "method": "cfgen",
+    "seed": 0
+  },
+  "result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f2_cfgen_s0.json",
+  "result_SHA256": "791deea8f49f87a22f0c0429f3f853df1d82d05b132758122f5e26476e138cdd",
+  "all_saved_outputs_rehashed": 57,
+  "from_scratch": true,
+  "source_checkpoint": null,
+  "initial_completed_updates": 0,
+  "AE_epochs": 300,
+  "FM_epochs": 1500,
+  "total_optimizer_updates": 102600,
+  "native_CUDA_reload_verified": true,
+  "native_frozen_encoder_preserved": true,
+  "full_generation_metadata": [
+    {
+      "name": "evaluation_r0",
+      "native_generated_cells": 320000,
+      "donors": 17,
+      "metrics_SHA256": "9e8fd66a8aa48616d4510b64ca6542b9b35e45b04d4573f0e852d7c26a27b677"
+    },
+    {
+      "name": "evaluation_r1",
+      "native_generated_cells": 320000,
+      "donors": 17,
+      "metrics_SHA256": "d60494594fe5ab9de7fcd08d513e9658bd0a853c2a31de9796902eb23d46a91d"
+    },
+    {
+      "name": "resampling_r0",
+      "native_generated_cells": 320000,
+      "donors": 17,
+      "metrics_SHA256": "401f40ed75e20f7ffa7bb299095500dd2bb833b296abae842c07ce6c574f4e31"
+    },
+    {
+      "name": "resampling_r1",
+      "native_generated_cells": 320000,
+      "donors": 17,
+      "metrics_SHA256": "9e7641105485935cbe90f5fef0bf12d88636bd28d00e4a39e16c39aeb1b92f23"
+    },
+    {
+      "name": "stage_swap_r0",
+      "native_generated_cells": 320000,
+      "donors": 17,
+      "metrics_SHA256": "ffdc88aa2119e5cfbcaf2c892369b56a0368ac0c67c5c85ea23ebf6e7fc586ba"
+    }
+  ],
+  "driver_independent_CPU_saved_score_audit": true,
+  "root_numeric_target_arrays_loaded": false,
+  "external_metrics_used_for_selection": false,
+  "original_guard_and_driver_recorded_worker_absent": true,
+  "canonical_clean_settlement": true,
+  "charged_GPU_seconds": 6894.796149667003,
+  "progress": {
+    "status": "DUAL_SHARED_FRESH45_RUNNING",
+    "completed_cells": 7,
+    "resolved_cells": 7,
+    "required_cells": 45,
+    "pending_cells": 36,
+    "active": [
+      {
+        "cell": {
+          "experiment": "external097",
+          "fold": 1,
+          "method": "cfgen",
+          "seed": 0
+        },
+        "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+        "identity": {
+          "pid": 3150493,
+          "birth": 23423331,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s0"
+      },
+      {
+        "cell": {
+          "experiment": "external097",
+          "fold": 0,
+          "method": "scvi",
+          "seed": 1
+        },
+        "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+        "identity": {
+          "pid": 3881982,
+          "birth": 24580557,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "attempt": "CAL_GPU0_V1_external097_f0_scvi_s1"
+      }
+    ],
+    "errors": [],
+    "unsettled": [],
+    "full_goal_complete": false,
+    "SOTA_claim": false
+  },
+  "exact_live_active_guards_and_progress": [
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "cfgen",
+        "seed": 0
+      },
+      "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "identity": {
+        "pid": 3150493,
+        "birth": 23423331,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s0",
+      "training_progress": {
+        "phase": "FM",
+        "phase_optimizer_updates": 88500,
+        "total_optimizer_updates": 106200,
+        "completed_epochs": 1499,
+        "native_loss": 5.843170166015625
+      }
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "scvi",
+        "seed": 1
+      },
+      "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "identity": {
+        "pid": 3881982,
+        "birth": 24580557,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f0_scvi_s1",
+      "training_progress": null
+    }
+  ],
+  "full45_complete": false,
+  "original57_and_prespecified53_still_required": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
