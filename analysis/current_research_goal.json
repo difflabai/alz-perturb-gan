@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T14:12:11.271489+00:00",
+  "UTC": "2026-11-07T16:13:54.343354+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/analysis/confirmfaith097/current_release_check_before_activation.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "QUALIFIED_BENCHMARK_READY",
+  "study_status": "FULL45_DUAL_SHARED_COMPARISON_RUNNING_TWO_REAL_NATIVE_WORKERS",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/benchmark097-dual-fullmatrix/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/confirmfaith097-paired-search/identity.json",
@@ -56,7 +56,7 @@
   "released_fresh_confirmation_materialized": true,
   "released_fresh_confirmation_actual_configuration_qualified": true,
   "external_benchmark_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
-  "external_benchmark_protocol_status": "PREPARED_NOT_FROZEN_PG_SELECTION_AND_CONFIRMATION_PENDING",
+  "external_benchmark_protocol_status": "FROZEN_NATIVE097_ALL45_FRESH_MODELS_BEFORE_NEW_EVALUATION",
   "external_benchmark_required_fresh_fits": 45,
   "external_benchmark_methods": [
     "pg",
@@ -75,8 +75,8 @@
     3,
     4
   ],
-  "external_benchmark_candidate_freeze_deferred": true,
-  "external_benchmark_actual_frozen_candidate_qualified": false,
+  "external_benchmark_candidate_freeze_deferred": false,
+  "external_benchmark_actual_frozen_candidate_qualified": true,
   "external_benchmark_prepared_CPU_proof_path": "/ml2/alz/analysis/benchmark097/prepared_CPU_qualification_v7.json",
   "external_benchmark_selection_validator_path": "/ml2/alz/analysis/released097_external_selection.py",
   "legacy_evidence": {
@@ -137,7 +137,7 @@
   "calibration_excluded53_observer_started": true,
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
   "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory_v2.py",
-  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_seven_confirmations_20261107.json",
+  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_full9_and_dual_start_20261107.json",
   "historical_recipe_disclosure_corrected_by_append_only_snapshot": true,
   "matched_seed0_calibration_comparison_path": "/ml2/alz/analysis/released097_matched_seed0_calibration_comparison_20261107.json",
   "current_calibration_distance_reference": {
@@ -176,26 +176,19 @@
   "full_calibration_plot_provenance_path": "/ml2/alz/analysis/released097_full_calibration_plot_provenance_20261107.json",
   "latest_confirmation_result": {
     "candidate_id": "f000",
-    "seed": 2,
+    "seed": 4,
     "endpoint": 20000,
     "metrics": {
-      "cell_energy_distance": 0.28976233769501647,
-      "energy_score": 1.9708290278596823,
-      "spread_ratio": 0.934475267461234,
-      "within_condition_spread_ratio": 0.8651563981651397,
-      "coverage80": 0.6826923076923077
+      "cell_energy_distance": 0.3098844878611331,
+      "energy_score": 2.010674343780418,
+      "spread_ratio": 0.8926913324969532,
+      "within_condition_spread_ratio": 0.8234962532674328,
+      "coverage80": 0.625
     },
-    "matched_resampling": {
-      "cell_energy_distance": 0.2360664757860942,
-      "energy_score": 2.1189666465878148,
-      "spread_ratio": 1.0996368276041926,
-      "within_condition_spread_ratio": 1.0006447828456726,
-      "coverage80": 0.6971153846153846
-    },
-    "charged_GPU_seconds": 3212.1238699740206,
+    "charged_GPU_seconds": 4087.9399663229997,
     "from_scratch": true
   },
-  "latest_fresh_confirmation_readout_path": "/ml2/alz/analysis/confirmfaith097_f000_first_fresh_seed20k_readout_20261107.json",
+  "latest_fresh_confirmation_readout_path": "/ml2/alz/analysis/confirmfaith097/report.json",
   "historical_local_coordinate_first_endpoint_readout": {
     "seed": 0,
     "endpoint": 20000,
@@ -230,28 +223,102 @@
   "broader_SOTA_comparator_coverage_complete": false,
   "lowest_observed_exploratory_seed01_distance_candidate": "t004",
   "lowest_observed_completed_seed234_confirmation_distance_candidate": "t005",
-  "confirmation_reference_seed234_complete": false,
-  "selection_remains_pending_all9": true,
-  "current_verified_confirmation_fit": {
-    "attempt": "CAL_GPU0_V1_cf097_f000_f0_pg_s3",
-    "guard": {
-      "pid": 2107203,
-      "birth": 21819132,
-      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-    },
-    "worker": {
-      "pid": 2107291,
-      "birth": 21819238,
-      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-    },
-    "initial_completed_updates": 0,
-    "actual_logged_update": 501
-  },
+  "confirmation_reference_seed234_complete": true,
+  "selection_remains_pending_all9": false,
   "completed_reference_confirmation_seeds": [
-    2
-  ],
-  "pending_reference_confirmation_seeds": [
+    2,
     3,
     4
-  ]
+  ],
+  "pending_reference_confirmation_seeds": [],
+  "all9_fresh_confirmation_fits_completed": true,
+  "all9_independent_raw_artifact_audit_completed": true,
+  "frozen_PG_candidate_id": "t005",
+  "frozen_PG_hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "full9_confirmation_audit_path": "/ml2/alz/analysis/confirmation097_pipeline_independent_audit_20261107.json",
+  "external_benchmark_actual_runtime_CPU_proof_path": "/ml2/alz/analysis/benchmark097/dual_runtime_CPU_qualification.json",
+  "external_benchmark_actual_runtime_CPU_tests": 43,
+  "external_benchmark_first_two_native_workers_verified_path": "/ml2/alz/analysis/released097_full9_frozen_first_dual_native_workers_20261107.json",
+  "current_verified_external_workers": [
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "pg",
+        "seed": 0
+      },
+      "attempt": "CAL_GPU0_V1_external097_f0_pg_s0",
+      "GPU_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f0_pg_s0/authorization.json",
+      "authorization_SHA256": "bc66656ba901279b20e70bccfef5e80c0b2dccb06a6e9be2e757b57576baa25c",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f0_pg_s0.json",
+      "guard": {
+        "pid": 2519402,
+        "birth": 22528271,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 2519505,
+        "birth": 22528385,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "from_scratch": true,
+      "initial_completed_updates": 0,
+      "source_checkpoint": null,
+      "native_progress": {
+        "completed_optimizer_pairs_at_least": 251,
+        "initial_logged_update": 1,
+        "G_prior_LRs": [
+          0.012,
+          0.06
+        ],
+        "D_LRs": [
+          0.018000000000000002
+        ]
+      }
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "scvi",
+        "seed": 0
+      },
+      "attempt": "CAL_GPU0_V1_external097_f0_scvi_s0",
+      "GPU_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f0_scvi_s0/authorization.json",
+      "authorization_SHA256": "f3734cd719daaaf0e333c3ea0ceae381db2013016113056336d4215054eac070",
+      "ledger_path": "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f0_scvi_s0.json",
+      "guard": {
+        "pid": 2519533,
+        "birth": 22528424,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 2519601,
+        "birth": 22528537,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "from_scratch": true,
+      "initial_completed_updates": 0,
+      "source_checkpoint": null,
+      "native_progress": {
+        "native_recovery_epoch": 179,
+        "native_global_optimizer_step": 5220,
+        "mutable_training_checkpoint": "/ml2/alz/runs/CAL_GPU0_V1_external097_f0_scvi_s0/fit/recovery/last.ckpt",
+        "immutable_observation_snapshot_path": "/ml2/alz/artifacts/benchmark097-dual-first-native-progress/scvi_first_observed_training_recovery.ckpt",
+        "observation_snapshot_SHA256": "3bcb50bf59363aed3c2d8feab8d1c0d0a19cb23a9b1043a9570a955c14b96f28"
+      }
+    }
+  ],
+  "external_benchmark_completed_fits": 0,
+  "external_benchmark_running_fits": 2,
+  "external_benchmark_queued_fits": 43
 }
