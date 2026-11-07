@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T18:57:26.461530+00:00",
+  "UTC": "2026-11-07T19:17:58.691844+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/analysis/confirmfaith097/current_release_check_before_activation.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "FULL45_THREE_NATIVE_FITS_COMPLETE_TWO_CFGEN_FOLDS_ACTIVE",
+  "study_status": "FULL45_FOUR_NATIVE_FITS_COMPLETE_ALL_THREE_METHODS_HAVE_FULL_ENDPOINT_TWO_ACTIVE",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/benchmark097-dual-fullmatrix/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-dual-fullmatrix/identity.json",
@@ -88,11 +88,10 @@
     "c014_saved_checkpoint_diagnosis_path": "/ml2/alz/analysis/distribution097/c014_checkpoint_diagnosis.json"
   },
   "remaining_requirements": [
-    "Complete all nine frozen matched confirmation fits from update0 at fresh seeds2..4; retain failures and matched controls.",
-    "Independently audit confirmation and freeze one PG setting by the declared fresh-seed distance ranking before any new external evaluation.",
-    "Qualify all45 cells for the frozen PG setting, then complete PG/scVI/CFGen \u00d73folds \u00d75seeds plus matched resampling; audit fresh states, counts, scores, costs and declared paired distribution statistics.",
-    "Disclose adaptive calibration, crossfold/cohort exposure and tuning-budget limits; make only claims supported by the full comparison.",
-    "Compute the prespecified53-donor sensitivity excluding the four current calibration donors from evaluation, using the same45frozen fits; retain original57primary and disclose historical exposure."
+    "Complete all45 fresh PG/scVI/CFGen fits across3folds/5seeds, including native training endpoints, generation, restoration, saved-count/score/source/cost audits, clean settlements and activation reversion.",
+    "Compute and audit original57-donor matched comparison, all fold/seed outcomes, paired donor-cluster uncertainty, energy/spread/coverage and negative outcomes without parameter reselection.",
+    "Compute and audit prespecified53-donor sensitivity excluding the four current calibration donors, using the same45frozen models and preserving original57primary.",
+    "Complete final requirement-by-requirement review and report actual distribution-distance ranking and joint quality with historical cohort/crossfold exposure and unequal tuning-budget limitations; make only claims supported by completed comparison."
   ],
   "crossfold_isolation_audit_path": "/ml2/alz/analysis/distribution097_split_isolation_audit_20261106.json",
   "supplementary25_design_path": "/ml2/alz/analysis/distribution097_supplementary25_design_proposal_20261106.json",
@@ -137,7 +136,7 @@
   "calibration_excluded53_observer_started": true,
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
   "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory_v2.py",
-  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_second_external_pg20k_20261107.json",
+  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_first_external_cfgen_20261107.json",
   "historical_recipe_disclosure_corrected_by_append_only_snapshot": true,
   "matched_seed0_calibration_comparison_path": "/ml2/alz/analysis/released097_matched_seed0_calibration_comparison_20261107.json",
   "current_calibration_distance_reference": {
@@ -250,28 +249,6 @@
     {
       "cell": {
         "experiment": "external097",
-        "fold": 0,
-        "method": "cfgen",
-        "seed": 0
-      },
-      "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
-      "identity": {
-        "pid": 2760763,
-        "birth": 22915128,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s0",
-      "training_progress": {
-        "phase": "FM",
-        "phase_optimizer_updates": 85500,
-        "total_optimizer_updates": 102600,
-        "completed_epochs": 1499,
-        "native_loss": 5.962145805358887
-      }
-    },
-    {
-      "cell": {
-        "experiment": "external097",
         "fold": 1,
         "method": "cfgen",
         "seed": 0
@@ -285,16 +262,32 @@
       "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s0",
       "training_progress": {
         "phase": "FM",
-        "phase_optimizer_updates": 21000,
-        "total_optimizer_updates": 38700,
-        "completed_epochs": 355,
-        "native_loss": 6.410919666290283
+        "phase_optimizer_updates": 53500,
+        "total_optimizer_updates": 71200,
+        "completed_epochs": 906,
+        "native_loss": 6.104068279266357
       }
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "scvi",
+        "seed": 0
+      },
+      "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "identity": {
+        "pid": 3245955,
+        "birth": 23655475,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f1_scvi_s0",
+      "training_progress": null
     }
   ],
-  "external_benchmark_completed_fits": 3,
+  "external_benchmark_completed_fits": 4,
   "external_benchmark_running_fits": 2,
-  "external_benchmark_queued_fits": 40,
+  "external_benchmark_queued_fits": 39,
   "external_benchmark_first_completed_fit_audit_path": "/ml2/alz/analysis/benchmark097_first_completed_native_scvi_and_two_fresh_pg_workers_20261107.json",
   "full_confirmation_plot_path": "/ml2/alz/analysis/released097_full_confirmation_selection_20261107.png",
   "full_confirmation_plot_provenance_path": "/ml2/alz/analysis/released097_full_confirmation_plot_provenance_20261107.json",
@@ -302,6 +295,14 @@
   "latest_external_full20k_PG_and_CFGen_start_audit_path": "/ml2/alz/analysis/benchmark097_first_complete_pg20k_native_repeat_and_CFGen_started_20261107.json",
   "same_seed_fresh20k_complete_training_state_reproduced_exactly": true,
   "external_benchmark_all_three_methods_actual_GPU_training_started": true,
-  "external_benchmark_all_three_methods_full_endpoint_completed": false,
-  "latest_external_full20k_PG_root_check_path": "/ml2/alz/analysis/benchmark097_second_external_pg20k_root_check_20261107.json"
+  "external_benchmark_all_three_methods_full_endpoint_completed": true,
+  "latest_external_full20k_PG_root_check_path": "/ml2/alz/analysis/benchmark097_second_external_pg20k_root_check_20261107.json",
+  "latest_external_full_CFGen_endpoint_root_check_path": "/ml2/alz/analysis/benchmark097_first_full_cfgen_native_endpoint_root_check_20261107.json",
+  "completed_research_requirements": [
+    "Diagnosed completed c014 saved checkpoints; preserved legacy variant distinction and negative results.",
+    "Qualified exact released full512-row SBNP/thermal-bound formulation against native GANTrainer; four fresh full20k baseline fits independently audited.",
+    "Completed twelve fresh full20k local coordinate fits and independently audited all positives/negatives.",
+    "Completed all nine matched fresh seed2/3/4 confirmation fits, independently audited, and froze t005 before new external evaluation.",
+    "Qualified actual full45 dual shared runtime and all native fresh initialization cases; full45 production remains in progress."
+  ]
 }

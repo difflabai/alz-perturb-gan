@@ -1,0 +1,152 @@
+{
+  "status": "FIRST_FULL_NATIVE_CFGEN_TRAINING_GENERATION_RESTORE_AND_CLEAN_SETTLEMENT_ROOT_CHECK_PASS",
+  "UTC": "2026-11-07T19:17:24.701252+00:00",
+  "cell": {
+    "experiment": "external097",
+    "fold": 0,
+    "method": "cfgen",
+    "seed": 0
+  },
+  "result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_cfgen_s0.json",
+  "result_SHA256": "e2980806b7d0f30c7df638b70faf923dc18bed7d42ce4778d4bf21c3a6d04aef",
+  "all_saved_artifacts_rehashed": 57,
+  "from_scratch": true,
+  "source_checkpoint": null,
+  "initial_completed_updates": 0,
+  "AE_epochs": 300,
+  "FM_epochs": 1500,
+  "total_optimizer_updates": 102600,
+  "AE_and_FM_updates": [
+    17100,
+    85500
+  ],
+  "native_CUDA_reload_verified": true,
+  "native_frozen_encoder_preserved": true,
+  "full_generation_metadata": [
+    {
+      "name": "evaluation_r0",
+      "generated_cells": 320000,
+      "donor_count": 20,
+      "metrics_SHA256": "2eebb9e80b88852cd18d14f7a0d60e629f2c81d4315f12bd547ffc43e38c6d7f"
+    },
+    {
+      "name": "evaluation_r1",
+      "generated_cells": 320000,
+      "donor_count": 20,
+      "metrics_SHA256": "d91f5bd8221d767b22bd5ece3c8ea09c4dec87e715816f5c2ee454e11722a451"
+    },
+    {
+      "name": "resampling_r0",
+      "generated_cells": 320000,
+      "donor_count": 20,
+      "metrics_SHA256": "403dfd7c6d0ddf36626d5d4a98bce91a953f8ebb822ba87eef4a6da339515682"
+    },
+    {
+      "name": "resampling_r1",
+      "generated_cells": 320000,
+      "donor_count": 20,
+      "metrics_SHA256": "4c6770a18ca0c59cf4ebd1558db7f7d3321df81c1eadb820a3c71ecb5a6477d5"
+    },
+    {
+      "name": "stage_swap_r0",
+      "generated_cells": 320000,
+      "donor_count": 20,
+      "metrics_SHA256": "b613cd2d440c3ad1d7b932c3cd370b7eebdc652a7119569d15f0afcb87a7d529"
+    }
+  ],
+  "independent_driver_CPU_saved_score_audit": true,
+  "root_numeric_target_arrays_loaded": false,
+  "no_target_driven_reselection": true,
+  "native_count_and_score_checks": "Driver audited complete native integer counts, exact native restored state and independently recomputed saved scores; root rehashed all57 declared outputs and verified full-generation metadata. Root did not rerun generation or fitting.",
+  "original_guard_worker_absent": true,
+  "canonical_clean_settlement": true,
+  "charged_GPU_seconds": 7386.933344733989,
+  "charged_GPU_hours": 2.0519259290927745,
+  "progress": {
+    "status": "DUAL_SHARED_FRESH45_RUNNING",
+    "completed_cells": 4,
+    "resolved_cells": 4,
+    "required_cells": 45,
+    "pending_cells": 39,
+    "active": [
+      {
+        "cell": {
+          "experiment": "external097",
+          "fold": 1,
+          "method": "cfgen",
+          "seed": 0
+        },
+        "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+        "identity": {
+          "pid": 3150493,
+          "birth": 23423331,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s0"
+      },
+      {
+        "cell": {
+          "experiment": "external097",
+          "fold": 1,
+          "method": "scvi",
+          "seed": 0
+        },
+        "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+        "identity": {
+          "pid": 3245955,
+          "birth": 23655475,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "attempt": "CAL_GPU0_V1_external097_f1_scvi_s0"
+      }
+    ],
+    "errors": [],
+    "unsettled": [],
+    "full_goal_complete": false,
+    "SOTA_claim": false
+  },
+  "current_exact_live_guards": [
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "cfgen",
+        "seed": 0
+      },
+      "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "identity": {
+        "pid": 3150493,
+        "birth": 23423331,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s0",
+      "optimizer_progress": {
+        "phase": "FM",
+        "phase_optimizer_updates": 52500,
+        "total_optimizer_updates": 70200,
+        "completed_epochs": 889,
+        "native_loss": 6.079612731933594
+      }
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "scvi",
+        "seed": 0
+      },
+      "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "identity": {
+        "pid": 3245955,
+        "birth": 23655475,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f1_scvi_s0",
+      "optimizer_progress": null
+    }
+  ],
+  "all_three_methods_first_full_endpoint_completed": true,
+  "complete_full45": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
