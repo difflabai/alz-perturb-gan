@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T02:13:28.777706+00:00",
+  "UTC": "2026-11-07T02:17:58.906499+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "native_goal_entry_updated": true,
@@ -95,5 +95,11 @@
   "external_benchmark_selection_gate": "Requires corrected full-table SBNP audit and fresh seed2..4 confirmation; old sampled-row variants refused",
   "external_benchmark_actual_frozen_candidate_qualified": false,
   "external_benchmark_selection_validator_path": "/ml2/alz/analysis/released097_external_selection.py",
-  "external_benchmark_selection_validator_CPU_proof_path": "/ml2/alz/analysis/released097_selection_CPU_qualification_v2.json"
+  "external_benchmark_selection_validator_CPU_proof_path": "/ml2/alz/analysis/released097_selection_CPU_qualification_v2.json",
+  "released_fresh_confirmation_prepared_protocol_path": "/ml2/alz/analysis/confirmfaith097/protocol.json",
+  "released_fresh_confirmation_prepared_CPU_proof_path": "/ml2/alz/analysis/confirmfaith097/prepared_accounting_CPU_qualification.json",
+  "released_fresh_confirmation_source_checks_path": "/ml2/alz/analysis/confirmfaith097/prepared_final_source_checks.json",
+  "released_fresh_confirmation_materialized": false,
+  "released_fresh_confirmation_actual_configuration_qualified": false,
+  "released_fresh_confirmation_requires": "Complete corrected paired-selection audit and scientific decision; freeze settings before seed2..4 fresh training"
 }
