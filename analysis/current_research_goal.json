@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T11:30:53.252932+00:00",
+  "UTC": "2026-11-07T11:46:09.187082+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -117,9 +117,9 @@
   "research_pipeline_source_path": "/ml2/alz/analysis/run_released097_dual_pipeline.py",
   "research_pipeline_preparation_checks_path": "/ml2/alz/analysis/released097_pipeline_preparation_checks.json",
   "research_pipeline_started": true,
-  "research_pipeline_identity_path": "/ml2/alz/artifacts/released097-dual-research-pipeline/identity.json",
-  "research_pipeline_started_evidence_path": "/ml2/alz/analysis/released097_dual_pipeline_started_20261107.json",
-  "research_pipeline_progress_path": "/ml2/alz/artifacts/released097-dual-research-pipeline/progress.json",
+  "research_pipeline_identity_path": "/ml2/alz/artifacts/released097-dual-research-pipeline-v2/identity.json",
+  "research_pipeline_started_evidence_path": "/ml2/alz/analysis/released097_dual_pipeline_v2_started_20261107.json",
+  "research_pipeline_progress_path": "/ml2/alz/artifacts/released097-dual-research-pipeline-v2/progress.json",
   "research_pipeline_behavior": "Preserve exact original9-fit driver and all current fresh models. After all9 close, independently audit, freeze one PG with original selector, qualify actual43-test dual runtime, then execute all45 fresh fixed-recipe models in at most one ALZ cell per physical card. Same57primary and prespecified53sensitivity; no warmstarts, retries or foreign signals.",
   "latest_released_paired_nominal_result_path": "/ml2/alz/analysis/faithful097_nominal_two_seed_readout_20261107.json",
   "calibration_excluded53_plan_path": "/ml2/alz/analysis/benchmark097_calibration_excluded53_plan.json",
@@ -132,8 +132,8 @@
     17
   ],
   "original57_primary_comparison_preserved": true,
-  "calibration_excluded53_observer_identity_path": "/ml2/alz/artifacts/released097-dual-calibration53-boundary/identity.json",
-  "calibration_excluded53_observer_started_evidence_path": "/ml2/alz/analysis/released097_dual_pipeline_started_20261107.json",
+  "calibration_excluded53_observer_identity_path": "/ml2/alz/artifacts/released097-dual-calibration53-boundary-v2/identity.json",
+  "calibration_excluded53_observer_started_evidence_path": "/ml2/alz/analysis/released097_dual_pipeline_v2_started_20261107.json",
   "calibration_excluded53_observer_started": true,
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
   "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory_v2.py",
@@ -228,5 +228,6 @@
   "external_benchmark_aggregation_source_path": "/ml2/alz/analysis/aggregate_benchmark097_dual.py",
   "dual_GPU_benchmark_possible_factory_proof_index_path": "/ml2/alz/analysis/benchmark097_dual_possible_factory_proof_index_20261107.json",
   "dual_GPU_benchmark_source_inventory_repair_path": "/ml2/alz/analysis/released097_dual_source_closure_repair_20261107.json",
-  "dual_GPU_benchmark_all45_native_source_closures_checked": true
+  "dual_GPU_benchmark_all45_native_source_closures_checked": true,
+  "dual_GPU_benchmark_source_repair_CPU_handoff_performed": true
 }
