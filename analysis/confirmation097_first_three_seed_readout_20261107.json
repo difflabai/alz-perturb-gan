@@ -1,0 +1,103 @@
+{
+  "status": "THREE_OF_FOUR_FRESH20K_SEEDS_COMPLETE_ALL_BEHIND_MATCHED_BASELINE",
+  "UTC": "2026-11-07T01:06:13.686577+00:00",
+  "completed_seeds": [
+    1,
+    2,
+    3
+  ],
+  "required_seeds": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "rows": [
+    {
+      "seed": 1,
+      "result_path": "/ml2/alz/analysis/confirmation097/results/CAL_GPU0_V1_confirm097_d000_f0_pg_s1.json",
+      "result_SHA256": "a97f479be5187185b28518b6ead63a9aa1af331463b7e3d95062db4ec43b1b60",
+      "PG": {
+        "cell_energy_distance": 0.3182107706327164,
+        "energy_score": 2.1316429139499187,
+        "spread_ratio": 0.7734794777250964,
+        "within_condition_spread_ratio": 0.7089416476984778,
+        "coverage80": 0.6009615384615384
+      },
+      "resampling": {
+        "cell_energy_distance": 0.22888526008152432,
+        "energy_score": 2.0814045098447242,
+        "spread_ratio": 1.089383296551302,
+        "within_condition_spread_ratio": 0.996161301507612,
+        "coverage80": 0.6634615384615384
+      },
+      "actual_GPU_seconds": 1376.9763570899959
+    },
+    {
+      "seed": 2,
+      "result_path": "/ml2/alz/analysis/confirmation097/results/CAL_GPU0_V1_confirm097_d000_f0_pg_s2.json",
+      "result_SHA256": "64be5c31b3fa60424f6c034408679df4addc7053451ade4996f063a3eba09973",
+      "PG": {
+        "cell_energy_distance": 0.38371682121224016,
+        "energy_score": 2.20778747354466,
+        "spread_ratio": 0.9289605815506183,
+        "within_condition_spread_ratio": 0.8178297141856226,
+        "coverage80": 0.625
+      },
+      "resampling": {
+        "cell_energy_distance": 0.2360664757860942,
+        "energy_score": 2.1189666465878148,
+        "spread_ratio": 1.0996368276041926,
+        "within_condition_spread_ratio": 1.0006447828456726,
+        "coverage80": 0.6971153846153846
+      },
+      "actual_GPU_seconds": 1377.2017725570186
+    },
+    {
+      "seed": 3,
+      "result_path": "/ml2/alz/analysis/confirmation097/results/CAL_GPU0_V1_confirm097_d000_f0_pg_s3.json",
+      "result_SHA256": "796ab908c1e8510d210ba2d39af512cdb941f3eda7cc97d3e17988f0096400a7",
+      "PG": {
+        "cell_energy_distance": 0.36152840584156287,
+        "energy_score": 2.225400149337171,
+        "spread_ratio": 0.7276927558427226,
+        "within_condition_spread_ratio": 0.6115641823861413,
+        "coverage80": 0.47596153846153844
+      },
+      "resampling": {
+        "cell_energy_distance": 0.2323084679127394,
+        "energy_score": 2.087918730129091,
+        "spread_ratio": 1.1029609521785577,
+        "within_condition_spread_ratio": 1.0083799613724387,
+        "coverage80": 0.6971153846153846
+      },
+      "actual_GPU_seconds": 1379.1682697939978
+    }
+  ],
+  "mean_over_completed_only": {
+    "PG": {
+      "cell_energy_distance": 0.3544853325621731,
+      "energy_score": 2.188276845610583,
+      "spread_ratio": 0.8100442717061457
+    },
+    "resampling": {
+      "cell_energy_distance": 0.23242006792678596,
+      "energy_score": 2.0960966288538767,
+      "spread_ratio": 1.097327025444684
+    }
+  },
+  "four_seed_distance_lower_bound_if_seed4_zero": 0.26586399942162986,
+  "known_matched_resampling_four_seed_mean_distance": 0.23294079307681725,
+  "lower_bound_exceeds_baseline": true,
+  "lower_bound_reason": "The declared cell score is Euclidean empirical energy distance using complete self-distance means and is nonnegative in exact arithmetic. Even a zero remaining-seed distance gives this conservative four-seed mean; the margin is far larger than floating-point rounding. This is not a measured seed4 value.",
+  "all_four_seed_confirmation_complete": false,
+  "seed4_not_skipped": true,
+  "independent_all_four_closure_audit_complete": false,
+  "benchmark_freeze_deferred": true,
+  "new_refinement_protocol_path": "/ml2/alz/analysis/refinement097/protocol.json",
+  "new_refinement_frozen_scope_qualified": false,
+  "new_refinement_activated": false,
+  "heldout_values_read": false,
+  "SOTA_claim": false,
+  "full_goal_complete": false
+}
