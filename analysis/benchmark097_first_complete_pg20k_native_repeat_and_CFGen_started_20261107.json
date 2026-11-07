@@ -1,0 +1,155 @@
+{
+  "status": "FIRST_EXTERNAL_FRESH_PG20K_NATIVE_AUDIT_PASS_EXACT_DETERMINISTIC_REPEAT_CFGEN_REAL_TRAINING_STARTED",
+  "UTC": "2026-11-07T17:18:32.370118+00:00",
+  "first_complete_PG_result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_pg_s0.json",
+  "first_complete_PG_result_SHA256": "4e3f7075276a602a83b91c10993b12aab7fefd060dba976503f95521dea9f388",
+  "complete_PG_cell": {
+    "experiment": "external097",
+    "fold": 0,
+    "method": "pg",
+    "seed": 0
+  },
+  "from_scratch": true,
+  "initial_completed_updates": 0,
+  "completed_optimizer_pairs": 20000,
+  "native_final_policy_CUDA_restore": true,
+  "all_saved_model_tensors_finite": true,
+  "all_saved_artifacts_rehashed": 56,
+  "clean_canonical_settlement": true,
+  "old_guard_worker_and_registry_lease_absent": true,
+  "charged_GPU_seconds": 3858.9427630729915,
+  "native_GPU_peak_allocated_bytes": 570084352,
+  "native_GPU_peak_reserved_bytes": 763363328,
+  "native_GPU_allocator_limit_bytes": 3221225472,
+  "fresh_same_seed_repeat": {
+    "new_checkpoint": "/ml2/alz/runs/CAL_GPU0_V1_external097_f0_pg_s0/fit/final.pt",
+    "old_same_seed_readonly_checkpoint": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/final.pt",
+    "same_recipe": true,
+    "same_declared_training_streams": true,
+    "same_released_hyperparameters": true,
+    "new_policy_fingerprint": "23c767c23a6131bc276f839a97abf5350bc65a5826ceb627b0d72d4b28d1e391",
+    "old_policy_fingerprint": "23c767c23a6131bc276f839a97abf5350bc65a5826ceb627b0d72d4b28d1e391",
+    "new_complete_training_state_fingerprint": "c0798e26d6e7f313252031a34cc103af196c86eaddbb1a839ca14c0cae2d9a0f",
+    "old_complete_training_state_fingerprint": "c0798e26d6e7f313252031a34cc103af196c86eaddbb1a839ca14c0cae2d9a0f",
+    "CPU_observer_CUDA_initialized": false,
+    "exact_policy_repeat": true,
+    "exact_complete_training_state_repeat": true
+  },
+  "fresh_repeat_limits": "Same fold/seed0/hyperparameters deterministically repeats prior calibration exploration. This is fresh initialization reproducibility evidence, not another independent stochastic or biological replicate. Prior checkpoint was read only after the new full20k completion and was never a training initialization source.",
+  "current_live_fresh_workers": [
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "pg",
+        "seed": 0
+      },
+      "GPU_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "attempt": "CAL_GPU0_V1_external097_f1_pg_s0",
+      "guard": {
+        "pid": 2548057,
+        "birth": 22574636,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 2548139,
+        "birth": 22574758,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "initial_completed_updates": 0,
+      "source_checkpoint": null,
+      "training_progress": {
+        "step": 8001,
+        "D_adversarial": 0.5896127820014954,
+        "D_penalty": 0.030980756506323814,
+        "D_total": 0.6205935478210449,
+        "G_adversarial": 1.842879295349121,
+        "prior_regularization_unweighted": 0.1251535415649414,
+        "G_total": 1.8441308736801147,
+        "G_prior_LRs": [
+          0.012,
+          0.06
+        ],
+        "D_LRs": [
+          0.018000000000000002
+        ],
+        "critic_gap": 5.220495700836182,
+        "D_gradient_norm": 15.361987113952637,
+        "G_gradient_norm": 16.56168556213379,
+        "prior_gradient_norm": 1.1158812046051025,
+        "penalty_stats": {
+          "applied": true,
+          "pen": 0.030980756506323814,
+          "center": 1.0,
+          "phase": "bispf",
+          "mean_grad_norm": 0.914624810218811,
+          "mean_logit": -0.7174923419952393,
+          "ebi_loss": 0.01811087504029274,
+          "gauge_loss": 0.012869881466031075,
+          "floor_pen": 0.004445256199687719,
+          "s_thermal": 1.0,
+          "ema_residual": 0.613490378659591,
+          "ema_data_scale": 4.033073837544023
+        },
+        "penalty_diagnostics": {
+          "ema_residual": 0.613490378659591,
+          "ema_data_scale": 4.033073837544023,
+          "s_thermal": 1.0
+        },
+        "particle_usage": {
+          "rows_drawn": 512,
+          "rows_moved": 512,
+          "total_draws": 256032,
+          "total_unsampled_row_moves": 0,
+          "particle_covariance_trace": 7.328912734985352,
+          "particle_mean_squared_norm": 7.384683609008789
+        }
+      },
+      "target_new_update_quantity": 20000,
+      "target_new_update_unit": "optimizer_pairs",
+      "target_endpoint": 20000
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "cfgen",
+        "seed": 0
+      },
+      "GPU_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s0",
+      "guard": {
+        "pid": 2760763,
+        "birth": 22915128,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 2760887,
+        "birth": 22915246,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "initial_completed_updates": 0,
+      "source_checkpoint": null,
+      "training_progress": {
+        "phase": "AE",
+        "phase_optimizer_updates": 6500,
+        "total_optimizer_updates": 6500,
+        "completed_epochs": 114,
+        "native_loss": 357.540283203125
+      },
+      "target_new_update_quantity": 102600,
+      "target_new_update_unit": "optimizer_steps",
+      "target_endpoint": 1800
+    }
+  ],
+  "completed_benchmark_fits": 2,
+  "active_benchmark_fits": 2,
+  "pending_benchmark_fits": 41,
+  "required_benchmark_fits": 45,
+  "external_target_arrays_read_by_this_check": false,
+  "external_test_metrics_not_compared_or_reported": true,
+  "all45_original57_and53_sensitivity_still_required": true,
+  "CPU_observer_CUDA_initialized": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}

@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T16:51:58.625370+00:00",
+  "UTC": "2026-11-07T17:20:06.178485+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/analysis/confirmfaith097/current_release_check_before_activation.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "FULL45_DUAL_SHARED_ONE_COMPLETE_TWO_FRESH_PG_FOLDS_PAST5000",
+  "study_status": "FULL45_TWO_NATIVE_FITS_COMPLETE_FIRST_CFGEN_AND_SECOND_PG_FOLD_RUNNING",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/benchmark097-dual-fullmatrix/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/confirmfaith097-paired-search/identity.json",
@@ -137,7 +137,7 @@
   "calibration_excluded53_observer_started": true,
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
   "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory_v2.py",
-  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_first_external_native_fit_20261107.json",
+  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_first_external_pg20k_20261107.json",
   "historical_recipe_disclosure_corrected_by_append_only_snapshot": true,
   "matched_seed0_calibration_comparison_path": "/ml2/alz/analysis/released097_matched_seed0_calibration_comparison_20261107.json",
   "current_calibration_distance_reference": {
@@ -250,31 +250,12 @@
     {
       "cell": {
         "experiment": "external097",
-        "fold": 0,
-        "method": "pg",
-        "seed": 0
-      },
-      "GPU_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
-      "guard": {
-        "pid": 2519402,
-        "birth": 22528271,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "worker": {
-        "pid": 2519505,
-        "birth": 22528385,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "last_logged_update": 9751
-    },
-    {
-      "cell": {
-        "experiment": "external097",
         "fold": 1,
         "method": "pg",
         "seed": 0
       },
       "GPU_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "attempt": "CAL_GPU0_V1_external097_f1_pg_s0",
       "guard": {
         "pid": 2548057,
         "birth": 22574636,
@@ -285,14 +266,101 @@
         "birth": 22574758,
         "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
       },
-      "last_logged_update": 5251
+      "initial_completed_updates": 0,
+      "source_checkpoint": null,
+      "training_progress": {
+        "step": 8001,
+        "D_adversarial": 0.5896127820014954,
+        "D_penalty": 0.030980756506323814,
+        "D_total": 0.6205935478210449,
+        "G_adversarial": 1.842879295349121,
+        "prior_regularization_unweighted": 0.1251535415649414,
+        "G_total": 1.8441308736801147,
+        "G_prior_LRs": [
+          0.012,
+          0.06
+        ],
+        "D_LRs": [
+          0.018000000000000002
+        ],
+        "critic_gap": 5.220495700836182,
+        "D_gradient_norm": 15.361987113952637,
+        "G_gradient_norm": 16.56168556213379,
+        "prior_gradient_norm": 1.1158812046051025,
+        "penalty_stats": {
+          "applied": true,
+          "pen": 0.030980756506323814,
+          "center": 1.0,
+          "phase": "bispf",
+          "mean_grad_norm": 0.914624810218811,
+          "mean_logit": -0.7174923419952393,
+          "ebi_loss": 0.01811087504029274,
+          "gauge_loss": 0.012869881466031075,
+          "floor_pen": 0.004445256199687719,
+          "s_thermal": 1.0,
+          "ema_residual": 0.613490378659591,
+          "ema_data_scale": 4.033073837544023
+        },
+        "penalty_diagnostics": {
+          "ema_residual": 0.613490378659591,
+          "ema_data_scale": 4.033073837544023,
+          "s_thermal": 1.0
+        },
+        "particle_usage": {
+          "rows_drawn": 512,
+          "rows_moved": 512,
+          "total_draws": 256032,
+          "total_unsampled_row_moves": 0,
+          "particle_covariance_trace": 7.328912734985352,
+          "particle_mean_squared_norm": 7.384683609008789
+        }
+      },
+      "target_new_update_quantity": 20000,
+      "target_new_update_unit": "optimizer_pairs",
+      "target_endpoint": 20000
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "cfgen",
+        "seed": 0
+      },
+      "GPU_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s0",
+      "guard": {
+        "pid": 2760763,
+        "birth": 22915128,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 2760887,
+        "birth": 22915246,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "initial_completed_updates": 0,
+      "source_checkpoint": null,
+      "training_progress": {
+        "phase": "AE",
+        "phase_optimizer_updates": 6500,
+        "total_optimizer_updates": 6500,
+        "completed_epochs": 114,
+        "native_loss": 357.540283203125
+      },
+      "target_new_update_quantity": 102600,
+      "target_new_update_unit": "optimizer_steps",
+      "target_endpoint": 1800
     }
   ],
-  "external_benchmark_completed_fits": 1,
+  "external_benchmark_completed_fits": 2,
   "external_benchmark_running_fits": 2,
-  "external_benchmark_queued_fits": 42,
+  "external_benchmark_queued_fits": 41,
   "external_benchmark_first_completed_fit_audit_path": "/ml2/alz/analysis/benchmark097_first_completed_native_scvi_and_two_fresh_pg_workers_20261107.json",
   "full_confirmation_plot_path": "/ml2/alz/analysis/released097_full_confirmation_selection_20261107.png",
   "full_confirmation_plot_provenance_path": "/ml2/alz/analysis/released097_full_confirmation_plot_provenance_20261107.json",
-  "latest_external_PG_intermediate_state_audit_path": "/ml2/alz/analysis/benchmark097_first_two_fresh_pg5000_state_audit_20261107.json"
+  "latest_external_PG_intermediate_state_audit_path": "/ml2/alz/analysis/benchmark097_first_two_fresh_pg5000_state_audit_20261107.json",
+  "latest_external_full20k_PG_and_CFGen_start_audit_path": "/ml2/alz/analysis/benchmark097_first_complete_pg20k_native_repeat_and_CFGen_started_20261107.json",
+  "same_seed_fresh20k_complete_training_state_reproduced_exactly": true,
+  "external_benchmark_all_three_methods_actual_GPU_training_started": true,
+  "external_benchmark_all_three_methods_full_endpoint_completed": false
 }
