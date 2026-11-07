@@ -1,0 +1,101 @@
+{
+  "status": "MATCHED_SEED0_CALIBRATION_EXTERNAL_REFERENCE_COMPARISON_NOT_FRESH45_BENCHMARK",
+  "UTC": "2026-11-07T03:31:17.485820+00:00",
+  "rows_sorted_by_cell_distance": [
+    {
+      "method": "scVI",
+      "configuration": "fixed stage-only native recipe",
+      "training_seed": 0,
+      "generation_replicates": 2,
+      "cell_energy_distance": 0.22857870145323922,
+      "energy_score": 2.3489122410781658,
+      "spread_ratio": 0.349303797578872,
+      "within_condition_spread_ratio": 0.18403745969334231,
+      "coverage80": 0.17307692307692307,
+      "source_path": "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json",
+      "historical_measured_calibration_model": true
+    },
+    {
+      "method": "Hierarchical resampling",
+      "configuration": "matched source row traces",
+      "training_seed": 0,
+      "generation_replicates": 2,
+      "cell_energy_distance": 0.24277825308317968,
+      "energy_score": 2.079287181278266,
+      "spread_ratio": 1.086688043301637,
+      "within_condition_spread_ratio": 0.9935126950887428,
+      "coverage80": 0.6778846153846154,
+      "source_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json"
+    },
+    {
+      "method": "CFGen",
+      "configuration": "fixed stage-only native recipe",
+      "training_seed": 0,
+      "generation_replicates": 2,
+      "cell_energy_distance": 0.2513296992803724,
+      "energy_score": 2.283138111608369,
+      "spread_ratio": 0.2692438880627546,
+      "within_condition_spread_ratio": 0.1652430757753246,
+      "coverage80": 0.21153846153846154,
+      "source_path": "/ml2/alz/analysis/CAL_GPU0_V1_matched_cfgen_f0_cfgen_s0-result.json",
+      "historical_measured_calibration_model": true
+    },
+    {
+      "method": "ParticleGAN",
+      "configuration": "f001",
+      "training_seed": 0,
+      "generation_replicates": 2,
+      "cell_energy_distance": 0.27502356676161543,
+      "energy_score": 2.082989412898513,
+      "spread_ratio": 0.835225944320275,
+      "within_condition_spread_ratio": 0.7552193659577149,
+      "coverage80": 0.5721153846153846,
+      "source_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f001_f0_pg_s0.json",
+      "released_formulation": "0.9.7 full512row_SBNP bound_thermal nonEMA"
+    },
+    {
+      "method": "ParticleGAN",
+      "configuration": "f000",
+      "training_seed": 0,
+      "generation_replicates": 2,
+      "cell_energy_distance": 0.2805434126347235,
+      "energy_score": 1.9009654459270127,
+      "spread_ratio": 0.9777870063157865,
+      "within_condition_spread_ratio": 0.9098323628540306,
+      "coverage80": 0.7259615384615384,
+      "source_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json",
+      "released_formulation": "0.9.7 full512row_SBNP bound_thermal nonEMA"
+    }
+  ],
+  "current_calibration_score_to_beat": {
+    "method": "scVI",
+    "cell_energy_distance": 0.22857870145323922
+  },
+  "common_target_contract": {
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "generation_replicates": 2,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1"
+  },
+  "all_donor_energy_and_spread_tradeoffs_retained": true,
+  "all_four_baseline_attempts_complete": false,
+  "new_external45_comparison_completed": false,
+  "limitations": "Same four adaptive calibration donors and one matched initialization only; PG shows two tested parameter settings while external recipes are fixed. Historical comparator outputs are calibration references, not fresh benchmark fits. Low scVI/CFGen donor spread warns that pooled-cell distance alone does not establish donor-level predictive quality. Original57and53calibration-excluded external comparisons still require all45newmodels and prespecified uncertainty.",
+  "input_SHA256": {
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json": "090be880e2a9758348f2075419593b693523d9792db910d4bc69bb8bf5826ca4",
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f001_f0_pg_s0.json": "2dcf3551cb764457b7fb33970b9a9ad557009836801a84607d92c9b53d97a1f6",
+    "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json": "5312be07c39064c56fb95f2c34726ce171399234679a7d5ed9e261b42aedcb10",
+    "/ml2/alz/analysis/CAL_GPU0_V1_matched_cfgen_f0_cfgen_s0-result.json": "bdc56e64a36ff3f17a0791fe731da986477e8153bb19709b33b2fc3ff534abba"
+  },
+  "no_new_training": true,
+  "no_new_evaluation_target_arrays_read": true,
+  "SOTA_claim": false,
+  "full_goal_complete": false
+}

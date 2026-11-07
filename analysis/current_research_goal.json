@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T03:26:29.210626+00:00",
+  "UTC": "2026-11-07T03:31:17.485820+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -80,7 +80,7 @@
   "external_benchmark_selection_validator_path": "/ml2/alz/analysis/released097_external_selection.py",
   "legacy_evidence": {
     "complete_previous_goal_index_archive_path": "/ml2/alz/analysis/current_research_goal_before_fidelity_index_cleanup_20261107.json",
-    "classification": "Historical PG runs used native package components with sampled-row SBNP; retain raw results and costs, but exclude them from exact released-trainer selection/confirmation eligibility.",
+    "classification": "Earlier release-adapter HPO500/c014/distribution097/confirmation097/refinement097 studies used sampled-row SBNP. Preserve those numerical scores/costs while excluding them from exact released-trainer eligibility; other historical formulation variants retain their own distinct labels.",
     "old20fit_queue_termination_path": "/ml2/alz/analysis/refinement097_fidelity_termination_20261107.json",
     "old20fit_queue_active": false,
     "previous_500step_goal_archive_path": "/ml2/alz/analysis/hpo500_completed_goal_archive_20261106.json",
@@ -151,5 +151,10 @@
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
   "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory.py",
   "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_snapshot_20261107T0324.json",
-  "historical_recipe_disclosure_corrected_by_append_only_snapshot": true
+  "historical_recipe_disclosure_corrected_by_append_only_snapshot": true,
+  "matched_seed0_calibration_comparison_path": "/ml2/alz/analysis/released097_matched_seed0_calibration_comparison_20261107.json",
+  "current_calibration_distance_reference": {
+    "method": "scVI",
+    "cell_energy_distance": 0.22857870145323922
+  }
 }
