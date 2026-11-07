@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T08:42:32.203680+00:00",
+  "UTC": "2026-11-07T08:45:57.876868+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -151,8 +151,8 @@
   "calibration_excluded53_observer_started_evidence_path": "/ml2/alz/analysis/released097_adaptive_pipeline_started_20261107.json",
   "calibration_excluded53_observer_started": true,
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
-  "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory.py",
-  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_five_coordinate_pairs_20261107.json",
+  "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory_v2.py",
+  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_at_confirmation_start_20261107.json",
   "historical_recipe_disclosure_corrected_by_append_only_snapshot": true,
   "matched_seed0_calibration_comparison_path": "/ml2/alz/analysis/released097_matched_seed0_calibration_comparison_20261107.json",
   "current_calibration_distance_reference": {
@@ -187,5 +187,7 @@
   "released_fresh_confirmation_started_evidence_path": "/ml2/alz/analysis/released097_full_search_to_confirmation_20261107.json",
   "optional_followup_skipped": true,
   "optional_followup_skip_design_path": "/ml2/alz/analysis/followfaith097/frozen_design.json",
-  "optional_followup_real_GPU_fits": 0
+  "optional_followup_real_GPU_fits": 0,
+  "full_calibration_plot_path": "/ml2/alz/analysis/released097_full_calibration_search_20261107.png",
+  "full_calibration_plot_provenance_path": "/ml2/alz/analysis/released097_full_calibration_plot_provenance_20261107.json"
 }
