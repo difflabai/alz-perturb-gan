@@ -1,0 +1,124 @@
+{
+  "status": "NINTH_COMPLETE_FIT_FIRST_SEED1_PG_FULL20K_ROOT_CHECK_PASS",
+  "UTC": "2026-11-07T22:23:25.631451+00:00",
+  "cell": {
+    "experiment": "external097",
+    "fold": 1,
+    "method": "pg",
+    "seed": 1
+  },
+  "result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_pg_s1.json",
+  "result_SHA256": "0c1f8badd7d06553868c48f51933c48525be2c6fa13531fefd456aefbc51f3a8",
+  "from_scratch": true,
+  "source_checkpoint": null,
+  "initial_completed_updates": 0,
+  "completed_updates": 20000,
+  "fixed_endpoint": 20000,
+  "native_version": "0.9.7",
+  "saved_outputs_rehashed": 56,
+  "all_saved_model_and_table_tensors_finite": true,
+  "particle_rows_used": 512,
+  "particle_draws": 640000,
+  "frozen_hyperparameters_match": true,
+  "native_CUDA_reload_verified": true,
+  "driver_independent_CPU_saved_score_audit": true,
+  "canonical_clean_settlement": true,
+  "original_guard_absent_and_driver_worker_closure_verified": true,
+  "charged_GPU_seconds": 1734.6026192090067,
+  "progress": {
+    "status": "DUAL_SHARED_FRESH45_RUNNING",
+    "completed_cells": 9,
+    "resolved_cells": 9,
+    "required_cells": 45,
+    "pending_cells": 34,
+    "active": [
+      {
+        "cell": {
+          "experiment": "external097",
+          "fold": 1,
+          "method": "cfgen",
+          "seed": 0
+        },
+        "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+        "identity": {
+          "pid": 3150493,
+          "birth": 23423331,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s0"
+      },
+      {
+        "cell": {
+          "experiment": "external097",
+          "fold": 1,
+          "method": "cfgen",
+          "seed": 1
+        },
+        "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+        "identity": {
+          "pid": 4016637,
+          "birth": 24773913,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s1"
+      }
+    ],
+    "errors": [],
+    "unsettled": [],
+    "full_goal_complete": false,
+    "SOTA_claim": false
+  },
+  "exact_live_active_guards_and_progress": [
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "cfgen",
+        "seed": 0
+      },
+      "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "identity": {
+        "pid": 3150493,
+        "birth": 23423331,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s0",
+      "training_progress": {
+        "phase": "FM",
+        "phase_optimizer_updates": 88500,
+        "total_optimizer_updates": 106200,
+        "completed_epochs": 1499,
+        "native_loss": 5.843170166015625
+      }
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "cfgen",
+        "seed": 1
+      },
+      "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "identity": {
+        "pid": 4016637,
+        "birth": 24773913,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s1",
+      "training_progress": {
+        "phase": "AE",
+        "phase_optimizer_updates": 1000,
+        "total_optimizer_updates": 1000,
+        "completed_epochs": 16,
+        "native_loss": 434.32476806640625
+      }
+    }
+  ],
+  "root_CUDA_initialized": false,
+  "root_numeric_target_arrays_read": false,
+  "external_metrics_used_for_selection": false,
+  "full45_complete": false,
+  "original57_and_prespecified53_still_required": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
