@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T02:54:25.250309+00:00",
+  "UTC": "2026-11-07T03:09:47.568757+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -92,7 +92,8 @@
     "Complete all frozen selected settings at fresh initialization seeds2..4 and retain failures and controls.",
     "Freeze the confirmed PG setting before new external evaluation; qualify all45 fresh model cells.",
     "Complete PG/scVI/CFGen \u00d73folds \u00d75seeds plus matched resampling, audit native states/counts/scores/costs, compute declared paired distribution statistics.",
-    "Disclose adaptive calibration, crossfold/cohort exposure and tuning-budget limits; make only claims supported by the full comparison."
+    "Disclose adaptive calibration, crossfold/cohort exposure and tuning-budget limits; make only claims supported by the full comparison.",
+    "Compute the prespecified53-donor sensitivity excluding the four current calibration donors from evaluation, using the same45frozen fits; retain original57primary and disclose historical exposure."
   ],
   "crossfold_isolation_audit_path": "/ml2/alz/analysis/distribution097_split_isolation_audit_20261106.json",
   "supplementary25_design_path": "/ml2/alz/analysis/distribution097_supplementary25_design_proposal_20261106.json",
@@ -133,5 +134,15 @@
   "research_pipeline_started_evidence_path": "/ml2/alz/analysis/released097_research_pipeline_started_20261107.json",
   "research_pipeline_progress_path": "/ml2/alz/artifacts/released097-research-pipeline/progress.json",
   "research_pipeline_behavior": "Wait exact baseline-audit process; then only source-pinned, actually qualified and reviewed fresh local/confirmation/external phases. Stops on real failures or source drift, never retries or signals foreign work.",
-  "latest_released_paired_nominal_result_path": "/ml2/alz/analysis/faithful097_nominal_two_seed_readout_20261107.json"
+  "latest_released_paired_nominal_result_path": "/ml2/alz/analysis/faithful097_nominal_two_seed_readout_20261107.json",
+  "calibration_excluded53_plan_path": "/ml2/alz/analysis/benchmark097_calibration_excluded53_plan.json",
+  "calibration_excluded53_source_path": "/ml2/alz/analysis/score_calibration_excluded53.py",
+  "calibration_excluded53_CPU_preparation_path": "/ml2/alz/analysis/benchmark097_calibration_excluded53_CPU_preparation.json",
+  "calibration_excluded53_completed": false,
+  "calibration_excluded53_donor_counts_by_fold": [
+    20,
+    16,
+    17
+  ],
+  "original57_primary_comparison_preserved": true
 }
