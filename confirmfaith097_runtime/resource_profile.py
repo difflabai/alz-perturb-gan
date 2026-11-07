@@ -72,6 +72,8 @@ def free_floor():
  return free,available
 def previous_trial_released():
  assert not read(PREVIOUS_REGISTRY)['jobs'],'Owned predecessor must release before next registered rate trial'
+ local=ROOT/'artifacts/gpu1-localfaith097-paired-search-20261107/live_registry/registry.json'
+ assert not local.exists() or not read(local)['jobs'],'Corrected local-search predecessor must be released'
 def reviewed():
  validate_proposal();previous_trial_released();q=read(REVIEW)
  assert q['status']=='OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS'

@@ -1,9 +1,10 @@
 """Confined accounting and actual early-refusal checks only; no deployment."""
-import datetime,json,os,re,subprocess,sys
+import argparse,datetime,json,os,re,subprocess,sys
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;sys.path.insert(0,str(HERE))
 import binding as b,preset_scope as s
 def main():
+ parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=s.STUDY/'prepared_accounting_CPU_qualification.json');args=parser.parse_args();assert args.output.resolve().parent==s.STUDY.resolve() and not args.output.exists()
  assert os.environ.get('CUDA_VISIBLE_DEVICES')=='' and not s.read(s.PLAN)['enabled']
  results=[];count=0
  for name in ('test_integration.py','test_prepared.py'):
@@ -15,6 +16,6 @@ def main():
  q=dict(status='PREPARED_RELEASED_CONFIRMATION_ACCOUNTING_AND_REAL_EARLY_REFUSAL_CPU_PASS',UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),actual_tests=count,tests=results,
    actual_corrected_selection_not_complete_admission_refused=True,actual_frozen_confirmation_scope_qualified=False,live_runtime_deployment_qualified=False,
    GPU_allocation_created=False,CUDA_initialized=False,source_SHA256={str(f):b.sha(f) for f in files})
- output=s.STUDY/'prepared_accounting_CPU_qualification.json';assert not output.exists();output.write_text(json.dumps(q,indent=2)+'\n')
+ output=args.output;output.write_text(json.dumps(q,indent=2)+'\n')
  print(json.dumps({k:q[k] for k in ('status','actual_tests','live_runtime_deployment_qualified','GPU_allocation_created')}))
 if __name__=='__main__':main()
