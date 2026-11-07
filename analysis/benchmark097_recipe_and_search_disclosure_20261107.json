@@ -1,0 +1,159 @@
+{
+  "status": "PRESPECIFIED_COMPARATOR_RECIPES_AND_UNEQUAL_TUNING_DISCLOSURE_BEFORE_NEW_EXTERNAL_EVALUATION",
+  "UTC": "2026-11-07T00:04:21.060815+00:00",
+  "methods": [
+    "pg",
+    "scvi",
+    "cfgen",
+    "hierarchical_resampling"
+  ],
+  "all_new_external_models_from_update_zero": true,
+  "reuse_old_models_for_new_benchmark": false,
+  "common_training_contract": "Same frozen optimization donor/cell sets and2000genes per fold; shared stage-only condition and native integer counts. Each fold HVG/PCA/classifier fit using optimization donors only. No cell-level validation split or early stopping. Fixed original real target/scoring trace for every method.",
+  "comparison_scope": "Threefold/fiveseed comparison of these disclosed recipes. Not an equal-hyperparameter-search-budget comparison, exhaustive state-of-the-art census or independent-population validation.",
+  "scvi": {
+    "version": "1.3.3",
+    "architecture": {
+      "n_hidden": 128,
+      "n_latent": 10,
+      "n_layers": 1,
+      "dropout_rate": 0.1,
+      "dispersion": "gene",
+      "gene_likelihood": "nb",
+      "use_observed_lib_size": true,
+      "latent_distribution": "normal"
+    },
+    "training_plan": {
+      "optimizer": "Adam",
+      "lr": 0.001,
+      "weight_decay": 1e-06,
+      "eps": 0.01,
+      "n_epochs_kl_warmup": 400,
+      "reduce_lr_on_plateau": false
+    },
+    "epochs": 400,
+    "batch_size": 512,
+    "batch_size_edge_case": "511 only if n_optimization_cells modulo512 is1",
+    "covariates": [
+      "stage"
+    ],
+    "validation_cells": 0,
+    "early_stopping": false,
+    "recipe_selection": "Frozen canonical stage-only NB recipe; not claimed to be all current package defaults or globally optimized.",
+    "hyperparameter_search_in_new45_model_matrix": false,
+    "historical_calibration_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json",
+    "historical_calibration_receipt": "Preserved400epoch model and separate native-reload evaluation; prior fit/evaluation cost must not be reduced to the evaluation-only receipt.",
+    "historical_completed400fit_and_failed_reload_GPU_seconds": 277.26753457299856,
+    "historical_separate_saved_model_evaluation_GPU_seconds": 38.217761501000496,
+    "historical_combined_GPU_seconds": 315.48529607399905
+  },
+  "cfgen": {
+    "source_commit": "ee5ca0ccdd97a85a3d6bab9344063b77a8fc7af3",
+    "recipe": {
+      "input_genes": 2000,
+      "covariates": [
+        "stage"
+      ],
+      "AE_dims": [
+        512,
+        256,
+        50
+      ],
+      "AE_batch_norm": true,
+      "AE_dropout": false,
+      "AE_learning_rate": 0.001,
+      "AE_weight_decay": 1e-05,
+      "flow_hidden_dim": 32,
+      "flow_blocks": 3,
+      "embedding_dim": 20,
+      "flow_normalization": "none",
+      "flow_dropout": 0.0,
+      "embed_size_factor": false,
+      "conditioning_probability": 0.8,
+      "guided_conditioning": true,
+      "FM_learning_rate": 0.0001,
+      "FM_weight_decay": 1e-06,
+      "antithetic_time_sampling": true,
+      "sigma": 0.0001,
+      "use_ot": false,
+      "batch_size": 256,
+      "drop_last": true,
+      "normalization": "log_gexp",
+      "theta": "global",
+      "precision": "32-true",
+      "gradient_clip_val": 1.0,
+      "detect_anomaly": true
+    },
+    "AE_epochs": 300,
+    "FM_epochs": 1500,
+    "AE_encoder_frozen_for_FM": true,
+    "covariates": [
+      "stage"
+    ],
+    "validation_cells": 0,
+    "early_stopping": false,
+    "trajectory_output_times": 2,
+    "native_adaptive_solver": "dopri5",
+    "atol": 1e-05,
+    "rtol": 1e-05,
+    "recipe_selection": "Fixed native constructors/log_gexp protocol;32hidden/3blocks/20embedding flow is shipped resnet_small configuration. Two requested output times are not two Euler steps.",
+    "hyperparameter_search_in_new45_model_matrix": false,
+    "historical_matched_calibration_GPU_seconds": 6488.181304419999,
+    "historical_calibration_result_path": "/ml2/alz/analysis/CAL_GPU0_V1_matched_cfgen_f0_cfgen_s0-result.json"
+  },
+  "pg": {
+    "version": "0.9.7",
+    "formulation": "native bispf_optimized nonEMA, generator_gradient_response none; six existing positive scalar hyperparameters only",
+    "endpoint": 20000,
+    "previous500step_HPO_complete_fits": 47,
+    "previous500step_HPO_GPU_seconds": 20098.06640428801,
+    "previous500step_HPO_endpoint": 500,
+    "previous500step_HPO_includes_original_and_boundary": true,
+    "previous_c01420k_GPU_seconds": 10433.874065807991,
+    "current_full20k_selection_fits": 6,
+    "current_full20k_selection_GPU_seconds": 8679.55109377901,
+    "current_full20k_selection_optimizer_pairs": 120000,
+    "new_seed_confirmation_fits": 4,
+    "new_seed_confirmation_seeds": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "new_seed_confirmation_status": "RUNNING_NOT_INCLUDED_IN_COMPLETED_SELECTION_COST",
+    "benchmark_candidate": "Frozen only after all four full20k fresh seed outcomes and independent audit; no seed0 substitution for failed seeds."
+  },
+  "hierarchical_resampling": {
+    "fitted_neural_model": false,
+    "optimization_donors_only": true,
+    "matched_seed_and_generation_replicate": true,
+    "two_replicates": true
+  },
+  "historical_tuning_cost_caveat": "Listed PG studies and matched comparator receipts are directly verified, nonoverlapping named evidence; they are not a complete method-by-method inventory of all historical work. Earlier formulation experiments, probes, failed fits and evaluations also consumed canonical project budget. Total historical search budgets are unequal and cannot support an equal-effort advantage claim.",
+  "original57_split_limitation": "All four current tuning donors reappear in fold1 evaluation. Preserve full57 comparison descriptively; disclose adaptive crossfold exposure. Supplementary globally disjoint25 historical donors remain a metadata-only proposal pending separate design/evaluation gate. Neither cohort is a fresh independent population.",
+  "source_SHA256": {
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/scvi_adapter.py": "42bbab234ab5f9f7f75909d0f978e57e64d679a2794668ddb8b36a59d6011eb9",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/execution-control-20261103/target_model.py": "58aad1644bc42493b227c59724fde93a6549f95805570b03460df4f033a83ccf",
+    "/ml2/alz/analysis/benchmark097_cfgen/protocol.json": "dc063f295ecbf9dc1bacdf5f359397a09f67b901761f14a2cf5df3c5d4a18460",
+    "/ml2/alz/analysis/benchmark097_cfgen/fit_adapter.py": "efa11816242490a1c726b3342e13f8bac41903027ba72cd15a5c1c4d00a4ceae",
+    "/ml2/alz/analysis/benchmark097_cfgen/native_reload.py": "6bad629fcdff5b4c94a4a1489fdd343d3f544b6d643a0862583132d203aee60c",
+    "/ml2/alz/analysis/distribution097/model/released_update.py": "bfc4c774ebc0b42b9d9a27ce8405fe03216af8a52df0062abd35243d6b04211e",
+    "/ml2/alz/analysis/distribution097/model/released_adapter.py": "b64b8d3eba2944383d470034b2e93bb2bb9e0e0c72fbcdaff95b285c2da5c731",
+    "/ml2/alz/analysis/confirmation097/protocol.json": "f8577fc0d401c1e35879e2d78a1555e9d9f84bc22d9a5347bb8e22882828612f",
+    "/ml2/alz/analysis/confirmation097_selection_rule_20261106.json": "1b13d64347fd74d2633630421ba90d80625299be19d739cfa97c8df97d43aab9",
+    "/ml2/alz/analysis/hpo500_boundary/complete_report.json": "14da4e3b65e7b6a58378faf205f0491447b3004d6d88394a950b2b534aef47f7",
+    "/ml2/alz/analysis/hpo20k/results/CAL_GPU0_V1_h20_c014_f0_pg_s0.json": "160893a339e238dd2e42d433354d117240a5a5b538565bb0a6c989e3423b0011",
+    "/ml2/alz/analysis/distribution097/stage1_report.json": "29bc5bdbed0574f0962279daaf4650068e6dc612a059b6ce287853a06cfd8331",
+    "/ml2/alz/analysis/distribution097b/stage2_report.json": "c6019ddcc2f40ba06f1f10fd10a6f8e9d512a66008f87ebde4dc8357bab5a9b5",
+    "/ml2/alz/analysis/CAL_GPU0_V1_matched_cfgen_f0_cfgen_s0-result.json": "bdc56e64a36ff3f17a0791fe731da986477e8153bb19709b33b2fc3ff534abba",
+    "/ml2/alz/analysis/CAL_GPU0_V1_matched_scvi_eval1_f0_scvi_s0-result.json": "5312be07c39064c56fb95f2c34726ce171399234679a7d5ed9e261b42aedcb10",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/isolated/sources/CFGen-ee5ca0ccdd97a85a3d6bab9344063b77a8fc7af3/configs/configs_sccfm/train.yaml": "2ab5dd6067754d103465cd913684b53ff8973c29eef6c75652e4727136df1a2a",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/isolated/sources/CFGen-ee5ca0ccdd97a85a3d6bab9344063b77a8fc7af3/configs/configs_sccfm/denoising_module/resnet_small.yaml": "bb182f954de6ff34baac42743d5fbbb99fd327c764d55b70f4dc82cc51b6d854",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/isolated/sources/CFGen-ee5ca0ccdd97a85a3d6bab9344063b77a8fc7af3/configs/configs_sccfm/encoder/default.yaml": "273c65545616536356ee996a645c5ef6818559cccfccf13b1fcb6441f0a6976d",
+    "/ml2/alz/analysis/matched_scvi_400fit_preserved_reload_failure.json": "975e33507c0326ad160bda9852a17ca1d87530e8b91abfa6d078f91fed759e56"
+  },
+  "new_evaluation_targets_read": false,
+  "new_model_fitted": false,
+  "GPU_allocation_created": false,
+  "SOTA_claim": false
+}
