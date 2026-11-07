@@ -1,0 +1,35 @@
+{
+  "status": "RELEASED097_FULL_OBJECTIVE_SELECTION_AND_FREEZE_METADATA_SYNTHETIC_CPU_TESTS_PASS",
+  "UTC": "2026-11-07T02:13:28.777706+00:00",
+  "actual_tests": 13,
+  "tests": [
+    {
+      "file": "test_released097_selection.py",
+      "actual_tests": 6,
+      "returncode": 0,
+      "stderr": "test_changed_targets_baseline_or_hyperparameters_refused (__main__.Selection.test_changed_targets_baseline_or_hyperparameters_refused) ... ok\ntest_complete_paired_selection_roles (__main__.Selection.test_complete_paired_selection_roles) ... ok\ntest_missing_duplicate_or_wrong_seed_refused (__main__.Selection.test_missing_duplicate_or_wrong_seed_refused) ... ok\ntest_nonfinite_failure_retained_and_cannot_win (__main__.Selection.test_nonfinite_failure_retained_and_cannot_win) ... ok\ntest_three_fresh_confirmation_seeds_rank_without_selection_seed_rescue (__main__.Selection.test_three_fresh_confirmation_seeds_rank_without_selection_seed_rescue) ... ok\ntest_warmstart_partial_and_unsettled_rejected (__main__.Selection.test_warmstart_partial_and_unsettled_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nOK\n"
+    },
+    {
+      "file": "test_released097_external_selection.py",
+      "actual_tests": 7,
+      "returncode": 0,
+      "stderr": "test_arithmetic_rank_or_failed_seed_omission_refused (__main__.Freeze.test_arithmetic_rank_or_failed_seed_omission_refused) ... ok\ntest_calibration_target_leak_or_checkpoint_reuse_refused (__main__.Freeze.test_calibration_target_leak_or_checkpoint_reuse_refused) ... ok\ntest_fully_finite_declared_chain_yields_only_fresh_confirmation_winner (__main__.Freeze.test_fully_finite_declared_chain_yields_only_fresh_confirmation_winner) ... ok\ntest_historical_sampled_row_or_unbound_thermal_refused (__main__.Freeze.test_historical_sampled_row_or_unbound_thermal_refused) ... ok\ntest_missing_confirmation_seed_or_exploratory_seed_rescue_refused (__main__.Freeze.test_missing_confirmation_seed_or_exploratory_seed_rescue_refused) ... ok\ntest_old_audit_status_cannot_qualify_by_relabeling_a_version (__main__.Freeze.test_old_audit_status_cannot_qualify_by_relabeling_a_version) ... ok\ntest_wrong_frozen_hyperparameters_and_proof_and_freshness_refused (__main__.Freeze.test_wrong_frozen_hyperparameters_and_proof_and_freshness_refused) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.006s\n\nOK\n"
+    }
+  ],
+  "actual_full_baseline_audit_executed": false,
+  "actual_confirmation_completed": false,
+  "actual_external_candidate_frozen": false,
+  "real_evaluation_target_values_read": false,
+  "GPU_allocation_created": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/released097_selection.py": "b9d8a25242cbe78249a8d4c62eb7cb8be3cc0d3bcf2b4e0caaa4d20929e06fed",
+    "/ml2/alz/analysis/released097_external_selection.py": "13fef85d97eeac2e50adc7bda9088f82770ef2f8738e90444e7d1f38f29d510d",
+    "/ml2/alz/analysis/test_released097_selection.py": "4d592ff56e627fb16e009f82a76ef72295a75c881048f991551c1fbc3685ddd7",
+    "/ml2/alz/analysis/test_released097_external_selection.py": "e00ec87af1cd1829a86791cccbf69c6da0f38b2e0086c692922b9bde38fdae12"
+  },
+  "prepared_full_audit_source_SHA256": {
+    "/ml2/alz/analysis/audit_faithful097.py": "2be33ef40d68885055262adae5d41838a8c9675f9d84b37cdf8d264eed243d29"
+  },
+  "actual_current_incomplete_study_refused_before_model_or_array_import": true,
+  "inherited_pure_test_proof_path": "/ml2/alz/analysis/released097_selection_CPU_qualification.json"
+}

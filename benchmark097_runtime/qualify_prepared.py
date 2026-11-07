@@ -15,7 +15,7 @@ def main():
   results.append(dict(file=name,returncode=p.returncode,stdout=p.stdout,stderr=p.stderr));assert p.returncode==0,name
   count+=int(re.search(r'Ran (\d+) tests?',p.stderr).group(1))
  assert count==23 and 'torch' not in sys.modules
- paths=[*HERE.glob('*.py'),s.PROTOCOL,s.PLAN,HERE/'policy.prepared.json',*s.PROOFS]
+ paths=[*HERE.glob('*.py'),s.PROTOCOL,s.PLAN,s.SELECTION_LOGIC,s.SELECTION_VALIDATOR,HERE/'policy.prepared.json',*s.PROOFS]
  q=dict(status='PREPARED_ACCOUNTING_AND_SYNTHETIC_SELECTION_SCOPE_CPU_TESTS_PASS',UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),
         actual_tests=count,synthetic_frozen_selection_fixture_all45_cells_checked=True,actual_frozen_PG_candidate_qualified=False,
         actual_unfrozen_candidate_admission_refused=True,actual_CFGen_role_confined_controller_settlement_test=True,

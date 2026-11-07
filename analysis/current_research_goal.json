@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T02:05:33.372110+00:00",
+  "UTC": "2026-11-07T02:13:28.777706+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "native_goal_entry_updated": true,
@@ -33,7 +33,7 @@
   "next_distribution_protocol_path": "/ml2/alz/analysis/distribution097b/protocol.json",
   "next_distribution_CPU_qualification_path": "/ml2/alz/analysis/distribution097b/runtime_CPU_qualification.json",
   "distribution_stage2_started_evidence_path": "/ml2/alz/analysis/distribution097b_started_20261106.json",
-  "external_benchmark_prepared_CPU_proof_path": "/ml2/alz/analysis/benchmark097/prepared_CPU_qualification_v4.json",
+  "external_benchmark_prepared_CPU_proof_path": "/ml2/alz/analysis/benchmark097/prepared_CPU_qualification_v6.json",
   "external_benchmark_real_frozen_candidate_qualified": false,
   "latest_distribution_readout_path": "/ml2/alz/analysis/distribution097b_first_result_20261106.json",
   "fresh_seed_confirmation_rule_path": "/ml2/alz/analysis/confirmation097_selection_rule_20261106.json",
@@ -89,5 +89,11 @@
   "faithful_restart_new_fits": 4,
   "faithful_restart_started": true,
   "formulation": "released097_full512row_SBNP_bound_thermal_nonEMA",
-  "faithful_restart_started_evidence_path": "/ml2/alz/analysis/faithful097_started_20261107.json"
+  "faithful_restart_started_evidence_path": "/ml2/alz/analysis/faithful097_started_20261107.json",
+  "faithful_restart_full_audit_prepared_path": "/ml2/alz/analysis/audit_faithful097.py",
+  "faithful_restart_audit_observer_source_path": "/ml2/alz/analysis/after_faithful097_audit.py",
+  "external_benchmark_selection_gate": "Requires corrected full-table SBNP audit and fresh seed2..4 confirmation; old sampled-row variants refused",
+  "external_benchmark_actual_frozen_candidate_qualified": false,
+  "external_benchmark_selection_validator_path": "/ml2/alz/analysis/released097_external_selection.py",
+  "external_benchmark_selection_validator_CPU_proof_path": "/ml2/alz/analysis/released097_selection_CPU_qualification_v2.json"
 }

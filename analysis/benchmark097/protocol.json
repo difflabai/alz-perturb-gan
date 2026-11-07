@@ -28,7 +28,9 @@
     "EMA_decay": 0,
     "generator_gradient_response": "none",
     "penalty_input_domain": "continuous",
-    "architecture": "unchanged PG8 count generator and150D VectorCritic"
+    "architecture": "unchanged PG8 count generator and150D VectorCritic",
+    "prior_regularizer_domain": "all512rows",
+    "critic_thermal": "explicitly_bound"
   },
   "endpoints": {
     "pg": 20000,
@@ -51,5 +53,7 @@
   "activation": false,
   "retain_full_generated_stage_PCs": true,
   "retained_PC_disk_bytes": 5760000000,
-  "retention_purpose": "Reproduce original weighted pooled reservoirs exactly and support independently gated frozen-model diagnostics without regenerating counts; no extra optimizer updates, RNG calls, targets or model changes."
+  "retention_purpose": "Reproduce original weighted pooled reservoirs exactly and support independently gated frozen-model diagnostics without regenerating counts; no extra optimizer updates, RNG calls, targets or model changes.",
+  "PG_model_fidelity_proof_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
+  "historical_sampled_row_PG_fits_eligible_for_freeze": false
 }

@@ -11,20 +11,19 @@ activate()
 import torch,released_adapter as model,released_update as update
 from native_fixture import context
 from state_fingerprint import fingerprint
-spec=importlib.util.spec_from_file_location('unchanged_short_adapter',s.ROOT/'analysis/hpo500/model/released_adapter.py');short=importlib.util.module_from_spec(spec);spec.loader.exec_module(short)
 class Factory(unittest.TestCase):
  def tearDown(self):self.assertFalse(torch.cuda.is_initialized())
  def test_selected_native_recipe_fixed_and_nonEMA(self):
   update.configure(s.CFG);update.configure_hyperparameters(s.hyperparameters());recipe=update.recipe()
   self.assertEqual((recipe.total_steps,recipe.ema_decay,recipe.generator_gradient_response),(20000,0,'none'))
-  self.assertEqual((s.MODEL_DIR/'released_update.py').read_bytes(),(s.ROOT/'analysis/released_tuning_v096/released_update.py').read_bytes())
+  self.assertEqual(s.sha(s.MODEL_DIR/'released_update.py'),s.read(s.MODEL_PROOF)['source_SHA256'][str(s.MODEL_DIR/'released_update.py')])
  def test_all15_native_initializations_and_exact_next_pair_horizon_parity(self):
   update.configure(s.CFG);update.configure_hyperparameters(s.hyperparameters())
   for fold in range(3):
    for seed in range(5):
     with tempfile.TemporaryDirectory() as folder:
      root=Path(folder);(root/'manifest.json').write_text('{}');ctx=context(root,fullwidth=True);ctx.fold=fold;states=[]
-     for adapter,limit in ((short,500),(model,20000)):
+     for adapter,limit in ((model,500),(model,20000)):
       bundle,g,r,u,streams=adapter.build(ctx.mu,ctx.theta,'cpu',fold,seed)
       self.assertEqual(bundle[-1].completed_steps,0);self.assertEqual(u.steps,0)
       adapter.advance(ctx,bundle,g,r,u,execution_limit=limit)

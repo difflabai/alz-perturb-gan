@@ -23,7 +23,7 @@ def main():
    actual_tests=count,actual_frozen_PG_candidate_qualified=True,PG_candidate_id=protocol['PG_candidate_id'],
    actual_all45_authorizations_and_source_pins_checked=True,all_new_models_from_update_zero=True,
    fullwidth_native_optimizer_pairs=30,actual_all15_PG_fold_seed_initializations_qualified=True,
-   native_model_source_unchanged=True,identical_next_pair_state_at500_and20000_limits=True,
+   native_model_source_unchanged_from_faithful_parity=True,prior_regularizer_domain="all512rows",identical_next_pair_state_at500_and20000_limits=True,
    actual_CFGen_role_confined_controller_settlement_test=True,tests=results,GPU_allocation_created=False,CUDA_initialized=False,
    source_SHA256={str(p):b.sha(p) for p in paths},
    limitation='Native CPU optimizer qualification and actual authorization/source closure; full fresh CUDA model endpoints and external outcomes remain unmeasured.')
