@@ -1,0 +1,55 @@
+{
+  "status": "CANONICAL_MULTI_RESERVATION_SUPPORT_CONFIRMED_DUAL_RUNTIME_NOT_IMPLEMENTED",
+  "UTC": "2026-11-07T10:37:35.802096+00:00",
+  "reason": "A new shared co-tenant slowed the third confirmation fit to3368.7678758809925 seconds. Preserve all45 full-length external fits and the original window by preparing qualified concurrency across both already-authorized cards.",
+  "owner_both_GPUs_and_sharing_already_authorized": true,
+  "source_SHA256": {
+    "/ml2/alz/benchmark097_runtime/prepare.py": "5b026cc0c226eb20ab76e7d722daacc9f4c6b9ff799877eb055f0d618c89ff73",
+    "/ml2/alz/benchmark097_runtime/project_runner_gpu0.py": "562507e0d1e5554dfa71e7f32ae16322bcf460caee2b3fc440681534e2c86fb5",
+    "/ml2/alz/benchmark097_runtime/launch_core_gpu0.py": "f4de7b30d845886c30307dc23fad0b79c8a2f7c67f2afa3a9fcad8ae2c4aaaa4",
+    "/ml2/alz/benchmark097_runtime/binding.py": "fa7b6d5d69e66796873e9c24bdd9ada4af45aaa3647240ba7afe3a6c084bde74",
+    "/ml2/alz/benchmark097_runtime/resource_profile.py": "3f6491f8722dd7246fad52abfb0358a03118afa6ad946491a50ee6e1f10fc4e1",
+    "/ml2/alz/benchmark097_runtime/preset_scope.py": "9e920c7bb04fb3b4ab1792f9710bd40dd1a2e9d3942315f8ce3a4970511a47c4",
+    "/ml2/alz/analysis/run_benchmark097.py": "ec935e71bcc8bcafdd5a200ca72cff049520b87bab2d2dc5f4b61d769773c67b",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/budget_executor_v2_20261103_r2/budget_controller.py": "c8520f426e6b7a94741dd96804b96d9d22a224bff973b7e85d765e5b83c09848"
+  },
+  "canonical_controller_findings": [
+    "Unchanged Controller.reserve supports multiple distinct live exact-owner reservations with aggregate card-hour accounting; uncertain, expired, duplicate or absent-owner reservations are rejected.",
+    "The present ALZ prepare.py explicitly refuses any open reservation and stores a single one-use backend binding; those ALZ adapter choices impose serial execution.",
+    "Each existing guard already accounts one scoped scientific cell, one physical GPU, one exact live owner and one fresh immutable ledger.",
+    "Current ALZ launchers hold an exclusive global core_phase.lock, and the binding already supports qualified dynamic sharing guard modules on GPU0 and GPU1."
+  ],
+  "proposed_new_runtime_directories": [
+    "benchmark097_dual_gpu0_runtime",
+    "benchmark097_dual_gpu1_runtime"
+  ],
+  "planned_before_activation": [
+    "Copy into new prepared namespaces; leave all101 active parent source pins unchanged.",
+    "Keep exactly45 fresh cells, fixed recipes, seeds, native update counts, outputs, full-PC retention, original57 primary and prespecified53 sensitivity. Freeze the PG candidate only after all9 fresh confirmation fits and independent raw-artifact audit.",
+    "Bind reviewed backend metadata per exact allocation rather than overwriting another live cell; retain canonical Controller source and atomic aggregate caps.",
+    "Use a shared global phase lock that excludes legacy exclusive owners, plus exclusive per-device and per-cell owned locks. Test both concurrency and legacy exclusion.",
+    "Retain at most one ALZ cell per physical card; jointly reserve peer ALZ host-growth envelopes and preserve both physical free floors and foreign-growth/desktop sharing guards.",
+    "Run actual CPU source/scope/admission tests for both assigned-device lanes and every45 cell; preserve native model parity and finisher/count/restore audits.",
+    "Serialize parent Git writes, preparation and admission; let both finite GPU children execute concurrently. No automatic retry or foreign signals. On a failure stop new admissions and account every in-flight outcome.",
+    "After concrete source preparation and checks, reconcile only the exact owned CPU parent/53 observer; preserve the current original9-fit driver/guard/worker and all current trials.",
+    "Qualify and activate both benchmark plans together after PG freeze; aggregate all45 and the unchanged prespecified53 cohort before final objective audit."
+  ],
+  "current_confirmation_driver_preserved": {
+    "pid": 1143735,
+    "birth": 19836875,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "current_CPU_parent_and_53_observer_unchanged": [
+    1064251,
+    1064252
+  ],
+  "new_dual_runtime_implemented": false,
+  "new_dual_runtime_qualified": false,
+  "CPU_handoff_performed": false,
+  "new_GPU0_allocation_created": false,
+  "existing_GPU_job_restarted": false,
+  "full45_scope_reduced": false,
+  "new_external_target_values_read": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
