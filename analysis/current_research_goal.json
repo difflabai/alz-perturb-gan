@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T03:42:53.622711+00:00",
+  "UTC": "2026-11-07T04:06:45.146641+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/analysis/localfaith097/current_release_check_before_activation.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "FOUR_FULL_BASELINES_INDEPENDENTLY_AUDITED_TWELVE_FRESH20K_COORDINATES_ACTUALLY_STARTED",
+  "study_status": "FIRST_OF_TWELVE_FRESH20K_COORDINATE_FITS_AUDITED_PAIRED_SEED1_RUNNING",
   "study_protocol_path": "/ml2/alz/analysis/localfaith097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/localfaith097-paired-search/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/localfaith097-paired-search/identity.json",
@@ -87,8 +87,8 @@
     "c014_saved_checkpoint_diagnosis_path": "/ml2/alz/analysis/distribution097/c014_checkpoint_diagnosis.json"
   },
   "remaining_requirements": [
-    "Complete and independently audit all four current full20k calibration attempts.",
-    "Choose further hyperparameter refinement versus fresh-seed confirmation from full-length evidence; keep formula fixed.",
+    "Complete and independently audit all12 fresh20k coordinate trials at paired seeds0/1; retain all four completed baseline controls and all failures.",
+    "Select fresh-seed confirmation settings from the complete full-length paired evidence; keep the released formulation fixed.",
     "Complete all frozen selected settings at fresh initialization seeds2..4 and retain failures and controls.",
     "Freeze the confirmed PG setting before new external evaluation; qualify all45 fresh model cells.",
     "Complete PG/scVI/CFGen \u00d73folds \u00d75seeds plus matched resampling, audit native states/counts/scores/costs, compute declared paired distribution statistics.",
@@ -103,20 +103,21 @@
   "conditional_local_search_design_CPU_proof_path": "/ml2/alz/analysis/released097_local_search_design_CPU_qualification_v2.json",
   "conditional_local_search_frozen": true,
   "conditional_local_search_activated": true,
-  "study_completed_attempts": 0,
+  "study_completed_attempts": 1,
   "latest_released_first20k_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json",
   "latest_released_first20k_mixture_diagnostic_path": "/ml2/alz/analysis/faithful097_first20k_mixture_diagnostic_20261107.json",
   "latest_released_calibration_readout": {
-    "candidate_id": "f000",
     "seed": 0,
     "endpoint": 20000,
-    "cell_energy_distance": 0.2805434126347235,
-    "energy_score": 1.9009654459270127,
-    "spread_ratio": 0.9777870063157865,
+    "candidate_id": "t000",
+    "cell_energy_distance": 0.29588410092537387,
+    "energy_score": 1.975658379162815,
+    "spread_ratio": 0.9379033284484855,
     "matched_resampling_cell_energy_distance": 0.24277825308317968,
     "matched_resampling_energy_score": 2.079287181278266,
-    "actual_GPU_seconds": 1425.2270227230038,
-    "one_initialization_only": true
+    "actual_GPU_seconds": 1423.9727248519775,
+    "one_initialization_only": true,
+    "selection_complete": false
   },
   "conditional_local_search_prepared_protocol_path": "/ml2/alz/analysis/localfaith097/protocol.json",
   "conditional_local_search_prepared_CPU_proof_path": "/ml2/alz/analysis/localfaith097/prepared_accounting_CPU_qualification_v2.json",
@@ -164,5 +165,7 @@
   "baseline_completed_fits": 4,
   "baseline_total_actual_GPU_seconds": 5699.271528569021,
   "conditional_local_search_started_evidence_path": "/ml2/alz/analysis/localfaith097_started_20261107.json",
-  "conditional_local_search_current_anchor": "f000"
+  "conditional_local_search_current_anchor": "f000",
+  "latest_local_coordinate_endpoint_readout_path": "/ml2/alz/analysis/localfaith097_first20k_readout_20261107.json",
+  "all4_released_baseline_mixture_diagnostic_path": "/ml2/alz/analysis/faithful097_all4_mixture_diagnostic_20261107.json"
 }

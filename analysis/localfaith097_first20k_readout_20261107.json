@@ -1,0 +1,164 @@
+{
+  "status": "FIRST_FRESH_COORDINATE20K_SAVED_SCORE_AND_SETTLEMENT_AUDIT_PASS",
+  "UTC": "2026-11-07T04:05:58.920683+00:00",
+  "attempt": "CAL_GPU0_V1_lf097_t000_f0_pg_s0",
+  "initial_completed_updates": 0,
+  "endpoint": 20000,
+  "seed": 0,
+  "hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.03,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.003
+  },
+  "metrics": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.975658379162815,
+    "cell_energy_distance": 0.29588410092537387,
+    "spread_ratio": 0.9379033284484855,
+    "within_condition_spread_ratio": 0.8744602485705284,
+    "coverage80": 0.625,
+    "generated_zero_count_rate": 0.0,
+    "per_donor_energy_score": [
+      1.1199893839962014,
+      2.7967404740345296,
+      1.7594352371013968,
+      2.2264684215191326
+    ],
+    "per_stage_cell_energy_distance": [
+      0.7888959146680632,
+      1.5846962492471537,
+      1.2499122247047572,
+      0.5103364693151322
+    ]
+  },
+  "matched_nominal_seed0_metrics": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9009654459270127,
+    "cell_energy_distance": 0.2805434126347235,
+    "spread_ratio": 0.9777870063157865,
+    "within_condition_spread_ratio": 0.9098323628540306,
+    "coverage80": 0.7259615384615384,
+    "generated_zero_count_rate": 1.8750000000000002e-05,
+    "per_donor_energy_score": [
+      1.2013774528118741,
+      2.760463060505384,
+      1.772322878590658,
+      1.8696983918001349
+    ],
+    "per_stage_cell_energy_distance": [
+      0.8343051269575126,
+      1.6872571311343174,
+      0.9682222075083216,
+      0.5500221448538092
+    ]
+  },
+  "matched_resampling": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 2.079287181278266,
+    "cell_energy_distance": 0.24277825308317968,
+    "spread_ratio": 1.086688043301637,
+    "within_condition_spread_ratio": 0.9935126950887428,
+    "coverage80": 0.6778846153846154,
+    "generated_zero_count_rate": 0.0,
+    "per_donor_energy_score": [
+      1.272282323410263,
+      3.047641176747636,
+      1.95978725566323,
+      2.0374379692919344
+    ],
+    "per_stage_cell_energy_distance": [
+      0.9114143695390835,
+      1.8390837374697222,
+      1.132453828552058,
+      0.5532384176654261
+    ]
+  },
+  "delta_vs_nominal": {
+    "cell_energy_distance": 0.015340688290650384,
+    "energy_score": 0.0746929332358024,
+    "spread_ratio": -0.03988367786730107,
+    "coverage80": -0.10096153846153844
+  },
+  "actual_GPU_seconds": 1423.9727248519775,
+  "saved_artifacts_hashed": 17,
+  "calibration_replicates_independently_rescored": 4,
+  "owned_trial_closed": true,
+  "scope": "One exploratory seed only; paired seed1 remains required. No model selection or search change.",
+  "full12fit_audit_complete": false,
+  "external45fit_comparison_complete": false,
+  "new_model_fits": 0,
+  "new_optimizer_updates": 0,
+  "CUDA_initialized": false,
+  "evaluation_target_values_read": false,
+  "SOTA_claim": false,
+  "full_goal_complete": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_localfaith097_first_endpoint.py": "3b560e22ce519b424970925e22c321060db596f9ac102cd6f538664cfb02841e",
+    "/ml2/alz/calibration.py": "ce1ea5d5086db11712aa075b81daca799f2101a9ca3d8df3ff03e0b3d45da747"
+  },
+  "input_SHA256": {
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t000_f0_pg_s0.json": "8ec6ad1399c359a6dc2f2435e72ac8b68c2ecca945c696560ebfd5a8c9590212",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t000_f0_pg_s0/authorization.json": "feb950594db9c3c6fefcac2b54e46a3ec52f74200cb0017af108df30d4f538c5",
+    "/ml2/alz/analysis/faithful097/model/released_update.py": "7cba670fbc51740938b01ecb5f637bbc8cc23f4ed889e8f00d829b886643e3a8",
+    "/ml2/alz/analysis/faithful097/model/released_adapter.py": "b3fe9b78771f1a85fa86646ae2e6c74e8725af211a7484ee0e08fb5b62093f09",
+    "/ml2/alz/analysis/faithful097/model/release_env.py": "841568c7d2132ac307bbc399f8739713aa1636a90259680dbae84f37c5dd115c",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t000_f0_pg_s0-settlement.json": "29c8e8b5c915904d3c8cb589e0c5dd92af537c614abedeeee16ef10eae54d354",
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json": "090be880e2a9758348f2075419593b693523d9792db910d4bc69bb8bf5826ca4",
+    "/ml2/alz/analysis/faithful097_final_independent_audit_20261107.json": "b67ad4d2f940acc4671301d74bfda3189a82f1f20b10dbb0a1894d058f4b8963"
+  },
+  "saved_artifact_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/fit/final.pt": "fb1da2d3dcc65cd0fe6172b3ccaf1d7f20c522a394a0ff7655a8791913fd4f92",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r0/stage0_exemplar.npz": "ae108db48bd1511798040422de2f9ac6b48c4fc656ee50bf8688c5330a668171",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r0/stage1_exemplar.npz": "7c8c1d3f1ff198a42a58e3c098c625e2c3d15dfa9ba4cd3dc312e55427d57d9d",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r0/stage2_exemplar.npz": "1ed45fc9df91ee0659509d779ba162d6e6bb8c861df11fc3754e406b9325d229",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r0/stage3_exemplar.npz": "a369f81236feac58d302e8d061a4ed19221da942bcc28512eef789cca135a614",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r0/arrays.npz": "bc37936fa775028c1535a3cdc9e2f706d99524ef4b55f3e1d00bf34dcf88ca68",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r0/metrics.json": "dbe92f06743e1525089dc7eea0f188402f11a1f2e47ca9fe2838a98c729cc573",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r1/stage0_exemplar.npz": "eb6ec211d4d019a22518fed82b15abb72e9b2bc6f45b994e03ce8aadb3e108ef",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r1/stage1_exemplar.npz": "db1aa2f053a584f648c5233b99d6e2c377bf57560ccd6644483c90bc21875d6b",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r1/stage2_exemplar.npz": "1b3825e0a681d2486d2fb8538e7160548102fc09af998abc9b8a3adb9ce7e7d6",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r1/stage3_exemplar.npz": "713a474a88e504995b9ef35d2ea9baf86a208d296dbe361c816ab99e0f190ead",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r1/arrays.npz": "7167b051de7ed0cc49512e75824da02606bf5c7e066cbd88e4c8a0bec12f33a6",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/r1/metrics.json": "6da767d93326986f7d2dcb42106d4e12fbeffa0e2034c060c59922b3eaa6562b",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/resampling_r0/arrays.npz": "e2d99112bf69bd3fa6687a9ddb62a6eb8f0dfcdb292c6350cad1fe5ae01abd13",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/resampling_r0/metrics.json": "e2f988dd11d3b6010d0cf1f8097620e7005f51eb8ccf7d82ff03e4dfacc00230",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/resampling_r1/arrays.npz": "793071d2f104124c43753b16461a9b300fda355e591eead92e3a759427773225",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t000_f0_pg_s0/resampling_r1/metrics.json": "2f73941a19545af58dbb6a739ef0785c2c04cb16c8e2ea2d4a9e7906f6fb6be6"
+  }
+}
