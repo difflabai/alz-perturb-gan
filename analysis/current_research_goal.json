@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T11:18:37.675358+00:00",
+  "UTC": "2026-11-07T11:21:08.247175+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -114,16 +114,16 @@
   "conditional_local_search_possible_settings_native_probe_identity_path": "/ml2/alz/artifacts/localfaith097-possible-native.identity.json",
   "conditional_local_search_possible_settings_native_CPU_proof_path": "/ml2/alz/analysis/localfaith097/possible_settings_native_CPU_qualification.json",
   "conditional_local_search_all24_possible_prefixes_qualified": true,
-  "research_pipeline_source_path": "/ml2/alz/analysis/run_released097_adaptive_pipeline.py",
+  "research_pipeline_source_path": "/ml2/alz/analysis/run_released097_dual_pipeline.py",
   "research_pipeline_preparation_checks_path": "/ml2/alz/analysis/released097_pipeline_preparation_checks.json",
   "research_pipeline_started": true,
-  "research_pipeline_identity_path": "/ml2/alz/artifacts/released097-adaptive-research-pipeline/identity.json",
-  "research_pipeline_started_evidence_path": "/ml2/alz/analysis/released097_adaptive_pipeline_started_20261107.json",
-  "research_pipeline_progress_path": "/ml2/alz/artifacts/released097-adaptive-research-pipeline/progress.json",
-  "research_pipeline_behavior": "Wait original exact12fit driver, independently audit it, optionally freeze one/two lower-direction paired20k settings only if no joint gain and conservative full45/worst9confirmation/cleanup reserve permits; audit combined evidence, then freshseed2..4 confirmation and all45fresh external fits. Stop on actual source/qualification/endpoint failures; no retries or foreign signals.",
+  "research_pipeline_identity_path": "/ml2/alz/artifacts/released097-dual-research-pipeline/identity.json",
+  "research_pipeline_started_evidence_path": "/ml2/alz/analysis/released097_dual_pipeline_started_20261107.json",
+  "research_pipeline_progress_path": "/ml2/alz/artifacts/released097-dual-research-pipeline/progress.json",
+  "research_pipeline_behavior": "Preserve exact original9-fit driver and all current fresh models. After all9 close, independently audit, freeze one PG with original selector, qualify actual43-test dual runtime, then execute all45 fresh fixed-recipe models in at most one ALZ cell per physical card. Same57primary and prespecified53sensitivity; no warmstarts, retries or foreign signals.",
   "latest_released_paired_nominal_result_path": "/ml2/alz/analysis/faithful097_nominal_two_seed_readout_20261107.json",
   "calibration_excluded53_plan_path": "/ml2/alz/analysis/benchmark097_calibration_excluded53_plan.json",
-  "calibration_excluded53_source_path": "/ml2/alz/analysis/score_calibration_excluded53.py",
+  "calibration_excluded53_source_path": "/ml2/alz/analysis/score_calibration_excluded53_dual.py",
   "calibration_excluded53_CPU_preparation_path": "/ml2/alz/analysis/benchmark097_calibration_excluded53_CPU_preparation.json",
   "calibration_excluded53_completed": false,
   "calibration_excluded53_donor_counts_by_fold": [
@@ -132,8 +132,8 @@
     17
   ],
   "original57_primary_comparison_preserved": true,
-  "calibration_excluded53_observer_identity_path": "/ml2/alz/artifacts/released097-adaptive-calibration53-boundary/identity.json",
-  "calibration_excluded53_observer_started_evidence_path": "/ml2/alz/analysis/released097_adaptive_pipeline_started_20261107.json",
+  "calibration_excluded53_observer_identity_path": "/ml2/alz/artifacts/released097-dual-calibration53-boundary/identity.json",
+  "calibration_excluded53_observer_started_evidence_path": "/ml2/alz/analysis/released097_dual_pipeline_started_20261107.json",
   "calibration_excluded53_observer_started": true,
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
   "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory_v2.py",
@@ -220,7 +220,9 @@
   "dual_GPU_benchmark_prepared_CPU_proof_path": "/ml2/alz/analysis/benchmark097/dual_prepared_CPU_qualification_v4.json",
   "dual_GPU_benchmark_prepared_CPU_tests": 42,
   "dual_GPU_benchmark_analysis_preparation_path": "/ml2/alz/analysis/benchmark097_dual_analysis_CPU_preparation.json",
-  "dual_GPU_benchmark_CPU_handoff_performed": false,
+  "dual_GPU_benchmark_CPU_handoff_performed": true,
   "dual_GPU_benchmark_CPU_continuation_source_path": "/ml2/alz/analysis/run_released097_dual_pipeline.py",
-  "dual_GPU_benchmark_CPU_continuation_source_validated": true
+  "dual_GPU_benchmark_CPU_continuation_source_validated": true,
+  "dual_GPU_benchmark_CPU_handoff_evidence_path": "/ml2/alz/analysis/released097_dual_CPU_handoff_20261107.json",
+  "external_benchmark_aggregation_source_path": "/ml2/alz/analysis/aggregate_benchmark097_dual.py"
 }
