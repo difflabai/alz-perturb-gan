@@ -1,0 +1,102 @@
+{
+  "status": "TWO_FRESH_NATIVE_PG_FOLDS_PASS5000_IMMUTABLE_STATE_CHECK_FULL20K_PENDING",
+  "UTC": "2026-11-07T16:51:34.423383+00:00",
+  "benchmark_protocol_SHA256": "fd92d0afe5cfa9e6b152ae8a14858ffacb62b804d38bd876e2e589862db71de8",
+  "frozen_PG_hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "rows": [
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "pg",
+        "seed": 0
+      },
+      "GPU_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f0_pg_s0/authorization.json",
+      "authorization_SHA256": "bc66656ba901279b20e70bccfef5e80c0b2dccb06a6e9be2e757b57576baa25c",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_external097_f0_pg_s0/fit/checkpoint05000.pt",
+      "checkpoint_SHA256": "2c3ec06b27b310f9644f871238d852e1bdf1c4d6d63e5ca5e5992c4a23b8a042",
+      "checkpoint_completed_updates": 5000,
+      "fixed_endpoint": 20000,
+      "all_saved_model_tensors_finite": true,
+      "particle_rows_used": 512,
+      "total_particle_draws": 160000,
+      "unsampled_row_move_total": 0,
+      "from_scratch": true,
+      "initial_logged_update": 1,
+      "last_logged_update": 9751,
+      "guard": {
+        "pid": 2519402,
+        "birth": 22528271,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 2519505,
+        "birth": 22528385,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "checkpoint_UTC": "2026-11-07T16:32:15.077228+00:00",
+      "worker_elapsed_seconds_at5000": 1434.5354797840118,
+      "first5000_update_rate_per_second": 3.4854488233032868,
+      "linear_training20k_hours_including_startup": 1.5939283108711242
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "pg",
+        "seed": 0
+      },
+      "GPU_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f1_pg_s0/authorization.json",
+      "authorization_SHA256": "25c30808122d5bb3d23d3fd2a069405b795ffdcf51f6dedf863f850c619c5b6a",
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_external097_f1_pg_s0/fit/checkpoint05000.pt",
+      "checkpoint_SHA256": "6dbbb32fce79e02701c8a8abd4308c184f7330ba500d1a71b3a202ad5bc292d9",
+      "checkpoint_completed_updates": 5000,
+      "fixed_endpoint": 20000,
+      "all_saved_model_tensors_finite": true,
+      "particle_rows_used": 512,
+      "total_particle_draws": 160000,
+      "unsampled_row_move_total": 0,
+      "from_scratch": true,
+      "initial_logged_update": 1,
+      "last_logged_update": 5251,
+      "guard": {
+        "pid": 2548057,
+        "birth": 22574636,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 2548139,
+        "birth": 22574758,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "checkpoint_UTC": "2026-11-07T16:49:16.389559+00:00",
+      "worker_elapsed_seconds_at5000": 1992.1186237335205,
+      "first5000_update_rate_per_second": 2.5098906964833607,
+      "linear_training20k_hours_including_startup": 2.2134651374816894
+    }
+  ],
+  "completed_benchmark_fits": 1,
+  "active_benchmark_fits": 2,
+  "pending_benchmark_fits": 42,
+  "required_benchmark_fits": 45,
+  "CPU_observer_CUDA_initialized": false,
+  "new_RNA_generation": false,
+  "external_target_arrays_read": false,
+  "external_scores_used_for_selection": false,
+  "goal_or_training_endpoint_reduced": false,
+  "throughput_limit": "First5000updates include initialization and the observed shared load. Linear estimates omit generation/scoring and cannot guarantee future runtime or the full45 completion window.",
+  "full20k_PG_fits_completed": 0,
+  "full45_complete": false,
+  "full57_primary_and53_sensitivity_pending": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
