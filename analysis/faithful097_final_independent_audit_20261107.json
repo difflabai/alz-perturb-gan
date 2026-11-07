@@ -1,0 +1,444 @@
+{
+  "status": "INDEPENDENT_RELEASED097_FRESH_BASELINE4_AUDIT_PASS",
+  "UTC": "2026-11-07T03:40:42.546752+00:00",
+  "required_attempts": 4,
+  "all_planned_attempts_resolved": true,
+  "all_new_models_from_update_zero": true,
+  "training_seeds": [
+    0,
+    1
+  ],
+  "selection_seeds_are_exploratory": true,
+  "formulation": {
+    "native_version": "0.9.7",
+    "recipe": "bispf_optimized",
+    "EMA_decay": 0,
+    "generator_gradient_response": "none",
+    "prior_regularizer_domain": "all512rows",
+    "critic_thermal": "explicitly_bound",
+    "penalty_input_domain": "continuous"
+  },
+  "model_parity_proof_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
+  "model_parity_proof_SHA256": "b3ec603f6091ddd413fd5f264be0036503dd304339a60ae6f744a9597b607a3c",
+  "summary": {
+    "candidates": [
+      {
+        "candidate_id": "f000",
+        "hyperparameters": {
+          "generator_lr": 0.012,
+          "critic_lr": 0.018,
+          "particle_lr": 0.03,
+          "reg_coeff": 1.0,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.01
+        },
+        "seeds": [
+          0,
+          1
+        ],
+        "all_seeds_finite": true,
+        "failed_seeds": [],
+        "per_seed": [
+          {
+            "seed": 0,
+            "finite": true,
+            "metrics": {
+              "metric_role": "calibration_selection",
+              "generation_replicates": 2,
+              "donors": [
+                "H20.33.032",
+                "H21.33.001",
+                "H21.33.023",
+                "H21.33.025"
+              ],
+              "training_seed": 0,
+              "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+              "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+              "sampling_contract": "calibration_equal_stage375_priority_v1",
+              "energy_score": 1.9009654459270127,
+              "cell_energy_distance": 0.2805434126347235,
+              "spread_ratio": 0.9777870063157865,
+              "within_condition_spread_ratio": 0.9098323628540306,
+              "coverage80": 0.7259615384615384,
+              "generated_zero_count_rate": 1.8750000000000002e-05,
+              "per_donor_energy_score": [
+                1.2013774528118741,
+                2.760463060505384,
+                1.772322878590658,
+                1.8696983918001349
+              ],
+              "per_stage_cell_energy_distance": [
+                0.8343051269575126,
+                1.6872571311343174,
+                0.9682222075083216,
+                0.5500221448538092
+              ]
+            },
+            "baseline_metrics": {
+              "metric_role": "calibration_selection",
+              "generation_replicates": 2,
+              "donors": [
+                "H20.33.032",
+                "H21.33.001",
+                "H21.33.023",
+                "H21.33.025"
+              ],
+              "training_seed": 0,
+              "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+              "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+              "sampling_contract": "calibration_equal_stage375_priority_v1",
+              "energy_score": 2.079287181278266,
+              "cell_energy_distance": 0.24277825308317968,
+              "spread_ratio": 1.086688043301637,
+              "within_condition_spread_ratio": 0.9935126950887428,
+              "coverage80": 0.6778846153846154,
+              "generated_zero_count_rate": 0.0,
+              "per_donor_energy_score": [
+                1.272282323410263,
+                3.047641176747636,
+                1.95978725566323,
+                2.0374379692919344
+              ],
+              "per_stage_cell_energy_distance": [
+                0.9114143695390835,
+                1.8390837374697222,
+                1.132453828552058,
+                0.5532384176654261
+              ]
+            }
+          },
+          {
+            "seed": 1,
+            "finite": true,
+            "metrics": {
+              "metric_role": "calibration_selection",
+              "generation_replicates": 2,
+              "donors": [
+                "H20.33.032",
+                "H21.33.001",
+                "H21.33.023",
+                "H21.33.025"
+              ],
+              "training_seed": 1,
+              "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+              "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+              "sampling_contract": "calibration_equal_stage375_priority_v1",
+              "energy_score": 2.098323730108719,
+              "cell_energy_distance": 0.30211045128460867,
+              "spread_ratio": 0.9281311966699651,
+              "within_condition_spread_ratio": 0.8544890992961155,
+              "coverage80": 0.6394230769230769,
+              "generated_zero_count_rate": 1.5625e-06,
+              "per_donor_energy_score": [
+                1.1546636822099434,
+                3.269833328553129,
+                1.7197940860539782,
+                2.2490038236178256
+              ],
+              "per_stage_cell_energy_distance": [
+                0.7748649186889276,
+                1.9190842449336003,
+                1.3029828901112612,
+                0.5357991175505719
+              ]
+            },
+            "baseline_metrics": {
+              "metric_role": "calibration_selection",
+              "generation_replicates": 2,
+              "donors": [
+                "H20.33.032",
+                "H21.33.001",
+                "H21.33.023",
+                "H21.33.025"
+              ],
+              "training_seed": 1,
+              "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+              "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+              "sampling_contract": "calibration_equal_stage375_priority_v1",
+              "energy_score": 2.0814045098447242,
+              "cell_energy_distance": 0.22888526008152432,
+              "spread_ratio": 1.089383296551302,
+              "within_condition_spread_ratio": 0.996161301507612,
+              "coverage80": 0.6634615384615384,
+              "generated_zero_count_rate": 0.0,
+              "per_donor_energy_score": [
+                1.271577429600569,
+                3.0322623871947756,
+                1.9984319036294795,
+                2.0233463189540717
+              ],
+              "per_stage_cell_energy_distance": [
+                0.9584722675422146,
+                1.8071349131033703,
+                1.0769299151655627,
+                0.5926959501979292
+              ]
+            }
+          }
+        ],
+        "mean": {
+          "cell_energy_distance": 0.2913269319596661,
+          "energy_score": 1.999644588017866,
+          "spread_ratio": 0.9529591014928758,
+          "within_condition_spread_ratio": 0.882160731075073,
+          "coverage80": 0.6826923076923077
+        },
+        "SD": {
+          "cell_energy_distance": 0.015250199279446177,
+          "energy_score": 0.13955338106822626,
+          "spread_ratio": 0.03511195972586868,
+          "within_condition_spread_ratio": 0.03913359695479609,
+          "coverage80": 0.0611919329872974
+        },
+        "mean_matched_resampling": {
+          "cell_energy_distance": 0.235831756582352,
+          "energy_score": 2.080345845561495,
+          "spread_ratio": 1.0880356699264695,
+          "within_condition_spread_ratio": 0.9948369982981774,
+          "coverage80": 0.6706730769230769
+        },
+        "joint_quality": true
+      },
+      {
+        "candidate_id": "f001",
+        "hyperparameters": {
+          "generator_lr": 0.006,
+          "critic_lr": 0.009,
+          "particle_lr": 0.015,
+          "reg_coeff": 1.0,
+          "reg_kappa": 0.5,
+          "prior_reg": 0.01
+        },
+        "seeds": [
+          0,
+          1
+        ],
+        "all_seeds_finite": true,
+        "failed_seeds": [],
+        "per_seed": [
+          {
+            "seed": 0,
+            "finite": true,
+            "metrics": {
+              "metric_role": "calibration_selection",
+              "generation_replicates": 2,
+              "donors": [
+                "H20.33.032",
+                "H21.33.001",
+                "H21.33.023",
+                "H21.33.025"
+              ],
+              "training_seed": 0,
+              "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+              "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+              "sampling_contract": "calibration_equal_stage375_priority_v1",
+              "energy_score": 2.082989412898513,
+              "cell_energy_distance": 0.27502356676161543,
+              "spread_ratio": 0.835225944320275,
+              "within_condition_spread_ratio": 0.7552193659577149,
+              "coverage80": 0.5721153846153846,
+              "generated_zero_count_rate": 0.00011875000000000001,
+              "per_donor_energy_score": [
+                1.1522150994300997,
+                3.025920640936177,
+                2.0885142861269337,
+                2.065307625100841
+              ],
+              "per_stage_cell_energy_distance": [
+                0.9379769645988194,
+                1.7356980272108187,
+                1.0756211634912143,
+                0.5519625237560115
+              ]
+            },
+            "baseline_metrics": {
+              "metric_role": "calibration_selection",
+              "generation_replicates": 2,
+              "donors": [
+                "H20.33.032",
+                "H21.33.001",
+                "H21.33.023",
+                "H21.33.025"
+              ],
+              "training_seed": 0,
+              "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+              "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+              "sampling_contract": "calibration_equal_stage375_priority_v1",
+              "energy_score": 2.079287181278266,
+              "cell_energy_distance": 0.24277825308317968,
+              "spread_ratio": 1.086688043301637,
+              "within_condition_spread_ratio": 0.9935126950887428,
+              "coverage80": 0.6778846153846154,
+              "generated_zero_count_rate": 0.0,
+              "per_donor_energy_score": [
+                1.272282323410263,
+                3.047641176747636,
+                1.95978725566323,
+                2.0374379692919344
+              ],
+              "per_stage_cell_energy_distance": [
+                0.9114143695390835,
+                1.8390837374697222,
+                1.132453828552058,
+                0.5532384176654261
+              ]
+            }
+          },
+          {
+            "seed": 1,
+            "finite": true,
+            "metrics": {
+              "metric_role": "calibration_selection",
+              "generation_replicates": 2,
+              "donors": [
+                "H20.33.032",
+                "H21.33.001",
+                "H21.33.023",
+                "H21.33.025"
+              ],
+              "training_seed": 1,
+              "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+              "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+              "sampling_contract": "calibration_equal_stage375_priority_v1",
+              "energy_score": 2.0307753329770426,
+              "cell_energy_distance": 0.3152744960257321,
+              "spread_ratio": 0.9187787243564136,
+              "within_condition_spread_ratio": 0.8562551741583773,
+              "coverage80": 0.625,
+              "generated_zero_count_rate": 1.09375e-05,
+              "per_donor_energy_score": [
+                1.2299402382947457,
+                3.1482801888662295,
+                1.8183304389745119,
+                1.9265504657726822
+              ],
+              "per_stage_cell_energy_distance": [
+                0.7957232358767374,
+                1.8063439752990638,
+                0.9379484758507681,
+                0.621730021963641
+              ]
+            },
+            "baseline_metrics": {
+              "metric_role": "calibration_selection",
+              "generation_replicates": 2,
+              "donors": [
+                "H20.33.032",
+                "H21.33.001",
+                "H21.33.023",
+                "H21.33.025"
+              ],
+              "training_seed": 1,
+              "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+              "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+              "sampling_contract": "calibration_equal_stage375_priority_v1",
+              "energy_score": 2.0814045098447242,
+              "cell_energy_distance": 0.22888526008152432,
+              "spread_ratio": 1.089383296551302,
+              "within_condition_spread_ratio": 0.996161301507612,
+              "coverage80": 0.6634615384615384,
+              "generated_zero_count_rate": 0.0,
+              "per_donor_energy_score": [
+                1.271577429600569,
+                3.0322623871947756,
+                1.9984319036294795,
+                2.0233463189540717
+              ],
+              "per_stage_cell_energy_distance": [
+                0.9584722675422146,
+                1.8071349131033703,
+                1.0769299151655627,
+                0.5926959501979292
+              ]
+            }
+          }
+        ],
+        "mean": {
+          "cell_energy_distance": 0.29514903139367377,
+          "energy_score": 2.056882372937778,
+          "spread_ratio": 0.8770023343383443,
+          "within_condition_spread_ratio": 0.8057372700580461,
+          "coverage80": 0.5985576923076923
+        },
+        "SD": {
+          "cell_energy_distance": 0.028461705031716942,
+          "energy_score": 0.03692092998588817,
+          "spread_ratio": 0.059080737350541625,
+          "within_condition_spread_ratio": 0.07144310512135175,
+          "coverage80": 0.037395070158903976
+        },
+        "mean_matched_resampling": {
+          "cell_energy_distance": 0.235831756582352,
+          "energy_score": 2.080345845561495,
+          "spread_ratio": 1.0880356699264695,
+          "within_condition_spread_ratio": 0.9948369982981774,
+          "coverage80": 0.6706730769230769
+        },
+        "joint_quality": true
+      }
+    ],
+    "ranking": [
+      "f000",
+      "f001"
+    ],
+    "ranking_seeds": [
+      0,
+      1
+    ],
+    "proposed_external_candidate": null,
+    "all_planned_attempts_resolved": true,
+    "failed_seeds_not_dropped": true,
+    "heldout_used": false,
+    "independent_population_confirmation": false,
+    "SOTA_claim": false,
+    "full_goal_complete": false,
+    "reference_id": "f000",
+    "proposed_confirmation_configurations": [
+      {
+        "candidate_id": "f000",
+        "hyperparameters": {
+          "generator_lr": 0.012,
+          "critic_lr": 0.018,
+          "particle_lr": 0.03,
+          "reg_coeff": 1.0,
+          "reg_kappa": 1.0,
+          "prior_reg": 0.01
+        },
+        "roles": [
+          "primary_distance",
+          "joint_quality",
+          "released_reference"
+        ]
+      }
+    ]
+  },
+  "result_SHA256": {
+    "CAL_GPU0_V1_faith097_f000_f0_pg_s0": "090be880e2a9758348f2075419593b693523d9792db910d4bc69bb8bf5826ca4",
+    "CAL_GPU0_V1_faith097_f000_f0_pg_s1": "e05cdb19ecb41376c8e56317e6402fb8743aa545a52ca8dd79774531d6563f3c",
+    "CAL_GPU0_V1_faith097_f001_f0_pg_s0": "2dcf3551cb764457b7fb33970b9a9ad557009836801a84607d92c9b53d97a1f6",
+    "CAL_GPU0_V1_faith097_f001_f0_pg_s1": "feefa49805d6bb7aecf0379b671e0ee3b9fce2dfbb1815f23065bc9eacf21655"
+  },
+  "report_SHA256": "c2ac4bc66a96d8b209fb717a9bbe429b44928a98787fbda8c4eedffb7e25ef67",
+  "protocol_SHA256": "aac06637de106c10e48a2ae76e04ac84ef5ef3b2bdf5c21e36e356cd46e68405",
+  "protocol_path": "/ml2/alz/analysis/faithful097/protocol.json",
+  "report_path": "/ml2/alz/analysis/faithful097/report.json",
+  "saved_artifacts_hashed": 68,
+  "calibration_replicates_independently_rescored": 16,
+  "total_actual_GPU_seconds": 5699.271528569021,
+  "activation_actually_reverted": true,
+  "owned_processes_and_leases_absent": true,
+  "native_version": "0.9.7",
+  "native_source_files_verified": 69,
+  "EMA_decay": 0,
+  "formulation_changed": false,
+  "heldout_values_read": false,
+  "CUDA_initialized": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_faithful097.py": "2be33ef40d68885055262adae5d41838a8c9675f9d84b37cdf8d264eed243d29",
+    "/ml2/alz/analysis/released097_selection.py": "b9d8a25242cbe78249a8d4c62eb7cb8be3cc0d3bcf2b4e0caaa4d20929e06fed",
+    "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json": "b3ec603f6091ddd413fd5f264be0036503dd304339a60ae6f744a9597b607a3c"
+  },
+  "broader_goal_complete": false,
+  "SOTA_claim": false,
+  "limitation": "Two settings at two exploratory initialization seeds on the same four adaptive calibration donors. Fresh seed2..4 confirmation and external comparison remain."
+}
