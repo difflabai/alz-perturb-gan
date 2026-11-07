@@ -1,7 +1,7 @@
 """Finite CPU-only sensitivity after the exact full research pipeline closes."""
 import datetime,fcntl,hashlib,json,os,subprocess,time
 from pathlib import Path
-ROOT=Path('/ml2/alz');STATE=ROOT/'artifacts/released097-dual-calibration53-boundary'
+ROOT=Path('/ml2/alz');STATE=ROOT/'artifacts/released097-dual-calibration53-boundary-v2'
 PG=Path('/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/bin/python')
 ENV=dict(os.environ,CUDA_VISIBLE_DEVICES='',OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1')
 def read(p):return json.loads(Path(p).read_bytes())
@@ -17,7 +17,7 @@ def main():
  STATE.mkdir(exist_ok=True)
  with (STATE/'lock').open('a+') as lock:
   fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB);assert not (STATE/'identity.json').exists(),'One-use CPU sensitivity observer consumed'
-  parent=read(ROOT/'artifacts/released097-dual-research-pipeline/identity.json');assert alive(parent)
+  parent=read(ROOT/'artifacts/released097-dual-research-pipeline-v2/identity.json');assert alive(parent)
   files=[Path(__file__).resolve(),ROOT/'analysis/score_calibration_excluded53_dual.py',ROOT/'analysis/benchmark097_calibration_excluded53_plan.json',ROOT/'analysis/aggregate_benchmark097_dual.py',ROOT/'analysis/distribution_primary_statistics.py']
   pins={str(p):sha(p) for p in files};expiry=read(ROOT/'analysis/research_window_20261104_five_days.json')['expires_unix']+7200
   write(STATE/'identity.json',dict(pid=os.getpid(),birth=int(Path('/proc',str(os.getpid()),'stat').read_text().rsplit(')',1)[1].split()[19]),boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip(),parent={k:parent[k] for k in ('pid','birth','boot')},finite_CPU_analysis_expiry_unix=expiry,training_window_extended=False,GPU_allocation_permitted=False,source_SHA256=pins))
@@ -26,7 +26,7 @@ def main():
     assert time.time()<expiry,'CPU observation allowance expired; original handles retained, no restart'
     time.sleep(30)
    for p,pin in pins.items():assert sha(p)==pin,'Prespecified sensitivity source changed'
-   pstate=ROOT/'artifacts/released097-dual-research-pipeline';assert not (pstate/'failure.json').exists() and (pstate/'completed.json').exists()
+   pstate=ROOT/'artifacts/released097-dual-research-pipeline-v2';assert not (pstate/'failure.json').exists() and (pstate/'completed.json').exists()
    assert read(pstate/'completed.json')['status']=='FULL_RESEARCH_PIPELINE_COMPARISON_READY_FOR_FINAL_AGENT_AUDIT'
    assert not subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True)
    p=subprocess.run([str(PG),'-I','-S','-B',str(ROOT/'analysis/score_calibration_excluded53_dual.py')],cwd=ROOT,env=ENV,capture_output=True,text=True,timeout=3600)

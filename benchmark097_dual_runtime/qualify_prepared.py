@@ -4,7 +4,7 @@ from pathlib import Path
 HERE=Path(__file__).resolve().parent;sys.path.insert(0,str(HERE))
 import binding as b,preset_scope as s
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=s.STUDY/'dual_prepared_CPU_qualification_v4.json');args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=s.STUDY/'dual_prepared_CPU_qualification_v5.json');args=parser.parse_args()
  assert args.output.resolve().parent==s.STUDY.resolve() and not args.output.exists()
  assert os.environ.get('CUDA_VISIBLE_DEVICES')=='' and not s.read(s.PLAN)['enabled']
  assert s.read(s.PROTOCOL)['status']=='PREPARED_NOT_FROZEN_PG_SELECTION_AND_CONFIRMATION_PENDING'
@@ -19,6 +19,7 @@ def main():
  q=dict(status='PREPARED_ACCOUNTING_AND_SYNTHETIC_SELECTION_SCOPE_CPU_TESTS_PASS',UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),
         actual_tests=count,synthetic_frozen_selection_fixture_all45_cells_checked=True,actual_frozen_PG_candidate_qualified=False,
         two_physical_policy_profiles=True,actual_two_concurrent_confined_CPU_guard_workers=True,actual_driver_failure_drain_and_observation_timeout_tests=True,
+        actual_all45_native_preimport_source_closures_checked=True,
         actual_unfrozen_candidate_admission_refused=True,actual_CFGen_role_confined_controller_settlement_test=True,
         real_GPU_allocation_created=False,CUDA_initialized=False,plan_enabled=False,live_runtime_deployment_qualified=False,
         tests=results,source_SHA256={str(p):b.sha(p) for p in paths},

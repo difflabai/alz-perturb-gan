@@ -140,7 +140,7 @@ def source_closure(auth,layout):
     if not layout.fixture_mode:
         extra=auth.get('research_source_SHA256',{})
         require_members(pins,extra,'calibration research source')
-        require(all(str(p) in extra for folder in [HERE.parent,HERE.parent/'model',HERE,HERE.parent/'analysis/distribution097/model'] for p in folder.glob('*.py')),'complete isolated preset source inventory required')
+        require(all(str(p) in extra for folder in [HERE.parent,HERE.parent/'model',HERE,HERE.parent/'analysis/faithful097/model'] for p in folder.glob('*.py')),'complete isolated preset source inventory required')
         data=HERE.parent/'data/calibration_fold0'
         manifest=pinned_inventory(data/'manifest.json',auth.get('calibration_manifest_SHA256'),pins,'calibration input')
         require(manifest.get('status')=='CPU_CALIBRATION_PROJECTED_WITHOUT_REFITTING','calibration provenance differs')

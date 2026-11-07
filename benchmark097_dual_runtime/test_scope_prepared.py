@@ -19,7 +19,7 @@ class PreparedScope(unittest.TestCase):
   with self.assertRaisesRegex(AssertionError,'PG selection/confirmation'):self.auth()
   self.assertNotIn('torch',sys.modules);self.assertNotIn('scvi',sys.modules)
  def test_all45_fresh_bindings_under_synthetic_selection_fixture(self):
-  keys=set()
+  keys=set();validator=s.validate_authorization
   with patch.object(s,'protocol',return_value=self.fixture):
    for fold in range(3):
     for method in ('pg','scvi','cfgen'):
@@ -28,6 +28,8 @@ class PreparedScope(unittest.TestCase):
       self.assertEqual(b.cell(a),s.cell(fold,method,seed));keys.add(a['allocation_id'])
       self.assertFalse(a['reuse_completed_model']);self.assertEqual(a['initial_completed_updates'],0)
       self.assertIsNone(a['source_model_path']);self.assertIsNone(a['source_model_SHA256'])
+      with patch.object(s,'validate_authorization',side_effect=lambda auth:validator(auth,require_runtime_proof=False)):
+       b.source_closure(a,b.NATIVE_LAYOUT)
   self.assertEqual(len(keys),45);self.assertNotIn('torch',sys.modules)
  def test_partial_or_parent_weights_and_wrong_role_cannot_pass_frozen_scope(self):
   with patch.object(s,'protocol',return_value=self.fixture):

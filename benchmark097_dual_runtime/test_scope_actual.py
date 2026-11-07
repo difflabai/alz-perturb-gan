@@ -9,7 +9,7 @@ class FrozenScope(unittest.TestCase):
  def tearDown(self):self.plan.stop()
  def auth(self,fold=0,method='pg',seed=0):return prepare.build_authorization(fold=fold,method=method,seed=seed,check_only=True)[0]
  def test_all45_actual_frozen_fresh_authorizations_and_all_pins(self):
-  ids=set()
+  ids=set();validator=s.validate_authorization
   for fold in range(3):
    for method in ('pg','scvi','cfgen'):
     for seed in range(5):
@@ -19,6 +19,8 @@ class FrozenScope(unittest.TestCase):
      self.assertIsNone(a['source_model_path']);self.assertIsNone(a['source_model_SHA256'])
      self.assertEqual(a['released_hyperparameters'],self.protocol['PG_hyperparameters'])
      for path,pin in a['files_SHA256'].items():self.assertEqual(b.sha(path),pin,path)
+     with patch.object(s,'validate_authorization',side_effect=lambda auth:validator(auth,require_runtime_proof=False)):
+      b.source_closure(a,b.NATIVE_LAYOUT)
   self.assertEqual(len(ids),45);self.assertNotIn('torch',sys.modules);self.assertNotIn('scvi',sys.modules)
  def test_warm_start_partial_or_wrong_formulation_and_clock_refused(self):
   a=self.auth()

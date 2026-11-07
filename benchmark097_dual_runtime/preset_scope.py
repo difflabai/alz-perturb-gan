@@ -105,6 +105,6 @@ def validate_authorization(auth,*,require_runtime_proof=True):
  if require_runtime_proof:
   assert auth['runtime_qualification_SHA256']==pins[str(RUNTIME_PROOF)]==sha(RUNTIME_PROOF)
   q=read(RUNTIME_PROOF);assert q['status']=='EXTERNAL097_ALL45_FRESH_CELLS_SCOPE_ACCOUNTING_CPU_PASS' and not q['GPU_allocation_created']
-  assert q['actual_tests']==43 and q['two_physical_policy_profiles'] and q['actual_two_concurrent_confined_CPU_guard_workers'] and q['actual_driver_failure_drain_and_observation_timeout_tests']
+  assert q['actual_tests']==43 and q['two_physical_policy_profiles'] and q['actual_two_concurrent_confined_CPU_guard_workers'] and q['actual_driver_failure_drain_and_observation_timeout_tests'] and q['actual_all45_native_preimport_source_closures_checked']
   for path,pin in q['source_SHA256'].items():assert pins[path]==pin==sha(path)
  return p

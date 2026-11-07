@@ -22,6 +22,7 @@ def main():
  q=dict(status='EXTERNAL097_ALL45_FRESH_CELLS_SCOPE_ACCOUNTING_CPU_PASS',UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),
    actual_tests=count,actual_frozen_PG_candidate_qualified=True,PG_candidate_id=protocol['PG_candidate_id'],
    two_physical_policy_profiles=True,actual_two_concurrent_confined_CPU_guard_workers=True,actual_driver_failure_drain_and_observation_timeout_tests=True,
+   actual_all45_native_preimport_source_closures_checked=True,
    actual_all45_authorizations_and_source_pins_checked=True,all_new_models_from_update_zero=True,
    fullwidth_native_optimizer_pairs=30,actual_all15_PG_fold_seed_initializations_qualified=True,
    native_model_source_unchanged_from_faithful_parity=True,prior_regularizer_domain="all512rows",identical_next_pair_state_at500_and20000_limits=True,
