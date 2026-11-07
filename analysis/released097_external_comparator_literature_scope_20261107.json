@@ -1,0 +1,77 @@
+{
+  "status": "PRIMARY_SOURCE_COMPARATOR_SCOPE_RECHECK_NO_NEW_MODELS_OR_TARGETS",
+  "UTC": "2026-11-07T11:56:26.553975+00:00",
+  "purpose": "Keep the ongoing45-fit comparison and any eventual claim aligned with current generative-cell literature; do not interpret a win over selected baselines as exhaustive SOTA.",
+  "current_frozen_scientific_scope_preserved": {
+    "methods": [
+      "pg",
+      "scvi",
+      "cfgen"
+    ],
+    "folds": 3,
+    "seeds": 5,
+    "fresh_fits": 45,
+    "matched_resampling": true,
+    "PG_formulation_fixed": true,
+    "calibration_and_evaluation_separate_with_declared_exposure_limits": true
+  },
+  "primary_sources": [
+    {
+      "method": "CFGen",
+      "url": "https://arxiv.org/abs/2407.11734v2",
+      "code": "https://github.com/theislab/CFGen",
+      "version_date": "2025-03-03",
+      "venue_reference": "ICLR2025",
+      "directly_verified": "A conditional model combining latent flow matching with discrete single-cell count generation; supports multiple attributes/modalities.",
+      "our_inference": "Appropriate count-generation comparator for the declared stage-conditioned ALZ task. Its published dataset/metric results are not ALZ energy-distance targets."
+    },
+    {
+      "method": "scLDM",
+      "url": "https://arxiv.org/abs/2511.02986v2",
+      "version_date": "2026-06-01",
+      "venue_status_in_primary_abstract": "Accepted to ICML2026",
+      "directly_verified": "Transformer-based VAE and latent diffusion model with multiple conditioning variables; evaluates observational and perturbational expression generation and compares with scVI/CFGen.",
+      "our_inference": "Relevant additional comparator to screen before any broad field-level SOTA claim. No ALZ adapter or matched result has been measured here.",
+      "in_current45": false
+    },
+    {
+      "method": "count-FM",
+      "url": "https://arxiv.org/abs/2605.07746v3",
+      "html": "https://arxiv.org/html/2605.07746v3",
+      "version_date": "2026-10-31",
+      "code": "https://github.com/weigcdsb/count-flow-matching",
+      "directly_verified": "Models count-valued samples using local birth/death rates. Includes RNA marginal generation/transport; its conditional-generation demonstrations concern neural spike counts.",
+      "our_inference": "Potential count-space comparator; applicability and an exact RNA stage-conditioning recipe still need review. No matched ALZ result is available.",
+      "in_current45": false
+    },
+    {
+      "method": "GGE evaluation framework",
+      "url": "https://arxiv.org/abs/2603.11244v1",
+      "version_date": "2026-03-11",
+      "directly_verified": "Documents incompatible evaluation spaces and metric settings across gene-expression generative papers and supports explicit distributional metric configuration.",
+      "our_inference": "Published Wasserstein/MMD values cannot be numerically compared with this project energy distance without matching data, normalization, feature space and estimand."
+    }
+  ],
+  "limited_access": [
+    {
+      "url": "https://openreview.net/forum?id=fA0T9ujlQr",
+      "status": "Browser verification prevented direct full-paper inspection; excluded from substantive evidence in this audit."
+    }
+  ],
+  "claim_logic": {
+    "full45_complete": false,
+    "broader_comparator_coverage_complete": false,
+    "independent_population_confirmation_complete": false,
+    "even_if_PG_ranks_first_in45": "At most best among the tested methods under the declared historically exposed ALZ protocol, with uncertainty and unequal tuning budgets disclosed. Broad SOTA remains unproven.",
+    "current_primary_energy_distance_not_redefined": true,
+    "no_reselection_from_external_values": true
+  },
+  "new_model_fits": 0,
+  "new_GPU_allocations": 0,
+  "new_external_target_values_read": false,
+  "new_ALZ_algorithm_scores_computed": false,
+  "additional_comparators_queued": 0,
+  "full45_scope_reduced": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
