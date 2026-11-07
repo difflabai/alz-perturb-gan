@@ -1,5 +1,5 @@
 {
-  "status": "PREPARED_PENDING_COMPLETE_REFERENCE_CONFIRMATION_AUDIT",
+  "status": "FROZEN_CONDITIONAL_PAIRED_SEED_FULL20K_NATIVE097_REFINEMENT",
   "native_version": "0.9.7",
   "endpoint": 20000,
   "all_new_training_from_scratch": true,
@@ -204,11 +204,199 @@
   "maximum_new_fits": 20,
   "reference_control": "Previously measured reference seed0/1 endpoint metrics only; never initialize from old weights.",
   "design_path": "/ml2/alz/analysis/distribution097_conditional_next_search_design_20261107.json",
-  "design_evidence_SHA256": {},
+  "design_evidence_SHA256": {
+    "/ml2/alz/analysis/confirmation097_final_independent_audit_20261107.json": "d016258f9d78dbc46295694e63dc5d5ebe066efbdc54b8ccdc554993a65e850d",
+    "/ml2/alz/analysis/confirmation097_next_decision_20261107.json": "5e367a66101396051b1c02c029b47e1c1272b5e1fe8a2d9744760b6e0e59e70b",
+    "/ml2/alz/analysis/distribution097_conditional_next_search_design_20261107.json": "a52ce58eca0aae33c9de2be3388ae85b1ca1e43322bc4d21a6493103ea73b456",
+    "/ml2/alz/analysis/distribution097_conditional_continuation_CPU_model_qualification_20261107.json": "ee9f85e7e137ad6524aa005986824072a215160b2d73aa3ce228afa80864550b",
+    "/ml2/alz/analysis/refinement097/resampling_controls_CPU.json": "931fdbebdc4ed1a6baace62c9fb434b775610cad50fba21de2af35f95284fb14",
+    "/ml2/alz/analysis/distribution097/results/CAL_GPU0_V1_dist097_d000_f0_pg_s0.json": "e84ec67bb5233c95100488fae89d03faf029d5ee1c2801c69ec29ee214330a14",
+    "/ml2/alz/analysis/confirmation097/results/CAL_GPU0_V1_confirm097_d000_f0_pg_s1.json": "a97f479be5187185b28518b6ead63a9aa1af331463b7e3d95062db4ec43b1b60",
+    "/ml2/alz/analysis/distribution097_stage1_final_independent_audit_20261106.json": "3e8803c82c6a99fb4495e17480708a3fda43dfe44bcebec05904633c2fa22ead",
+    "/ml2/alz/analysis/refinement097_selection.py": "68bd399f455abddafa4a246428dc318a502b16b0887412a36aca28b52dad9a5d",
+    "/ml2/alz/analysis/prepare_refinement097.py": "d1af61c928daecb5af5dae2c98afc1d4a49f27d4f4cbd1c09220ef4e95e43059"
+  },
   "calibration_only": true,
   "metric_role": "calibration_selection",
   "automatic_promotion": false,
   "SOTA_claim": false,
   "full_goal_complete": false,
-  "activation": false
+  "activation": false,
+  "UTC": "2026-11-07T01:28:53.318480+00:00",
+  "original_reference_confirmation_audit_path": "/ml2/alz/analysis/confirmation097_final_independent_audit_20261107.json",
+  "original_reference_next_decision_path": "/ml2/alz/analysis/confirmation097_next_decision_20261107.json",
+  "reference_controls": [
+    {
+      "candidate_id": "d000",
+      "seed": 0,
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "endpoint": 20000,
+      "from_scratch": true,
+      "initial_completed_updates": 0,
+      "finite": true,
+      "metrics": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 0,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 1.9537118942286584,
+        "cell_energy_distance": 0.21992865338427325,
+        "spread_ratio": 1.0316557076122854,
+        "within_condition_spread_ratio": 0.9670804123928186,
+        "coverage80": 0.6826923076923077,
+        "generated_zero_count_rate": 3.125e-06,
+        "per_donor_energy_score": [
+          1.1499889157466354,
+          2.6149681536484795,
+          2.1061048179769397,
+          1.9437856895425787
+        ],
+        "per_stage_cell_energy_distance": [
+          1.1003814798779246,
+          1.427898486002821,
+          1.0663081631141367,
+          0.5443863623639995
+        ]
+      },
+      "baseline_metrics": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 0,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 2.079287181278266,
+        "cell_energy_distance": 0.24277825308317968,
+        "spread_ratio": 1.086688043301637,
+        "within_condition_spread_ratio": 0.9935126950887428,
+        "coverage80": 0.6778846153846154,
+        "generated_zero_count_rate": 0.0,
+        "per_donor_energy_score": [
+          1.272282323410263,
+          3.047641176747636,
+          1.95978725566323,
+          2.0374379692919344
+        ],
+        "per_stage_cell_energy_distance": [
+          0.9114143695390835,
+          1.8390837374697222,
+          1.132453828552058,
+          0.5532384176654261
+        ]
+      },
+      "read_only_previously_measured_reference": true,
+      "source_result_path": "/ml2/alz/analysis/distribution097/results/CAL_GPU0_V1_dist097_d000_f0_pg_s0.json",
+      "source_result_SHA256": "e84ec67bb5233c95100488fae89d03faf029d5ee1c2801c69ec29ee214330a14",
+      "new_model_fitted": false,
+      "new_GPU_charge": 0
+    },
+    {
+      "candidate_id": "d000",
+      "seed": 1,
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "endpoint": 20000,
+      "from_scratch": true,
+      "initial_completed_updates": 0,
+      "finite": true,
+      "metrics": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 1,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 2.1316429139499187,
+        "cell_energy_distance": 0.3182107706327164,
+        "spread_ratio": 0.7734794777250964,
+        "within_condition_spread_ratio": 0.7089416476984778,
+        "coverage80": 0.6009615384615384,
+        "generated_zero_count_rate": 1.8750000000000002e-05,
+        "per_donor_energy_score": [
+          1.1304956660008663,
+          3.020342621307096,
+          2.1315958401109016,
+          2.244137528380812
+        ],
+        "per_stage_cell_energy_distance": [
+          0.9948914241366467,
+          1.74931597197416,
+          1.2071706894555172,
+          0.5599705102734323
+        ]
+      },
+      "baseline_metrics": {
+        "metric_role": "calibration_selection",
+        "generation_replicates": 2,
+        "donors": [
+          "H20.33.032",
+          "H21.33.001",
+          "H21.33.023",
+          "H21.33.025"
+        ],
+        "training_seed": 1,
+        "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+        "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+        "sampling_contract": "calibration_equal_stage375_priority_v1",
+        "energy_score": 2.0814045098447242,
+        "cell_energy_distance": 0.22888526008152432,
+        "spread_ratio": 1.089383296551302,
+        "within_condition_spread_ratio": 0.996161301507612,
+        "coverage80": 0.6634615384615384,
+        "generated_zero_count_rate": 0.0,
+        "per_donor_energy_score": [
+          1.271577429600569,
+          3.0322623871947756,
+          1.9984319036294795,
+          2.0233463189540717
+        ],
+        "per_stage_cell_energy_distance": [
+          0.9584722675422146,
+          1.8071349131033703,
+          1.0769299151655627,
+          0.5926959501979292
+        ]
+      },
+      "read_only_previously_measured_reference": true,
+      "source_result_path": "/ml2/alz/analysis/confirmation097/results/CAL_GPU0_V1_confirm097_d000_f0_pg_s1.json",
+      "source_result_SHA256": "a97f479be5187185b28518b6ead63a9aa1af331463b7e3d95062db4ec43b1b60",
+      "new_model_fitted": false,
+      "new_GPU_charge": 0
+    }
+  ],
+  "selection_rule": "Resolve every new setting at both seeds0/1, rank finite complete paired means by cell energy distance then donor energy; retain joint-quality tradeoffs and measured d000 control. No failed-seed dropping.",
+  "followup_rule": "Distinct primary-distance and joint-quality choices plus measured d000 reference; new choices require frozen matched-seed2..4 full20k followup. d000 followup scores are already known controls and must not be called new independent evidence."
 }
