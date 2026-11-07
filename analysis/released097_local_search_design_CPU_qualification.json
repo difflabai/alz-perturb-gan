@@ -1,0 +1,19 @@
+{
+  "status": "PROSPECTIVE_FULL_ENDPOINT_LOCAL_SEARCH_DESIGN_SYNTHETIC_CPU_TESTS_PASS",
+  "UTC": "2026-11-07T02:26:29.124382+00:00",
+  "actual_tests": 6,
+  "stderr": "test_full_external_and_confirmation_reserves_bound_search_size (__main__.LocalDesign.test_full_external_and_confirmation_reserves_bound_search_size) ... ok\ntest_full_grid_is_twelve_new_fresh_full_endpoint_fits (__main__.LocalDesign.test_full_grid_is_twelve_new_fresh_full_endpoint_fits) ... ok\ntest_half_rate_anchor_uses_lower_direction_without_formulation_change (__main__.LocalDesign.test_half_rate_anchor_uses_lower_direction_without_formulation_change) ... ok\ntest_incomplete_or_old_variant_audit_refused (__main__.LocalDesign.test_incomplete_or_old_variant_audit_refused) ... ok\ntest_no_automatic_activation_or_sota_claim (__main__.LocalDesign.test_no_automatic_activation_or_sota_claim) ... ok\ntest_too_little_search_slack_prioritizes_full_confirmation_and_matrix (__main__.LocalDesign.test_too_little_search_slack_prioritizes_full_confirmation_and_matrix) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.001s\n\nOK\n",
+  "source_SHA256": {
+    "/ml2/alz/analysis/released097_local_search_design.py": "bec59584caafc7e8cd920565e9613cd8cab0a55c07f2becfcdae2f9b4088770c",
+    "/ml2/alz/analysis/test_released097_local_search_design.py": "9bf0b32c03931bcbb3fe80967ef40ea80701088bbd8d1731faae5756ca8855e1",
+    "/ml2/alz/analysis/released097_selection.py": "b9d8a25242cbe78249a8d4c62eb7cb8be3cc0d3bcf2b4e0caaa4d20929e06fed",
+    "/ml2/alz/analysis/released097_external_selection.py": "13fef85d97eeac2e50adc7bda9088f82770ef2f8738e90444e7d1f38f29d510d"
+  },
+  "actual_baseline_results_used": false,
+  "actual_search_proposals_frozen": false,
+  "actual_selected_settings_native_qualified": false,
+  "actual_new_search_training_started": false,
+  "GPU_allocation_created": false,
+  "design": "After all four corrected baselines are finite and independently audited: choose lower two-seed distance anchor; test prior-weight bracket and one-coordinate G/D/P-rate/kappa extrapolations as hypotheses. Reserve full45-model comparison, up to9 fresh confirmation fits and two-hour handoff/cleanup forecast first. Keep20k endpoints; at most6neighbors \u00d72fresh seeds.",
+  "remaining": "Read all four real endpoints/audit, calculate actual window/cost forecast, review selected design, qualify exact native settings and runtime scope before any allocation."
+}

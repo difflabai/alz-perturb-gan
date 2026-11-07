@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T02:24:05.852633+00:00",
+  "UTC": "2026-11-07T02:26:29.124382+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -96,5 +96,9 @@
   "crossfold_isolation_audit_path": "/ml2/alz/analysis/distribution097_split_isolation_audit_20261106.json",
   "supplementary25_design_path": "/ml2/alz/analysis/distribution097_supplementary25_design_proposal_20261106.json",
   "supplementary25_target_values_read": false,
-  "prepared_evidence_is_not_full_completion": true
+  "prepared_evidence_is_not_full_completion": true,
+  "conditional_local_search_design_path": "/ml2/alz/analysis/released097_local_search_design.py",
+  "conditional_local_search_design_CPU_proof_path": "/ml2/alz/analysis/released097_local_search_design_CPU_qualification.json",
+  "conditional_local_search_frozen": false,
+  "conditional_local_search_activated": false
 }
