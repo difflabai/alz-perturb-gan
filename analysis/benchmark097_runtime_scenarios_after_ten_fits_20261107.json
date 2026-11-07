@@ -1,0 +1,88 @@
+{
+  "status": "METADATA_ONLY_RUNTIME_SCENARIOS_NOT_A_DEADLINE_PREDICTION",
+  "UTC": "2026-11-07T22:48:52.567920+00:00",
+  "complete_cells": 10,
+  "remaining_cells_including_active": 35,
+  "training_window_expires_UTC": "2026-11-09T06:26:46.606656+00:00",
+  "remaining_training_window_hours": 31.631677426666666,
+  "observed_cell_costs_GPU_hours": {
+    "GPU-72c1b506-891d-b8bc-b353-e020585e1c47": {
+      "pg": [
+        2.3540038535886074
+      ],
+      "scvi": [
+        0.1248366658077834
+      ],
+      "cfgen": [
+        4.123382289569442
+      ]
+    },
+    "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69": {
+      "pg": [
+        1.0719285452980531,
+        0.48183406089139075,
+        0.6041764986686111
+      ],
+      "scvi": [
+        0.0474995292827791,
+        0.03660898228916469
+      ],
+      "cfgen": [
+        2.0519259290927745,
+        1.9152211526852787
+      ]
+    }
+  },
+  "remaining_counts_by_fixed_lane": {
+    "GPU-72c1b506-891d-b8bc-b353-e020585e1c47": {
+      "pg": 6,
+      "scvi": 7,
+      "cfgen": 6
+    },
+    "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69": {
+      "pg": 5,
+      "scvi": 5,
+      "cfgen": 6
+    }
+  },
+  "scenario_same_card_observed_mean_full_cell_costs": {
+    "lane_hours": {
+      "GPU-72c1b506-891d-b8bc-b353-e020585e1c47": 39.73817351960278,
+      "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69": 15.708277699027445
+    },
+    "maximum_lane_hours": 39.73817351960278,
+    "active_cells_charged_full_scenario_cost": true
+  },
+  "scenario_both_cards_at_observed_GPU1_mean_method_rates": {
+    "lane_hours": {
+      "GPU-72c1b506-891d-b8bc-b353-e020585e1c47": 16.511699245552073,
+      "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69": 15.708277699027445
+    },
+    "maximum_lane_hours": 16.511699245552073,
+    "active_cells_charged_full_scenario_cost": true
+  },
+  "limitations": [
+    "Only one completed PG/scVI/CFGen observation on GPU0 before the next scVI closes; workload and method/seed/ODE difficulty are confounded.",
+    "These are changing shared-load scenarios, not statistical confidence intervals or a guarantee of future throughput.",
+    "Active cells are counted at full scenario cost, so their progress is conservatively ignored.",
+    "No test metrics, model parameters, runtime code, fixed GPU assignment, training expiry or authorization changed."
+  ],
+  "next_action": "Continue both healthy lanes; observe the next GPU0 PG5000 milestone to distinguish the old busy-card throughput from current conditions. Ask coordinator for expected shared-load turnover before considering any separately qualified resource handoff.",
+  "root_numeric_target_arrays_loaded": false,
+  "external_metrics_used_for_selection": false,
+  "source_result_SHA256": {
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_cfgen_s0.json": "e2980806b7d0f30c7df638b70faf923dc18bed7d42ce4778d4bf21c3a6d04aef",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_pg_s0.json": "4e3f7075276a602a83b91c10993b12aab7fefd060dba976503f95521dea9f388",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_scvi_s0.json": "4f1cec6dbb201780385796a96461f2db81e657de2b449a770b09fef315600a3d",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_scvi_s1.json": "e57f39310c102637e3833496932fee0450f211120c2390c6fb2335e5a08a4bd2",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_cfgen_s0.json": "01696aa318a909c2afc0a007b4c4489adb4f5affaf301cff64a1018b19dad59a",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_pg_s0.json": "22df9de15e211d6ba07961639863bd5956f2ecc669335a1a72ad19c6dd164bf4",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_pg_s1.json": "0c1f8badd7d06553868c48f51933c48525be2c6fa13531fefd456aefbc51f3a8",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_scvi_s0.json": "227f77a30c67302d807d915d36ef0dd4300b791835f69fe9d8ace4157cc13fa4",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f2_cfgen_s0.json": "791deea8f49f87a22f0c0429f3f853df1d82d05b132758122f5e26476e138cdd",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f2_pg_s0.json": "64407a25d1b80a25422af953ccfda3e9825c9d6489da7e13655272679e737b01"
+  },
+  "full45_complete": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
