@@ -1,0 +1,117 @@
+{
+  "status": "TWO_OF_THREE_FRESH_CRITIC_RATE_SEEDS_COMPLETE_SEVEN_OF_NINE_PHASE_FITS_REMAIN",
+  "UTC": "2026-11-07T09:38:50.171786+00:00",
+  "candidate_id": "t004",
+  "training_seeds_complete": [
+    2,
+    3
+  ],
+  "training_seed_pending": 4,
+  "rows": [
+    {
+      "seed": 2,
+      "attempt": "CAL_GPU0_V1_cf097_t004_f0_pg_s2",
+      "endpoint": 20000,
+      "from_scratch": true,
+      "metrics": {
+        "cell_energy_distance": 0.23764907311808336,
+        "energy_score": 2.1395910745687736,
+        "spread_ratio": 0.9227101394977113,
+        "within_condition_spread_ratio": 0.8264429556479327,
+        "coverage80": 0.6153846153846154
+      },
+      "matched_resampling": {
+        "cell_energy_distance": 0.2360664757860942,
+        "energy_score": 2.1189666465878148,
+        "spread_ratio": 1.0996368276041926,
+        "within_condition_spread_ratio": 1.0006447828456726,
+        "coverage80": 0.6971153846153846
+      },
+      "PG_minus_matched_resampling": {
+        "cell_energy_distance": 0.0015825973319891773,
+        "energy_score": 0.02062442798095887,
+        "spread_ratio": -0.17692668810648127,
+        "within_condition_spread_ratio": -0.1742018271977399,
+        "coverage80": -0.08173076923076916
+      },
+      "charged_GPU_seconds": 1439.8290422199934,
+      "saved_artifacts_rehashed": 17,
+      "clean_closed_canonical_ledger_independently_checked": true
+    },
+    {
+      "seed": 3,
+      "attempt": "CAL_GPU0_V1_cf097_t004_f0_pg_s3",
+      "endpoint": 20000,
+      "from_scratch": true,
+      "metrics": {
+        "cell_energy_distance": 0.34735459769648624,
+        "energy_score": 2.1889405809646942,
+        "spread_ratio": 0.8638690809220994,
+        "within_condition_spread_ratio": 0.7666343503760332,
+        "coverage80": 0.5673076923076923
+      },
+      "matched_resampling": {
+        "cell_energy_distance": 0.2323084679127394,
+        "energy_score": 2.087918730129091,
+        "spread_ratio": 1.1029609521785577,
+        "within_condition_spread_ratio": 1.0083799613724387,
+        "coverage80": 0.6971153846153846
+      },
+      "PG_minus_matched_resampling": {
+        "cell_energy_distance": 0.11504612978374684,
+        "energy_score": 0.10102185083560311,
+        "spread_ratio": -0.23909187125645837,
+        "within_condition_spread_ratio": -0.24174561099640546,
+        "coverage80": -0.1298076923076923
+      },
+      "charged_GPU_seconds": 1993.8560400080169,
+      "saved_artifacts_rehashed": 17,
+      "clean_closed_canonical_ledger_independently_checked": true
+    }
+  ],
+  "partial_two_seed_mean": {
+    "metrics": {
+      "cell_energy_distance": 0.2925018354072848,
+      "energy_score": 2.1642658277667337,
+      "spread_ratio": 0.8932896102099053,
+      "within_condition_spread_ratio": 0.7965386530119829,
+      "coverage80": 0.5913461538461539
+    },
+    "matched_resampling": {
+      "cell_energy_distance": 0.2341874718494168,
+      "energy_score": 2.103442688358453,
+      "spread_ratio": 1.1012988898913751,
+      "within_condition_spread_ratio": 1.0045123721090556,
+      "coverage80": 0.6971153846153846
+    },
+    "PG_minus_matched_resampling": {
+      "cell_energy_distance": 0.05831436355786801,
+      "energy_score": 0.06082313940828099,
+      "spread_ratio": -0.20800927968146982,
+      "within_condition_spread_ratio": -0.20797371909707268,
+      "coverage80": -0.10576923076923073
+    }
+  },
+  "actual_settled_GPU_seconds": 3433.6850822280103,
+  "required_full_phase_fits": 9,
+  "completed_phase_fits": 2,
+  "current_live_fit": {
+    "attempt": "CAL_GPU0_V1_cf097_t004_f0_pg_s4",
+    "guard_identity": {
+      "pid": 1286768,
+      "birth": 20183213,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    "verified_logged_update": 251,
+    "from_scratch": true
+  },
+  "source_result_SHA256": {
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s2.json": "a8cb583e89575312c5f7c05741dd9d16bb9eddf8bbd0ba6b6be6477c99545f2d",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s3.json": "65bc57ef3a3177eb57afc5514b3efafd18a5b70fe04e78a5580b93ebf1d1198e"
+  },
+  "full_nine_fit_independent_audit_completed": false,
+  "final_setting_selected": false,
+  "SOTA_claim": false,
+  "full_goal_complete": false,
+  "interpretation": "Preserved negative seed3 result. Partial two-seed readout is not candidate selection or independent-population evidence. Frozen choice waits all three fresh initialization seeds2..4 for each of three candidates. Same four adaptive calibration donors; full45 external comparison remains."
+}
