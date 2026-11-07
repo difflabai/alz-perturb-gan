@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T06:54:41.576778+00:00",
+  "UTC": "2026-11-07T07:51:19.747514+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/analysis/localfaith097/current_release_check_before_activation.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "FOUR_PAIRED_COORDINATES_COMPLETE_CRITIC_LR_RUNNING",
+  "study_status": "FIVE_PAIRED_COORDINATES_COMPLETE_FINAL_PARTICLE_LR_PAIR_RUNNING",
   "study_protocol_path": "/ml2/alz/analysis/localfaith097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/localfaith097-paired-search/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/localfaith097-paired-search/identity.json",
@@ -103,7 +103,7 @@
   "conditional_local_search_design_CPU_proof_path": "/ml2/alz/analysis/released097_local_search_design_CPU_qualification_v2.json",
   "conditional_local_search_frozen": true,
   "conditional_local_search_activated": true,
-  "study_completed_attempts": 8,
+  "study_completed_attempts": 10,
   "latest_released_first20k_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json",
   "latest_released_first20k_mixture_diagnostic_path": "/ml2/alz/analysis/faithful097_first20k_mixture_diagnostic_20261107.json",
   "latest_released_calibration_readout": {
@@ -151,7 +151,7 @@
   "calibration_excluded53_observer_started": true,
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
   "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory.py",
-  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_two_coordinate_pairs_20261107.json",
+  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_five_coordinate_pairs_20261107.json",
   "historical_recipe_disclosure_corrected_by_append_only_snapshot": true,
   "matched_seed0_calibration_comparison_path": "/ml2/alz/analysis/released097_matched_seed0_calibration_comparison_20261107.json",
   "current_calibration_distance_reference": {
@@ -168,9 +168,10 @@
   "conditional_local_search_current_anchor": "f000",
   "latest_local_coordinate_endpoint_readout_path": "/ml2/alz/analysis/localfaith097_first20k_readout_20261107.json",
   "all4_released_baseline_mixture_diagnostic_path": "/ml2/alz/analysis/faithful097_all4_mixture_diagnostic_20261107.json",
-  "latest_local_paired_coordinate_readout_path": "/ml2/alz/analysis/localfaith097_t003_two_seed_tradeoff_20261107.json",
+  "latest_local_paired_coordinate_readout_path": "/ml2/alz/analysis/localfaith097_t004_two_seed_tradeoff_20261107.json",
   "latest_local_coordinate_tradeoff_path": "/ml2/alz/analysis/localfaith097_t001_seed0_tradeoff_20261107.json",
   "latest_release_recheck_path": "/ml2/alz/analysis/particlegan_current_release_recheck_20261107T0608.json",
-  "lowest_observed_complete_paired_distance_candidate": "t003",
-  "lowest_observed_paired_distance_is_not_final_selection": true
+  "lowest_observed_complete_paired_distance_candidate": "t004",
+  "lowest_observed_paired_distance_is_not_final_selection": true,
+  "latest_shared_capacity_observation_path": "/ml2/alz/analysis/alz_shared_GPU_capacity_recheck_20261107T0750.json"
 }

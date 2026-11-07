@@ -1,0 +1,48 @@
+{
+  "status": "CURRENT_GPU1_OTHER_COMPUTE_ALLOCATION_ABSENT_ALZ_TRAINING_CONTINUES",
+  "UTC": "2026-11-07T07:51:19.522301+00:00",
+  "ALZ_worker_identity": {
+    "pid": 995378,
+    "birth": 19530021,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "telemetry": [
+    {
+      "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "memory_used_MiB": 20230,
+      "memory_free_MiB": 28309,
+      "GPU_utilization_percent": 100,
+      "own_ALZ_worker_present": false,
+      "other_compute_process_count": 6,
+      "other_compute_allocated_MiB": 18945
+    },
+    {
+      "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "memory_used_MiB": 1131,
+      "memory_free_MiB": 47411,
+      "GPU_utilization_percent": 71,
+      "own_ALZ_worker_present": true,
+      "other_compute_process_count": 0,
+      "other_compute_allocated_MiB": 0
+    }
+  ],
+  "query_commands": [
+    [
+      "nvidia-smi",
+      "--query-compute-apps=gpu_uuid,pid,used_gpu_memory",
+      "--format=csv,noheader,nounits"
+    ],
+    [
+      "nvidia-smi",
+      "--query-gpu=uuid,memory.used,memory.free,utilization.gpu",
+      "--format=csv,noheader,nounits"
+    ]
+  ],
+  "host_MemAvailable_bytes": 97252855808,
+  "earlier_observation": "At07:37:40UTC GPU1used17718MiB at100percent, while same t004seed1 fit was13751updates after20min. At07:46:49..07:47:09 five subsequent samples showed GPU1used1131MiB and69..74percent utilization. The previous fit completed with its original process identities; no training restart.",
+  "new_GPU_allocation": false,
+  "resource_or_model_source_changed": false,
+  "foreign_processes_signalled": false,
+  "observation_only": true,
+  "limitation": "Current observations do not reserve capacity or predict future co-tenant arrivals. No co-tenant completion or ownership claim outside this GPU observation."
+}

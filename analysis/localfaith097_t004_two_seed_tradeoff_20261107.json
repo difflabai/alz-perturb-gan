@@ -1,0 +1,184 @@
+{
+  "status": "MATCHED_TWO_SEED_CRITIC_LR_DISTANCE_DONOR_SCORE_TRADEOFF_NOT_FINAL_SELECTION",
+  "UTC": "2026-11-07T07:51:19.746693+00:00",
+  "candidate_id": "t004",
+  "training_seeds": [
+    0,
+    1
+  ],
+  "rows": [
+    {
+      "seed": 0,
+      "attempt": "CAL_GPU0_V1_lf097_t004_f0_pg_s0",
+      "endpoint": 20000,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": 0.30773330260163956,
+        "energy_score": 2.140771673665144,
+        "spread_ratio": 0.77041941885551,
+        "within_condition_spread_ratio": 0.6958137651341827,
+        "coverage80": 0.4903846153846154
+      },
+      "nominal_metrics": {
+        "cell_energy_distance": 0.2805434126347235,
+        "energy_score": 1.9009654459270127,
+        "spread_ratio": 0.9777870063157865,
+        "within_condition_spread_ratio": 0.9098323628540306,
+        "coverage80": 0.7259615384615384
+      },
+      "resampling_metrics": {
+        "cell_energy_distance": 0.24277825308317968,
+        "energy_score": 2.079287181278266,
+        "spread_ratio": 1.086688043301637,
+        "within_condition_spread_ratio": 0.9935126950887428,
+        "coverage80": 0.6778846153846154
+      },
+      "delta_vs_nominal": {
+        "cell_energy_distance": 0.02718988996691607,
+        "energy_score": 0.23980622773813143,
+        "spread_ratio": -0.2073675874602765,
+        "within_condition_spread_ratio": -0.21401859771984788,
+        "coverage80": -0.23557692307692302
+      },
+      "actual_GPU_seconds": 1468.390021239
+    },
+    {
+      "seed": 1,
+      "attempt": "CAL_GPU0_V1_lf097_t004_f0_pg_s1",
+      "endpoint": 20000,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": 0.264455196017626,
+        "energy_score": 2.1334580454135876,
+        "spread_ratio": 0.8768900492585688,
+        "within_condition_spread_ratio": 0.7746653037181315,
+        "coverage80": 0.5769230769230769
+      },
+      "nominal_metrics": {
+        "cell_energy_distance": 0.30211045128460867,
+        "energy_score": 2.098323730108719,
+        "spread_ratio": 0.9281311966699651,
+        "within_condition_spread_ratio": 0.8544890992961155,
+        "coverage80": 0.6394230769230769
+      },
+      "resampling_metrics": {
+        "cell_energy_distance": 0.22888526008152432,
+        "energy_score": 2.0814045098447242,
+        "spread_ratio": 1.089383296551302,
+        "within_condition_spread_ratio": 0.996161301507612,
+        "coverage80": 0.6634615384615384
+      },
+      "delta_vs_nominal": {
+        "cell_energy_distance": -0.03765525526698266,
+        "energy_score": 0.03513431530486866,
+        "spread_ratio": -0.05124114741139629,
+        "within_condition_spread_ratio": -0.07982379557798402,
+        "coverage80": -0.0625
+      },
+      "actual_GPU_seconds": 1842.3715584739984
+    }
+  ],
+  "summary": {
+    "metrics": {
+      "mean": {
+        "cell_energy_distance": 0.2860942493096328,
+        "energy_score": 2.137114859539366,
+        "spread_ratio": 0.8236547340570395,
+        "within_condition_spread_ratio": 0.7352395344261571,
+        "coverage80": 0.5336538461538461
+      },
+      "sample_SD_over_two_initialization_seeds": {
+        "cell_energy_distance": 0.030602242642470145,
+        "energy_score": 0.005171516131753085,
+        "spread_ratio": 0.07528610475520948,
+        "within_condition_spread_ratio": 0.055756457639702876,
+        "coverage80": 0.061191932987297325
+      }
+    },
+    "nominal_metrics": {
+      "mean": {
+        "cell_energy_distance": 0.2913269319596661,
+        "energy_score": 1.999644588017866,
+        "spread_ratio": 0.9529591014928758,
+        "within_condition_spread_ratio": 0.882160731075073,
+        "coverage80": 0.6826923076923077
+      },
+      "sample_SD_over_two_initialization_seeds": {
+        "cell_energy_distance": 0.015250199279446177,
+        "energy_score": 0.13955338106822626,
+        "spread_ratio": 0.03511195972586868,
+        "within_condition_spread_ratio": 0.03913359695479609,
+        "coverage80": 0.0611919329872974
+      }
+    },
+    "resampling_metrics": {
+      "mean": {
+        "cell_energy_distance": 0.235831756582352,
+        "energy_score": 2.080345845561495,
+        "spread_ratio": 1.0880356699264695,
+        "within_condition_spread_ratio": 0.9948369982981774,
+        "coverage80": 0.6706730769230769
+      },
+      "sample_SD_over_two_initialization_seeds": {
+        "cell_energy_distance": 0.009823829562447754,
+        "energy_score": 0.001497177387342576,
+        "spread_ratio": 0.0019058318498531355,
+        "within_condition_spread_ratio": 0.0018728475594765607,
+        "coverage80": 0.010198655497882939
+      }
+    },
+    "delta_vs_nominal": {
+      "mean": {
+        "cell_energy_distance": -0.0052326826500332935,
+        "energy_score": 0.13747027152150004,
+        "spread_ratio": -0.1293043674358364,
+        "within_condition_spread_ratio": -0.14692119664891595,
+        "coverage80": -0.1490384615384615
+      },
+      "sample_SD_over_two_initialization_seeds": {
+        "cell_energy_distance": 0.04585244192191632,
+        "energy_score": 0.14472489719997936,
+        "spread_ratio": 0.11039806448107817,
+        "within_condition_spread_ratio": 0.09489005459449897,
+        "coverage80": 0.12238386597459472
+      }
+    }
+  },
+  "actual_GPU_seconds": 3310.7615797129984,
+  "saved_artifacts_hashed": 34,
+  "heldout_target_values_read": false,
+  "new_model_fits": 0,
+  "new_optimizer_updates": 0,
+  "full12fit_search_complete": false,
+  "full12fit_independent_audit_complete": false,
+  "model_selected": false,
+  "SOTA_claim": false,
+  "full_goal_complete": false,
+  "interpretation": "Doubling critic_lr to0.036 gives the lowest observed paired mean primary distance so far, with opposite-signed changes across seeds. Donor energy score worsens at both seeds, while predictive spread and coverage fall. Two exploratory initialization seeds on the same four adaptive calibration donors; a reliable gain is not established. The final particle-LR pair, independent full12audit and freshseed2..4 confirmation remain before frozen external evaluation.",
+  "calculation": "Arithmetic mean and sample SD (ddof1) over seed0/1 matched saved full20k metrics; differences are coordinate minus nominal at each seed. Scores come from raw completed result records, previously rescored by each finisher; this readout verifies hashes, fromscratch authorization and canonical settlement but does not perform a new array rescore.",
+  "input_SHA256": {
+    "/ml2/alz/analysis/faithful097_final_independent_audit_20261107.json": "b67ad4d2f940acc4671301d74bfda3189a82f1f20b10dbb0a1894d058f4b8963",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t004_f0_pg_s0.json": "6048edea749e5bf00468f26aca359b8c759a96d601ca32983ebb809b97e7af25",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t004_f0_pg_s0/authorization.json": "6142ea0480420309d7f77318c58e10dab2311031beb9ad0e71438c1365b9c4a7",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t004_f0_pg_s0-settlement.json": "98576c72e2c0abe143f5f51af02e115b900c4410ce9e0991fef236b3b2bfb02a",
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json": "090be880e2a9758348f2075419593b693523d9792db910d4bc69bb8bf5826ca4",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t004_f0_pg_s1.json": "087e42ba8c4b410762dfbdefaadd3809a5c6e76ef49866b23db8f11dcf53cb4d",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t004_f0_pg_s1/authorization.json": "222c52574121f969a516382a540f3659e1d4153d42a93694bddc2cf625922390",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t004_f0_pg_s1-settlement.json": "bfe91d035e3278e4bc698350256375d748acb10d8a00af1a72ad81596e8010a9",
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s1.json": "e05cdb19ecb41376c8e56317e6402fb8743aa545a52ca8dd79774531d6563f3c"
+  }
+}
