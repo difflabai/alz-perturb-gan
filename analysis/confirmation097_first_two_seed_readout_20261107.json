@@ -1,0 +1,87 @@
+{
+  "status": "TWO_OF_FOUR_FRESH20K_SEEDS_COMPLETE_BOTH_BEHIND_MATCHED_BASELINE",
+  "UTC": "2026-11-07T00:43:34.500725+00:00",
+  "completed_seeds": [
+    1,
+    2
+  ],
+  "required_seeds": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "rows": [
+    {
+      "seed": 1,
+      "result_path": "/ml2/alz/analysis/confirmation097/results/CAL_GPU0_V1_confirm097_d000_f0_pg_s1.json",
+      "result_SHA256": "a97f479be5187185b28518b6ead63a9aa1af331463b7e3d95062db4ec43b1b60",
+      "PG": {
+        "cell_energy_distance": 0.3182107706327164,
+        "energy_score": 2.1316429139499187,
+        "spread_ratio": 0.7734794777250964,
+        "within_condition_spread_ratio": 0.7089416476984778,
+        "coverage80": 0.6009615384615384
+      },
+      "resampling": {
+        "cell_energy_distance": 0.22888526008152432,
+        "energy_score": 2.0814045098447242,
+        "spread_ratio": 1.089383296551302,
+        "within_condition_spread_ratio": 0.996161301507612,
+        "coverage80": 0.6634615384615384
+      },
+      "actual_GPU_seconds": 1376.9763570899959,
+      "native_saved_score_audit": true
+    },
+    {
+      "seed": 2,
+      "result_path": "/ml2/alz/analysis/confirmation097/results/CAL_GPU0_V1_confirm097_d000_f0_pg_s2.json",
+      "result_SHA256": "64be5c31b3fa60424f6c034408679df4addc7053451ade4996f063a3eba09973",
+      "PG": {
+        "cell_energy_distance": 0.38371682121224016,
+        "energy_score": 2.20778747354466,
+        "spread_ratio": 0.9289605815506183,
+        "within_condition_spread_ratio": 0.8178297141856226,
+        "coverage80": 0.625
+      },
+      "resampling": {
+        "cell_energy_distance": 0.2360664757860942,
+        "energy_score": 2.1189666465878148,
+        "spread_ratio": 1.0996368276041926,
+        "within_condition_spread_ratio": 1.0006447828456726,
+        "coverage80": 0.6971153846153846
+      },
+      "actual_GPU_seconds": 1377.2017725570186,
+      "native_saved_score_audit": true
+    }
+  ],
+  "mean_over_completed_only": {
+    "PG": {
+      "cell_energy_distance": 0.3509637959224783,
+      "energy_score": 2.1697151937472894,
+      "spread_ratio": 0.8512200296378574
+    },
+    "resampling": {
+      "cell_energy_distance": 0.23247586793380925,
+      "energy_score": 2.1001855782162693,
+      "spread_ratio": 1.0945100620777473
+    }
+  },
+  "all_four_seed_robustness_complete": false,
+  "benchmark_candidate_freeze_deferred": true,
+  "original_GPU_queue_interrupted": false,
+  "CPU_waiter_cancellation_evidence": "/ml2/alz/artifacts/benchmark097-boundary/cancelled_by_review.json",
+  "CPU_waiter_cancellation_SHA256": "07ab860309537d51e7831aa45a4531c2afeab51599a96e5ef2128f6c8f445845",
+  "cancelled_CPU_identity": {
+    "pid": 3997619,
+    "birth": 16728929,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "next_calibration_design_path": "/ml2/alz/analysis/distribution097_conditional_next_search_design_20261107.json",
+  "next_calibration_CPU_model_qualification_path": "/ml2/alz/analysis/distribution097_conditional_continuation_CPU_model_qualification_20261107.json",
+  "new_calibration_runtime_or_GPU_scope_qualified": false,
+  "new_search_activated": false,
+  "heldout_values_read": false,
+  "SOTA_claim": false,
+  "full_goal_complete": false
+}
