@@ -2,19 +2,6 @@
   "status": "PRIMARY_SOURCE_COMPARATOR_SCOPE_RECHECK_NO_NEW_MODELS_OR_TARGETS",
   "UTC": "2026-11-07T11:56:26.553975+00:00",
   "purpose": "Keep the ongoing45-fit comparison and any eventual claim aligned with current generative-cell literature; do not interpret a win over selected baselines as exhaustive SOTA.",
-  "current_frozen_scientific_scope_preserved": {
-    "methods": [
-      "pg",
-      "scvi",
-      "cfgen"
-    ],
-    "folds": 3,
-    "seeds": 5,
-    "fresh_fits": 45,
-    "matched_resampling": true,
-    "PG_formulation_fixed": true,
-    "calibration_and_evaluation_separate_with_declared_exposure_limits": true
-  },
   "primary_sources": [
     {
       "method": "CFGen",
@@ -73,5 +60,19 @@
   "additional_comparators_queued": 0,
   "full45_scope_reduced": false,
   "full_goal_complete": false,
-  "SOTA_claim": false
+  "SOTA_claim": false,
+  "declared_full45_scope_preserved": {
+    "methods": [
+      "pg",
+      "scvi",
+      "cfgen"
+    ],
+    "folds": 3,
+    "seeds": 5,
+    "fresh_fits": 45,
+    "matched_resampling": true,
+    "PG_formulation_fixed": true,
+    "calibration_and_evaluation_separate_with_declared_exposure_limits": true
+  },
+  "PG_candidate_still_unfrozen_pending_all9_confirmation": true
 }
