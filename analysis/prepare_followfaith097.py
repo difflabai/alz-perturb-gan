@@ -15,6 +15,8 @@ def main():
     now=time.time();window=ROOT/'analysis/research_window_20261104_five_days.json'
     forecast=ROOT/'analysis/benchmark097_historical_cost_forecast_20261107.json'
     frozen=design(a,now,read(window)['expires_unix'],read(forecast)['estimated_matrix_GPU_hours'])
+    project=Path('/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark')
+    assert not read(project/'project_gpu_budget.json')['open_reservations']
     # Even the prospective skip retains its exact full-scope time calculation.
     dest=STUDY/'frozen_design.json';assert not dest.exists();dest.write_text(json.dumps(frozen,indent=2)+'\n')
     if not frozen['candidates']:
@@ -42,8 +44,6 @@ def main():
     assert q['status']=='ALL4_POSSIBLE_FOLLOWUP_SETTING_SEED_NATIVE_TRAINER_PREFIX_CASES_PASS'
     for path,pin in q['source_SHA256'].items():assert sha(path)==pin
     native=Path(a['model_parity_proof_path']);assert sha(native)==a['model_parity_proof_SHA256'];paths.append(native)
-    project=Path('/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark')
-    assert not read(project/'project_gpu_budget.json')['open_reservations']
     p.update(status='FROZEN_RELEASED097_FULL20K_FOLLOWUP_COORDINATE_SEARCH',
         UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),baseline_audit_path=str(audit_path),
         upstream_control_audit_path=str(old_path),reference_result_SHA256=combined,
