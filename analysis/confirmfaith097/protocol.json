@@ -1,5 +1,5 @@
 {
-  "status": "PREPARED_PENDING_CORRECTED_RELEASED_PAIRED_SELECTION_AUDIT",
+  "status": "FROZEN_RELEASED097_MATCHED_SEED234_CONFIRMATION",
   "native_version": "0.9.7",
   "endpoint": 20000,
   "training_seeds": [
@@ -11,7 +11,50 @@
     0,
     1
   ],
-  "selected_configurations": [],
+  "selected_configurations": [
+    {
+      "candidate_id": "t004",
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "roles": [
+        "primary_distance"
+      ]
+    },
+    {
+      "candidate_id": "t005",
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "roles": [
+        "joint_quality"
+      ]
+    },
+    {
+      "candidate_id": "f000",
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "roles": [
+        "released_reference"
+      ]
+    }
+  ],
   "all_new_training_from_scratch": true,
   "initial_completed_updates": 0,
   "source_checkpoint": null,
@@ -21,7 +64,31 @@
   "SOTA_claim": false,
   "full_goal_complete": false,
   "activation": false,
-  "selection_evidence_SHA256": {},
+  "selection_evidence_SHA256": {
+    "/ml2/alz/analysis/local097_pipeline_independent_audit_20261107.json": "d7c04e3f368b2bdfd46c939169322d7b639623bc9e2dde6d9d59fa409d930e17",
+    "/ml2/alz/analysis/prepare_confirmfaith097.py": "2cc06cbcd689c107df84220dd541c019f016b14c43625a1dbc02ffb25fe6ec50",
+    "/ml2/alz/analysis/released097_selection.py": "b9d8a25242cbe78249a8d4c62eb7cb8be3cc0d3bcf2b4e0caaa4d20929e06fed",
+    "/ml2/alz/analysis/released097_external_selection.py": "13fef85d97eeac2e50adc7bda9088f82770ef2f8738e90444e7d1f38f29d510d",
+    "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json": "b3ec603f6091ddd413fd5f264be0036503dd304339a60ae6f744a9597b607a3c",
+    "/ml2/alz/analysis/audit_localfaith097.py": "a7aaf7db142a513fd3337753696aa8322a0fc6356f7662906fdc18f232da60f0",
+    "/ml2/alz/analysis/localfaith097/selection.py": "964fc116afdc7697cc7d0cb8b533684e621ec57d63a420ded8a3ffb3ca5b0053",
+    "/ml2/alz/analysis/localfaith097/runtime_CPU_qualification.json": "f369a02b9d31ec5cc7e3ec2d847da491959cf5a9b33764ea0b45d8dfdbb29851",
+    "/ml2/alz/analysis/faithful097_final_independent_audit_20261107.json": "b67ad4d2f940acc4671301d74bfda3189a82f1f20b10dbb0a1894d058f4b8963",
+    "/ml2/alz/analysis/localfaith097/protocol.json": "b5dfe66178a28aa15119f1d2b25766af9e8895e32dfd734c05b8e1622043ff5c",
+    "/ml2/alz/analysis/localfaith097/report.json": "d65205006517afbb92c1ab62e3a766d1c980461c9e64c92576651b45f8816b1d",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t000_f0_pg_s0.json": "8ec6ad1399c359a6dc2f2435e72ac8b68c2ecca945c696560ebfd5a8c9590212",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t000_f0_pg_s1.json": "8a439e0916cf3f03a0f8474375c4be86ba775afffcadc5f0cb365c3eb598a627",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t001_f0_pg_s0.json": "410b26210c477a7cc2f375c3e0b5a485810f9cff227bbc88b337b4522a255c2f",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t001_f0_pg_s1.json": "df0c6b635eaa90ab52ae35f2ab2b6922b3026519f99a8f616952b5ec68380d77",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t002_f0_pg_s0.json": "ce5c034e8d88a10d4a3449c6600f74b902d99d92baded4b38d6b3659e9df01cc",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t002_f0_pg_s1.json": "8c8a33c18bfaec30ba009ed6cf9ef1f31252d2e5b2f638a02468418dca2c2823",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t003_f0_pg_s0.json": "592c8805483e4720213eecbf3631af24934e157851ab0e370a7407464a1c7245",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t003_f0_pg_s1.json": "9f43fd543a29d973f532acf2db253291829b6cd8319ec7bec01ed53979b9de32",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t004_f0_pg_s0.json": "6048edea749e5bf00468f26aca359b8c759a96d601ca32983ebb809b97e7af25",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t004_f0_pg_s1.json": "087e42ba8c4b410762dfbdefaadd3809a5c6e76ef49866b23db8f11dcf53cb4d",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s0.json": "4f8f7940b9e2a3c6233613fc89469cc316d0128890100b80bc2271b86436c089",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s1.json": "5277287475c5b1e8e7b2861aad146a5ac88d13a92a6ef3012a7eb50f12347535"
+  },
   "formulation": {
     "native_version": "0.9.7",
     "recipe": "bispf_optimized",
@@ -30,5 +97,10 @@
     "prior_regularizer_domain": "all512rows",
     "critic_thermal": "explicitly_bound",
     "penalty_input_domain": "continuous"
-  }
+  },
+  "UTC": "2026-11-07T08:37:07.618701+00:00",
+  "selection_audit_path": "/ml2/alz/analysis/local097_pipeline_independent_audit_20261107.json",
+  "all_selected_models_are_new_fits": true,
+  "maximum_new_fits": 9,
+  "ranking_rule": "All selected settings at all fresh initialization seeds2..4; minimize mean full20k calibration cell energy distance, then donor energy score. Exploratory seeds0/1 excluded. Retain failures, SD, controls, spread and coverage."
 }

@@ -1,0 +1,234 @@
+{
+  "status": "RELEASED097_MATCHED_CONFIRMATION_SCOPE_ACCOUNTING_CPU_PASS",
+  "UTC": "2026-11-07T08:39:44.923476+00:00",
+  "actual_runtime_tests": 23,
+  "actual_native_trainer_parity_rows": [
+    {
+      "seed": 2,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "optimizer_pairs_per_loop": 3,
+      "exact_models_optimizers_rng_and_update_clock": true,
+      "exact_all_losses_and_penalty": true,
+      "from_scratch": true,
+      "candidate_id": "t004"
+    },
+    {
+      "seed": 3,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "optimizer_pairs_per_loop": 3,
+      "exact_models_optimizers_rng_and_update_clock": true,
+      "exact_all_losses_and_penalty": true,
+      "from_scratch": true,
+      "candidate_id": "t004"
+    },
+    {
+      "seed": 4,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "optimizer_pairs_per_loop": 3,
+      "exact_models_optimizers_rng_and_update_clock": true,
+      "exact_all_losses_and_penalty": true,
+      "from_scratch": true,
+      "candidate_id": "t004"
+    },
+    {
+      "seed": 2,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "optimizer_pairs_per_loop": 3,
+      "exact_models_optimizers_rng_and_update_clock": true,
+      "exact_all_losses_and_penalty": true,
+      "from_scratch": true,
+      "candidate_id": "t005"
+    },
+    {
+      "seed": 3,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "optimizer_pairs_per_loop": 3,
+      "exact_models_optimizers_rng_and_update_clock": true,
+      "exact_all_losses_and_penalty": true,
+      "from_scratch": true,
+      "candidate_id": "t005"
+    },
+    {
+      "seed": 4,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "optimizer_pairs_per_loop": 3,
+      "exact_models_optimizers_rng_and_update_clock": true,
+      "exact_all_losses_and_penalty": true,
+      "from_scratch": true,
+      "candidate_id": "t005"
+    },
+    {
+      "seed": 2,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "optimizer_pairs_per_loop": 3,
+      "exact_models_optimizers_rng_and_update_clock": true,
+      "exact_all_losses_and_penalty": true,
+      "from_scratch": true,
+      "candidate_id": "f000"
+    },
+    {
+      "seed": 3,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "optimizer_pairs_per_loop": 3,
+      "exact_models_optimizers_rng_and_update_clock": true,
+      "exact_all_losses_and_penalty": true,
+      "from_scratch": true,
+      "candidate_id": "f000"
+    },
+    {
+      "seed": 4,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "optimizer_pairs_per_loop": 3,
+      "exact_models_optimizers_rng_and_update_clock": true,
+      "exact_all_losses_and_penalty": true,
+      "from_scratch": true,
+      "candidate_id": "f000"
+    }
+  ],
+  "actual_cells_checked": 9,
+  "fullwidth_native_optimizer_pairs": 54,
+  "selection_seeds": [
+    0,
+    1
+  ],
+  "all_new_models_from_update_zero": true,
+  "native_model_source_unchanged": false,
+  "actual_released_trainer_parity": true,
+  "actual_native_trainer_prefix_parity_for_all_selected_seeds": true,
+  "GPU_allocation_created": false,
+  "CUDA_initialized": false,
+  "tests": [
+    {
+      "file": "test_integration.py",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_any_old_or_new_matrix_consumption_or_output_refuses_duplicate (__main__.Integration.test_any_old_or_new_matrix_consumption_or_output_refuses_duplicate) ... ok\ntest_benchmark_worker_refuses_partial_wrong_reference_or_changed_hyperparameters (__main__.Integration.test_benchmark_worker_refuses_partial_wrong_reference_or_changed_hyperparameters) ... ok\ntest_complete_native_inventory_and_input_pins_required (__main__.Integration.test_complete_native_inventory_and_input_pins_required) ... ok\ntest_core_180hour_budget_includes_closed_and_open_card_hours (__main__.Integration.test_core_180hour_budget_includes_closed_and_open_card_hours) ... ok\ntest_end_to_end_cpu_owner_worker_settle_then_unchanged_gpu1_key_refuses (__main__.Integration.test_end_to_end_cpu_owner_worker_settle_then_unchanged_gpu1_key_refuses) ... ok\ntest_failed_cpu_attempt_is_charged_and_consumes_same_scientific_key (__main__.Integration.test_failed_cpu_attempt_is_charged_and_consumes_same_scientific_key) ... ok\ntest_fixture_cannot_select_canonical_root (__main__.Integration.test_fixture_cannot_select_canonical_root) ... ok\ntest_held_owner_and_worker_refuse_before_reservation_or_model_import (__main__.Integration.test_held_owner_and_worker_refuse_before_reservation_or_model_import) ... ok\ntest_missing_live_reservation_or_lease_refuses_worker (__main__.Integration.test_missing_live_reservation_or_lease_refuses_worker) ... ok\ntest_native_runtime_import_roots_find_packages_without_importing_models (__main__.Integration.test_native_runtime_import_roots_find_packages_without_importing_models) ... ok\ntest_old_gpu1_phase_lock_prevents_new_gpu0_race (__main__.Integration.test_old_gpu1_phase_lock_prevents_new_gpu0_race) ... ok\ntest_source_or_cache_drift_refused_before_budget_or_model (__main__.Integration.test_source_or_cache_drift_refused_before_budget_or_model) ... ok\ntest_uncertain_resource_cleanup_preserves_canonical_reservation (__main__.Integration.test_uncertain_resource_cleanup_preserves_canonical_reservation) ... ok\ntest_worker_checks_private_canonical_lease_command_device_and_ancestor_bindings (__main__.Integration.test_worker_checks_private_canonical_lease_command_device_and_ancestor_bindings) ... ok\ntest_wrong_device_expiry_endpoint_command_or_backend_binding_refused (__main__.Integration.test_wrong_device_expiry_endpoint_command_or_backend_binding_refused) ... ok\n\n----------------------------------------------------------------------\nRan 15 tests in 3.254s\n\nOK\n"
+    },
+    {
+      "file": "test_scope.py",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_all_actual_frozen_confirm_authorizations (__main__.Scope.test_all_actual_frozen_confirm_authorizations) ... ok\ntest_controls_and_original_shared_resource_margins (__main__.Scope.test_controls_and_original_shared_resource_margins) ... ok\ntest_hyperparameters_cannot_change_after_frozen_selection (__main__.Scope.test_hyperparameters_cannot_change_after_frozen_selection) ... ok\ntest_incomplete_selection_audit_refuses_confirmation (__main__.Scope.test_incomplete_selection_audit_refuses_confirmation) ... ok\ntest_old_weights_partial_horizon_and_wrong_formulation_refuse (__main__.Scope.test_old_weights_partial_horizon_and_wrong_formulation_refuse) ... ok\ntest_wrong_seeds_phase_ids_and_boolean_seed_refused (__main__.Scope.test_wrong_seeds_phase_ids_and_boolean_seed_refused) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 1.511s\n\nOK\n"
+    },
+    {
+      "file": "test_factory.py",
+      "returncode": 0,
+      "stdout": "NATIVE_CONFIRMATION_ROWS [{\"seed\": 2, \"hyperparameters\": {\"generator_lr\": 0.012, \"critic_lr\": 0.036, \"particle_lr\": 0.03, \"reg_coeff\": 1.0, \"reg_kappa\": 1.0, \"prior_reg\": 0.01}, \"optimizer_pairs_per_loop\": 3, \"exact_models_optimizers_rng_and_update_clock\": true, \"exact_all_losses_and_penalty\": true, \"from_scratch\": true, \"candidate_id\": \"t004\"}, {\"seed\": 3, \"hyperparameters\": {\"generator_lr\": 0.012, \"critic_lr\": 0.036, \"particle_lr\": 0.03, \"reg_coeff\": 1.0, \"reg_kappa\": 1.0, \"prior_reg\": 0.01}, \"optimizer_pairs_per_loop\": 3, \"exact_models_optimizers_rng_and_update_clock\": true, \"exact_all_losses_and_penalty\": true, \"from_scratch\": true, \"candidate_id\": \"t004\"}, {\"seed\": 4, \"hyperparameters\": {\"generator_lr\": 0.012, \"critic_lr\": 0.036, \"particle_lr\": 0.03, \"reg_coeff\": 1.0, \"reg_kappa\": 1.0, \"prior_reg\": 0.01}, \"optimizer_pairs_per_loop\": 3, \"exact_models_optimizers_rng_and_update_clock\": true, \"exact_all_losses_and_penalty\": true, \"from_scratch\": true, \"candidate_id\": \"t004\"}, {\"seed\": 2, \"hyperparameters\": {\"generator_lr\": 0.012, \"critic_lr\": 0.018, \"particle_lr\": 0.06, \"reg_coeff\": 1.0, \"reg_kappa\": 1.0, \"prior_reg\": 0.01}, \"optimizer_pairs_per_loop\": 3, \"exact_models_optimizers_rng_and_update_clock\": true, \"exact_all_losses_and_penalty\": true, \"from_scratch\": true, \"candidate_id\": \"t005\"}, {\"seed\": 3, \"hyperparameters\": {\"generator_lr\": 0.012, \"critic_lr\": 0.018, \"particle_lr\": 0.06, \"reg_coeff\": 1.0, \"reg_kappa\": 1.0, \"prior_reg\": 0.01}, \"optimizer_pairs_per_loop\": 3, \"exact_models_optimizers_rng_and_update_clock\": true, \"exact_all_losses_and_penalty\": true, \"from_scratch\": true, \"candidate_id\": \"t005\"}, {\"seed\": 4, \"hyperparameters\": {\"generator_lr\": 0.012, \"critic_lr\": 0.018, \"particle_lr\": 0.06, \"reg_coeff\": 1.0, \"reg_kappa\": 1.0, \"prior_reg\": 0.01}, \"optimizer_pairs_per_loop\": 3, \"exact_models_optimizers_rng_and_update_clock\": true, \"exact_all_losses_and_penalty\": true, \"from_scratch\": true, \"candidate_id\": \"t005\"}, {\"seed\": 2, \"hyperparameters\": {\"generator_lr\": 0.012, \"critic_lr\": 0.018, \"particle_lr\": 0.03, \"reg_coeff\": 1.0, \"reg_kappa\": 1.0, \"prior_reg\": 0.01}, \"optimizer_pairs_per_loop\": 3, \"exact_models_optimizers_rng_and_update_clock\": true, \"exact_all_losses_and_penalty\": true, \"from_scratch\": true, \"candidate_id\": \"f000\"}, {\"seed\": 3, \"hyperparameters\": {\"generator_lr\": 0.012, \"critic_lr\": 0.018, \"particle_lr\": 0.03, \"reg_coeff\": 1.0, \"reg_kappa\": 1.0, \"prior_reg\": 0.01}, \"optimizer_pairs_per_loop\": 3, \"exact_models_optimizers_rng_and_update_clock\": true, \"exact_all_losses_and_penalty\": true, \"from_scratch\": true, \"candidate_id\": \"f000\"}, {\"seed\": 4, \"hyperparameters\": {\"generator_lr\": 0.012, \"critic_lr\": 0.018, \"particle_lr\": 0.03, \"reg_coeff\": 1.0, \"reg_kappa\": 1.0, \"prior_reg\": 0.01}, \"optimizer_pairs_per_loop\": 3, \"exact_models_optimizers_rng_and_update_clock\": true, \"exact_all_losses_and_penalty\": true, \"from_scratch\": true, \"candidate_id\": \"f000\"}]\n",
+      "stderr": "test_every_frozen_setting_and_seed_matches_actual_native_trainer (__main__.Factory.test_every_frozen_setting_and_seed_matches_actual_native_trainer) ... ok\ntest_qualified_update_source_and_nonEMA_full_horizon (__main__.Factory.test_qualified_update_source_and_nonEMA_full_horizon) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 149.679s\n\nOK\n"
+    }
+  ],
+  "source_SHA256": {
+    "/ml2/alz/confirmfaith097_runtime/resource_profile.py": "01b4bcb1b177e443cf89378cf9129d51b6cc072adf03a151a51a997f5b5eb4b2",
+    "/ml2/alz/confirmfaith097_runtime/test_factory.py": "75f10e8a9a46279f6a0162193f6f347f5614c1775690b4f619c33bd9b4f401b9",
+    "/ml2/alz/confirmfaith097_runtime/finish.py": "edbc490c175c5ce1fd5f7ea1607a99ebe4559ec15d7ae5035d4fa0c546340eb4",
+    "/ml2/alz/confirmfaith097_runtime/launch_core_gpu0.py": "f4de7b30d845886c30307dc23fad0b79c8a2f7c67f2afa3a9fcad8ae2c4aaaa4",
+    "/ml2/alz/confirmfaith097_runtime/qualify_prepared.py": "7cc78564fab20ebd1a6940af5045cbe89b60dbc4ac1b773b006646e9e1301b26",
+    "/ml2/alz/confirmfaith097_runtime/project_runner_gpu0.py": "562507e0d1e5554dfa71e7f32ae16322bcf460caee2b3fc440681534e2c86fb5",
+    "/ml2/alz/confirmfaith097_runtime/preset_scope.py": "1dba827aff3bfc50298d6e72e0682decf4896a18be7acafe46cc9a6ae36aee6d",
+    "/ml2/alz/confirmfaith097_runtime/test_scope.py": "96c9c661fba69466e61ea4e764c043ffc432d1d0de6cb14dee3d041e67859b47",
+    "/ml2/alz/confirmfaith097_runtime/prepare.py": "f8f4af86f185d1c9983791ca5891b0d26666a80157bbddf7bf67c12f81aa066e",
+    "/ml2/alz/confirmfaith097_runtime/test_prepared.py": "c17b32816da1ea018a4a761c2e6287011f04cdbd08c517d251ecefdc1312e551",
+    "/ml2/alz/confirmfaith097_runtime/worker_gpu0.py": "e7869cc5352f0ea4f6c1cfe09d9f1f47bc685b11b461781bc468e09a0a7e2b78",
+    "/ml2/alz/confirmfaith097_runtime/qualify.py": "a6d15d0cdc5fc2f4faa75034820cd580b45f888f1e818dc682f1e24320dc908d",
+    "/ml2/alz/confirmfaith097_runtime/test_integration.py": "83cf45a9b96426cf7822c36a0e82dd0a087afd0e3b73884d8c1ecc3e2eb10fee",
+    "/ml2/alz/confirmfaith097_runtime/state_fingerprint.py": "29201ac7d98124296ec926fe6155903b30a8338e5e3875ae47d3276a7d61ae53",
+    "/ml2/alz/confirmfaith097_runtime/binding.py": "9113c5db148af7abe88a8fe47a2425ce9f56925e427e9adaa44848a8b1dfb902",
+    "/ml2/alz/confirmfaith097_runtime/policy.prepared.json": "b4e3f52445524b89e54e715cadf63191d3c4d58da62d1d79eff9b14370f9813b",
+    "/ml2/alz/analysis/faithful097/model/released_adapter.py": "b3fe9b78771f1a85fa86646ae2e6c74e8725af211a7484ee0e08fb5b62093f09",
+    "/ml2/alz/analysis/faithful097/model/released_update.py": "7cba670fbc51740938b01ecb5f637bbc8cc23f4ed889e8f00d829b886643e3a8",
+    "/ml2/alz/analysis/faithful097/model/release_env.py": "841568c7d2132ac307bbc399f8739713aa1636a90259680dbae84f37c5dd115c",
+    "/ml2/alz/analysis/confirmfaith097/protocol.json": "c5d040988e2e176b8778c73c182c01ad886103a253a257ac469ae9ab0a8cb604",
+    "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json": "b3ec603f6091ddd413fd5f264be0036503dd304339a60ae6f744a9597b607a3c",
+    "/ml2/alz/analysis/confirmfaith097/native_release.json": "f47134d2e72c0481959bcbd45b202c71de193aacc671458c6fca57e3ca500e60",
+    "/ml2/alz/analysis/shared_gpu0_candidate_CPU_qualification.json": "fb8d6e6243ad9b13da0337c2b0194cb875d550e920d2886c89429ec3a8b29995",
+    "/ml2/alz/analysis/confirmation097_resampling_controls_CPU_20261106.json": "cdda8e60bde982667f8e79c840f4df629459dbe4ff22aa5194498a9f5ee928a9",
+    "/ml2/alz/analysis/released097_selection.py": "b9d8a25242cbe78249a8d4c62eb7cb8be3cc0d3bcf2b4e0caaa4d20929e06fed",
+    "/ml2/alz/analysis/research_window_20261104_five_days.json": "2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1",
+    "/ml2/alz/analysis/run_confirmfaith097.py": "4b0ad8a865198557745f43dbaa839d424dfd0c9b9bce67b3b32ae449aa30fcde",
+    "/ml2/alz/analysis/prepare_confirmfaith097.py": "2cc06cbcd689c107df84220dd541c019f016b14c43625a1dbc02ffb25fe6ec50",
+    "/ml2/alz/analysis/faithful097/native_trainer_parity.py": "d3ecf079f9b106ad19383c700f751ff79436f841a09699a218980c1cb7d07c37",
+    "/ml2/alz/analysis/local097_pipeline_independent_audit_20261107.json": "d7c04e3f368b2bdfd46c939169322d7b639623bc9e2dde6d9d59fa409d930e17",
+    "/ml2/alz/analysis/released097_external_selection.py": "13fef85d97eeac2e50adc7bda9088f82770ef2f8738e90444e7d1f38f29d510d",
+    "/ml2/alz/analysis/audit_localfaith097.py": "a7aaf7db142a513fd3337753696aa8322a0fc6356f7662906fdc18f232da60f0",
+    "/ml2/alz/analysis/localfaith097/selection.py": "964fc116afdc7697cc7d0cb8b533684e621ec57d63a420ded8a3ffb3ca5b0053",
+    "/ml2/alz/analysis/localfaith097/runtime_CPU_qualification.json": "f369a02b9d31ec5cc7e3ec2d847da491959cf5a9b33764ea0b45d8dfdbb29851",
+    "/ml2/alz/analysis/faithful097_final_independent_audit_20261107.json": "b67ad4d2f940acc4671301d74bfda3189a82f1f20b10dbb0a1894d058f4b8963",
+    "/ml2/alz/analysis/localfaith097/protocol.json": "b5dfe66178a28aa15119f1d2b25766af9e8895e32dfd734c05b8e1622043ff5c",
+    "/ml2/alz/analysis/localfaith097/report.json": "d65205006517afbb92c1ab62e3a766d1c980461c9e64c92576651b45f8816b1d",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t000_f0_pg_s0.json": "8ec6ad1399c359a6dc2f2435e72ac8b68c2ecca945c696560ebfd5a8c9590212",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t000_f0_pg_s1.json": "8a439e0916cf3f03a0f8474375c4be86ba775afffcadc5f0cb365c3eb598a627",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t001_f0_pg_s0.json": "410b26210c477a7cc2f375c3e0b5a485810f9cff227bbc88b337b4522a255c2f",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t001_f0_pg_s1.json": "df0c6b635eaa90ab52ae35f2ab2b6922b3026519f99a8f616952b5ec68380d77",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t002_f0_pg_s0.json": "ce5c034e8d88a10d4a3449c6600f74b902d99d92baded4b38d6b3659e9df01cc",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t002_f0_pg_s1.json": "8c8a33c18bfaec30ba009ed6cf9ef1f31252d2e5b2f638a02468418dca2c2823",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t003_f0_pg_s0.json": "592c8805483e4720213eecbf3631af24934e157851ab0e370a7407464a1c7245",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t003_f0_pg_s1.json": "9f43fd543a29d973f532acf2db253291829b6cd8319ec7bec01ed53979b9de32",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t004_f0_pg_s0.json": "6048edea749e5bf00468f26aca359b8c759a96d601ca32983ebb809b97e7af25",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t004_f0_pg_s1.json": "087e42ba8c4b410762dfbdefaadd3809a5c6e76ef49866b23db8f11dcf53cb4d",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s0.json": "4f8f7940b9e2a3c6233613fc89469cc316d0128890100b80bc2271b86436c089",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s1.json": "5277287475c5b1e8e7b2861aad146a5ac88d13a92a6ef3012a7eb50f12347535"
+  }
+}
