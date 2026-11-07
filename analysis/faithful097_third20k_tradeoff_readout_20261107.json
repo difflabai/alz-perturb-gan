@@ -1,0 +1,122 @@
+{
+  "status": "THIRD_RELEASED_FRESH20K_ENDPOINT_AUDITED_LAST_BASELINE_SEED_PENDING",
+  "UTC": "2026-11-07T03:20:44.204132+00:00",
+  "training_seed": 0,
+  "endpoint": 20000,
+  "nominal_metrics": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 1.9009654459270127,
+    "cell_energy_distance": 0.2805434126347235,
+    "spread_ratio": 0.9777870063157865,
+    "within_condition_spread_ratio": 0.9098323628540306,
+    "coverage80": 0.7259615384615384,
+    "generated_zero_count_rate": 1.8750000000000002e-05,
+    "per_donor_energy_score": [
+      1.2013774528118741,
+      2.760463060505384,
+      1.772322878590658,
+      1.8696983918001349
+    ],
+    "per_stage_cell_energy_distance": [
+      0.8343051269575126,
+      1.6872571311343174,
+      0.9682222075083216,
+      0.5500221448538092
+    ]
+  },
+  "lower_rate_kappa_metrics": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 2.082989412898513,
+    "cell_energy_distance": 0.27502356676161543,
+    "spread_ratio": 0.835225944320275,
+    "within_condition_spread_ratio": 0.7552193659577149,
+    "coverage80": 0.5721153846153846,
+    "generated_zero_count_rate": 0.00011875000000000001,
+    "per_donor_energy_score": [
+      1.1522150994300997,
+      3.025920640936177,
+      2.0885142861269337,
+      2.065307625100841
+    ],
+    "per_stage_cell_energy_distance": [
+      0.9379769645988194,
+      1.7356980272108187,
+      1.0756211634912143,
+      0.5519625237560115
+    ]
+  },
+  "matched_resampling": {
+    "metric_role": "calibration_selection",
+    "generation_replicates": 2,
+    "donors": [
+      "H20.33.032",
+      "H21.33.001",
+      "H21.33.023",
+      "H21.33.025"
+    ],
+    "training_seed": 0,
+    "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+    "sampling_contract": "calibration_equal_stage375_priority_v1",
+    "energy_score": 2.079287181278266,
+    "cell_energy_distance": 0.24277825308317968,
+    "spread_ratio": 1.086688043301637,
+    "within_condition_spread_ratio": 0.9935126950887428,
+    "coverage80": 0.6778846153846154,
+    "generated_zero_count_rate": 0.0,
+    "per_donor_energy_score": [
+      1.272282323410263,
+      3.047641176747636,
+      1.95978725566323,
+      2.0374379692919344
+    ],
+    "per_stage_cell_energy_distance": [
+      0.9114143695390835,
+      1.8390837374697222,
+      1.132453828552058,
+      0.5532384176654261
+    ]
+  },
+  "lower_minus_nominal": {
+    "cell_energy_distance": -0.0055198458731080535,
+    "energy_score": 0.18202396697150047,
+    "spread_ratio": -0.14256106199551155,
+    "within_condition_spread_ratio": -0.1546129968963157,
+    "coverage80": -0.15384615384615385
+  },
+  "lower_actual_GPU_seconds": 1428.002219618007,
+  "completed_baseline_attempts": 3,
+  "required_baseline_attempts": 4,
+  "all_planned_attempts_resolved": false,
+  "calibration_only": true,
+  "parameter_selection_not_frozen": true,
+  "interpretation": "Lower rates/kappa slightly improve pooled distance at matched seed0 but worsen donor energy and predictive spread/coverage. Both settings trail matched resampling in pooled distance. Last lower-setting seed must finish before two-seed ranking or local-anchor selection.",
+  "input_SHA256": {
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json": "090be880e2a9758348f2075419593b693523d9792db910d4bc69bb8bf5826ca4",
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f001_f0_pg_s0.json": "2dcf3551cb764457b7fb33970b9a9ad557009836801a84607d92c9b53d97a1f6"
+  },
+  "SOTA_claim": false,
+  "full_goal_complete": false
+}
