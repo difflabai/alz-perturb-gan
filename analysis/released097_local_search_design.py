@@ -8,6 +8,16 @@ import math
 from released097_selection import FORMULATION,FIELDS,require
 from released097_external_selection import validate_summary
 
+def coordinate_neighbors(anchor_id,h):
+ require(anchor_id in ('f000','f001') and set(h)==FIELDS,'Qualified baseline coordinate anchor required')
+ factor=.5 if anchor_id=='f001' else 2.
+ neighbors=[('prior_reg',.3),('prior_reg',3.),('reg_kappa',factor),('generator_lr',factor),('critic_lr',factor),('particle_lr',factor)]
+ rows=[]
+ for i,(field,multiplier) in enumerate(neighbors):
+  value=dict(h);value[field]*=multiplier
+  rows.append(dict(id=f't{i:03}',hyperparameters=value,changed_field=field,multiplier=multiplier,endpoint=20000,training_seeds=[0,1],from_scratch=True,initial_completed_updates=0,source_checkpoint=None))
+ return factor,rows
+
 def design(audit,now_unix,expires_unix,matrix_estimated_hours):
  require(audit['status']=='INDEPENDENT_RELEASED097_FRESH_BASELINE4_AUDIT_PASS','Complete independent corrected four-fit baseline audit required')
  require(audit['formulation']==FORMULATION and audit['all_planned_attempts_resolved'] and audit['all_new_models_from_update_zero'] and audit['activation_actually_reverted'] and audit['owned_processes_and_leases_absent'] and not audit['heldout_values_read'],'Fresh closed calibration evidence required')
@@ -23,8 +33,7 @@ def design(audit,now_unix,expires_unix,matrix_estimated_hours):
  # Both baseline settings differ jointly in G/D/P rates and kappa. Extrapolation
  # is a testable pattern-search hypothesis, never a causal claim for each field.
  both_finite=all(c['all_seeds_finite'] for c in by_id.values())
- factor=.5 if anchor['candidate_id']=='f001' or not both_finite else 2.
- neighbors=[('prior_reg',.3),('prior_reg',3.),('reg_kappa',factor),('generator_lr',factor),('critic_lr',factor),('particle_lr',factor)]
+ factor,neighbors=coordinate_neighbors(anchor['candidate_id'],h)
  # Measured per-fit costs include generation/scoring. This conservative mean
  # forecast is not admission, a reservation, or a runtime guarantee.
  cal_fit_seconds=1.1*audit['total_actual_GPU_seconds']/4
@@ -37,10 +46,7 @@ def design(audit,now_unix,expires_unix,matrix_estimated_hours):
  # A prior-weight bracket is the minimum useful local study. Otherwise proceed
  # to baseline confirmation instead of shortening endpoints or external scope.
  if slots<2:slots=0
- proposals=[]
- for i,(field,multiplier) in enumerate(neighbors[:slots]):
-  value=dict(h);value[field]*=multiplier
-  proposals.append(dict(id=f't{i:03}',hyperparameters=value,changed_field=field,multiplier=multiplier,endpoint=20000,training_seeds=[0,1],from_scratch=True,initial_completed_updates=0,source_checkpoint=None))
+ proposals=neighbors[:slots]
  return dict(status='PROPOSED_WINDOW_BOUNDED_LOCAL_COORDINATE_SEARCH' if proposals else 'INSUFFICIENT_FORECAST_SLACK_FOR_LOCAL_SEARCH_BASELINE_CONFIRMATION_PRIORITY',formulation=FORMULATION,
    anchor_candidate_id=anchor['candidate_id'],anchor_hyperparameters=h,anchor_selection='Complete two-seed mean cell energy distance, then donor energy score',
    directional_factor_for_rates_and_kappa=factor,directional_hypothesis_not_causal=both_finite,candidates=proposals,required_new_fits=2*len(proposals),
