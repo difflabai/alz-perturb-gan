@@ -1,0 +1,118 @@
+{
+  "status": "FIRST_FRESH_REFERENCE_SEED20K_COMPLETE_ALL9_SELECTION_STILL_PENDING",
+  "UTC": "2026-11-07T14:11:37.514723+00:00",
+  "candidate_id": "f000",
+  "completed_reference_seeds": [
+    2
+  ],
+  "pending_reference_seeds": [
+    3,
+    4
+  ],
+  "endpoint": 20000,
+  "from_scratch": true,
+  "initial_completed_updates": 0,
+  "hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.03,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "same_seed_metrics": {
+    "f000": {
+      "cell_energy_distance": 0.28976233769501647,
+      "energy_score": 1.9708290278596823,
+      "spread_ratio": 0.934475267461234,
+      "within_condition_spread_ratio": 0.8651563981651397,
+      "coverage80": 0.6826923076923077
+    },
+    "t004": {
+      "cell_energy_distance": 0.23764907311808336,
+      "energy_score": 2.1395910745687736,
+      "spread_ratio": 0.9227101394977113,
+      "within_condition_spread_ratio": 0.8264429556479327,
+      "coverage80": 0.6153846153846154
+    },
+    "t005": {
+      "cell_energy_distance": 0.26831310034773725,
+      "energy_score": 1.9626469382647591,
+      "spread_ratio": 0.9346156261331027,
+      "within_condition_spread_ratio": 0.8714921408492905,
+      "coverage80": 0.6682692307692308
+    }
+  },
+  "matched_resampling": {
+    "cell_energy_distance": 0.2360664757860942,
+    "energy_score": 2.1189666465878148,
+    "spread_ratio": 1.0996368276041926,
+    "within_condition_spread_ratio": 1.0006447828456726,
+    "coverage80": 0.6971153846153846
+  },
+  "reference_minus_matched_resampling": {
+    "cell_energy_distance": 0.05369586190892228,
+    "energy_score": -0.14813761872813247,
+    "spread_ratio": -0.16516156014295857,
+    "within_condition_spread_ratio": -0.13548838468053293,
+    "coverage80": -0.014423076923076872
+  },
+  "reference_minus_particle_rate": {
+    "cell_energy_distance": 0.021449237347279215,
+    "energy_score": 0.00818208959492317,
+    "spread_ratio": -0.0001403586718686789,
+    "within_condition_spread_ratio": -0.006335742684150825,
+    "coverage80": 0.014423076923076872
+  },
+  "reference_minus_critic_rate": {
+    "cell_energy_distance": 0.052113264576933105,
+    "energy_score": -0.16876204670909134,
+    "spread_ratio": 0.011765127963522692,
+    "within_condition_spread_ratio": 0.038713442517206986,
+    "coverage80": 0.06730769230769229
+  },
+  "source_result_SHA256": {
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_f000_f0_pg_s2.json": "489c90c6463bebd954fe320be7681102f8488f76fd10d90bb8e6a3868118dbf6",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s2.json": "a8cb583e89575312c5f7c05741dd9d16bb9eddf8bbd0ba6b6be6477c99545f2d",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s2.json": "301f82e278ce69c5204f83d52b14d8b52800ae7e8851b5c5d92850b66490eaaf"
+  },
+  "saved_artifacts_rehashed": 17,
+  "calibration_replicates_independently_rescored": 4,
+  "new_paired_control_files": {
+    "resampling_r0/arrays.npz": "5010b21fa1567e520a15fd0f8307531c389ce3e3fab98114f2bcc3bac87087d5",
+    "resampling_r0/metrics.json": "ceab62578ebb9ee7688e38ee0011fbfe43cf1a5ffdc8f10814992888f0bae770",
+    "resampling_r1/arrays.npz": "84a774e743cf5444934ddd625f98f5944ac1a7c6ab150a0b3ebdbfbb7ce0e22b",
+    "resampling_r1/metrics.json": "d58202d3096a54cb4d33ea5c9a40245723077c809d45c0a5ad737f70ea0eb62b"
+  },
+  "control_byte_equality_comparisons_across_two_prior_arms": 8,
+  "native_saved_update_state_and_finiteness_checked": true,
+  "clean_closed_canonical_ledger_checked": true,
+  "charged_GPU_seconds": 3212.1238699740206,
+  "completed_phase_fits": 7,
+  "required_phase_fits": 9,
+  "current_live_fit": {
+    "attempt": "CAL_GPU0_V1_cf097_f000_f0_pg_s3",
+    "guard": {
+      "pid": 2107203,
+      "birth": 21819132,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    "worker": {
+      "pid": 2107291,
+      "birth": 21819238,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    "initial_completed_updates": 0,
+    "actual_logged_update": 501
+  },
+  "all9_independent_raw_artifact_audit_completed": false,
+  "final_setting_selected": false,
+  "CUDA_initialized": false,
+  "interpretation": "On fresh seed2 the nominal reference has better energy but worse cell distance than resampling. The doubled particle rate improves both metrics versus this same-seed reference. This is one matched initialization on the same adaptive calibration donors; the two remaining reference seeds and full9 audit are required before selection. No biological confidence interval or SOTA inference.",
+  "full_goal_complete": false,
+  "SOTA_claim": false,
+  "source_SHA256": {
+    "/ml2/alz/artifacts/audit-reference-seed2-fresh20k-20261107.py": "4970e633031b010c87aaba819f990ab3d8839c060748cbe0165eeb41f475ca20",
+    "/ml2/alz/calibration.py": "ce1ea5d5086db11712aa075b81daca799f2101a9ca3d8df3ff03e0b3d45da747"
+  }
+}
