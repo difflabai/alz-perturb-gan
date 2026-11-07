@@ -1,0 +1,52 @@
+{
+  "status": "FROZEN_FRESH_RELEASED_OBJECTIVE_RESTART_BASELINE",
+  "native_version": "0.9.7",
+  "endpoint": 20000,
+  "selection_seeds": [
+    0,
+    1
+  ],
+  "maximum_new_fits": 4,
+  "all_new_training_from_scratch": true,
+  "initial_completed_updates": 0,
+  "source_checkpoint": null,
+  "calibration_only": true,
+  "metric_role": "calibration_selection",
+  "automatic_promotion": false,
+  "SOTA_claim": false,
+  "full_goal_complete": false,
+  "candidates": [
+    {
+      "id": "f000",
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "meaning": "Released optimized recipe nominal scalars"
+    },
+    {
+      "id": "f001",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "meaning": "Previously explored lower rates and kappa, now corrected formulation and fresh weights"
+    }
+  ],
+  "prior_regularizer_domain": "all512rows",
+  "thermal_source": "bound_critic_optimizer_record",
+  "selection_rule": "Rank both complete seed0/1 means by cell energy distance, then donor energy score; retain every failure and spread/coverage. Baseline characterization only: no automatic benchmark freeze or SOTA claim.",
+  "design_evidence_SHA256": {
+    "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json": "277afb0a9d76b18a111e36060a7c064202473a814e70a0d2307e2ca0ef80a64f",
+    "/ml2/alz/analysis/refinement097_fidelity_termination_20261107.json": "b258f7bbf2e7b6540059f124e49610a35067370e0b208e6c9d9ec9e04b2afd2b"
+  },
+  "UTC": "2026-11-07T02:01:34.955434+00:00"
+}

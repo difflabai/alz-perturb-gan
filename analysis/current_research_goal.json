@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T01:59:31.021617+00:00",
+  "UTC": "2026-11-07T02:04:30.683988+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "native_goal_entry_updated": true,
@@ -22,7 +22,7 @@
   "research_window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
   "heldout_evaluation_separate": true,
   "SOTA_claim": false,
-  "study_status": "REPLANNING_FRESH_TRAINING_FOR_RELEASED_PRIOR_REGULARIZATION_FIDELITY",
+  "study_status": "QUALIFIED_FRESH_RELEASED_OBJECTIVE_BASELINE_READY_FOR_ACTIVATION",
   "prospective_distribution_search_protocol": "/ml2/alz/analysis/distribution097b/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/refinement097-paired-search/progress.json",
   "distribution_started_evidence_path": "/ml2/alz/analysis/distribution097_started_20261106.json",
@@ -82,5 +82,11 @@
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "previous_results_formulation": "Native package components in sampled-row-SBNP caller loop; not exact GANTrainer prior-regularizer domain",
   "new_training_requires": "Fresh G, D, particles and optimizer state at update0; full-table native prior regularizer at512rows; explicit thermal binding; actual native trainer comparison before GPU launch",
-  "latest_variant_result_path": "/ml2/alz/analysis/refinement097/results/CAL_GPU0_V1_refine097_r000_f0_pg_s0.json"
+  "latest_variant_result_path": "/ml2/alz/analysis/refinement097/results/CAL_GPU0_V1_refine097_r000_f0_pg_s0.json",
+  "faithful_restart_protocol_path": "/ml2/alz/analysis/faithful097/protocol.json",
+  "faithful_restart_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
+  "faithful_restart_runtime_qualification_path": "/ml2/alz/analysis/faithful097/runtime_CPU_qualification.json",
+  "faithful_restart_new_fits": 4,
+  "faithful_restart_started": false,
+  "formulation": "released097_full512row_SBNP_bound_thermal_nonEMA"
 }
