@@ -41,6 +41,18 @@ def protocol():
  assert p['retain_full_generated_stage_PCs'] is True
  assert p['PG_frozen_selection_evidence_SHA256']
  for path,pin in p['PG_frozen_selection_evidence_SHA256'].items():assert Path(path).is_absolute() and sha(path)==pin
+ audit=read(p['PG_confirmation_audit_path']);confirmation=read(p['PG_confirmation_protocol_path']);report=read(p['PG_confirmation_report_path'])
+ assert audit['status']=='INDEPENDENT_FRESH_NATIVE097_MATCHED_SEED_CONFIRMATION_AUDIT_PASS'
+ assert audit['all_planned_attempts_resolved'] and audit['all_new_models_from_update_zero'] and audit['training_seeds']==[1,2,3,4]
+ assert audit['activation_actually_reverted'] and audit['owned_processes_and_leases_absent'] and not audit['heldout_values_read']
+ assert audit['report_SHA256']==sha(p['PG_confirmation_report_path']) and audit['protocol_SHA256']==sha(p['PG_confirmation_protocol_path'])
+ assert p['PG_frozen_selection_evidence_SHA256'][p['PG_confirmation_audit_path']]==sha(p['PG_confirmation_audit_path'])
+ for key,value in audit['summary'].items():assert report[key]==value
+ assert p['PG_candidate_id']==audit['summary']['proposed_external_candidate'] and p['PG_candidate_id'] is not None
+ choice=next(q for q in confirmation['selected_configurations'] if q['candidate_id']==p['PG_candidate_id'])
+ entry=next(q for q in audit['summary']['candidates'] if q['candidate_id']==p['PG_candidate_id'])
+ assert p['PG_hyperparameters']==choice['hyperparameters']==entry['hyperparameters']
+ assert entry['all_four_fresh_seeds_finite'] and entry['seeds']==[1,2,3,4] and not entry['failed_seeds']
  return p
 def hyperparameters():
  h=protocol()['PG_hyperparameters']
