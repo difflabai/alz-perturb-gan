@@ -1,0 +1,104 @@
+{
+  "status": "FROZEN_SEPARATE_SCALAR_CALIBRATION_COMPARISON_BEFORE_REAL_VALUES",
+  "UTC": "2026-11-07T23:14:19.887550+00:00",
+  "experiment": "scalarcal097",
+  "fold": 0,
+  "seeds": [
+    5,
+    6,
+    7
+  ],
+  "arms": [
+    "fixed",
+    "adaptive"
+  ],
+  "required_fresh_fits": 6,
+  "updates_per_fit": 20000,
+  "calibration_interval": 1000,
+  "decision_metric": "calibration_cell_energy_distance",
+  "controller": {
+    "interval": 1000,
+    "warmup": 2000,
+    "window": 3,
+    "patience": 3,
+    "cooldown": 1,
+    "factor": 0.5,
+    "min_scale": 0.125,
+    "relative_improvement": 0.01
+  },
+  "hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "all_from_scratch": true,
+  "source_checkpoint": null,
+  "recovery_restore_tested_for_fidelity_only": true,
+  "real_training_resume_authorized_by_this_plan": false,
+  "fixed_arm_identical_calibration_sampling_overhead": true,
+  "fixed_20000update_mean_across_matched_seeds_is_selector": true,
+  "keep_all_negative_results": true,
+  "holdout57_or53_values_may_not_control_LR_or_selection": true,
+  "calibration_only_not_SOTA_evidence": true,
+  "existing45_candidate_and_original57primary_53sensitivity_unchanged": true,
+  "resources": {
+    "shared_GPU_capacity_authorized": true,
+    "no_solo_access_required": true,
+    "no_foreign_signals_or_settings": true,
+    "at_most_one_owned_ALZ_cell_per_card": true,
+    "proposed_start": "Require all45 cleanly audited, reverted activation, original57 comparison and53 sensitivity complete, existing CPU parents completed and empty canonical reservations. Never coexist with a frozen benchmark reservation under an incompatible peer scope.",
+    "new_admission_and_accounting_namespace_required": true,
+    "canonical_project_hour_cap": 1024,
+    "core_hour_cap": 180,
+    "per_fit_seconds_cap": 21600,
+    "training_window_ends_UTC": "2026-11-09T06:26:46.606656+00:00",
+    "cannot_train_after_window": true
+  },
+  "GPU_admission_runtime_qualified": false,
+  "activated": false,
+  "queued": false,
+  "actual_real_ALZ_fits": 0,
+  "full_goal_complete": false,
+  "SOTA_claim": false,
+  "native_version": "0.9.7",
+  "metric_role": "calibration_selection",
+  "calibration_only": true,
+  "initial_completed_updates": 0,
+  "automatic_promotion": false,
+  "cap_seconds": 21600,
+  "folds": [
+    0
+  ],
+  "training_seeds": [
+    5,
+    6,
+    7
+  ],
+  "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+  "generation": {
+    "replicates": [
+      0,
+      1
+    ],
+    "stage_bags": 200,
+    "cells_per_bag": 400,
+    "stage_reservoir": 375,
+    "seed_formula": "20261104 +1000*training_seed +100*replicate +stage",
+    "reservoir_seed_formula": "20261106 +10*replicate +stage",
+    "fitting_only_library_traces": true,
+    "common_streams_across_arms_and_updates": true
+  },
+  "existing45_reselection": false,
+  "preparation_correction": "Supersedes the earlier first-free-lane suggestion: the current benchmark rejects different-study peer reservations and its final CPU gates require empty canonical reservations.",
+  "fidelity_evidence_SHA256": {
+    "/ml2/alz/analysis/adaptive_lr097/ALZ_integration_CPU_qualification.json": "82e09378c75597d9abf45065dd46cb7d150e8f026f526fe5f030dc4923a58332",
+    "/ml2/alz/analysis/adaptive_lr097/published_integration_sources.json": "0126856da97b79a56fb9e462a97707dfaac42ba25fe5ee0f6aaaa149ef9a51ff",
+    "/ml2/alz/analysis/adaptive_lr097/calibration_distance_lr.py": "d471c881a7dc2efaa282593b3384406854209b785888185fe30e7b5fcfcae04e",
+    "/ml2/alz/analysis/adaptive_lr097/model/calibration_scalar.py": "f15f0101ed5166b2e1eb81582d669966a15f9378a67d8d2903852c31c8d57db6",
+    "/ml2/alz/analysis/adaptive_lr097/model/scalar_adapter.py": "c645c675651b481c9b28a06dffc5e8cbc3ef05fb199add803d604b63a89a0449",
+    "/ml2/alz/analysis/adaptive_lr097/model/scalar_update.py": "a35bd6dd6d63066b8218999d3fb497b982fb386c21ebd4e25b7f6484fcc573fd"
+  }
+}

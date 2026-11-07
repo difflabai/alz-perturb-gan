@@ -1,0 +1,63 @@
+{
+  "schema": "gpu0-coexistence-policy-v1",
+  "status": "PREPARED_EXACT_GPU0_PARALLEL_PROFILE",
+  "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+  "registry_path": "/ml2/alz/artifacts/gpu0-scalarcal097-20261107/live_registry",
+  "locks": [
+    "/mnt/nvme/sliders/qualification/admission-gpu-0.lock",
+    "/mnt/nvme/sliders/locks/gpu-0.lock"
+  ],
+  "driver_headroom_bytes": 3221225472,
+  "host_free_floor_bytes": 12884901888,
+  "roles": {
+    "alz_core_pg": {
+      "gpu_bytes": 3221225472,
+      "ram_bytes": 6442450944
+    }
+  },
+  "protected_peers": [
+    {
+      "identity": {
+        "pid": 146094,
+        "birth": 534000,
+        "boot": "6daf6e2c-249b-4f56-8920-b9c7476fa1fb",
+        "uid": 1000,
+        "exe": "/usr/bin/gnome-shell (deleted)",
+        "argv_sha256": "351e5338558425cea4559d733b9bba4bbeeda620c5cd4a0dbe8965470c3cef78",
+        "ppid": 7650
+      },
+      "gpu_kinds": [
+        "graphics"
+      ],
+      "gpu_budget_bytes": 272699392,
+      "ram_budget_bytes": 2575880192
+    }
+  ],
+  "resource_basis": {
+    "observation_path": "/ml2/alz/analysis/hpo500_boundary/anchor.json",
+    "observation_SHA256": "d0700c1bc8c5643715fd3db87617ebcad2ff2f93b7f9ed55231ba1fa1e83a802",
+    "forecast_not_foreign_caps": true,
+    "foreign_control": "No foreign control. Separate fresh scalar-LR calibration comparison after the frozen45 study and both CPU reports finish; shared capacity on both physical cards.",
+    "ALZ_early_stop_GPU_free_bytes": 3758096384,
+    "ALZ_early_stop_host_free_bytes": 12884901888,
+    "foreign_source_SHA256": {}
+  },
+  "source_sha256": {
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2/gpu0_admission.py": "c92e975ff4839ba3d70f53d67c712916bf0bb346fcb218ef9c96e6dbf6dfeaca",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-11/gpu0-coexistence/v2/gpu0_runner.py": "13453ca11cf5a0e7758dcee112de0f85189b0d74a098c3f5103388e1ebb32f27",
+    "/ml2/alz/recovery_runtime/parallel_runner.py": "41e586fed4ca267b6e13b0aaf5c3d3dce05f32383616d2b7ac816cb372f4008d",
+    "/ml2/alz/recovery_runtime/gpu1_admission.py": "8577361349e475a5400b1b9283de727df9dbe38f4feabbaf137d3e99585ae833",
+    "/ml2/alz/recovery_runtime/gpu1_runner.py": "bb5e5c5274dfa91453a238f4eb36120ec07703bda9acf3e82d531f20d7a9b32e",
+    "/ml2/alz/recovery_runtime/shared_gpu1_admission.py": "7a615c15ebd14024f1d35646a458ee74c858947f1061ee89b06a71367ec9757a",
+    "/ml2/alz/recovery_runtime/shared_gpu1_runner.py": "621492363bafbb28181aa9b4c9faae46bfe87f353d69542a437c52abe344b362",
+    "/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_admission.py": "d6300693ca6afcfc94fb7cfe33513adaa0e30a3a393935b74eec73bee6922998",
+    "/ml2/alz/analysis/shared_gpu0_candidate/shared_gpu0_runner.py": "019bc2a2f8c03032eeeddf8a0b3bd9c68c4d105dcc6b3e393c4788f787fe1238"
+  },
+  "dynamic_shared_foreign": true,
+  "foreign_growth_allowances": {
+    "compute_GPU_bytes": 536870912,
+    "graphics_GPU_bytes": 268435456,
+    "host_above_peak_bytes": 2147483648,
+    "uid": 1000
+  }
+}

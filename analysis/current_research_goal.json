@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T23:20:34.985898+00:00",
+  "UTC": "2026-11-07T23:38:37.837141+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -338,7 +338,16 @@
     "ALZ_CPU_qualification_path": "/ml2/alz/analysis/adaptive_lr097/ALZ_integration_CPU_qualification.json",
     "published_source_identity_path": "/ml2/alz/analysis/adaptive_lr097/published_integration_sources.json",
     "real_calibration_comparison_prepared_path": "/ml2/alz/analysis/adaptive_lr097/real_comparison.prepared.json",
-    "GPU_admission_runtime_qualified": false
+    "GPU_admission_runtime_qualified": false,
+    "separate_runtime_source_prepared": true,
+    "separate_runtime_source_path": "/ml2/alz/scalarcal097_runtime",
+    "separate_scientific_protocol_path": "/ml2/alz/analysis/scalarcal097/protocol.json",
+    "separate_runtime_CPU_qualification_complete": false,
+    "separate_runtime_activated": false,
+    "separate_runtime_queued": false,
+    "actual_real_adaptive_fits": 0
   },
-  "latest_external_native_root_audit_path": "/ml2/alz/analysis/benchmark097_eleventh_complete_all_nine_seed0_cells_root_check_20261107.json"
+  "latest_external_native_root_audit_path": "/ml2/alz/analysis/benchmark097_eleventh_complete_all_nine_seed0_cells_root_check_20261107.json",
+  "latest_GPU0_native5000_runtime_evidence_path": "/ml2/alz/analysis/benchmark097_current_GPU0_second_fresh5000_runtime_20261107.json",
+  "scalar_calibration_handoff_constraint": "The original frozen benchmark admits only same-study peer reservations and both final CPU analyses require empty reservations; the first-free-lane suggestion was superseded. A compatible reviewed resource handoff is needed before mixing study phases."
 }
