@@ -4,7 +4,7 @@ from pathlib import Path
 HERE=Path(__file__).resolve().parent;sys.path.insert(0,str(HERE))
 import binding as b,preset_scope as s
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=s.STUDY/'dual_prepared_CPU_qualification_v2.json');args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=s.STUDY/'dual_prepared_CPU_qualification_v4.json');args=parser.parse_args()
  assert args.output.resolve().parent==s.STUDY.resolve() and not args.output.exists()
  assert os.environ.get('CUDA_VISIBLE_DEVICES')=='' and not s.read(s.PLAN)['enabled']
  assert s.read(s.PROTOCOL)['status']=='PREPARED_NOT_FROZEN_PG_SELECTION_AND_CONFIRMATION_PENDING'
@@ -15,7 +15,7 @@ def main():
   results.append(dict(file=name,returncode=p.returncode,stdout=p.stdout,stderr=p.stderr));assert p.returncode==0,name
   count+=int(re.search(r'Ran (\d+) tests?',p.stderr).group(1))
  assert count==42 and 'torch' not in sys.modules
- paths=[*HERE.glob('*.py'),s.PROTOCOL,s.PLAN,s.SELECTION_LOGIC,s.SELECTION_VALIDATOR,HERE/'policy.prepared.json',HERE/'policy.gpu0.prepared.json',HERE/'policy.gpu1.prepared.json',s.ROOT/'analysis/benchmark097_dual_resource_protocol.json',s.ROOT/'benchmark097_runtime/resource_profile.py',*s.PROOFS]
+ paths=[*HERE.glob('*.py'),*[s.ROOT/'analysis'/n for n in ['run_released097_dual_pipeline.py','after_released097_dual_calibration53.py','run_benchmark097_dual.py','aggregate_benchmark097_dual.py','score_calibration_excluded53_dual.py','benchmark097_dual_analysis_CPU_preparation.json']],s.PROTOCOL,s.PLAN,s.SELECTION_LOGIC,s.SELECTION_VALIDATOR,HERE/'policy.prepared.json',HERE/'policy.gpu0.prepared.json',HERE/'policy.gpu1.prepared.json',s.ROOT/'analysis/benchmark097_dual_resource_protocol.json',s.ROOT/'benchmark097_runtime/resource_profile.py',*s.PROOFS]
  q=dict(status='PREPARED_ACCOUNTING_AND_SYNTHETIC_SELECTION_SCOPE_CPU_TESTS_PASS',UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),
         actual_tests=count,synthetic_frozen_selection_fixture_all45_cells_checked=True,actual_frozen_PG_candidate_qualified=False,
         two_physical_policy_profiles=True,actual_two_concurrent_confined_CPU_guard_workers=True,actual_driver_failure_drain_and_observation_timeout_tests=True,

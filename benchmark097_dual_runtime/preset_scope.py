@@ -64,7 +64,7 @@ def hyperparameters():
  assert all(type(v) in (int,float) and math.isfinite(v) and v>0 for v in h.values())
  return h
 def protocol_paths(p):
- return [ROOT/'benchmark097_runtime/resource_profile.py',HERE/'policy.prepared.json',HERE/'policy.gpu0.prepared.json',HERE/'policy.gpu1.prepared.json',ROOT/'analysis/benchmark097_dual_resource_protocol.json',PROTOCOL,NATIVE_PROOF,WINDOW,PLAN,SELECTION_LOGIC,SELECTION_VALIDATOR,*PROOFS,CFGEN_DIR/'protocol.json',
+ return [ROOT/'analysis/run_released097_dual_pipeline.py',ROOT/'analysis/after_released097_dual_calibration53.py',ROOT/'analysis/run_benchmark097_dual.py',ROOT/'analysis/aggregate_benchmark097_dual.py',ROOT/'analysis/score_calibration_excluded53_dual.py',ROOT/'analysis/benchmark097_dual_analysis_CPU_preparation.json',ROOT/'benchmark097_runtime/resource_profile.py',HERE/'policy.prepared.json',HERE/'policy.gpu0.prepared.json',HERE/'policy.gpu1.prepared.json',ROOT/'analysis/benchmark097_dual_resource_protocol.json',PROTOCOL,NATIVE_PROOF,WINDOW,PLAN,SELECTION_LOGIC,SELECTION_VALIDATOR,*PROOFS,CFGEN_DIR/'protocol.json',
          ROOT/'analysis/particlegan097_runtime_equivalence_20261106.json',
          ROOT/'analysis/distribution097_external_evaluation_plan_20261106.json',
          ROOT/'analysis/distribution097_split_isolation_audit_20261106.json',
