@@ -1,0 +1,82 @@
+{
+  "status": "PARTICLE_RATE_FIRST_FRESH_SEED20K_ENERGY_DISTANCE_TRADEOFF_NOT_SELECTION",
+  "UTC": "2026-11-07T11:30:53.252932+00:00",
+  "candidate_id": "t005",
+  "training_seed": 2,
+  "hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "endpoint": 20000,
+  "from_scratch": true,
+  "initial_completed_updates": 0,
+  "metrics": {
+    "cell_energy_distance": 0.26831310034773725,
+    "energy_score": 1.9626469382647591,
+    "spread_ratio": 0.9346156261331027,
+    "within_condition_spread_ratio": 0.8714921408492905,
+    "coverage80": 0.6682692307692308
+  },
+  "matched_resampling": {
+    "cell_energy_distance": 0.2360664757860942,
+    "energy_score": 2.1189666465878148,
+    "spread_ratio": 1.0996368276041926,
+    "within_condition_spread_ratio": 1.0006447828456726,
+    "coverage80": 0.6971153846153846
+  },
+  "PG_minus_matched_resampling": {
+    "cell_energy_distance": 0.03224662456164307,
+    "energy_score": -0.15631970832305564,
+    "spread_ratio": -0.1650212014710899,
+    "within_condition_spread_ratio": -0.1291526419963821,
+    "coverage80": -0.028846153846153744
+  },
+  "same_seed_criticLR036": {
+    "cell_energy_distance": 0.23764907311808336,
+    "energy_score": 2.1395910745687736,
+    "spread_ratio": 0.9227101394977113,
+    "within_condition_spread_ratio": 0.8264429556479327,
+    "coverage80": 0.6153846153846154
+  },
+  "particleLR006_minus_criticLR036": {
+    "cell_energy_distance": 0.03066402722965389,
+    "energy_score": -0.1769441363040145,
+    "spread_ratio": 0.011905486635391371,
+    "within_condition_spread_ratio": 0.04504918520135781,
+    "coverage80": 0.05288461538461542
+  },
+  "same_seed_matched_control_arrays_and_trace_metadata_identical": true,
+  "charged_GPU_seconds": 3193.890827024996,
+  "saved_artifacts_rehashed": 17,
+  "canonical_closed_settlement_independently_checked": true,
+  "completed_phase_fits": 4,
+  "required_phase_fits": 9,
+  "current_live_fit": {
+    "attempt": "CAL_GPU0_V1_cf097_t005_f0_pg_s3",
+    "guard": {
+      "pid": 1613415,
+      "birth": 20841385,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    "worker": {
+      "pid": 1613466,
+      "birth": 20841490,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    "actual_update": 1251
+  },
+  "source_result_SHA256": {
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s2.json": "301f82e278ce69c5204f83d52b14d8b52800ae7e8851b5c5d92850b66490eaaf",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s2.json": "a8cb583e89575312c5f7c05741dd9d16bb9eddf8bbd0ba6b6be6477c99545f2d"
+  },
+  "all9_independent_raw_artifact_audit_completed": false,
+  "final_setting_selected": false,
+  "runtime_costs_not_causal_comparisons_under_variable_shared_load": true,
+  "interpretation": "First fresh particleLR.06 seed has better donor energy and worse pooled cell distance than matched resampling. It also has worse distance and better energy than the matched fresh criticLR.036 seed2. All three fresh seeds per candidate and all nine fits remain necessary before selection; same four adaptive calibration donors, no independent-population or SOTA conclusion.",
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
