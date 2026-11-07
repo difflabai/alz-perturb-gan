@@ -1,0 +1,128 @@
+"""Matched fixed PG8 adapter with explicit released scalar parameters and saved curves."""
+from pathlib import Path
+import copy,json,signal,sys,time
+import numpy as np,scipy.sparse as sp,torch
+from contracts import B,PG_UPDATES,SEEDS,checked_cache,sha,dump,validate_train_donors
+sys.path.insert(0,str(B))
+from release_env import activate,VERSION,PENALTY_OPTIONS
+activate()
+from particlegan import UpdatePolicy
+from particlegan.optim.dualnorm import NormalizedOptimizer
+from pg_model import CountGenerator,standardize_counts
+from bench_core import load_space
+from critic import VectorCritic,N_FEATURES
+from stage_law import StageLaw,mask_adnc
+from usage import Usage
+from scalar_update import recipe,advance,CONFIG,normalized_config,bag_features,HYPER,normalized_hyperparameters
+STREAM_NAMES=['generator_init','critic_init','prior_init','policy_latent','policy_penalty','policy_eval','policy_noise','cell','count','gamma_global','donor_sampler']
+def training_streams(fold,seed):
+ if fold != 0 or type(seed) is not int or seed not in (5,6,7):raise ValueError('unregistered training cell')
+ children=np.random.SeedSequence([20261103,fold,seed]).spawn(len(STREAM_NAMES))
+ return {k:int(c.generate_state(1,dtype=np.uint64)[0])%(2**63-16) for k,c in zip(STREAM_NAMES,children)}
+class Context:
+ def __init__(self,cache,device):
+  manifest,f=checked_cache(cache,'train');cache=Path(cache);self.cache=cache;self.manifest=manifest;self.fold=manifest['fold'];self.device=torch.device(device)
+  m=np.load(cache/'train/metadata.npz',allow_pickle=False);self.fit_labels=m['donor'].copy();self.cell_names=m['cell'].copy();self.ids=m['donors'].copy();validate_train_donors(self.fit_labels,f['optimization_donors'])
+  if list(self.ids)!=f['optimization_donors']:raise ValueError('ordered optimizer donor set differs')
+  self.fitc=m['raw_c'].astype(np.float32);self.space=load_space(cache);counts=sp.load_npz(cache/'train/counts_hvg.npz').astype(np.float32)
+  if counts.shape!=(len(self.fit_labels),2000) or not np.isfinite(counts.data).all() or (counts.data<0).any():raise ValueError('training count shape/range invalid')
+  self.X=torch.as_tensor(counts.toarray(),device=self.device);self.by=[np.where(self.fit_labels==d)[0] for d in self.ids]
+  self.conditions=torch.as_tensor(mask_adnc(self.fitc),device=self.device);self.mean=torch.as_tensor(self.space.mean,device=self.device);self.sd=torch.as_tensor(self.space.sd,device=self.device);self.W=torch.as_tensor(self.space.W/self.space.pc_sd,device=self.device)
+  self.trainpcs=self.project(self.X);self.fitlibs=self.X.sum(-1)
+  if not bool((self.fitlibs>0).all()):raise ValueError('common training zero-HVG rule not applied')
+  self.mu=self.X.mean(0);v=self.X.var(0,unbiased=False);self.theta=(self.mu.square()/(v-self.mu).clamp_min(1e-4)).clamp(.1,10000)
+  self.law=StageLaw(self.fitc,self.by,self.fitlibs.cpu().numpy())
+ def project(self,x):return standardize_counts(x,self.mean,self.sd)@self.W
+ def batch(self,rng):
+  if CONFIG['stage_balance']:
+   stage=np.rint(self.fitc[:,3]*3).astype(int);groups=[np.flatnonzero(stage==s) for s in range(4)]
+   if any(len(group)==0 for group in groups):raise ValueError('balanced fitting requires optimization donors at every stage')
+   order=np.repeat(np.arange(4),8);rng.shuffle(order);ds=np.asarray([rng.choice(groups[s]) for s in order])
+  else:ds=rng.integers(len(self.ids),size=32)
+  idx=torch.as_tensor(np.stack([rng.choice(self.by[i],128,replace=True) for i in ds]),device=self.device)
+  return bag_features(self.trainpcs[idx]),self.conditions[torch.as_tensor(ds,device=self.device)],self.X[idx].sum(-1)
+def build(mu,theta,device,fold,seed,*,controller=None):
+ from calibration_distance_lr import CalibrationDistanceLR
+ if HYPER!=dict(generator_lr=.012,critic_lr=.018,particle_lr=.06,reg_coeff=1.,reg_kappa=1.,prior_reg=.01):raise ValueError('configure the frozen t005 six hyperparameters explicitly')
+ if controller is not None and not isinstance(controller,CalibrationDistanceLR):raise TypeError('declared single-scalar controller required')
+ streams=training_streams(fold,seed);rec=recipe();torch.manual_seed(streams['generator_init']);G=CountGenerator(mu.cpu(),(theta*CONFIG['theta_init_scale']).cpu(),zd=rec.z_dim,zc=CONFIG['cell_z_dim']).to(device)
+ torch.manual_seed(streams['critic_init']);D=VectorCritic(N_FEATURES,h=128).to(device)
+ P=rec.make_prior(generator=torch.Generator().manual_seed(streams['prior_init'])).to(device);og,od=rec.make_optimizers(G,D,P);pen=rec.make_critic_penalty(od,**PENALTY_OPTIONS);loss=rec.make_loss();reg=rec.make_prior_regularizer(prior=P,reference=P,weight=1.)
+ from particlegan.bispf import bind_thermal_source
+ bind_thermal_source(od.record,loss,reg)
+ policy=UpdatePolicy(rec,G,D,schedule=controller,prior=P,generator_optimizer=og,critic_optimizer=od,penalty=pen,seed=seed,row_semantics='conditional',streams={name:torch.Generator(device=device).manual_seed(streams['policy_'+key]) for name,key in [('latent_generator','latent'),('penalty_generator','penalty'),('eval_generator','eval'),('noise_generator','noise')]})
+ policy.calibration_lr_controller=controller
+ if not(rec.name=='bispf_optimized' and rec.loss=='non_saturating' and rec.num_particles==512 and rec.z_dim==CONFIG['z_dim'] and rec.ema_decay==rec.input_noise_std==rec.output_noise_std==0 and rec.network_lr_horizon_cap is None and rec.lr_floor==rec.network_lr_floor==1 and isinstance(og,NormalizedOptimizer) and isinstance(od,NormalizedOptimizer)):raise ValueError('canonical PG recipe changed')
+ generators={k:torch.Generator(device=device).manual_seed(streams[k]) for k in ['cell','count']};rng=np.random.default_rng(streams['donor_sampler']);torch.manual_seed(streams['gamma_global'])
+ return (rec,G,D,P,og,od,pen,loss,reg,policy),generators,rng,Usage(P.z),streams
+def snapshot(ctx,bundle,generators,rng,usage,seed,streams,status):
+ rec,G,D,P,og,od,pen,loss,reg,policy=bundle
+ if policy._phase!='ready':raise ValueError('no checkpoint at a partial optimizer-pair boundary')
+ q={'schema':1,'method':'pg','fold':ctx.fold,'seed':seed,'cache_manifest_SHA256':sha(ctx.cache/'manifest.json'),'recipe':rec.to_dict(),'policy':policy.state_dict(),'prior_regularizer':rec.prior_regularizer_checkpoint(reg),'generators':{k:g.get_state() for k,g in generators.items()},'numpy_rng':rng.bit_generator.state,'usage':usage.state_dict(),'training_streams':streams,'torch_cpu_rng':torch.get_rng_state(),'torch_device_rng':torch.cuda.get_rng_state(ctx.device) if ctx.device.type=='cuda' else None,'completed_updates':policy.completed_steps,'fixed_endpoint':PG_UPDATES,'status':status}
+ q['calibration_lr_controller']=None if policy.calibration_lr_controller is None else policy.calibration_lr_controller.state_dict()
+ q['particlegan_version']=VERSION;q['penalty_options']=dict(PENALTY_OPTIONS)
+ q['variant_config']=dict(CONFIG);q['native_recipe']='bispf_optimized';q['released_hyperparameters']=dict(HYPER)
+ return copy.deepcopy(q)
+def restore(ctx,q,*,expected_endpoint=PG_UPDATES,controller_config=None):
+ if q.get('particlegan_version')!=VERSION or q.get('penalty_options')!=PENALTY_OPTIONS:raise ValueError('native release or input domain checkpoint differs')
+ if q.get('native_recipe')!='bispf_optimized' or normalized_hyperparameters(q.get('released_hyperparameters'))!=HYPER:raise ValueError('native recipe or six hyperparameters differ')
+ if q.get('status') not in ('synthetic','diagnostic','recovery','incomplete','completed'):raise ValueError('unrecognized checkpoint status')
+ if type(q.get('completed_updates')) is not int or not 0<=q['completed_updates']<=20000 or q['policy']['completed_steps']!=q['completed_updates']:raise ValueError('native update clock differs')
+ if q['status']=='completed' and q['completed_updates']!=20000:raise ValueError('completed checkpoint lacks fixed endpoint')
+ if normalized_config(q.get('variant_config',{'z_dim':q['recipe']['z_dim']}))!=CONFIG:raise ValueError('variant sampling configuration differs')
+ if expected_endpoint!=20000 or q['cache_manifest_SHA256']!=sha(ctx.cache/'manifest.json') or q['fold']!=ctx.fold or q['fixed_endpoint']!=expected_endpoint:raise ValueError('checkpoint fold/cache/endpoint mismatch')
+ from calibration_distance_lr import CalibrationDistanceLR
+ controller=None
+ if controller_config is not None:
+  controller=CalibrationDistanceLR(controller_config);controller.load_state_dict(q['calibration_lr_controller'])
+  if controller.last_step>q['completed_updates']:raise ValueError('LR observation is ahead of the native clock')
+ elif q.get('calibration_lr_controller') is not None:raise ValueError('adaptive checkpoint requires the expected controller configuration')
+ b,g,r,u,seeds=build(ctx.mu,ctx.theta,ctx.device,ctx.fold,q['seed'],controller=controller);rec=b[0];policy=b[-1]
+ if q['recipe']!=rec.to_dict() or q['training_streams']!=seeds:raise ValueError('checkpoint recipe/seeds differ')
+ policy.load_state_dict(q['policy']);rec.restore_prior_regularizer(b[-2],q['prior_regularizer'].get('prior_regularizer'))
+ for k,v in q['generators'].items():g[k].set_state(v.cpu())
+ r.bit_generator.state=q['numpy_rng']
+ for k in ['draws','selected_steps','moved_steps','unsampled_moved_steps']:setattr(u,k,q['usage'][k].to(ctx.device).clone())
+ u.steps=q['usage']['steps'];u.unique_batch_histogram=list(q['usage']['unique_batch_histogram']);torch.set_rng_state(q['torch_cpu_rng'].cpu())
+ if ctx.device.type=='cuda':torch.cuda.set_rng_state(q['torch_device_rng'].cpu(),ctx.device)
+ return b,g,r,u,seeds
+@torch.no_grad()
+def passive_particle_diagnostics(bundle,usage):
+ table=bundle[3].z.detach()
+ return {'rows_drawn':int((usage.draws>0).sum()),'rows_moved':int((usage.moved_steps>0).sum()),
+  'total_draws':int(usage.draws.sum()),'total_unsampled_row_moves':int(usage.unsampled_moved_steps.sum()),
+  'particle_covariance_trace':float(table.var(0,unbiased=False).sum()),'particle_mean_squared_norm':float(table.square().sum(-1).mean())}
+
+def fit(ctx,out,seed,*,end_monotonic,evaluator,controller=None):
+ from calibration_distance_lr import Config
+ from calibration_scalar import CalibrationScalar
+ if not isinstance(evaluator,CalibrationScalar) or evaluator.synthetic or evaluator.bags!=200:raise ValueError('real fits require the fixed complete calibration evaluator')
+ if controller is not None and controller.config!=Config():raise ValueError('real fits require the prespecified controller configuration')
+ if ctx.device.type!='cuda':raise RuntimeError('real PG fitting requires a separately reviewed guarded GPU admission; CPU tests use synthetic advance only')
+ out=Path(out);out.mkdir(exist_ok=False,parents=True);b,g,r,u,seeds=build(ctx.mu,ctx.theta,ctx.device,ctx.fold,seed,controller=controller);stops=[];handlers={s:signal.signal(s,lambda sig,frame:stops.append(sig)) for s in [signal.SIGINT,signal.SIGTERM]}
+ def save(status):
+  p=out/'final.pt' if status=='completed' else out/'recovery.pt';tmp=p.with_suffix('.partial.pt');torch.save(snapshot(ctx,b,g,r,u,seed,seeds,status),tmp);tmp.replace(p);dump(out/'checkpoint_receipt.json',{'path':p.name,'SHA256':sha(p),'status':status,'completed_updates':b[-1].completed_steps});return p
+ try:
+  while b[-1].completed_steps<PG_UPDATES:
+   if stops or time.monotonic()>=end_monotonic:raise InterruptedError('finite scientific allocation ending; preserve completed-update checkpoint')
+   metrics=advance(ctx,b,g,r,u,execution_limit=PG_UPDATES)
+   interval=1000 if controller is None else controller.config.interval
+   if metrics['step']%interval==0:
+    observation=evaluator(ctx,b,seed,completed_updates=metrics['step'],out=out/'calibration',end_monotonic=end_monotonic)
+    decision=None if controller is None else controller.observe(metrics['step'],observation['value'],split_role=observation['split_role'])
+    with (out/'calibration_curve.jsonl').open('a') as stream:stream.write(json.dumps(dict(observation=observation,decision=decision),allow_nan=False)+'\n')
+   if metrics['step']%250 in (0,1):
+    metrics['particle_usage']=passive_particle_diagnostics(b,u)
+    dump(out/'progress.json',metrics)
+    with (out/'learning_curve.jsonl').open('a') as stream:stream.write(json.dumps(metrics,allow_nan=False)+'\n')
+   if metrics['step'] in (5000,10000):
+    path=out/('checkpoint%05d.pt'%metrics['step'])
+    if path.exists():raise FileExistsError('Diagnostic checkpoint must not be replaced')
+    torch.save(snapshot(ctx,b,g,r,u,seed,seeds,'diagnostic'),path)
+   if metrics['step']%1000==0:save('recovery')
+  p=save('completed');return b,p
+ except BaseException as exc:
+  if b[-1]._phase=='ready':save('incomplete')
+  dump(out/'failure.json',{'error':repr(exc),'completed_updates':b[-1].completed_steps,'phase':b[-1]._phase,'primary_endpoint_complete':False});raise
+ finally:
+  for s,h in handlers.items():signal.signal(s,h)
