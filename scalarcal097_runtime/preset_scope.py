@@ -6,7 +6,8 @@ PROTOCOL=STUDY/'protocol.json';PLAN=HERE/'plan.json';RESOURCE_PROTOCOL=STUDY/'re
 MODEL_DIR=ROOT/'analysis/adaptive_lr097/model';CONTROLLER_DIR=ROOT/'analysis/adaptive_lr097'
 MODEL_PROOF=CONTROLLER_DIR/'ALZ_integration_CPU_qualification.json'
 NATIVE_PROOF=ROOT/'analysis/distribution097/native_release.json';ENGINE_PROOF=ROOT/'analysis/shared_gpu0_candidate_CPU_qualification.json'
-RUNTIME_PROOF=STUDY/'runtime_CPU_qualification.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
+ENDPOINT_PROOF=STUDY/'endpoint_CPU_qualification.json'
+RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v2.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
 CFG=dict(z_dim=8,stage_balance=False,cell_z_dim=8,theta_init_scale=1.,fourier_feature_scale=1.)
 ENABLED=dict(enabled=True,experiment='scalarcal097',fold=0,training_seeds=[5,6,7],arms=['fixed','adaptive'],endpoint=20000,all_training_from_scratch=True,calibration_only=True)
 def read(p):return json.loads(Path(p).read_bytes())
@@ -31,6 +32,9 @@ def protocol():
  for path,pin in p['fidelity_evidence_SHA256'].items():assert sha(path)==pin
  q=read(MODEL_PROOF);assert q['qualified_sources_unchanged_during_execution'] and q['tests_run']==6 and q['parity_actual_optimizer_pairs_total']==30 and not q['CUDA_initialized'] and q['real_ALZ_adaptive_fits']==0
  for path,pin in q['source_SHA256'].items():assert sha(path)==pin
+ endpoint=read(ENDPOINT_PROOF)
+ assert endpoint['status']=='FULL2000GENE_SYNTHETIC_CPU_SCALAR_AND_ENDPOINT_POOL_PARITY_PASS' and endpoint['endpoint_primary_reservoir_bitwise_equal_to_scalar_replicate0'] and not endpoint['real_ALZ_target_values_read'] and not endpoint['CUDA_initialized']
+ for path,pin in endpoint['source_SHA256'].items():assert sha(path)==pin
  return p
 def hyperparameters():return protocol()['hyperparameters']
 def proof_source_pins():
@@ -56,7 +60,7 @@ def prior_study_ready(root=ROOT):
   assert not registry.exists() or not read(registry)['jobs'],'Previous physical registry is still active'
  return {str(p):sha(p) for p in (matrix,primary,sensitivity,parent,child)}
 def protocol_paths():
- return [PROTOCOL,RESOURCE_PROTOCOL,PLAN,MODEL_PROOF,NATIVE_PROOF,ENGINE_PROOF,WINDOW,CONTROLLER_DIR/'published_integration_sources.json',*map(Path,protocol()['fidelity_evidence_SHA256']),ROOT/'benchmark097_runtime/resource_profile.py',*[ROOT/f'benchmark097_dual_runtime/policy.gpu{i}.prepared.json' for i in (0,1)]]
+ return [PROTOCOL,RESOURCE_PROTOCOL,PLAN,MODEL_PROOF,ENDPOINT_PROOF,NATIVE_PROOF,ENGINE_PROOF,WINDOW,CONTROLLER_DIR/'published_integration_sources.json',*map(Path,protocol()['fidelity_evidence_SHA256']),ROOT/'benchmark097_runtime/resource_profile.py',*[ROOT/f'benchmark097_dual_runtime/policy.gpu{i}.prepared.json' for i in (0,1)]]
 def validate_authorization(auth,*,require_runtime_proof=True,require_activation=True,require_handoff=True):
  p=protocol();v=auth['cell'];assert v==cell(auth['arm'],v['seed'])
  assert auth['operation']=='scalarcal097_cell' and auth['metric_role']=='calibration_selection' and auth['role']=='alz_core_pg'

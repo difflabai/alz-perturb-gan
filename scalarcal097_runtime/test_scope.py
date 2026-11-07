@@ -1,5 +1,5 @@
 """Native prepared closures and refusal gates; no allocation or model imports."""
-import ast,copy,json,sys,tempfile,unittest
+import ast,copy,json,os,sys,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
 import binding as b,preset_scope as s,prepare,resource_profile as p,dual_coordination as d
@@ -65,8 +65,9 @@ class Scope(unittest.TestCase):
    with self.assertRaises(AssertionError):p.capacity({**obs,'total':5*2**30},Admission,gpu)
  def test_current_other_study_reservations_cannot_be_relabelled_as_new_peers(self):
   auth,_=prepare.build_authorization(arm='fixed',seed=5,check_only=True)
-  old=s.read(b.PROJECT/'project_gpu_budget.json')
-  self.assertTrue(old['open_reservations'])
+  gpu=d.GPUS[1-d.GPUS.index(auth['gpu_uuid'])];key='ALZ_CAL_V1_external097_f0_pg_s0'
+  reservation=dict(allocation_id=key,status='reserved',owner=d.identity(os.getpid()),gpu_uuids=[gpu])
+  old=dict(open_reservations=[reservation],execution_controller=dict(calibration_parallel_backends={key:dict(cell=dict(experiment='external097',fold=0,method='pg',seed=0),gpu_uuid=gpu)}))
   with self.assertRaises((ValueError,AssertionError,KeyError)):d.validate_active_peers(old,auth)
   self.assertNotIn('torch',sys.modules)
 if __name__=='__main__':unittest.main(verbosity=2)

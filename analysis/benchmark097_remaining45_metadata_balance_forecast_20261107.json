@@ -1,0 +1,177 @@
+{
+  "status": "METADATA_ONLY_REMAINING45_RUNTIME_BALANCE_SCENARIO_NOT_A_NATIVE_AUTHORIZATION",
+  "UTC": "2026-11-07T23:43:51.886095+00:00",
+  "completed_cells": 11,
+  "active_cells": [
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "cfgen",
+        "seed": 1
+      },
+      "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "identity": {
+        "pid": 4016637,
+        "birth": 24773913,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "current_elapsed_seconds": 4874.822427749634,
+      "conditional_remaining_estimate_seconds": 2266.042319450862
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "pg",
+        "seed": 1
+      },
+      "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "identity": {
+        "pid": 4158163,
+        "birth": 24975852,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "current_elapsed_seconds": 2855.395559310913,
+      "conditional_remaining_estimate_seconds": 5619.018313608074
+    }
+  ],
+  "pending_cells": 32,
+  "pending_method_counts": {
+    "pg": 10,
+    "scvi": 11,
+    "cfgen": 11
+  },
+  "same_card_method_median_cost_seconds": {
+    "pg": [
+      8474.413872918987,
+      2175.035395207
+    ],
+    "scvi": [
+      547.5640669695131,
+      151.39532082949881
+    ],
+    "cfgen": [
+      14844.17624244999,
+      7140.864747200496
+    ]
+  },
+  "same_card_sample_counts": {
+    "pg": [
+      1,
+      3
+    ],
+    "scvi": [
+      2,
+      2
+    ],
+    "cfgen": [
+      1,
+      2
+    ]
+  },
+  "fixed_original_lane_conditional_remaining_seconds": [
+    140341.52953472,
+    49602.519635635836
+  ],
+  "resource_only_candidate_after_drain": {
+    "counts_per_lane": {
+      "cfgen": [
+        4,
+        7
+      ],
+      "pg": [
+        1,
+        9
+      ],
+      "scvi": [
+        5,
+        6
+      ]
+    },
+    "predicted_lane_seconds": [
+      70588.93917756651,
+      70469.74371224346
+    ],
+    "predicted_makespan_seconds": 70588.93917756651,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true,
+    "conditional_after_current_healthy_guards_drain_seconds": 76207.95749117459
+  },
+  "followup_six_scalar_fits_illustrative15percent_sampling_overhead": {
+    "counts_per_lane": {
+      "pg": [
+        1,
+        5
+      ]
+    },
+    "predicted_lane_seconds": [
+      9745.575953856835,
+      12506.45352244025
+    ],
+    "predicted_makespan_seconds": 12506.45352244025,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "authorized_training_seconds_remaining": 110574.73354458809,
+  "includes_quality_based_scheduling": false,
+  "quality_result_JSON_parsed": false,
+  "numerical_target_arrays_loaded": false,
+  "already_admitted_models_interrupted": false,
+  "new_GPU_allocations": 0,
+  "current_native_driver_unchanged": true,
+  "implementation_handoff_activated": false,
+  "forecast_uncertainty": "Very sparse same-card full-endpoint samples, changing shared load, method/fold/generation overhead. Counts-only allocation is an advisory scenario; actual handoff must revalidate exact healthy handles, preserve and settle admitted fits, recompute all remaining never-consumed keys, qualify exact source and all45 scientific provenance before execution. This forecast neither guarantees deadlines nor authorizes smaller endpoints, model retries, weight reuse, source edits under live guards, or a new training window.",
+  "source_SHA256": {
+    "/ml2/alz/artifacts/scalarcal097-runtime-build/forecast_remaining.py": "ad1c152cbdbeaa168e42cd5f5a4d9f7d971c082e2ffed4549266bc2104c9bb97",
+    "/ml2/alz/artifacts/scalarcal097-runtime-build/remaining_runtime_balance.py": "b587c7fb4eadd29e80480bd06872ce2494aab52b72f84843364ac92e4a660680"
+  },
+  "input_SHA256": {
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_cfgen_s0.json": "e2980806b7d0f30c7df638b70faf923dc18bed7d42ce4778d4bf21c3a6d04aef",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f0_cfgen_s0/authorization.json": "d3436f820cb5b19bb0191444d255c5428a5c40e16ded4f9fe12fe4e26ba8c521",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f0_cfgen_s0.json": "bfb8c9539816aa381bf75c329fcc5a135e7734c39f69ccddf2738ad253ecdae2",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f0_cfgen_s0-settlement.json": "2b16d4cf4a744995f8a616c5356d4aaca6f20d764f82b2693cf3b53a826537ff",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_pg_s0.json": "4e3f7075276a602a83b91c10993b12aab7fefd060dba976503f95521dea9f388",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f0_pg_s0/authorization.json": "bc66656ba901279b20e70bccfef5e80c0b2dccb06a6e9be2e757b57576baa25c",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f0_pg_s0.json": "5b7fc79c9f3926a0c799b22b18f89fe80efee364aa8844bac2ec7f3cc72dc635",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f0_pg_s0-settlement.json": "948a763fe3b3d2e9245bba1f5fe28068b39c47f2af03081f1defadcebb83619a",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_scvi_s0.json": "4f1cec6dbb201780385796a96461f2db81e657de2b449a770b09fef315600a3d",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f0_scvi_s0/authorization.json": "f3734cd719daaaf0e333c3ea0ceae381db2013016113056336d4215054eac070",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f0_scvi_s0.json": "33e852a2c72113de23f845ff1f388beeaeab8ae476140805212f3c257299b2a4",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f0_scvi_s0-settlement.json": "2c1ee13e58cd4faf1d4b8201df6c2d0d5ed61597321093002b2f15015dc39c98",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_scvi_s1.json": "e57f39310c102637e3833496932fee0450f211120c2390c6fb2335e5a08a4bd2",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f0_scvi_s1/authorization.json": "e87de139928c6b2c343ee2bd1e4c0df852a1a447e4f2323c3ee18527b704eb19",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f0_scvi_s1.json": "944c8232b13392bdea0c60bc004cd7656aba487b0baf0b5dddf50eb4e67f1324",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f0_scvi_s1-settlement.json": "2eabfbb07e4713b290cad899d17a29ddfc23512f83878b53ae19ccd4bbed5151",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_cfgen_s0.json": "01696aa318a909c2afc0a007b4c4489adb4f5affaf301cff64a1018b19dad59a",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f1_cfgen_s0/authorization.json": "d50ca43b966e4da8ad28e38a9b69b984cbc9dffc97cc866ec4f7620b32fae556",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f1_cfgen_s0.json": "55201d313bc0b15ee7387a70ef8f61480a0e1238ad0018401a63faf789ed79f4",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f1_cfgen_s0-settlement.json": "c6ed5c7b0cb4bf0b353e6612e3ed638ae1cec09152bcfb98d0fcbf234bc2d5d5",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_pg_s0.json": "22df9de15e211d6ba07961639863bd5956f2ecc669335a1a72ad19c6dd164bf4",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f1_pg_s0/authorization.json": "25c30808122d5bb3d23d3fd2a069405b795ffdcf51f6dedf863f850c619c5b6a",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f1_pg_s0.json": "e4256f9aad6a6c2dfc302639d2f7fb31aa129f0995f99320b33aeda556d65069",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f1_pg_s0-settlement.json": "8c41e855c32b1e8e3cb9652c49ad133bb5b182ea22a83a81443ad5b2f0ccb601",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_pg_s1.json": "0c1f8badd7d06553868c48f51933c48525be2c6fa13531fefd456aefbc51f3a8",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f1_pg_s1/authorization.json": "fe65d1b8ca2407b9fb3de6ddaf3c94eb4acb5ba35898bee9ba7428657a307fa5",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f1_pg_s1.json": "2634d81cd70a7b33d95245283667cd0fa640a41b0c7597759c1ab58995a7d112",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f1_pg_s1-settlement.json": "86a30483341bcdf5c3e31e430cd3d699e9bfa8d96187b68ac55ff967663d70e5",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_scvi_s0.json": "227f77a30c67302d807d915d36ef0dd4300b791835f69fe9d8ace4157cc13fa4",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f1_scvi_s0/authorization.json": "91032fefa88ecd315fe963a74d6de2536a90d291a1e3fcb0b56e607d3fdb0fe2",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f1_scvi_s0.json": "5dbf717725ccd368a28a8203f64c8af88231f56e79098a0f7be282d70656145e",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f1_scvi_s0-settlement.json": "8d3b704242e2e269973fb30e128744c91769d287fd6ccec28d0c3be0dc291e0e",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f2_cfgen_s0.json": "791deea8f49f87a22f0c0429f3f853df1d82d05b132758122f5e26476e138cdd",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f2_cfgen_s0/authorization.json": "1427540e464043a5bc6c8f45860e95727916f067ea5bc06f9ee9de9672437e6c",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f2_cfgen_s0.json": "3e06b1cc28e109fadf52354032e990cec8fa977c9135bb7d310d43956dc86c21",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f2_cfgen_s0-settlement.json": "16764a8b4aac29e5838e2213c30848c7c6ebe5a531bf4c51b49f8fd7a581c9a3",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f2_pg_s0.json": "64407a25d1b80a25422af953ccfda3e9825c9d6489da7e13655272679e737b01",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f2_pg_s0/authorization.json": "f0489a2c44230509d4dc5bb5b34247a78e087c89164ea39275a094d1d956d347",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f2_pg_s0.json": "e36bcce3ac5ca902d112ff4c0ed6da56c415e60ba18ce4e86fac26f28d39a4af",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f2_pg_s0-settlement.json": "8d65e221b61fce8dec25bc9b0304363f63b8e951df658d75a9c1017dae56bf6f",
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f2_scvi_s0.json": "98e136426762f6f24cff1c712029da4e87a8c2f0d4eb94fff74648d7c1d0a421",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f2_scvi_s0/authorization.json": "dfa3238b01d2140261f7a03248f10995b6006935cd0ccb02f1e111a4b1c6cca6",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f2_scvi_s0.json": "5cec4c742ce230f3f40611f74cc4758ee3c641a7110281ced30a6fbb727bf268",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f2_scvi_s0-settlement.json": "cff7210b93dc74bb9cf5e5dff020e07d9ca5fc5e4447015adf7367d6dcfee3dd"
+  },
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}

@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-07T23:38:37.837141+00:00",
+  "UTC": "2026-11-07T23:45:37.806367+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -311,12 +311,12 @@
   "all_three_PG_seed0_folds_full20k_complete": true,
   "shared_resource_forecast_question": {
     "event_ref": "alz-current-shared-gpu-runtime-forecast-20261107",
-    "revision": 5,
+    "revision": 6,
     "state": "pending",
     "recipient": "bits255.dots.ada_20261002",
     "permission_requested": false,
     "production_blocked": false,
-    "reason": "At sparse same-card observed costs GPU0 lane could exceed remaining31.6h; both healthy lanes continue while next GPU0 PG prefix distinguishes current throughput from historical busy-card load."
+    "reason": "Second GPU0 fresh5000 took2100.513s; same-card metadata cost scenario needs39h on original GPU0 lane vs remaining30.7h. Counts-only resource balance forecasts21.17h after admitted guards drain, conditionally; exact source/provenance handoff is not yet implemented or activated."
   },
   "seed1_fresh_PG_actual_training_started": true,
   "first_seed1_fresh_PG_full20k_complete": true,
@@ -345,9 +345,14 @@
     "separate_runtime_CPU_qualification_complete": false,
     "separate_runtime_activated": false,
     "separate_runtime_queued": false,
-    "actual_real_adaptive_fits": 0
+    "actual_real_adaptive_fits": 0,
+    "separate_runtime_first27_test_record": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification.json",
+    "endpoint_CPU_parity_qualified": true,
+    "endpoint_CPU_parity_proof_path": "/ml2/alz/analysis/scalarcal097/endpoint_CPU_qualification.json",
+    "current_runtime_qualification_pending_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v2.json"
   },
   "latest_external_native_root_audit_path": "/ml2/alz/analysis/benchmark097_eleventh_complete_all_nine_seed0_cells_root_check_20261107.json",
   "latest_GPU0_native5000_runtime_evidence_path": "/ml2/alz/analysis/benchmark097_current_GPU0_second_fresh5000_runtime_20261107.json",
-  "scalar_calibration_handoff_constraint": "The original frozen benchmark admits only same-study peer reservations and both final CPU analyses require empty reservations; the first-free-lane suggestion was superseded. A compatible reviewed resource handoff is needed before mixing study phases."
+  "scalar_calibration_handoff_constraint": "The original frozen benchmark admits only same-study peer reservations and both final CPU analyses require empty reservations; the first-free-lane suggestion was superseded. A compatible reviewed resource handoff is needed before mixing study phases.",
+  "latest_remaining45_metadata_balance_forecast_path": "/ml2/alz/analysis/benchmark097_remaining45_metadata_balance_forecast_20261107.json"
 }
