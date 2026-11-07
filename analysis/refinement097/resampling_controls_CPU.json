@@ -1,0 +1,101 @@
+{
+  "status": "TWO_MATCHED_SELECTION_SEED_RESAMPLING_CONTROLS_CPU_VERIFIED",
+  "UTC": "2026-11-07T00:49:18.674482+00:00",
+  "metrics_by_seed": {
+    "0": {
+      "metric_role": "calibration_selection",
+      "generation_replicates": 2,
+      "donors": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "training_seed": 0,
+      "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+      "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+      "sampling_contract": "calibration_equal_stage375_priority_v1",
+      "energy_score": 2.079287181278266,
+      "cell_energy_distance": 0.24277825308317968,
+      "spread_ratio": 1.086688043301637,
+      "within_condition_spread_ratio": 0.9935126950887428,
+      "coverage80": 0.6778846153846154,
+      "generated_zero_count_rate": 0.0,
+      "per_donor_energy_score": [
+        1.272282323410263,
+        3.047641176747636,
+        1.95978725566323,
+        2.0374379692919344
+      ],
+      "per_stage_cell_energy_distance": [
+        0.9114143695390835,
+        1.8390837374697222,
+        1.132453828552058,
+        0.5532384176654261
+      ]
+    },
+    "1": {
+      "metric_role": "calibration_selection",
+      "generation_replicates": 2,
+      "donors": [
+        "H20.33.032",
+        "H21.33.001",
+        "H21.33.023",
+        "H21.33.025"
+      ],
+      "training_seed": 1,
+      "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+      "trace_manifest_SHA256": "e09b953fe3370886412f0b51f02f3c2db08a83d2e1b48481532c21385812de40",
+      "sampling_contract": "calibration_equal_stage375_priority_v1",
+      "energy_score": 2.0814045098447242,
+      "cell_energy_distance": 0.22888526008152432,
+      "spread_ratio": 1.089383296551302,
+      "within_condition_spread_ratio": 0.996161301507612,
+      "coverage80": 0.6634615384615384,
+      "generated_zero_count_rate": 0.0,
+      "per_donor_energy_score": [
+        1.271577429600569,
+        3.0322623871947756,
+        1.9984319036294795,
+        2.0233463189540717
+      ],
+      "per_stage_cell_energy_distance": [
+        0.9584722675422146,
+        1.8071349131033703,
+        1.0769299151655627,
+        0.5926959501979292
+      ]
+    }
+  },
+  "selection_seeds": [
+    0,
+    1
+  ],
+  "independently_rescored320k_cell_replicates": 4,
+  "source_SHA256": {
+    "/ml2/alz/analysis/prepare_refinement097_baselines.py": "95cbe7d0dd437e6a0b3ecc525da8a91456f450a31276715af5ef5d41d61cc0b1",
+    "/ml2/alz/calibration.py": "ce1ea5d5086db11712aa075b81daca799f2101a9ca3d8df3ff03e0b3d45da747",
+    "/ml2/alz/data/calibration_fold0/manifest.json": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b",
+    "/ml2/alz/analysis/confirmation097_resampling_controls_CPU_20261106.json": "cdda8e60bde982667f8e79c840f4df629459dbe4ff22aa5194498a9f5ee928a9",
+    "/ml2/alz/analysis/baseline_calibration_seed0.json": "46babfb542f4ed09a4e08ff60d86da3049798f8f245e882716a50f950a513a18"
+  },
+  "files_SHA256": {
+    "/ml2/alz/artifacts/calibration_resampling_seed0/r0/arrays.npz": "e2d99112bf69bd3fa6687a9ddb62a6eb8f0dfcdb292c6350cad1fe5ae01abd13",
+    "/ml2/alz/artifacts/calibration_resampling_seed0_validation_replay/r0/arrays.npz": "e2d99112bf69bd3fa6687a9ddb62a6eb8f0dfcdb292c6350cad1fe5ae01abd13",
+    "/ml2/alz/artifacts/calibration_resampling_seed0_validation_replay/r0/metrics.json": "e2f988dd11d3b6010d0cf1f8097620e7005f51eb8ccf7d82ff03e4dfacc00230",
+    "/ml2/alz/artifacts/calibration_resampling_seed0/r1/arrays.npz": "793071d2f104124c43753b16461a9b300fda355e591eead92e3a759427773225",
+    "/ml2/alz/artifacts/calibration_resampling_seed0_validation_replay/r1/arrays.npz": "793071d2f104124c43753b16461a9b300fda355e591eead92e3a759427773225",
+    "/ml2/alz/artifacts/calibration_resampling_seed0_validation_replay/r1/metrics.json": "2f73941a19545af58dbb6a739ef0785c2c04cb16c8e2ea2d4a9e7906f6fb6be6",
+    "/ml2/alz/artifacts/calibration_resampling_seed1/r0/arrays.npz": "99398dd2031bb3e58e56619d8734e11c159ab4924fa6b837a67522109b7fafee",
+    "/ml2/alz/artifacts/calibration_resampling_seed1/r0/metrics.json": "316bb68faf7111c66d1420c3b3c0fa080a2f38a73d4c3ee79edc1fbe6e54bf2f",
+    "/ml2/alz/artifacts/calibration_resampling_seed1/r1/arrays.npz": "1202940d6ba356d93b0642f2fc513b91eb7711a52fe9f0ae6ec7c9957f9b4315",
+    "/ml2/alz/artifacts/calibration_resampling_seed1/r1/metrics.json": "b7674c63d1747993fa30b3a8a754d60e7861615458343f3e64e126b4c9616148"
+  },
+  "seed0_existing_validation_replay_bitwise_equal_to_original_arrays": true,
+  "new_count_generation": false,
+  "new_model_fitted": false,
+  "optimizer_updates": 0,
+  "CUDA_initialized": false,
+  "GPU_allocation_created": false,
+  "heldout_values_read": false
+}

@@ -1,0 +1,9 @@
+{
+  "status": "RETAINED_CPU_BASELINE_METADATA_SELECTION_FAILURE",
+  "UTC": "2026-11-07T00:49:17.914319+00:00",
+  "error": "KeyError: trace_manifest_SHA256",
+  "cause": "Original historical seed0 metrics predate the explicit trace/sampling metadata contract. The already generated validation-replay metrics have that contract and their arrays must be verified bitwise equal to the original seed0 arrays. No fields fabricated, no scores modified, no new generation.",
+  "resolution": "Use existing seed0_validation_replay records and explicitly verify every original/replay array element; keep seed1 existing records.",
+  "GPU_allocation_created": false,
+  "new_model_fitted": false
+}

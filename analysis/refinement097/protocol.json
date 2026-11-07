@@ -1,0 +1,214 @@
+{
+  "status": "PREPARED_PENDING_COMPLETE_REFERENCE_CONFIRMATION_AUDIT",
+  "native_version": "0.9.7",
+  "endpoint": 20000,
+  "all_new_training_from_scratch": true,
+  "initial_completed_updates": 0,
+  "source_checkpoint": null,
+  "selection_seeds": [
+    0,
+    1
+  ],
+  "candidates": [
+    {
+      "id": "r000",
+      "changed_field": "generator_lr",
+      "hyperparameters": {
+        "generator_lr": 0.003,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "training_seeds": [
+        0,
+        1
+      ],
+      "endpoint": 20000,
+      "from_scratch": true,
+      "source_checkpoint": null
+    },
+    {
+      "id": "r001",
+      "changed_field": "generator_lr",
+      "hyperparameters": {
+        "generator_lr": 0.009,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "training_seeds": [
+        0,
+        1
+      ],
+      "endpoint": 20000,
+      "from_scratch": true,
+      "source_checkpoint": null
+    },
+    {
+      "id": "r002",
+      "changed_field": "critic_lr",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.0045,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "training_seeds": [
+        0,
+        1
+      ],
+      "endpoint": 20000,
+      "from_scratch": true,
+      "source_checkpoint": null
+    },
+    {
+      "id": "r003",
+      "changed_field": "critic_lr",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.018,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "training_seeds": [
+        0,
+        1
+      ],
+      "endpoint": 20000,
+      "from_scratch": true,
+      "source_checkpoint": null
+    },
+    {
+      "id": "r004",
+      "changed_field": "particle_lr",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.0075,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "training_seeds": [
+        0,
+        1
+      ],
+      "endpoint": 20000,
+      "from_scratch": true,
+      "source_checkpoint": null
+    },
+    {
+      "id": "r005",
+      "changed_field": "particle_lr",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "training_seeds": [
+        0,
+        1
+      ],
+      "endpoint": 20000,
+      "from_scratch": true,
+      "source_checkpoint": null
+    },
+    {
+      "id": "r006",
+      "changed_field": "reg_coeff",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 0.5,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "training_seeds": [
+        0,
+        1
+      ],
+      "endpoint": 20000,
+      "from_scratch": true,
+      "source_checkpoint": null
+    },
+    {
+      "id": "r007",
+      "changed_field": "reg_coeff",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 2.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "training_seeds": [
+        0,
+        1
+      ],
+      "endpoint": 20000,
+      "from_scratch": true,
+      "source_checkpoint": null
+    },
+    {
+      "id": "r008",
+      "changed_field": "prior_reg",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.003
+      },
+      "training_seeds": [
+        0,
+        1
+      ],
+      "endpoint": 20000,
+      "from_scratch": true,
+      "source_checkpoint": null
+    },
+    {
+      "id": "r009",
+      "changed_field": "prior_reg",
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.03
+      },
+      "training_seeds": [
+        0,
+        1
+      ],
+      "endpoint": 20000,
+      "from_scratch": true,
+      "source_checkpoint": null
+    }
+  ],
+  "maximum_new_fits": 20,
+  "reference_control": "Previously measured reference seed0/1 endpoint metrics only; never initialize from old weights.",
+  "design_path": "/ml2/alz/analysis/distribution097_conditional_next_search_design_20261107.json",
+  "design_evidence_SHA256": {},
+  "calibration_only": true,
+  "metric_role": "calibration_selection",
+  "automatic_promotion": false,
+  "SOTA_claim": false,
+  "full_goal_complete": false,
+  "activation": false
+}
