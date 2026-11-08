@@ -1,0 +1,78 @@
+{
+  "status": "CFGEN_FOLD2_SEED2_FULL_NATIVE_FIT_CHECKPOINT_HASHES_AND_CUDA_RESTORE_RECEIPT_VERIFIED_ENDPOINTS_RUNNING",
+  "UTC": "2026-11-08T07:16:47.499299+00:00",
+  "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s2",
+  "AE_epochs": 300,
+  "FM_epochs": 1500,
+  "AE_optimizer_updates": 17100,
+  "FM_optimizer_updates": 85500,
+  "total_optimizer_updates": 102600,
+  "AE_checkpoint_SHA256": "84f6a0f75f6de4743c8e7a1a2f947e51d4d3d81d92db4eea133e6635d46e4e07",
+  "FM_checkpoint_SHA256": "6442fb0128f83d9adbebc5072154fc0c197ca05ee0ddf79c901ab8c83076bc3f",
+  "native_worker_exact_CUDA_restore_pass": true,
+  "root_checkpoint_bytes_match_native_restore_receipt": true,
+  "encoder_fingerprint_checks": 168,
+  "all_encoder_checks_preserved": true,
+  "native_recipe_unchanged": true,
+  "detect_anomaly_unchanged": true,
+  "actual_new_model_from_zero": true,
+  "active_native_models": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s2",
+      "guard": {
+        "pid": 1088132,
+        "birth": 26707700,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 1088215,
+        "birth": 26707832,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "native_progress": {
+        "phase": "FM",
+        "phase_optimizer_updates": 49750,
+        "total_optimizer_updates": 67450,
+        "completed_epochs": 843,
+        "native_loss": 6.188165664672852
+      },
+      "allocation_hours_remaining": 2.4687414961391023
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s2",
+      "guard": {
+        "pid": 1593495,
+        "birth": 27590239,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 1593587,
+        "birth": 27590374,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "native_progress": {
+        "phase": "FM",
+        "phase_optimizer_updates": 85500,
+        "total_optimizer_updates": 102600,
+        "completed_epochs": 1499,
+        "native_loss": 5.739205360412598
+      },
+      "allocation_hours_remaining": 4.920246692962117
+    }
+  ],
+  "successful_logical_models": 15,
+  "required_logical_models": 45,
+  "receipt_and_restore_SHA256": {
+    "/ml2/alz/runs/CAL_GPU0_V1_external097_f2_cfgen_s2/fit/fit_receipt.json": "b4c3f9ddd1a0963cf3c78bfdcc6935db1f3836c1a261e88dde7ee250e7421756",
+    "/ml2/alz/runs/CAL_GPU0_V1_external097_f2_cfgen_s2/fit/AE/receipt.json": "757d9bb48be34dd2fb313e158d9346befb1174178e52f3c98462ff36a4510eed",
+    "/ml2/alz/runs/CAL_GPU0_V1_external097_f2_cfgen_s2/fit/FM/receipt.json": "e3c1d69ee3f5ce88a81a49a6a2d57bd7ba343989b24ae17a75399c3a47305979",
+    "/ml2/alz/runs/CAL_GPU0_V1_external097_f2_cfgen_s2/native_restore.json": "411028e63ff3a202cf6373a83ecf456be7bcf09d9f06130f6fb6742cb6b56b97"
+  },
+  "generation_scoring_independent_audit_and_settlement_pending": true,
+  "quality_or_evaluation_target_values_read": false,
+  "new_scalar_LR_fits": 0,
+  "new_theta_fits": 0,
+  "no_new_GPU_admission_or_model_change": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
