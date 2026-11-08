@@ -402,8 +402,10 @@
   "resource_only_handoff_observed_PID": 474542,
   "resource_only_after_handoff_observed_PID": 475880,
   "latest_native_progress_observation": {
-    "status": "BOTH_NATIVE_CFGEN_FLOW_MATCHING_JOBS_LIVE_AND_FINITE",
-    "UTC": "2026-11-08T04:49:45.172578+00:00",
+    "status": "BOTH_ORIGINAL_MODELS_LIVE_GPU0_THROUGHPUT_IMPROVED_POSTFIT_TIME_STILL_TIGHT",
+    "UTC": "2026-11-08T05:31:08.799806+00:00",
+    "successful_logical_models": 14,
+    "required_successful_logical_models": 45,
     "active_models": [
       {
         "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s2",
@@ -418,20 +420,14 @@
           "birth": 26518853,
           "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
         },
-        "heartbeat_age_seconds": 1.0269355773925781,
-        "ledger_status": "active",
-        "lease_status": "running",
-        "native_progress_last_verified": {
+        "native_progress": {
           "phase": "FM",
-          "phase_optimizer_updates": 79500,
-          "total_optimizer_updates": 96600,
-          "completed_epochs": 1394,
-          "native_loss": 6.020125389099121
+          "phase_optimizer_updates": 85500,
+          "total_optimizer_updates": 102600,
+          "completed_epochs": 1499,
+          "native_loss": 6.052128314971924
         },
-        "required_total_optimizer_updates": 102600,
-        "initial_completed_updates": 0,
-        "source_checkpoint": null,
-        "is_continuation": false
+        "allocation_seconds_remaining": 13336.378538370132
       },
       {
         "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s2",
@@ -446,28 +442,31 @@
           "birth": 26707832,
           "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
         },
-        "heartbeat_age_seconds": 1.3527541160583496,
-        "ledger_status": "active",
-        "lease_status": "running",
-        "native_progress_last_verified": {
+        "native_progress": {
           "phase": "FM",
-          "phase_optimizer_updates": 5000,
-          "total_optimizer_updates": 22700,
-          "completed_epochs": 84,
-          "native_loss": 6.702661991119385
+          "phase_optimizer_updates": 16250,
+          "total_optimizer_updates": 33950,
+          "completed_epochs": 275,
+          "native_loss": 6.329128265380859
         },
-        "required_total_optimizer_updates": 106200,
-        "initial_completed_updates": 0,
-        "source_checkpoint": null,
-        "is_continuation": false
+        "allocation_seconds_remaining": 15226.169734239578
       }
     ],
-    "successful_logical_models": 14,
-    "required_successful_logical_models": 45,
-    "retained_infrastructure_failures": 2,
-    "CPU_dispatcher_and_recovery_and_scalar_observer_live": true,
-    "real_scalar_fits": 0,
-    "no_processes_signalled": true,
+    "GPU0_FM_updates_since_last_cap_risk_observation": 9000,
+    "GPU0_observation_interval_seconds": 1696.253916501999,
+    "GPU0_recent_FM_updates_per_second": 5.305809414760101,
+    "GPU0_previous_FM_updates_per_second": 2.8576123816604655,
+    "GPU0_conditional_remaining_training_hours": 3.7825415267675746,
+    "GPU0_current_allocation_hours_remaining": 4.229491592844327,
+    "GPU0_postfit_allowance_hours_if_recent_rate_persists": 0.44695006607675225,
+    "GPU1_full_fit_and_native_restore_verified": true,
+    "GPU1_generation_scoring_final_audit_not_yet_closed": true,
+    "previous_observation_path": "/ml2/alz/analysis/benchmark097_GPU0_current_CFGen_throughput_cap_risk_20261108.json",
+    "previous_observation_SHA256": "55b91be8b42b6a8ba3c5e555d02c923985d2924ef017267b35d3721af9c2b3c9",
+    "no_rate_or_completion_guarantee": true,
+    "no_foreign_or_owned_model_signals": true,
+    "no_live_authorization_changes": true,
+    "quality_or_target_values_read": false,
     "full_goal_complete": false,
     "SOTA_claim": false
   },
@@ -520,7 +519,7 @@
   "latest_scalar_runtime_cost_recovery_evidence_path": "/ml2/alz/analysis/scalarcal097_runtime_cost_recovery_v6_20261108.json",
   "latest_shared_capacity_observation": "Existing V2 scheduler admitted CFGen fold1seed2 onGPU0 after its stability/cushion check; GPU0 nativeAE5000 andGPU1 nativeFM42500 verified. Both guards/workers and all original CPU observers retained.",
   "countfm_native_fullwidth_CPU_fit_reload_review_path": "/ml2/alz/analysis/countfm_native_fullwidth_CPU_fit_reload_review_20261108.json",
-  "latest_external_live_progress_evidence_path": "/ml2/alz/analysis/benchmark097_CFGen_seed2_full_training_and_native_restore_20261108.json",
+  "latest_external_live_progress_evidence_path": "/ml2/alz/analysis/benchmark097_GPU0_throughput_improved_original_models_live_20261108.json",
   "foreign_bridge_peak_profile_source_observation_path": "/ml2/alz/analysis/ALZ_foreign_bridge_peak_profile_source_observation_20261108.json",
   "capacity_V3_revision_prepared_but_not_deployed": true,
   "capacity_V3_preparation_path": "/ml2/alz/analysis/benchmark097_capacity_continuation_v3_CPU_check_20261108.json",
@@ -548,7 +547,7 @@
     "scalar_overhead_measured": false,
     "capacity_and_completion_guaranteed": false,
     "extra_theta_fits_admitted": 0,
-    "current_GPU0_throughput_warning": "Recent CFGen FM2.86updates/s would require7.90h for remaining FM versus4.70h allocation left at05:02UTC, before generation. Earlier21h median cost forecast is conditional; actual competing compute service needs reconciliation. Current model is live, finite and not failed."
+    "current_GPU0_throughput_warning": "Recent FM service improved, but postfit generation/audit/settlement allowance remains tight; see current actual observation. No cap extension or restart assumed."
   },
   "latest_CFGen_native_full_fit_and_restore_path": "/ml2/alz/analysis/benchmark097_CFGen_seed2_full_training_and_native_restore_20261108.json",
   "latest_GPU1_CFGen_phase": "FULL_TRAINING_AND_NATIVE_CUDA_RESTORE_COMPLETE_GENERATION_AUDIT_SETTLEMENT_REMAIN",
@@ -556,7 +555,7 @@
   "dispersion_followup_model_CPU_qualification_path": "/ml2/alz/analysis/dispersion097/model_CPU_qualification.json",
   "dispersion_followup_proposed_design_path": "/ml2/alz/analysis/dispersion097/proposed_fresh_six_design.json",
   "dispersion_followup_real_ALZ_fits": 0,
-  "latest_current_throughput_risk_path": "/ml2/alz/analysis/benchmark097_GPU0_current_CFGen_throughput_cap_risk_20261108.json",
+  "latest_current_throughput_risk_path": "/ml2/alz/analysis/benchmark097_GPU0_throughput_improved_original_models_live_20261108.json",
   "dispersion_followup_fresh_seed_model_CPU_qualification_path": "/ml2/alz/analysis/dispersion097/fresh_seed_model_CPU_qualification.json",
   "dispersion_followup_runtime_CPU_qualification_path": "/ml2/alz/analysis/dispersion097/runtime_CPU_qualification_v2.json",
   "dispersion_followup_runtime_qualified_and_queued_path": "/ml2/alz/analysis/dispersion097/runtime_qualified_and_queued_20261108.json",
