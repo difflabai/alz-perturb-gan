@@ -1,10 +1,14 @@
 """Hash-only handoff after recovered benchmark AND all six scalar-LR fits."""
-import hashlib,json,sys
+import hashlib,json,subprocess,sys
 from pathlib import Path
 ROOT=Path('/ml2/alz');sys.path.append(str(ROOT/'analysis'))
 import scalarcal097_recovered_handoff as recovered
 def read(p):return json.loads(Path(p).read_bytes())
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+def committed_sha(root,path):
+ relative=Path(path).relative_to(root)
+ data=subprocess.check_output(['git','show','HEAD:'+relative.as_posix()],cwd=root)
+ return hashlib.sha256(data).hexdigest()
 def paths(root=ROOT):
  root=Path(root)
  return [*recovered.paths(root),root/'analysis/scalarcal097/matrix_complete.json',root/'analysis/scalarcal097/comparison.json',root/'artifacts/scalarcal097-after-recovered-science-v5/completed.json']
@@ -21,6 +25,7 @@ def ready(root=ROOT):
   path=root/'analysis/scalarcal097/results'/(key+'.json');assert sha(path)==pin;extra.append(path)
  assert marker['status']=='SCALARCAL097_COMPLETE_CALIBRATION_REPORT_FINAL_RESEARCH_AUDIT_REMAINS'
  assert marker['report_path']==str(report)
+ assert sha(report)==committed_sha(root,report),'Prior scalar report differs from its completed committed artifact'
  assert not read(root/'scalarcal097_runtime/plan.json')['enabled']
  for registry in (root/'artifacts').glob('gpu*-scalarcal097-20261107/live_registry/registry.json'):assert not read(registry)['jobs']
  proof_path=root/'analysis/scalarcal097/runtime_CPU_qualification_v6.json';proof=read(proof_path)

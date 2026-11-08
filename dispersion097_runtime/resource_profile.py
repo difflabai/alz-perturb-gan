@@ -34,7 +34,7 @@ def validate_proposal(gpu=None):
  return policies if gpu is None else policies[gpu]
 def review_sources():
  import preset_scope as s
- paths=[*HERE.glob('*.py'),*[prepared_path(g) for g in GPUS],*s.MODEL_DIR.glob('*.py'),*s.CONTROLLER_DIR.glob('*.py'),*s.protocol_paths(),s.RUNTIME_PROOF,ROOT/'analysis/run_dispersion097.py',ROOT/'analysis/after_benchmark097_scalarcal.py']
+ paths=[*HERE.glob('*.py'),*[prepared_path(g) for g in GPUS],*s.MODEL_DIR.glob('*.py'),*s.CONTROLLER_DIR.glob('*.py'),*s.protocol_paths(),s.RUNTIME_PROOF,ROOT/'analysis/run_dispersion097.py',ROOT/'analysis/after_scalarcal097_dispersion.py']
  return {str(p):sha(p) for p in paths if p!=s.PLAN}
 def reviewed():
  import preset_scope as s

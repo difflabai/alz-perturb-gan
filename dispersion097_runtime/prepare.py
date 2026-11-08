@@ -15,7 +15,7 @@ def build_authorization(*,arm='theta1',seed=8,gpu=None,check_only=False,auth_pat
     auth={k:copy.deepcopy(base[k]) for k in ('status','cpu_fixture','machine_id','source_review_passed','project_root','science_root','calibration_manifest_SHA256','core_GPU_hour_ceiling')}
     scope.protocol();model_input=None
     auth.update(cell=value,allocation_id=b.allocation_key(value),attempt_id=b.attempt_key(value),label=b.attempt_key(value),
-      scheduler_allocation_id='ALZ_SCALARCAL_DUAL_'+b.attempt_key(value)+'_'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ'),issued_unix=now,
+      scheduler_allocation_id='ALZ_DISPERSION_DUAL_'+b.attempt_key(value)+'_'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ'),issued_unix=now,
       expires_unix=min(now+21630,b.read(scope.WINDOW)['expires_unix']),cap_seconds=21600,
       gpu_uuid=gpu,role='alz_core_'+method,operation='dispersion097_cell',metric_role='calibration_selection',arm=arm,
       fixed_endpoint=scope.endpoint(method),new_model_updates=scope.update_count(value),new_model_update_unit=scope.update_unit(method),initial_completed_updates=0,is_continuation=False,
