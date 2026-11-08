@@ -1,0 +1,111 @@
+{
+  "status": "FRESH_FOLD2_SEED2_NATIVE_PG10000_CHECKPOINT_BOTH_GPU_WORKERS_AND_SIX_CPU_QUEUES_LIVE",
+  "UTC": "2026-11-08T13:03:41.009675+00:00",
+  "attempt": "CAL_GPU0_V1_external097_f2_pg_s2",
+  "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f2_pg_s2/authorization.json",
+  "authorization_SHA256": "5630408cc8ba3e3997184d0aeb3553a993b2f772e2690e0a605bd963273e9532",
+  "official_ParticleGAN_version": "0.9.7",
+  "initial_completed_updates": 0,
+  "source_model_path": null,
+  "frozen_hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "completed_optimizer_pairs_at_observation": 10001,
+  "actual_G_prior_LRs": [
+    0.012,
+    0.06
+  ],
+  "actual_D_LRs": [
+    0.018000000000000002
+  ],
+  "actual_particle_usage": {
+    "rows_drawn": 512,
+    "rows_moved": 512,
+    "total_draws": 320032,
+    "total_unsampled_row_moves": 0,
+    "particle_covariance_trace": 8.311698913574219,
+    "particle_mean_squared_norm": 8.429481506347656
+  },
+  "checkpoint_receipt_path": "/ml2/alz/runs/CAL_GPU0_V1_external097_f2_pg_s2/fit/checkpoint_receipt.json",
+  "checkpoint_receipt_SHA256_at_observation": "6d62d9b230c212ba23655fc28542b7c6f1edd7078b489f9391fdad4e1dad26ef",
+  "durable_checkpoint_optimizer_pairs": 10000,
+  "durable_checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_external097_f2_pg_s2/fit/recovery.pt",
+  "durable_checkpoint_actual_SHA256_at_observation": "9c7a4dd7a3eb511946bdd23fbd69777d2c0117899eeea31c70aba9ef3d9448d4",
+  "checkpoint_is_intermediate_not_final": true,
+  "guard_identity": {
+    "pid": 2732468,
+    "birth": 29831474,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "worker_identity": {
+    "pid": 2732554,
+    "birth": 29831619,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "other_live_attempt": "CAL_GPU0_V1_external097_f0_cfgen_s4",
+  "other_live_guard_identity": {
+    "pid": 2707855,
+    "birth": 29780353,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "other_live_worker_identity": {
+    "pid": 2707896,
+    "birth": 29780483,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "other_native_progress_at_observation": {
+    "phase": "FM",
+    "total_optimizer_updates": 92350,
+    "completed_epochs": 1320
+  },
+  "six_CPU_process_identities_verified_live": [
+    {
+      "name": "original_dispatcher",
+      "pid": 2283066,
+      "birth": 28901418,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "replacement_pipeline",
+      "pid": 2348403,
+      "birth": 29037448,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "scalar_LR_queue",
+      "pid": 2348719,
+      "birth": 29037941,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "theta_queue",
+      "pid": 2348925,
+      "birth": 29038447,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "final_audit_observer",
+      "pid": 2368995,
+      "birth": 29080116,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "donor_matched_supplement_observer",
+      "pid": 2369483,
+      "birth": 29080902,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    }
+  ],
+  "audited_logical_models": 21,
+  "required_logical_models": 45,
+  "retained_original_infrastructure_failures": 3,
+  "no_quality_or_evaluation_target_values_inspected": true,
+  "no_native_source_or_configuration_changes": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
