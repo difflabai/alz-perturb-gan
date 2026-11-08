@@ -1,0 +1,72 @@
+{
+  "status": "FRESH_FOLD0_SEED3_PG10000_CHECKPOINT_HASH_NATIVE_LIVENESS_AND_COST_FORECAST_VERIFIED",
+  "UTC": "2026-11-08T14:49:16.054582+00:00",
+  "attempt": "CAL_GPU0_V1_external097_f0_pg_s3",
+  "from_zero": true,
+  "actual_optimizer_pairs": 10001,
+  "durable_optimizer_pairs": 10000,
+  "checkpoint_status": "recovery",
+  "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_external097_f0_pg_s3/fit/recovery.pt",
+  "checkpoint_SHA256": "3180b18eb425596ff62c1a25630adce4797329dd6735101e9bca9e7bc468372d",
+  "authorization_SHA256": "2138387953237b50add0e9a3b928da0c79980df8c51c58356a8575ac91105e8b",
+  "release": "0.9.7",
+  "G_LR": 0.012,
+  "D_LR": 0.018000000000000002,
+  "prior_LR": 0.06,
+  "particle_rows_drawn": 512,
+  "particle_rows_moved": 512,
+  "total_unsampled_row_moves": 0,
+  "native_workers": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f0_pg_s3",
+      "guard_identity": {
+        "pid": 2999150,
+        "birth": 30375522,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker_identity": {
+        "pid": 2999210,
+        "birth": 30375659,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "progress": {
+        "step": 10001
+      }
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s4",
+      "guard_identity": {
+        "pid": 3019176,
+        "birth": 30418277,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker_identity": {
+        "pid": 3019224,
+        "birth": 30418412,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "progress": {
+        "phase": "FM",
+        "total_optimizer_updates": 87200,
+        "completed_epochs": 1177
+      }
+    }
+  ],
+  "successful_logical_models": 23,
+  "required_logical_models": 45,
+  "retained_infrastructure_failures": 3,
+  "updated_forecast_path": "/ml2/alz/analysis/released097_full_queue23_PG10000_metadata_forecast_20261108.json",
+  "updated_forecast_SHA256": "fea92f41bbd2e129fb7d2057e44ab3dac59aa14e29614990e6cdb1d218c12a42",
+  "updated_canonical_budget_snapshot": {
+    "revision": 582,
+    "cap_GPU_hours": 1124.0,
+    "charged_GPU_hours": 111.77803989933113,
+    "reserved_GPU_hours": 12.016666666666667,
+    "available_after_reservations_GPU_hours": 1000.2052934340021
+  },
+  "active_PG_pace_is_what_if_not_settled_cost": true,
+  "quality_values_inspected": false,
+  "full_endpoint_complete": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}

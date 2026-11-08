@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-08T14:29:01.984105+00:00",
+  "UTC": "2026-11-08T14:49:16.054582+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -154,7 +154,7 @@
   "latest_local_coordinate_tradeoff_path": "/ml2/alz/analysis/localfaith097_t001_seed0_tradeoff_20261107.json",
   "latest_release_recheck_path": "/ml2/alz/analysis/released097_particle_sliders_new_develop_compatibility_20261107.json",
   "lowest_observed_paired_distance_is_not_final_selection": true,
-  "latest_shared_capacity_observation_path": "/ml2/alz/analysis/released097_full_queue23_constrained_metadata_forecast_20261108.json",
+  "latest_shared_capacity_observation_path": "/ml2/alz/analysis/released097_full_queue23_PG10000_metadata_forecast_20261108.json",
   "original_research_pipeline_superseded_evidence_path": "/ml2/alz/analysis/released097_adaptive_CPU_handoff_20261107.json",
   "optional_followup_prepared_protocol_path": "/ml2/alz/analysis/followfaith097/protocol.json",
   "optional_followup_design_source_path": "/ml2/alz/analysis/released097_followup_design.py",
@@ -711,9 +711,9 @@
   "dispersion_completed_study_final_audit_actual_CPU_tests": 11,
   "dispersion_completed_study_final_audit_existing_saved_calibration_arrays_checked": 40,
   "dispersion_completed_study_final_audit_real_theta_outcomes_audited": 0,
-  "latest_full_queue_metadata_forecast_path": "/ml2/alz/analysis/released097_full_queue23_constrained_metadata_forecast_20261108.json",
+  "latest_full_queue_metadata_forecast_path": "/ml2/alz/analysis/released097_full_queue23_PG10000_metadata_forecast_20261108.json",
   "latest_full_queue_metadata_forecast_source_path": "/ml2/alz/analysis/forecast_released097_full_queue_metadata_v3.py",
-  "latest_canonical_budget_live_metadata_snapshot_path": "/ml2/alz/analysis/benchmark097_all_six_CPU_queues_restored_48_attempts_and_native_PG_live_20261108.json",
+  "latest_canonical_budget_live_metadata_snapshot_path": "/ml2/alz/analysis/released097_full_queue23_PG10000_metadata_forecast_20261108.json",
   "full_queue_time_feasibility_status": "LATEST_SETTLED_COST_LOW_OVERHEAD_SCENARIO_WITHIN_WINDOW_TWO_FOLD_SCALAR_OVERHEAD_MARGIN_NARROW_HIGHER_OVERHEAD_AT_RISK",
   "full_queue_time_feasibility_is_not_admission_or_completion_guarantee": true,
   "full_queue_time_feasibility_does_not_change_existing_priorities": true,
@@ -727,7 +727,7 @@
     "message_id": "report_896e93a8671108adfa3773bda6e6de1123d83ac18c8691a7e6d7edd7349a1e56",
     "delivery_status": "queued_not_yet_answered",
     "forecast_at_question_submission_path": "/ml2/alz/analysis/released097_full_queue20_constrained_metadata_forecast_20261108.json",
-    "latest_subsequent_forecast_path": "/ml2/alz/analysis/released097_full_queue23_constrained_metadata_forecast_20261108.json"
+    "latest_subsequent_forecast_path": "/ml2/alz/analysis/released097_full_queue23_PG10000_metadata_forecast_20261108.json"
   },
   "existing_t005_stage_and_mixture_energy_diagnostic_path": "/ml2/alz/analysis/t005_stage_mixture_energy_CPU_result_20261108.json",
   "existing_t005_stage_and_mixture_energy_independent_audit_path": "/ml2/alz/analysis/t005_stage_mixture_energy_CPU_root_audit_20261108.json",
@@ -849,12 +849,12 @@
   "external_benchmark_queued_fits_includes_three_explicit_unstarted_replacements": true,
   "current_goal_index_reconciled_from_V6_authoritative_metadata_UTC": "2026-11-08T14:12:21.441745+00:00",
   "latest_verified_external_PG_progress": {
-    "UTC": "2026-11-08T14:16:59.534035+00:00",
+    "UTC": "2026-11-08T14:49:16.054582+00:00",
     "attempt": "CAL_GPU0_V1_external097_f0_pg_s3",
-    "optimizer_pairs": 5001,
-    "durable_optimizer_pairs": 5000,
+    "optimizer_pairs": 10001,
+    "durable_optimizer_pairs": 10000,
     "quality_values_inspected": false,
-    "observation_proof_path": "/ml2/alz/analysis/benchmark097_fold0_seed3_native_PG5000_live_root_check_20261108.json"
+    "observation_proof_path": "/ml2/alz/analysis/benchmark097_fold0_seed3_native_PG10000_live_root_check_20261108.json"
   },
   "latest_verified_completed_PG_endpoint": {
     "UTC": "2026-11-08T14:00:05.662654+00:00",
