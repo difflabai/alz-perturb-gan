@@ -82,9 +82,9 @@ class Scope(unittest.TestCase):
    common[0].write_text(json.dumps(dict(matrix_complete=True,complete_cells=45,required_cells=45,result_SHA256={str(i):'fixed' for i in range(45)})))
    common[1].write_bytes(b'OPAQUE_PRIMARY_NEVER_PARSED');common[2].write_bytes(b'OPAQUE_SENSITIVITY_NEVER_PARSED')
    source=root/'analysis/run_released097_balanced_pipeline.py';source.write_text('CPU_FIXTURE_ONLY')
-   aux=root/'analysis/benchmark097_balanced';aux.mkdir();proof=aux/'runtime_CPU_qualification.json';handoff=aux/'handoff_completed.json';handoff.write_text('{}')
+   aux=root/'analysis/benchmark097_balanced';aux.mkdir();proof=aux/'runtime_CPU_qualification_v2.json';handoff=aux/'handoff_completed.json';handoff.write_text('{}')
    proof.write_text(json.dumps(dict(status='EXTERNAL097_SAME45_BALANCED_RESOURCE_SCOPE_CPU_PASS',native_cell_device_bindings=90,source_SHA256={str(source):s.sha(source)})))
-   barrier=aux/'scientific_reports_completed.json';value=dict(status='SAME_FROZEN45_ORIGINAL57_PRIMARY_AND_PRESPECIFIED53_COMPLETE',complete_fresh_models=45,original57_primary_preserved=True,prespecified53_complete=True,new_generated_counts_for53=0,source_pipeline_path=str(source),source_pipeline_SHA256=s.sha(source),runtime_qualification_SHA256=s.sha(proof),handoff_SHA256=s.sha(handoff),report_SHA256={str(path):s.sha(path) for path in common});barrier.write_text(json.dumps(value))
+   barrier=aux/'scientific_reports_completed.json';value=dict(status='SAME_FROZEN45_ORIGINAL57_PRIMARY_AND_PRESPECIFIED53_COMPLETE',complete_fresh_models=45,original57_primary_preserved=True,prespecified53_complete=True,new_generated_counts_for53=0,source_pipeline_path=str(source),source_pipeline_SHA256=s.sha(source),runtime_qualification_path=str(proof),runtime_qualification_SHA256=s.sha(proof),handoff_SHA256=s.sha(handoff),report_SHA256={str(path):s.sha(path) for path in common});barrier.write_text(json.dumps(value))
    marker=root/'artifacts/released097-balanced-research-pipeline/completed.json';marker.parent.mkdir(parents=True);marker.write_text(json.dumps(dict(status='SAME45_SCIENTIFIC_REPORTS_READY_FINAL_AGENT_AUDIT_AND_SCALAR_CALIBRATION_REMAIN')))
    for name in ('benchmark097_dual_runtime','benchmark097_balanced_runtime'):
     path=root/name/'plan.json';path.parent.mkdir();path.write_text('{"enabled":false}')

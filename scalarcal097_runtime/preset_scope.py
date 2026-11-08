@@ -7,7 +7,7 @@ MODEL_DIR=ROOT/'analysis/adaptive_lr097/model';CONTROLLER_DIR=ROOT/'analysis/ada
 MODEL_PROOF=CONTROLLER_DIR/'ALZ_integration_CPU_qualification.json'
 NATIVE_PROOF=ROOT/'analysis/distribution097/native_release.json';ENGINE_PROOF=ROOT/'analysis/shared_gpu0_candidate_CPU_qualification.json'
 ENDPOINT_PROOF=STUDY/'endpoint_CPU_qualification.json'
-RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v3.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
+RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v4.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
 CFG=dict(z_dim=8,stage_balance=False,cell_z_dim=8,theta_init_scale=1.,fourier_feature_scale=1.)
 ENABLED=dict(enabled=True,experiment='scalarcal097',fold=0,training_seeds=[5,6,7],arms=['fixed','adaptive'],endpoint=20000,all_training_from_scratch=True,calibration_only=True)
 def read(p):return json.loads(Path(p).read_bytes())
@@ -57,7 +57,9 @@ def prior_study_ready(root=ROOT):
  q=read(matrix);assert q['matrix_complete'] and q['complete_cells']==q['required_cells']==45 and len(q['result_SHA256'])==45
  if parent==root/'analysis/benchmark097_balanced/scientific_reports_completed.json':
   barrier=read(parent);assert barrier['status']=='SAME_FROZEN45_ORIGINAL57_PRIMARY_AND_PRESPECIFIED53_COMPLETE' and barrier['complete_fresh_models']==45 and barrier['original57_primary_preserved'] and barrier['prespecified53_complete'] and barrier['new_generated_counts_for53']==0
-  source=root/'analysis/run_released097_balanced_pipeline.py';proof_path=root/'analysis/benchmark097_balanced/runtime_CPU_qualification.json';proof=read(proof_path)
+  source=root/'analysis/run_released097_balanced_pipeline.py';proof_path=Path(barrier.get('runtime_qualification_path',str(root/'analysis/benchmark097_balanced/runtime_CPU_qualification.json')))
+  assert proof_path in (root/'analysis/benchmark097_balanced/runtime_CPU_qualification.json',root/'analysis/benchmark097_balanced/runtime_CPU_qualification_v2.json')
+  proof=read(proof_path)
   assert proof['status']=='EXTERNAL097_SAME45_BALANCED_RESOURCE_SCOPE_CPU_PASS' and proof['native_cell_device_bindings']==90
   assert barrier['source_pipeline_path']==str(source) and barrier['source_pipeline_SHA256']==proof['source_SHA256'][str(source)]==sha(source)
   assert barrier['runtime_qualification_SHA256']==sha(proof_path) and barrier['handoff_SHA256']==sha(root/'analysis/benchmark097_balanced/handoff_completed.json')

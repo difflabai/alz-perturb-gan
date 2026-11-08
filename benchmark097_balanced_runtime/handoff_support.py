@@ -23,7 +23,7 @@ def command_matches(pid,script,authorization=None):
   args=(p/'cmdline').read_bytes().split(b'\0');wanted=os.fsencode(str(script))
   if wanted not in args:return False
   return authorization is None or os.fsencode(str(authorization)) in args
- except FileNotFoundError:return False
+ except (FileNotFoundError,ProcessLookupError):return False
 
 def matching_processes(scripts,authorization=None):
  found=[]
@@ -34,7 +34,7 @@ def matching_processes(scripts,authorization=None):
    if any(command_matches(int(p.name),script,authorization) for script in scripts):
     ident=identity(int(p.name))
     if ident is not None:found.append(ident)
-  except FileNotFoundError:continue
+  except (FileNotFoundError,ProcessLookupError):continue
  return found
 
 def signal_dispatcher_only(expected,script,*,fixture_root=None):

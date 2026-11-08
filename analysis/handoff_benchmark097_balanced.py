@@ -155,7 +155,13 @@ def main():
  else:STATE.mkdir(exist_ok=False)
  with (STATE/'handoff.lock').open('a+') as lock:
   fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-  write(STATE/'identity.json',dict(**identity(os.getpid()),source_SHA256=b.sha(__file__),original_driver=original))
+  if args.resume:
+   history=STATE/'CPU_observer_history';history.mkdir(exist_ok=True)
+   for name in ('failure.json','identity.json'):
+    old=STATE/name
+    if old.exists():
+     saved=history/(str(time.time_ns())+'-'+name);old.rename(saved)
+  write(STATE/'identity.json',dict(**identity(os.getpid()),source_SHA256=b.sha(__file__),original_driver=original,CPU_observation_resumed=args.resume,existing_models_restarted=False))
   try:
    if not args.resume:stop_original(original,expected)
    while identity(expected['pid'])==expected:

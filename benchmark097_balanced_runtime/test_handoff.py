@@ -1,5 +1,6 @@
 """Actual CPU PID signal isolation and authoritative handoff evidence cases."""
-import json,os,signal,subprocess,sys,tempfile,time,unittest
+import errno,json,os,signal,subprocess,sys,tempfile,time,unittest
+from unittest.mock import patch
 from pathlib import Path
 from handoff_support import classify,signal_dispatcher_only
 from dual_coordination import identity
@@ -47,4 +48,9 @@ class Handoff(unittest.TestCase):
     p.wait(timeout=5)
     if child and identity(child)==child_id:os.kill(child,signal.SIGTERM)
     p.stdout.close();p.stderr.close()
+ def test_exiting_proc_cmdline_race_is_not_a_guard_failure(self):
+  from handoff_support import command_matches
+  with patch.object(Path,'read_bytes',side_effect=ProcessLookupError(errno.ESRCH,'No such process')):
+   self.assertFalse(command_matches(os.getpid(),Path('/tmp/CPU-fixture-script.py')))
+
 if __name__=='__main__':unittest.main(verbosity=2)

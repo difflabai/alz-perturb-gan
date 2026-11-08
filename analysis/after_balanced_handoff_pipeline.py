@@ -3,7 +3,7 @@
 A vanished handle alone is never success. No model/guard signal or restart is
 performed. The original scientific/runtime gates remain in the launched code.
 """
-import datetime,fcntl,json,os,subprocess,sys,time
+import argparse,datetime,fcntl,json,os,subprocess,sys,time
 from pathlib import Path
 ROOT=Path('/ml2/alz');RUNTIME=ROOT/'benchmark097_balanced_runtime';STATE=ROOT/'artifacts/after-balanced-handoff-pipeline'
 sys.path.insert(0,str(RUNTIME))
@@ -14,13 +14,22 @@ def read(p):return json.loads(Path(p).read_bytes())
 def write(p,q):
  p=Path(p);tmp=p.with_suffix('.partial');tmp.write_text(json.dumps(q,indent=2,allow_nan=False)+'\n');tmp.replace(p)
 def main():
+ parser=argparse.ArgumentParser();parser.add_argument('--resume',action='store_true');args=parser.parse_args()
  upstream=ROOT/'artifacts/benchmark097-balanced-handoff';parent=read(upstream/'identity.json');expected={k:parent[k] for k in ('pid','birth','boot')}
  assert identity(expected['pid'])==expected,'Bind the actual currently live handoff CPU process'
  proof=read(s.RUNTIME_PROOF);assert proof['status']=='EXTERNAL097_SAME45_BALANCED_RESOURCE_SCOPE_CPU_PASS'
  for path,pin in proof['source_SHA256'].items():assert b.sha(path)==pin
- expiry=read(s.WINDOW)['expires_unix'];STATE.mkdir(exist_ok=False)
+ expiry=read(s.WINDOW)['expires_unix']
+ if args.resume:
+  assert STATE.exists() and not (STATE/'launch_receipt.json').exists(),'Never relaunch an already started qualified pipeline'
+ else:STATE.mkdir(exist_ok=False)
  with (STATE/'boundary.lock').open('a+') as lock:
   fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+  if args.resume:
+   history=STATE/'CPU_observer_history';history.mkdir(exist_ok=True)
+   for name in ('failure.json','identity.json'):
+    old=STATE/name
+    if old.exists():old.rename(history/(str(time.time_ns())+'-'+name))
   write(STATE/'identity.json',dict(**identity(os.getpid()),source_SHA256=b.sha(__file__),upstream=expected,training_window_not_extended=True,new_GPU_allocation=False))
   try:
    while identity(expected['pid'])==expected:

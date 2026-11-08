@@ -11,7 +11,7 @@ ENGINE_PROOF=ROOT/'analysis/shared_gpu0_candidate_CPU_qualification.json'
 PREDECESSOR_RUNTIME_PROOF=STUDY/'dual_runtime_CPU_qualification.json'
 AUX=ROOT/'analysis/benchmark097_balanced'
 HANDOFF=AUX/'handoff_completed.json'
-RUNTIME_PROOF=AUX/'runtime_CPU_qualification.json'
+RUNTIME_PROOF=AUX/'runtime_CPU_qualification_v2.json'
 WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
 sys.path.insert(0,str(ROOT/'analysis'))
 from released097_selection import FORMULATION
