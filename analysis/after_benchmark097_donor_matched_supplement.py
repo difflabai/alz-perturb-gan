@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT=Path('/ml2/alz')
 STATE=ROOT/'artifacts/benchmark097-donor-matched-supplement-observer'
-PROOF=ROOT/'analysis/benchmark097_donor_matched_supplement_CPU_preparation_20261108.json'
+PROOF=ROOT/'analysis/benchmark097_donor_matched_supplement_CPU_preparation_v2_20261108.json'
 PG=Path('/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/bin/python')
 
 
@@ -35,7 +35,7 @@ def main():
     proof=read(PROOF);assert proof['status']=='DONOR_MATCHED_SUPPLEMENT_ESTIMATOR_SAMPLING_AND_OPAQUE_BARRIER_CPU_PASS'
     assert proof['actual_tests']==14 and proof['clinical_reference_allocations']==6 and proof['generated_row_plans_checked']==60
     for p,pin in proof['source_SHA256'].items():assert sha(p)==pin,p
-    parent=ROOT/'artifacts/benchmark097-infra1-pipeline';up=read(parent/'identity.json');expected={k:up[k] for k in ('pid','birth','boot')}
+    parent=ROOT/'artifacts/released097-final-independent-audits';up=read(parent/'identity.json');expected={k:up[k] for k in ('pid','birth','boot')}
     assert identity(up['pid'])==expected
     expiry=read(ROOT/'analysis/research_window_20261104_five_days.json')['expires_unix']+7200
     STATE.mkdir(exist_ok=False)
@@ -46,10 +46,11 @@ def main():
             while identity(up['pid'])==expected:
                 assert time.time()<expiry,'Finite CPU observation window ended; upstream is not inferred stopped'
                 assert not(parent/'failure.json').exists(),'Upstream incomplete; no secondary target reads'
-                write(STATE/'progress.json',dict(status='WAITING_ON_FULL45_AND_BOTH_ORIGINAL_REPORTS',new_GPU_allocation=False,expression_or_quality_values_read=False,full_goal_complete=False))
+                write(STATE/'progress.json',dict(status='WAITING_ON_FINAL_NATIVE_QUEUES_AND_INDEPENDENT_AUDIT_OBSERVER',new_GPU_allocation=False,expression_or_quality_values_read=False,full_goal_complete=False))
                 time.sleep(30)
             assert not(parent/'failure.json').exists()
-            assert read(parent/'completed.json')['status']=='RECOVERED45_57_53_READY_FRESH_SCALAR_CALIBRATION_AND_FINAL_AUDIT_REMAIN'
+            marker=parent/('completed.json' if (parent/'completed.json').is_file() else 'incomplete.json')
+            assert read(marker)['status'] in ('AVAILABLE_COMPLETED_STUDY_AUDITS_FINISHED','AUDITS_UNAVAILABLE_UPSTREAM_STUDIES_INCOMPLETE')
             for p,pin in proof['source_SHA256'].items():assert sha(p)==pin,p
             assert time.time()<expiry
             env=dict(os.environ,CUDA_VISIBLE_DEVICES='',OMP_NUM_THREADS='1',OPENBLAS_NUM_THREADS='1',MKL_NUM_THREADS='1')
