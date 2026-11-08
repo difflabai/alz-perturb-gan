@@ -50,7 +50,7 @@ def build_authorization(*,fold=2,method='cfgen',seed=1,gpu=None,check_only=False
     return auth,auth_path
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--fold',type=int,default=2);parser.add_argument('--method',choices=['cfgen'],default='cfgen');parser.add_argument('--seed',type=int,default=1);parser.add_argument('--gpu',required=True);parser.add_argument('--check-only',action='store_true');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--fold',type=int,default=2);parser.add_argument('--method',choices=['pg','cfgen'],default='cfgen');parser.add_argument('--seed',type=int,default=1);parser.add_argument('--gpu',required=True);parser.add_argument('--check-only',action='store_true');args=parser.parse_args()
     if not args.check_only:
         profile.reviewed()
         b.require(not subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True),'Commit qualified source/evidence before deployment')

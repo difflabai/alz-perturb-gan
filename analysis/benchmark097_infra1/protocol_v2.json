@@ -1,0 +1,62 @@
+{
+  "status": "PRESPECIFIED_TWO_FRESH_INFRASTRUCTURE_REPLACEMENTS_NO_SCIENTIFIC_RESELECTION",
+  "UTC": "2026-11-08T03:08:52.131485+00:00",
+  "experiment": "external097infra1",
+  "original_scientific_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
+  "original_scientific_protocol_SHA256": "fd92d0afe5cfa9e6b152ae8a14858ffacb62b804d38bd876e2e589862db71de8",
+  "capacity_failure_only": true,
+  "selection_quality_values_read": false,
+  "automatic_retry": false,
+  "new_attempt_limit": 2,
+  "initial_completed_updates": 0,
+  "all_new_training_from_scratch": true,
+  "reuse_failed_weights": false,
+  "CFGen_AE_epochs": 300,
+  "CFGen_FM_epochs": 1500,
+  "cap_seconds": 21600,
+  "all_original_attempts_close_before_activation": true,
+  "logical_successful_models_required": 45,
+  "total_physical_attempts_if_replacement_succeeds": 46,
+  "failed_attempt_cost_included": true,
+  "unchanged57_primary_and53_sensitivity": true,
+  "six_fresh_scalar_calibration_fits_remain_required": true,
+  "SOTA_claim": false,
+  "full_goal_complete": false,
+  "supersedes_unactivated_single_replacement_draft": true,
+  "physical_cells": [
+    {
+      "experiment": "external097infra1",
+      "fold": 2,
+      "method": "pg",
+      "seed": 1
+    },
+    {
+      "experiment": "external097infra1",
+      "fold": 2,
+      "method": "cfgen",
+      "seed": 1
+    }
+  ],
+  "logical_cells": [
+    {
+      "experiment": "external097",
+      "fold": 2,
+      "method": "pg",
+      "seed": 1
+    },
+    {
+      "experiment": "external097",
+      "fold": 2,
+      "method": "cfgen",
+      "seed": 1
+    }
+  ],
+  "known_failed_attempts": {
+    "CAL_GPU0_V1_external097_f2_cfgen_s1": "38369df32e1433722d5b270289ec6d9f51aac05ef91ae6654a97e53d458dfdd0",
+    "CAL_GPU0_V1_external097_f2_pg_s1": "a2e6db6a3a22c0ad6f4cd40de9ac761c1bde6586bccc319e43a65e39489f99e5"
+  },
+  "successful_original_models_preserved": 43,
+  "total_physical_attempts_if_replacements_succeed": 47,
+  "scheduling_only_stability_seconds": 300,
+  "scheduling_only_extra_GPU_capacity_bytes": 6442450944
+}

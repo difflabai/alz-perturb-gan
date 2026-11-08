@@ -5,7 +5,7 @@ from dual_coordination import GPUS,RESOURCE_PROTOCOL,validate_resource_protocol
 ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent
 BASE=ROOT/'benchmark097_runtime/resource_profile.py'
 REVIEW=ROOT/'analysis/benchmark097_infra1/owner_execution_review.json'
-SCOPE='ONE_FRESH_INFRASTRUCTURE_REPLACEMENT_OF_FAILED_CFGEN_F2SEED1';_BASE=None
+SCOPE='TWO_FRESH_INFRASTRUCTURE_REPLACEMENTS_OF_CERTIFIED_CAPACITY_FAILURES';_BASE=None
 FOREIGN_CONTROL='No foreign control. One fresh infrastructure replacement after all original attempts close; unchanged scientific endpoint and physical growth bounds.'
 def read(p):return json.loads(Path(p).read_bytes())
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
