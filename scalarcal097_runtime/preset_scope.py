@@ -8,7 +8,7 @@ MODEL_DIR=ROOT/'analysis/adaptive_lr097/model';CONTROLLER_DIR=ROOT/'analysis/ada
 MODEL_PROOF=CONTROLLER_DIR/'ALZ_integration_CPU_qualification.json'
 NATIVE_PROOF=ROOT/'analysis/distribution097/native_release.json';ENGINE_PROOF=ROOT/'analysis/shared_gpu0_candidate_CPU_qualification.json'
 ENDPOINT_PROOF=STUDY/'endpoint_CPU_qualification.json'
-RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v8.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
+RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v9.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
 CFG=dict(z_dim=8,stage_balance=False,cell_z_dim=8,theta_init_scale=1.,fourier_feature_scale=1.)
 ENABLED=dict(enabled=True,experiment='scalarcal097',fold=0,training_seeds=[5,6,7],arms=['fixed','adaptive'],endpoint=20000,all_training_from_scratch=True,calibration_only=True)
 def read(p):return json.loads(Path(p).read_bytes())

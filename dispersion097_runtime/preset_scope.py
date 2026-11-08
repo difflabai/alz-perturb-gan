@@ -7,7 +7,7 @@ PROTOCOL=STUDY/'protocol.json';PLAN=HERE/'plan.json';RESOURCE_PROTOCOL=STUDY/'re
 MODEL_DIR=STUDY/'model';CONTROLLER_DIR=STUDY
 MODEL_PROOF=STUDY/'fresh_seed_model_CPU_qualification.json';BASE_MODEL_PROOF=STUDY/'model_CPU_qualification.json'
 NATIVE_PROOF=ROOT/'analysis/distribution097/native_release.json';ENGINE_PROOF=ROOT/'analysis/shared_gpu0_candidate_CPU_qualification.json'
-RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v4.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
+RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v5.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
 ENABLED=dict(enabled=True,experiment='dispersion097',fold=0,training_seeds=[8,9,10],arms=['theta1','theta5'],endpoint=20000,all_training_from_scratch=True,calibration_only=True)
 def read(p):return json.loads(Path(p).read_bytes())
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
