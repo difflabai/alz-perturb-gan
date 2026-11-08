@@ -1,7 +1,7 @@
 """Observe untouched originals, then exactly two fresh infrastructure replacements."""
 import datetime,fcntl,importlib.util,json,os,subprocess,sys,time
 from pathlib import Path
-ROOT=Path('/ml2/alz');RUNTIME=ROOT/'benchmark097_infra1_runtime';STATE=ROOT/'artifacts/benchmark097-infra1-pipeline';UPSTREAM=ROOT/'artifacts/benchmark097-after-capacity-continuation-v4'
+ROOT=Path('/ml2/alz');RUNTIME=ROOT/'benchmark097_infra1_runtime';STATE=ROOT/'artifacts/benchmark097-infra1-pipeline';UPSTREAM=ROOT/'artifacts/benchmark097-after-capacity-continuation-v5'
 sys.path[:0]=[str(RUNTIME),str(ROOT/'analysis')]
 import binding as b,preset_scope as s,resource_profile as profile,prepare
 from dual_coordination import GPUS,identity
@@ -22,8 +22,8 @@ def main():
  proof=read(s.RUNTIME_PROOF);assert proof['status']=='ONE_FRESH_INFRASTRUCTURE_REPLACEMENT_NATIVE_SCOPE_CPU_PASS' and proof['native_cell_device_bindings']==4
  for p,pin in proof['source_SHA256'].items():assert b.sha(p)==pin,p
  parent=read(UPSTREAM/'identity.json');parent_id={k:parent[k] for k in ('pid','birth','boot')};assert identity(parent_id['pid'])==parent_id
- assert parent['source_SHA256']==b.sha(ROOT/'analysis/continue_benchmark097_after_capacity_v4.py')
- assert parent['protocol_SHA256']==b.sha(ROOT/'analysis/benchmark097_capacity_recovery_continuation_v4_protocol_20261108.json')
+ assert parent['source_SHA256']==b.sha(ROOT/'analysis/continue_benchmark097_after_capacity_v5.py')
+ assert parent['protocol_SHA256']==b.sha(ROOT/'analysis/benchmark097_capacity_recovery_continuation_v5_protocol_20261108.json')
  expiry=read(s.WINDOW)['expires_unix'];STATE.mkdir(exist_ok=False)
  with (STATE/'observer.lock').open('a+') as lock:
   fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB);write(STATE/'identity.json',dict(**identity(os.getpid()),source_SHA256=b.sha(__file__),upstream=parent_id,runtime_qualification_SHA256=b.sha(s.RUNTIME_PROOF),training_expiry_unix=expiry,new_model_fits=0))

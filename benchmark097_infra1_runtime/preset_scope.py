@@ -5,7 +5,7 @@ ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent;STUDY=ROOT/'analysis/
 spec=importlib.util.spec_from_file_location('unchanged_original45_scientific_scope',ROOT/'benchmark097_balanced_runtime/preset_scope.py');original=importlib.util.module_from_spec(spec);spec.loader.exec_module(original)
 PROTOCOL=original.PROTOCOL;AMENDMENT=STUDY/'protocol_v2.json';PLAN=HERE/'plan.json'
 MODEL_DIR=original.MODEL_DIR;CFGEN_DIR=original.CFGEN_DIR;MODEL_PROOF=original.MODEL_PROOF;NATIVE_PROOF=original.NATIVE_PROOF;ENGINE_PROOF=original.ENGINE_PROOF;WINDOW=original.WINDOW
-RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v2.json';HANDOFF=ROOT/'analysis/benchmark097_original_attempts_postcapacity_closed.json'
+RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v3.json';HANDOFF=ROOT/'analysis/benchmark097_original_attempts_postcapacity_closed.json'
 CFG=original.CFG;ENABLED=dict(enabled=True,experiment='external097infra1',fold=2,methods=['pg','cfgen'],seed=1,initial_completed_updates=0,all_training_from_scratch=True)
 def read(p):return json.loads(Path(p).read_bytes())
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -26,7 +26,7 @@ def protocol():
 def hyperparameters():return original.hyperparameters()
 def proof_source_pins():return original.proof_source_pins()
 def protocol_paths(p):
- return [*original.protocol_paths(p),AMENDMENT,PLAN,*[HERE/f'policy.gpu{i}.prepared.json' for i in (0,1)],ROOT/'analysis/continue_benchmark097_after_capacity_v4.py',ROOT/'analysis/benchmark097_capacity_recovery_continuation_v4_protocol_20261108.json',ROOT/'analysis/benchmark097_capacity_continuation_v4_CPU_check_20261108.json',ROOT/'analysis/benchmark097_capacity_CPU_handoff_v4_20261108.json']
+ return [*original.protocol_paths(p),AMENDMENT,PLAN,*[HERE/f'policy.gpu{i}.prepared.json' for i in (0,1)],ROOT/'analysis/continue_benchmark097_after_capacity_v5.py',ROOT/'analysis/benchmark097_capacity_recovery_continuation_v5_protocol_20261108.json',ROOT/'analysis/benchmark097_capacity_continuation_v5_CPU_check_20261108.json',ROOT/'analysis/benchmark097_capacity_CPU_handoff_v5_20261108.json']
 def closed_originals():
  q=read(HANDOFF)
  assert q['status']=='ALL45_ORIGINAL_ATTEMPTS_CLOSED_43_COMPLETE_TWO_INFRA_FAILURES_FRESH_REPLACEMENTS_REMAIN'
