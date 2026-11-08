@@ -1,0 +1,85 @@
+{
+  "status": "FRESH_REPLACEMENT_PG5000_DURABLE_CHECKPOINT_AND_BOTH_NATIVE_WORKERS_VERIFIED",
+  "UTC": "2026-11-08T19:43:52.940203+00:00",
+  "attempt": "CAL_GPU0_V1_external097infra1_f2_pg_s1",
+  "actual_optimizer_pairs": 5501,
+  "durable_optimizer_pairs": 5000,
+  "checkpoint_status": "recovery",
+  "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_external097infra1_f2_pg_s1/fit/recovery.pt",
+  "checkpoint_SHA256": "abbcd6046b67b1a7fb5fb3483bd8e5150d860fc58a6e0dcddaa48b94f7dc300e",
+  "authorization_SHA256": "918996e1a08fe70308503c9d2187e7a5b35b903ae181bfda23d79d42cc6f3dd6",
+  "from_zero": true,
+  "release": "0.9.7",
+  "LRs": {
+    "G": 0.012,
+    "D": 0.018000000000000002,
+    "P": 0.06
+  },
+  "particle_usage": {
+    "rows_drawn": 512,
+    "rows_moved": 512,
+    "total_draws": 176032,
+    "total_unsampled_row_moves": 0,
+    "particle_covariance_trace": 8.912960052490234,
+    "particle_mean_squared_norm": 9.0010986328125
+  },
+  "native_workers": [
+    {
+      "attempt": "CAL_GPU0_V1_external097infra1_f2_cfgen_s1",
+      "guard": {
+        "pid": 3973183,
+        "birth": 32400613,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 3973306,
+        "birth": 32400759,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "progress": {
+        "phase": "AE",
+        "phase_optimizer_updates": 15500,
+        "total_optimizer_updates": 15500,
+        "completed_epochs": 271
+      }
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097infra1_f2_pg_s1",
+      "guard": {
+        "pid": 3973337,
+        "birth": 32400835,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 3973414,
+        "birth": 32400989,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "progress": {
+        "step": 5501,
+        "G_prior_LRs": [
+          0.012,
+          0.06
+        ],
+        "D_LRs": [
+          0.018000000000000002
+        ],
+        "particle_usage": {
+          "rows_drawn": 512,
+          "rows_moved": 512,
+          "total_draws": 176032,
+          "total_unsampled_row_moves": 0,
+          "particle_covariance_trace": 8.912960052490234,
+          "particle_mean_squared_norm": 9.0010986328125
+        }
+      }
+    }
+  ],
+  "five_exact_CPU_actors_live": true,
+  "successful_logical_models": 42,
+  "required_logical_models": 45,
+  "retained_original_infrastructure_failures": 3,
+  "quality_values_inspected": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
