@@ -1,0 +1,44 @@
+{
+  "status": "ADDITIONAL_PRIMARY_HUMAN_MICROGLIA_PERTURBATION_EVIDENCE_PREPARED_BEFORE_MODEL_GENE_RANKING",
+  "UTC": "2026-11-08T20:30:47.447463+00:00",
+  "paper": "McQuade et al.2026 Transcriptional regulation of disease-relevant microglial activation programs",
+  "DOI": "10.1016/j.neuron.2026.07.001",
+  "URL": "https://pubmed.ncbi.nlm.nih.gov/42526428/",
+  "author_data_repository": "https://github.com/reetm09/mglia-regulators-explorer",
+  "commit": "bc660a1464ed594adbf7e9e77fd835e23492d590",
+  "downloaded_blobs_verified_against_Git_tree": true,
+  "records": 62,
+  "unique_perturbations": 31,
+  "cell_models": [
+    "iTF-MG",
+    "iMG"
+  ],
+  "data_are_author_curated_summary_not_reprocessed_full_DEGs": true,
+  "top_DEG_lists_are_truncated": true,
+  "functional_readouts_include_beta_amyloid_and_synaptosome_phagocytosis_not_neuroprotection": true,
+  "source_files_SHA256": {
+    "/ml2/alz/artifacts/primamente-external-evidence/McQuade2026_data_nutrition_label.json": "c3054874119392d786ef9310446823f032f109cd343835972369471cef5ce794",
+    "/ml2/alz/artifacts/primamente-external-evidence/McQuade2026_mglia_schema.py": "38a886757532609b817e86130071c742f734b58f3943462a0058a13dc7bb390d",
+    "/ml2/alz/artifacts/primamente-external-evidence/McQuade2026_data_perturbations.json": "ba0eaa477235412da976677b56d8ca81841b48874a0ae4c86b73ed918101e659",
+    "/ml2/alz/artifacts/primamente-external-evidence/2026_regulator_explorer_tree.json": "4b6f356827b739c1d8892925337bc0573e95fb22b9f1667e8b6d86bf6a9d4f4f",
+    "/ml2/alz/artifacts/primamente-external-evidence/GSE335887_metadata.txt": "a67b84cde2bebbd8965970f64a6e89bdbdcb4f3fc4a61fe70dcf9eb8a860b1c7"
+  },
+  "primary_literature_limitations": [
+    "State labels are not simple healthy versus harmful categories.",
+    "Effects and knockdown efficiency depend on cell model.",
+    "More amyloid uptake may coexist with increased synapse engulfment.",
+    "LysoTracker intensity is not a direct calibrated lysosomal pH readout.",
+    "Author dashboard confidence labels are descriptive curation, not our model validation."
+  ],
+  "selection_rubric": [
+    "First inspect full prespecified frozen-model and real-donor ranking, then primaryROSMAP crosscheck.",
+    "Prefer a measured stable within-subtype signal when human functional perturbation evidence supports a testable direction.",
+    "If a regulator is unmeasured, label that choice as literature-derived from a downstream program; do not attribute direct regulator inference to PG.",
+    "No automated signature reversal is equated with therapeutic benefit.",
+    "Select a falsifiable lab experiment, with cell-survival and synapse-preservation readouts alongside the intended molecular endpoint.",
+    "If no robust model signal survives, state the negative result rather than making a model-discovery claim."
+  ],
+  "model_gene_results_read": false,
+  "therapeutic_target_selected": false,
+  "new_training_fits": 0
+}

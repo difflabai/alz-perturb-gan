@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_HACKATHON_PREPARATION",
-  "UTC": "2026-11-08T16:52:58.661400+00:00",
+  "UTC": "2026-11-08T20:27:40.224016+00:00",
   "objective": "Prepare for Prima Mente\u2019s Alzheimer\u2019s Translation Challenge by turning the existing pure ParticleGAN ALZ prototype into a useful, reproducible hypothesis-prioritization workflow. Finish retained benchmark evidence, perform broad inference-only disease-stage analysis across frozen trained models, validate candidate gene/program signals against real optimization donors and primary perturbation literature, and nominate one clearly labeled testable lab hypothesis for the optional registration field. Identify and implement the additional conditioning, perturbation data, and generalization evaluations needed for the2027 challenge when available. Preserve model formulation, checkpoints, evaluation separation and all negative findings. Do not claim intervention prediction or therapeutic efficacy from the observational stage-conditioned model.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -987,14 +987,24 @@
   },
   "current_verified_CPU_queues": [
     {
-      "name": "benchmark097-infra1-pipeline",
+      "name": "primamente-inference-recovery",
       "identity": {
-        "pid": 3961122,
-        "birth": 32369470,
+        "pid": 4111100,
+        "birth": 32714893,
         "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
       },
-      "source_SHA256": "f8f3cdd6e21cc8f3f37bb836e992feccb37597de89328b7499c8d65b6cb6e65c",
-      "unified_session": 18331
+      "source_SHA256": "2c89dd30ef07d109f9cb0ddc168ae572fb1792c5d44deee4c62405a88c66c8dc",
+      "identity_path": "/ml2/alz/artifacts/primamente-t005-gene-inference-recovery-v1-20261108/identity.json"
+    },
+    {
+      "name": "two-retained-native-jobs-no-admissions",
+      "identity": {
+        "pid": 4114794,
+        "birth": 32722245,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "cf27860b30c0155e4655a3088ff40b5701de118648228e9625d83c2c78e6cff3",
+      "identity_path": "/ml2/alz/artifacts/benchmark-retained-two-hackathon-20261108/identity.json"
     }
   ],
   "latest_fresh_infrastructure_runtime_qualification_path": "/ml2/alz/analysis/benchmark097_infra1/runtime_CPU_qualification_v7.json",
@@ -1069,14 +1079,22 @@
   "hackathon_starts": "Spring2027",
   "hackathon_priority_inference_plan_path": "/ml2/alz/analysis/primamente_inference_hypothesis_plan_20261108.json",
   "hackathon_inference_worker_identity": {
-    "pid": 4028726,
-    "birth": 32532681,
+    "pid": 4111100,
+    "birth": 32714893,
     "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
-    "source_SHA256": "cd5d24bcd899dd7dbcd1eb3585fd570cd541313a0e3e9d90233e0990303e491d",
+    "source_SHA256": "2c89dd30ef07d109f9cb0ddc168ae572fb1792c5d44deee4c62405a88c66c8dc",
+    "original_source_SHA256": "cd5d24bcd899dd7dbcd1eb3585fd570cd541313a0e3e9d90233e0990303e491d",
+    "original_owner": {
+      "pid": 4028726,
+      "birth": 32532681,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
+      "source_SHA256": "cd5d24bcd899dd7dbcd1eb3585fd570cd541313a0e3e9d90233e0990303e491d",
+      "new_optimizer_updates": 0
+    },
     "new_optimizer_updates": 0
   },
-  "hackathon_inference_unified_session": 70192,
-  "hackathon_inference_progress_path": "/ml2/alz/artifacts/primamente-t005-gene-inference-20261108/progress.json",
+  "hackathon_inference_unified_session": null,
+  "hackathon_inference_progress_path": "/ml2/alz/artifacts/primamente-t005-gene-inference-recovery-v1-20261108/progress.json",
   "hackathon_inference_actual_start_path": "/ml2/alz/analysis/primamente_inference_actual_start_20261108.json",
   "hackathon_inference_actual_generated_cells_at_start_snapshot": 480000,
   "hackathon_inference_planned_cells": 12800000,
@@ -1088,5 +1106,9 @@
     "Human microglial genetic or compound perturbation evidence for intervention direction and functional consequences.",
     "Concrete gene/intervention, cellular context, predicted molecular and functional readouts, limitations and falsifiable outcome."
   ],
-  "hackathon_external_validation_tables_downloaded": 3
+  "hackathon_external_validation_tables_downloaded": 3,
+  "hackathon_inference_recovery_review_path": "/ml2/alz/analysis/primamente_inference_recovery_and_review_20261108.json",
+  "additional_benchmark_admissions_held_by_user_hackathon_priority": true,
+  "already_running_benchmark_jobs_finish_and_audit_only": true,
+  "previous_CPU_inference_interrupted_after_unique_cells": 6960000
 }

@@ -11,7 +11,7 @@ import sys
 ROOT=Path('/ml2/alz');PROJECT=Path('/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark')
 sys.path[:0]=[str(PROJECT/'current_base_20261029/runtime/lib/python3.12/site-packages'),str(PROJECT/'.venv312/lib/python3.12/site-packages')]
 import numpy as np
-STATE=ROOT/'artifacts/primamente-t005-gene-inference-20261108'
+STATE=ROOT/'artifacts/primamente-t005-gene-inference-recovery-v1-20261108'
 OUTPUT=ROOT/'analysis/primamente_gene_inference_exploratory_ranking_20261108.json'
 PANELS={
  'lipid_handling':['LPL','PLIN2','APOE','ABCA1','ABCG1','ACSL1','DGAT1','DGAT2','SOAT1','SCD','FABP5','NPC1','NPC2'],

@@ -1,0 +1,45 @@
+{
+  "status": "INTERRUPTED_CPU_INFERENCE_RECOVERED_WITH_FIXED_SCIENCE_RULES",
+  "UTC": "2026-11-08T20:27:40.224016+00:00",
+  "original_state": "/ml2/alz/artifacts/primamente-t005-gene-inference-20261108",
+  "recovery_state": "/ml2/alz/artifacts/primamente-t005-gene-inference-recovery-v1-20261108",
+  "original_outputs_retained": true,
+  "reused_cases": 87,
+  "missing_cases": 73,
+  "required_replay_cases": 3,
+  "expected_replay_cells": 240000,
+  "unique_analysis_cells": 12800000,
+  "new_training_fits": 0,
+  "new_GPU_allocations": 0,
+  "analysis_path_only_amendment": true,
+  "original_ranking_rules_unchanged": true,
+  "actual_CPU_checks": {
+    "aggregate_primamente_gene_inference": {
+      "premature_numerical_read_refused": true,
+      "equal_donor_subtype_contrast_checked": true,
+      "missing_real_subtype_excluded_by_fixed_rule": true,
+      "seed_and_replicate_agreement_checked": true,
+      "missing_synthetic_subtype_never_silently_dropped": true,
+      "mean_direction_reversal_from_one_large_outlier_receives_zero_priority": true
+    },
+    "compare_primamente_genes_with_rosmap": {
+      "direction_and_adjusted_evidence_checked": true,
+      "missing_and_invalid_never_support": true,
+      "all_three_actual_author_tables_hashes_and_schema_checked": true,
+      "table_genes": {
+        "gpath": 12922,
+        "amyloid": 12925,
+        "tangles": 12925
+      },
+      "model_ranking_not_read": true
+    }
+  },
+  "source_SHA256": {
+    "/ml2/alz/analysis/recover_primamente_inference_20261108.py": "2c89dd30ef07d109f9cb0ddc168ae572fb1792c5d44deee4c62405a88c66c8dc",
+    "/ml2/alz/analysis/retain_two_active_benchmark_jobs_20261108.py": "cf27860b30c0155e4655a3088ff40b5701de118648228e9625d83c2c78e6cff3",
+    "/ml2/alz/analysis/aggregate_primamente_gene_inference.py": "9f4492c0bd642c5137ff7f6625f826a22dbcbe1aaac6f4e449149dd27b47a753",
+    "/ml2/alz/analysis/compare_primamente_genes_with_rosmap.py": "fe21ef77102b0b3f1246f7f280cae24303003d80d2870dfe86c627059d9cd338",
+    "/ml2/alz/analysis/primamente_gene_inference_analysis_plan_20261108.json": "bd07eb02953897fc9a12787f4ab62aebd1819f90bd7a3cc469e741a31399063e"
+  },
+  "hypothesis_results_read": false
+}
