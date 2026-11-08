@@ -5,7 +5,7 @@ upstream handle is never taken as proof of successful completion.
 """
 import datetime,fcntl,hashlib,importlib.util,json,os,subprocess,sys,time,urllib.request
 from pathlib import Path
-ROOT=Path('/ml2/alz');RUNTIME=ROOT/'scalarcal097_runtime';STATE=ROOT/'artifacts/scalarcal097-after-recovered-science-v4'
+ROOT=Path('/ml2/alz');RUNTIME=ROOT/'scalarcal097_runtime';STATE=ROOT/'artifacts/scalarcal097-after-recovered-science-v5'
 sys.path.insert(0,str(RUNTIME))
 import binding as b,preset_scope as s,resource_profile as profile
 from dual_coordination import GPUS,identity
@@ -66,7 +66,7 @@ def main():
    write(s.PLAN,s.ENABLED);commit([str(s.PLAN)],'Activate separate six fresh scalar calibration fits within existing budget/window')
    activation=command(['git','rev-parse','HEAD']).strip()
    command([PG,'-I','-S','-B',RUNTIME/'post_handoff_check.py'],timeout=300)
-   commit([str(s.STUDY/'post_handoff_source_closure_v4.json')],'Verify all12 current scalar cell/card source closures before fresh native admission')
+   commit([str(s.STUDY/'post_handoff_source_closure_v5.json')],'Verify all12 current scalar cell/card source closures before fresh native admission')
    with (STATE/'driver.stdout').open('xb') as out,(STATE/'driver.stderr').open('xb') as err:
     child=subprocess.Popen([str(PG),'-I','-S','-B',str(ROOT/'analysis/run_scalarcal097.py'),'--activation',activation],cwd=ROOT,env=ENV,stdin=subprocess.DEVNULL,stdout=out,stderr=err,start_new_session=True)
    handle=identity(child.pid);assert handle is not None
