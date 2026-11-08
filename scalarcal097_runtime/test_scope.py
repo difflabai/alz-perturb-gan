@@ -118,6 +118,9 @@ class Scope(unittest.TestCase):
    for name in ('benchmark097_dual_runtime','benchmark097_balanced_runtime','benchmark097_infra1_runtime'):
     p=root/name/'plan.json';p.parent.mkdir();p.write_text('{"enabled":false}')
    self.assertEqual(len(s.prior_study_ready(root)),9)
+   for filename in ('runtime_CPU_qualification_v2.json','runtime_CPU_qualification_v3.json'):
+    adopted=aux/filename;adopted.write_bytes(proof.read_bytes());q.update(runtime_qualification_path=str(adopted),runtime_qualification_SHA256=s.sha(adopted));barrier.write_text(json.dumps(q))
+    self.assertEqual(len(s.prior_study_ready(root)),9)
    common[1].write_bytes(b'TAMPERED_PRIMARY')
    with self.assertRaises(AssertionError):s.prior_study_ready(root)
    common[1].write_bytes(b'OPAQUE_PRIMARY_NEVER_PARSED');m['logical_to_physical_attempt']['f2_pg_s1']='WRONG';common[0].write_text(json.dumps(m));q['report_SHA256'][str(common[0])]=s.sha(common[0]);barrier.write_text(json.dumps(q))

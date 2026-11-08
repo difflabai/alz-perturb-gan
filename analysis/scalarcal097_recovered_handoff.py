@@ -7,7 +7,9 @@ def paths(root):
  root=Path(root);return [root/'analysis/benchmark097/matrix_complete.json',root/'analysis/benchmark097/comparison.json',root/'analysis/benchmark097_calibration_excluded53_report.json',root/'analysis/benchmark097_infra1/scientific_reports_completed.json',root/'artifacts/benchmark097-infra1-pipeline/completed.json']
 def ready(root):
  root=Path(root);matrix,primary,sensitivity,barrier,child=paths(root);assert all(p.is_file() for p in (matrix,primary,sensitivity,barrier,child))
- m=read(matrix);q=read(barrier);source=root/'analysis/run_benchmark097_infra1_pipeline.py';proof_path=root/'analysis/benchmark097_infra1/runtime_CPU_qualification.json';proof=read(proof_path)
+ m=read(matrix);q=read(barrier);source=root/'analysis/run_benchmark097_infra1_pipeline.py';proof_path=Path(q['runtime_qualification_path'])
+ assert proof_path in [root/'analysis/benchmark097_infra1'/name for name in ('runtime_CPU_qualification.json','runtime_CPU_qualification_v2.json','runtime_CPU_qualification_v3.json')]
+ proof=read(proof_path)
  assert m['matrix_complete'] and m['complete_cells']==m['required_cells']==45 and m['physical_attempts']==47 and len(m['result_SHA256'])==45
  expected={f'f{f}_{method}_s{seed}':f"CAL_GPU0_V1_{'external097infra1' if f==2 and seed==1 and method in ('pg','cfgen') else 'external097'}_f{f}_{method}_s{seed}" for f in range(3) for seed in range(5) for method in ('pg','scvi','cfgen')}
  assert m['logical_to_physical_attempt']==expected and set(m['result_SHA256'])==set(expected.values())
