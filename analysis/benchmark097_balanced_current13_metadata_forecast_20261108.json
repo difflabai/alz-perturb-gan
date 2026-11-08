@@ -1,0 +1,132 @@
+{
+  "status": "ACTIVE_BALANCED_QUEUE_METADATA_ONLY_CONDITIONAL_RUNTIME_FORECAST",
+  "UTC": "2026-11-08T01:30:28.114030+00:00",
+  "completed_fits": 13,
+  "active_fits": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s1",
+      "method": "cfgen",
+      "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "elapsed_wall_seconds": 342.81436491012573,
+      "conditional_estimated_remaining_seconds": 7044.118979823863
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s1",
+      "method": "cfgen",
+      "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "elapsed_wall_seconds": 341.11553716659546,
+      "conditional_estimated_remaining_seconds": 14503.060705283395
+    }
+  ],
+  "pending_frozen45_counts": {
+    "pg": 10,
+    "scvi": 11,
+    "cfgen": 9
+  },
+  "method_card_median_settled_GPU_seconds": {
+    "pg": [
+      8663.332578796486,
+      2175.035395207
+    ],
+    "scvi": [
+      547.5640669695131,
+      151.39532082949881
+    ],
+    "cfgen": [
+      14844.17624244999,
+      7386.933344733989
+    ]
+  },
+  "cost_source_attempts": {
+    "pg": [
+      [
+        "CAL_GPU0_V1_external097_f1_pg_s0",
+        "CAL_GPU0_V1_external097_f0_pg_s1"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f0_pg_s0",
+        "CAL_GPU0_V1_external097_f2_pg_s0",
+        "CAL_GPU0_V1_external097_f1_pg_s1"
+      ]
+    ],
+    "scvi": [
+      [
+        "CAL_GPU0_V1_external097_f0_scvi_s0",
+        "CAL_GPU0_V1_external097_f2_scvi_s0"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f1_scvi_s0",
+        "CAL_GPU0_V1_external097_f0_scvi_s1"
+      ]
+    ],
+    "cfgen": [
+      [
+        "CAL_GPU0_V1_external097_f1_cfgen_s0"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f0_cfgen_s0",
+        "CAL_GPU0_V1_external097_f2_cfgen_s0",
+        "CAL_GPU0_V1_external097_f1_cfgen_s1"
+      ]
+    ]
+  },
+  "active_residual_seconds": [
+    14503.060705283395,
+    7044.118979823863
+  ],
+  "remaining_frozen45_forecast": {
+    "counts_per_lane": {
+      "cfgen": [
+        3,
+        6
+      ],
+      "pg": [
+        1,
+        9
+      ],
+      "scvi": [
+        7,
+        4
+      ]
+    },
+    "predicted_lane_seconds": [
+      71531.87048021644,
+      71546.61888840879
+    ],
+    "predicted_makespan_seconds": 71546.61888840879,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "separate_scalar6_forecast": {
+    "counts_per_lane": {
+      "pg": [
+        1,
+        5
+      ]
+    },
+    "predicted_lane_seconds": [
+      9962.832465615958,
+      12506.45352244025
+    ],
+    "predicted_makespan_seconds": 12506.45352244025,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "scalar_cost_assumption": "Same-card median settled full20k PG cost times1.15 illustrative measurement overhead; no real scalar fit is yet measured.",
+  "remaining_authorized_wall_seconds": 104178.50334525108,
+  "predicted_scientific_training_seconds_excluding_CPU_reports": 84053.07241084904,
+  "conditional_headroom_before_training_expiry_seconds": 20125.430934402044,
+  "conditional_predicted_training_finish_UTC": "2026-11-09T00:51:21.175722+00:00",
+  "deadline_UTC": "2026-11-09T06:26:46.606656+00:00",
+  "limitations": "Sparse settled samples; folds differ in optimization-cell counts and shared-card competition changes. Active residuals use medians, not native progress extrapolation. CPU primary/sensitivity reports and independent audits also precede scalar admission. This is a forecast, not a completion or deadline guarantee. Each live allocation retains its own native cap and source guards.",
+  "quality_result_JSON_read": false,
+  "target_arrays_read": false,
+  "new_training_or_allocation": false,
+  "no_current_model_or_dispatcher_change": true,
+  "SOTA_claim": false,
+  "full_goal_complete": false,
+  "source_SHA256": {
+    "/ml2/alz/benchmark097_balanced_runtime/runtime_dispatch.py": "823a1bc1ad54920dc479a5b033b5b531aff17fd9a87cfd8766dd028ac7f52e23",
+    "/ml2/alz/analysis/released097_remaining_runtime_balance.py": "b587c7fb4eadd29e80480bd06872ce2494aab52b72f84843364ac92e4a660680"
+  }
+}
