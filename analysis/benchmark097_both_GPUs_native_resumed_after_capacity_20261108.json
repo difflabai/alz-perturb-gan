@@ -1,0 +1,90 @@
+{
+  "status": "BOTH_PHYSICAL_GPUS_ACTIVE_UNDER_EXISTING_V2_NATIVE_RUNTIME_V3_PREPARED_NOT_DEPLOYED",
+  "UTC": "2026-11-08T03:55:51.587211+00:00",
+  "completed_successful_models": 14,
+  "required_successful_logical_models": 45,
+  "known_clean_failed_attempts_retained": 2,
+  "active_native_models": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s2",
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "cfgen",
+        "seed": 2
+      },
+      "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "guard": {
+        "pid": 980409,
+        "birth": 26518725,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 980480,
+        "birth": 26518853,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "native_progress_last_verified": {
+        "phase": "FM",
+        "phase_optimizer_updates": 42500,
+        "total_optimizer_updates": 59600,
+        "completed_epochs": 745,
+        "native_loss": 5.9311747550964355
+      },
+      "required_total_optimizer_updates": 102600,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "original_native_authorization_unchanged": true
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s2",
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "cfgen",
+        "seed": 2
+      },
+      "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "guard": {
+        "pid": 1088132,
+        "birth": 26707700,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 1088215,
+        "birth": 26707832,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "native_progress_last_verified": {
+        "phase": "AE",
+        "phase_optimizer_updates": 5000,
+        "total_optimizer_updates": 5000,
+        "completed_epochs": 84,
+        "native_loss": 367.290283203125
+      },
+      "required_total_optimizer_updates": 106200,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "original_native_authorization_unchanged": true
+    }
+  ],
+  "active_CPU_observers": [
+    962924,
+    977389,
+    1020103
+  ],
+  "existing_physical_guards_unchanged": true,
+  "additional_GPU_scheduling_margin_current_bytes": 6442450944,
+  "prepared_CPU_revision_source": "/ml2/alz/analysis/continue_benchmark097_after_capacity_v3.py",
+  "prepared_CPU_revision_tests": 18,
+  "prepared_revision_deployed": false,
+  "CPU_handoff_executed": false,
+  "CPU_observers_stopped": [],
+  "native_models_restarted_or_signalled": false,
+  "foreign_processes_signalled": false,
+  "preflight_disposition": "Existing queue independently admitted GPU0 while V3 was prepared. Handoff preflight required one known active model and refused when it observed two. The V3 entrypoint then refused its absent handoff receipt before state creation. Existing V2 remains active with both original guard/worker chains.",
+  "separate_scalar_calibration_real_fits": 0,
+  "heldout_ranking_available": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}

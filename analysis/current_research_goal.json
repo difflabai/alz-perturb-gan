@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-08T03:16:17.519681+00:00",
+  "UTC": "2026-11-08T03:55:51.587211+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/analysis/confirmfaith097/current_release_check_before_activation.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "FROZEN_BENCHMARK_ACTIVE_GPU1_TWO_INFRA_FAILURES_RETAINED_STABLE_CAPACITY_WAIT_ON_GPU0",
+  "study_status": "BOTH_NATIVE_GPUS_ACTIVE_V2_TWO_INFRA_FAILURES_RETAINED",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v2/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v2/identity.json",
@@ -372,7 +372,7 @@
     "single_seed_CPU_diagnostic_evidence_path": "/ml2/alz/analysis/t005_checkpoint_CPU_calibration_result_v3_20261108.json",
     "five_existing_seed_CPU_diagnostic_evidence_path": "/ml2/alz/analysis/t005_checkpoint_CPU_multiseed_result_20261108.json"
   },
-  "latest_external_native_root_audit_path": "/ml2/alz/analysis/benchmark097_capacity_recovery_started_root_check_20261108.json",
+  "latest_external_native_root_audit_path": "/ml2/alz/analysis/benchmark097_both_GPUs_native_resumed_after_capacity_20261108.json",
   "latest_GPU0_native5000_runtime_evidence_path": "/ml2/alz/analysis/benchmark097_current_GPU0_second_fresh5000_runtime_20261107.json",
   "scalar_calibration_handoff_constraint": "The original frozen benchmark admits only same-study peer reservations and both final CPU analyses require empty reservations; the first-free-lane suggestion was superseded. A compatible reviewed resource handoff is needed before mixing study phases.",
   "latest_remaining45_metadata_balance_forecast_path": "/ml2/alz/analysis/benchmark097_capacity_recovery_metadata_forecast_v2_20261108.json",
@@ -402,11 +402,17 @@
   "resource_only_handoff_observed_PID": 474542,
   "resource_only_after_handoff_observed_PID": 475880,
   "latest_native_progress_observation": {
-    "UTC": "2026-11-08T03:43:15.715347+00:00",
-    "completed_benchmark_models": 14,
-    "active_metadata": [
+    "UTC": "2026-11-08T03:55:51.587211+00:00",
+    "new_active_native_models": [
       {
         "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s2",
+        "cell": {
+          "experiment": "external097",
+          "fold": 0,
+          "method": "cfgen",
+          "seed": 2
+        },
+        "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
         "guard": {
           "pid": 980409,
           "birth": 26518725,
@@ -417,20 +423,52 @@
           "birth": 26518853,
           "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
         },
-        "elapsed_seconds": 172.341402053833,
-        "conditional_remaining_seconds": 6722.45474761317
+        "native_progress_last_verified": {
+          "phase": "FM",
+          "phase_optimizer_updates": 42500,
+          "total_optimizer_updates": 59600,
+          "completed_epochs": 745,
+          "native_loss": 5.9311747550964355
+        },
+        "required_total_optimizer_updates": 102600,
+        "from_update_zero": true,
+        "source_checkpoint": null,
+        "original_native_authorization_unchanged": true
+      },
+      {
+        "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s2",
+        "cell": {
+          "experiment": "external097",
+          "fold": 1,
+          "method": "cfgen",
+          "seed": 2
+        },
+        "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+        "guard": {
+          "pid": 1088132,
+          "birth": 26707700,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "worker": {
+          "pid": 1088215,
+          "birth": 26707832,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "native_progress_last_verified": {
+          "phase": "AE",
+          "phase_optimizer_updates": 5000,
+          "total_optimizer_updates": 5000,
+          "completed_epochs": 84,
+          "native_loss": 367.290283203125
+        },
+        "required_total_optimizer_updates": 106200,
+        "from_update_zero": true,
+        "source_checkpoint": null,
+        "original_native_authorization_unchanged": true
       }
     ],
-    "last_observed_training": {
-      "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s2",
-      "phase": "FM",
-      "AE_optimizer_updates_completed": 17100,
-      "FM_optimizer_updates_completed": 18250,
-      "total_optimizer_updates": 35350,
-      "FM_completed_epochs": 320,
-      "native_loss": 6.31110954284668,
-      "real_scalar_fits": 0
-    }
+    "completed_benchmark_models": 14,
+    "real_scalar_fits": 0
   },
   "external_comparison_figure_source_path": "/ml2/alz/analysis/plot_released097_external_comparison.py",
   "external_comparison_figure_preparation_path": "/ml2/alz/analysis/benchmark097_outcome_figures_CPU_check_20261108.json",
@@ -467,7 +505,7 @@
   "fresh_infrastructure_replacement_real_fits": 0,
   "shared_capacity_owner_coordination_question": {
     "event_ref": "alz-transient-GPU0-growth-owner-coordination-20261108",
-    "revision": 3,
+    "revision": 4,
     "state": "pending",
     "delivery": "queued_not_receipt_or_answer",
     "permission_requested": false,
@@ -477,8 +515,11 @@
   "countfm_native_sampler_resolution_CPU_review_path": "/ml2/alz/analysis/countfm_native_sampler_resolution_CPU_review_20261108.json",
   "countfm_real_ALZ_fits": 0,
   "latest_scalar_runtime_cost_recovery_evidence_path": "/ml2/alz/analysis/scalarcal097_runtime_cost_recovery_v6_20261108.json",
-  "latest_shared_capacity_observation": "GPU0 briefly recovered at03:29 but by03:36 native admission margin fell to1.706GB, below separate6GiB scheduling reserve; stabilization correctly reset. GPU1 remains active. No GPU0 readmission yet.",
+  "latest_shared_capacity_observation": "Existing V2 scheduler admitted CFGen fold1seed2 onGPU0 after its stability/cushion check; GPU0 nativeAE5000 andGPU1 nativeFM42500 verified. Both guards/workers and all original CPU observers retained.",
   "countfm_native_fullwidth_CPU_fit_reload_review_path": "/ml2/alz/analysis/countfm_native_fullwidth_CPU_fit_reload_review_20261108.json",
-  "latest_external_live_progress_evidence_path": "/ml2/alz/analysis/benchmark097_CFGen_seed2_AEcomplete_FM_progress_20261108T0341.json",
-  "foreign_bridge_peak_profile_source_observation_path": "/ml2/alz/analysis/ALZ_foreign_bridge_peak_profile_source_observation_20261108.json"
+  "latest_external_live_progress_evidence_path": "/ml2/alz/analysis/benchmark097_both_GPUs_native_resumed_after_capacity_20261108.json",
+  "foreign_bridge_peak_profile_source_observation_path": "/ml2/alz/analysis/ALZ_foreign_bridge_peak_profile_source_observation_20261108.json",
+  "capacity_V3_revision_prepared_but_not_deployed": true,
+  "capacity_V3_preparation_path": "/ml2/alz/analysis/benchmark097_capacity_continuation_v3_CPU_check_20261108.json",
+  "capacity_V3_no_handoff_executed": true
 }
