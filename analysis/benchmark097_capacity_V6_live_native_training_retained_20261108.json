@@ -1,0 +1,74 @@
+{
+  "status": "V6_CPU_DISPATCHER_VERIFIED_LIVE_RETAINED_GPU1_NATIVE_TRAINING",
+  "UTC": "2026-11-08T09:53:59.142241+00:00",
+  "identity": {
+    "pid": 2283066,
+    "birth": 28901418,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "unified_session": 35827,
+  "source_path": "/ml2/alz/analysis/continue_benchmark097_after_capacity_v6.py",
+  "source_SHA256": "ee04209a254142ba3fd419c53177232223eb287dfcb9a5bfee6659cf43643dc3",
+  "CPU_qualification_path": "/ml2/alz/analysis/benchmark097_capacity_continuation_v6_CPU_check_20261108.json",
+  "CPU_qualification_SHA256": "b28915b2f271a07b621d86411f1a56f8cb5d1f8593ce3137b8e3249497a6caae",
+  "progress": {
+    "status": "UNTOUCHED_ORIGINAL_CELLS_CONTINUE_KNOWN_INFRA_FAILURE_RETAINED",
+    "resolved_original_cells": 20,
+    "complete_original_cells": 17,
+    "known_infra_failed_attempts": {
+      "CAL_GPU0_V1_external097_f2_cfgen_s1": "38369df32e1433722d5b270289ec6d9f51aac05ef91ae6654a97e53d458dfdd0",
+      "CAL_GPU0_V1_external097_f2_pg_s1": "a2e6db6a3a22c0ad6f4cd40de9ac761c1bde6586bccc319e43a65e39489f99e5",
+      "CAL_GPU0_V1_external097_f1_cfgen_s2": "f478529690fb2d80cd6ec0497723e018ea478207ce1dd54c9320c988113389a0"
+    },
+    "pending_original_cells": 24,
+    "active": [
+      {
+        "cell": {
+          "experiment": "external097",
+          "fold": 1,
+          "method": "cfgen",
+          "seed": 3
+        },
+        "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+        "identity": {
+          "pid": 2225844,
+          "birth": 28779534,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s3"
+      }
+    ],
+    "errors": [],
+    "unsettled": [],
+    "full_goal_complete": false,
+    "SOTA_claim": false
+  },
+  "GPU0_scheduling_stability_state": {
+    "checked_unix": 1794131614.0120082,
+    "capacity_fits": true,
+    "stable_since": 1794131431.4350119,
+    "ready": false,
+    "extra_GPU_scheduling_bytes": 0
+  },
+  "GPU1_guard_identity": {
+    "pid": 2225844,
+    "birth": 28779534,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "GPU1_worker_identity": {
+    "pid": 2225916,
+    "birth": 28779666,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "canonical_budget_snapshot": {
+    "revision": 561,
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 103.32861711371332,
+    "reserved_GPU_hours": 6.008333333333334,
+    "available_after_reservations_GPU_hours": 914.6630495529533
+  },
+  "native_and_foreign_processes_signalled": false,
+  "unconsumed_recovery_and_followup_CPU_observers_paused_pending48_attempt_requalification": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
