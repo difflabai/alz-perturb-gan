@@ -505,14 +505,14 @@
   "fresh_infrastructure_replacement_real_fits": 0,
   "shared_capacity_owner_coordination_question": {
     "event_ref": "alz-transient-GPU0-growth-owner-coordination-20261108",
-    "revision": 5,
+    "revision": 6,
     "state": "pending",
     "delivery": "queued_not_receipt_or_answer",
     "permission_requested": false,
     "production_blocked": false,
     "worker_identity_evidence_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v2/foreign_worker_identity_metadata_20261108.json",
-    "message_id": "report_a4f018058e03084917c65d2f34a8cbbf5e2d77a3839942ffcd24c62522b5bdde",
-    "throughput_cap_risk_evidence_path": "/ml2/alz/analysis/benchmark097_GPU0_current_CFGen_throughput_cap_risk_20261108.json"
+    "message_id": "report_9e3f0f115c798ee2ec895fde7fddbfe0b39f18809bd88b7d0336a605c4727102",
+    "throughput_cap_risk_evidence_path": "/ml2/alz/analysis/benchmark097_GPU0_throughput_improved_original_models_live_20261108.json"
   },
   "countfm_native_sampler_resolution_CPU_review_path": "/ml2/alz/analysis/countfm_native_sampler_resolution_CPU_review_20261108.json",
   "countfm_real_ALZ_fits": 0,
@@ -568,5 +568,6 @@
   "training_loss_vs_calibration_distance_review_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_CPU_20261108.json",
   "training_loss_vs_calibration_distance_independent_audit_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_root_audit_20261108.json",
   "training_loss_vs_calibration_distance_plot_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_20261108.png",
-  "training_loss_vs_calibration_distance_conclusion": "Existing t005 five-seed10k-to20k generator total loss and calibration ED changes have opposite signs in allfive. Fourseeds lowergeneratorloss yetworseED, onehigherlossyetbetterED. Retrospective descriptive calibration only; keep measured calibrationED as sole LR-control signal and still require fresh matched6fitcomparison."
+  "training_loss_vs_calibration_distance_conclusion": "Existing t005 five-seed10k-to20k generator total loss and calibration ED changes have opposite signs in allfive. Fourseeds lowergeneratorloss yetworseED, onehigherlossyetbetterED. Retrospective descriptive calibration only; keep measured calibrationED as sole LR-control signal and still require fresh matched6fitcomparison.",
+  "next_required_runtime_action": "Preserve admitted CFGen fits and all active CPU parents. Wait for actual current generation/native-score audit/settlement and next original-cell admission, monitor GPU0 at roughly5000update intervals or material failure, and reconcile current shared compute service. Benchmark45/47+57/53, scalar6 and theta6 are already wired in priority order. No new speculative formulation changes or extra studies are needed while these execute."
 }
