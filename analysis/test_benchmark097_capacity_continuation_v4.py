@@ -1,5 +1,6 @@
 import importlib.util,json,pathlib,sys,tempfile,unittest
-root=pathlib.Path('/ml2/alz');spec=importlib.util.spec_from_file_location('continuation',root/'analysis/continue_benchmark097_after_capacity_v3.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+root=pathlib.Path('/ml2/alz');spec=importlib.util.spec_from_file_location('continuation',root/'analysis/continue_benchmark097_after_capacity_v4.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+assert pathlib.Path(m.__file__).resolve()==root/'analysis/continue_benchmark097_after_capacity_v4.py'
 class Checks(unittest.TestCase):
  def run_case(self,*,known=False,legacy=False,bad=False,start_error=False,capacity_wait=False,expiry=1000):
   t=[0];starts=[];finishes=[];seen=[];v=dict(id='new');old=dict(id='known');lh=dict(cell=dict(id='legacy'),gpu=m.GPUS[1],identity={},attempt='legacy');rows=[dict(cell=old,complete=False)] if known else [];active={m.GPUS[1]:lh} if legacy else {}
