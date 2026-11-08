@@ -1,0 +1,263 @@
+{
+  "status": "BOTH_GPUS_FRESH_NATIVE_TRAINING_ALL_SIX_CPU_QUEUES_RESTORED_WITH48_ATTEMPT_LINEAGE",
+  "UTC": "2026-11-08T10:21:43.208711+00:00",
+  "fully_audited_successful_logical_models": 17,
+  "retained_original_infrastructure_failures": 3,
+  "required_successful_logical_models": 45,
+  "required_total_physical_attempts": 48,
+  "native_jobs": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f0_pg_s2",
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "pg",
+        "seed": 2
+      },
+      "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "guard_identity": {
+        "pid": 2298445,
+        "birth": 28932123,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker_identity": {
+        "pid": 2298515,
+        "birth": 28932259,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f0_pg_s2/authorization.json",
+      "authorization_SHA256": "9561fc12ad9fb2e2145a0d18af2a22daf6a97a86f19b1b45ffc4744095918bef",
+      "native_progress": {
+        "step": 7001,
+        "D_adversarial": 0.5978493690490723,
+        "D_penalty": 0.04103627800941467,
+        "D_total": 0.6388856172561646,
+        "G_adversarial": 2.9751510620117188,
+        "prior_regularization_unweighted": 0.14781491458415985,
+        "G_total": 2.9766292572021484,
+        "G_prior_LRs": [
+          0.012,
+          0.06
+        ],
+        "D_LRs": [
+          0.018000000000000002
+        ],
+        "critic_gap": 6.794658660888672,
+        "D_gradient_norm": 10.753856658935547,
+        "G_gradient_norm": 14.656577110290527,
+        "prior_gradient_norm": 0.8648620843887329,
+        "penalty_stats": {
+          "applied": true,
+          "pen": 0.04103627800941467,
+          "center": 1.0,
+          "phase": "bispf",
+          "mean_grad_norm": 0.8670181035995483,
+          "mean_logit": -1.081781029701233,
+          "ebi_loss": 0.011780023574829102,
+          "gauge_loss": 0.02925625443458557,
+          "floor_pen": 0.00401159655302763,
+          "s_thermal": 1.0,
+          "ema_residual": 0.6644243597984314,
+          "ema_data_scale": 4.253481388092041
+        },
+        "penalty_diagnostics": {
+          "ema_residual": 0.6644243597984314,
+          "ema_data_scale": 4.253481388092041,
+          "s_thermal": 1.0
+        },
+        "particle_usage": {
+          "rows_drawn": 512,
+          "rows_moved": 512,
+          "total_draws": 224032,
+          "total_unsampled_row_moves": 0,
+          "particle_covariance_trace": 9.549699783325195,
+          "particle_mean_squared_norm": 9.700052261352539
+        }
+      },
+      "all_new_training_from_zero": true
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s3",
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "cfgen",
+        "seed": 3
+      },
+      "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "guard_identity": {
+        "pid": 2225844,
+        "birth": 28779534,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker_identity": {
+        "pid": 2225916,
+        "birth": 28779666,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f1_cfgen_s3/authorization.json",
+      "authorization_SHA256": "ec26f58be70e23aa1c92b1a55c751e09ab009730c67a081ed9867f86e071169d",
+      "native_progress": {
+        "phase": "FM",
+        "phase_optimizer_updates": 77750,
+        "total_optimizer_updates": 95450,
+        "completed_epochs": 1317,
+        "native_loss": 6.069801330566406
+      },
+      "all_new_training_from_zero": true
+    }
+  ],
+  "all_six_CPU_actors": {
+    "benchmark097-after-capacity-continuation-v6": {
+      "identity": {
+        "pid": 2283066,
+        "birth": 28901418,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "ee04209a254142ba3fd419c53177232223eb287dfcb9a5bfee6659cf43643dc3",
+      "progress": {
+        "status": "UNTOUCHED_ORIGINAL_CELLS_CONTINUE_KNOWN_INFRA_FAILURE_RETAINED",
+        "resolved_original_cells": 20,
+        "complete_original_cells": 17,
+        "known_infra_failed_attempts": {
+          "CAL_GPU0_V1_external097_f2_cfgen_s1": "38369df32e1433722d5b270289ec6d9f51aac05ef91ae6654a97e53d458dfdd0",
+          "CAL_GPU0_V1_external097_f2_pg_s1": "a2e6db6a3a22c0ad6f4cd40de9ac761c1bde6586bccc319e43a65e39489f99e5",
+          "CAL_GPU0_V1_external097_f1_cfgen_s2": "f478529690fb2d80cd6ec0497723e018ea478207ce1dd54c9320c988113389a0"
+        },
+        "pending_original_cells": 23,
+        "active": [
+          {
+            "cell": {
+              "experiment": "external097",
+              "fold": 1,
+              "method": "cfgen",
+              "seed": 3
+            },
+            "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+            "identity": {
+              "pid": 2225844,
+              "birth": 28779534,
+              "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+            },
+            "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s3"
+          },
+          {
+            "cell": {
+              "experiment": "external097",
+              "fold": 0,
+              "method": "pg",
+              "seed": 2
+            },
+            "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+            "identity": {
+              "pid": 2298445,
+              "birth": 28932123,
+              "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+            },
+            "attempt": "CAL_GPU0_V1_external097_f0_pg_s2"
+          }
+        ],
+        "errors": [],
+        "unsettled": [],
+        "full_goal_complete": false,
+        "SOTA_claim": false
+      }
+    },
+    "benchmark097-infra1-pipeline": {
+      "identity": {
+        "pid": 2348403,
+        "birth": 29037448,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "caf466e1374073ec9bd5db7419b6623c3f45dc06f25124f0f5aa02bd84e7edad",
+      "progress": {
+        "status": "WAITING_FOR_ALL45_ORIGINAL_ATTEMPTS_TO_CLOSE",
+        "new_model_fits": 0,
+        "upstream": {
+          "pid": 2283066,
+          "birth": 28901418,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "full_goal_complete": false
+      }
+    },
+    "scalarcal097-after-recovered-science-v5": {
+      "identity": {
+        "pid": 2348719,
+        "birth": 29037941,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "a1c0d073bcf2a24505cdde6874dae6108be8225ed4ea4ea7f01a1c4d8cf85873",
+      "progress": {
+        "status": "WAITING_ON_EXACT_BALANCED45_AND_ORIGINAL57_PRESPECIFIED53_REPORTS",
+        "new_GPU_allocation": false,
+        "upstream_pid": 2348403,
+        "full_goal_complete": false
+      }
+    },
+    "dispersion097-after-scalarcal097": {
+      "identity": {
+        "pid": 2348925,
+        "birth": 29038447,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "a30b9aee29a6cc1405bf733f185a47410ebde3b9b277591e89e43cc39865469a",
+      "progress": {
+        "status": "WAITING_ON_COMPLETED_BENCHMARK_AND_SIX_SCALAR_LR_FITS",
+        "new_GPU_allocation": false,
+        "upstream_pid": 2348719,
+        "full_goal_complete": false
+      }
+    },
+    "released097-final-independent-audits": {
+      "identity": {
+        "pid": 2368995,
+        "birth": 29080116,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "58fd8dd38c46870b574035e82a4e191e20aace129e01743855aed85330ac875d",
+      "progress": {
+        "status": "WAITING_FOR_UPSTREAM_TERMINALS_AND_RESERVATION_DRAIN",
+        "upstream_states": {
+          "benchmark": "live",
+          "scalar": "live",
+          "theta": "live"
+        },
+        "reservations_open": true,
+        "new_GPU_allocation": false,
+        "numerical_reports_read": false,
+        "full_goal_complete": false
+      }
+    },
+    "benchmark097-donor-matched-supplement-observer": {
+      "identity": {
+        "pid": 2369483,
+        "birth": 29080902,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "6a469360727280fc699358a5dc60974a374c77d9525c46e97006b7259f512f2e",
+      "progress": {
+        "status": "WAITING_ON_FINAL_NATIVE_QUEUES_AND_INDEPENDENT_AUDIT_OBSERVER",
+        "new_GPU_allocation": false,
+        "expression_or_quality_values_read": false,
+        "full_goal_complete": false
+      }
+    }
+  },
+  "canonical_budget_snapshot": {
+    "revision": 563,
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 103.32861711371332,
+    "reserved_GPU_hours": 12.016666666666667,
+    "available_after_reservations_GPU_hours": 908.65471621962
+  },
+  "actual_replacement_scalar_theta_fits": 0,
+  "actual_final_independent_audits": 0,
+  "actual_donor_matched_supplement_results": 0,
+  "secondary_CPU_supplement_serialized_after_final_native_queues_and_audit_observer": true,
+  "scientific_formulation_and_frozen_candidate_and_endpoints_unchanged": true,
+  "partial_heldout_quality_reports_decoded": false,
+  "native_or_foreign_processes_signalled": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
