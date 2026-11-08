@@ -40,6 +40,21 @@ Resampling reuses observed cells; it is an empirical reference, not a trained ne
 
 Across the 2,000 correlated genes, the within-subtype training-association comparison has descriptive Spearman correlation **0.502** and direction agreement **65.9%**. It is not held-out gene-prediction accuracy. The report includes failed/sensitive signals, sex/APOE imbalance, incomplete marker coverage, and a comparison with the simpler real-data-plus-literature workflow that still needs to be done.
 
+<details>
+<summary>Why PPARG fits poorly: a tested blind spot in the application</summary>
+
+The critic sees 150 bag summaries derived from 50 fixed PCs, rather than the 2,000 genes directly. In a fresh matched-depth diagnostic, observed Not AD PPARG expression averaged **0.827**, versus **0.237** generated. Yet their linear PC reconstructions were **0.838** and **0.833**. About **99% of this signed mean gap** lies outside the PC column space; that component never reaches the critic. Across the other stages, the corresponding shares were 89%, 83%, and 80%. These are components of a mean difference, not percentages of causal responsibility or energy-distance error.
+
+![Actual PPARG profiles versus their linear PC reconstructions](analysis/figures/PPARG-PCA-blindspot-20261108.png)
+
+This affects the training signal: adding log(4) to PPARG’s output bias, with the original softmax and valid Gamma–Poisson sampling, reduced the pooled Not AD mean-expression gap by **59%**. The frozen critic loss nevertheless worsened in **four of five** models. A discrete Poisson derivative also opposed increasing PPARG in those four models, so the straight-through gradient cannot be the sole explanation. At Intermediate stage, straight-through and discrete gradient estimates had opposite signs in three model-level averages; their sampling uncertainty and contribution to training remain separate questions.
+
+These are frozen-model probes, not a trained repair. We have identified missing gene-level constraints and a locally misaligned training signal in our count/PCA application; this does not establish a defect in released ParticleGAN. The next causal test is matched fresh training that changes what the critic observes while preserving the ParticleGAN update rule, with the count-gradient ablation kept separate. The diagnostic uses pooled fitting cells with stage-matched observed depths, so its means differ from the report’s subtype-balanced explorer. No weights or published benchmark results were replaced.
+
+Reproducible code/results: [PC error decomposition](analysis/PPARG_PCA_blindspot_CPU_20261108.json), [critic and gradient probes](analysis/PPARG_critic_gradient_CPU_20261108.json), and [actual output-bias response](analysis/PPARG_output_bias_CPU_20261108.json). Each includes input hashes and interpretation limits. All probes ran on CPU with zero optimizer updates.
+
+</details>
+
 ## Inspect the evidence
 
 - [Interactive report and all-gene explorer](https://difflabai.github.io/alz-perturb-gan/): four-stage curves, five-seed effects, external cohort checks, donor sensitivity, and a concrete experiment proposal.

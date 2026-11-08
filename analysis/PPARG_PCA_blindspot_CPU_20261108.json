@@ -1,0 +1,1293 @@
+{
+  "status": "COMPLETE_EXACT_PPARG_PCA_VISIBLE_VS_INVISIBLE_ERROR_DECOMPOSITION",
+  "UTC": "2026-11-08T22:41:14.532490+00:00",
+  "protocol": {
+    "UTC": "2026-11-08T22:40:55.957226+00:00",
+    "input_SHA256": {
+      "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/final.pt": "ac55507c73d5927e464d1567e1a5366787909832796c0dd18189ffa2c0ac5351",
+      "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s1/fit/final.pt": "939eb69f8eaae43b2f52a799232e68d7deab4bd68126cf88dee7a276df722237",
+      "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s2/fit/final.pt": "c042196acb6ef72563299fb6025ad61892d06c44cc25813ed18ebeaf93759606",
+      "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s3/fit/final.pt": "e758b67dda6f3c54351a6289f46433ca6abc895dc29a814be0e2d601323c23ba",
+      "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s4/fit/final.pt": "3b626768f52d56aa05598a2977a4a72d630b429872400bedd231e186330bfea9",
+      "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0/train/counts_hvg.npz": "bf0e24ccadc1e78b789cdc18c571e049ea5b9bca5b5457929038c01ba2b104f7",
+      "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0/train/metadata.npz": "5b7bb88301bc592786c585a7026e372e026a39d9b918d71bd804febc36be0a6a",
+      "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0/space.npz": "d3e31f5c7960676ab5cc87f5e39b141120d5347f1777fb935531d60b39cbb840",
+      "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0/manifest.json": "553fbe2ad8d901782e834a1e3a77fc959e95cf6aef51b9ca88528aea29f6c631",
+      "/ml2/alz/analysis/faithful097/model/released_adapter.py": "b3fe9b78771f1a85fa86646ae2e6c74e8725af211a7484ee0e08fb5b62093f09",
+      "/ml2/alz/analysis/faithful097/model/released_update.py": "7cba670fbc51740938b01ecb5f637bbc8cc23f4ed889e8f00d829b886643e3a8",
+      "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/contracts.py": "1ef929b020b87c5a1e7e4a1194a42ded2c0f61c7589f3e8bb49a6f437ae57131",
+      "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/stage_law.py": "403b04bbaa285f5cc2ffbace9b67c133448c83c7304083da2aba9cc4daa6c5ae",
+      "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/pg_model.py": "47740d4039e680c48c9e5855753d7ebd797fe4f68109aaa75c3d56b57f13af85",
+      "/ml2/alz/analysis/primamente_inference_hypothesis_plan_20261108.json": "095265735889b3d16b1c0110c860d75236c5b8cf8f383c33e353735c32456180",
+      "/ml2/alz/analysis/probe_PPARG_critic_gradient_20261108.py": "1abb2fe7b9cd4c16c62a6a17ce743317b26925397f559029f2d2768a224f30bf",
+      "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/critic.py": "2921c0f7706cf3ac7bff0e3ebb09be2f2699a97e93d1faf1fb5376d6b9c11a5f",
+      "/ml2/alz/analysis/diagnose_t005_calibration_checkpoints_multiseed_cpu.py": "dee69f5bcc30bbb8454f9092245aea8f6a532c5cbf7756b2058356e55eaaaa6a",
+      "/ml2/alz/analysis/decompose_PPARG_PCA_blindspot_20261108.py": "df52b9058d2611551a25392ce495a94b516fa57696b003244697c89f4d6c5f3c",
+      "/ml2/alz/analysis/PPARG_critic_gradient_CPU_20261108.json": "a24ff77b38a61866d2f873b9f929325c16f9bfb1b1bea2ed45f9ae8442971884"
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "replicates": 4,
+    "exact_replay": "Same CPU base draws as the critic-gradient probe, verified by all stage mu/log means/detection.",
+    "algebra": "delta = delta_visible + delta_null; delta_visible = delta @ U @ U.T; U spans the fixed PC columns.",
+    "units": "Mean log1p(panel CP10k); no new model fitting.",
+    "new_optimizer_updates": 0
+  },
+  "summary": [
+    {
+      "stage": 0,
+      "observed_logmean": 0.8273967954581058,
+      "generated_logmean": 0.23671504392686762,
+      "actual_mean_gap": 0.5906817515312384,
+      "PC_visible_component_of_mean_gap": 0.004932382072656389,
+      "PC_invisible_component_of_mean_gap": 0.585749369458582,
+      "real_PC_reconstructed_logmean": 0.8381862470160719,
+      "generated_PC_reconstructed_logmean": 0.8332538649434154,
+      "invisible_share_of_signed_mean_gap": 0.991649679273365,
+      "seed_means": {
+        "0": {
+          "observed_logmean": 0.827396795458106,
+          "generated_logmean": 0.31498027986437305,
+          "actual_mean_gap": 0.5124165155937329,
+          "PC_visible_component_of_mean_gap": 0.01489564224272481,
+          "PC_invisible_component_of_mean_gap": 0.49752087335100814,
+          "real_PC_reconstructed_logmean": 0.8381862470160719,
+          "generated_PC_reconstructed_logmean": 0.823290604773347
+        },
+        "1": {
+          "observed_logmean": 0.827396795458106,
+          "generated_logmean": 0.06753155546959405,
+          "actual_mean_gap": 0.759865239988512,
+          "PC_visible_component_of_mean_gap": 0.0658016177277019,
+          "PC_invisible_component_of_mean_gap": 0.6940636222608101,
+          "real_PC_reconstructed_logmean": 0.8381862470160719,
+          "generated_PC_reconstructed_logmean": 0.7723846292883698
+        },
+        "2": {
+          "observed_logmean": 0.827396795458106,
+          "generated_logmean": 0.2696866749904043,
+          "actual_mean_gap": 0.5577101204677016,
+          "PC_visible_component_of_mean_gap": -0.05574993375189772,
+          "PC_invisible_component_of_mean_gap": 0.6134600542195994,
+          "real_PC_reconstructed_logmean": 0.8381862470160719,
+          "generated_PC_reconstructed_logmean": 0.8939361807679694
+        },
+        "3": {
+          "observed_logmean": 0.827396795458106,
+          "generated_logmean": 0.3348743302555257,
+          "actual_mean_gap": 0.49252246520258014,
+          "PC_visible_component_of_mean_gap": 0.03445234630541285,
+          "PC_invisible_component_of_mean_gap": 0.4580701188971673,
+          "real_PC_reconstructed_logmean": 0.8381862470160719,
+          "generated_PC_reconstructed_logmean": 0.8037339007106592
+        },
+        "4": {
+          "observed_logmean": 0.827396795458106,
+          "generated_logmean": 0.19650237905444126,
+          "actual_mean_gap": 0.6308944164036647,
+          "PC_visible_component_of_mean_gap": -0.03473776216065991,
+          "PC_invisible_component_of_mean_gap": 0.6656321785643247,
+          "real_PC_reconstructed_logmean": 0.8381862470160719,
+          "generated_PC_reconstructed_logmean": 0.8729240091767317
+        }
+      }
+    },
+    {
+      "stage": 1,
+      "observed_logmean": 1.2466129536504895,
+      "generated_logmean": 0.6656660741225259,
+      "actual_mean_gap": 0.5809468795279635,
+      "PC_visible_component_of_mean_gap": 0.06435477768859345,
+      "PC_invisible_component_of_mean_gap": 0.51659210183937,
+      "real_PC_reconstructed_logmean": 1.2451092731946527,
+      "generated_PC_reconstructed_logmean": 1.1807544955060594,
+      "invisible_share_of_signed_mean_gap": 0.8892243336587268,
+      "seed_means": {
+        "0": {
+          "observed_logmean": 1.2466129536504895,
+          "generated_logmean": 0.7765056309601338,
+          "actual_mean_gap": 0.4701073226903556,
+          "PC_visible_component_of_mean_gap": -0.008983659465188304,
+          "PC_invisible_component_of_mean_gap": 0.47909098215554385,
+          "real_PC_reconstructed_logmean": 1.2451092731946527,
+          "generated_PC_reconstructed_logmean": 1.254092932659841
+        },
+        "1": {
+          "observed_logmean": 1.2466129536504895,
+          "generated_logmean": 0.5588191969890192,
+          "actual_mean_gap": 0.6877937566614701,
+          "PC_visible_component_of_mean_gap": 0.24873343479471924,
+          "PC_invisible_component_of_mean_gap": 0.43906032186675104,
+          "real_PC_reconstructed_logmean": 1.2451092731946527,
+          "generated_PC_reconstructed_logmean": 0.9963758383999335
+        },
+        "2": {
+          "observed_logmean": 1.2466129536504895,
+          "generated_logmean": 0.7165251430988884,
+          "actual_mean_gap": 0.530087810551601,
+          "PC_visible_component_of_mean_gap": 0.030172046415100844,
+          "PC_invisible_component_of_mean_gap": 0.4999157641365002,
+          "real_PC_reconstructed_logmean": 1.2451092731946527,
+          "generated_PC_reconstructed_logmean": 1.2149372267795524
+        },
+        "3": {
+          "observed_logmean": 1.2466129536504895,
+          "generated_logmean": 0.5590846475493645,
+          "actual_mean_gap": 0.6875283061011249,
+          "PC_visible_component_of_mean_gap": 0.0406026225759779,
+          "PC_invisible_component_of_mean_gap": 0.6469256835251471,
+          "real_PC_reconstructed_logmean": 1.2451092731946527,
+          "generated_PC_reconstructed_logmean": 1.2045066506186752
+        },
+        "4": {
+          "observed_logmean": 1.2466129536504895,
+          "generated_logmean": 0.7173957520152234,
+          "actual_mean_gap": 0.5292172016352659,
+          "PC_visible_component_of_mean_gap": 0.011249444122357583,
+          "PC_invisible_component_of_mean_gap": 0.5179677575129084,
+          "real_PC_reconstructed_logmean": 1.2451092731946527,
+          "generated_PC_reconstructed_logmean": 1.2338598290722953
+        }
+      }
+    },
+    {
+      "stage": 2,
+      "observed_logmean": 1.2149702235716306,
+      "generated_logmean": 0.6903510365673429,
+      "actual_mean_gap": 0.5246191870042877,
+      "PC_visible_component_of_mean_gap": 0.08673019293265534,
+      "PC_invisible_component_of_mean_gap": 0.43788899407163245,
+      "real_PC_reconstructed_logmean": 1.2089111998822308,
+      "generated_PC_reconstructed_logmean": 1.1221810069495755,
+      "invisible_share_of_signed_mean_gap": 0.8346797161043475,
+      "seed_means": {
+        "0": {
+          "observed_logmean": 1.2149702235716306,
+          "generated_logmean": 0.6799424695913499,
+          "actual_mean_gap": 0.5350277539802808,
+          "PC_visible_component_of_mean_gap": 0.08542866892017763,
+          "PC_invisible_component_of_mean_gap": 0.44959908506010327,
+          "real_PC_reconstructed_logmean": 1.2089111998822308,
+          "generated_PC_reconstructed_logmean": 1.123482530962053
+        },
+        "1": {
+          "observed_logmean": 1.2149702235716306,
+          "generated_logmean": 0.6029723277927096,
+          "actual_mean_gap": 0.6119978957789212,
+          "PC_visible_component_of_mean_gap": -0.09619812436338987,
+          "PC_invisible_component_of_mean_gap": 0.708196020142311,
+          "real_PC_reconstructed_logmean": 1.2089111998822308,
+          "generated_PC_reconstructed_logmean": 1.3051093242456204
+        },
+        "2": {
+          "observed_logmean": 1.2149702235716306,
+          "generated_logmean": 0.926052100953273,
+          "actual_mean_gap": 0.2889181226183578,
+          "PC_visible_component_of_mean_gap": 0.05628121376152377,
+          "PC_invisible_component_of_mean_gap": 0.23263690885683402,
+          "real_PC_reconstructed_logmean": 1.2089111998822308,
+          "generated_PC_reconstructed_logmean": 1.152629986120707
+        },
+        "3": {
+          "observed_logmean": 1.2149702235716306,
+          "generated_logmean": 0.7104890564620783,
+          "actual_mean_gap": 0.5044811671095524,
+          "PC_visible_component_of_mean_gap": 0.21604674665146767,
+          "PC_invisible_component_of_mean_gap": 0.28843442045808476,
+          "real_PC_reconstructed_logmean": 1.2089111998822308,
+          "generated_PC_reconstructed_logmean": 0.9928644532307632
+        },
+        "4": {
+          "observed_logmean": 1.2149702235716306,
+          "generated_logmean": 0.5322992280373041,
+          "actual_mean_gap": 0.6826709955343266,
+          "PC_visible_component_of_mean_gap": 0.17209245969349748,
+          "PC_invisible_component_of_mean_gap": 0.5105785358408291,
+          "real_PC_reconstructed_logmean": 1.2089111998822308,
+          "generated_PC_reconstructed_logmean": 1.036818740188733
+        }
+      }
+    },
+    {
+      "stage": 3,
+      "observed_logmean": 1.2695049296001506,
+      "generated_logmean": 0.7303579669807423,
+      "actual_mean_gap": 0.5391469626194081,
+      "PC_visible_component_of_mean_gap": 0.10561255223535722,
+      "PC_invisible_component_of_mean_gap": 0.43353441038405105,
+      "real_PC_reconstructed_logmean": 1.2725206438469754,
+      "generated_PC_reconstructed_logmean": 1.1669080916116177,
+      "invisible_share_of_signed_mean_gap": 0.804111755128424,
+      "seed_means": {
+        "0": {
+          "observed_logmean": 1.2695049296001506,
+          "generated_logmean": 0.6203887682929179,
+          "actual_mean_gap": 0.6491161613072327,
+          "PC_visible_component_of_mean_gap": 0.18459819564413485,
+          "PC_invisible_component_of_mean_gap": 0.4645179656630978,
+          "real_PC_reconstructed_logmean": 1.2725206438469752,
+          "generated_PC_reconstructed_logmean": 1.08792244820284
+        },
+        "1": {
+          "observed_logmean": 1.2695049296001506,
+          "generated_logmean": 0.4510064980927347,
+          "actual_mean_gap": 0.818498431507416,
+          "PC_visible_component_of_mean_gap": 0.048964636474916425,
+          "PC_invisible_component_of_mean_gap": 0.7695337950324994,
+          "real_PC_reconstructed_logmean": 1.2725206438469752,
+          "generated_PC_reconstructed_logmean": 1.2235560073720588
+        },
+        "2": {
+          "observed_logmean": 1.2695049296001506,
+          "generated_logmean": 0.886921420491334,
+          "actual_mean_gap": 0.38258350910881644,
+          "PC_visible_component_of_mean_gap": 0.06446463185546442,
+          "PC_invisible_component_of_mean_gap": 0.31811887725335203,
+          "real_PC_reconstructed_logmean": 1.2725206438469752,
+          "generated_PC_reconstructed_logmean": 1.208056011991511
+        },
+        "3": {
+          "observed_logmean": 1.2695049296001506,
+          "generated_logmean": 0.815230613158054,
+          "actual_mean_gap": 0.4542743164420966,
+          "PC_visible_component_of_mean_gap": 0.06913043991124795,
+          "PC_invisible_component_of_mean_gap": 0.3851438765308487,
+          "real_PC_reconstructed_logmean": 1.2725206438469752,
+          "generated_PC_reconstructed_logmean": 1.203390203935727
+        },
+        "4": {
+          "observed_logmean": 1.2695049296001506,
+          "generated_logmean": 0.8782425348686711,
+          "actual_mean_gap": 0.3912623947314794,
+          "PC_visible_component_of_mean_gap": 0.16090485729102247,
+          "PC_invisible_component_of_mean_gap": 0.230357537440457,
+          "real_PC_reconstructed_logmean": 1.2725206438469752,
+          "generated_PC_reconstructed_logmean": 1.1116157865559524
+        }
+      }
+    }
+  ],
+  "records": [
+    {
+      "seed": 0,
+      "replicate": 0,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.7663148278981842,
+          "generated_logmean": 0.32323163972767344,
+          "actual_mean_gap": 0.4430831881705107,
+          "PC_visible_component_of_mean_gap": 0.09144312928357064,
+          "PC_invisible_component_of_mean_gap": 0.35164005888694,
+          "real_PC_reconstructed_logmean": 0.8685123438328077,
+          "generated_PC_reconstructed_logmean": 0.777069214549238,
+          "hidden_difference_projection_max_error": 1.0399548948120813e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.2542550769639769,
+          "generated_logmean": 0.7448444513353897,
+          "actual_mean_gap": 0.5094106256285873,
+          "PC_visible_component_of_mean_gap": -0.023387944846371314,
+          "PC_invisible_component_of_mean_gap": 0.5327985704749586,
+          "real_PC_reconstructed_logmean": 1.2173251006387922,
+          "generated_PC_reconstructed_logmean": 1.2407130454851636,
+          "hidden_difference_projection_max_error": 6.491576916013405e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.088314738643569,
+          "generated_logmean": 0.663718325445275,
+          "actual_mean_gap": 0.424596413198294,
+          "PC_visible_component_of_mean_gap": 0.02730000598199892,
+          "PC_invisible_component_of_mean_gap": 0.39729640721629506,
+          "real_PC_reconstructed_logmean": 1.0489427818499473,
+          "generated_PC_reconstructed_logmean": 1.021642775867948,
+          "hidden_difference_projection_max_error": 6.757145346283542e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.2102113546202207,
+          "generated_logmean": 0.6008054484018839,
+          "actual_mean_gap": 0.6094059062183366,
+          "PC_visible_component_of_mean_gap": 0.04812773633579731,
+          "PC_invisible_component_of_mean_gap": 0.5612781698825393,
+          "real_PC_reconstructed_logmean": 1.1911247777928,
+          "generated_PC_reconstructed_logmean": 1.1429970414570028,
+          "hidden_difference_projection_max_error": 1.016105231205211e-08
+        }
+      ]
+    },
+    {
+      "seed": 0,
+      "replicate": 1,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.8669109680250018,
+          "generated_logmean": 0.3391239269418923,
+          "actual_mean_gap": 0.5277870410831096,
+          "PC_visible_component_of_mean_gap": -0.030981289902163724,
+          "PC_invisible_component_of_mean_gap": 0.5587683309852733,
+          "real_PC_reconstructed_logmean": 0.860423015491879,
+          "generated_PC_reconstructed_logmean": 0.8914043053940417,
+          "hidden_difference_projection_max_error": 1.1096188947713748e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.353844088089098,
+          "generated_logmean": 0.8010449398378829,
+          "actual_mean_gap": 0.5527991482512151,
+          "PC_visible_component_of_mean_gap": -0.0038397812391120895,
+          "PC_invisible_component_of_mean_gap": 0.5566389294903271,
+          "real_PC_reconstructed_logmean": 1.3156852321998296,
+          "generated_PC_reconstructed_logmean": 1.3195250134389411,
+          "hidden_difference_projection_max_error": 7.4260907440698576e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.3072846308893007,
+          "generated_logmean": 0.7983491899055553,
+          "actual_mean_gap": 0.5089354409837454,
+          "PC_visible_component_of_mean_gap": 0.08740560462019457,
+          "PC_invisible_component_of_mean_gap": 0.4215298363635509,
+          "real_PC_reconstructed_logmean": 1.3104253117370388,
+          "generated_PC_reconstructed_logmean": 1.2230197071168447,
+          "hidden_difference_projection_max_error": 7.031197391677013e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.383349114931208,
+          "generated_logmean": 0.6128032707719361,
+          "actual_mean_gap": 0.7705458441592719,
+          "PC_visible_component_of_mean_gap": 0.4028734682459302,
+          "PC_invisible_component_of_mean_gap": 0.3676723759133417,
+          "real_PC_reconstructed_logmean": 1.4286771628938217,
+          "generated_PC_reconstructed_logmean": 1.0258036946478906,
+          "hidden_difference_projection_max_error": 7.857473817429739e-09
+        }
+      ]
+    },
+    {
+      "seed": 0,
+      "replicate": 2,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.7801191770245413,
+          "generated_logmean": 0.34161863363127976,
+          "actual_mean_gap": 0.4385005433932615,
+          "PC_visible_component_of_mean_gap": 0.0032816211549584495,
+          "PC_invisible_component_of_mean_gap": 0.43521892223830305,
+          "real_PC_reconstructed_logmean": 0.8482900266864244,
+          "generated_PC_reconstructed_logmean": 0.8450084055314657,
+          "hidden_difference_projection_max_error": 1.1959772015942248e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.333736606019347,
+          "generated_logmean": 0.8406417989942288,
+          "actual_mean_gap": 0.4930948070251182,
+          "PC_visible_component_of_mean_gap": 0.015342531849958164,
+          "PC_invisible_component_of_mean_gap": 0.47775227517516,
+          "real_PC_reconstructed_logmean": 1.3335460211505112,
+          "generated_PC_reconstructed_logmean": 1.3182034893005525,
+          "hidden_difference_projection_max_error": 7.238810006277019e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.2954640440465763,
+          "generated_logmean": 0.7224028574564001,
+          "actual_mean_gap": 0.5730611865901761,
+          "PC_visible_component_of_mean_gap": -0.019040919089471215,
+          "PC_invisible_component_of_mean_gap": 0.5921021056796474,
+          "real_PC_reconstructed_logmean": 1.3203554719621073,
+          "generated_PC_reconstructed_logmean": 1.3393963910515783,
+          "hidden_difference_projection_max_error": 6.2412224646779015e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.488320740404052,
+          "generated_logmean": 0.7856185410072132,
+          "actual_mean_gap": 0.7027021993968386,
+          "PC_visible_component_of_mean_gap": 0.1597804144000335,
+          "PC_invisible_component_of_mean_gap": 0.5429217849968052,
+          "real_PC_reconstructed_logmean": 1.3625479969728547,
+          "generated_PC_reconstructed_logmean": 1.202767582572821,
+          "hidden_difference_projection_max_error": 9.290475944112586e-09
+        }
+      ]
+    },
+    {
+      "seed": 0,
+      "replicate": 3,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.8962422088846966,
+          "generated_logmean": 0.2559469191566466,
+          "actual_mean_gap": 0.64029528972805,
+          "PC_visible_component_of_mean_gap": -0.004160891565466119,
+          "PC_invisible_component_of_mean_gap": 0.6444561812935162,
+          "real_PC_reconstructed_logmean": 0.7755196020531763,
+          "generated_PC_reconstructed_logmean": 0.7796804936186429,
+          "hidden_difference_projection_max_error": 1.385053338036693e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.0446160435295355,
+          "generated_logmean": 0.7194913336730339,
+          "actual_mean_gap": 0.32512470985650166,
+          "PC_visible_component_of_mean_gap": -0.024049443625227977,
+          "PC_invisible_component_of_mean_gap": 0.34917415348172964,
+          "real_PC_reconstructed_logmean": 1.1138807387894782,
+          "generated_PC_reconstructed_logmean": 1.137930182414706,
+          "hidden_difference_projection_max_error": 5.950752335012223e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.168817480707077,
+          "generated_logmean": 0.5352995055581691,
+          "actual_mean_gap": 0.6335179751489078,
+          "PC_visible_component_of_mean_gap": 0.24604998416798823,
+          "PC_invisible_component_of_mean_gap": 0.38746799098091966,
+          "real_PC_reconstructed_logmean": 1.1559212339798295,
+          "generated_PC_reconstructed_logmean": 0.9098712498118413,
+          "hidden_difference_projection_max_error": 6.266853158154798e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 0.9961385084451218,
+          "generated_logmean": 0.4823278129906383,
+          "actual_mean_gap": 0.5138106954544834,
+          "PC_visible_component_of_mean_gap": 0.12761116359477842,
+          "PC_invisible_component_of_mean_gap": 0.386199531859705,
+          "real_PC_reconstructed_logmean": 1.107732637728424,
+          "generated_PC_reconstructed_logmean": 0.9801214741336461,
+          "hidden_difference_projection_max_error": 6.581336013059685e-09
+        }
+      ]
+    },
+    {
+      "seed": 1,
+      "replicate": 0,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.7663148278981842,
+          "generated_logmean": 0.05708353599960203,
+          "actual_mean_gap": 0.7092312918985823,
+          "PC_visible_component_of_mean_gap": 0.0947223739415703,
+          "PC_invisible_component_of_mean_gap": 0.6145089179570119,
+          "real_PC_reconstructed_logmean": 0.8685123438328077,
+          "generated_PC_reconstructed_logmean": 0.7737899698912372,
+          "hidden_difference_projection_max_error": 1.0596192498955881e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.2542550769639769,
+          "generated_logmean": 0.6075131615941393,
+          "actual_mean_gap": 0.6467419153698376,
+          "PC_visible_component_of_mean_gap": 0.20392320437014808,
+          "PC_invisible_component_of_mean_gap": 0.44281871099968956,
+          "real_PC_reconstructed_logmean": 1.2173251006387922,
+          "generated_PC_reconstructed_logmean": 1.0134018962686442,
+          "hidden_difference_projection_max_error": 1.2877130368363788e-08
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.088314738643569,
+          "generated_logmean": 0.49454081600290034,
+          "actual_mean_gap": 0.5937739226406686,
+          "PC_visible_component_of_mean_gap": -0.11619688045243928,
+          "PC_invisible_component_of_mean_gap": 0.7099708030931079,
+          "real_PC_reconstructed_logmean": 1.0489427818499473,
+          "generated_PC_reconstructed_logmean": 1.165139662302386,
+          "hidden_difference_projection_max_error": 5.600975250356086e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.2102113546202207,
+          "generated_logmean": 0.6861891694862859,
+          "actual_mean_gap": 0.5240221851339346,
+          "PC_visible_component_of_mean_gap": -0.10294117681090545,
+          "PC_invisible_component_of_mean_gap": 0.62696336194484,
+          "real_PC_reconstructed_logmean": 1.1911247777928,
+          "generated_PC_reconstructed_logmean": 1.2940659546037057,
+          "hidden_difference_projection_max_error": 1.1292094573636668e-08
+        }
+      ]
+    },
+    {
+      "seed": 1,
+      "replicate": 1,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.8669109680250018,
+          "generated_logmean": 0.09099265461818495,
+          "actual_mean_gap": 0.7759183134068168,
+          "PC_visible_component_of_mean_gap": 0.09069726000487993,
+          "PC_invisible_component_of_mean_gap": 0.685221053401937,
+          "real_PC_reconstructed_logmean": 0.860423015491879,
+          "generated_PC_reconstructed_logmean": 0.7697257554869987,
+          "hidden_difference_projection_max_error": 1.1946031870310736e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.353844088089098,
+          "generated_logmean": 0.48131558510647476,
+          "actual_mean_gap": 0.8725285029826233,
+          "PC_visible_component_of_mean_gap": 0.39480956740204404,
+          "PC_invisible_component_of_mean_gap": 0.4777189355805793,
+          "real_PC_reconstructed_logmean": 1.3156852321998296,
+          "generated_PC_reconstructed_logmean": 0.9208756647977854,
+          "hidden_difference_projection_max_error": 1.2845778267869031e-08
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.3072846308893007,
+          "generated_logmean": 0.6652860264172102,
+          "actual_mean_gap": 0.6419986044720905,
+          "PC_visible_component_of_mean_gap": 0.008261597159840288,
+          "PC_invisible_component_of_mean_gap": 0.6337370073122501,
+          "real_PC_reconstructed_logmean": 1.3104253117370388,
+          "generated_PC_reconstructed_logmean": 1.3021637145771983,
+          "hidden_difference_projection_max_error": 6.429814276495693e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.383349114931208,
+          "generated_logmean": 0.2605847294217202,
+          "actual_mean_gap": 1.1227643855094878,
+          "PC_visible_component_of_mean_gap": 0.21861913712308004,
+          "PC_invisible_component_of_mean_gap": 0.9041452483864078,
+          "real_PC_reconstructed_logmean": 1.4286771628938217,
+          "generated_PC_reconstructed_logmean": 1.2100580257707416,
+          "hidden_difference_projection_max_error": 7.326132677614762e-09
+        }
+      ]
+    },
+    {
+      "seed": 1,
+      "replicate": 2,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.7801191770245413,
+          "generated_logmean": 0.05920331801864509,
+          "actual_mean_gap": 0.7209158590058963,
+          "PC_visible_component_of_mean_gap": 0.04497072205626983,
+          "PC_invisible_component_of_mean_gap": 0.6759451369496265,
+          "real_PC_reconstructed_logmean": 0.8482900266864244,
+          "generated_PC_reconstructed_logmean": 0.8033193046301546,
+          "hidden_difference_projection_max_error": 1.1704094086267824e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.333736606019347,
+          "generated_logmean": 0.6035482567131973,
+          "actual_mean_gap": 0.7301883493061495,
+          "PC_visible_component_of_mean_gap": 0.35528411051185516,
+          "PC_invisible_component_of_mean_gap": 0.37490423879429435,
+          "real_PC_reconstructed_logmean": 1.3335460211505112,
+          "generated_PC_reconstructed_logmean": 0.9782619106386558,
+          "hidden_difference_projection_max_error": 9.135093370741003e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.2954640440465763,
+          "generated_logmean": 0.6925911800078492,
+          "actual_mean_gap": 0.602872864038727,
+          "PC_visible_component_of_mean_gap": -0.11664123335809218,
+          "PC_invisible_component_of_mean_gap": 0.7195140973968192,
+          "real_PC_reconstructed_logmean": 1.3203554719621073,
+          "generated_PC_reconstructed_logmean": 1.4369967053201993,
+          "hidden_difference_projection_max_error": 7.693063556010087e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.488320740404052,
+          "generated_logmean": 0.49298794757335684,
+          "actual_mean_gap": 0.995332792830695,
+          "PC_visible_component_of_mean_gap": 0.08219034154916491,
+          "PC_invisible_component_of_mean_gap": 0.91314245128153,
+          "real_PC_reconstructed_logmean": 1.3625479969728547,
+          "generated_PC_reconstructed_logmean": 1.28035765542369,
+          "hidden_difference_projection_max_error": 8.62075128123252e-09
+        }
+      ]
+    },
+    {
+      "seed": 1,
+      "replicate": 3,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.8962422088846966,
+          "generated_logmean": 0.06284671324194413,
+          "actual_mean_gap": 0.8333954956427525,
+          "PC_visible_component_of_mean_gap": 0.03281611490808756,
+          "PC_invisible_component_of_mean_gap": 0.8005793807346651,
+          "real_PC_reconstructed_logmean": 0.7755196020531763,
+          "generated_PC_reconstructed_logmean": 0.7427034871450888,
+          "hidden_difference_projection_max_error": 1.1477814134894238e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.0446160435295355,
+          "generated_logmean": 0.5428997845422652,
+          "actual_mean_gap": 0.5017162589872705,
+          "PC_visible_component_of_mean_gap": 0.04091685689482966,
+          "PC_invisible_component_of_mean_gap": 0.46079940209244075,
+          "real_PC_reconstructed_logmean": 1.1138807387894782,
+          "generated_PC_reconstructed_logmean": 1.0729638818946485,
+          "hidden_difference_projection_max_error": 7.947040805018337e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.168817480707077,
+          "generated_logmean": 0.5594712887428784,
+          "actual_mean_gap": 0.6093461919641985,
+          "PC_visible_component_of_mean_gap": -0.16021598080286828,
+          "PC_invisible_component_of_mean_gap": 0.7695621727670667,
+          "real_PC_reconstructed_logmean": 1.1559212339798295,
+          "generated_PC_reconstructed_logmean": 1.3161372147826977,
+          "hidden_difference_projection_max_error": 6.577932749115157e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 0.9961385084451218,
+          "generated_logmean": 0.3642641458895757,
+          "actual_mean_gap": 0.6318743625555461,
+          "PC_visible_component_of_mean_gap": -0.002009755961673804,
+          "PC_invisible_component_of_mean_gap": 0.6338841185172199,
+          "real_PC_reconstructed_logmean": 1.107732637728424,
+          "generated_PC_reconstructed_logmean": 1.1097423936900979,
+          "hidden_difference_projection_max_error": 7.11426525286038e-09
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "replicate": 0,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.7663148278981842,
+          "generated_logmean": 0.2931632571136671,
+          "actual_mean_gap": 0.4731515707845171,
+          "PC_visible_component_of_mean_gap": -0.10791270366822533,
+          "PC_invisible_component_of_mean_gap": 0.5810642744527424,
+          "real_PC_reconstructed_logmean": 0.8685123438328077,
+          "generated_PC_reconstructed_logmean": 0.9764250475010336,
+          "hidden_difference_projection_max_error": 1.1852401161221993e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.2542550769639769,
+          "generated_logmean": 0.6589216717795974,
+          "actual_mean_gap": 0.5953334051843796,
+          "PC_visible_component_of_mean_gap": 0.11442304883601259,
+          "PC_invisible_component_of_mean_gap": 0.48091035634836704,
+          "real_PC_reconstructed_logmean": 1.2173251006387922,
+          "generated_PC_reconstructed_logmean": 1.1029020518027803,
+          "hidden_difference_projection_max_error": 4.931216289363709e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.088314738643569,
+          "generated_logmean": 0.7882412083940679,
+          "actual_mean_gap": 0.30007353024950106,
+          "PC_visible_component_of_mean_gap": -0.08135889651223081,
+          "PC_invisible_component_of_mean_gap": 0.38143242676173184,
+          "real_PC_reconstructed_logmean": 1.0489427818499473,
+          "generated_PC_reconstructed_logmean": 1.1303016783621778,
+          "hidden_difference_projection_max_error": 7.4327781701276525e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.2102113546202207,
+          "generated_logmean": 0.945730327309811,
+          "actual_mean_gap": 0.2644810273104097,
+          "PC_visible_component_of_mean_gap": -0.0033124928245920247,
+          "PC_invisible_component_of_mean_gap": 0.2677935201350017,
+          "real_PC_reconstructed_logmean": 1.1911247777928,
+          "generated_PC_reconstructed_logmean": 1.1944372706173927,
+          "hidden_difference_projection_max_error": 7.3361641156430984e-09
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "replicate": 1,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.8669109680250018,
+          "generated_logmean": 0.3216142881051183,
+          "actual_mean_gap": 0.5452966799198835,
+          "PC_visible_component_of_mean_gap": -0.06257797733286599,
+          "PC_invisible_component_of_mean_gap": 0.6078746572527495,
+          "real_PC_reconstructed_logmean": 0.860423015491879,
+          "generated_PC_reconstructed_logmean": 0.9230009928247448,
+          "hidden_difference_projection_max_error": 1.240596733155519e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.353844088089098,
+          "generated_logmean": 0.6437157823640265,
+          "actual_mean_gap": 0.7101283057250716,
+          "PC_visible_component_of_mean_gap": 0.12431496675059366,
+          "PC_invisible_component_of_mean_gap": 0.585813338974478,
+          "real_PC_reconstructed_logmean": 1.3156852321998296,
+          "generated_PC_reconstructed_logmean": 1.1913702654492362,
+          "hidden_difference_projection_max_error": 8.220162516798792e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.3072846308893007,
+          "generated_logmean": 0.8113536091372096,
+          "actual_mean_gap": 0.49593102175209103,
+          "PC_visible_component_of_mean_gap": 0.20707042157691616,
+          "PC_invisible_component_of_mean_gap": 0.2888606001751749,
+          "real_PC_reconstructed_logmean": 1.3104253117370388,
+          "generated_PC_reconstructed_logmean": 1.1033548901601227,
+          "hidden_difference_projection_max_error": 7.436557555054414e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.383349114931208,
+          "generated_logmean": 1.0031962458799806,
+          "actual_mean_gap": 0.3801528690512273,
+          "PC_visible_component_of_mean_gap": 0.2409214525169967,
+          "PC_invisible_component_of_mean_gap": 0.1392314165342306,
+          "real_PC_reconstructed_logmean": 1.4286771628938217,
+          "generated_PC_reconstructed_logmean": 1.1877557103768246,
+          "hidden_difference_projection_max_error": 6.0072903430115e-09
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "replicate": 2,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.7801191770245413,
+          "generated_logmean": 0.2324448946605463,
+          "actual_mean_gap": 0.5476742823639948,
+          "PC_visible_component_of_mean_gap": 0.09355556651693114,
+          "PC_invisible_component_of_mean_gap": 0.45411871584706376,
+          "real_PC_reconstructed_logmean": 0.8482900266864244,
+          "generated_PC_reconstructed_logmean": 0.7547344601694922,
+          "hidden_difference_projection_max_error": 1.1939240388871009e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.333736606019347,
+          "generated_logmean": 0.8854815672209995,
+          "actual_mean_gap": 0.44825503879834744,
+          "PC_visible_component_of_mean_gap": -0.0921630139370612,
+          "PC_invisible_component_of_mean_gap": 0.5404180527354087,
+          "real_PC_reconstructed_logmean": 1.3335460211505112,
+          "generated_PC_reconstructed_logmean": 1.4257090350875725,
+          "hidden_difference_projection_max_error": 7.36218424868566e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.2954640440465763,
+          "generated_logmean": 1.0405336387462527,
+          "actual_mean_gap": 0.25493040530032357,
+          "PC_visible_component_of_mean_gap": 0.08564452332575806,
+          "PC_invisible_component_of_mean_gap": 0.16928588197456554,
+          "real_PC_reconstructed_logmean": 1.3203554719621073,
+          "generated_PC_reconstructed_logmean": 1.2347109486363494,
+          "hidden_difference_projection_max_error": 7.268405666387471e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.488320740404052,
+          "generated_logmean": 0.8351998810208382,
+          "actual_mean_gap": 0.6531208593832137,
+          "PC_visible_component_of_mean_gap": 0.18341098387165602,
+          "PC_invisible_component_of_mean_gap": 0.4697098755115577,
+          "real_PC_reconstructed_logmean": 1.3625479969728547,
+          "generated_PC_reconstructed_logmean": 1.179137013101199,
+          "hidden_difference_projection_max_error": 9.19366818330318e-09
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "replicate": 3,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.8962422088846966,
+          "generated_logmean": 0.23152426008228544,
+          "actual_mean_gap": 0.6647179488024112,
+          "PC_visible_component_of_mean_gap": -0.1460646205234307,
+          "PC_invisible_component_of_mean_gap": 0.8107825693258418,
+          "real_PC_reconstructed_logmean": 0.7755196020531763,
+          "generated_PC_reconstructed_logmean": 0.9215842225766071,
+          "hidden_difference_projection_max_error": 1.2715264575188095e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.0446160435295355,
+          "generated_logmean": 0.67798155103093,
+          "actual_mean_gap": 0.3666344924986056,
+          "PC_visible_component_of_mean_gap": -0.025886815989141665,
+          "PC_invisible_component_of_mean_gap": 0.39252130848774724,
+          "real_PC_reconstructed_logmean": 1.1138807387894782,
+          "generated_PC_reconstructed_logmean": 1.1397675547786204,
+          "hidden_difference_projection_max_error": 5.713136253944723e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.168817480707077,
+          "generated_logmean": 1.0640799475355616,
+          "actual_mean_gap": 0.10473753317151549,
+          "PC_visible_component_of_mean_gap": 0.013768806655651665,
+          "PC_invisible_component_of_mean_gap": 0.09096872651586382,
+          "real_PC_reconstructed_logmean": 1.1559212339798295,
+          "generated_PC_reconstructed_logmean": 1.1421524273241779,
+          "hidden_difference_projection_max_error": 6.001587998490446e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 0.9961385084451218,
+          "generated_logmean": 0.7635592277547065,
+          "actual_mean_gap": 0.2325792806904152,
+          "PC_visible_component_of_mean_gap": -0.163161416142203,
+          "PC_invisible_component_of_mean_gap": 0.3957406968326182,
+          "real_PC_reconstructed_logmean": 1.107732637728424,
+          "generated_PC_reconstructed_logmean": 1.2708940538706275,
+          "hidden_difference_projection_max_error": 7.111111715939851e-09
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "replicate": 0,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.7663148278981842,
+          "generated_logmean": 0.29645269737946045,
+          "actual_mean_gap": 0.46986213051872366,
+          "PC_visible_component_of_mean_gap": 0.060917997980340095,
+          "PC_invisible_component_of_mean_gap": 0.4089441325383835,
+          "real_PC_reconstructed_logmean": 0.8685123438328077,
+          "generated_PC_reconstructed_logmean": 0.8075943458524686,
+          "hidden_difference_projection_max_error": 1.174464955931015e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.2542550769639769,
+          "generated_logmean": 0.44559713907885623,
+          "actual_mean_gap": 0.8086579378851206,
+          "PC_visible_component_of_mean_gap": 0.09112501127575513,
+          "PC_invisible_component_of_mean_gap": 0.7175329266093656,
+          "real_PC_reconstructed_logmean": 1.2173251006387922,
+          "generated_PC_reconstructed_logmean": 1.1262000893630377,
+          "hidden_difference_projection_max_error": 1.2092326283526245e-08
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.088314738643569,
+          "generated_logmean": 0.9331411207182717,
+          "actual_mean_gap": 0.1551736179252972,
+          "PC_visible_component_of_mean_gap": 0.02652346460439156,
+          "PC_invisible_component_of_mean_gap": 0.12865015332090565,
+          "real_PC_reconstructed_logmean": 1.0489427818499473,
+          "generated_PC_reconstructed_logmean": 1.0224193172455558,
+          "hidden_difference_projection_max_error": 6.3884676286562504e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.2102113546202207,
+          "generated_logmean": 0.9012239593678584,
+          "actual_mean_gap": 0.30898739525236224,
+          "PC_visible_component_of_mean_gap": -0.009798400778138679,
+          "PC_invisible_component_of_mean_gap": 0.31878579603050095,
+          "real_PC_reconstructed_logmean": 1.1911247777928,
+          "generated_PC_reconstructed_logmean": 1.2009231785709382,
+          "hidden_difference_projection_max_error": 6.9437915395896554e-09
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "replicate": 1,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.8669109680250018,
+          "generated_logmean": 0.39657363661188194,
+          "actual_mean_gap": 0.47033733141311984,
+          "PC_visible_component_of_mean_gap": 0.031679930931781834,
+          "PC_invisible_component_of_mean_gap": 0.438657400481338,
+          "real_PC_reconstructed_logmean": 0.860423015491879,
+          "generated_PC_reconstructed_logmean": 0.8287430845600966,
+          "hidden_difference_projection_max_error": 1.094614621947182e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.353844088089098,
+          "generated_logmean": 0.5933444467551187,
+          "actual_mean_gap": 0.7604996413339794,
+          "PC_visible_component_of_mean_gap": 0.1305390418680454,
+          "PC_invisible_component_of_mean_gap": 0.629960599465934,
+          "real_PC_reconstructed_logmean": 1.3156852321998296,
+          "generated_PC_reconstructed_logmean": 1.1851461903317844,
+          "hidden_difference_projection_max_error": 9.675707797040384e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.3072846308893007,
+          "generated_logmean": 0.5784582642724485,
+          "actual_mean_gap": 0.7288263666168522,
+          "PC_visible_component_of_mean_gap": 0.23322734049487692,
+          "PC_invisible_component_of_mean_gap": 0.49559902612197526,
+          "real_PC_reconstructed_logmean": 1.3104253117370388,
+          "generated_PC_reconstructed_logmean": 1.0771979712421622,
+          "hidden_difference_projection_max_error": 5.823118267092586e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.383349114931208,
+          "generated_logmean": 0.7919867597392497,
+          "actual_mean_gap": 0.5913623551919582,
+          "PC_visible_component_of_mean_gap": 0.20630444014895663,
+          "PC_invisible_component_of_mean_gap": 0.3850579150430017,
+          "real_PC_reconstructed_logmean": 1.4286771628938217,
+          "generated_PC_reconstructed_logmean": 1.2223727227448649,
+          "hidden_difference_projection_max_error": 6.984279169331559e-09
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "replicate": 2,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.7801191770245413,
+          "generated_logmean": 0.31313011396704626,
+          "actual_mean_gap": 0.466989063057495,
+          "PC_visible_component_of_mean_gap": 0.07503001523593317,
+          "PC_invisible_component_of_mean_gap": 0.3919590478215618,
+          "real_PC_reconstructed_logmean": 0.8482900266864244,
+          "generated_PC_reconstructed_logmean": 0.7732600114504908,
+          "hidden_difference_projection_max_error": 1.2561101190439183e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.333736606019347,
+          "generated_logmean": 0.5854444388901434,
+          "actual_mean_gap": 0.7482921671292035,
+          "PC_visible_component_of_mean_gap": 0.10719346203689141,
+          "PC_invisible_component_of_mean_gap": 0.6410987050923121,
+          "real_PC_reconstructed_logmean": 1.3335460211505112,
+          "generated_PC_reconstructed_logmean": 1.2263525591136202,
+          "hidden_difference_projection_max_error": 9.108949240721476e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.2954640440465763,
+          "generated_logmean": 0.8446359562214861,
+          "actual_mean_gap": 0.4508280878250901,
+          "PC_visible_component_of_mean_gap": 0.22773623606326351,
+          "PC_invisible_component_of_mean_gap": 0.2230918517618266,
+          "real_PC_reconstructed_logmean": 1.3203554719621073,
+          "generated_PC_reconstructed_logmean": 1.0926192358988436,
+          "hidden_difference_projection_max_error": 8.109692217674741e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.488320740404052,
+          "generated_logmean": 0.7141531634124099,
+          "actual_mean_gap": 0.7741675769916421,
+          "PC_visible_component_of_mean_gap": 0.2669098993537704,
+          "PC_invisible_component_of_mean_gap": 0.5072576776378717,
+          "real_PC_reconstructed_logmean": 1.3625479969728547,
+          "generated_PC_reconstructed_logmean": 1.0956380976190838,
+          "hidden_difference_projection_max_error": 6.651612660408396e-09
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "replicate": 3,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.8962422088846966,
+          "generated_logmean": 0.3333408730637143,
+          "actual_mean_gap": 0.5629013358209822,
+          "PC_visible_component_of_mean_gap": -0.0298185589264037,
+          "PC_invisible_component_of_mean_gap": 0.592719894747386,
+          "real_PC_reconstructed_logmean": 0.7755196020531763,
+          "generated_PC_reconstructed_logmean": 0.8053381609795807,
+          "hidden_difference_projection_max_error": 1.2205163935075092e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.0446160435295355,
+          "generated_logmean": 0.6119525654733395,
+          "actual_mean_gap": 0.43266347805619604,
+          "PC_visible_component_of_mean_gap": -0.16644702487678034,
+          "PC_invisible_component_of_mean_gap": 0.5991105029329764,
+          "real_PC_reconstructed_logmean": 1.1138807387894782,
+          "generated_PC_reconstructed_logmean": 1.2803277636662587,
+          "hidden_difference_projection_max_error": 1.0731224807315927e-08
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.168817480707077,
+          "generated_logmean": 0.48572088463610685,
+          "actual_mean_gap": 0.6830965960709702,
+          "PC_visible_component_of_mean_gap": 0.3766999454433386,
+          "PC_invisible_component_of_mean_gap": 0.30639665062763155,
+          "real_PC_reconstructed_logmean": 1.1559212339798295,
+          "generated_PC_reconstructed_logmean": 0.7792212885364914,
+          "hidden_difference_projection_max_error": 7.836292410540874e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 0.9961385084451218,
+          "generated_logmean": 0.8535585701126979,
+          "actual_mean_gap": 0.14257993833242386,
+          "PC_visible_component_of_mean_gap": -0.18689417907959657,
+          "PC_invisible_component_of_mean_gap": 0.32947411741202043,
+          "real_PC_reconstructed_logmean": 1.107732637728424,
+          "generated_PC_reconstructed_logmean": 1.294626816808021,
+          "hidden_difference_projection_max_error": 8.054258931675107e-09
+        }
+      ]
+    },
+    {
+      "seed": 4,
+      "replicate": 0,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.7663148278981842,
+          "generated_logmean": 0.24757327126957007,
+          "actual_mean_gap": 0.518741556628614,
+          "PC_visible_component_of_mean_gap": 0.20364288461937644,
+          "PC_invisible_component_of_mean_gap": 0.3150986720092376,
+          "real_PC_reconstructed_logmean": 0.8685123438328077,
+          "generated_PC_reconstructed_logmean": 0.6648694592134319,
+          "hidden_difference_projection_max_error": 9.562417961628267e-09
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.2542550769639769,
+          "generated_logmean": 0.8092609544888956,
+          "actual_mean_gap": 0.44499412247508136,
+          "PC_visible_component_of_mean_gap": 0.12609737584180045,
+          "PC_invisible_component_of_mean_gap": 0.31889674663328094,
+          "real_PC_reconstructed_logmean": 1.2173251006387922,
+          "generated_PC_reconstructed_logmean": 1.0912277247969921,
+          "hidden_difference_projection_max_error": 5.542831722792942e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.088314738643569,
+          "generated_logmean": 0.4791170610135753,
+          "actual_mean_gap": 0.6091976776299936,
+          "PC_visible_component_of_mean_gap": 0.085442682311573,
+          "PC_invisible_component_of_mean_gap": 0.5237549953184206,
+          "real_PC_reconstructed_logmean": 1.0489427818499473,
+          "generated_PC_reconstructed_logmean": 0.963500099538374,
+          "hidden_difference_projection_max_error": 4.222001395330155e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.2102113546202207,
+          "generated_logmean": 0.8304383476915673,
+          "actual_mean_gap": 0.3797730069286533,
+          "PC_visible_component_of_mean_gap": 0.04166288718736753,
+          "PC_invisible_component_of_mean_gap": 0.33811011974128574,
+          "real_PC_reconstructed_logmean": 1.1911247777928,
+          "generated_PC_reconstructed_logmean": 1.1494618906054324,
+          "hidden_difference_projection_max_error": 6.730183911909937e-09
+        }
+      ]
+    },
+    {
+      "seed": 4,
+      "replicate": 1,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.8669109680250018,
+          "generated_logmean": 0.19661090179418084,
+          "actual_mean_gap": 0.670300066230821,
+          "PC_visible_component_of_mean_gap": -0.056928393348520304,
+          "PC_invisible_component_of_mean_gap": 0.7272284595793413,
+          "real_PC_reconstructed_logmean": 0.860423015491879,
+          "generated_PC_reconstructed_logmean": 0.9173514088403988,
+          "hidden_difference_projection_max_error": 1.150706275187749e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.353844088089098,
+          "generated_logmean": 0.7421852184059007,
+          "actual_mean_gap": 0.6116588696831974,
+          "PC_visible_component_of_mean_gap": -0.013946081561886575,
+          "PC_invisible_component_of_mean_gap": 0.6256049512450839,
+          "real_PC_reconstructed_logmean": 1.3156852321998296,
+          "generated_PC_reconstructed_logmean": 1.329631313761716,
+          "hidden_difference_projection_max_error": 6.995711028696949e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.3072846308893007,
+          "generated_logmean": 0.5382588778885581,
+          "actual_mean_gap": 0.7690257530007426,
+          "PC_visible_component_of_mean_gap": 0.2986731685744587,
+          "PC_invisible_component_of_mean_gap": 0.4703525844262839,
+          "real_PC_reconstructed_logmean": 1.3104253117370388,
+          "generated_PC_reconstructed_logmean": 1.0117521431625802,
+          "hidden_difference_projection_max_error": 6.2865958133651034e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.383349114931208,
+          "generated_logmean": 1.0417835695877407,
+          "actual_mean_gap": 0.3415655453434673,
+          "PC_visible_component_of_mean_gap": 0.2661134034966646,
+          "PC_invisible_component_of_mean_gap": 0.07545214184680267,
+          "real_PC_reconstructed_logmean": 1.4286771628938217,
+          "generated_PC_reconstructed_logmean": 1.1625637593971567,
+          "hidden_difference_projection_max_error": 6.92092137915637e-09
+        }
+      ]
+    },
+    {
+      "seed": 4,
+      "replicate": 2,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.7801191770245413,
+          "generated_logmean": 0.10894207775016262,
+          "actual_mean_gap": 0.6711770992743787,
+          "PC_visible_component_of_mean_gap": -0.016429988449459094,
+          "PC_invisible_component_of_mean_gap": 0.6876070877238379,
+          "real_PC_reconstructed_logmean": 0.8482900266864244,
+          "generated_PC_reconstructed_logmean": 0.8647200151358836,
+          "hidden_difference_projection_max_error": 1.0688634776746808e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.333736606019347,
+          "generated_logmean": 0.5731944222620489,
+          "actual_mean_gap": 0.760542183757298,
+          "PC_visible_component_of_mean_gap": 0.022241089702219448,
+          "PC_invisible_component_of_mean_gap": 0.7383010940550786,
+          "real_PC_reconstructed_logmean": 1.3335460211505112,
+          "generated_PC_reconstructed_logmean": 1.3113049314482916,
+          "hidden_difference_projection_max_error": 7.584123605172688e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.2954640440465763,
+          "generated_logmean": 0.48878200715934417,
+          "actual_mean_gap": 0.8066820368872322,
+          "PC_visible_component_of_mean_gap": 0.28315585687977596,
+          "PC_invisible_component_of_mean_gap": 0.5235261800074562,
+          "real_PC_reconstructed_logmean": 1.3203554719621073,
+          "generated_PC_reconstructed_logmean": 1.0371996150823308,
+          "hidden_difference_projection_max_error": 6.970472804642899e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 1.488320740404052,
+          "generated_logmean": 0.8033403552862886,
+          "actual_mean_gap": 0.6849803851177633,
+          "PC_visible_component_of_mean_gap": 0.25169285601201463,
+          "PC_invisible_component_of_mean_gap": 0.43328752910574864,
+          "real_PC_reconstructed_logmean": 1.3625479969728547,
+          "generated_PC_reconstructed_logmean": 1.1108551409608403,
+          "hidden_difference_projection_max_error": 5.6798260742840345e-09
+        }
+      ]
+    },
+    {
+      "seed": 4,
+      "replicate": 3,
+      "by_stage": [
+        {
+          "stage": 0,
+          "observed_logmean": 0.8962422088846966,
+          "generated_logmean": 0.2328832654038515,
+          "actual_mean_gap": 0.6633589434808451,
+          "PC_visible_component_of_mean_gap": -0.26923555146403666,
+          "PC_invisible_component_of_mean_gap": 0.9325944949448817,
+          "real_PC_reconstructed_logmean": 0.7755196020531763,
+          "generated_PC_reconstructed_logmean": 1.044755153517213,
+          "hidden_difference_projection_max_error": 1.1219227885259087e-08
+        },
+        {
+          "stage": 1,
+          "observed_logmean": 1.0446160435295355,
+          "generated_logmean": 0.7449424129040485,
+          "actual_mean_gap": 0.299673630625487,
+          "PC_visible_component_of_mean_gap": -0.08939460749270299,
+          "PC_invisible_component_of_mean_gap": 0.38906823811819,
+          "real_PC_reconstructed_logmean": 1.1138807387894782,
+          "generated_PC_reconstructed_logmean": 1.203275346282181,
+          "hidden_difference_projection_max_error": 8.482140015104306e-09
+        },
+        {
+          "stage": 2,
+          "observed_logmean": 1.168817480707077,
+          "generated_logmean": 0.623038966087739,
+          "actual_mean_gap": 0.545778514619338,
+          "PC_visible_component_of_mean_gap": 0.0210981310081823,
+          "PC_invisible_component_of_mean_gap": 0.5246803836111558,
+          "real_PC_reconstructed_logmean": 1.1559212339798295,
+          "generated_PC_reconstructed_logmean": 1.1348231029716473,
+          "hidden_difference_projection_max_error": 6.024218593371142e-09
+        },
+        {
+          "stage": 3,
+          "observed_logmean": 0.9961385084451218,
+          "generated_logmean": 0.8374078669090878,
+          "actual_mean_gap": 0.15873064153603397,
+          "PC_visible_component_of_mean_gap": 0.08415028246804299,
+          "PC_invisible_component_of_mean_gap": 0.07458035906799097,
+          "real_PC_reconstructed_logmean": 1.107732637728424,
+          "generated_PC_reconstructed_logmean": 1.0235823552603809,
+          "hidden_difference_projection_max_error": 5.687113164160864e-09
+        }
+      ]
+    }
+  ],
+  "original_fitting_cell_PPARG_variance_outside_PC_column_space_fraction": 0.8186998008460167,
+  "max_invisible_error_projection_magnitude": 1.385053338036693e-08,
+  "replay_of_all_twenty_original_probe_cases_verified": true,
+  "new_optimizer_updates": 0,
+  "new_training_fits": 0,
+  "new_GPU_allocations": 0,
+  "CUDA_initialized": false,
+  "generator_prior_checkpoint_states_unchanged": true,
+  "interpretation": "The null-space component of actual standardized-log expression differences is absent from every cell PC, hence absent from downstream PC bag summaries and critic inputs.",
+  "limitations": [
+    "This splits a vector of mean differences, not the total energy-distance or a fraction of causal training responsibility.",
+    "Signed invisible shares can exceed100% when visible and invisible components oppose one another.",
+    "PCA reconstructions are linear proxies and can take values outside nonnegative expression.",
+    "No matched retraining ablation has established which representation or count-gradient change would fix the issue."
+  ],
+  "elapsed_seconds": 18.57501966500422
+}
