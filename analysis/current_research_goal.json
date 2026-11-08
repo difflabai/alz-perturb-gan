@@ -1,7 +1,7 @@
 {
-  "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
+  "status": "ACTIVE_OWNER_REQUESTED_HACKATHON_PREPARATION",
   "UTC": "2026-11-08T16:52:58.661400+00:00",
-  "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
+  "objective": "Prepare the ALZ ParticleGAN proof of concept for the user\u2019s hackathon: confirm event requirements and deadline, choose one concrete useful workflow, deliver a reliable reproducible demo with defensible evidence and an honest pitch. Preserve existing results and finish the already-running frozen comparison; hold the separate LR and dispersion research studies until they serve the confirmed hackathon scope.",
   "native_goal_status": "active",
   "full_goal_complete": false,
   "SOTA_claim": false,
@@ -725,7 +725,7 @@
   "training_loss_vs_calibration_distance_independent_audit_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_root_audit_20261108.json",
   "training_loss_vs_calibration_distance_plot_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_20261108.png",
   "training_loss_vs_calibration_distance_conclusion": "Existing t005 five-seed10k-to20k generator total loss and calibration ED changes have opposite signs in allfive. Fourseeds lowergeneratorloss yetworseED, onehigherlossyetbetterED. Retrospective descriptive calibration only; keep measured calibrationED as sole LR-control signal and still require fresh matched6fitcomparison.",
-  "next_required_runtime_action": "Start qualified replacement pipeline from the verified completed V8 parent; finish exactly3 fresh infrastructure replacements from zero, then preserve45 logical/48 physical/57 primary/53 sensitivity and run scalar6 plus eligible whole-theta6 and final audits. Original42 successful models and all3 failures remain intact.",
+  "next_required_runtime_action": "Preserve current native fits and complete the frozen comparison as hackathon evidence; identify target hackathon and build the useful demonstration workflow before admitting further research studies.",
   "CFGen_anomaly_instrumentation_CPU_diagnostic_path": "/ml2/alz/analysis/cfgen_anomaly_instrumentation_CPU_result_20261108.json",
   "CFGen_anomaly_instrumentation_CPU_independent_audit_path": "/ml2/alz/analysis/cfgen_anomaly_instrumentation_CPU_root_audit_20261108.json",
   "CFGen_anomaly_detection_kept_for_all_current45": true,
@@ -826,7 +826,7 @@
   "donor_matched_supplement_clinical_reference_cases": 6,
   "donor_matched_supplement_generated_row_plan_cases": 60,
   "donor_matched_supplement_observer_source_path": "/ml2/alz/analysis/after_benchmark097_donor_matched_supplement.py",
-  "donor_matched_supplement_CPU_observer_queued": true,
+  "donor_matched_supplement_CPU_observer_queued": false,
   "donor_matched_supplement_CPU_observer_identity_path": "/ml2/alz/artifacts/benchmark097-donor-matched-supplement-observer/identity.json",
   "donor_matched_supplement_CPU_observer_progress_path": "/ml2/alz/artifacts/benchmark097-donor-matched-supplement-observer/progress.json",
   "donor_matched_supplement_CPU_observer_session": 24919,
@@ -836,7 +836,7 @@
   "current_GPU1_native_attempt": "CAL_GPU0_V1_external097infra1_f2_cfgen_s1",
   "current_GPU1_native_training_from_zero": true,
   "single_scalar_LR_owner_confirmation_path": "/ml2/alz/analysis/scalarcal097_single_metric_owner_confirmation_20261108.json",
-  "final_independent_audits_observer_queued": true,
+  "final_independent_audits_observer_queued": false,
   "final_independent_audits_observer_identity_path": "/ml2/alz/artifacts/released097-final-independent-audits/identity.json",
   "final_independent_audits_observer_live_evidence_path": "/ml2/alz/analysis/released097_final_independent_audits_observer_live_20261108.json",
   "final_independent_audits_observer_CPU_qualification_path": "/ml2/alz/analysis/released097_final_audits_observer_CPU_check_v2_20261108.json",
@@ -995,46 +995,6 @@
       },
       "source_SHA256": "f8f3cdd6e21cc8f3f37bb836e992feccb37597de89328b7499c8d65b6cb6e65c",
       "unified_session": 18331
-    },
-    {
-      "name": "scalarcal097-after-recovered-science-v5",
-      "identity": {
-        "pid": 3961578,
-        "birth": 32370064,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "source_SHA256": "a1c0d073bcf2a24505cdde6874dae6108be8225ed4ea4ea7f01a1c4d8cf85873",
-      "unified_session": 77546
-    },
-    {
-      "name": "dispersion097-after-scalarcal097",
-      "identity": {
-        "pid": 3961815,
-        "birth": 32370926,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "source_SHA256": "a30b9aee29a6cc1405bf733f185a47410ebde3b9b277591e89e43cc39865469a",
-      "unified_session": 45844
-    },
-    {
-      "name": "released097-final-independent-audits",
-      "identity": {
-        "pid": 3962293,
-        "birth": 32372576,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "source_SHA256": "43e83c4daeaed6ae8790eb8c52c048c7f37b8c9204b1b3479697c6dfd2453ebe",
-      "unified_session": 23452
-    },
-    {
-      "name": "benchmark097-donor-matched-supplement-observer",
-      "identity": {
-        "pid": 3962407,
-        "birth": 32372692,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "source_SHA256": "30440b26359cf788b2392ffccf648b39406b10627e7108f307a3892f4038e957",
-      "unified_session": 76192
     }
   ],
   "latest_fresh_infrastructure_runtime_qualification_path": "/ml2/alz/analysis/benchmark097_infra1/runtime_CPU_qualification_v7.json",
@@ -1098,5 +1058,10 @@
     "state": "ALL_FIVE_FUTURE_CPU_QUEUES_LIVE_ORIGINAL_PARENT_VERIFIED_COMPLETED",
     "restoration_proof_path": "/ml2/alz/analysis/benchmark097_postclosure_five_future_CPU_queues_restored_20261108.json"
   },
-  "full_queue_window_feasibility_question_message_id": "report_66fa850ce5e9e763c7924d803948d0f2ed66594ff5b2e811aca0a9acd757fefa"
+  "full_queue_window_feasibility_question_message_id": "report_66fa850ce5e9e763c7924d803948d0f2ed66594ff5b2e811aca0a9acd757fefa",
+  "previous_research_objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
+  "hackathon_priority_transition_path": "/ml2/alz/analysis/hackathon_priority_transition_20261108.json",
+  "native_goal_objective_replacement_succeeded": false,
+  "hackathon_requirements_status": "EVENT_AND_DEADLINE_PENDING",
+  "future_scalar_and_theta_studies_held_by_owner_priority": true
 }
