@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/artifacts/dispersion097-preparation-release-20261108.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "FORTY_AUDITED_ALL_NATIVE_DRAINED_CPU_V7_RECOVERY_QUALIFIED_RELAUNCH_PENDING",
+  "study_status": "FORTY_AUDITED_V7_AND_ALL_FUTURE_CPU_QUEUES_RESTORED",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v6/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v6/identity.json",
@@ -644,7 +644,7 @@
   "training_loss_vs_calibration_distance_independent_audit_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_root_audit_20261108.json",
   "training_loss_vs_calibration_distance_plot_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_20261108.png",
   "training_loss_vs_calibration_distance_conclusion": "Existing t005 five-seed10k-to20k generator total loss and calibration ED changes have opposite signs in allfive. Fourseeds lowergeneratorloss yetworseED, onehigherlossyetbetterED. Retrospective descriptive calibration only; keep measured calibrationED as sole LR-control signal and still require fresh matched6fitcomparison.",
-  "next_required_runtime_action": "Continue the two current fresh native fits and V6 untouched-original queue. After42 successful originals plus3 retained infrastructure failures, run the3 explicit from-zero replacements to reach45 successful logical models across48 physical attempts, audit both57/53 reports, then run the separately qualified scalar6 and eligible theta6 studies. Preserve fixed formulation, calibration ED control metric, native guards, existing endpoints and window.",
+  "next_required_runtime_action": "Continue V7 only the two untouched original scVI seed4 cells from zero to full400 epochs. After42 successful originals plus3 retained infrastructure failures, run3 fresh replacements, preserve45 logical/48 physical/57 primary/53 sensitivity, then scalar6 and eligible whole-theta6 under the existing window. All six CPU actors are live.",
   "CFGen_anomaly_instrumentation_CPU_diagnostic_path": "/ml2/alz/analysis/cfgen_anomaly_instrumentation_CPU_result_20261108.json",
   "CFGen_anomaly_instrumentation_CPU_independent_audit_path": "/ml2/alz/analysis/cfgen_anomaly_instrumentation_CPU_root_audit_20261108.json",
   "CFGen_anomaly_detection_kept_for_all_current45": true,
@@ -803,7 +803,7 @@
   "study_successful_fits": 40,
   "study_retained_failed_attempts": 3,
   "study_planned_physical_attempts": 48,
-  "current_verified_external_workers_observed_UTC": "2026-11-08T18:32:39.289593+00:00",
+  "current_verified_external_workers_observed_UTC": "2026-11-08T18:36:21.282970+00:00",
   "external_benchmark_queued_original_fits": 2,
   "external_benchmark_queued_fits_includes_three_explicit_unstarted_replacements": true,
   "current_goal_index_reconciled_from_V6_authoritative_metadata_UTC": "2026-11-08T18:32:39.289593+00:00",
@@ -915,6 +915,78 @@
     "recovery_wrapper_path": "/ml2/alz/analysis/continue_benchmark097_after_capacity_v7.py",
     "CPU_tests_passed": 42,
     "handoff_path": "/ml2/alz/analysis/benchmark097_capacity_CPU_handoff_v7_20261108.json",
-    "state": "QUALIFIED_NATIVE_AND_FUTURE_QUEUES_RELAUNCH_PENDING"
-  }
+    "state": "V7_AND_ALL_FIVE_FOLLOWUP_CPU_ACTORS_LIVE",
+    "restoration_proof_path": "/ml2/alz/analysis/benchmark097_all_six_CPU_queues_restored_v7_40_models_20261108.json"
+  },
+  "current_verified_CPU_queues": [
+    {
+      "name": "benchmark097-after-capacity-continuation-v7",
+      "identity": {
+        "pid": 3786924,
+        "birth": 32038189,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_path": "/ml2/alz/analysis/continue_benchmark097_after_capacity_v7.py",
+      "source_SHA256": "19080a3456d25dd178fda76edb5b0df7f9691e3b7cd314ac48d8dcdd19799d14",
+      "unified_session": 82455
+    },
+    {
+      "name": "benchmark097-infra1-pipeline",
+      "identity": {
+        "pid": 3787594,
+        "birth": 32040396,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_path": "/ml2/alz/analysis/run_benchmark097_infra1_pipeline.py",
+      "source_SHA256": "e67b2fca8ff7e355cd69a9e4b732498e9ac9ac540c6c44eff32e246d8af5f1bb",
+      "unified_session": 50296
+    },
+    {
+      "name": "scalarcal097-after-recovered-science-v5",
+      "identity": {
+        "pid": 3787745,
+        "birth": 32041071,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_path": "/ml2/alz/analysis/after_benchmark097_scalarcal.py",
+      "source_SHA256": "a1c0d073bcf2a24505cdde6874dae6108be8225ed4ea4ea7f01a1c4d8cf85873",
+      "unified_session": 29632
+    },
+    {
+      "name": "dispersion097-after-scalarcal097",
+      "identity": {
+        "pid": 3787801,
+        "birth": 32041187,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_path": "/ml2/alz/analysis/after_scalarcal097_dispersion.py",
+      "source_SHA256": "a30b9aee29a6cc1405bf733f185a47410ebde3b9b277591e89e43cc39865469a",
+      "unified_session": 62680
+    },
+    {
+      "name": "released097-final-independent-audits",
+      "identity": {
+        "pid": 3793459,
+        "birth": 32052004,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_path": "/ml2/alz/analysis/after_released097_final_audits.py",
+      "source_SHA256": "904ac748252c3a4a08f048f2a6f1a460504fd5e4e75eae3166d3892ff183d802",
+      "unified_session": 40255
+    },
+    {
+      "name": "benchmark097-donor-matched-supplement-observer",
+      "identity": {
+        "pid": 3793495,
+        "birth": 32052120,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_path": "/ml2/alz/analysis/after_benchmark097_donor_matched_supplement.py",
+      "source_SHA256": "7a2af8091685b83abfe4375e534f69f06510c533ca4ea2f3513d310c6c6b65ce",
+      "unified_session": 45766
+    }
+  ],
+  "latest_fresh_infrastructure_runtime_qualification_path": "/ml2/alz/analysis/benchmark097_infra1/runtime_CPU_qualification_v5.json",
+  "latest_scalar_runtime_qualification_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v9.json",
+  "latest_theta_runtime_qualification_path": "/ml2/alz/analysis/dispersion097/runtime_CPU_qualification_v5.json"
 }
