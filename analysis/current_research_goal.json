@@ -702,7 +702,7 @@
   "full_queue_time_feasibility_does_not_change_existing_priorities": true,
   "full_queue_feasibility_coordination_question": {
     "event_ref": "alz-full-queue-window-feasibility-20261108",
-    "revision": 6,
+    "revision": 7,
     "state": "pending",
     "recipient": "bits255.dots.ada_20261002",
     "permission_requested": false,
@@ -710,7 +710,11 @@
     "message_id": "report_c364d0d86fb24e1cb7dbbc118ed75747621a0f945e47d29122d66cadff7bc285",
     "delivery_status": "queued_not_yet_answered",
     "forecast_at_question_submission_path": "/ml2/alz/analysis/released097_full_queue25_constrained_metadata_forecast_20261108.json",
-    "latest_subsequent_forecast_path": "/ml2/alz/analysis/released097_full_queue26_constrained_metadata_forecast_20261108.json"
+    "latest_subsequent_forecast_path": "/ml2/alz/analysis/released097_full_queue26_constrained_metadata_forecast_20261108.json",
+    "evidence_path": "/ml2/alz/analysis/benchmark097_GPU1_scVI_shared_service_observation_20261108.json",
+    "latest_actual_observation": "Last original scVI advanced50 to340 epochs; current621s elapsed already exceeds recent same-fold/card full-cell median126.5s by4.91x. GPU pmon snapshots do not establish causation or future CFGen cost.",
+    "production_blocked": false,
+    "revision7_notice_status": "queued_not_yet_answered"
   },
   "existing_t005_stage_and_mixture_energy_diagnostic_path": "/ml2/alz/analysis/t005_stage_mixture_energy_CPU_result_20261108.json",
   "existing_t005_stage_and_mixture_energy_independent_audit_path": "/ml2/alz/analysis/t005_stage_mixture_energy_CPU_root_audit_20261108.json",
@@ -1049,5 +1053,13 @@
     "twofold_scalar_overhead": 1.8534857291055273,
     "conditional_not_guarantee": true,
     "includes_last_original_three_replacements_scalar6_and_theta6": true
+  },
+  "latest_actual_native_SCVI_progress": {
+    "attempt": "CAL_GPU0_V1_external097_f2_scvi_s4",
+    "saved_completed_epochs_at_least": 340,
+    "saved_optimizer_updates": 9860,
+    "saved_progress_UTC": "2026-11-08T19:02:55.791721+00:00",
+    "evidence_path": "/ml2/alz/analysis/benchmark097_GPU1_scVI_shared_service_observation_20261108.json",
+    "quality_values_inspected": false
   }
 }
