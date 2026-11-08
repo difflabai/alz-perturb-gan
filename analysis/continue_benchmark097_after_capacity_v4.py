@@ -135,7 +135,11 @@ def main():
    choice,forecast=choose_available(pending,timed,gpu,costs,eligible,bootstrap_scvi=bootstrap[0]);write(STATE/'latest_cost_choice.json',dict(selected=choice,gpu=gpu,forecast=forecast,quality_values_read=False));return choice
   def start(v,gpu,n):
    attempt=b.attempt_key(v)
-   def untouched():return not (ROOT/'artifacts/allocations'/attempt).exists() and not (scope.STUDY/'results'/(attempt+'.json')).exists() and not (ROOT/'runs'/attempt).exists()
+   def untouched():
+    if any(p.exists() for p in (ROOT/'artifacts/allocations'/attempt,scope.STUDY/'results'/(attempt+'.json'),ROOT/'runs'/attempt,b.ledger_path(b.NATIVE_LAYOUT,v))):return False
+    budget=read(b.PROJECT/'project_gpu_budget.json');key=b.allocation_key(v)
+    if any(r['allocation_id']==key for r in budget.get('allocation_history',[])+budget.get('open_reservations',[])):return False
+    return key not in budget.get('execution_controller',{}).get('calibration_parallel_backends',{})
    h=admit_when_clean(lambda:old.start_cell(v,gpu,n),lambda:not old.command(['git','status','--porcelain']),untouched)
    if h is not None:
     if gpu==GPUS[0]:bootstrap[0]=False
