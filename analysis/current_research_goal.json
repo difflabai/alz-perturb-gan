@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-08T01:17:47.673765+00:00",
+  "UTC": "2026-11-08T01:27:54.369043+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -35,10 +35,10 @@
   "current_release_check_path": "/ml2/alz/analysis/confirmfaith097/current_release_check_before_activation.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "TWELVE_COMPLETE_ONE_ORIGINAL_PG_NATIVE_GUARD_DRAINING_TO_RESOURCE_HANDOFF",
+  "study_status": "BALANCED_REMAINING_FROZEN45_NATIVE_TRAINING_ON_BOTH_CARDS",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
-  "study_progress_path": "/ml2/alz/artifacts/benchmark097-balanced-handoff/progress.json",
-  "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-balanced-handoff/identity.json",
+  "study_progress_path": "/ml2/alz/artifacts/benchmark097-balanced-fullmatrix/progress.json",
+  "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-balanced-fullmatrix/identity.json",
   "faithful_restart_started": true,
   "faithful_restart_started_evidence_path": "/ml2/alz/analysis/faithful097_started_20261107.json",
   "study_required_fits": 45,
@@ -98,7 +98,7 @@
   "conditional_local_search_design_CPU_proof_path": "/ml2/alz/analysis/released097_local_search_design_CPU_qualification_v2.json",
   "conditional_local_search_frozen": true,
   "conditional_local_search_activated": true,
-  "study_completed_attempts": 12,
+  "study_completed_attempts": 13,
   "latest_released_first20k_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json",
   "latest_released_first20k_mixture_diagnostic_path": "/ml2/alz/analysis/faithful097_first20k_mixture_diagnostic_20261107.json",
   "conditional_local_search_prepared_protocol_path": "/ml2/alz/analysis/localfaith097/protocol.json",
@@ -110,12 +110,12 @@
   "conditional_local_search_possible_settings_native_probe_identity_path": "/ml2/alz/artifacts/localfaith097-possible-native.identity.json",
   "conditional_local_search_possible_settings_native_CPU_proof_path": "/ml2/alz/analysis/localfaith097/possible_settings_native_CPU_qualification.json",
   "conditional_local_search_all24_possible_prefixes_qualified": true,
-  "research_pipeline_source_path": "/ml2/alz/analysis/run_released097_dual_pipeline.py",
+  "research_pipeline_source_path": "/ml2/alz/analysis/run_released097_balanced_pipeline.py",
   "research_pipeline_preparation_checks_path": "/ml2/alz/analysis/released097_pipeline_preparation_checks.json",
   "research_pipeline_started": true,
-  "research_pipeline_identity_path": "/ml2/alz/artifacts/released097-dual-research-pipeline-v2/identity.json",
+  "research_pipeline_identity_path": "/ml2/alz/artifacts/released097-balanced-research-pipeline/identity.json",
   "research_pipeline_started_evidence_path": "/ml2/alz/analysis/released097_dual_pipeline_v2_started_20261107.json",
-  "research_pipeline_progress_path": "/ml2/alz/artifacts/released097-dual-research-pipeline-v2/progress.json",
+  "research_pipeline_progress_path": "/ml2/alz/artifacts/benchmark097-balanced-fullmatrix/progress.json",
   "research_pipeline_behavior": "Preserve exact original9-fit driver and all current fresh models. After all9 close, independently audit, freeze one PG with original selector, qualify actual43-test dual runtime, then execute all45 fresh fixed-recipe models in at most one ALZ cell per physical card. Same57primary and prespecified53sensitivity; no warmstarts, retries or foreign signals.",
   "latest_released_paired_nominal_result_path": "/ml2/alz/analysis/faithful097_nominal_two_seed_readout_20261107.json",
   "calibration_excluded53_plan_path": "/ml2/alz/analysis/benchmark097_calibration_excluded53_plan.json",
@@ -133,7 +133,7 @@
   "calibration_excluded53_observer_started": true,
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
   "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory_v3.py",
-  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_twelfth_external_complete_20261108.json",
+  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_balanced_native_started_20261108.json",
   "historical_recipe_disclosure_corrected_by_append_only_snapshot": true,
   "matched_seed0_calibration_comparison_path": "/ml2/alz/analysis/released097_matched_seed0_calibration_comparison_20261107.json",
   "current_calibration_distance_reference": {
@@ -370,13 +370,13 @@
     "queue_PID": 481315,
     "queue_birth": 25686088
   },
-  "latest_external_native_root_audit_path": "/ml2/alz/analysis/benchmark097_twelfth_complete_cfgen_native_root_check_20261108.json",
+  "latest_external_native_root_audit_path": "/ml2/alz/analysis/benchmark097_thirteenth_complete_balanced_native_started_root_check_20261108.json",
   "latest_GPU0_native5000_runtime_evidence_path": "/ml2/alz/analysis/benchmark097_current_GPU0_second_fresh5000_runtime_20261107.json",
   "scalar_calibration_handoff_constraint": "The original frozen benchmark admits only same-study peer reservations and both final CPU analyses require empty reservations; the first-free-lane suggestion was superseded. A compatible reviewed resource handoff is needed before mixing study phases.",
   "latest_remaining45_metadata_balance_forecast_path": "/ml2/alz/analysis/benchmark097_remaining45_metadata_balance_forecast_20261107.json",
   "remaining45_resource_handoff_design_path": "/ml2/alz/analysis/benchmark097_remaining45_resource_handoff_design_20261107.json",
   "resource_only_replacement_dispatcher_qualified": true,
-  "resource_only_replacement_activated": false,
+  "resource_only_replacement_activated": true,
   "resource_only_replacement_source_path": "/ml2/alz/benchmark097_balanced_runtime",
   "resource_only_replacement_prepared": true,
   "resource_only_original_CPU_stop_requested": true,
@@ -400,15 +400,57 @@
   "resource_only_handoff_observed_PID": 474542,
   "resource_only_after_handoff_observed_PID": 475880,
   "latest_native_progress_observation": {
-    "UTC": "2026-11-08T01:03:01.375806+00:00",
-    "pg_f0_seed1_updates": 16751,
-    "cfgen_f1_seed1_native_FM_updates": 88500,
-    "original_models_restarted": false,
-    "same_native_guard_PIDs": [
-      4158163
+    "UTC": "2026-11-08T01:27:54.369043+00:00",
+    "original_PG_f0_seed1": "full20000_completed_audited_settled",
+    "new_active_native_models": [
+      {
+        "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s1",
+        "cell": {
+          "experiment": "external097",
+          "fold": 0,
+          "method": "cfgen",
+          "seed": 1
+        },
+        "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+        "guard": {
+          "pid": 600784,
+          "birth": 25866736,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "worker": {
+          "pid": 600897,
+          "birth": 25866865,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "native_phase": "AE",
+        "native_optimizer_updates": 6000,
+        "fresh_from_zero": true
+      },
+      {
+        "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s1",
+        "cell": {
+          "experiment": "external097",
+          "fold": 2,
+          "method": "cfgen",
+          "seed": 1
+        },
+        "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+        "guard": {
+          "pid": 600918,
+          "birth": 25866903,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "worker": {
+          "pid": 601000,
+          "birth": 25867034,
+          "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+        },
+        "native_phase": "AE",
+        "native_optimizer_updates": 1500,
+        "fresh_from_zero": true
+      }
     ],
-    "real_scalar_fits": 0,
-    "cfgen_f1_seed1_terminal": "completed_exit0_settled_native_outputs_audited"
+    "real_scalar_fits": 0
   },
   "external_comparison_figure_source_path": "/ml2/alz/analysis/plot_released097_external_comparison.py",
   "external_comparison_figure_preparation_path": "/ml2/alz/analysis/benchmark097_outcome_figures_CPU_check_20261108.json",
@@ -416,5 +458,8 @@
   "external_comparison_figure_next_action": "After all45 and both57/53 scientific reports finish, render and visually inspect quality and paired-distance PNG/SVG outputs; synthetic previews are not ALZ outcomes.",
   "latest_comparator_source_coverage_review_path": "/ml2/alz/analysis/sota_comparator_source_contract_review_20261108.json",
   "countfm_CPU_source_review_path": "/ml2/alz/analysis/countfm_upstream_CPU_core_review_20261108.json",
-  "broad_SOTA_coverage_complete": false
+  "broad_SOTA_coverage_complete": false,
+  "resource_only_handoff_complete": true,
+  "resource_only_handoff_record_path": "/ml2/alz/analysis/benchmark097_balanced/handoff_completed.json",
+  "resource_only_actual_post_handoff_source_closure_path": "/ml2/alz/analysis/benchmark097_balanced/post_handoff_source_closure.json"
 }
