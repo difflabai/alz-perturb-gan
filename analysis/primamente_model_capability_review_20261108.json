@@ -1,0 +1,456 @@
+{
+  "status": "FROZEN_MODEL_CAPABILITY_AND_LIMITATION_REVIEW_COMPLETE",
+  "UTC": "2026-11-08T20:47:05.981857+00:00",
+  "new_training_fits": 0,
+  "new_optimizer_updates": 0,
+  "CUDA_initialized": false,
+  "stage_order": [
+    "Not AD",
+    "Low",
+    "Intermediate",
+    "High"
+  ],
+  "calibration_per_seed": [
+    {
+      "seed": 0,
+      "PG": {
+        "cell_energy_distance": 0.2741018211259272,
+        "energy_score": 1.8569006558544108,
+        "coverage80": 0.7355769230769231,
+        "spread_ratio": 0.9698792395128607
+      },
+      "resampling": {
+        "cell_energy_distance": 0.24277825308317968,
+        "energy_score": 2.079287181278266,
+        "coverage80": 0.6778846153846154,
+        "spread_ratio": 1.086688043301637
+      }
+    },
+    {
+      "seed": 1,
+      "PG": {
+        "cell_energy_distance": 0.30519373782223713,
+        "energy_score": 2.0546543661800256,
+        "coverage80": 0.6442307692307692,
+        "spread_ratio": 0.9394920826630158
+      },
+      "resampling": {
+        "cell_energy_distance": 0.22888526008152432,
+        "energy_score": 2.0814045098447242,
+        "coverage80": 0.6634615384615384,
+        "spread_ratio": 1.089383296551302
+      }
+    },
+    {
+      "seed": 2,
+      "PG": {
+        "cell_energy_distance": 0.26831310034773725,
+        "energy_score": 1.9626469382647591,
+        "coverage80": 0.6682692307692308,
+        "spread_ratio": 0.9346156261331027
+      },
+      "resampling": {
+        "cell_energy_distance": 0.2360664757860942,
+        "energy_score": 2.1189666465878148,
+        "coverage80": 0.6971153846153846,
+        "spread_ratio": 1.0996368276041926
+      }
+    },
+    {
+      "seed": 3,
+      "PG": {
+        "cell_energy_distance": 0.298707450673219,
+        "energy_score": 2.006895477869522,
+        "coverage80": 0.6153846153846154,
+        "spread_ratio": 0.9168376460521994
+      },
+      "resampling": {
+        "cell_energy_distance": 0.2323084679127394,
+        "energy_score": 2.087918730129091,
+        "coverage80": 0.6971153846153846,
+        "spread_ratio": 1.1029609521785577
+      }
+    },
+    {
+      "seed": 4,
+      "PG": {
+        "cell_energy_distance": 0.27462011388704877,
+        "energy_score": 2.153204738068661,
+        "coverage80": 0.5721153846153846,
+        "spread_ratio": 0.8804492684959149
+      },
+      "resampling": {
+        "cell_energy_distance": 0.2345029685269111,
+        "energy_score": 2.1055532952403473,
+        "coverage80": 0.6826923076923077,
+        "spread_ratio": 1.10063590280311
+      }
+    }
+  ],
+  "calibration_mean_over5seeds": {
+    "PG": {
+      "cell_energy_distance": 0.28418724477123386,
+      "energy_score": 2.006860435247476,
+      "coverage80": 0.6471153846153846,
+      "spread_ratio": 0.9282547725714186
+    },
+    "resampling": {
+      "cell_energy_distance": 0.23490828507808975,
+      "energy_score": 2.094626072616049,
+      "coverage80": 0.6836538461538462,
+      "spread_ratio": 1.09586100448776
+    }
+  },
+  "calibration_biological_donors": 4,
+  "calibration_is_selection_data_not_external_generalization": true,
+  "real_training_classifier_confusion": [
+    [
+      455,
+      52,
+      0,
+      12,
+      45,
+      5
+    ],
+    [
+      16,
+      8289,
+      8,
+      644,
+      207,
+      4
+    ],
+    [
+      0,
+      12,
+      116,
+      19,
+      5,
+      0
+    ],
+    [
+      5,
+      914,
+      4,
+      2071,
+      91,
+      3
+    ],
+    [
+      17,
+      566,
+      0,
+      188,
+      925,
+      5
+    ],
+    [
+      12,
+      14,
+      0,
+      9,
+      13,
+      36
+    ]
+  ],
+  "real_training_classifier_accuracy": 0.8055818994716163,
+  "real_training_classifier_balanced_accuracy": 0.6849932089817123,
+  "real_training_classifier_confidence_mean": 0.7900834517671299,
+  "classifier_training_accuracy_not_out_of_sample_validation": true,
+  "generated_classifier_confidence_mean_by_stage": [
+    0.8014803328365087,
+    0.7397269851714374,
+    0.7540224849060178,
+    0.8056157476082444
+  ],
+  "generated_classifier_confidence_range": [
+    0.7235154151916504,
+    0.8343181848526001
+  ],
+  "real_equal_donor_stage_mixture": [
+    [
+      0.03981214569449863,
+      0.5247615100556277,
+      0.007541478129713424,
+      0.36851745087039206,
+      0.05650026238261532,
+      0.002867152867152867
+    ],
+    [
+      0.029048665077644184,
+      0.4729906456473119,
+      0.029789706966058347,
+      0.3388141046031052,
+      0.1283173766663793,
+      0.0010395010395010396
+    ],
+    [
+      0.04485746914855904,
+      0.61444985176056,
+      0.007495149723723364,
+      0.20793205850263716,
+      0.1144224922562859,
+      0.010842978608234579
+    ],
+    [
+      0.05370266540112935,
+      0.600441268870176,
+      0.012624209124389461,
+      0.1882278748500615,
+      0.13529139178650476,
+      0.009712589967738942
+    ]
+  ],
+  "generated_seed_mean_mixtures": [
+    [
+      [
+        0.0341859375,
+        0.6825359375,
+        0.0017484374999999998,
+        0.20718750000000002,
+        0.07429375,
+        4.843749999999999e-05
+      ],
+      [
+        0.0466890625,
+        0.5263421875000001,
+        0.0174171875,
+        0.2705578125,
+        0.13872812499999998,
+        0.000265625
+      ],
+      [
+        0.04312031250000001,
+        0.6465078124999999,
+        0.004487500000000001,
+        0.19256562500000002,
+        0.107534375,
+        0.0057843750000000005
+      ],
+      [
+        0.04705,
+        0.6925703125,
+        0.0105375,
+        0.149228125,
+        0.10049531249999999,
+        0.00011874999999999999
+      ]
+    ],
+    [
+      [
+        0.028825,
+        0.797390625,
+        0.0002171875,
+        0.1477640625,
+        0.0257234375,
+        7.96875e-05
+      ],
+      [
+        0.037625,
+        0.5539359375,
+        0.0158546875,
+        0.31962812500000004,
+        0.07269999999999999,
+        0.00025625
+      ],
+      [
+        0.050201562500000005,
+        0.61488125,
+        0.009478125,
+        0.19258750000000002,
+        0.13163125,
+        0.0012203125
+      ],
+      [
+        0.03068125,
+        0.776953125,
+        0.0030359375,
+        0.0794546875,
+        0.10972343749999999,
+        0.0001515625
+      ]
+    ],
+    [
+      [
+        0.02538125,
+        0.6948484374999999,
+        0.000428125,
+        0.24119531250000004,
+        0.03755625,
+        0.000590625
+      ],
+      [
+        0.041814062500000006,
+        0.6291453124999999,
+        0.016100000000000003,
+        0.24299062500000002,
+        0.0675296875,
+        0.0024203125
+      ],
+      [
+        0.0495140625,
+        0.734609375,
+        0.005609375,
+        0.10495,
+        0.10399687499999999,
+        0.0013203125
+      ],
+      [
+        0.027325000000000002,
+        0.8028375,
+        0.001325,
+        0.052625,
+        0.11581250000000001,
+        7.5e-05
+      ]
+    ],
+    [
+      [
+        0.031315625,
+        0.70975625,
+        0.0025421875,
+        0.19165625,
+        0.0642015625,
+        0.000528125
+      ],
+      [
+        0.0383375,
+        0.6113531249999999,
+        0.0165484375,
+        0.20307187499999999,
+        0.1303796875,
+        0.00030937499999999997
+      ],
+      [
+        0.0509,
+        0.6746281249999999,
+        0.0020421874999999997,
+        0.1669265625,
+        0.103928125,
+        0.001575
+      ],
+      [
+        0.052528124999999995,
+        0.7089796875,
+        0.016610937500000002,
+        0.093334375,
+        0.12834375,
+        0.000203125
+      ]
+    ],
+    [
+      [
+        0.044703124999999996,
+        0.6794140625,
+        0.001859375,
+        0.240134375,
+        0.0327296875,
+        0.001159375
+      ],
+      [
+        0.0511125,
+        0.522146875,
+        0.046914062500000006,
+        0.24505625000000003,
+        0.13449375000000002,
+        0.0002765625
+      ],
+      [
+        0.04457656249999999,
+        0.7038828125000001,
+        0.004365625,
+        0.15073750000000002,
+        0.093996875,
+        0.0024406249999999997
+      ],
+      [
+        0.0387046875,
+        0.6582765625,
+        0.0029249999999999996,
+        0.16326249999999998,
+        0.13501406249999998,
+        0.0018171875
+      ]
+    ]
+  ],
+  "mixture_total_variation_per_seed_stage": [
+    [
+      0.175567915061757,
+      0.08140268760866462,
+      0.03205796073943995,
+      0.09212904362982402
+    ],
+    [
+      0.27262911494437236,
+      0.08952162677504388,
+      0.02496722461087174,
+      0.17651185612982404
+    ],
+    [
+      0.1700869274443723,
+      0.17030087573554278,
+      0.12481611659088099,
+      0.202396231129824
+    ],
+    [
+      0.19269604006175697,
+      0.1497136251086646,
+      0.06622080409088095,
+      0.11252514700543452
+    ],
+    [
+      0.15954353174987368,
+      0.09452079314260624,
+      0.08943296073944003,
+      0.05783529362982402
+    ]
+  ],
+  "mixture_total_variation_mean_by_stage": [
+    0.19410470585242648,
+    0.11709192167410443,
+    0.06749901335430272,
+    0.1282795143049461
+  ],
+  "mixture_comparison_exposure_limitation": "Synthetic stage conditions use common pooled training library-depth templates; real stage subsets have their actual stage-specific depths.",
+  "gene_contrast_descriptive_agreement": {
+    "pooled_ranking": {
+      "genes": 2000,
+      "descriptive_spearman_across_genes": 0.546573936143484,
+      "direction_agreement": 0.675,
+      "model_to_real_effect_L2_ratio": 0.6640669005736453,
+      "genes_passing_fixed_heuristic": 842,
+      "these_genes_are_correlated_not_independent_replicates": true
+    },
+    "within_subtype_ranking": {
+      "genes": 2000,
+      "descriptive_spearman_across_genes": 0.5020237240059309,
+      "direction_agreement": 0.659,
+      "model_to_real_effect_L2_ratio": 0.6887717605225974,
+      "genes_passing_fixed_heuristic": 614,
+      "these_genes_are_correlated_not_independent_replicates": true
+    }
+  },
+  "individual_gene_constraints": "Adversarial training uses bag features from50PCs; accurate2000gene reconstruction is not established by a low projected distribution distance.",
+  "observational_conditioning": "Only ADNC stage slot is supplied; no drug,gene,dose or intervention conditioning exists.",
+  "known_risk_genes_missing_from_measured_panel": [
+    "ACSL1",
+    "INPP5D",
+    "TREM2",
+    "APOE",
+    "SORL1",
+    "SPI1",
+    "DGAT1",
+    "DGAT2",
+    "ABCA1",
+    "BIN1",
+    "CD33",
+    "TYROBP",
+    "NLRP3"
+  ],
+  "source_and_input_SHA256": {
+    "/ml2/alz/analysis/review_primamente_model_quality_20261108.py": "f7ab53a59c0edaaf98d20d93f757c5cdb1d621bee118f7aeec10cd671f370270",
+    "/ml2/alz/analysis/primamente_gene_inference_exploratory_ranking_20261108.json": "fd3bb4bb500734b90d80fd46cb97acae4205d397c04eb737db83b60c750c9032",
+    "/ml2/alz/artifacts/primamente-t005-gene-inference-recovery-v1-20261108/completed.json": "26c02c3cdc3cda441e46fc30220e6a01ac0383adc721323801c10a668b3011d3"
+  },
+  "conclusion": "Suitable for exploratory program/association prioritization only. Neither intervention efficacy, causal therapeutic direction, nor SOTA is established by this study."
+}

@@ -1,0 +1,1428 @@
+{
+  "status": "REGISTRATION_READY_EXPLORATORY_HUMAN_TRANSLATION_HYPOTHESIS_REVIEWED",
+  "UTC": "2026-11-08T20:51:18.461571+00:00",
+  "challenge": "Prima Mente Alzheimer’s Translation Challenge",
+  "challenge_URL": "https://www.primamente.com/challenges/",
+  "question": "A gene or compound you’d like us to test in the lab, and why (optional)",
+  "working_goal": "Use the trained PG prototype for a defensible lab hypothesis and hackathon readiness; additionalSOTA training is held.",
+  "gene": "CLEC5A",
+  "proposed_intervention": "Graded CRISPRi knockdown after human microglial differentiation; orthogonal receptor-specific blockade could be a later corroboration if selectivity is established.",
+  "cell_context": "Mature human iPSC-derived microglia challenged with amyloid-β, with matched APOE3/3 andAPOE4/4 backgrounds and neuronal cocultures for functional follow-up.",
+  "form_answer": "I’d like to test CLEC5A knockdown in human iPSC-derived microglia exposed to amyloid-β, across APOE3/3 and APOE4/4 backgrounds. Our trained ParticleGAN models consistently reproduce higher CLEC5A expression with Alzheimer’s pathology, supported by published ROSMAP microglial data. A published mouse knockout study motivates the hypothesis that reducing CLEC5A could improve amyloid clearance. I’d measure amyloid uptake and degradation, inflammatory output, microglial survival and synapse preservation to test whether that benefit translates to human cells.",
+  "shorter_form_answer": "Test graded CLEC5A knockdown in amyloid-challenged human iPSC microglia. Five trained PG models reproduce its pathology-associated increase, with supporting human cohort data; a mouse knockout study motivates testing amyloid clearance and synapse preservation in human cells.",
+  "actual_inference": {
+    "unique_synthetic_cells": 12800000,
+    "physical_deterministic_replay_cells": 240000,
+    "model_initializations": 5,
+    "training_updates_per_model": 20000,
+    "particlegan_release": "0.9.7",
+    "generator_EMA_decay": 0,
+    "all_from_scratch": true,
+    "models_retrained_for_this_study": 0,
+    "real_optimization_donors": 33,
+    "real_NotAD_donors": 3,
+    "real_High_donors": 18,
+    "biological_replicates_added_by_simulation": 0,
+    "all160_stage_case_hashes_verified": true,
+    "all20_original_input_hashes_rechecked": true,
+    "checkpoint_provenance": [
+      {
+        "seed": 0,
+        "checkpoint_SHA256": "ac55507c73d5927e464d1567e1a5366787909832796c0dd18189ffa2c0ac5351",
+        "native_saved_state_matches_GPU_restore": true,
+        "independent_saved_score_audit": true
+      },
+      {
+        "seed": 1,
+        "checkpoint_SHA256": "939eb69f8eaae43b2f52a799232e68d7deab4bd68126cf88dee7a276df722237",
+        "native_saved_state_matches_GPU_restore": true,
+        "independent_saved_score_audit": true
+      },
+      {
+        "seed": 2,
+        "checkpoint_SHA256": "c042196acb6ef72563299fb6025ad61892d06c44cc25813ed18ebeaf93759606",
+        "native_saved_state_matches_GPU_restore": true,
+        "independent_saved_score_audit": true
+      },
+      {
+        "seed": 3,
+        "checkpoint_SHA256": "e758b67dda6f3c54351a6289f46433ca6abc895dc29a814be0e2d601323c23ba",
+        "native_saved_state_matches_GPU_restore": true,
+        "independent_saved_score_audit": true
+      },
+      {
+        "seed": 4,
+        "checkpoint_SHA256": "3b626768f52d56aa05598a2977a4a72d630b429872400bedd231e186330bfea9",
+        "native_saved_state_matches_GPU_restore": true,
+        "independent_saved_score_audit": true
+      }
+    ]
+  },
+  "exploratory_screen": {
+    "within_subtype_stability_heuristic_genes": 614,
+    "model_plus_primary_ROSMAP_supported_genes": 107,
+    "additional_covariate_and_stage_stratified_deletion_robust_genes": 58,
+    "additional_sensitivity_definition": "Original model and primary ROSMAP association supported; adjusted direction retained; at least 80% unadjusted and adjusted donor-deletion sign agreement separately for each subtype and deleted stage. With three controls, this requires all three control deletions to agree.",
+    "robust_genes": [
+      "CDKN1A",
+      "MT-ND3",
+      "STARD13",
+      "PLCL1",
+      "CLEC5A",
+      "MT-ATP8",
+      "LINC02397",
+      "MEIS1",
+      "IQGAP2",
+      "IL15",
+      "PPARG",
+      "AP001636.3",
+      "EVA1C",
+      "HSPA1A",
+      "NEK10",
+      "TPRG1",
+      "MTRNR2L12",
+      "SPON1",
+      "CECR2",
+      "CRADD",
+      "AHNAK",
+      "SERPINE1",
+      "NT5DC1",
+      "PLCXD3",
+      "BTBD11",
+      "ZNF608",
+      "FGL1",
+      "ZNF208",
+      "PRKCA-AS1",
+      "AC103591.3",
+      "CXCR4",
+      "AL139220.2",
+      "TNFRSF11B",
+      "LINC02432",
+      "DAB2IP",
+      "DPH6-DT",
+      "CHI3L1",
+      "FLT1",
+      "ITGA4",
+      "ENPP1",
+      "RANBP3L",
+      "LINC02444",
+      "SLC2A3",
+      "AC090518.1",
+      "LPL",
+      "TNF",
+      "PLIN2",
+      "ANXA2",
+      "SOX4",
+      "S100A4",
+      "GPNMB",
+      "TUBB2A",
+      "LINC01258",
+      "SLC26A3",
+      "STMN4",
+      "TDRD15",
+      "AC090921.1",
+      "ABCC3"
+    ],
+    "not_statistical_discoveries": true,
+    "not_a_validated_precision_or_recall_estimate": true
+  },
+  "selected_gene": {
+    "original_within_subtype_heuristic_rank": 11,
+    "rank_among_primary_ROSMAP_supported": 5,
+    "evidence": {
+      "gene": "CLEC5A",
+      "real_high_minus_NotAD_mean_log1p_panelCP10k": 0.48856018775822085,
+      "model_high_minus_NotAD_mean_log1p_panelCP10k": 0.45410841148237047,
+      "model_seed_effects": [
+        0.6065569822190976,
+        0.598025998612209,
+        0.355865955747123,
+        0.5373381444344452,
+        0.17275497639897733
+      ],
+      "model_seeds_agreeing_with_real": 5,
+      "model_replicate_sign_agreement": 1.0,
+      "real_leave_one_donor_sign_agreement": 1.0,
+      "prioritization_heuristic": 0.45410841148237047,
+      "synthetic_groups_complete_in_all_models": true,
+      "ROSMAP": {
+        "gpath": {
+          "logFC": 0.275251742743651,
+          "published_global_adjusted_p": 0.00628014944188717,
+          "published_local_adjusted_p": 0.00628014944188717,
+          "measured_in_external_table": true,
+          "direction_agrees": true,
+          "association_support": true
+        },
+        "amyloid": {
+          "logFC": 0.0503547586876051,
+          "published_global_adjusted_p": 0.000562186669333551,
+          "published_local_adjusted_p": 0.000562186669333551,
+          "measured_in_external_table": true,
+          "direction_agrees": true,
+          "association_support": true
+        },
+        "tangles": {
+          "logFC": 0.0269998111788605,
+          "published_global_adjusted_p": 6.2182239815188e-05,
+          "published_local_adjusted_p": 6.2182239815188e-05,
+          "measured_in_external_table": true,
+          "direction_agrees": true,
+          "association_support": true
+        }
+      },
+      "model_and_primary_cohort_association_supported": true
+    },
+    "covariate_sensitivity": {
+      "gene": "CLEC5A",
+      "adjusted_High_vs_NotAD_coefficient": 0.5720709358950373,
+      "subtype_coefficients": [
+        0.41586016011333304,
+        0.7282817116767415
+      ],
+      "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+      "stage_stratified_donor_deletion_checks": [
+        {
+          "group": 2,
+          "deleted_donor_stage": 0,
+          "adjusted_valid_deletions": 3,
+          "adjusted_sign_agreement": 1.0,
+          "unadjusted_sign_agreement": 1.0
+        },
+        {
+          "group": 2,
+          "deleted_donor_stage": 3,
+          "adjusted_valid_deletions": 18,
+          "adjusted_sign_agreement": 1.0,
+          "unadjusted_sign_agreement": 1.0
+        },
+        {
+          "group": 4,
+          "deleted_donor_stage": 0,
+          "adjusted_valid_deletions": 3,
+          "adjusted_sign_agreement": 1.0,
+          "unadjusted_sign_agreement": 1.0
+        },
+        {
+          "group": 4,
+          "deleted_donor_stage": 3,
+          "adjusted_valid_deletions": 18,
+          "adjusted_sign_agreement": 1.0,
+          "unadjusted_sign_agreement": 1.0
+        }
+      ],
+      "unadjusted_reference_effect": 0.48856018775822085,
+      "model_effect": 0.45410841148237047,
+      "adjusted_sign_agrees_with_unadjusted": true,
+      "adjusted_sign_agrees_with_model": true,
+      "original_prioritization_heuristic": 0.45410841148237047
+    },
+    "units": "High minus Not-AD difference in mean per-cell log1p(panel CP10k), with equal weights over eligible subtypes. This is not log fold-change. The adjusted coefficient uses the same expression scale.",
+    "all_five_model_seed_signs_positive": true,
+    "all40_model_MC_contrasts_positive": true,
+    "all42_adjusted_groupwise_donor_deletions_retain_positive_sign": true
+  },
+  "literature_basis": {
+    "primary_functional_paper": {
+      "title": "The deficient CLEC5A ameliorates the behavioral and pathological deficits via the microglial Aβ clearance in Alzheimer’s disease mouse model",
+      "year": 2024,
+      "DOI": "10.1186/s12974-024-03253-x",
+      "URL": "https://pubmed.ncbi.nlm.nih.gov/39443966/",
+      "full_text_URL": "https://link.springer.com/article/10.1186/s12974-024-03253-x",
+      "evidence": "A 2024 study reported increased amyloid phagocytosis after Clec5a loss in mouse microglial systems, and lower amyloid burden with improved behavioral measures in an AD mouse model.",
+      "species_limitation": "Mouse primary microglia/cell-line and mouse-model intervention; direct human AD-microglia perturbation benefit not established here.",
+      "additional_translation_limitations": [
+        "The in vivo work used a genetic knockout in an APP mouse model; this is not an adult microglia-specific drug intervention.",
+        "Greater fluorescent amyloid uptake is not itself proof of faster lysosomal degradation, motivating a separate flux assay in the proposed human experiment."
+      ]
+    },
+    "human_association_source": "https://github.com/mathyslab7/ROSMAP_snRNAseq_PFC",
+    "human_cohort_paper": "https://doi.org/10.1016/j.cell.2023.08.039",
+    "general_human_perturbation_context": "https://doi.org/10.1016/j.neuron.2026.07.001",
+    "human_context_lesson": "Human microglial state changes can have mixed functional effects, including increasedsynaptosome uptake; transcriptional state shifts are not sufficient evidence of benefit.",
+    "earlier_human_perturbation_validation_aspiration_not_met_for_selected_target": true,
+    "why_suggestion_remains_appropriate": "The optional registration field asks for a testable proposal. This is explicitly a human translation experiment prompted by model/human associations and mouse perturbation evidence, not a claim that human intervention efficacy was already validated.",
+    "new_target_discovery_claim": false
+  },
+  "proposed_validation": {
+    "design": "Use multiple independent donor backgrounds with matched APOE genotypes; independent differentiation batches; mature-cell knockdown; non-targeting controls, multiple independent guides and rescue. Verify baseline CLEC5A protein and target engagement before interpreting any phenotype.",
+    "molecular_readouts": [
+      "CLEC5A transcript/protein target engagement",
+      "Inflammatory cytokine and inflammasome readouts",
+      "Relevant lipid/phagolysosomal markers including LPL, PLIN2, GPNMB; full-transcriptome data for states missing from our 2,000-HVG panel"
+    ],
+    "functional_readouts": [
+      "Distinguish amyloid uptake from lysosomal degradation using pulse/chase or equivalent flux readouts",
+      "Microglial viability and cell numbers to distinguish state change from depletion",
+      "Live-neuron coculture synapse integrity, neuronal survival and network function; isolated synaptosome uptake alone is not a neuroprotection assay"
+    ],
+    "hypothesized_success": "Improved net amyloid clearance with preserved microglial viability and neuronal/synaptic function across more than one donor background.",
+    "falsifiers": [
+      "RNA signature change without improved amyloid degradation",
+      "Apparent amyloid reduction explained by cell loss or altered substrate availability",
+      "Increased synapse loss or worsened neuronal function",
+      "No reproducible effect after verified CLEC5A knockdown in human cells"
+    ],
+    "prediction_source": "These are literature-motivated experimental hypotheses. The current PG model cannot simulate the intervention or predict these functional outcomes."
+  },
+  "model_capability_review": {
+    "gene_effect_spearman_with_real_within_subtype": 0.5020237240059309,
+    "gene_effect_direction_agreement_with_real_within_subtype": 0.659,
+    "calibration_mean_over5seeds": {
+      "PG": {
+        "cell_energy_distance": 0.28418724477123386,
+        "energy_score": 2.006860435247476,
+        "coverage80": 0.6471153846153846,
+        "spread_ratio": 0.9282547725714186
+      },
+      "resampling": {
+        "cell_energy_distance": 0.23490828507808975,
+        "energy_score": 2.094626072616049,
+        "coverage80": 0.6836538461538462,
+        "spread_ratio": 1.09586100448776
+      }
+    },
+    "interpretation": "A useful exploratoryassociation prototype. PG has lower mean donor energy score but worse mean cell energy distance than matched resampling on thefour calibration donors; no SOTA or intervention-performance claim follows.",
+    "training_representation": "Adversarial fitting constrains150 bag features derived from50 PCs; not every individual gene is validated.",
+    "known_measurement_limits": "Incomplete 2,000-HVG panel, imperfect predicted subtype classifier, only three Not-AD donors, stage only conditioning, no intervention inputs or functional phenotype outputs."
+  },
+  "alternative_and_negative_findings": [
+    {
+      "gene": "CLEC5A",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "CLEC5A",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": 0.48856018775822085,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": 0.45410841148237047,
+        "model_seed_effects": [
+          0.6065569822190976,
+          0.598025998612209,
+          0.355865955747123,
+          0.5373381444344452,
+          0.17275497639897733
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.45410841148237047,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": 0.275251742743651,
+            "published_global_adjusted_p": 0.00628014944188717,
+            "published_local_adjusted_p": 0.00628014944188717,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "amyloid": {
+            "logFC": 0.0503547586876051,
+            "published_global_adjusted_p": 0.000562186669333551,
+            "published_local_adjusted_p": 0.000562186669333551,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "tangles": {
+            "logFC": 0.0269998111788605,
+            "published_global_adjusted_p": 6.2182239815188e-05,
+            "published_local_adjusted_p": 6.2182239815188e-05,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          }
+        },
+        "model_and_primary_cohort_association_supported": true
+      },
+      "covariate_sensitivity": {
+        "gene": "CLEC5A",
+        "adjusted_High_vs_NotAD_coefficient": 0.5720709358950373,
+        "subtype_coefficients": [
+          0.41586016011333304,
+          0.7282817116767415
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": 0.48856018775822085,
+        "model_effect": 0.45410841148237047,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.45410841148237047
+      },
+      "reason": "Preferred actionable hypothesis: measured gene, strong reproducible model/donor association, covariate and control robustness, primary ROSMAP association, and target-specific mouse perturbation evidence supporting a clear human translation test."
+    },
+    {
+      "gene": "CDKN1A",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "CDKN1A",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": -0.70363607189613,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": -0.6320551726131943,
+        "model_seed_effects": [
+          -1.0475390600012966,
+          -0.1614386196588623,
+          -0.9333094773217889,
+          -0.6706025259675583,
+          -0.34738618011646555
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.6320551726131943,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": -0.201337805225183,
+            "published_global_adjusted_p": 0.00989532275842281,
+            "published_local_adjusted_p": 0.00989532275842281,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "amyloid": {
+            "logFC": -0.0344016867216959,
+            "published_global_adjusted_p": 0.0016762327988869,
+            "published_local_adjusted_p": 0.0016762327988869,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "tangles": {
+            "logFC": -0.019981478153888,
+            "published_global_adjusted_p": 0.0023512420261119,
+            "published_local_adjusted_p": 0.0023512420261119,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          }
+        },
+        "model_and_primary_cohort_association_supported": true
+      },
+      "covariate_sensitivity": {
+        "gene": "CDKN1A",
+        "adjusted_High_vs_NotAD_coefficient": -0.7837154843598564,
+        "subtype_coefficients": [
+          -0.7401590768069058,
+          -0.8272718919128068
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": -0.70363607189613,
+        "model_effect": -0.6320551726131943,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.6320551726131943
+      },
+      "reason": "Higher association heuristic does not establish a useful intervention direction for this broad cell-cycle regulator. Not prioritized for the registration experiment without focused mechanistic and functional work."
+    },
+    {
+      "gene": "STARD13",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "STARD13",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": 0.7580321281244042,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": 0.4892908338400064,
+        "model_seed_effects": [
+          0.4596563093234955,
+          0.721030638520467,
+          0.4485116115782015,
+          0.3136664795161281,
+          0.5035891302617396
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.4892908338400064,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": 0.0983039454804996,
+            "published_global_adjusted_p": 0.0439436349644711,
+            "published_local_adjusted_p": 0.0439436349644711,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "amyloid": {
+            "logFC": 0.0207861366820871,
+            "published_global_adjusted_p": 0.00276903546258739,
+            "published_local_adjusted_p": 0.00276903546258739,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "tangles": {
+            "logFC": 0.00717672495655114,
+            "published_global_adjusted_p": 0.0667467449943895,
+            "published_local_adjusted_p": 0.0667467449943895,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          }
+        },
+        "model_and_primary_cohort_association_supported": true
+      },
+      "covariate_sensitivity": {
+        "gene": "STARD13",
+        "adjusted_High_vs_NotAD_coefficient": 0.89577695995117,
+        "subtype_coefficients": [
+          0.9968046940882629,
+          0.794749225814077
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": 0.7580321281244042,
+        "model_effect": 0.4892908338400064,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.4892908338400064
+      },
+      "reason": "Strong association signal; focused human microglial perturbation and intervention-direction work remains. Not excluded as a future research candidate."
+    },
+    {
+      "gene": "PLCL1",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "PLCL1",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": 0.6110269316823006,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": 0.48516233011091875,
+        "model_seed_effects": [
+          0.5471777635391359,
+          0.22871490906670358,
+          1.039700267503232,
+          0.43356370587006543,
+          0.17665500457545658
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.48516233011091875,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": 0.127919448687427,
+            "published_global_adjusted_p": 0.00802969716508539,
+            "published_local_adjusted_p": 0.00802969716508539,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "amyloid": {
+            "logFC": 0.00955619732149473,
+            "published_global_adjusted_p": 0.267206941372702,
+            "published_local_adjusted_p": 0.267206941372702,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          },
+          "tangles": {
+            "logFC": 0.00846917205631673,
+            "published_global_adjusted_p": 0.0382287539888568,
+            "published_local_adjusted_p": 0.0382287539888568,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          }
+        },
+        "model_and_primary_cohort_association_supported": true
+      },
+      "covariate_sensitivity": {
+        "gene": "PLCL1",
+        "adjusted_High_vs_NotAD_coefficient": 0.47532976010970857,
+        "subtype_coefficients": [
+          0.5669119139015499,
+          0.3837476063178672
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": 0.6110269316823006,
+        "model_effect": 0.48516233011091875,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.48516233011091875
+      },
+      "reason": "Strong association signal; no target-specific human microglial therapeutic effect established in this review. Not chosen from association magnitude alone."
+    },
+    {
+      "gene": "CD163",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "CD163",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": 0.598286671089469,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": 0.438604315065574,
+        "model_seed_effects": [
+          0.9859481611080173,
+          0.3828537331473096,
+          0.5058848719232436,
+          0.06454007256252264,
+          0.25379473658677687
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.438604315065574,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": 0.245960780655396,
+            "published_global_adjusted_p": 0.00733391275448054,
+            "published_local_adjusted_p": 0.00733391275448054,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "amyloid": {
+            "logFC": 0.0173296678307247,
+            "published_global_adjusted_p": 0.30611930298677,
+            "published_local_adjusted_p": 0.30611930298677,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          },
+          "tangles": {
+            "logFC": 0.0223214070480465,
+            "published_global_adjusted_p": 0.000716535483114262,
+            "published_local_adjusted_p": 0.000716535483114262,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          }
+        },
+        "model_and_primary_cohort_association_supported": true
+      },
+      "covariate_sensitivity": {
+        "gene": "CD163",
+        "adjusted_High_vs_NotAD_coefficient": -0.09939394753900936,
+        "subtype_coefficients": [
+          -0.2691860474599311,
+          0.07039815238191235
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 0.5238095238095238,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 0.6666666666666666,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 0.9444444444444444,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 0.3333333333333333,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 0.1111111111111111,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": 0.598286671089469,
+        "model_effect": 0.438604315065574,
+        "adjusted_sign_agrees_with_unadjusted": false,
+        "adjusted_sign_agrees_with_model": false,
+        "original_prioritization_heuristic": 0.438604315065574
+      },
+      "reason": "Deprioritized: positive unadjusted association reverses after age/sex/APOE4/PMI adjustment and adjusted control deletion stability is poor."
+    },
+    {
+      "gene": "PPARG",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "PPARG",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": 0.29304256193079253,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": 0.4388345124109444,
+        "model_seed_effects": [
+          0.22578758796881038,
+          0.25083153972414884,
+          0.4343827359557391,
+          0.5412477218814042,
+          0.7419229765246195
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.29304256193079253,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": 0.176811407672833,
+            "published_global_adjusted_p": 0.00174873083343323,
+            "published_local_adjusted_p": 0.00174873083343323,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "amyloid": {
+            "logFC": 0.0302271421475683,
+            "published_global_adjusted_p": 0.000420303699955035,
+            "published_local_adjusted_p": 0.000420303699955035,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "tangles": {
+            "logFC": 0.00732486743760701,
+            "published_global_adjusted_p": 0.146865665706887,
+            "published_local_adjusted_p": 0.146865665706887,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          }
+        },
+        "model_and_primary_cohort_association_supported": true
+      },
+      "covariate_sensitivity": {
+        "gene": "PPARG",
+        "adjusted_High_vs_NotAD_coefficient": 0.5262435178944382,
+        "subtype_coefficients": [
+          0.6032830301506095,
+          0.449204005638267
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": 0.29304256193079253,
+        "model_effect": 0.4388345124109444,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.29304256193079253
+      },
+      "reason": "Strong consistent association, but higher disease expression does not determine activation versus inhibition. The original pioglitazone TOMMORROW trial did not significantly delay MCI onset; this does not falsify the entire PPARG mechanism."
+    },
+    {
+      "gene": "GPNMB",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "GPNMB",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": 0.3332197973776617,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": 0.07488051319596059,
+        "model_seed_effects": [
+          0.08425555285970132,
+          0.07089490036147586,
+          0.08487731777333442,
+          0.037251140762459424,
+          0.0971236542228319
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.07488051319596059,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": 0.287521617480496,
+            "published_global_adjusted_p": 0.00104046451353226,
+            "published_local_adjusted_p": 0.00104046451353226,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "amyloid": {
+            "logFC": 0.0305783230257429,
+            "published_global_adjusted_p": 0.0435715072662946,
+            "published_local_adjusted_p": 0.0435715072662946,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "tangles": {
+            "logFC": 0.017151082288052,
+            "published_global_adjusted_p": 0.0142319189197043,
+            "published_local_adjusted_p": 0.0142319189197043,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          }
+        },
+        "model_and_primary_cohort_association_supported": true
+      },
+      "covariate_sensitivity": {
+        "gene": "GPNMB",
+        "adjusted_High_vs_NotAD_coefficient": 0.3158644924772034,
+        "subtype_coefficients": [
+          0.43690173028038576,
+          0.19482725467402096
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": 0.3332197973776617,
+        "model_effect": 0.07488051319596059,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.07488051319596059
+      },
+      "reason": "Consistent supportive alternative. Human microglial and other functional literature cautions that disease-associated states can be protective; elevated expression is not a reason to knock this gene down."
+    },
+    {
+      "gene": "PLIN2",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "PLIN2",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": 0.18013020872664204,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": 0.09266029156556484,
+        "model_seed_effects": [
+          0.13311958654468728,
+          0.10011320169621027,
+          0.04437404115172512,
+          0.08479480707705456,
+          0.10089982135814696
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.09266029156556484,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": 0.272784201819681,
+            "published_global_adjusted_p": 0.0060684934728047,
+            "published_local_adjusted_p": 0.0060684934728047,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "amyloid": {
+            "logFC": 0.0199829465218411,
+            "published_global_adjusted_p": 0.267034986063016,
+            "published_local_adjusted_p": 0.267034986063016,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          },
+          "tangles": {
+            "logFC": 0.0144834359625734,
+            "published_global_adjusted_p": 0.0830138393754229,
+            "published_local_adjusted_p": 0.0830138393754229,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          }
+        },
+        "model_and_primary_cohort_association_supported": true
+      },
+      "covariate_sensitivity": {
+        "gene": "PLIN2",
+        "adjusted_High_vs_NotAD_coefficient": 0.19456403199216876,
+        "subtype_coefficients": [
+          0.2376075760545337,
+          0.1515204879298038
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": 0.18013020872664204,
+        "model_effect": 0.09266029156556484,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.09266029156556484
+      },
+      "reason": "Consistent lipid-associated alternative, with smaller model effect and no significant primary-table secondary amyloid/tangle association at publishedglobal FDR<.05. Secondary traits are not required for the primaryscreen."
+    },
+    {
+      "gene": "LPL",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "LPL",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": 0.09381881554611379,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": 0.13210986706076572,
+        "model_seed_effects": [
+          0.1555637178744547,
+          0.22977880480663312,
+          0.10040805599174793,
+          0.07112247453153413,
+          0.10367628209945877
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.09381881554611379,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": 0.46630999846149,
+            "published_global_adjusted_p": 7.64567701422513e-05,
+            "published_local_adjusted_p": 7.64567701422513e-05,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "amyloid": {
+            "logFC": 0.0687520297912356,
+            "published_global_adjusted_p": 8.17852859524492e-05,
+            "published_local_adjusted_p": 8.17852859524492e-05,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "tangles": {
+            "logFC": 0.0256332045321351,
+            "published_global_adjusted_p": 0.0066997855393884,
+            "published_local_adjusted_p": 0.0066997855393884,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          }
+        },
+        "model_and_primary_cohort_association_supported": true
+      },
+      "covariate_sensitivity": {
+        "gene": "LPL",
+        "adjusted_High_vs_NotAD_coefficient": 0.08876524298406281,
+        "subtype_coefficients": [
+          0.07866545761010926,
+          0.09886502835801636
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": 0.09381881554611379,
+        "model_effect": 0.13210986706076572,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.09381881554611379
+      },
+      "reason": "Consistent lipid-associated alternative; expression association alone cannot choose therapeutic inhibition versus enhancement."
+    },
+    {
+      "gene": "CH25H",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "CH25H",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": -0.5408885772917322,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": -0.3202141725372126,
+        "model_seed_effects": [
+          -0.15166934242454316,
+          -0.22205612102821037,
+          -0.23237611385578974,
+          -0.6770699583809222,
+          -0.3178993269965975
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 0.9761904761904762,
+        "prioritization_heuristic": 0.3125900255720409,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": -0.37860202476672,
+            "published_global_adjusted_p": 0.00388802569819532,
+            "published_local_adjusted_p": 0.00388802569819532,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "amyloid": {
+            "logFC": -0.0680820720460026,
+            "published_global_adjusted_p": 0.00025524774564667,
+            "published_local_adjusted_p": 0.00025524774564667,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          },
+          "tangles": {
+            "logFC": -0.0395324822957689,
+            "published_global_adjusted_p": 0.000695672766718732,
+            "published_local_adjusted_p": 0.000695672766718732,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": true
+          }
+        },
+        "model_and_primary_cohort_association_supported": true
+      },
+      "covariate_sensitivity": {
+        "gene": "CH25H",
+        "adjusted_High_vs_NotAD_coefficient": -0.5450647039098522,
+        "subtype_coefficients": [
+          -0.637504664358833,
+          -0.4526247434608713
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 0.9761904761904762,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 0.6666666666666666,
+            "unadjusted_sign_agreement": 0.6666666666666666
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": -0.5408885772917322,
+        "model_effect": -0.3202141725372126,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.3125900255720409
+      },
+      "reason": "Deprioritized in this review because deleting one control reverses the effect in one eligible subtype, despite the aggregate stability statistic."
+    },
+    {
+      "gene": "CCL3",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "CCL3",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": -0.4149547570337522,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": -0.23836689390871704,
+        "model_seed_effects": [
+          -0.08133496356619335,
+          -0.2118493875358632,
+          -0.08756959550920056,
+          -0.4958337638661947,
+          -0.3152467590661335
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.23836689390871704,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": -0.318741121756109,
+            "published_global_adjusted_p": 0.124300811714249,
+            "published_local_adjusted_p": 0.124300811714249,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          },
+          "amyloid": {
+            "logFC": -0.0440119023280246,
+            "published_global_adjusted_p": 0.161282754920132,
+            "published_local_adjusted_p": 0.161282754920132,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          },
+          "tangles": {
+            "logFC": -0.00613778175965997,
+            "published_global_adjusted_p": 0.81817263549303,
+            "published_local_adjusted_p": 0.81817263549303,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          }
+        },
+        "model_and_primary_cohort_association_supported": false
+      },
+      "covariate_sensitivity": {
+        "gene": "CCL3",
+        "adjusted_High_vs_NotAD_coefficient": -0.4385920583494076,
+        "subtype_coefficients": [
+          -0.45852533301976506,
+          -0.4186587836790502
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": -0.4149547570337522,
+        "model_effect": -0.23836689390871704,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.23836689390871704
+      },
+      "reason": "Model/local association did not meet the prespecified primary ROSMAP association support criterion."
+    },
+    {
+      "gene": "CCL4",
+      "within_subtype_model_and_donor_evidence": {
+        "gene": "CCL4",
+        "real_high_minus_NotAD_mean_log1p_panelCP10k": -0.3361162554522802,
+        "model_high_minus_NotAD_mean_log1p_panelCP10k": -0.20876504196409096,
+        "model_seed_effects": [
+          -0.0785662581751808,
+          -0.0481954887399634,
+          -0.08645209673424617,
+          -0.4526075296407334,
+          -0.37800383653033093
+        ],
+        "model_seeds_agreeing_with_real": 5,
+        "model_replicate_sign_agreement": 1.0,
+        "real_leave_one_donor_sign_agreement": 1.0,
+        "prioritization_heuristic": 0.20876504196409096,
+        "synthetic_groups_complete_in_all_models": true,
+        "ROSMAP": {
+          "gpath": {
+            "logFC": -0.19471876135033,
+            "published_global_adjusted_p": 0.478793927008889,
+            "published_local_adjusted_p": 0.478793927008889,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          },
+          "amyloid": {
+            "logFC": -0.0374684929548602,
+            "published_global_adjusted_p": 0.324622578878469,
+            "published_local_adjusted_p": 0.324622578878469,
+            "measured_in_external_table": true,
+            "direction_agrees": true,
+            "association_support": false
+          },
+          "tangles": {
+            "logFC": 0.00151168792874901,
+            "published_global_adjusted_p": 0.971552244652516,
+            "published_local_adjusted_p": 0.971552244652516,
+            "measured_in_external_table": true,
+            "direction_agrees": false,
+            "association_support": false
+          }
+        },
+        "model_and_primary_cohort_association_supported": false
+      },
+      "covariate_sensitivity": {
+        "gene": "CCL4",
+        "adjusted_High_vs_NotAD_coefficient": -0.35304317043611233,
+        "subtype_coefficients": [
+          -0.30222457076894105,
+          -0.40386177010328356
+        ],
+        "groupwise_adjusted_donor_deletion_sign_agreement": 1.0,
+        "stage_stratified_donor_deletion_checks": [
+          {
+            "group": 2,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 2,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 0,
+            "adjusted_valid_deletions": 3,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          },
+          {
+            "group": 4,
+            "deleted_donor_stage": 3,
+            "adjusted_valid_deletions": 18,
+            "adjusted_sign_agreement": 1.0,
+            "unadjusted_sign_agreement": 1.0
+          }
+        ],
+        "unadjusted_reference_effect": -0.3361162554522802,
+        "model_effect": -0.20876504196409096,
+        "adjusted_sign_agrees_with_unadjusted": true,
+        "adjusted_sign_agrees_with_model": true,
+        "original_prioritization_heuristic": 0.20876504196409096
+      },
+      "reason": "Model/local association did not meet the prespecified primary ROSMAP association support criterion."
+    }
+  ],
+  "limitations": [
+    "Thefive models share one33-donor optimization fold and are not five independent biological cohorts.",
+    "The12.8Msyntheticcells reduceMonte Carlo error but add zero biological donors.",
+    "Stage associations are observational and do not establishCLEC5A causality or therapeutic direction.",
+    "The humanROSMAP support is cell-class association; the three traits share a cohort and are not three independent replications.",
+    "ExactDecontX preprocessing of thepublished author ROSMAP tables was not reproduced.",
+    "No direct human CLEC5A intervention benefit was verified; mouse-to-human transfer is the proposedtest.",
+    "The original published mouse gene result is not a novel discovery by this model.",
+    "No lab experiment, clinical efficacy claim, registration submission or organizer contact has occurred."
+  ],
+  "inputs_SHA256": {
+    "/ml2/alz/artifacts/primamente-t005-gene-inference-recovery-v1-20261108/completed.json": "26c02c3cdc3cda441e46fc30220e6a01ac0383adc721323801c10a668b3011d3",
+    "/ml2/alz/analysis/primamente_gene_inference_exploratory_ranking_20261108.json": "fd3bb4bb500734b90d80fd46cb97acae4205d397c04eb737db83b60c750c9032",
+    "/ml2/alz/analysis/primamente_model_gene_ROSMAP_crosscheck_20261108.json": "f61af34e989adb0fd0c2308234dc0e1f397b61ff0966517988c855c6a1d16f9e",
+    "/ml2/alz/analysis/primamente_donor_covariate_sensitivity_20261108.json": "deedf182f5124730ef5fbe4baadc3ac8b8ae236fa9d4784668dc178a7faa8a74",
+    "/ml2/alz/analysis/primamente_model_capability_review_20261108.json": "3ce9765e6a58688a8e4440bb110b0f097fc83e541007c144f912c0a055fa7df9",
+    "/ml2/alz/analysis/primamente_external_cohort_coefficient_audit_20261108.json": "0023c837297bc478cfe9c4617cfad770ed20ff9784aad51bbd310ac7ae8e07c6",
+    "/ml2/alz/analysis/primamente_published_state_marker_coverage_20261108.json": "c8c2eb008af4ff9f6fc6156ab6dd4209cd2b1e5669716d7491d3a0a4aef4f770"
+  },
+  "registration_submitted": false,
+  "lab_validation_performed": false,
+  "new_training_required_for_registration_answer": false,
+  "full_challenge_model_ready": false,
+  "future_challenge_work": [
+    "Add experimental perturbation, dose, time and genetic context conditioning when atlas data are available.",
+    "Validate unseen donors, perturbations andcombinations with explicit leakage controls.",
+    "Benchmark conditional expression andstate compositions against matched resampling and external models; evaluate functional readouts separately."
+  ],
+  "alternative_literature_sources": {
+    "PPARG_TOMMORROW_primary_trial": "https://www.sciencedirect.com/science/article/pii/S1474442221000430",
+    "GPNMB_human_and_model_context_primary": "https://www.nature.com/articles/s41588-026-02716-6",
+    "general_human_microglial_perturbation_primary": "https://pubmed.ncbi.nlm.nih.gov/42526428/"
+  }
+}
