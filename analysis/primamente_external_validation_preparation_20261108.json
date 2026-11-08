@@ -1,0 +1,138 @@
+{
+  "status": "AUTHOR_PUBLISHED_ROSMAP_MICROGLIAL_ASSOCIATION_TABLES_DOWNLOADED_NO_MODEL_RESULT_JOIN_YET",
+  "UTC": "2026-11-08T20:06:47.954715+00:00",
+  "primary_paper_URL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10601493/",
+  "primary_paper_DOI": "10.1016/j.cell.2023.08.039",
+  "cohort": "ROSMAP human prefrontal cortex427participants; disease-association summaries, not perturbation effects",
+  "author_repository": "https://github.com/mathyslab7/ROSMAP_snRNAseq_PFC",
+  "repository_commit": "28388f829be6affa1578e56fa09c4be8cd273817",
+  "tables": [
+    {
+      "contrast": "gpath",
+      "role": "primary_external_pathology_association",
+      "source_URL": "https://raw.githubusercontent.com/mathyslab7/ROSMAP_snRNAseq_PFC/28388f829be6affa1578e56fa09c4be8cd273817/Results/DecontX_RUVr_Differential_gene_expression_analysis/muscat_DecontX/Results/gpath/Mic_gpath.csv",
+      "author_repository_path": "Results/DecontX_RUVr_Differential_gene_expression_analysis/muscat_DecontX/Results/gpath/Mic_gpath.csv",
+      "git_blob_SHA1": "dcc3250c28b5083a8217a38dda6eb623c03489e2",
+      "download_path": "/ml2/alz/artifacts/primamente-external-evidence/ROSMAP_Mic_gpath.csv",
+      "SHA256": "648244af99a940a835116d06f0d5cd6fe34cb105cf07ddb71588b9ca142edcc5",
+      "bytes": 1790926,
+      "rows": 12922,
+      "columns": [
+        "",
+        "gene",
+        "cluster_id",
+        "logFC",
+        "logCPM",
+        "F",
+        "p_val",
+        "p_adj.loc",
+        "p_adj.glb",
+        "coef"
+      ],
+      "first_row_schema_only": {
+        "": "<gene_identifier>",
+        "gene": "<gene_identifier>",
+        "cluster_id": "<value>",
+        "logFC": "<value>",
+        "logCPM": "<value>",
+        "F": "<value>",
+        "p_val": "<value>",
+        "p_adj.loc": "<value>",
+        "p_adj.glb": "<value>",
+        "coef": "<value>"
+      }
+    },
+    {
+      "contrast": "amyloid",
+      "role": "prespecified_secondary_not_alternative_cherry_pick",
+      "source_URL": "https://raw.githubusercontent.com/mathyslab7/ROSMAP_snRNAseq_PFC/28388f829be6affa1578e56fa09c4be8cd273817/Results/DecontX_RUVr_Differential_gene_expression_analysis/muscat_DecontX/Results/amyloid/Mic_amyloid.csv",
+      "author_repository_path": "Results/DecontX_RUVr_Differential_gene_expression_analysis/muscat_DecontX/Results/amyloid/Mic_amyloid.csv",
+      "git_blob_SHA1": "9130545d228cbb1c159cd74b8f5b383fc4826051",
+      "download_path": "/ml2/alz/artifacts/primamente-external-evidence/ROSMAP_Mic_amyloid.csv",
+      "SHA256": "60a97ef390b602b78b79aeae21c67cd2f1ac2191b9917f3119397a3cf788a9b7",
+      "bytes": 1827020,
+      "rows": 12925,
+      "columns": [
+        "",
+        "gene",
+        "cluster_id",
+        "logFC",
+        "logCPM",
+        "F",
+        "p_val",
+        "p_adj.loc",
+        "p_adj.glb",
+        "coef"
+      ],
+      "first_row_schema_only": {
+        "": "<gene_identifier>",
+        "gene": "<gene_identifier>",
+        "cluster_id": "<value>",
+        "logFC": "<value>",
+        "logCPM": "<value>",
+        "F": "<value>",
+        "p_val": "<value>",
+        "p_adj.loc": "<value>",
+        "p_adj.glb": "<value>",
+        "coef": "<value>"
+      }
+    },
+    {
+      "contrast": "tangles",
+      "role": "prespecified_secondary_not_alternative_cherry_pick",
+      "source_URL": "https://raw.githubusercontent.com/mathyslab7/ROSMAP_snRNAseq_PFC/28388f829be6affa1578e56fa09c4be8cd273817/Results/DecontX_RUVr_Differential_gene_expression_analysis/muscat_DecontX/Results/tangles/Mic_tangles.csv",
+      "author_repository_path": "Results/DecontX_RUVr_Differential_gene_expression_analysis/muscat_DecontX/Results/tangles/Mic_tangles.csv",
+      "git_blob_SHA1": "42ca22657d94d951020945015ff285a27785f9de",
+      "download_path": "/ml2/alz/artifacts/primamente-external-evidence/ROSMAP_Mic_tangles.csv",
+      "SHA256": "38c5c32697b1f26d8f786a1ee23c090e000b7cbeb9a9a2841df153da5d831a55",
+      "bytes": 1831338,
+      "rows": 12925,
+      "columns": [
+        "",
+        "gene",
+        "cluster_id",
+        "logFC",
+        "logCPM",
+        "F",
+        "p_val",
+        "p_adj.loc",
+        "p_adj.glb",
+        "coef"
+      ],
+      "first_row_schema_only": {
+        "": "<gene_identifier>",
+        "gene": "<gene_identifier>",
+        "cluster_id": "<value>",
+        "logFC": "<value>",
+        "logCPM": "<value>",
+        "F": "<value>",
+        "p_val": "<value>",
+        "p_adj.loc": "<value>",
+        "p_adj.glb": "<value>",
+        "coef": "<value>"
+      }
+    }
+  ],
+  "primary_crosscheck": "GlobalADpathologygpath; fixed before model-gene ranking is read",
+  "secondary_crosschecks": [
+    "amyloid",
+    "tangles"
+  ],
+  "no_target_or_intervention_chosen": true,
+  "model_gene_rankings_not_read": true,
+  "not_yet_replication_claim": true,
+  "required_before_interpretation": [
+    "Confirm coefficient and covariate direction from author analysis code.",
+    "Audit source cohort independence and symbol mapping.",
+    "Preserve failed direction agreement and missing/unmeasured genes.",
+    "Do not equate expression association with an effect of inhibiting the gene."
+  ],
+  "perturbation_source": {
+    "paper_URL": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9448678/",
+    "DOI": "10.1038/s41593-022-01131-4",
+    "assay": "Human iPSC microgliaCRISPRi/a and CROP-seq with functional screens",
+    "public_data": "GSE178317 and CRISPRbrain",
+    "tables_downloaded": false,
+    "important_limitation": "Changing microglial state abundance is not proof of neuronal protection; survival and functional effects must be checked."
+  }
+}
