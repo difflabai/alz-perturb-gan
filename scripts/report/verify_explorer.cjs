@@ -47,6 +47,13 @@ change('gene-filter','all');
 change('gene-search','USP9Y','input');
 $('gene-rows').querySelector('button').click();
 assert.match($('detail-caveat').textContent, /Y-linked/);
+change('gene-search','PPARG','input');
+[...$('gene-rows').querySelectorAll('button')].find(el=>el.textContent==='PPARG').click();
+assert.equal($('detail-status').textContent,'Association checks pass');
+assert.match($('detail-fit').textContent,/Mean absolute gap: 0\.539/);
+assert.match($('detail-fit').textContent,/5\.5%.*20\.0%/);
+assert.equal($('detail-audit').hidden,false);
+assert.match($('detail-caveat').textContent,/model fit problem/);
 change('gene-search','TREM2','input');
 assert.match($('gene-count').textContent, /^0 genes/);
 assert.equal($('next-page').disabled, true);
@@ -63,6 +70,12 @@ assert.equal(window.document.querySelectorAll('#gene-rows script').length,0);
 dom.window.close();
 const story = window.document.querySelector('main').cloneNode(true);
 story.querySelectorAll('details,script,style').forEach(el=>el.remove());
+assert.doesNotMatch(story.textContent,/resampling/i);
+assert.match(story.textContent,/65\.9%/);
+for (const el of window.document.querySelectorAll('script[src],link[rel=stylesheet],img')) {
+ const resource=el.getAttribute('src') || el.getAttribute('href');
+ assert.match(resource,/\?v=[a-f0-9]{12}$/);
+}
 const visibleWords=story.textContent.trim().split(/\s+/).length;
 assert.ok(visibleWords<800, `Main story is too long: ${visibleWords} words`);
 console.log(`Main story: ${visibleWords} words (disclosures excluded).`);

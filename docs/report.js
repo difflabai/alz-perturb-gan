@@ -81,10 +81,22 @@
   function drawDetail() {
     const row = byGene.get(selected);
     $('detail-gene').textContent = selected;
-    $('detail-status').textContent = row.robust_sensitivity ? 'Passes sensitivity filter' : row.rosmap_support ? 'Model + cohort support' : row.stable ? 'Stable model signal' : 'Outside stability filter';
+    $('detail-status').textContent = row.robust_sensitivity ? 'Association checks pass' : row.rosmap_support ? 'Cohort-supported direction' : row.stable ? 'Stable model signal' : 'Outside stability filter';
     $('detail-summary').textContent = `Original within-subtype heuristic rank ${row.rank.toLocaleString()} of 2,000. Model Δ ${signed(row.model_effect)}; observed Δ ${signed(row.real_effect)}; adjusted observed Δ ${signed(row.adjusted_effect)}.`;
+    const profile = data.stage_profiles[selected];
+    const modelMean = profile.real.map((_, i) => profile.model_by_seed.reduce((sum, values) => sum + values[i], 0) / 5);
+    const errors = modelMean.map((value, i) => value - profile.real[i]);
+    const mae = errors.reduce((sum, value) => sum + Math.abs(value), 0) / 4;
+    const levelMessage = errors.every(value => value < 0) ? 'The model is below the observed mean at all four stages.' : errors.every(value => value > 0) ? 'The model is above the observed mean at all four stages.' : 'The model over- and underestimates different stages.';
+    $('detail-fit').textContent = `${levelMessage} Mean absolute gap: ${mae.toFixed(3)} log-expression units. Association support does not establish an accurate expression fit.`;
+    $('detail-audit').hidden = selected !== 'PPARG';
+    if (selected === 'PPARG') {
+      const fit = data.selected_gene_fit_audits.PPARG.within_subtype;
+      const pct = value => `${(value * 100).toFixed(1)}%`;
+      $('detail-fit').textContent += ` Balanced nonzero rates in the two analyzed subtypes: Not AD ${pct(fit.model_nonzero_fraction[0])} generated vs ${pct(fit.observed_nonzero_fraction[0])} observed; High: ${pct(fit.model_nonzero_fraction[3])} vs ${pct(fit.observed_nonzero_fraction[3])}.`;
+    }
     drawProfile(selected);
-    const metrics = [ ['Seeds agreeing with observed direction', `${row.seeds_agree} / 5`], ['Monte Carlo sign agreement', percentage(row.mc_agreement)], ['ROSMAP pathology coefficient', signed(row.rosmap_logFC)], ['ROSMAP published global FDR', fdr(row.rosmap_fdr)], ['Minimum adjusted control-deletion agreement', percentage(row.minimum_control_deletion_agreement)], ['Model seed-effect range', `${signed(Math.min(...row.seed_effects))} to ${signed(Math.max(...row.seed_effects))}`] ];
+    const metrics = [ ['Seeds agreeing with observed direction', `${row.seeds_agree} / 5`], ['Monte Carlo sign agreement', percentage(row.mc_agreement)], ['ROSMAP pathology coefficient', signed(row.rosmap_logFC)], ['ROSMAP published global FDR', fdr(row.rosmap_fdr)], ['Mean absolute stage-profile error', mae.toFixed(3)], ['Model seed-effect range', `${signed(Math.min(...row.seed_effects))} to ${signed(Math.max(...row.seed_effects))}`] ];
     const dl = $('detail-metrics'); dl.replaceChildren();
     for (const [label, value] of metrics) { const div = make('div'); div.append(make('dt', label), make('dd', value)); dl.append(div); }
     const caveats = {
@@ -94,7 +106,7 @@
       UTY: 'This Y-linked association reverses after donor-covariate adjustment. Sex imbalance is a major interpretive concern.',
       CH25H: 'One control-donor deletion reverses the association in one eligible subtype. It fails the additional stage-specific donor robustness filter.',
       GPNMB: 'The model strongly attenuates the endpoint effect. Higher disease-associated expression does not imply that reducing this potentially adaptive state is beneficial.',
-      PPARG: 'The model underestimates absolute expression. The direction of a useful intervention is unresolved; the low-dose pioglitazone prevention trial had a negative primary result.',
+      PPARG: 'This profile shows a model fit problem, with excess zero counts. It is not evidence of a hidden biological effect. The direction of a useful intervention is unresolved; the low-dose pioglitazone prevention trial had a negative primary result.',
       LPL: 'The small positive endpoint association is consistent, but the stage shape is imperfect. Association does not specify whether activity should be increased or reduced.',
       PLIN2: 'A candidate lipid-droplet-associated readout, with attenuated model effect. A marker change alone is not evidence of improved microglial function.'
     };

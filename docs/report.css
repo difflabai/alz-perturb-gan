@@ -76,11 +76,10 @@ button { font: inherit; cursor: pointer; }
 .evidence-strip dd { margin: 0; font-size: 12px; color: var(--dl-fg-muted); max-width: 230px; }
 .quality-section { background: var(--dl-surface); border-block: 1px solid var(--dl-border); }
 .quality-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 58px; align-items: center; }
-.score-row { display: grid; grid-template-columns: 1.7fr .7fr .7fr; align-items: center; gap: 12px; border-bottom: 1px solid var(--dl-border); padding: 19px 0; font-size: 14px; font-variant-numeric: tabular-nums; }
-.score-row > :not(:first-child) { text-align: right; }
-.score-header { color: var(--dl-fg-muted); font-size: 10px; padding-block: 0 13px; }
-.score-row strong { font-weight: 500; font-size: 24px; font-family: var(--dl-font-family-display); letter-spacing: -.03em; }
-.score-row small { display: block; font-size: 11px; color: var(--dl-fg-muted); margin-top: 5px; }
+.quality-values { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+.quality-values div { border-top: 1px solid var(--dl-border); padding-top: 17px; }
+.quality-values dt { font: 500 40px/1.2 var(--dl-font-family-display); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.quality-values dd { color: var(--dl-fg-muted); font-size: 12px; margin: 12px 0 0; max-width: 190px; }
 .quality-limit { font-size: 13px; margin-top: 28px; color: var(--dl-fg-muted); }
 .quality-limit strong { color: var(--dl-fg); font-weight: 500; }
 details { border-bottom: 1px solid var(--dl-border); font-size: 14px; padding-block: 18px; }
@@ -217,9 +216,7 @@ footer .small { font-size: 10px; }
   .evidence-strip div { display: flex; align-items: baseline; gap: 18px; padding-block: 16px; }
   .evidence-strip dt { font-size: 27px; min-width: 130px; margin: 0; }
   .evidence-strip dd { font-size: 11px; }
-  .score-row { grid-template-columns: 1.7fr .65fr .65fr; gap: 10px; font-size: 12px; }
-  .score-row strong { font-size: 21px; }
-  .score-header { font-size: 10px; }
+  .quality-values dt { font-size: 34px; }
   .experiment-steps { grid-template-columns: 1fr; gap: 0; margin-block: 26px; }
   .experiment-steps li { display: flex; gap: 20px; padding-block: 20px; }
   .experiment-steps .step { margin-top: 5px; }
@@ -244,3 +241,5 @@ footer .small { font-size: 10px; }
 }
 @media (max-width: 380px) { .brand-lockup img { width: 165px; } .nav-actions { gap: 9px; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .disclosure-title span { transition: none; } }
+
+.fit-note { border-left: 2px solid var(--dl-color-brand-slate); background: var(--dl-surface-raised); padding: 12px 14px; font-size: 12px; line-height: 1.65; margin-block: 15px; }

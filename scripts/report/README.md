@@ -42,3 +42,9 @@ Those retained artifacts and raw datasets are not bundled with the public reposi
 ## Brand assets and dataset context
 
 The report uses the official [DiffLab brand kit](https://branding.difflab.ai/): unmodified logo assets, navy/amber/paper tokens, and locally served Space Grotesk, Inter, and JetBrains Mono. Brand asset origins and hashes are in `docs/brand/manifest.json`; font licenses are bundled. Scientific chart text is rendered as vector paths for consistent typography. The main story is concise; the explorer and full methods sit in expandable sections. The displayed dataset is explicitly SEA-AD, an independent proof of concept that does not use Prima Mente’s forthcoming challenge atlas.
+
+Styles, scripts, and images receive content-versioned URLs in generated HTML so readers receive the assets that match each published revision. The main page focuses on model-versus-observation fit; resampling remains an empirical calibration reference inside the methods disclosure.
+
+## Investigate a gene-level fit error
+
+`python3 scripts/report/audit_gene_fit.py` reconstructs PPARG from raw training counts and all 160 frozen inference summaries, checking hashes and the plotted profiles. It requires the original retained data and SciPy, and writes only anonymous aggregates to `docs/evidence/pparg-fit-audit.json`. No models are loaded or trained. The explorer labels association support separately from expression fit and displays mean absolute profile error. PPARG’s excess zeros persist in the pooled analysis as well as the selected subtypes, so subtype assignments alone do not explain the discrepancy. This does not prove an optimization or biological cause.

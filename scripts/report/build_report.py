@@ -3,7 +3,8 @@
 No GPU, raw cells, donor identifiers, model weights, or native runtime is needed.
 """
 from pathlib import Path
-import argparse,csv,hashlib,json,math,statistics,colorsys,tempfile
+import argparse,csv,hashlib,json,math,statistics,colorsys,tempfile,re
+from urllib.parse import urlsplit
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -56,6 +57,7 @@ def data_export():
   subset=[v for v in donors.values() if v['Overall AD neuropathological Change']==stage]
   covariates.append(dict(stage=stage,n=len(subset),male=sum(v['Sex']=='Male' for v in subset),apoe4_carriers=sum('4' in v['APOE Genotype'].split('/') for v in subset),mean_age=statistics.mean(float(v['Age at Death']) for v in subset)))
  data=dict(schema=1,snapshot_date='2026-11-08',training_dataset='SEA-AD middle temporal gyrus',challenge_atlas_used=False,challenge_context='Independent proof of concept; Prima Mente atlas planned for Spring 2027',research_snapshot_commit='89fa5ea',repository='https://github.com/difflabai/alz-perturb-gan',version='0.9.7',frozen_updates=20000,models=5,real_training_donors=33,training_cells=14762,genes_measured=2000,synthetic_cells=12800000,stages=profiles['stage_order'],subtypes=profiles['group_names'],covariates=covariates,hyperparameters=q['plan']['hyperparameters'],calibration=quality['calibration_per_seed'],calibration_means=quality['calibration_mean_over5seeds'],gene_agreement=quality['gene_contrast_descriptive_agreement'],classifier=dict(apparent_training_accuracy=quality['real_training_classifier_accuracy'],apparent_balanced_training_accuracy=quality['real_training_classifier_balanced_accuracy'],generated_mean_confidence_by_stage=quality['generated_classifier_confidence_mean_by_stage']),mixture=dict(real=quality['real_equal_donor_stage_mixture'],generated_by_seed=quality['generated_seed_mean_mixtures'],total_variation_mean=quality['mixture_total_variation_mean_by_stage']),screen=dict(measured=2000,stable=sum(x['stable'] for x in rows),cohort_supported=sum(x['rosmap_support'] for x in rows),sensitivity_robust=sum(x['robust_sensitivity'] for x in rows)),rows=rows,stage_profiles=profiles['profiles'],stage_profile_eligible_donors=profiles['real_eligible_donors_by_stage_group'],form_answer='I’d like to test whether reducing CLEC5A in human stem-cell-derived microglia improves amyloid-β clearance without increasing synapse loss. In an independent proof of concept using public SEA-AD data, our trained generative model and donor-level analyses prioritize CLEC5A as a pathology-associated candidate. Published mouse knockout results motivate testing whether the benefit translates to human cells, including across APOE3 and APOE4 backgrounds.')
+ data['selected_gene_fit_audits']={'PPARG':read(EVIDENCE/'pparg-fit-audit.json')}
  assert data['screen']==dict(measured=2000,stable=614,cohort_supported=107,sensitivity_robust=58)
  for row in rows:
   profile=profiles['profiles'][row['gene']];delta=np.mean([v[3]-v[0] for v in profile['model_by_seed']]);real=profile['real'][3]-profile['real'][0]
@@ -100,14 +102,23 @@ def figures(data):
 def manifest():
  sources={f'analysis/{name}':sha(ANALYSIS/name) for name in FILES.values()};sources['docs/evidence/stage-profiles.json']=sha(EVIDENCE/'stage-profiles.json')
  sources['scripts/report/report.template.html']=sha(ROOT/'scripts/report/report.template.html')
+ sources['docs/evidence/pparg-fit-audit.json']=sha(EVIDENCE/'pparg-fit-audit.json')
+ sources['scripts/report/audit_gene_fit.py']=sha(ROOT/'scripts/report/audit_gene_fit.py')
  sources['docs/brand/manifest.json']=sha(DOCS/'brand/manifest.json')
- paths=[EVIDENCE/'report-data.json',EVIDENCE/'genes.csv',DOCS/'index.html',DOCS/'report.css',DOCS/'report.js',*ASSETS.glob('*.svg'),*ASSETS.glob('*.png'),*sorted((DOCS/'brand').glob('*'))]
+ paths=[EVIDENCE/'pparg-fit-audit.json',EVIDENCE/'report-data.json',EVIDENCE/'genes.csv',DOCS/'index.html',DOCS/'report.css',DOCS/'report.js',*ASSETS.glob('*.svg'),*ASSETS.glob('*.png'),*sorted((DOCS/'brand').glob('*'))]
  output=dict(schema=1,study_snapshot='2026-11-08',source_research_commit='89fa5ea',aggregate_input_SHA256=sources,generated_output_SHA256={str(p.relative_to(ROOT)):sha(p) for p in sorted(paths)},builder_SHA256=sha(Path(__file__)),description='Public aggregate exports and figures; no raw cells or model weights. All gene contrasts are exploratory observational associations.')
  (EVIDENCE/'manifest.json').write_text(json.dumps(output,indent=2)+'\n')
 
 def html_export(data):
  template=(ROOT/'scripts/report/report.template.html').read_text();embed=json.dumps(data,separators=(',',':'),ensure_ascii=False,allow_nan=False).replace('<','\\u003c');out=template.replace('__REPORT_JSON__',embed)
- assert '__REPORT_JSON__' not in out;(DOCS/'index.html').write_text(out)
+ assert '__REPORT_JSON__' not in out
+ def version_asset(match):
+  prefix,url,suffix=match.groups();parsed=urlsplit(url)
+  if parsed.scheme or parsed.netloc or not parsed.path.endswith(('.css','.js','.svg','.png','.woff2')):return match.group(0)
+  asset=DOCS/parsed.path
+  return prefix+parsed.path+'?v='+sha(asset)[:12]+suffix if asset.is_file() else match.group(0)
+ out=re.sub(r'((?:src|href)=")([^"]+)(")',version_asset,out)
+ (DOCS/'index.html').write_text(out)
 
 def check():
  data=read(EVIDENCE/'report-data.json');m=read(EVIDENCE/'manifest.json');assert len(data['rows'])==len(set(x['gene'] for x in data['rows']))==2000
@@ -128,7 +139,7 @@ def check():
  parser=Links();parser.feed((DOCS/'index.html').read_text())
  for link in parser.links:
   if link.startswith('#'):assert link[1:] in parser.ids,link
-  elif not link.startswith(('https:','http:','mailto:','data:')):assert (DOCS/link).is_file(),link
+  elif not link.startswith(('https:','http:','mailto:','data:')):assert (DOCS/urlsplit(link).path).is_file(),link
  print(json.dumps(dict(status='REPORT_DATA_HASHES_GENE_COUNTS_STAGE_CONTRASTS_LINKS_AND_PUBLIC_EXPORT_CHECKS_PASS',genes=2000,screen=data['screen'],no_raw_cell_or_donor_identifier_exports=True)))
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');args=p.parse_args()

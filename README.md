@@ -23,6 +23,9 @@ The resulting analysis supports **CLEC5A as a candidate for a human microglial e
 
 ## How well it fits
 
+<details>
+<summary>Technical calibration sanity check</summary>
+
 Four calibration donors were used during hyperparameter selection. These are selection results, not an independent final test. Means across five fits and two generation replicates per fit:
 
 | Metric | Generator | Matched resampling | Interpretation |
@@ -30,6 +33,10 @@ Four calibration donors were used during hyperparameter selection. These are sel
 | Donor energy score ↓ | 2.0069 | 2.0946 | Generator 4.2% lower; better in 4/5 fits |
 | Cell energy distance ↓ | 0.2842 | 0.2349 | Generator 21.0% higher; worse in 5/5 fits |
 | Central 80% donor-summary coverage | 64.7% | 68.4% | Both below nominal 80% |
+
+Resampling reuses observed cells; it is an empirical reference, not a trained neural network or a model-architecture benchmark.
+
+</details>
 
 Across the 2,000 correlated genes, the within-subtype training-association comparison has descriptive Spearman correlation **0.502** and direction agreement **65.9%**. It is not held-out gene-prediction accuracy. The report includes failed/sensitive signals, sex/APOE imbalance, incomplete marker coverage, and a comparison with the simpler real-data-plus-literature workflow that still needs to be done.
 
