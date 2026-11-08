@@ -1,4 +1,5 @@
-import copy,sys,unittest
+import copy,sys,tempfile,unittest
+from pathlib import Path
 from unittest.mock import patch
 import binding as b,preset_scope as s,prepare,resource_profile as profile
 from dual_coordination import GPUS,valid_cell,validate_active_peers
@@ -27,7 +28,9 @@ class Scope(unittest.TestCase):
  def test_plan_handoff_and_runtime_proof_required(self):
   a,_=prepare.build_authorization(gpu=GPUS[1],check_only=True)
   with self.assertRaises(AssertionError):ORIGINAL(a,require_runtime_proof=False,require_handoff=False)
-  with self.assertRaises(FileNotFoundError):ORIGINAL(a,require_runtime_proof=False,require_activation=False)
+  with tempfile.TemporaryDirectory() as folder:
+   with patch.object(s,'HANDOFF',Path(folder)/'missing-handoff.json'),self.assertRaises(FileNotFoundError):ORIGINAL(a,require_runtime_proof=False,require_activation=False)
+   with patch.object(s,'RUNTIME_PROOF',Path(folder)/'missing-proof.json'),self.assertRaises(FileNotFoundError):ORIGINAL(a,require_activation=False,require_handoff=False)
  def test_scientific_workers_native_auditor_and_backend_byte_identical(self):
   for n in ('worker_gpu0.py','finish.py','retained_pcs.py','native_scvi_reload.py','state_fingerprint.py','project_runner_gpu0.py','launch_core_gpu0.py'):
    self.assertEqual((b.HERE/n).read_bytes(),(s.ROOT/'benchmark097_balanced_runtime'/n).read_bytes(),n)

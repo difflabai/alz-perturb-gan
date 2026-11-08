@@ -16,7 +16,7 @@ import time
 
 ROOT = Path('/ml2/alz')
 STATE = ROOT / 'artifacts/released097-final-independent-audits'
-PROOF = ROOT / 'analysis/released097_final_audits_observer_CPU_check_v4_20261108.json'
+PROOF = ROOT / 'analysis/released097_final_audits_observer_CPU_check_v5_20261108.json'
 PROJECT = Path('/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark')
 PG = PROJECT / 'current_base_20261029/runtime/bin/python'
 PARENTS = {

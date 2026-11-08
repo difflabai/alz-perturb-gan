@@ -17,16 +17,53 @@ def command(args,timeout=120):
  if p.returncode:raise RuntimeError(p.stderr[-3000:])
  return p.stdout
 def commit(paths,message):command(['git','add','--',*paths]);command(['git','commit','--only','-m',message,'--',*paths])
+def upstream_state(parent,*,get_identity=identity,upstream=UPSTREAM,handoff=None):
+ assert not (upstream/'failure.json').exists(),'Original continuation has a retained failure'
+ if get_identity(parent['pid'])==parent:return 'live'
+ assert (upstream/'completed.json').is_file(),'Missing verified completed original parent'
+ original=read(s.HANDOFF if handoff is None else handoff)
+ assert read(upstream/'completed.json')==original,'Original completion receipts differ'
+ assert original['status']=='ALL45_ORIGINAL_ATTEMPTS_CLOSED_42_COMPLETE_THREE_INFRA_FAILURES_FRESH_REPLACEMENTS_REMAIN'
+ assert original['original_scientific_cells']==45 and original['successful_original_models']==42 and original['failed_original_attempts']==list(lineage.FAILED)
+ return 'completed'
+def wait_clean_handoff(*,clean,budget_free,deadline,clock=time.time,sleep=time.sleep,on_wait=lambda:None):
+ while True:
+  assert budget_free(),'Unexpected native reservation at original/replacement handoff'
+  if clean():return
+  if clock()>=deadline:raise TimeoutError('Training admission window ended while waiting for research output commit')
+  on_wait();sleep(2)
+DIRTY_START='Commit completed research outputs before new admission'
+DIRTY_PREPARE='Commit qualified source/evidence before deployment'
+def fresh_admission(start,*,clean,untouched):
+ assert untouched(),'Fresh scientific key already prepared/consumed; no retry'
+ if not clean():return None
+ try:return start()
+ except (AssertionError,RuntimeError) as exc:
+  text=str(exc).strip();last=text.splitlines()[-1] if text else '';kind,sep,message=last.partition(':')
+  dirty=(isinstance(exc,AssertionError) and text==DIRTY_START) or (sep and kind.split('.')[-1] in ('AssertionError','Refusal') and message.strip() in (DIRTY_START,DIRTY_PREPARE))
+  if dirty and untouched():return None
+  raise
+def untouched_replacement(value):
+ attempt=b.attempt_key(value)
+ if any(p.exists() for p in (ROOT/'artifacts/allocations'/attempt,ROOT/'runs'/attempt,s.STUDY/'results'/(attempt+'.json'),b.ledger_path(b.NATIVE_LAYOUT,value))):return False
+ budget=read(b.PROJECT/'project_gpu_budget.json');key=b.allocation_key(value)
+ if any(row['allocation_id']==key for row in budget.get('allocation_history',[])+budget.get('open_reservations',[])):return False
+ return key not in budget.get('execution_controller',{}).get('calibration_parallel_backends',{})
+def start_when_clean(value,gpu,count):
+ return fresh_admission(lambda:driver.start_cell(value,gpu,count),clean=lambda:not command(['git','status','--porcelain']),untouched=lambda:untouched_replacement(value))
 def main():
  assert not command(['git','status','--porcelain']) and not read(s.PLAN)['enabled']
  proof=read(s.RUNTIME_PROOF);assert proof['status']=='ONE_FRESH_INFRASTRUCTURE_REPLACEMENT_NATIVE_SCOPE_CPU_PASS' and proof['native_cell_device_bindings']==6
  for p,pin in proof['source_SHA256'].items():assert b.sha(p)==pin,p
- parent=read(UPSTREAM/'identity.json');parent_id={k:parent[k] for k in ('pid','birth','boot')};assert identity(parent_id['pid'])==parent_id
+ parent=read(UPSTREAM/'identity.json');parent_id={k:parent[k] for k in ('pid','birth','boot')}
  assert parent['source_SHA256']==b.sha(ROOT/'analysis/continue_benchmark097_after_capacity_v8.py')
  assert parent['protocol_SHA256']==b.sha(ROOT/'analysis/benchmark097_capacity_recovery_continuation_v8_protocol_20261108.json')
+ attached_state=upstream_state(parent_id)
+ gate=read(ROOT/'analysis/benchmark097_infra1_commit_handoff_CPU_check_20261108.json');assert gate['status']=='CLOSED_PARENT_AND_COMMIT_WAIT_AND_FRESH_ADMISSION_CPU_PASS' and gate['actual_tests']==8
+ for p,pin in gate['source_SHA256'].items():assert b.sha(p)==pin,p
  expiry=read(s.WINDOW)['expires_unix'];STATE.mkdir(exist_ok=False)
  with (STATE/'observer.lock').open('a+') as lock:
-  fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB);write(STATE/'identity.json',dict(**identity(os.getpid()),source_SHA256=b.sha(__file__),upstream=parent_id,runtime_qualification_SHA256=b.sha(s.RUNTIME_PROOF),training_expiry_unix=expiry,new_model_fits=0))
+  fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB);write(STATE/'identity.json',dict(**identity(os.getpid()),source_SHA256=b.sha(__file__),upstream=parent_id,upstream_state_at_attach=attached_state,runtime_qualification_SHA256=b.sha(s.RUNTIME_PROOF),training_expiry_unix=expiry,new_model_fits=0))
   try:
    while identity(parent_id['pid'])==parent_id:
     assert not (UPSTREAM/'failure.json').exists(),'Untouched continuation stopped; retain all evidence without automatic retry'
@@ -34,7 +71,7 @@ def main():
     write(STATE/'progress.json',dict(status='WAITING_FOR_ALL45_ORIGINAL_ATTEMPTS_TO_CLOSE',new_model_fits=0,upstream=parent_id,full_goal_complete=False));time.sleep(30)
    assert not (UPSTREAM/'failure.json').exists() and (UPSTREAM/'completed.json').exists()
    original=read(s.HANDOFF);assert original['successful_original_models']==42 and original['failed_original_attempts']==list(lineage.FAILED)
-   assert not read(b.PROJECT/'project_gpu_budget.json')['open_reservations'] and not command(['git','status','--porcelain'])
+   wait_clean_handoff(clean=lambda:not command(['git','status','--porcelain']),budget_free=lambda:not read(b.PROJECT/'project_gpu_budget.json')['open_reservations'],deadline=expiry-150,on_wait=lambda:write(STATE/'progress.json',dict(status='WAITING_FOR_RESEARCH_OUTPUT_COMMIT_BEFORE_FRESH_REPLACEMENTS',new_model_fits=0,full_goal_complete=False)))
    for p,pin in proof['source_SHA256'].items():assert b.sha(p)==pin,p
    activation=read(ROOT/'artifacts/benchmark097-balanced-fullmatrix/identity.json')['activation'];command(['git','revert','--no-edit',activation]);s.closed_originals()
    review=dict(status='OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS',UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),reviewer_session='01a1a22b-f310-7190-a7c6-8697ecabae6c',independent_review_claimed=False,owner_authorization=read(ROOT/'analysis/faithful097_owner_execution_review.json')['owner_authorization'],scope=profile.SCOPE,policy_SHA256=profile.policy_sha(),source_SHA256=profile.review_sources(),handoff_SHA256=b.sha(s.HANDOFF),failed_weights_never_loaded=True)
@@ -61,7 +98,7 @@ def main():
     if not allowed:return None
     preferred='cfgen' if gpu==GPUS[1] else 'pg'
     return next((v for v in allowed if v['method']==preferred),allowed[0])
-   outcome=driver.run_queue([s.cell(*case) for case in s.CASES],initial_rows=[],start=driver.start_cell,ready=driver.ready_cell,finish=driver.finish_cell,observe=lambda rows,pending,active,errors,unsettled:write(STATE/'progress.json',dict(status='THREE_FROM_ZERO_INFRASTRUCTURE_REPLACEMENTS_RUNNING' if not errors else 'STOP_NEW_ADMISSIONS_DRAIN_HEALTHY_HANDLES',required_replacement_fits=3,completed_replacement_fits=sum(r['complete'] for r in rows),pending_replacement_fits=len(pending),active=[driver.public_handle(h) for h in active.values()],errors=errors,unsettled=unsettled,full_goal_complete=False,SOTA_claim=False)),sleep=time.sleep,now=time.time,training_expiry=expiry,select=select)
+   outcome=driver.run_queue([s.cell(*case) for case in s.CASES],initial_rows=[],start=start_when_clean,ready=driver.ready_cell,finish=driver.finish_cell,observe=lambda rows,pending,active,errors,unsettled:write(STATE/'progress.json',dict(status='THREE_FROM_ZERO_INFRASTRUCTURE_REPLACEMENTS_RUNNING' if not errors else 'STOP_NEW_ADMISSIONS_DRAIN_HEALTHY_HANDLES',required_replacement_fits=3,completed_replacement_fits=sum(r['complete'] for r in rows),pending_replacement_fits=len(pending),active=[driver.public_handle(h) for h in active.values()],errors=errors,unsettled=unsettled,full_goal_complete=False,SOTA_claim=False)),sleep=time.sleep,now=time.time,training_expiry=expiry,select=select)
    assert not outcome['errors'] and not outcome['unsettled'] and len(outcome['rows'])==3 and all(r['complete'] for r in outcome['rows']),'Fresh replacement incomplete; retain without retry'
    matrix=lineage.build_matrix();path=ROOT/'analysis/benchmark097/matrix_complete.json';assert not path.exists();write(path,matrix);commit([str(path)],'Retain45 logical successful models and all48 physical attempt charges without hiding capacity failures')
    command(['git','revert','--no-edit',activation])

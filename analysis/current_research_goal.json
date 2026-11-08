@@ -35,10 +35,10 @@
   "current_release_check_path": "/ml2/alz/artifacts/dispersion097-preparation-release-20261108.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "FORTYONE_AUDITED_V8_LAST_ORIGINAL_SCVI_ACTUALLY_TRAINING",
+  "study_status": "ALL45_ORIGINAL_ATTEMPTS_CLOSED_42_SUCCESSFUL_THREE_FRESH_REPLACEMENTS_PENDING",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
-  "study_progress_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v6/progress.json",
-  "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v6/identity.json",
+  "study_progress_path": "/ml2/alz/artifacts/benchmark097-infra1-pipeline/progress.json",
+  "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-infra1-pipeline/identity.json",
   "faithful_restart_started": true,
   "faithful_restart_started_evidence_path": "/ml2/alz/analysis/faithful097_started_20261107.json",
   "study_required_fits": 45,
@@ -98,7 +98,7 @@
   "conditional_local_search_design_CPU_proof_path": "/ml2/alz/analysis/released097_local_search_design_CPU_qualification_v2.json",
   "conditional_local_search_frozen": true,
   "conditional_local_search_activated": true,
-  "study_completed_attempts": 44,
+  "study_completed_attempts": 45,
   "latest_released_first20k_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json",
   "latest_released_first20k_mixture_diagnostic_path": "/ml2/alz/analysis/faithful097_first20k_mixture_diagnostic_20261107.json",
   "conditional_local_search_prepared_protocol_path": "/ml2/alz/analysis/localfaith097/protocol.json",
@@ -242,33 +242,9 @@
   "external_benchmark_actual_runtime_CPU_proof_path": "/ml2/alz/analysis/benchmark097/dual_runtime_CPU_qualification.json",
   "external_benchmark_actual_runtime_CPU_tests": 43,
   "external_benchmark_first_two_native_workers_verified_path": "/ml2/alz/analysis/released097_full9_frozen_first_dual_native_workers_20261107.json",
-  "current_verified_external_workers": [
-    {
-      "attempt": "CAL_GPU0_V1_external097_f2_scvi_s4",
-      "cell": {
-        "experiment": "external097",
-        "fold": 2,
-        "method": "scvi",
-        "seed": 4
-      },
-      "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
-      "guard_identity": {
-        "pid": 3840787,
-        "birth": 32160987,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "worker_identity": {
-        "pid": 3840848,
-        "birth": 32161134,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "initial_completed_updates": 0,
-      "source_model_path": null,
-      "fixed_endpoint_epochs": 400
-    }
-  ],
-  "external_benchmark_completed_fits": 41,
-  "external_benchmark_running_fits": 1,
+  "current_verified_external_workers": [],
+  "external_benchmark_completed_fits": 42,
+  "external_benchmark_running_fits": 0,
   "external_benchmark_queued_fits": 3,
   "external_benchmark_first_completed_fit_audit_path": "/ml2/alz/analysis/benchmark097_first_completed_native_scvi_and_two_fresh_pg_workers_20261107.json",
   "full_confirmation_plot_path": "/ml2/alz/analysis/released097_full_confirmation_selection_20261107.png",
@@ -591,7 +567,7 @@
   "supplementary_existing_t005_CPU_multiseed_checkpoint_audit_path": "/ml2/alz/analysis/t005_checkpoint_CPU_multiseed_root_audit_20261108.json",
   "supplementary_existing_t005_CPU_multiseed_checkpoint_plot_path": "/ml2/alz/analysis/t005_five_seed_checkpoint_CPU_calibration_20261108.png",
   "latest_count_observation_source_review_path": "/ml2/alz/analysis/released097_count_observation_source_review_20261108.json",
-  "study_resolved_attempts": 44,
+  "study_resolved_attempts": 45,
   "study_incomplete_attempts": 3,
   "latest_infrastructure_failure_evidence_path": "/ml2/alz/analysis/benchmark097_verified_third_original_postfit_cap_failure_20261108.json",
   "automatic_frozen_study_successor_admissions_stopped": false,
@@ -668,7 +644,7 @@
   "training_loss_vs_calibration_distance_independent_audit_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_root_audit_20261108.json",
   "training_loss_vs_calibration_distance_plot_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_20261108.png",
   "training_loss_vs_calibration_distance_conclusion": "Existing t005 five-seed10k-to20k generator total loss and calibration ED changes have opposite signs in allfive. Fourseeds lowergeneratorloss yetworseED, onehigherlossyetbetterED. Retrospective descriptive calibration only; keep measured calibrationED as sole LR-control signal and still require fresh matched6fitcomparison.",
-  "next_required_runtime_action": "Continue V8 to finish only untouched fold2 seed4 scVI at400 epochs from zero, then exactly3 fresh infrastructure replacements. Preserve45 logical models,48 physical attempts,57 primary/53 sensitivity, then scalar6, eligible whole-theta6 and prepared CPU audits. All six CPU actors are live under unchanged physical guards and owner window.",
+  "next_required_runtime_action": "Start qualified replacement pipeline from the verified completed V8 parent; finish exactly3 fresh infrastructure replacements from zero, then preserve45 logical/48 physical/57 primary/53 sensitivity and run scalar6 plus eligible whole-theta6 and final audits. Original42 successful models and all3 failures remain intact.",
   "CFGen_anomaly_instrumentation_CPU_diagnostic_path": "/ml2/alz/analysis/cfgen_anomaly_instrumentation_CPU_result_20261108.json",
   "CFGen_anomaly_instrumentation_CPU_independent_audit_path": "/ml2/alz/analysis/cfgen_anomaly_instrumentation_CPU_root_audit_20261108.json",
   "CFGen_anomaly_detection_kept_for_all_current45": true,
@@ -773,10 +749,10 @@
   "donor_matched_supplement_CPU_observer_identity_path": "/ml2/alz/artifacts/benchmark097-donor-matched-supplement-observer/identity.json",
   "donor_matched_supplement_CPU_observer_progress_path": "/ml2/alz/artifacts/benchmark097-donor-matched-supplement-observer/progress.json",
   "donor_matched_supplement_CPU_observer_session": 24919,
-  "successful_external_models": 41,
+  "successful_external_models": 42,
   "GPU1_CFGen_fold2_seed2_actual_charged_GPU_seconds": 5670.366205975995,
   "latest_GPU1_actual_native_admission_path": "/ml2/alz/analysis/benchmark097_twentyfourth_model_CFGen_audited_next_fresh_fold2_seed4_fit_20261108.json",
-  "current_GPU1_native_attempt": "CAL_GPU0_V1_external097_f2_scvi_s4",
+  "current_GPU1_native_attempt": null,
   "current_GPU1_native_training_from_zero": true,
   "single_scalar_LR_owner_confirmation_path": "/ml2/alz/analysis/scalarcal097_single_metric_owner_confirmation_20261108.json",
   "final_independent_audits_observer_queued": true,
@@ -819,16 +795,16 @@
   "GPU1_CFGen_fold1_seed3_full_endpoint_audit_completed": false,
   "latest_official_release_matches_current_frozen_runtime": true,
   "latest_external_completed_model_audit_path": "/ml2/alz/analysis/benchmark097_twentyseventh_model_PG_full20k_audited_next_fresh_fold0_seed4_fit_20261108.json",
-  "latest_verified_external_completed_fits": 41,
+  "latest_verified_external_completed_fits": 42,
   "latest_verified_retained_infrastructure_failures": 3,
   "latest_external_metadata_observation_UTC": "2026-11-08T16:35:28.832139+00:00",
   "latest_external_new_native_start_audit_path": "/ml2/alz/analysis/benchmark097_twentyseventh_model_PG_full20k_audited_next_fresh_fold0_seed4_fit_20261108.json",
-  "latest_verified_external_running_fits": 1,
+  "latest_verified_external_running_fits": 0,
   "latest_verified_external_pending_original_fits": 0,
   "calibration_ED_sampling_resolution_CPU_diagnostic_path": "/ml2/alz/analysis/calibration_ED_two_stream_resolution_CPU_20261108.json",
   "calibration_ED_sampling_resolution_independent_audit_path": "/ml2/alz/analysis/calibration_ED_two_stream_resolution_CPU_root_audit_20261108.json",
   "sampling_resolution_diagnostic_changed_controller_or_frozen_comparison": false,
-  "study_successful_fits": 41,
+  "study_successful_fits": 42,
   "study_retained_failed_attempts": 3,
   "study_planned_physical_attempts": 48,
   "current_verified_external_workers_observed_UTC": "2026-11-08T18:58:17.874497+00:00",
@@ -909,31 +885,13 @@
     "all_result_file_hashes_actually_verified": 57,
     "proof_path": "/ml2/alz/analysis/benchmark097_twentyeighth_model_CFGen_audited_next_fresh_fold1_seed4_PG_fit_20261108.json"
   },
-  "latest_verified_external_full_endpoint_proof_path": "/ml2/alz/analysis/benchmark097_capacity_CPU_handoff_v8_20261108.json",
-  "current_GPU1_phase": "NATIVE_WORKER_LIVE",
+  "latest_verified_external_full_endpoint_proof_path": "/ml2/alz/analysis/benchmark097_infra1_postclosure_CPU_handoff_20261108.json",
+  "current_GPU1_phase": "ORIGINAL_BATCH_COMPLETE_FRESH_REPLACEMENTS_PENDING",
   "latest_completed_external_SCVI_endpoint": {
-    "attempt": "CAL_GPU0_V1_external097_f1_scvi_s2",
-    "cell": {
-      "experiment": "external097",
-      "fold": 1,
-      "method": "scvi",
-      "seed": 2
-    },
-    "from_zero": true,
-    "endpoint": {
-      "completed_epochs": 400
-    },
-    "source_result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_scvi_s2.json",
-    "source_result_SHA256": "dfd09bd9ed482b5efa5a9532d7f2e6b82fad4ddff6b4e5cdfa1fd463545dcda5",
-    "authorization_SHA256": "853871d16ccb0c91a53997fe43d42e1451d486b249f2ec827f9d3229eefb6f39",
-    "all_result_file_hashes_actually_verified": 55,
-    "native_restore_actual_SHA256": "c6f02478c1836a49b3e8a5eaae1b927711d1e8fdef5bc24deebe97f26cf0263e",
-    "checkpoint_actual_SHA256": "605c98cf8bfc2420d34f3a6bf089bdca2d0ff79a6ca608c6227d012c36f7e72f",
-    "independent_CPU_audit_and_native_CUDA_restore_passed": true,
-    "own_guard_worker_and_registry_lease_absent": true,
-    "canonical_settlement_verified": true,
-    "actual_charged_GPU_seconds": 142.66085699701216,
-    "proof_path": "/ml2/alz/analysis/benchmark097_models32_to34_SCVI400_full_audits_20261108.json"
+    "attempt": "CAL_GPU0_V1_external097_f2_scvi_s4",
+    "completed_epochs": 400,
+    "actual_charged_GPU_seconds": 659.678949313995,
+    "proof_path": "/ml2/alz/analysis/benchmark097_infra1_postclosure_CPU_handoff_20261108.json"
   },
   "V6_CPU_choice_error_recovery": {
     "native_failure_count_unchanged": 3,
@@ -946,77 +904,10 @@
     "state": "V7_AND_ALL_FIVE_FOLLOWUP_CPU_ACTORS_LIVE",
     "restoration_proof_path": "/ml2/alz/analysis/benchmark097_all_six_CPU_queues_restored_v7_40_models_20261108.json"
   },
-  "current_verified_CPU_queues": [
-    {
-      "name": "benchmark097-after-capacity-continuation-v8",
-      "identity": {
-        "pid": 3823884,
-        "birth": 32126863,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "source_path": "/ml2/alz/analysis/continue_benchmark097_after_capacity_v8.py",
-      "source_SHA256": "58a0cea0c6c62e45e61afcd7b911ea454f4c3bf95b909c37f0738b106f099d73",
-      "unified_session": 43188
-    },
-    {
-      "name": "benchmark097-infra1-pipeline",
-      "identity": {
-        "pid": 3825600,
-        "birth": 32129508,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "source_path": "/ml2/alz/analysis/run_benchmark097_infra1_pipeline.py",
-      "source_SHA256": "7707d4154099afa5d0b99f7c9d477200fa3c43699a97ed65aac8dcabf4a202b4",
-      "unified_session": 14403
-    },
-    {
-      "name": "scalarcal097-after-recovered-science-v5",
-      "identity": {
-        "pid": 3825650,
-        "birth": 32129625,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "source_path": "/ml2/alz/analysis/after_benchmark097_scalarcal.py",
-      "source_SHA256": "a1c0d073bcf2a24505cdde6874dae6108be8225ed4ea4ea7f01a1c4d8cf85873",
-      "unified_session": 6224
-    },
-    {
-      "name": "dispersion097-after-scalarcal097",
-      "identity": {
-        "pid": 3825725,
-        "birth": 32129741,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "source_path": "/ml2/alz/analysis/after_scalarcal097_dispersion.py",
-      "source_SHA256": "a30b9aee29a6cc1405bf733f185a47410ebde3b9b277591e89e43cc39865469a",
-      "unified_session": 31973
-    },
-    {
-      "name": "released097-final-independent-audits",
-      "identity": {
-        "pid": 3828660,
-        "birth": 32138003,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "source_path": "/ml2/alz/analysis/after_released097_final_audits.py",
-      "source_SHA256": "6d093f76d79a29c1574696dc5b0e679e21f273b31b9c77233d6019792b6e81e1",
-      "unified_session": 65986
-    },
-    {
-      "name": "benchmark097-donor-matched-supplement-observer",
-      "identity": {
-        "pid": 3828711,
-        "birth": 32138119,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "source_path": "/ml2/alz/analysis/after_benchmark097_donor_matched_supplement.py",
-      "source_SHA256": "9c51012ebbf2e8398aceb9ec092373241b26436cbaa22816fedbe5e34eb5bd97",
-      "unified_session": 25232
-    }
-  ],
-  "latest_fresh_infrastructure_runtime_qualification_path": "/ml2/alz/analysis/benchmark097_infra1/runtime_CPU_qualification_v6.json",
-  "latest_scalar_runtime_qualification_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v10.json",
-  "latest_theta_runtime_qualification_path": "/ml2/alz/analysis/dispersion097/runtime_CPU_qualification_v6.json",
+  "current_verified_CPU_queues": [],
+  "latest_fresh_infrastructure_runtime_qualification_path": "/ml2/alz/analysis/benchmark097_infra1/runtime_CPU_qualification_v7.json",
+  "latest_scalar_runtime_qualification_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v11.json",
+  "latest_theta_runtime_qualification_path": "/ml2/alz/analysis/dispersion097/runtime_CPU_qualification_v7.json",
   "latest_verified_canonical_budget_snapshot": {
     "revision": 632,
     "cap_GPU_hours": 1124.0,
@@ -1061,5 +952,19 @@
     "saved_progress_UTC": "2026-11-08T19:02:55.791721+00:00",
     "evidence_path": "/ml2/alz/analysis/benchmark097_GPU1_scVI_shared_service_observation_20261108.json",
     "quality_values_inspected": false
-  }
+  },
+  "original_closure_commit_handoff_recovery": {
+    "UTC": "2026-11-08T19:22:59.688620+00:00",
+    "failure_before_native_activation": true,
+    "transient_untracked_research_artifact_created_UTC": "2026-11-08T19:04:09.317333+00:00",
+    "original_closure_commit_UTC": "2026-11-08T19:04:55Z",
+    "handoff_failure_UTC": "2026-11-08T19:05:01.942679+00:00",
+    "research_artifact_committed_UTC": "2026-11-08T19:05:57Z",
+    "all45_original_results_and2350_success_file_hashes_verified": true,
+    "completed_parent_and_commit_gate_CPU_tests": 8,
+    "three_fresh_replacement_keys_unconsumed": true,
+    "handoff_path": "/ml2/alz/analysis/benchmark097_infra1_postclosure_CPU_handoff_20261108.json",
+    "state": "QUALIFIED_FUTURE_QUEUES_RELAUNCH_PENDING"
+  },
+  "full_queue_window_feasibility_question_message_id": "report_66fa850ce5e9e763c7924d803948d0f2ed66594ff5b2e811aca0a9acd757fefa"
 }

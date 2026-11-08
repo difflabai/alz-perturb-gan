@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT=Path('/ml2/alz')
 STATE=ROOT/'artifacts/benchmark097-donor-matched-supplement-observer'
-PROOF=ROOT/'analysis/benchmark097_donor_matched_supplement_CPU_preparation_v4_20261108.json'
+PROOF=ROOT/'analysis/benchmark097_donor_matched_supplement_CPU_preparation_v5_20261108.json'
 PG=Path('/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/current_base_20261029/runtime/bin/python')
 
 
