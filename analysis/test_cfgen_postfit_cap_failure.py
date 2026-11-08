@@ -43,6 +43,11 @@ class TerminalBoundary(unittest.TestCase):
         self.assertFalse(record['failed_weights_may_initialize_training'])
         self.assertFalse(record['recovery_qualified_or_launched'])
 
+    def test_canonical_nonzero_exit_may_have_null_guard_error(self):
+        case = fixture()
+        case['job']['error'] = None
+        self.assertEqual(gate.classify(**case)['retained_native_training_updates'], 106200)
+
     def test_live_or_unsettled_job_is_never_a_failure(self):
         for mutate in (lambda c:c['job'].update(status='active'),
                        lambda c:c['job'].update(reservation_released=False),

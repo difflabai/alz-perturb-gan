@@ -35,7 +35,7 @@ def classify(*, auth, auth_sha256, job, settlement, result, result_sha256,
     assert settlement['uncertain'] is None and settlement['settlement']['status'] == 'settled'
     assert auth['cap_seconds'] == job['allowed_seconds'] == 21600
     assert math.isfinite(job['ended_unix']) and job['ended_unix']-job['started_unix'] >= 21600-150
-    assert 'Protected/registered GPU growth' not in job.get('error', '')
+    assert 'Protected/registered GPU growth' not in (job.get('error') or '')
     assert result['status'] == 'INCOMPLETE_BENCHMARK097_CELL_CLEAN_SETTLEMENT_AUDIT'
     assert result['attempt'] == ATTEMPT and result['cell'] == CELL and result['complete'] is False
     assert result['all_new_training_from_scratch'] and result['initial_completed_updates'] == 0

@@ -133,6 +133,7 @@ def main():
  assert plan['exclude_CFGen_GPU0_after_verified_cap_failure'] is True
  successful_costs()
  proof=read(PROOF);assert proof['status']=='UNTOUCHED_CELL_CONTINUATION_CPU_CHECK_PASS' and proof['source_SHA256']==sha(__file__) and proof['protocol_SHA256']==sha(PROTOCOL)
+ for path,pin in proof['supporting_source_SHA256'].items():assert sha(path)==pin,path
  inherited=read(scope.RUNTIME_PROOF)
  for p,pin in inherited['source_SHA256'].items():assert sha(p)==pin,p
  assert read(scope.PLAN)==scope.ENABLED and sha(ROOT/'analysis/run_benchmark097_balanced.py')==plan['original_driver_source_SHA256'];scope.protocol()
