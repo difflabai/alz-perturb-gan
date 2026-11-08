@@ -1,7 +1,8 @@
 """Frozen six-fit calibration experiment, isolated from external evaluation."""
-import hashlib,json,math
+import hashlib,json,math,sys
 from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent;STUDY=ROOT/'analysis/scalarcal097'
+sys.path.append(str(ROOT/'analysis'))
 PROTOCOL=STUDY/'protocol.json';PLAN=HERE/'plan.json';RESOURCE_PROTOCOL=STUDY/'resource_protocol_v3.json'
 MODEL_DIR=ROOT/'analysis/adaptive_lr097/model';CONTROLLER_DIR=ROOT/'analysis/adaptive_lr097'
 MODEL_PROOF=CONTROLLER_DIR/'ALZ_integration_CPU_qualification.json'
