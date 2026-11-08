@@ -1,0 +1,530 @@
+{
+  "status": "PPARG_LEARNED_MEAN_SHORTFALL_PRECEDES_COUNT_NOISE",
+  "gene": "PPARG",
+  "stage_order": [
+    "Not AD",
+    "Low",
+    "Intermediate",
+    "High"
+  ],
+  "units": "Raw gene counts; these are not log-expression contrasts.",
+  "reference_scope": "Original fitting donors only, stage-balanced hierarchical fitting-donor/cell/library traces; each stage uses200bags*400cells, two common-random-number probes shared across checkpoints and initializations.",
+  "raw_libraries_recomputed_and_exactly_matched": true,
+  "observed_probe_mean_count_by_stage": [
+    0.39713125000000005,
+    0.8490312499999999,
+    0.7983374999999999,
+    0.7087187499999998
+  ],
+  "observed_probe_nonzero_fraction_by_stage": [
+    0.19889374999999998,
+    0.30603125,
+    0.27399375,
+    0.28237500000000004
+  ],
+  "observed_probe_variance_by_stage": [
+    1.1220415652343727,
+    4.434825389609372,
+    4.412794779687503,
+    2.8231092167968788
+  ],
+  "five_final_model_mean_count_by_stage": [
+    0.10111888967402778,
+    0.4733260187648753,
+    0.4539607550064183,
+    0.5310866686591753
+  ],
+  "pooled_moment_theta_initializer": 0.1869537146547173,
+  "records": [
+    {
+      "seed": 0,
+      "updates": 10000,
+      "learned_theta": 0.2832513451576233,
+      "theta_over_pooled_moment_initializer": 1.5150880830624682,
+      "model_mean_count_by_stage": [
+        0.16309243685162714,
+        0.5299194385410511,
+        0.4624839609193802,
+        0.2951861405776165
+      ],
+      "model_mean_over_matched_observed_by_stage": [
+        0.4106708037406629,
+        0.6244276701605269,
+        0.5794378671557968,
+        0.4167712914562447
+      ],
+      "count_variance_components_by_stage": {
+        "latent_and_library_mean_variation": [
+          0.0902661326759644,
+          1.4447600088470804,
+          0.6760417585779732,
+          0.22362148460731784
+        ],
+        "gamma_excess": [
+          0.4125903978161294,
+          6.092028984445036,
+          3.1422502670274723,
+          1.0972813679031943
+        ],
+        "poisson": [
+          0.16309243685162714,
+          0.5299194385410511,
+          0.4624839609193802,
+          0.2951861405776165
+        ]
+      },
+      "mean_preserving_nonzero_upper_bound_by_stage": [
+        0.16309243685162714,
+        0.5299194385410511,
+        0.4624839609193802,
+        0.2951861405776165
+      ],
+      "NotAD_mean_bound_below_observed_nonzero_in_both_probes": true
+    },
+    {
+      "seed": 0,
+      "updates": 20000,
+      "learned_theta": 0.34338951110839844,
+      "theta_over_pooled_moment_initializer": 1.836762172619039,
+      "model_mean_count_by_stage": [
+        0.15051508838112942,
+        0.45570199762734664,
+        0.4257508011753216,
+        0.3247697718387861
+      ],
+      "model_mean_over_matched_observed_by_stage": [
+        0.3789853033282715,
+        0.5369618034634992,
+        0.5333063820956272,
+        0.4583601166727304
+      ],
+      "count_variance_components_by_stage": {
+        "latent_and_library_mean_variation": [
+          0.11289700450325407,
+          0.8461000889810322,
+          0.5734973809451696,
+          0.34030113625213365
+        ],
+        "gamma_excess": [
+          0.39477537401905827,
+          3.068718975117684,
+          2.1984414351190695,
+          1.298166017728005
+        ],
+        "poisson": [
+          0.15051508838112942,
+          0.45570199762734664,
+          0.4257508011753216,
+          0.3247697718387861
+        ]
+      },
+      "mean_preserving_nonzero_upper_bound_by_stage": [
+        0.15051508838112942,
+        0.45570199762734664,
+        0.4257508011753216,
+        0.3247697718387861
+      ],
+      "NotAD_mean_bound_below_observed_nonzero_in_both_probes": true
+    },
+    {
+      "seed": 1,
+      "updates": 10000,
+      "learned_theta": 0.284873366355896,
+      "theta_over_pooled_moment_initializer": 1.5237641406699267,
+      "model_mean_count_by_stage": [
+        0.12278316584522313,
+        0.541524905309081,
+        0.5119518136990551,
+        0.22784270507997567
+      ],
+      "model_mean_over_matched_observed_by_stage": [
+        0.30916229065981293,
+        0.6390796013668019,
+        0.6419883806359106,
+        0.32097299577143285
+      ],
+      "count_variance_components_by_stage": {
+        "latent_and_library_mean_variation": [
+          0.07107893781197441,
+          1.5752386433798895,
+          0.8588483032846439,
+          0.527322863711758
+        ],
+        "gamma_excess": [
+          0.30244643559664186,
+          6.563717931465596,
+          3.9349190441198862,
+          2.035760299729158
+        ],
+        "poisson": [
+          0.12278316584522313,
+          0.541524905309081,
+          0.5119518136990551,
+          0.22784270507997567
+        ]
+      },
+      "mean_preserving_nonzero_upper_bound_by_stage": [
+        0.12278316584522313,
+        0.541524905309081,
+        0.5119518136990551,
+        0.22784270507997567
+      ],
+      "NotAD_mean_bound_below_observed_nonzero_in_both_probes": true
+    },
+    {
+      "seed": 1,
+      "updates": 20000,
+      "learned_theta": 0.32493725419044495,
+      "theta_over_pooled_moment_initializer": 1.738062572281957,
+      "model_mean_count_by_stage": [
+        0.02775013520831789,
+        0.3613506073290992,
+        0.31202819608353766,
+        0.222857587598032
+      ],
+      "model_mean_over_matched_observed_by_stage": [
+        0.06988262299260836,
+        0.42598771764748267,
+        0.39137183038851686,
+        0.3141531692444064
+      ],
+      "count_variance_components_by_stage": {
+        "latent_and_library_mean_variation": [
+          0.01399742757490541,
+          0.5645402628981924,
+          0.2671136179629523,
+          0.2302141729910459
+        ],
+        "gamma_excess": [
+          0.04544881675951136,
+          2.1393683770133753,
+          1.1217357177163967,
+          0.862205341490378
+        ],
+        "poisson": [
+          0.02775013520831789,
+          0.3613506073290992,
+          0.31202819608353766,
+          0.222857587598032
+        ]
+      },
+      "mean_preserving_nonzero_upper_bound_by_stage": [
+        0.02775013520831789,
+        0.3613506073290992,
+        0.31202819608353766,
+        0.222857587598032
+      ],
+      "NotAD_mean_bound_below_observed_nonzero_in_both_probes": true
+    },
+    {
+      "seed": 2,
+      "updates": 10000,
+      "learned_theta": 0.26661914587020874,
+      "theta_over_pooled_moment_initializer": 1.4261238208752611,
+      "model_mean_count_by_stage": [
+        0.5377855813507152,
+        1.3343826150823088,
+        0.5074197597656109,
+        0.29283145586567816
+      ],
+      "model_mean_over_matched_observed_by_stage": [
+        1.3543065824261966,
+        1.5729211126768876,
+        0.6379736365361162,
+        0.4133270382844342
+      ],
+      "count_variance_components_by_stage": {
+        "latent_and_library_mean_variation": [
+          2.3611250104958357,
+          12.282064625772996,
+          2.270719023752146,
+          0.3884502214391219
+        ],
+        "gamma_excess": [
+          9.941435305669827,
+          52.7456921570641,
+          9.49072686079286,
+          1.7785795037407444
+        ],
+        "poisson": [
+          0.5377855813507152,
+          1.3343826150823088,
+          0.5074197597656109,
+          0.29283145586567816
+        ]
+      },
+      "mean_preserving_nonzero_upper_bound_by_stage": [
+        0.5377855813507152,
+        1.0,
+        0.5074197597656109,
+        0.29283145586567816
+      ],
+      "NotAD_mean_bound_below_observed_nonzero_in_both_probes": false
+    },
+    {
+      "seed": 2,
+      "updates": 20000,
+      "learned_theta": 0.2929305136203766,
+      "theta_over_pooled_moment_initializer": 1.5668611568450868,
+      "model_mean_count_by_stage": [
+        0.11487058468169717,
+        0.5842090181054664,
+        0.7593358883328516,
+        0.8048837157143411
+      ],
+      "model_mean_over_matched_observed_by_stage": [
+        0.289265153242017,
+        0.6884965540413819,
+        0.9526006893419345,
+        1.1358856858023008
+      ],
+      "count_variance_components_by_stage": {
+        "latent_and_library_mean_variation": [
+          0.07791201267687697,
+          1.993825316858492,
+          1.6393574198587424,
+          6.73391000128252
+        ],
+        "gamma_excess": [
+          0.3110278398757811,
+          7.971627938772381,
+          7.565541555476331,
+          25.199710252135347
+        ],
+        "poisson": [
+          0.11487058468169717,
+          0.5842090181054664,
+          0.7593358883328516,
+          0.8048837157143411
+        ]
+      },
+      "mean_preserving_nonzero_upper_bound_by_stage": [
+        0.11487058468169717,
+        0.5842090181054664,
+        0.7593358883328516,
+        0.8048837157143411
+      ],
+      "NotAD_mean_bound_below_observed_nonzero_in_both_probes": true
+    },
+    {
+      "seed": 3,
+      "updates": 10000,
+      "learned_theta": 0.3031619191169739,
+      "theta_over_pooled_moment_initializer": 1.6215881009739774,
+      "model_mean_count_by_stage": [
+        0.11496773671846675,
+        0.3275655489012159,
+        0.44071154826803355,
+        0.4626118069978086
+      ],
+      "model_mean_over_matched_observed_by_stage": [
+        0.2894734646512742,
+        0.38579258034587527,
+        0.5524448278984533,
+        0.6531703959854336
+      ],
+      "count_variance_components_by_stage": {
+        "latent_and_library_mean_variation": [
+          0.04406070141332394,
+          0.656584572209457,
+          0.6374076777610215,
+          0.722611186236657
+        ],
+        "gamma_excess": [
+          0.18897087668099855,
+          2.519930062012858,
+          2.743225152764561,
+          3.089952590805029
+        ],
+        "poisson": [
+          0.11496773671846675,
+          0.3275655489012159,
+          0.44071154826803355,
+          0.4626118069978086
+        ]
+      },
+      "mean_preserving_nonzero_upper_bound_by_stage": [
+        0.11496773671846675,
+        0.3275655489012159,
+        0.44071154826803355,
+        0.4626118069978086
+      ],
+      "NotAD_mean_bound_below_observed_nonzero_in_both_probes": true
+    },
+    {
+      "seed": 3,
+      "updates": 20000,
+      "learned_theta": 0.37102288007736206,
+      "theta_over_pooled_moment_initializer": 1.984570784071341,
+      "model_mean_count_by_stage": [
+        0.12982431674317058,
+        0.29124642993114924,
+        0.40505207536956944,
+        0.44794059056862723
+      ],
+      "model_mean_over_matched_observed_by_stage": [
+        0.3269226222132192,
+        0.34353637337397835,
+        0.5075023790780084,
+        0.6329479036338104
+      ],
+      "count_variance_components_by_stage": {
+        "latent_and_library_mean_variation": [
+          0.07294784239970259,
+          0.5105433143048812,
+          0.5162855150007905,
+          0.7322370142156764
+        ],
+        "gamma_excess": [
+          0.24204891752803842,
+          1.6051125056808133,
+          1.8339306694410404,
+          2.517330502249724
+        ],
+        "poisson": [
+          0.12982431674317058,
+          0.29124642993114924,
+          0.40505207536956944,
+          0.44794059056862723
+        ]
+      },
+      "mean_preserving_nonzero_upper_bound_by_stage": [
+        0.12982431674317058,
+        0.29124642993114924,
+        0.40505207536956944,
+        0.44794059056862723
+      ],
+      "NotAD_mean_bound_below_observed_nonzero_in_both_probes": true
+    },
+    {
+      "seed": 4,
+      "updates": 10000,
+      "learned_theta": 0.2550191879272461,
+      "theta_over_pooled_moment_initializer": 1.3640766025871063,
+      "model_mean_count_by_stage": [
+        0.19592855805453846,
+        0.8954599570796763,
+        0.31004755232649917,
+        0.8358667508465762
+      ],
+      "model_mean_over_matched_observed_by_stage": [
+        0.4930566322747116,
+        1.0580496623726352,
+        0.3892626926395931,
+        1.1785572243334625
+      ],
+      "count_variance_components_by_stage": {
+        "latent_and_library_mean_variation": [
+          3.0952072165830833,
+          56.43955396387379,
+          1.543641497769896,
+          4.226968638152962
+        ],
+        "gamma_excess": [
+          12.294027664795813,
+          224.50621013035507,
+          6.430773614341845,
+          19.325013010680102
+        ],
+        "poisson": [
+          0.19592855805453846,
+          0.8954599570796763,
+          0.31004755232649917,
+          0.8358667508465762
+        ]
+      },
+      "mean_preserving_nonzero_upper_bound_by_stage": [
+        0.19592855805453846,
+        0.8929830757509672,
+        0.31004755232649917,
+        0.8358667508465762
+      ],
+      "NotAD_mean_bound_below_observed_nonzero_in_both_probes": false
+    },
+    {
+      "seed": 4,
+      "updates": 20000,
+      "learned_theta": 0.293987900018692,
+      "theta_over_pooled_moment_initializer": 1.572517029477884,
+      "model_mean_count_by_stage": [
+        0.08263432335582381,
+        0.6741220408313149,
+        0.36763681407081117,
+        0.8549816775760901
+      ],
+      "model_mean_over_matched_observed_by_stage": [
+        0.2080995445990001,
+        0.7946108419336894,
+        0.4608167362418609,
+        1.2057242681375366
+      ],
+      "count_variance_components_by_stage": {
+        "latent_and_library_mean_variation": [
+          0.049954864742007055,
+          3.550509472555171,
+          0.7598580099662761,
+          3.792271382111712
+        ],
+        "gamma_excess": [
+          0.19317053672856685,
+          13.623113229055487,
+          3.044422434740481,
+          15.392074125489717
+        ],
+        "poisson": [
+          0.08263432335582381,
+          0.6741220408313149,
+          0.36763681407081117,
+          0.8549816775760901
+        ]
+      },
+      "mean_preserving_nonzero_upper_bound_by_stage": [
+        0.08263432335582381,
+        0.6741220408313149,
+        0.36763681407081117,
+        0.8549816775760901
+      ],
+      "NotAD_mean_bound_below_observed_nonzero_in_both_probes": true
+    }
+  ],
+  "NotAD_noise_only_fix_cannot_match_observed_detection_on_all_five_finite_probe_ensembles": true,
+  "established": [
+    "Learned PPARG means are too low before Gamma or Poisson draws, even with matched real-cell depths.",
+    "All five final models have a Not AD mean below the observed nonzero fraction in both finite probes.",
+    "A mean-preserving dispersion-only change cannot repair that detection deficit on these probes.",
+    "The learned theta increases from its pooled initializer; it is not simply frozen at its initial value."
+  ],
+  "plausible_not_established": [
+    "The critic receives 150 bag features from 50 PCs instead of direct per-gene means and zero fractions.",
+    "The count adapter uses a biased straight-through gradient through continuous Gamma rates for discrete counts.",
+    "Optimization and representation may allow improved aggregate fit while individual genes drift."
+  ],
+  "limitations": [
+    "Posthoc analysis of frozen, finite Monte Carlo probes, not a causal training ablation.",
+    "Raw variance contributions are not a decomposition of log/PCA energy scores.",
+    "This does not establish an inherent limitation of the released ParticleGAN formulation.",
+    "Changing theta, training features, or optimization requires a separate matched experiment."
+  ],
+  "new_training_fits": 0,
+  "new_optimizer_updates": 0,
+  "new_count_draws": 0,
+  "new_GPU_allocations": 0,
+  "source_SHA256": "591cc21795f554b0277e7a642f9a2651db8e1b4d0a093f2382a809e46e1f76c4",
+  "input_SHA256": {
+    "analysis/t005_nb_variance_CPU_result_20261108.json": "bc4ea791b64d7f01de6e73d0bd590a1aa8a28de787af52a68f308a99e2563a21",
+    "analysis/t005_nb_variance_CPU_root_audit_20261108.json": "8240c9f4f28a3d67b229c1d57e21587d1f9a30f9e445d91bf979ee609c61df8d",
+    "retained_fitting_probe_arrays": "408b2dfb7d626c7e555cc5db2f4ad64f5e3fdabd4f019fec87cd438851d6202c",
+    "training_counts": "bf0e24ccadc1e78b789cdc18c571e049ea5b9bca5b5457929038c01ba2b104f7",
+    "training_metadata": "5b7bb88301bc592786c585a7026e372e026a39d9b918d71bd804febc36be0a6a",
+    "seed0_update10000_arrays": "899875623c69f42d2c53156e2494d5d3e4bc1cf09e8717eaf95a2f1b5e42063f",
+    "seed0_update20000_arrays": "4ea03077481100ad58772c41666751d59a65ef800a537f66bf9efc6a7962780b",
+    "seed1_update10000_arrays": "0fde7744f4b9651ebd4d65ee1fbd39086aa6df0f110275e601216d860a01b2d3",
+    "seed1_update20000_arrays": "20a702de4ca5f92464c682d8cfeaae255e4196d58470263749ac6c09fa56029c",
+    "seed2_update10000_arrays": "3d0aa905f485c9f7802703420bf01259d71154dcbeb9850fa54603c227acf9c8",
+    "seed2_update20000_arrays": "defee6b2da44baef5263b81237c0ccf24fe8cf32b89887cb0ba6cc10c224af23",
+    "seed3_update10000_arrays": "28987f9fba4a6c7ab970d4ff02e8770cb9b88017221cd2373e4e53b2e1f26f88",
+    "seed3_update20000_arrays": "cff177b3c71ace1621168afe3064b883e67fcfbc919241a76d90e2aeb15204e7",
+    "seed4_update10000_arrays": "a93b7b68a6d4bbdcf92bba409edaa9e7a261d729a077533ea949c26b1dc9765f",
+    "seed4_update20000_arrays": "04929d1a90544ff73ae41e422f7a11d5682eb2f20632a708fbca3e3ea08bbb82"
+  }
+}
