@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-08T01:50:24.576141+00:00",
+  "UTC": "2026-11-08T01:59:21.565529+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -465,5 +465,10 @@
   "resource_only_actual_post_handoff_source_closure_path": "/ml2/alz/analysis/benchmark097_balanced/post_handoff_source_closure.json",
   "latest_frozen_t005_saved_checkpoint_CPU_calibration_diagnostic_path": "/ml2/alz/analysis/t005_checkpoint_CPU_calibration_result_v3_20261108.json",
   "latest_frozen_t005_saved_checkpoint_CPU_calibration_audit_path": "/ml2/alz/analysis/t005_checkpoint_CPU_calibration_root_audit_20261108.json",
-  "latest_frozen_t005_saved_checkpoint_CPU_calibration_plot_path": "/ml2/alz/analysis/t005_saved_checkpoint_CPU_calibration_20261108.png"
+  "latest_frozen_t005_saved_checkpoint_CPU_calibration_plot_path": "/ml2/alz/analysis/t005_saved_checkpoint_CPU_calibration_20261108.png",
+  "supplementary_existing_t005_CPU_multiseed_checkpoint_protocol_path": "/ml2/alz/analysis/t005_checkpoint_CPU_multiseed_protocol_20261108.json",
+  "supplementary_existing_t005_CPU_multiseed_checkpoint_identity_path": "/ml2/alz/artifacts/t005-checkpoint-calibration-CPU-multiseed-20261108/identity.json",
+  "supplementary_existing_t005_CPU_multiseed_checkpoint_session": 25430,
+  "supplementary_existing_t005_CPU_multiseed_checkpoint_status": "ALL12_ADDITIONAL_SNAPSHOTS_STRICT_CPU_LOAD_PASS_READONLY_SCORING_RUNNING",
+  "supplementary_existing_t005_CPU_multiseed_checkpoint_new_training_fits": 0
 }
