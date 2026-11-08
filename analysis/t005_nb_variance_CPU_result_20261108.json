@@ -1,0 +1,789 @@
+{
+  "status": "COMPLETE_READONLY_CURRENT_T005_FIVE_SEED_RAW_COUNT_VARIANCE_DECOMPOSITION",
+  "UTC": "2026-11-08T04:39:47.930648+00:00",
+  "training_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "saved_updates": [
+    10000,
+    20000
+  ],
+  "summary": {
+    "10000": {
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.14432994251819697,
+        "gamma_excess": 0.8126516887064877,
+        "poisson": 0.043018368775315244
+      },
+      "mean_model_to_reference_variance_ratio": 2.956382305978484
+    },
+    "20000": {
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.1597677819235048,
+        "gamma_excess": 0.7936798708075538,
+        "poisson": 0.04655234726894141
+      },
+      "mean_model_to_reference_variance_ratio": 2.759141971592554
+    }
+  },
+  "records": [
+    {
+      "training_seed": 0,
+      "saved_update": 10000,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/checkpoint10000.pt",
+      "checkpoint_SHA256": "8a31f2a9f40a962b1eec6d5569821ddfb3cc592bae0d5ee956507fb4cc7f9a9d",
+      "theta_quantiles": {
+        "min": 0.099034383893013,
+        "q10": 0.10474479496479035,
+        "median": 0.13927803188562393,
+        "q90": 0.45399773120880127,
+        "max": 4.478812217712402
+      },
+      "theta_to_training_moment_initializer_ratio_quantiles": [
+        0.9366411326110814,
+        1.0156496400887196,
+        1.1419290879081325,
+        1.5392067650078725,
+        5.290324609125784
+      ],
+      "replicates": [
+        {
+          "replicate": 0,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3590.1281365989166,
+            "gamma_excess": 18554.202539857844,
+            "poisson": 1034.287482192335,
+            "total": 23178.618158649093
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.15488965356026893,
+            "gamma_excess": 0.8004878639814147,
+            "poisson": 0.04462248245831647
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.7930016336807806,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            2.636802403246977,
+            4.728048715325086,
+            2.402688382376965,
+            1.7307803195281364
+          ]
+        },
+        {
+          "replicate": 1,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3582.74550115087,
+            "gamma_excess": 18697.451980836267,
+            "poisson": 1039.26199469325,
+            "total": 23319.45947668039
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.15363758772940853,
+            "gamma_excess": 0.8017961136506547,
+            "poisson": 0.044566298619936655
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.8722074090358594,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            2.534236090433263,
+            4.779531508849333,
+            2.4868343690822123,
+            1.6144167196155321
+          ]
+        }
+      ],
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.15426362064483873,
+        "gamma_excess": 0.8011419888160347,
+        "poisson": 0.04459439053912656
+      },
+      "mean_model_to_reference_variance_ratio": 2.83260452135832,
+      "retained_per_gene_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/seed0-update10000.npz",
+      "retained_per_gene_arrays_SHA256": "899875623c69f42d2c53156e2494d5d3e4bc1cf09e8717eaf95a2f1b5e42063f",
+      "generator_prior_fingerprints_before_after_equal": true
+    },
+    {
+      "training_seed": 0,
+      "saved_update": 20000,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/final.pt",
+      "checkpoint_SHA256": "ac55507c73d5927e464d1567e1a5366787909832796c0dd18189ffa2c0ac5351",
+      "theta_quantiles": {
+        "min": 0.09897434711456299,
+        "q10": 0.10712574422359467,
+        "median": 0.1596641018986702,
+        "q90": 0.5077097594738007,
+        "max": 4.482276916503906
+      },
+      "theta_to_training_moment_initializer_ratio_quantiles": [
+        0.922449839479992,
+        1.0258296627705468,
+        1.2191555467373796,
+        1.9086005726587831,
+        7.8843288438867205
+      ],
+      "replicates": [
+        {
+          "replicate": 0,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3813.3308108624387,
+            "gamma_excess": 18623.50488284504,
+            "poisson": 1034.2874822630465,
+            "total": 23471.123175970526
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.16246903832733853,
+            "gamma_excess": 0.7934645795694847,
+            "poisson": 0.04406638210317683
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.828248212473647,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            2.7876551568055383,
+            3.7947666861268057,
+            2.9308411257748257,
+            2.094385634897142
+          ]
+        },
+        {
+          "replicate": 1,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3644.6874374350828,
+            "gamma_excess": 17536.774296475778,
+            "poisson": 1039.261994853866,
+            "total": 22220.72372876473
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.1640219950494697,
+            "gamma_excess": 0.7892080613816561,
+            "poisson": 0.04676994356887401
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.7368785023392124,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            2.305493230767432,
+            3.5846020594935357,
+            2.824029322249213,
+            2.167261168894763
+          ]
+        }
+      ],
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.16324551668840412,
+        "gamma_excess": 0.7913363204755703,
+        "poisson": 0.04541816283602542
+      },
+      "mean_model_to_reference_variance_ratio": 2.7825633574064295,
+      "retained_per_gene_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/seed0-update20000.npz",
+      "retained_per_gene_arrays_SHA256": "4ea03077481100ad58772c41666751d59a65ef800a537f66bf9efc6a7962780b",
+      "generator_prior_fingerprints_before_after_equal": true
+    },
+    {
+      "training_seed": 1,
+      "saved_update": 10000,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s1/fit/checkpoint10000.pt",
+      "checkpoint_SHA256": "6b3e1dbe4d9399c25941e3a722b293b2f8385f25c55a9a888695cd99fb969c6f",
+      "theta_quantiles": {
+        "min": 0.0991370901465416,
+        "q10": 0.10572605356574058,
+        "median": 0.14302026480436325,
+        "q90": 0.4763274908065796,
+        "max": 4.482485771179199
+      },
+      "theta_to_training_moment_initializer_ratio_quantiles": [
+        0.8880749617335385,
+        1.0286217775903495,
+        1.179424753054527,
+        1.6154304706560274,
+        3.328409741395567
+      ],
+      "replicates": [
+        {
+          "replicate": 0,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3550.5305394017078,
+            "gamma_excess": 21603.04405871166,
+            "poisson": 1034.2874823320292,
+            "total": 26187.862080445397
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.13557924386859002,
+            "gamma_excess": 0.8249258374872365,
+            "poisson": 0.03949491864417358
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 3.1556126889297658,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            3.1833136335069487,
+            5.131875626608989,
+            3.0166480684341517,
+            1.8133288658948317
+          ]
+        },
+        {
+          "replicate": 1,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3752.1360056354824,
+            "gamma_excess": 23501.358727938197,
+            "poisson": 1039.2619949486852,
+            "total": 28292.756728522363
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.13261825426339233,
+            "gamma_excess": 0.8306493055251175,
+            "poisson": 0.03673244021149022
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 3.484757679695547,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            3.5245591642367278,
+            5.218527497308087,
+            2.9467639985753618,
+            2.2629936431723086
+          ]
+        }
+      ],
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.13409874906599117,
+        "gamma_excess": 0.827787571506177,
+        "poisson": 0.0381136794278319
+      },
+      "mean_model_to_reference_variance_ratio": 3.320185184312656,
+      "retained_per_gene_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/seed1-update10000.npz",
+      "retained_per_gene_arrays_SHA256": "0fde7744f4b9651ebd4d65ee1fbd39086aa6df0f110275e601216d860a01b2d3",
+      "generator_prior_fingerprints_before_after_equal": true
+    },
+    {
+      "training_seed": 1,
+      "saved_update": 20000,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s1/fit/final.pt",
+      "checkpoint_SHA256": "939eb69f8eaae43b2f52a799232e68d7deab4bd68126cf88dee7a276df722237",
+      "theta_quantiles": {
+        "min": 0.09879469126462936,
+        "q10": 0.10731061771512032,
+        "median": 0.15817423909902573,
+        "q90": 0.523326325416565,
+        "max": 4.486301898956299
+      },
+      "theta_to_training_moment_initializer_ratio_quantiles": [
+        0.9027544627170297,
+        1.032378181332675,
+        1.2350559050581469,
+        1.9407297353505537,
+        6.803516644187024
+      ],
+      "replicates": [
+        {
+          "replicate": 0,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 4344.43069817859,
+            "gamma_excess": 21591.949190276675,
+            "poisson": 1034.2874821410992,
+            "total": 26970.667370596362
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.16107983679020577,
+            "gamma_excess": 0.8005715577441139,
+            "poisson": 0.038348605465680384
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 3.249939988308903,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            3.230961673204041,
+            4.232316008742497,
+            4.211211071387422,
+            1.962751003338273
+          ]
+        },
+        {
+          "replicate": 1,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 4474.270006305283,
+            "gamma_excess": 22186.13906586053,
+            "poisson": 1039.2619946100967,
+            "total": 27699.671066775907
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.16152791112642131,
+            "gamma_excess": 0.8009531597821561,
+            "poisson": 0.03751892909142265
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 3.411708600939473,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            3.482123272464271,
+            4.389316870962762,
+            3.766003767308576,
+            2.2355337095335748
+          ]
+        }
+      ],
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.16130387395831353,
+        "gamma_excess": 0.800762358763135,
+        "poisson": 0.037933767278551515
+      },
+      "mean_model_to_reference_variance_ratio": 3.330824294624188,
+      "retained_per_gene_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/seed1-update20000.npz",
+      "retained_per_gene_arrays_SHA256": "20a702de4ca5f92464c682d8cfeaae255e4196d58470263749ac6c09fa56029c",
+      "generator_prior_fingerprints_before_after_equal": true
+    },
+    {
+      "training_seed": 2,
+      "saved_update": 10000,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s2/fit/checkpoint10000.pt",
+      "checkpoint_SHA256": "eaafa8d8c5f93a734fa1df6a906d7d95aeb16954dc9dcfb30d2d8ce8d488c121",
+      "theta_quantiles": {
+        "min": 0.09822461009025574,
+        "q10": 0.10542015209794045,
+        "median": 0.14091991633176804,
+        "q90": 0.46472175419330597,
+        "max": 4.481323719024658
+      },
+      "theta_to_training_moment_initializer_ratio_quantiles": [
+        0.9822460862659501,
+        1.0221065945166599,
+        1.156788823652434,
+        1.5772777244107337,
+        3.909813405427137
+      ],
+      "replicates": [
+        {
+          "replicate": 0,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 2898.6629195114383,
+            "gamma_excess": 16984.147797942107,
+            "poisson": 1034.2874822969313,
+            "total": 20917.09819975048
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.13857863513525107,
+            "gamma_excess": 0.8119743778869247,
+            "poisson": 0.049446986977824174
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.5204906109540635,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            1.5787321481800547,
+            3.0721504761751626,
+            3.057713197544131,
+            2.281289899869525
+          ]
+        },
+        {
+          "replicate": 1,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3083.6010155412814,
+            "gamma_excess": 18010.07524429332,
+            "poisson": 1039.2619945446554,
+            "total": 22132.938254379253
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.13932180987904558,
+            "gamma_excess": 0.8137227437811978,
+            "poisson": 0.0469554463397568
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.7260661552439536,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            1.587878327740741,
+            3.2369017991752123,
+            3.591357042176633,
+            2.3458823238999544
+          ]
+        }
+      ],
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.13895022250714834,
+        "gamma_excess": 0.8128485608340612,
+        "poisson": 0.048201216658790486
+      },
+      "mean_model_to_reference_variance_ratio": 2.6232783830990085,
+      "retained_per_gene_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/seed2-update10000.npz",
+      "retained_per_gene_arrays_SHA256": "3d0aa905f485c9f7802703420bf01259d71154dcbeb9850fa54603c227acf9c8",
+      "generator_prior_fingerprints_before_after_equal": true
+    },
+    {
+      "training_seed": 2,
+      "saved_update": 20000,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s2/fit/final.pt",
+      "checkpoint_SHA256": "c042196acb6ef72563299fb6025ad61892d06c44cc25813ed18ebeaf93759606",
+      "theta_quantiles": {
+        "min": 0.09880423545837402,
+        "q10": 0.10745803490281106,
+        "median": 0.15904363244771957,
+        "q90": 0.5211410045623781,
+        "max": 4.484194755554199
+      },
+      "theta_to_training_moment_initializer_ratio_quantiles": [
+        0.9768119144894464,
+        1.027891303300459,
+        1.2283977399661326,
+        1.963742133406377,
+        6.256125476120033
+      ],
+      "replicates": [
+        {
+          "replicate": 0,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 2920.726129585545,
+            "gamma_excess": 14228.782807278672,
+            "poisson": 1034.2874823159757,
+            "total": 18183.79641918019
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.16062246091277044,
+            "gamma_excess": 0.7824979162365794,
+            "poisson": 0.05687962285065035
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.191130323545095,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            2.105282161895579,
+            2.2071787403831236,
+            2.7977929495896277,
+            1.8490842291147334
+          ]
+        },
+        {
+          "replicate": 1,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 2991.6866358884254,
+            "gamma_excess": 14572.649257194487,
+            "poisson": 1039.261994864507,
+            "total": 18603.59788794742
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.16081226082760194,
+            "gamma_excess": 0.7833242443191897,
+            "poisson": 0.05586349485320827
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.2913649324470913,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            2.0931058324481566,
+            2.126889962749732,
+            3.091933044356507,
+            2.0021502146494607
+          ]
+        }
+      ],
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.16071736087018618,
+        "gamma_excess": 0.7829110802778845,
+        "poisson": 0.05637155885192931
+      },
+      "mean_model_to_reference_variance_ratio": 2.241247627996093,
+      "retained_per_gene_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/seed2-update20000.npz",
+      "retained_per_gene_arrays_SHA256": "defee6b2da44baef5263b81237c0ccf24fe8cf32b89887cb0ba6cc10c224af23",
+      "generator_prior_fingerprints_before_after_equal": true
+    },
+    {
+      "training_seed": 3,
+      "saved_update": 10000,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s3/fit/checkpoint10000.pt",
+      "checkpoint_SHA256": "3ca09c4f08de1960e8e3f432f0c2c97923de8dd8399d6ed098f8bea7ff44df64",
+      "theta_quantiles": {
+        "min": 0.09927140921354294,
+        "q10": 0.10515409484505653,
+        "median": 0.1401779055595398,
+        "q90": 0.4658832997083664,
+        "max": 4.4799604415893555
+      },
+      "theta_to_training_moment_initializer_ratio_quantiles": [
+        0.9165502389621201,
+        1.0228417214327794,
+        1.1553197926980288,
+        1.5526642568012443,
+        3.2102625938368257
+      ],
+      "replicates": [
+        {
+          "replicate": 0,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3722.685125574132,
+            "gamma_excess": 19246.339338593774,
+            "poisson": 1034.2874822834679,
+            "total": 24003.311946451377
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.1550904780923155,
+            "gamma_excess": 0.8018201563821751,
+            "poisson": 0.043089365525509314
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.892376457531471,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            2.2686925452025752,
+            2.9712347558520373,
+            6.047021213642188,
+            1.2087979461438452
+          ]
+        },
+        {
+          "replicate": 1,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3936.3877364297077,
+            "gamma_excess": 20587.983799191883,
+            "poisson": 1039.2619946780678,
+            "total": 25563.63353029966
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.15398389011343197,
+            "gamma_excess": 0.8053621866699694,
+            "poisson": 0.0406539232165986
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 3.148617475504899,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            2.3530324982343047,
+            3.4557958761222096,
+            5.7719350441608865,
+            1.5213627694970888
+          ]
+        }
+      ],
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.15453718410287373,
+        "gamma_excess": 0.8035911715260722,
+        "poisson": 0.04187164437105396
+      },
+      "mean_model_to_reference_variance_ratio": 3.020496966518185,
+      "retained_per_gene_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/seed3-update10000.npz",
+      "retained_per_gene_arrays_SHA256": "28987f9fba4a6c7ab970d4ff02e8770cb9b88017221cd2373e4e53b2e1f26f88",
+      "generator_prior_fingerprints_before_after_equal": true
+    },
+    {
+      "training_seed": 3,
+      "saved_update": 20000,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s3/fit/final.pt",
+      "checkpoint_SHA256": "e758b67dda6f3c54351a6289f46433ca6abc895dc29a814be0e2d601323c23ba",
+      "theta_quantiles": {
+        "min": 0.09875592589378357,
+        "q10": 0.10696233361959458,
+        "median": 0.15624534338712692,
+        "q90": 0.506093293428421,
+        "max": 4.481170177459717
+      },
+      "theta_to_training_moment_initializer_ratio_quantiles": [
+        0.8868277133806337,
+        1.0225411279609868,
+        1.2166744811989991,
+        1.9110959483519805,
+        6.012964159057079
+      ],
+      "replicates": [
+        {
+          "replicate": 0,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3291.263599217531,
+            "gamma_excess": 16627.025023694914,
+            "poisson": 1034.2874818512257,
+            "total": 20952.57610476367
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.15708157234514214,
+            "gamma_excess": 0.7935551667040446,
+            "poisson": 0.049363260950813365
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.5247656650570813,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            3.500456240574526,
+            1.918996769221141,
+            4.193166737825531,
+            1.421704125934224
+          ]
+        },
+        {
+          "replicate": 1,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3491.173417046896,
+            "gamma_excess": 17468.366536125206,
+            "poisson": 1039.2619946877394,
+            "total": 21998.80194785984
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.15869834299710742,
+            "gamma_excess": 0.7940599027859615,
+            "poisson": 0.04724175421693109
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.709544876361352,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            3.7646251590984616,
+            2.1813249671743167,
+            4.270494851627102,
+            1.4646587867187002
+          ]
+        }
+      ],
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.1578899576711248,
+        "gamma_excess": 0.7938075347450031,
+        "poisson": 0.04830250758387222
+      },
+      "mean_model_to_reference_variance_ratio": 2.6171552707092167,
+      "retained_per_gene_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/seed3-update20000.npz",
+      "retained_per_gene_arrays_SHA256": "cff177b3c71ace1621168afe3064b883e67fcfbc919241a76d90e2aeb15204e7",
+      "generator_prior_fingerprints_before_after_equal": true
+    },
+    {
+      "training_seed": 4,
+      "saved_update": 10000,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s4/fit/checkpoint10000.pt",
+      "checkpoint_SHA256": "da3a922e1d3879710cf555e8b468ddcd2c10af7e9e073594589be1454ea06489",
+      "theta_quantiles": {
+        "min": 0.09945942461490631,
+        "q10": 0.10417049378156662,
+        "median": 0.13637667149305344,
+        "q90": 0.4526473015546799,
+        "max": 4.4769697189331055
+      },
+      "theta_to_training_moment_initializer_ratio_quantiles": [
+        0.9825573554662368,
+        1.0156192932686194,
+        1.1278853096226884,
+        1.494098009239139,
+        3.1741582874334116
+      ],
+      "replicates": [
+        {
+          "replicate": 0,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3450.591177086434,
+            "gamma_excess": 20201.078502137898,
+            "poisson": 1034.2874822162146,
+            "total": 24685.95716144055
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.13977951733936633,
+            "gamma_excess": 0.8183226751155499,
+            "poisson": 0.041897807545083605
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.9746345622915977,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            2.2340788670613785,
+            2.284935751687356,
+            4.239834571387915,
+            3.069356162114335
+          ]
+        },
+        {
+          "replicate": 1,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3401.130963870858,
+            "gamma_excess": 19884.612931877185,
+            "poisson": 1039.2619947317794,
+            "total": 24325.00589047982
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.13982035520089936,
+            "gamma_excess": 0.8174556265846378,
+            "poisson": 0.04272401821446299
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.9960583869169,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            2.445425449669713,
+            2.4458833014310426,
+            4.266397762983311,
+            2.941771684275503
+          ]
+        }
+      ],
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.13979993627013285,
+        "gamma_excess": 0.8178891508500938,
+        "poisson": 0.0423109128797733
+      },
+      "mean_model_to_reference_variance_ratio": 2.985346474604249,
+      "retained_per_gene_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/seed4-update10000.npz",
+      "retained_per_gene_arrays_SHA256": "a93b7b68a6d4bbdcf92bba409edaa9e7a261d729a077533ea949c26b1dc9765f",
+      "generator_prior_fingerprints_before_after_equal": true
+    },
+    {
+      "training_seed": 4,
+      "saved_update": 20000,
+      "checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s4/fit/final.pt",
+      "checkpoint_SHA256": "3b626768f52d56aa05598a2977a4a72d630b429872400bedd231e186330bfea9",
+      "theta_quantiles": {
+        "min": 0.09924615919589996,
+        "q10": 0.10588354468345643,
+        "median": 0.15180496126413345,
+        "q90": 0.4871690452098847,
+        "max": 4.475625991821289
+      },
+      "theta_to_training_moment_initializer_ratio_quantiles": [
+        0.9718937937318036,
+        1.0215272036081742,
+        1.1852651378575498,
+        1.8021256010913198,
+        5.440785207736712
+      ],
+      "replicates": [
+        {
+          "replicate": 0,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3666.202425662013,
+            "gamma_excess": 18862.551505609223,
+            "poisson": 1034.2874824492305,
+            "total": 23563.041413720464
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.15559122276665138,
+            "gamma_excess": 0.8005142958593535,
+            "poisson": 0.0438944813739952
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.839324273455515,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            1.5907839760424796,
+            2.372854520623352,
+            5.451218671194127,
+            2.2048694046359247
+          ]
+        },
+        {
+          "replicate": 1,
+          "raw_marginal_variance_trace_components": {
+            "mean_variation": 3551.992236122253,
+            "gamma_excess": 18211.081059515494,
+            "poisson": 1039.2619948234756,
+            "total": 22802.335290461226
+          },
+          "raw_marginal_variance_trace_fractions": {
+            "mean_variation": 0.15577317809233943,
+            "gamma_excess": 0.7986498236929984,
+            "poisson": 0.045576998214662
+          },
+          "model_to_matching_fitting_reference_variance_trace_ratio": 2.8085143409981708,
+          "per_stage_model_to_reference_variance_trace_ratio": [
+            1.615993023063344,
+            2.3097349982239685,
+            5.281648776516057,
+            2.2563470538649315
+          ]
+        }
+      ],
+      "mean_variance_trace_fractions": {
+        "mean_variation": 0.1556822004294954,
+        "gamma_excess": 0.799582059776176,
+        "poisson": 0.0447357397943286
+      },
+      "mean_model_to_reference_variance_ratio": 2.823919307226843,
+      "retained_per_gene_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/seed4-update20000.npz",
+      "retained_per_gene_arrays_SHA256": "04929d1a90544ff73ae41e422f7a11d5682eb2f20632a708fbca3e3ea08bbb82",
+      "generator_prior_fingerprints_before_after_equal": true
+    }
+  ],
+  "formula": "Var(X)=Var(mu)+E(mu^2/theta)+E(mu); theta is per gene and fixed within each saved checkpoint.",
+  "reference_scope": "Original fitting donors only, stage-balanced hierarchical fitting-donor/cell/library traces; each stage uses200bags*400cells, two common-random-number probes shared across checkpoints and initializations.",
+  "latent_and_library_variation_not_separated": true,
+  "statistic_scope": "Equal-weight sum of four stage-conditional per-gene raw marginal variance traces across2000genes. Excludes between-stage mean variation, cross-gene covariance, normalized/PCA energy-distance decomposition and donor uncertainty.",
+  "conditional_means_evaluated": 6400000,
+  "new_RNA_count_draws": 0,
+  "new_optimizer_updates": 0,
+  "new_training_fits": 0,
+  "new_GPU_allocations": 0,
+  "CUDA_initialized": false,
+  "frozen45_and_six_fresh_fit_protocols_unchanged": true,
+  "model_and_source_checkpoint_states_unchanged": true,
+  "heldout_values_loaded_for_scoring_or_selection": false,
+  "CPU_seconds": 288.72406639595283,
+  "protocol_path": "/ml2/alz/analysis/t005_nb_variance_CPU_protocol_20261108.json",
+  "protocol_SHA256": "9b0b43c3c106b361c6e1f2b7d0dc694e37f4e8bfe12ed6a39469dbe3567e8088",
+  "source_SHA256": {
+    "/ml2/alz/analysis/t005_nb_variance_cpu.py": "3b2fc7265a63196ea772cdd47c7d84edad28b37b8fc3c0bbe10728c158c856b7"
+  },
+  "fitting_trace_arrays_path": "/ml2/alz/artifacts/t005-nb-variance-CPU-20261108/fitting_traces_and_reference.npz",
+  "fitting_trace_arrays_SHA256": "408b2dfb7d626c7e555cc5db2f4ad64f5e3fdabd4f019fec87cd438851d6202c",
+  "limitations": "A diagnostic of the current count application, not a missing-Poisson finding: native forward already includes Gamma and Poisson noise. Finite Monte Carlo conditional-mean ensembles and existing initialization seeds are not biological replicates. A large noise fraction alone does not establish excess technical noise or explain an energy-distance gap. No theta, objective, checkpoint or hyperparameter was changed; improvement requires a separate matched fresh training test.",
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
