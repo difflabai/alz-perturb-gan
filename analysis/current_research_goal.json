@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-08T00:13:13.063455+00:00",
+  "UTC": "2026-11-08T00:18:07.208320+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/analysis/confirmfaith097/current_release_check_before_activation.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "FULL45_RUNNING_SINGLE_SCALAR_CALIBRATION_LR_FULLWIDTH_CPU_INTEGRATION_QUALIFIED",
+  "study_status": "ORIGINAL_NATIVE_GUARDS_CONTINUE_CPU_DISPATCHER_RESOURCE_HANDOFF_DRAINING",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/benchmark097-dual-fullmatrix/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-dual-fullmatrix/identity.json",
@@ -87,7 +87,8 @@
     "Compute and audit original57-donor matched comparison, all fold/seed outcomes, paired donor-cluster uncertainty, energy/spread/coverage and negative outcomes without parameter reselection.",
     "Compute and audit prespecified53-donor sensitivity excluding the four current calibration donors, using the same45frozen models and preserving original57primary.",
     "Complete final requirement-by-requirement review and report actual distribution-distance ranking and joint quality with historical cohort/crossfold exposure and unequal tuning-budget limitations; make only claims supported by completed comparison.",
-    "Qualify a separate finite shared-GPU admission for the CPU-qualified fullwidth calibration-distance scalar LR integration, then test it against matched fixed-LR fresh20k calibration fits within the authorized budget/window; keep the current45-model comparison frozen and separate."
+    "Qualify a separate finite shared-GPU admission for the CPU-qualified fullwidth calibration-distance scalar LR integration, then test it against matched fixed-LR fresh20k calibration fits within the authorized budget/window; keep the current45-model comparison frozen and separate.",
+    "Complete the qualified resource-only handoff and balanced scheduling without interrupting admitted native fits, preserving all45 original scientific cells and mixed-resource57/53 provenance; adapt the separate scalar-calibration completion barrier and physical scheduling before its real fresh fits."
   ],
   "crossfold_isolation_audit_path": "/ml2/alz/analysis/distribution097_split_isolation_audit_20261106.json",
   "supplementary25_design_path": "/ml2/alz/analysis/distribution097_supplementary25_design_proposal_20261106.json",
@@ -358,9 +359,18 @@
   "scalar_calibration_handoff_constraint": "The original frozen benchmark admits only same-study peer reservations and both final CPU analyses require empty reservations; the first-free-lane suggestion was superseded. A compatible reviewed resource handoff is needed before mixing study phases.",
   "latest_remaining45_metadata_balance_forecast_path": "/ml2/alz/analysis/benchmark097_remaining45_metadata_balance_forecast_20261107.json",
   "remaining45_resource_handoff_design_path": "/ml2/alz/analysis/benchmark097_remaining45_resource_handoff_design_20261107.json",
-  "resource_only_replacement_dispatcher_qualified": false,
+  "resource_only_replacement_dispatcher_qualified": true,
   "resource_only_replacement_activated": false,
   "resource_only_replacement_source_path": "/ml2/alz/benchmark097_balanced_runtime",
   "resource_only_replacement_prepared": true,
-  "resource_only_original_CPU_stop_requested": false
+  "resource_only_original_CPU_stop_requested": true,
+  "resource_only_replacement_CPU_tests": 40,
+  "resource_only_replacement_actual_cell_card_bindings": 90,
+  "resource_only_original_GPU_jobs_interrupted": false,
+  "resource_only_handoff_identity_path": "/ml2/alz/artifacts/benchmark097-balanced-handoff/identity.json",
+  "resource_only_handoff_progress_path": "/ml2/alz/artifacts/benchmark097-balanced-handoff/progress.json",
+  "resource_only_handoff_started_proof_path": "/ml2/alz/analysis/benchmark097_balanced/original_CPU_handoff_started_20261108.json",
+  "resource_only_handoff_unified_exec_session": 81328,
+  "resource_only_after_handoff_source_path": "/ml2/alz/analysis/after_balanced_handoff_pipeline.py",
+  "new_adaptive_GPU_fits": 0
 }

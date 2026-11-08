@@ -1,0 +1,87 @@
+{
+  "status": "ORIGINAL_CPU_DISPATCHER_STOPPED_NATIVE_GUARDS_UNCHANGED_DRAINING",
+  "UTC": "2026-11-08T00:18:07.208038+00:00",
+  "handoff_identity": {
+    "pid": 315298,
+    "birth": 25452558,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
+    "source_SHA256": "19984495be6fc6a71e1b6b190ae55c96520f296e7ec93f71a458ab7adb99cdb4",
+    "original_driver": {
+      "pid": 2519299,
+      "birth": 22528113,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
+      "source_SHA256": "6349997591f23f633f6036321d1e83ec3be974c78e992acb565266caed517eac",
+      "protocol_SHA256": "fd92d0afe5cfa9e6b152ae8a14858ffacb62b804d38bd876e2e589862db71de8",
+      "resource_protocol_SHA256": "160c657e6e1d9e36fe27faa1d9bbc57adb32e283e8e6226a2f020b6b1c84a631",
+      "activation": "99f0dfd87498f990bff9d4444c1225c18f5ddeb0",
+      "required_cells": 45
+    }
+  },
+  "stop_signal_receipt": {
+    "signalled_identity": {
+      "pid": 2519299,
+      "birth": 22528113,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    "signal": "SIGINT",
+    "single_PID_only": true,
+    "training_or_foreign_process_signalled": false
+  },
+  "progress": {
+    "status": "DRAINING_UNCHANGED_ORIGINAL_NATIVE_GUARDS",
+    "waiting": [
+      {
+        "cell": {
+          "experiment": "external097",
+          "fold": 0,
+          "method": "pg",
+          "seed": 1
+        },
+        "status": "WAIT_ORIGINAL_PROCESSES",
+        "matching_processes": [
+          {
+            "pid": 4158163,
+            "birth": 24975852,
+            "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+          },
+          {
+            "pid": 4158258,
+            "birth": 24975983,
+            "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+          }
+        ]
+      },
+      {
+        "cell": {
+          "experiment": "external097",
+          "fold": 1,
+          "method": "cfgen",
+          "seed": 1
+        },
+        "status": "WAIT_ORIGINAL_PROCESSES",
+        "matching_processes": [
+          {
+            "pid": 4016637,
+            "birth": 24773913,
+            "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+          },
+          {
+            "pid": 4016726,
+            "birth": 24774040,
+            "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+          }
+        ]
+      }
+    ],
+    "native_models_signalled": false
+  },
+  "qualified_replacement_CPU_proof_path": "/ml2/alz/analysis/benchmark097_balanced/runtime_CPU_qualification.json",
+  "new_GPU_dispatch_started": false,
+  "new_models_started": 0,
+  "all45_scientific_cells_still_required": true,
+  "original53_and57_preserved": true,
+  "readonly_previous_observer_superseded": true,
+  "original_CPU_parent_failures_are_expected_controlled_handoff_not_model_failures": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
