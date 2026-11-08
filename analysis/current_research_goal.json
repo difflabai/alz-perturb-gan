@@ -701,19 +701,19 @@
   "dispersion_completed_study_final_audit_actual_CPU_tests": 11,
   "dispersion_completed_study_final_audit_existing_saved_calibration_arrays_checked": 40,
   "dispersion_completed_study_final_audit_real_theta_outcomes_audited": 0,
-  "latest_full_queue_metadata_forecast_path": "/ml2/alz/analysis/released097_full_queue15_metadata_forecast_20261108.json",
+  "latest_full_queue_metadata_forecast_path": "/ml2/alz/artifacts/released097-full-queue16-live-20261108T0842Z.json",
   "latest_full_queue_metadata_forecast_source_path": "/ml2/alz/analysis/forecast_released097_full_queue_metadata_v2.py",
   "latest_canonical_budget_live_metadata_snapshot_path": "/ml2/alz/analysis/released097_full_queue15_metadata_forecast_20261108.json",
-  "full_queue_time_feasibility_status": "CURRENT_SETTLED_COST_SCENARIOS_EXCEED_REMAINING_WINDOW_FOR_ALL_STUDIES_EVEN_AT_UNMEASURED_SCALAR_MULTIPLIER1P15",
+  "full_queue_time_feasibility_status": "LOW_OVERHEAD_FORECAST_NOW_FITS_CONDITIONALLY_HIGHER_OVERHEAD_STILL_EXCEEDS_WINDOW",
   "full_queue_time_feasibility_is_not_admission_or_completion_guarantee": true,
   "full_queue_time_feasibility_does_not_change_existing_priorities": true,
   "full_queue_feasibility_coordination_question": {
     "event_ref": "alz-full-queue-window-feasibility-20261108",
-    "revision": 1,
+    "revision": 2,
     "state": "pending",
     "recipient": "bits255.dots.ada_20261002",
     "permission_requested": false,
-    "reason": "Current25.45h lowest unmeasured-overhead scenario exceeds23.86h remaining window; both GPUs live and no scientific/runtime source change. Coordinate shared compute service, preserve frozen45/recovery then scalar6 then theta6 priority. No implicit deadline extension."
+    "reason": "Updated16-model settled-cost forecast: lowest unmeasured1.15x scalar-overhead scenario has0.727h margin,2x scenario misses by1.841h; if both current allocations consume remaining caps even1.15x misses by2.360h. Preserve current priorities and existing qualified two-card execution; no implicit deadline extension."
   },
   "existing_t005_stage_and_mixture_energy_diagnostic_path": "/ml2/alz/analysis/t005_stage_mixture_energy_CPU_result_20261108.json",
   "existing_t005_stage_and_mixture_energy_independent_audit_path": "/ml2/alz/analysis/t005_stage_mixture_energy_CPU_root_audit_20261108.json",
@@ -782,5 +782,6 @@
   "final_independent_audits_actual_completed": 0,
   "latest_GPU1_full_native_fit_and_restore_proof_path": "/ml2/alz/analysis/benchmark097_GPU1_fold0_seed3_full_native_fit_and_restore_20261108.json",
   "GPU1_CFGen_fold0_seed3_native_fit_completed": true,
-  "GPU1_CFGen_fold0_seed3_full_endpoint_audit_completed": false
+  "GPU1_CFGen_fold0_seed3_full_endpoint_audit_completed": false,
+  "latest_full_queue_window_reassessment_path": "/ml2/alz/analysis/released097_full_queue16_window_reassessment_20261108.json"
 }
