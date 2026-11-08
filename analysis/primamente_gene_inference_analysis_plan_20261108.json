@@ -4,9 +4,9 @@
   "inference_plan_path": "/ml2/alz/analysis/primamente_inference_hypothesis_plan_20261108.json",
   "inference_plan_SHA256": "095265735889b3d16b1c0110c860d75236c5b8cf8f383c33e353735c32456180",
   "analysis_source_path": "/ml2/alz/analysis/aggregate_primamente_gene_inference.py",
-  "analysis_source_SHA256": "80448d215ea194e7656e006fb36b06edf7006adcd37b45a3bf006630b5def701",
+  "analysis_source_SHA256": "c53b222094db8367cb3a3a0e440de96980adad2504a9d3c6eaa91f746e2a67de",
   "CPU_proof_path": "/ml2/alz/analysis/primamente_gene_inference_analysis_CPU_check_20261108.json",
-  "CPU_proof_SHA256": "3ab55c0724e887b9973125056eab0d0d93407c0efde7dc7908bf2826082fa74d",
+  "CPU_proof_SHA256": "96d28ba579f16337957f81729fe7cf456b9bd2405e8ade0319b6f217feb49567",
   "required_completed_stage_cases": 160,
   "primary_association_contrast": "High minus Not AD",
   "real_donor_unit": "Equal donor weighting within each subtype/stage; no cell-level biological inference",
@@ -15,7 +15,7 @@
   "fixed_subtype_weights": "Equal over types passing training-donor metadata/count availability rules; never choose types by direction or effect",
   "synthetic_cells_per_subtype_stage_replicate_minimum": 100,
   "missing_synthetic_subtype_rule": "Fixed group remains required; missing case receives no heuristic priority, never silently dropped",
-  "ranking_rule": "min(abs(real effect),abs(mean5seed model effect))*5seed direction agreement*real group-wise donor-deletion sign stability; zero unless>=4/5 seeds,>=80% of40replicates,>=80% real group-wise donor-deletion checks agree.",
+  "ranking_rule": "min(abs(real effect),abs(mean5seed model effect))*5seed direction agreement*real group-wise donor-deletion sign stability; zero unless>=4/5 seeds,>=80% of40replicates,>=80% real group-wise donor-deletion checks agree. The5seed mean must also agree with the real direction.",
   "ranking_is_exploratory_not_a_discovery_or_causal_score": true,
   "panels": {
     "lipid_handling": [
@@ -72,5 +72,8 @@
   "eligibility_does_not_establish_genetic_or_drug_actionability": true,
   "primary_perturbation_literature_review_required": true,
   "calibration_and_evaluation_target_data_excluded": true,
-  "synthetic_replication_adds_zero_biological_donors": true
+  "synthetic_replication_adds_zero_biological_donors": true,
+  "analysis_revision": 2,
+  "pre_result_revision_reason": "Synthetic numerical edge case showed4of5sign agreement could coexist with an opposite mean. Explicitly require mean direction agreement; no actual gene results have been read.",
+  "previous_analysis_plan_SHA256": "a5276e115da68b2806014d17befa697644f84d1c8589ad206e1afef0f31cb8a6"
 }
