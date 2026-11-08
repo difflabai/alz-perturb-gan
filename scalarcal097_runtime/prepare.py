@@ -4,8 +4,10 @@ from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent;sys.path.insert(0,str(HERE))
 import binding as b,preset_scope as scope,resource_profile as profile
 
-def build_authorization(*,arm='fixed',seed=5,check_only=False,auth_path=None):
+def build_authorization(*,arm='fixed',seed=5,gpu=None,check_only=False,auth_path=None):
     base=b.read(ROOT/'artifacts/allocations/CAL_GPU0_V1_matched_cfgen_f0_cfgen_s0/authorization.json')
+    from dual_coordination import GPUS
+    assert gpu in GPUS,'exact approved physical card required'
     value=scope.cell(arm,seed);folder=ROOT/'artifacts/allocations'/b.attempt_key(value)
     method='pg'
     auth_path=Path(auth_path or folder/'authorization.json');now=time.time()
@@ -15,7 +17,7 @@ def build_authorization(*,arm='fixed',seed=5,check_only=False,auth_path=None):
     auth.update(cell=value,allocation_id=b.allocation_key(value),attempt_id=b.attempt_key(value),label=b.attempt_key(value),
       scheduler_allocation_id='ALZ_SCALARCAL_DUAL_'+b.attempt_key(value)+'_'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ'),issued_unix=now,
       expires_unix=min(now+21630,b.read(scope.WINDOW)['expires_unix']),cap_seconds=21600,
-      role='alz_core_'+method,operation='scalarcal097_cell',metric_role='calibration_selection',arm=arm,
+      gpu_uuid=gpu,role='alz_core_'+method,operation='scalarcal097_cell',metric_role='calibration_selection',arm=arm,
       fixed_endpoint=scope.endpoint(method),new_model_updates=scope.update_count(value),new_model_update_unit=scope.update_unit(method),initial_completed_updates=0,is_continuation=False,
       reuse_completed_model=False,source_model_path=str(model_input) if model_input else None,
       source_model_SHA256=b.sha(model_input) if model_input else None,
@@ -37,7 +39,7 @@ def build_authorization(*,arm='fixed',seed=5,check_only=False,auth_path=None):
     if scope.RUNTIME_PROOF.exists():
         auth['runtime_qualification_SHA256']=b.sha(scope.RUNTIME_PROOF);paths.append(scope.RUNTIME_PROOF)
         for p,pin in b.read(scope.RUNTIME_PROOF)['source_SHA256'].items():pins.setdefault(p,pin)
-    if all(p.exists() for p in scope.handoff_paths()):paths.extend(scope.handoff_paths())
+    if all(p.exists() for p in scope.handoff_paths()):paths.extend(Path(path) for path in scope.prior_study_ready())
     cache=Path(auth['cache_dir']);paths.append(cache/'manifest.json')
     pins.update({str(cache/name):pin for name,pin in b.read(cache/'manifest.json')['files_SHA256'].items()})
     data=ROOT/'data/calibration_fold0';paths.append(data/'manifest.json')
@@ -49,11 +51,11 @@ def build_authorization(*,arm='fixed',seed=5,check_only=False,auth_path=None):
     return auth,auth_path
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--arm',choices=['fixed','adaptive'],default='fixed');parser.add_argument('--seed',type=int,default=5);parser.add_argument('--check-only',action='store_true');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--arm',choices=['fixed','adaptive'],default='fixed');parser.add_argument('--seed',type=int,default=5);parser.add_argument('--gpu',required=True);parser.add_argument('--check-only',action='store_true');args=parser.parse_args()
     if not args.check_only:
         profile.reviewed()
         b.require(not subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True),'Commit qualified source/evidence before deployment')
-    auth,path=build_authorization(arm=args.arm,seed=args.seed,check_only=args.check_only)
+    auth,path=build_authorization(arm=args.arm,seed=args.seed,gpu=args.gpu,check_only=args.check_only)
     b.require(auth['expires_unix']>time.time()+150,'Research window lacks cleanup interval')
     b.require(not path.parent.exists(),'One-use cell already exists; inspect rather than duplicate')
     if not args.check_only:

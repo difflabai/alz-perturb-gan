@@ -1,7 +1,7 @@
 """Exact scoped copies of the qualified shared physical profiles."""
 import copy,hashlib,importlib.util,json,subprocess
 from pathlib import Path
-from dual_coordination import GPUS,RESOURCE_PROTOCOL,assigned_gpu,validate_resource_protocol
+from dual_coordination import GPUS,RESOURCE_PROTOCOL,validate_resource_protocol
 ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent
 BASE=ROOT/'benchmark097_runtime/resource_profile.py'
 REVIEW=ROOT/'analysis/scalarcal097/owner_execution_review.json'
@@ -44,7 +44,7 @@ def reviewed():
  assert q['scope']==SCOPE and q['policy_SHA256']==policy_sha() and q['source_SHA256']==review_sources()
  return q
 def configure(auth,*,check_only=False):
- g=assigned_gpu(auth['cell']);p=validate_proposal(g);path=prepared_path(g) if check_only else deployed_path(g);pin=sha(path) if check_only else policy_sha(g)
+ g=auth['gpu_uuid'];assert g in GPUS;p=validate_proposal(g);path=prepared_path(g) if check_only else deployed_path(g);pin=sha(path) if check_only else policy_sha(g)
  auth.update(gpu_uuid=g,policy_path=str(path),policy_SHA256=pin,protected_peers=p['protected_peers'],registry_path=str(registry_path(g)),parallel_profile=True,dynamic_shared_foreign=True,dynamic_shared_gpu0=g==GPUS[0])
  auth['files_SHA256'].update({str(prepared_path(g)):sha(prepared_path(g)),str(path):pin,str(BASE):sha(BASE),str(RESOURCE_PROTOCOL):sha(RESOURCE_PROTOCOL)})
  if REVIEW.exists():auth['files_SHA256'][str(REVIEW)]=sha(REVIEW)
@@ -52,12 +52,13 @@ def configure(auth,*,check_only=False):
 def validate(auth):
  import preset_scope as s
  assert auth['operation']=='scalarcal097_cell' and auth.get('parallel_profile') is True
- g=assigned_gpu(auth['cell']);p=validate_proposal(g);reviewed()
+ g=auth['gpu_uuid'];assert g in GPUS;p=validate_proposal(g);reviewed()
  assert auth['gpu_uuid']==g and auth.get('dynamic_shared_foreign') is True and auth['dynamic_shared_gpu0']==(g==GPUS[0])
  assert read(s.PLAN)==s.ENABLED and auth['files_SHA256'][str(s.PLAN)]==sha(s.PLAN)
  assert auth['policy_path']==str(deployed_path(g)) and auth['registry_path']==str(registry_path(g))
  assert sha(deployed_path(g))==auth['policy_SHA256']==policy_sha(g) and auth['protected_peers']==p['protected_peers']
  assert auth['files_SHA256'][str(REVIEW)]==sha(REVIEW)
+ for path,pin in s.prior_study_ready().items():assert auth['files_SHA256'][path]==pin
  return p
 def free_floor(gpu):
  raw=subprocess.check_output(['nvidia-smi','-i',gpu,'--query-gpu=uuid,memory.free','--format=csv,noheader,nounits'],text=True,timeout=2).strip().split(',')

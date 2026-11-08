@@ -2,18 +2,18 @@
 import contextlib,fcntl,hashlib,json,os
 from pathlib import Path
 ROOT=Path('/ml2/alz');GPUS=('GPU-72c1b506-891d-b8bc-b353-e020585e1c47','GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69')
-RESOURCE_PROTOCOL=ROOT/'analysis/scalarcal097/resource_protocol.json'
-def assigned_gpu(cell):
+RESOURCE_PROTOCOL=ROOT/'analysis/scalarcal097/resource_protocol_v3.json'
+def valid_cell(cell):
  arm=cell['experiment'].removeprefix('scalarcal097_')
- assert cell['fold']==0 and cell['method']=='pg' and type(cell['seed']) is int and cell['seed'] in (5,6,7) and arm in ('fixed','adaptive')
- return GPUS[(cell['seed']-5+(arm=='adaptive'))%2]
+ assert cell==dict(experiment='scalarcal097_'+arm,fold=0,method='pg',seed=cell['seed']) and type(cell['seed']) is int and cell['seed'] in (5,6,7) and arm in ('fixed','adaptive')
+ return cell
 def validate_resource_protocol():
- p=json.loads(RESOURCE_PROTOCOL.read_text());expected=[]
- for seed in (5,6,7):
-  for arm in ('fixed','adaptive'):
-   c=dict(experiment='scalarcal097_'+arm,fold=0,method='pg',seed=seed);expected.append(dict(**c,gpu_uuid=assigned_gpu(c)))
- assert p['cells']==expected and p['at_most_one_ALZ_cell_per_physical_card'] and p['peer_ALZ_host_reserve_bytes']==6*2**30
+ p=json.loads(RESOURCE_PROTOCOL.read_text())
+ assert p['status']=='PREPARED_SCALARCAL6_COST_ONLY_TWO_CARD_SCOPE' and p['scientific_cells']==6 and p['registered_cell_device_bindings']==12 and tuple(p['eligible_GPUs'])==GPUS
+ assert p['at_most_one_ALZ_cell_per_physical_card'] and p['peer_ALZ_host_reserve_bytes']==6*2**30
+ assert p['quality_values_used_for_resource_choice'] is False and p['fresh_training_updates']==20000
  return p
+
 def identity(pid):
  try:
   p=Path('/proc',str(pid));v=(p/'stat').read_text().rsplit(')',1)[1].split()
@@ -29,7 +29,8 @@ def validate_active_peers(state,auth):
   if r['status']!='reserved' or identity(r['owner']['pid'])!=r['owner']:raise ValueError('Prior owned allocation needs reconciliation')
   if r['allocation_id']==auth['allocation_id'] or r['gpu_uuids']==[auth['gpu_uuid']]:raise ValueError('Cell or assigned ALZ lane already occupied')
   meta=bindings.get(r['allocation_id'],{})
-  if not meta or assigned_gpu(meta['cell'])!=meta.get('gpu_uuid') or r['gpu_uuids']!=[meta['gpu_uuid']]:raise ValueError('Different-study or unscoped reservation blocks handoff')
+  if not meta or meta.get('gpu_uuid') not in GPUS or r['gpu_uuids']!=[meta['gpu_uuid']]:raise ValueError('Different-study or unscoped reservation blocks handoff')
+  valid_cell(meta['cell'])
   if meta.get('benchmark_protocol_SHA256')!=auth['benchmark_protocol_SHA256'] or meta.get('resource_protocol_SHA256')!=hashlib.sha256(RESOURCE_PROTOCOL.read_bytes()).hexdigest():raise ValueError('Peer scientific/resource protocol differs')
   if meta.get('path')!=str(Path(__file__).parent/'project_runner_gpu0.py'):raise ValueError('Peer backend differs')
   if r['device_count']!=1 or r['declared_wall_seconds']!=r['job_cap_seconds'] or r['job_cap_seconds']!=auth['cap_seconds']:raise ValueError('Peer resource deadline differs')

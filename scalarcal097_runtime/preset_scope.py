@@ -2,12 +2,12 @@
 import hashlib,json,math
 from pathlib import Path
 ROOT=Path('/ml2/alz');HERE=Path(__file__).resolve().parent;STUDY=ROOT/'analysis/scalarcal097'
-PROTOCOL=STUDY/'protocol.json';PLAN=HERE/'plan.json';RESOURCE_PROTOCOL=STUDY/'resource_protocol.json'
+PROTOCOL=STUDY/'protocol.json';PLAN=HERE/'plan.json';RESOURCE_PROTOCOL=STUDY/'resource_protocol_v3.json'
 MODEL_DIR=ROOT/'analysis/adaptive_lr097/model';CONTROLLER_DIR=ROOT/'analysis/adaptive_lr097'
 MODEL_PROOF=CONTROLLER_DIR/'ALZ_integration_CPU_qualification.json'
 NATIVE_PROOF=ROOT/'analysis/distribution097/native_release.json';ENGINE_PROOF=ROOT/'analysis/shared_gpu0_candidate_CPU_qualification.json'
 ENDPOINT_PROOF=STUDY/'endpoint_CPU_qualification.json'
-RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v2.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
+RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v3.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
 CFG=dict(z_dim=8,stage_balance=False,cell_z_dim=8,theta_init_scale=1.,fourier_feature_scale=1.)
 ENABLED=dict(enabled=True,experiment='scalarcal097',fold=0,training_seeds=[5,6,7],arms=['fixed','adaptive'],endpoint=20000,all_training_from_scratch=True,calibration_only=True)
 def read(p):return json.loads(Path(p).read_bytes())
@@ -45,22 +45,38 @@ def proof_source_pins():
    pins[path]=pin
  return pins
 def handoff_paths(root=ROOT):
- root=Path(root)
- return [root/'analysis/benchmark097/matrix_complete.json',root/'analysis/benchmark097/comparison.json',root/'analysis/benchmark097_calibration_excluded53_report.json',root/'artifacts/released097-dual-research-pipeline-v2/completed.json',root/'artifacts/released097-dual-calibration53-boundary-v2/completed.json']
+ root=Path(root);common=[root/'analysis/benchmark097/matrix_complete.json',root/'analysis/benchmark097/comparison.json',root/'analysis/benchmark097_calibration_excluded53_report.json']
+ barrier=root/'analysis/benchmark097_balanced/scientific_reports_completed.json'
+ if barrier.exists():return [*common,barrier,root/'artifacts/released097-balanced-research-pipeline/completed.json']
+ return [*common,root/'artifacts/released097-dual-research-pipeline-v2/completed.json',root/'artifacts/released097-dual-calibration53-boundary-v2/completed.json']
 def prior_study_ready(root=ROOT):
- """Metadata completion barriers and file hashing only; no target metric parsing."""
+ """Accept either qualified resource lineage; hash, never parse target reports."""
  root=Path(root);matrix,primary,sensitivity,parent,child=handoff_paths(root)
- assert all(p.is_file() for p in (matrix,primary,sensitivity,parent,child)),'Frozen45 and both CPU reports must finish before the separate experiment'
+ paths=(matrix,primary,sensitivity,parent,child)
+ assert all(p.is_file() for p in paths),'All45 and both scientific reports must finish before scalar calibration'
  q=read(matrix);assert q['matrix_complete'] and q['complete_cells']==q['required_cells']==45 and len(q['result_SHA256'])==45
- assert read(parent)['status']=='FULL_RESEARCH_PIPELINE_COMPARISON_READY_FOR_FINAL_AGENT_AUDIT'
- c=read(child);assert c['status']=='CALIBRATION_EXCLUDED53_SENSITIVITY_COMPLETE_FINAL_AGENT_AUDIT_REMAINS' and c['original57_primary_preserved']
- assert not read(root/'benchmark097_dual_runtime/plan.json')['enabled'],'Frozen study activation has not reverted'
- for index in (0,1):
-  registry=root/f'artifacts/gpu{index}-benchmark097-dual-20261107/live_registry/registry.json'
-  assert not registry.exists() or not read(registry)['jobs'],'Previous physical registry is still active'
- return {str(p):sha(p) for p in (matrix,primary,sensitivity,parent,child)}
+ if parent==root/'analysis/benchmark097_balanced/scientific_reports_completed.json':
+  barrier=read(parent);assert barrier['status']=='SAME_FROZEN45_ORIGINAL57_PRIMARY_AND_PRESPECIFIED53_COMPLETE' and barrier['complete_fresh_models']==45 and barrier['original57_primary_preserved'] and barrier['prespecified53_complete'] and barrier['new_generated_counts_for53']==0
+  source=root/'analysis/run_released097_balanced_pipeline.py';proof_path=root/'analysis/benchmark097_balanced/runtime_CPU_qualification.json';proof=read(proof_path)
+  assert proof['status']=='EXTERNAL097_SAME45_BALANCED_RESOURCE_SCOPE_CPU_PASS' and proof['native_cell_device_bindings']==90
+  assert barrier['source_pipeline_path']==str(source) and barrier['source_pipeline_SHA256']==proof['source_SHA256'][str(source)]==sha(source)
+  assert barrier['runtime_qualification_SHA256']==sha(proof_path) and barrier['handoff_SHA256']==sha(root/'analysis/benchmark097_balanced/handoff_completed.json')
+  assert barrier['report_SHA256']=={str(p):sha(p) for p in (matrix,primary,sensitivity)}
+  assert read(child)['status']=='SAME45_SCIENTIFIC_REPORTS_READY_FINAL_AGENT_AUDIT_AND_SCALAR_CALIBRATION_REMAIN'
+  assert not read(root/'benchmark097_balanced_runtime/plan.json')['enabled']
+  paths=(*paths,source,proof_path,root/'analysis/benchmark097_balanced/handoff_completed.json')
+ else:
+  assert read(parent)['status']=='FULL_RESEARCH_PIPELINE_COMPARISON_READY_FOR_FINAL_AGENT_AUDIT'
+  c=read(child);assert c['status']=='CALIBRATION_EXCLUDED53_SENSITIVITY_COMPLETE_FINAL_AGENT_AUDIT_REMAINS' and c['original57_primary_preserved']
+ assert not read(root/'benchmark097_dual_runtime/plan.json')['enabled']
+ for namespace in ('benchmark097-dual','benchmark097-balanced'):
+  for index in (0,1):
+   registry=root/f'artifacts/gpu{index}-{namespace}-20261107/live_registry/registry.json'
+   assert not registry.exists() or not read(registry)['jobs'],'Previous physical registry is still active'
+ return {str(p):sha(p) for p in paths}
+
 def protocol_paths():
- return [PROTOCOL,RESOURCE_PROTOCOL,PLAN,MODEL_PROOF,ENDPOINT_PROOF,NATIVE_PROOF,ENGINE_PROOF,WINDOW,CONTROLLER_DIR/'published_integration_sources.json',*map(Path,protocol()['fidelity_evidence_SHA256']),ROOT/'benchmark097_runtime/resource_profile.py',*[ROOT/f'benchmark097_dual_runtime/policy.gpu{i}.prepared.json' for i in (0,1)]]
+ return [ROOT/'analysis/released097_remaining_runtime_balance.py',ROOT/'analysis/run_scalarcal097.py',ROOT/'analysis/after_benchmark097_scalarcal.py',ROOT/'analysis/aggregate_scalarcal097.py',PROTOCOL,RESOURCE_PROTOCOL,PLAN,MODEL_PROOF,ENDPOINT_PROOF,NATIVE_PROOF,ENGINE_PROOF,WINDOW,CONTROLLER_DIR/'published_integration_sources.json',*map(Path,protocol()['fidelity_evidence_SHA256']),ROOT/'benchmark097_runtime/resource_profile.py',*[ROOT/f'benchmark097_dual_runtime/policy.gpu{i}.prepared.json' for i in (0,1)]]
 def validate_authorization(auth,*,require_runtime_proof=True,require_activation=True,require_handoff=True):
  p=protocol();v=auth['cell'];assert v==cell(auth['arm'],v['seed'])
  assert auth['operation']=='scalarcal097_cell' and auth['metric_role']=='calibration_selection' and auth['role']=='alz_core_pg'
@@ -73,8 +89,8 @@ def validate_authorization(auth,*,require_runtime_proof=True,require_activation=
  if require_activation:assert read(PLAN)==ENABLED,'Separate experiment plan remains disabled'
  assert sha(WINDOW)=='2dffe7ce5956cac37fd212e5b0b02b145acff98e35b75700855c98cda57dfbc1'
  assert math.isfinite(auth['issued_unix']) and auth['expires_unix']<=min(read(WINDOW)['expires_unix'],auth['issued_unix']+21630)
- from dual_coordination import assigned_gpu
- assert auth['gpu_uuid']==assigned_gpu(v) and auth['dynamic_shared_gpu0']==(auth['gpu_uuid']=='GPU-72c1b506-891d-b8bc-b353-e020585e1c47')
+ from dual_coordination import GPUS
+ assert auth['gpu_uuid'] in GPUS and auth['dynamic_shared_gpu0']==(auth['gpu_uuid']=='GPU-72c1b506-891d-b8bc-b353-e020585e1c47')
  pins=auth['files_SHA256'];research=auth['research_source_SHA256']
  for path in protocol_paths():assert pins[str(path)]==sha(path),str(path)
  for path,pin in proof_source_pins().items():assert pins[path]==pin==sha(path)
@@ -85,6 +101,6 @@ def validate_authorization(auth,*,require_runtime_proof=True,require_activation=
   for path,pin in prior_study_ready().items():assert pins[path]==pin
  if require_runtime_proof:
   assert auth['runtime_qualification_SHA256']==pins[str(RUNTIME_PROOF)]==sha(RUNTIME_PROOF)
-  q=read(RUNTIME_PROOF);assert q['status']=='SCALARCAL097_SIX_FRESH_CELLS_PREPARED_SCOPE_ACCOUNTING_CPU_PASS' and q['native_cells_checked']==6 and not q['GPU_allocation_created']
+  q=read(RUNTIME_PROOF);assert q['status']=='SCALARCAL097_SIX_FRESH_CELLS_PREPARED_SCOPE_ACCOUNTING_CPU_PASS' and q['native_cells_checked']==6 and q['native_cell_device_bindings']==12 and not q['GPU_allocation_created']
   for path,pin in q['source_SHA256'].items():assert pins[path]==pin==sha(path)
  return p

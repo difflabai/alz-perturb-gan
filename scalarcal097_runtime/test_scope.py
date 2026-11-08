@@ -1,5 +1,5 @@
 """Native prepared closures and refusal gates; no allocation or model imports."""
-import ast,copy,json,os,sys,tempfile,unittest
+import ast,copy,json,os,subprocess,sys,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
 import binding as b,preset_scope as s,prepare,resource_profile as p,dual_coordination as d
@@ -8,23 +8,24 @@ def prepared_validate(a):return ORIGINAL_VALIDATE(a,require_runtime_proof=False,
 ORIGINAL_VALIDATE=s.validate_authorization
 
 class Scope(unittest.TestCase):
- def test_six_fresh_namespace_cells_and_balanced_both_cards(self):
+ def test_six_fresh_cells_and_twelve_eligible_card_bindings(self):
   values=[s.cell(a,seed) for seed in (5,6,7) for a in ('fixed','adaptive')]
   self.assertEqual(len({b.allocation_key(c) for c in values}),6)
-  self.assertEqual([sum(d.assigned_gpu(c)==g for c in values) for g in d.GPUS],[3,3]);s.protocol();d.validate_resource_protocol()
+  self.assertEqual(len([(v,g) for v in values for g in d.GPUS]),12);s.protocol();d.validate_resource_protocol()
   for arm,seed in [('wrong',5),('fixed',0),('adaptive',4),('adaptive',8),('fixed',True)]:
    with self.assertRaises(AssertionError):s.cell(arm,seed)
- def test_all_six_actual_prepared_source_closures_with_deployment_gates_explicitly_held(self):
+ def test_all12_actual_prepared_source_closures_with_deployment_gates_held(self):
   for seed in (5,6,7):
    for arm in ('fixed','adaptive'):
-    auth,_=prepare.build_authorization(arm=arm,seed=seed,check_only=True)
-    prepared_validate(auth)
-    with patch.object(s,'validate_authorization',side_effect=prepared_validate):b.source_closure(auth,b.NATIVE_LAYOUT)
-    with self.assertRaises(AssertionError):ORIGINAL_VALIDATE(auth,require_runtime_proof=False,require_handoff=False)
-    with self.assertRaises((AssertionError,FileNotFoundError)):s.prior_study_ready()
+    for gpu in d.GPUS:
+     auth,_=prepare.build_authorization(arm=arm,seed=seed,gpu=gpu,check_only=True)
+     prepared_validate(auth)
+     with patch.object(s,'validate_authorization',side_effect=prepared_validate):b.source_closure(auth,b.NATIVE_LAYOUT)
+     with self.assertRaises(AssertionError):ORIGINAL_VALIDATE(auth,require_runtime_proof=False,require_handoff=False)
+     with self.assertRaises((AssertionError,FileNotFoundError)):s.prior_study_ready()
   self.assertNotIn('torch',sys.modules)
  def test_warmstart_changed_formulation_wrong_role_or_endpoint_refused(self):
-  auth,_=prepare.build_authorization(arm='adaptive',seed=5,check_only=True)
+  auth,_=prepare.build_authorization(arm='adaptive',seed=5,gpu=d.GPUS[0],check_only=True)
   for key,value in [('source_model_path','old.pt'),('is_continuation',True),('initial_completed_updates',500),('reuse_completed_model',True),('fixed_endpoint',500),('operation','external097_benchmark_cell'),('metric_role','final_evaluation'),('particlegan_version','0.9.6'),('arm','fixed')]:
    changed=copy.deepcopy(auth);changed[key]=value
    with self.subTest(key=key),self.assertRaises(AssertionError):prepared_validate(changed)
@@ -64,10 +65,37 @@ class Scope(unittest.TestCase):
    with self.assertRaises(AssertionError):p.capacity({**obs,'available_ram':23*2**30},Admission,gpu)
    with self.assertRaises(AssertionError):p.capacity({**obs,'total':5*2**30},Admission,gpu)
  def test_current_other_study_reservations_cannot_be_relabelled_as_new_peers(self):
-  auth,_=prepare.build_authorization(arm='fixed',seed=5,check_only=True)
+  auth,_=prepare.build_authorization(arm='fixed',seed=5,gpu=d.GPUS[1],check_only=True)
   gpu=d.GPUS[1-d.GPUS.index(auth['gpu_uuid'])];key='ALZ_CAL_V1_external097_f0_pg_s0'
   reservation=dict(allocation_id=key,status='reserved',owner=d.identity(os.getpid()),gpu_uuids=[gpu])
   old=dict(open_reservations=[reservation],execution_controller=dict(calibration_parallel_backends={key:dict(cell=dict(experiment='external097',fold=0,method='pg',seed=0),gpu_uuid=gpu)}))
   with self.assertRaises((ValueError,AssertionError,KeyError)):d.validate_active_peers(old,auth)
   self.assertNotIn('torch',sys.modules)
+ def test_scientific_worker_auditor_and_scoring_unchanged_from_qualified_v2(self):
+  for name in ('worker_gpu0.py','finish.py','endpoint_evaluation.py'):
+   old=subprocess.check_output(['git','show','3c49817:scalarcal097_runtime/'+name],cwd=s.ROOT)
+   self.assertEqual(old,(b.HERE/name).read_bytes(),name)
+ def test_balanced_lineage_barrier_hashes_reports_without_reading_quality(self):
+  with tempfile.TemporaryDirectory() as folder:
+   root=Path(folder);common=[root/'analysis/benchmark097/matrix_complete.json',root/'analysis/benchmark097/comparison.json',root/'analysis/benchmark097_calibration_excluded53_report.json']
+   for path in common:path.parent.mkdir(parents=True,exist_ok=True)
+   common[0].write_text(json.dumps(dict(matrix_complete=True,complete_cells=45,required_cells=45,result_SHA256={str(i):'fixed' for i in range(45)})))
+   common[1].write_bytes(b'OPAQUE_PRIMARY_NEVER_PARSED');common[2].write_bytes(b'OPAQUE_SENSITIVITY_NEVER_PARSED')
+   source=root/'analysis/run_released097_balanced_pipeline.py';source.write_text('CPU_FIXTURE_ONLY')
+   aux=root/'analysis/benchmark097_balanced';aux.mkdir();proof=aux/'runtime_CPU_qualification.json';handoff=aux/'handoff_completed.json';handoff.write_text('{}')
+   proof.write_text(json.dumps(dict(status='EXTERNAL097_SAME45_BALANCED_RESOURCE_SCOPE_CPU_PASS',native_cell_device_bindings=90,source_SHA256={str(source):s.sha(source)})))
+   barrier=aux/'scientific_reports_completed.json';value=dict(status='SAME_FROZEN45_ORIGINAL57_PRIMARY_AND_PRESPECIFIED53_COMPLETE',complete_fresh_models=45,original57_primary_preserved=True,prespecified53_complete=True,new_generated_counts_for53=0,source_pipeline_path=str(source),source_pipeline_SHA256=s.sha(source),runtime_qualification_SHA256=s.sha(proof),handoff_SHA256=s.sha(handoff),report_SHA256={str(path):s.sha(path) for path in common});barrier.write_text(json.dumps(value))
+   marker=root/'artifacts/released097-balanced-research-pipeline/completed.json';marker.parent.mkdir(parents=True);marker.write_text(json.dumps(dict(status='SAME45_SCIENTIFIC_REPORTS_READY_FINAL_AGENT_AUDIT_AND_SCALAR_CALIBRATION_REMAIN')))
+   for name in ('benchmark097_dual_runtime','benchmark097_balanced_runtime'):
+    path=root/name/'plan.json';path.parent.mkdir();path.write_text('{"enabled":false}')
+   self.assertEqual(len(s.prior_study_ready(root)),8)
+   common[1].write_bytes(b'TAMPERED_PRIMARY')
+   with self.assertRaises(AssertionError):s.prior_study_ready(root)
+ def test_authorization_pins_every_prior_barrier_dependency(self):
+  with tempfile.TemporaryDirectory() as folder:
+   path=Path(folder)/'extra-handoff-source.json';path.write_text('{"CPU_fixture":true}')
+   with patch.object(s,'handoff_paths',return_value=[path]),patch.object(s,'prior_study_ready',return_value={str(path):s.sha(path)}):
+    auth,_=prepare.build_authorization(arm='fixed',seed=5,gpu=d.GPUS[0],check_only=True)
+   self.assertEqual(auth['files_SHA256'][str(path)],s.sha(path))
+
 if __name__=='__main__':unittest.main(verbosity=2)

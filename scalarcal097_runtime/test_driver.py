@@ -1,37 +1,64 @@
-"""Exercise the real queue's coverage, waiting and failure-drain behavior."""
-import importlib.util,unittest
+"""Actual six-fit dynamic queue, cost-only placement and capacity fallback."""
+import importlib.util,json,tempfile,unittest
 from pathlib import Path
-P=Path('/ml2/alz/analysis/run_scalarcal097.py');spec=importlib.util.spec_from_file_location('dual_driver_under_test',P);driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
+import binding as b
+from runtime_dispatch import choose_next,cost_table,settled_cost_rows
+P=Path('/ml2/alz/analysis/run_scalarcal097.py');spec=importlib.util.spec_from_file_location('scalar_dynamic_driver_test',P);d=importlib.util.module_from_spec(spec);spec.loader.exec_module(d)
+COSTS={'pg':[4.,1.]}
 class Scheduler(unittest.TestCase):
  def run_fake(self,*,failure=None,capacity_wait=0,expired=False):
-  clock=[10000 if expired else 0];started=[];finished=[];observations=[];attempts={}
-  def start(v,n):
-   key=(v['experiment'],v['seed']);attempts[key]=attempts.get(key,0)+1;gpu=driver.assigned_gpu(v)
-   if capacity_wait and gpu==driver.GPUS[0] and attempts[key]<=capacity_wait:return None
-   if failure=='admission' and gpu==driver.GPUS[0]:raise RuntimeError('confined admission failure')
-   h=dict(cell=v,gpu=gpu,attempt=str(key),started=clock[0]);started.append(h);return h
+  clock=[1000. if expired else 0.];started=[];finished=[];obs=[];tries={}
+  def select(pending,active,gpu):
+   timed={card:dict(cell=h['cell'],elapsed_seconds=clock[0]-h['start']) for card,h in active.items()}
+   return choose_next(pending,timed,gpu,COSTS)[0]
+  def start(v,gpu,n):
+   key=b.allocation_key(v);tries[key]=tries.get(key,0)+1
+   if capacity_wait and gpu==d.GPUS[0] and tries[key]<=capacity_wait:return None
+   if failure=='admission' and gpu==d.GPUS[0]:raise RuntimeError('fixture admission failure')
+   h=dict(cell=v,gpu=gpu,attempt=key,start=clock[0]);started.append(h);return h
   def ready(h):
-   if clock[0]<h['started']+2:return False
-   if failure=='observation' and h['gpu']==driver.GPUS[1]:raise TimeoutError('observation only, original handle retained')
-   if failure in ('endpoint','observation','admission') and h['gpu']==driver.GPUS[0] and clock[0]<h['started']+4:return False
+   if clock[0]<h['start']+COSTS['pg'][d.GPUS.index(h['gpu'])]:return False
+   if failure=='observation' and h['gpu']==d.GPUS[1]:raise TimeoutError('observation only; retain exact handle')
    return True
-  def finish(h):
-   finished.append(h);return dict(cell=h['cell'],complete=not(failure=='endpoint' and h['gpu']==driver.GPUS[1]),charged_GPU_seconds=clock[0]-h['started'])
-  def observe(rows,pending,active,errors,unsettled):observations.append(dict(active=list(active),errors=bool(errors),pending=list(pending)))
+  def finish(h):finished.append(h);return dict(cell=h['cell'],complete=not(failure=='endpoint' and h['gpu']==d.GPUS[1]),charged_GPU_seconds=clock[0]-h['start'])
+  def observe(rows,pending,active,errors,unsettled):obs.append(dict(active=list(active),errors=bool(errors)))
   def sleep(n):clock[0]+=n
-  q=driver.run_queue(driver.matrix(),start=start,ready=ready,finish=finish,observe=observe,sleep=sleep,now=lambda:clock[0],training_expiry=10000)
-  return q,started,finished,observations,attempts
- def test_all6_cells_run_once_at_most_one_per_card(self):
-  q,s,f,o,_=self.run_fake();self.assertFalse(q['errors']);self.assertFalse(q['pending']);self.assertEqual(len(q['rows']),6)
-  self.assertEqual(len({x['attempt'] for x in s}),6);self.assertTrue(any(len(x['active'])==2 for x in o));self.assertTrue(all(len(x['active'])==len(set(x['active']))<=2 for x in o))
- def test_capacity_wait_keeps_every_cell_and_other_card_progresses(self):
-  q,s,f,o,a=self.run_fake(capacity_wait=3);self.assertEqual(len(q['rows']),6);self.assertEqual(len(s),6);self.assertTrue(any(n==4 for n in a.values()))
- def test_incomplete_cell_stops_new_admission_and_drains_other_card(self):
-  q,s,f,o,_=self.run_fake(failure='endpoint');self.assertEqual(len(s),2);self.assertEqual(len(q['rows']),2);self.assertEqual(sum(x['complete'] for x in q['rows']),1);self.assertFalse(q['unsettled']);self.assertTrue(q['errors']);self.assertTrue(any(x['errors'] and x['active'] for x in o))
- def test_observation_timeout_retains_handle_and_never_restarts(self):
-  q,s,f,o,_=self.run_fake(failure='observation');self.assertEqual(len(s),2);self.assertEqual(len(q['rows']),1);self.assertEqual(len(q['unsettled']),1);self.assertEqual(q['unsettled'][0]['attempt'],s[0]['attempt']);self.assertTrue(q['errors'])
- def test_admission_error_drains_already_admitted_cell(self):
-  q,s,f,o,_=self.run_fake(failure='admission');self.assertEqual(len(s),1);self.assertEqual(len(q['rows']),1);self.assertTrue(q['errors']);self.assertFalse(q['unsettled'])
- def test_expired_training_window_never_admits(self):
-  q,s,f,o,_=self.run_fake(expired=True);self.assertFalse(s);self.assertFalse(f);self.assertEqual(len(q['pending']),6);self.assertTrue(q['errors'])
+  q=d.run_queue(d.matrix(),initial_rows=[],start=start,ready=ready,finish=finish,observe=observe,sleep=sleep,now=lambda:clock[0],training_expiry=1000,select=select)
+  return q,started,finished,obs
+ def test_six_models_once_and_faster_card_receives_more_work(self):
+  q,started,_,obs=self.run_fake();self.assertFalse(q['errors']);self.assertEqual(len(q['rows']),6);self.assertEqual(len({h['attempt'] for h in started}),6)
+  self.assertGreater(sum(h['gpu']==d.GPUS[1] for h in started),sum(h['gpu']==d.GPUS[0] for h in started));self.assertTrue(any(len(o['active'])==2 for o in obs))
+ def test_capacity_wait_preserves_all_models(self):
+  q,started,_,_=self.run_fake(capacity_wait=2);self.assertEqual(len(q['rows']),6);self.assertEqual(len(started),6)
+ def test_failure_stops_admission_and_healthy_peer_drains(self):
+  q,started,finished,_=self.run_fake(failure='endpoint');self.assertEqual(len(started),2);self.assertEqual(len(finished),2);self.assertTrue(q['errors'])
+ def test_observation_timeout_never_restarts_a_model(self):
+  q,started,_,_=self.run_fake(failure='observation');self.assertEqual(len(started),2);self.assertEqual(len(q['unsettled']),1)
+ def test_failed_admission_keeps_admitted_peer(self):
+  q,started,finished,_=self.run_fake(failure='admission');self.assertEqual(len(started),1);self.assertEqual(len(finished),1);self.assertTrue(q['errors'])
+ def test_expired_window_refuses_every_new_model(self):
+  q,started,_,_=self.run_fake(expired=True);self.assertFalse(started);self.assertEqual(len(q['pending']),6)
+ def test_available_slow_card_is_used_when_fast_card_has_no_capacity(self):
+  value=d.matrix()[0];selected,proposal=choose_next([value],{},d.GPUS[0],COSTS,eligible={d.GPUS[0]})
+  self.assertEqual(selected,value);self.assertEqual(proposal['reason'],'only_card_with_current_capacity')
+  self.assertIsNone(choose_next([value],{},d.GPUS[1],COSTS,eligible={d.GPUS[0]})[0])
+ def test_no_capacity_does_not_allocate_or_drop_any_cell(self):
+  values=d.matrix();self.assertIsNone(choose_next(values,{},d.GPUS[0],COSTS,eligible=set())[0]);self.assertEqual(len(values),6)
+ def test_cost_window_scales_only_benchmark_estimates_not_actual_scalar_costs(self):
+  rows=[]
+  for gpu in d.GPUS:
+   for i in range(4):rows.append(dict(gpu_uuid=gpu,effective_seconds=float(i+1),checked_unix=i,attempt=f'{gpu}_{i}'))
+  costs,refs=cost_table(rows);self.assertEqual(costs['pg'],[3.,3.]);self.assertTrue(all(len(v)==3 for v in refs['pg']))
+ def test_closed_cost_metadata_does_not_parse_quality_and_scales_only_external(self):
+  with tempfile.TemporaryDirectory() as folder:
+   root=Path(folder)
+   for phase in ('benchmark097','scalarcal097'):
+    attempt=phase+'_CPU_fixture';result=root/'analysis'/phase/'results'/(attempt+'.json');result.parent.mkdir(parents=True);result.write_bytes(b'OPAQUE_QUALITY_MUST_NOT_BE_PARSED')
+    allocation=root/'artifacts/allocations'/attempt;allocation.mkdir(parents=True);authpath=allocation/'authorization.json';ledger=root/(attempt+'-ledger.json')
+    auth=dict(cell=dict(method='pg'),fixed_endpoint=20000,new_model_updates=20000,initial_completed_updates=0,source_model_path=None,ledger_path=str(ledger),gpu_uuid=d.GPUS[0]);authpath.write_text(json.dumps(auth));(allocation/'deployment.json').write_text(json.dumps(dict(authorization_path=str(authpath))))
+    ledger.write_text(json.dumps(dict(jobs=[dict(status='completed',exit_code=0,reservation_released=True)])))
+    ledger.with_name(attempt+'-settlement.json').write_text(json.dumps(dict(uncertain=None,settlement=dict(status='settled',charged_GPU_seconds=100.),checked_unix=1.)))
+   rows=settled_cost_rows(root);self.assertEqual(len(rows),2)
+   for row in rows:self.assertAlmostEqual(row['effective_seconds'],115. if row['source_phase']=='benchmark097' else 100.,places=10)
+
 if __name__=='__main__':unittest.main(verbosity=2)

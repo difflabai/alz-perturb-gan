@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-08T00:22:05.750463+00:00",
+  "UTC": "2026-11-08T00:40:56.546113+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -343,7 +343,7 @@
     "separate_runtime_source_prepared": true,
     "separate_runtime_source_path": "/ml2/alz/scalarcal097_runtime",
     "separate_scientific_protocol_path": "/ml2/alz/analysis/scalarcal097/protocol.json",
-    "separate_runtime_CPU_qualification_complete": true,
+    "separate_runtime_CPU_qualification_complete": false,
     "separate_runtime_activated": false,
     "separate_runtime_queued": false,
     "actual_real_adaptive_fits": 0,
@@ -352,7 +352,11 @@
     "endpoint_CPU_parity_proof_path": "/ml2/alz/analysis/scalarcal097/endpoint_CPU_qualification.json",
     "current_runtime_qualification_pending_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v2.json",
     "separate_runtime_CPU_qualification_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v2.json",
-    "separate_runtime_CPU_tests": 27
+    "separate_runtime_CPU_tests": 27,
+    "separate_runtime_source_version": "v3_cost_and_capacity_aware_12_bindings",
+    "separate_runtime_current_qualification_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v3.json",
+    "scientific_worker_model_auditor_endpoint_unchanged": true,
+    "balanced_scientific_handoff_barrier_prepared": true
   },
   "latest_external_native_root_audit_path": "/ml2/alz/analysis/benchmark097_eleventh_complete_all_nine_seed0_cells_root_check_20261107.json",
   "latest_GPU0_native5000_runtime_evidence_path": "/ml2/alz/analysis/benchmark097_current_GPU0_second_fresh5000_runtime_20261107.json",
