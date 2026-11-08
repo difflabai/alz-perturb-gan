@@ -1,0 +1,19 @@
+{
+  "status": "FRESH_SEED_NAMESPACE_ONLY_NO_TRAINING_OR_OBJECTIVE_CHANGE",
+  "parent_path": "/ml2/alz/analysis/dispersion097/model/released_adapter.py",
+  "parent_SHA256": "b3fe9b78771f1a85fa86646ae2e6c74e8725af211a7484ee0e08fb5b62093f09",
+  "path": "/ml2/alz/analysis/dispersion097/model/fresh_seed_adapter.py",
+  "SHA256": "7faffd3d8768752a2a5e2d06f94b8f47a0ae778b9203edc20b04421cde38462f",
+  "only_source_edit": {
+    "before": "if fold not in range(3) or seed not in SEEDS:raise ValueError('unregistered training cell')",
+    "after": "if fold not in range(3) or seed not in (8,9,10):raise ValueError('unregistered fresh dispersion training cell')"
+  },
+  "matched_training_seeds": [
+    8,
+    9,
+    10
+  ],
+  "old0to4_seed_streams_not_reused": true,
+  "real_new_ALZ_fits": 0,
+  "GPU_admission_runtime_qualified": false
+}
