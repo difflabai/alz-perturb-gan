@@ -1,0 +1,104 @@
+{
+  "status": "UPDATED_PRIMARY_SOURCE_COMPARATOR_COVERAGE_NOT_NEW_BENCHMARK_RESULTS",
+  "UTC": "2026-11-08T01:17:47.673765+00:00",
+  "supersedes_as_of_status_only": "/ml2/alz/analysis/sota_comparator_coverage_20261105.json",
+  "original_review_retained": true,
+  "current_frozen_benchmark": {
+    "methods": [
+      "PG0.9.7",
+      "scVI1.3.3",
+      "CFGen",
+      "hierarchical_resampling"
+    ],
+    "required_new_neural_fits": 45,
+    "complete_fits": 12,
+    "formulation": "full512row_SBNP_bound_thermal_nonEMA",
+    "frozen_protocol_unchanged": true
+  },
+  "source_repositories": {
+    "scldm": {
+      "path": "/ml2/alz/artifacts/comparator-source-review-20261108/scldm",
+      "commit": "3be2f3a7f2ad11f262b8f58cc8eecea90b46e8e6",
+      "reviewed_file_SHA256": {
+        "src/scldm/models.py": "60eaf070c6caf7dd6d797b5bbff83b5e72253561c851eef2d066274926cb8591",
+        "experiments/configs/model/vae_base.yaml": "4e61f46f35a1ec14ce5c9ac3e132e963c0a35b04dd3a61008e4e22051a3af2fb",
+        "experiments/configs/model/ldm_base.yaml": "c4a7fdfb3e2e406ec0888f024fc6c35e4b8e587cfa194334f8332459fb66c59c",
+        "experiments/configs/vae_training.yaml": "7704ca54181b38e6f537a69932015136a95bfd66fff146b52821f2463cbffb51",
+        "experiments/configs/ldm_training.yaml": "895640755d0203fe016b02853f8499f23d3f880de7b3203b9138be328544eda2"
+      }
+    },
+    "sc-save": {
+      "path": "/ml2/alz/artifacts/comparator-source-review-20261108/sc-save",
+      "commit": "3713943ea1bb9d5e3fef6f7905f2553ae780190b",
+      "reviewed_file_SHA256": {
+        "src/sc_save_public/conditional_generation.py": "07261ceafbe0c2b66e2cb7e4124aea31c76dfcd24a818aa17a46da8c10f16233",
+        "src/sc_save_public/models/save_model.py": "43bb2f5a2e2e7cf26cce5a7ea0413051164afc4a31312a8be39814b5c7ede8d9",
+        "src/sc_save_public/models/VAE_model.py": "4be64b64d589f6fc1fc40d48792ea50057d0c2b01ccf993ca8fc3bc91404bba9",
+        "pyproject.toml": "7950f2319da927d297b275c4ae7da96528bb2d97205488f647ae1718b35bef5b"
+      }
+    },
+    "count-flow-matching": {
+      "path": "/ml2/alz/artifacts/comparator-source-review-20261108/count-flow-matching",
+      "commit": "7ce372db78581451103baf1afdb8fecd50e12230",
+      "reviewed_file_SHA256": {
+        "count_fm/sampling.py": "9a121665d9839beb6483eed611cf3199551ffdcce39d8d509f101a8f04cc202a",
+        "count_fm/experiments/scrna_countfm.py": "199bcbbd749b58bfe8e4e5d0d7c4ce12b0d7fdf6cbde0d976db9e93da6bd8ccd",
+        "tests/test_core.py": "b3dac7a25d5693f67a7913c51f57af9a725192b3d56433f25b84370536bbde26",
+        "pyproject.toml": "776b652f1a7fb1b7e8bad57aacfa58b086f9c6543c63f4017d99b5d5713e8688"
+      }
+    }
+  },
+  "scLDM": {
+    "official_source": "https://github.com/czi-ai/scldm",
+    "count_contract_finding": "The shipped VAE configuration selects a negative-binomial decoder; LatentDiffusion.sample decodes latent samples and returns NB draws. Count-valued generation is source-supported, so absence of a count likelihood is not a valid exclusion.",
+    "conditioning": "Sampler accepts condition and guidance dictionaries. Exact stage-only ALZ conditioning and train-only vocabulary remain unexecuted.",
+    "depth_contract": "Public sampler draws log-size factors internally by condition. Matching the fixed fitting-only ALZ library trace needs an explicit native-decoder integration and replay check.",
+    "remaining": "Fresh local VAE/LDM training, checkpoint restoration, exact condition/count/depth/scoring adapter, fullwidth CPU/native checks and measured shared-resource requirements. No real ALZ fit or score.",
+    "eligible_for_current45": false
+  },
+  "SAVE": {
+    "official_source": "https://github.com/fdu-wangfeilab/sc-save",
+    "source_contract": "Public conditional-generation path fits MaxAbsScaler, decodes and clamps continuous outputs, then inverse-transforms them. No native integer-count draw was found in the reviewed generation path.",
+    "inference": "It does not directly meet this frozen benchmark integer-count contract. Rounding or adding an observation distribution would be an adapted method and must be declared; this finding does not rank SAVE expression-distribution quality.",
+    "remaining": "A separately specified continuous-expression comparison or a justified, disclosed count adapter; preserve original model rather than silently substituting a weakened implementation.",
+    "eligible_for_current45": false
+  },
+  "count_FM": {
+    "primary_paper": "https://arxiv.org/abs/2605.07746v3",
+    "paper_revision": "2026-10-31",
+    "official_source": "https://github.com/weigcdsb/count-flow-matching",
+    "count_contract": "Native nonnegative integer unit-jump sampler and scRNA adapter are present. Source supports direct count-space generation.",
+    "CPU_core_test_record": "/ml2/alz/analysis/countfm_upstream_CPU_core_review_20261108.json",
+    "CPU_core_test_record_SHA256": "57f9324de541403f62d895e56d8b0cfff7a481cd18fca481100becaa2260bb25",
+    "CPU_core_tests_passed": 7,
+    "conditioning": "Generic conditional count networks have upstream covariate-dropout checks; the scRNA adapter inspected is unconditional. A stage-only ALZ integration is not yet tested.",
+    "sampling_contract": "The scRNA sampler defaults to500 first-order unit-jump steps; adequacy for fitting count ranges, library variation and convergence must be checked before fair ALZ evaluation.",
+    "remaining": "Fresh conditional ALZ adapter, fixed recipe declared before new evaluation, full2000gene/native CPU qualification, checkpoint/count/depth replay and measured shared GPU feasibility. No real ALZ fit or score.",
+    "eligible_for_current45": false
+  },
+  "additional_literature": {
+    "count_flow_map": {
+      "primary_paper": "https://arxiv.org/abs/2609.23290v4",
+      "revision": "2026-10-28",
+      "status": "Count-space one/few-step method identified in the primary paper; code/task eligibility not established here."
+    }
+  },
+  "CFGen_current_default_HEAD_observed": "bc484fb84f75716fb3bf6dfdfc8d9413c590e304",
+  "CFGen_frozen_commit": "ee5ca0ccdd97a85a3d6bab9344063b77a8fc7af3",
+  "CFGen_commit_difference_alone_invalidates_existing_results": false,
+  "prior_donor_aware_gaps_remain": [
+    "scVIP",
+    "MrVI",
+    "splatPop",
+    "scDesign3"
+  ],
+  "full_SOTA_coverage_complete": false,
+  "broad_SOTA_claim_supported": false,
+  "claim_scope": "A completed frozen45 comparison can establish results against its tested recipes on this historical ALZ protocol. Additional applicable methods and independent-cohort evidence remain separate requirements for broader claims.",
+  "new_ALZ_target_values_read": false,
+  "new_GPU_allocations": 0,
+  "new_real_model_fits": 0,
+  "foreign_jobs_or_live_packages_modified": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}

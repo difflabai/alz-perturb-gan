@@ -1,0 +1,37 @@
+{
+  "upstream_CPU_core_tests_passed": 7,
+  "test_names": [
+    "test_bridge_endpoints_and_support",
+    "test_exact_bridge_rates_and_zero_death_boundary",
+    "test_jump_probabilities_match_competing_hazards",
+    "test_ot_cost_and_unequal_independent_batches",
+    "test_pcx_dropout_removes_all_covariates",
+    "test_sampler_grid_boundary_and_mode_restore",
+    "test_unet_wrapper_forwards_covariates"
+  ],
+  "runner": "Direct invocation of all seven unmodified zero-argument upstream test functions in existing isolated CFGen CPU environment; no packages installed.",
+  "python": "3.11.17 (main, Oct  1 2026, 20:17:42) [GCC 14.3.0]",
+  "torch_version": "2.6.0+cu124",
+  "POT_version": "0.9.7.post1",
+  "elapsed_seconds": 0.23022387598757632,
+  "CUDA_initialized": false,
+  "real_ALZ_data_read": false,
+  "real_model_fits": 0,
+  "source_SHA256": {
+    "/ml2/alz/artifacts/comparator-source-review-20261108/count-flow-matching/tests/test_core.py": "b3dac7a25d5693f67a7913c51f57af9a725192b3d56433f25b84370536bbde26",
+    "/ml2/alz/artifacts/comparator-source-review-20261108/count-flow-matching/count_fm/sampling.py": "9a121665d9839beb6483eed611cf3199551ffdcce39d8d509f101a8f04cc202a",
+    "/ml2/alz/artifacts/comparator-source-review-20261108/count-flow-matching/count_fm/experiments/scrna_countfm.py": "199bcbbd749b58bfe8e4e5d0d7c4ce12b0d7fdf6cbde0d976db9e93da6bd8ccd"
+  },
+  "source_repository_commit": "7ce372db78581451103baf1afdb8fecd50e12230",
+  "initial_environment_attempts": [
+    {
+      "runtime": "existing PG Python3.12",
+      "status": "pytest unavailable; no test collection"
+    },
+    {
+      "runtime": "existing PG Python3.12 direct test invocation",
+      "status": "POT unavailable; test module import failed before any test"
+    }
+  ],
+  "packages_installed_or_modified": false
+}
