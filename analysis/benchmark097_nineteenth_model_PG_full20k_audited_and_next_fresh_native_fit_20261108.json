@@ -1,0 +1,90 @@
+{
+  "status": "NINETEENTH_LOGICAL_MODEL_FRESH_PG_FULL20K_AUDITED_NEXT_FRESH_PG_NATIVE_FIT_LIVE",
+  "UTC": "2026-11-08T11:14:00.352944+00:00",
+  "successful_logical_models_fully_audited": 19,
+  "required_successful_logical_models": 45,
+  "retained_infrastructure_failures": 3,
+  "completed_attempt": "CAL_GPU0_V1_external097_f0_pg_s2",
+  "source_result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_pg_s2.json",
+  "source_result_SHA256": "02507990c6f3deb18e9d45ee26824fb2b7f3dc944608065e4b470a2d80cd5c67",
+  "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f0_pg_s2/authorization.json",
+  "authorization_SHA256": "9561fc12ad9fb2e2145a0d18af2a22daf6a97a86f19b1b45ffc4744095918bef",
+  "completed_native_optimizer_pairs": 20000,
+  "initial_completed_updates": 0,
+  "all_training_from_scratch": true,
+  "official_ParticleGAN_version": "0.9.7",
+  "frozen_PG_hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "final_checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_external097_f0_pg_s2/fit/final.pt",
+  "final_checkpoint_actual_SHA256": "c042196acb6ef72563299fb6025ad61892d06c44cc25813ed18ebeaf93759606",
+  "native_CUDA_restore_actual_SHA256": "cf416a5594f2c2da8921b2efdeb209ce48598c19302c844f1e76f84a97002384",
+  "independent_CPU_saved_score_audit_passed": true,
+  "own_guard_and_worker_absent": true,
+  "owned_registry_lease_absent": true,
+  "actual_charged_GPU_seconds": 4545.942699183011,
+  "next_fresh_attempt": "CAL_GPU0_V1_external097_f1_pg_s2",
+  "next_authorization_actual_SHA256": "5e7119500ff934da1045414b660312f742d11cbac0f8f16da71af328feeb26a4",
+  "next_initial_completed_updates": 0,
+  "next_source_model_path": null,
+  "next_actual_native_optimizer_pairs_at_observation": 501,
+  "verified_live_workers": [
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 2,
+        "method": "cfgen",
+        "seed": 3
+      },
+      "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "identity": {
+        "pid": 2482588,
+        "birth": 29311737,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "guard_identity": {
+        "pid": 2482485,
+        "birth": 29311605,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s3"
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "pg",
+        "seed": 2
+      },
+      "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "identity": {
+        "pid": 2519187,
+        "birth": 29388134,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "guard_identity": {
+        "pid": 2519115,
+        "birth": 29387988,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f1_pg_s2"
+    }
+  ],
+  "updated_full_queue_forecast_path": "/ml2/alz/analysis/released097_full_queue19_constrained_metadata_forecast_20261108.json",
+  "updated_full_queue_forecast_SHA256": "02f7ea70831d2e13c181d44015e4a3c1a271038945709b83f55fe1769df56204",
+  "canonical_budget_snapshot": {
+    "revision": 569,
+    "cap_GPU_hours": 1024.0,
+    "charged_GPU_hours": 105.98000092484945,
+    "reserved_GPU_hours": 12.016666666666667,
+    "available_after_reservations_GPU_hours": 906.0033324084839
+  },
+  "quality_or_evaluation_target_values_inspected": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
