@@ -402,7 +402,7 @@
   "resource_only_handoff_observed_PID": 474542,
   "resource_only_after_handoff_observed_PID": 475880,
   "latest_native_progress_observation": {
-    "UTC": "2026-11-08T03:30:15.206332+00:00",
+    "UTC": "2026-11-08T03:43:15.715347+00:00",
     "completed_benchmark_models": 14,
     "active_metadata": [
       {
@@ -425,10 +425,10 @@
       "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s2",
       "phase": "FM",
       "AE_optimizer_updates_completed": 17100,
-      "FM_optimizer_updates_completed": 4000,
-      "total_optimizer_updates": 21100,
-      "FM_completed_epochs": 70,
-      "native_loss": 6.610221862792969,
+      "FM_optimizer_updates_completed": 18250,
+      "total_optimizer_updates": 35350,
+      "FM_completed_epochs": 320,
+      "native_loss": 6.31110954284668,
       "real_scalar_fits": 0
     }
   },
@@ -467,15 +467,17 @@
   "fresh_infrastructure_replacement_real_fits": 0,
   "shared_capacity_owner_coordination_question": {
     "event_ref": "alz-transient-GPU0-growth-owner-coordination-20261108",
-    "revision": 2,
+    "revision": 3,
     "state": "pending",
     "delivery": "queued_not_receipt_or_answer",
     "permission_requested": false,
-    "production_blocked": false
+    "production_blocked": false,
+    "worker_identity_evidence_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v2/foreign_worker_identity_metadata_20261108.json"
   },
   "countfm_native_sampler_resolution_CPU_review_path": "/ml2/alz/analysis/countfm_native_sampler_resolution_CPU_review_20261108.json",
   "countfm_real_ALZ_fits": 0,
   "latest_scalar_runtime_cost_recovery_evidence_path": "/ml2/alz/analysis/scalarcal097_runtime_cost_recovery_v6_20261108.json",
   "latest_shared_capacity_observation": "GPU0 briefly recovered at03:29 but by03:36 native admission margin fell to1.706GB, below separate6GiB scheduling reserve; stabilization correctly reset. GPU1 remains active. No GPU0 readmission yet.",
-  "countfm_native_fullwidth_CPU_fit_reload_review_path": "/ml2/alz/analysis/countfm_native_fullwidth_CPU_fit_reload_review_20261108.json"
+  "countfm_native_fullwidth_CPU_fit_reload_review_path": "/ml2/alz/analysis/countfm_native_fullwidth_CPU_fit_reload_review_20261108.json",
+  "latest_external_live_progress_evidence_path": "/ml2/alz/analysis/benchmark097_CFGen_seed2_AEcomplete_FM_progress_20261108T0341.json"
 }
