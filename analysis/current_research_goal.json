@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/artifacts/dispersion097-preparation-release-20261108.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "TWENTYNINE_AUDITED_BOTH_GPUS_FRESH_SEED4_PG_NATIVE_TRAINING",
+  "study_status": "THIRTYONE_AUDITED_NATIVE_PG_RUNNING_UNTOUCHED_SCVI_QUEUE_CONTINUES",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v6/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v6/identity.json",
@@ -98,7 +98,7 @@
   "conditional_local_search_design_CPU_proof_path": "/ml2/alz/analysis/released097_local_search_design_CPU_qualification_v2.json",
   "conditional_local_search_frozen": true,
   "conditional_local_search_activated": true,
-  "study_completed_attempts": 32,
+  "study_completed_attempts": 34,
   "latest_released_first20k_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json",
   "latest_released_first20k_mixture_diagnostic_path": "/ml2/alz/analysis/faithful097_first20k_mixture_diagnostic_20261107.json",
   "conditional_local_search_prepared_protocol_path": "/ml2/alz/analysis/localfaith097/protocol.json",
@@ -244,29 +244,7 @@
   "external_benchmark_first_two_native_workers_verified_path": "/ml2/alz/analysis/released097_full9_frozen_first_dual_native_workers_20261107.json",
   "current_verified_external_workers": [
     {
-      "cell": {
-        "experiment": "external097",
-        "fold": 1,
-        "method": "pg",
-        "seed": 4
-      },
-      "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
-      "identity": {
-        "pid": 3658135,
-        "birth": 31699059,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "guard_identity": {
-        "pid": 3658111,
-        "birth": 31698912,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "attempt": "CAL_GPU0_V1_external097_f1_pg_s4",
-      "native_progress": {
-        "step": 9251
-      }
-    },
-    {
+      "attempt": "CAL_GPU0_V1_external097_f2_pg_s4",
       "cell": {
         "experiment": "external097",
         "fold": 2,
@@ -274,25 +252,24 @@
         "seed": 4
       },
       "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
-      "identity": {
-        "pid": 3683512,
-        "birth": 31760207,
-        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
       "guard_identity": {
         "pid": 3683469,
         "birth": 31760068,
         "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
       },
-      "attempt": "CAL_GPU0_V1_external097_f2_pg_s4",
+      "worker_identity": {
+        "pid": 3683512,
+        "birth": 31760207,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
       "native_progress": {
-        "step": 501
+        "step": 10251
       }
     }
   ],
-  "external_benchmark_completed_fits": 29,
-  "external_benchmark_running_fits": 2,
-  "external_benchmark_queued_fits": 14,
+  "external_benchmark_completed_fits": 31,
+  "external_benchmark_running_fits": 1,
+  "external_benchmark_queued_fits": 13,
   "external_benchmark_first_completed_fit_audit_path": "/ml2/alz/analysis/benchmark097_first_completed_native_scvi_and_two_fresh_pg_workers_20261107.json",
   "full_confirmation_plot_path": "/ml2/alz/analysis/released097_full_confirmation_selection_20261107.png",
   "full_confirmation_plot_provenance_path": "/ml2/alz/analysis/released097_full_confirmation_plot_provenance_20261107.json",
@@ -614,7 +591,7 @@
   "supplementary_existing_t005_CPU_multiseed_checkpoint_audit_path": "/ml2/alz/analysis/t005_checkpoint_CPU_multiseed_root_audit_20261108.json",
   "supplementary_existing_t005_CPU_multiseed_checkpoint_plot_path": "/ml2/alz/analysis/t005_five_seed_checkpoint_CPU_calibration_20261108.png",
   "latest_count_observation_source_review_path": "/ml2/alz/analysis/released097_count_observation_source_review_20261108.json",
-  "study_resolved_attempts": 32,
+  "study_resolved_attempts": 34,
   "study_incomplete_attempts": 3,
   "latest_infrastructure_failure_evidence_path": "/ml2/alz/analysis/benchmark097_verified_third_original_postfit_cap_failure_20261108.json",
   "automatic_frozen_study_successor_admissions_stopped": false,
@@ -717,7 +694,7 @@
   "dispersion_completed_study_final_audit_actual_CPU_tests": 11,
   "dispersion_completed_study_final_audit_existing_saved_calibration_arrays_checked": 40,
   "dispersion_completed_study_final_audit_real_theta_outcomes_audited": 0,
-  "latest_full_queue_metadata_forecast_path": "/ml2/alz/analysis/released097_full_queue29_constrained_metadata_forecast_20261108.json",
+  "latest_full_queue_metadata_forecast_path": "/ml2/alz/analysis/released097_full_queue31_constrained_metadata_forecast_20261108.json",
   "latest_full_queue_metadata_forecast_source_path": "/ml2/alz/analysis/forecast_released097_full_queue_metadata_v3.py",
   "latest_canonical_budget_live_metadata_snapshot_path": "/ml2/alz/analysis/released097_full_queue27_constrained_metadata_forecast_20261108.json",
   "full_queue_time_feasibility_status": "FULL_QUEUE_WITH_THETA_EXCEEDS_WINDOW_LOW_OVERHEAD_45_AND_SCALAR_STILL_WITHIN_FORECAST",
@@ -792,10 +769,10 @@
   "donor_matched_supplement_CPU_observer_identity_path": "/ml2/alz/artifacts/benchmark097-donor-matched-supplement-observer/identity.json",
   "donor_matched_supplement_CPU_observer_progress_path": "/ml2/alz/artifacts/benchmark097-donor-matched-supplement-observer/progress.json",
   "donor_matched_supplement_CPU_observer_session": 24919,
-  "successful_external_models": 29,
+  "successful_external_models": 31,
   "GPU1_CFGen_fold2_seed2_actual_charged_GPU_seconds": 5670.366205975995,
   "latest_GPU1_actual_native_admission_path": "/ml2/alz/analysis/benchmark097_twentyfourth_model_CFGen_audited_next_fresh_fold2_seed4_fit_20261108.json",
-  "current_GPU1_native_attempt": "CAL_GPU0_V1_external097_f1_pg_s4",
+  "current_GPU1_native_attempt": null,
   "current_GPU1_native_training_from_zero": true,
   "single_scalar_LR_owner_confirmation_path": "/ml2/alz/analysis/scalarcal097_single_metric_owner_confirmation_20261108.json",
   "final_independent_audits_observer_queued": true,
@@ -838,22 +815,22 @@
   "GPU1_CFGen_fold1_seed3_full_endpoint_audit_completed": false,
   "latest_official_release_matches_current_frozen_runtime": true,
   "latest_external_completed_model_audit_path": "/ml2/alz/analysis/benchmark097_twentyseventh_model_PG_full20k_audited_next_fresh_fold0_seed4_fit_20261108.json",
-  "latest_verified_external_completed_fits": 29,
+  "latest_verified_external_completed_fits": 31,
   "latest_verified_retained_infrastructure_failures": 3,
   "latest_external_metadata_observation_UTC": "2026-11-08T16:35:28.832139+00:00",
   "latest_external_new_native_start_audit_path": "/ml2/alz/analysis/benchmark097_twentyseventh_model_PG_full20k_audited_next_fresh_fold0_seed4_fit_20261108.json",
-  "latest_verified_external_running_fits": 2,
-  "latest_verified_external_pending_original_fits": 11,
+  "latest_verified_external_running_fits": 1,
+  "latest_verified_external_pending_original_fits": 10,
   "calibration_ED_sampling_resolution_CPU_diagnostic_path": "/ml2/alz/analysis/calibration_ED_two_stream_resolution_CPU_20261108.json",
   "calibration_ED_sampling_resolution_independent_audit_path": "/ml2/alz/analysis/calibration_ED_two_stream_resolution_CPU_root_audit_20261108.json",
   "sampling_resolution_diagnostic_changed_controller_or_frozen_comparison": false,
-  "study_successful_fits": 29,
+  "study_successful_fits": 31,
   "study_retained_failed_attempts": 3,
   "study_planned_physical_attempts": 48,
-  "current_verified_external_workers_observed_UTC": "2026-11-08T17:47:58.994102+00:00",
-  "external_benchmark_queued_original_fits": 11,
+  "current_verified_external_workers_observed_UTC": "2026-11-08T18:04:45.153417+00:00",
+  "external_benchmark_queued_original_fits": 10,
   "external_benchmark_queued_fits_includes_three_explicit_unstarted_replacements": true,
-  "current_goal_index_reconciled_from_V6_authoritative_metadata_UTC": "2026-11-08T17:47:58.994102+00:00",
+  "current_goal_index_reconciled_from_V6_authoritative_metadata_UTC": "2026-11-08T18:04:45.153417+00:00",
   "latest_verified_external_PG_progress": {
     "UTC": "2026-11-08T17:56:41.282305+00:00",
     "attempt": "CAL_GPU0_V1_external097_f2_pg_s4",
@@ -913,11 +890,28 @@
   "GPU1_CFGen_fold2_seed4_native_fit_completed": true,
   "GPU1_CFGen_fold2_seed4_full_endpoint_audit_completed": false,
   "latest_completed_external_PG_endpoint": {
-    "attempt": "CAL_GPU0_V1_external097_f0_pg_s4",
-    "optimizer_pairs": 20000,
-    "actual_charged_GPU_seconds": 2147.3535056330147,
+    "attempt": "CAL_GPU0_V1_external097_f1_pg_s4",
+    "cell": {
+      "experiment": "external097",
+      "fold": 1,
+      "method": "pg",
+      "seed": 4
+    },
+    "from_zero": true,
+    "endpoint": {
+      "completed_optimizer_pairs": 20000
+    },
+    "source_result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_pg_s4.json",
+    "source_result_SHA256": "9646165588882c7012f027cf3c2d1f5e9f865f60e198a7cd9a62be99819ad8b8",
+    "authorization_SHA256": "dbdcab9122f169a61023710c912d1d295a7dfac3caa4ba07d5fa33a61d2d79d6",
     "all_result_file_hashes_actually_verified": 56,
-    "proof_path": "/ml2/alz/analysis/benchmark097_twentyninth_model_PG_full20k_audited_next_fresh_fold2_seed4_fit_20261108.json"
+    "native_restore_actual_SHA256": "79c5b36f1b772238b11b68a9549f99a7d5a6718b83262bbfab5269335583a884",
+    "checkpoint_actual_SHA256": "ddb5655a6c208423a2af707b907f60264ae9d4e625b12a91500b5f578f9119e8",
+    "independent_CPU_audit_and_native_CUDA_restore_passed": true,
+    "own_guard_worker_and_registry_lease_absent": true,
+    "canonical_settlement_verified": true,
+    "actual_charged_GPU_seconds": 1444.906471491966,
+    "proof_path": "/ml2/alz/analysis/benchmark097_models30_and31_PG20k_SCVI400_full_audits_20261108.json"
   },
   "study_incomplete_attempts_meaning": "Retained terminal infrastructure failures; currently active native fits are counted separately.",
   "latest_completed_external_CFGen_endpoint": {
@@ -927,5 +921,30 @@
     "all_result_file_hashes_actually_verified": 57,
     "proof_path": "/ml2/alz/analysis/benchmark097_twentyeighth_model_CFGen_audited_next_fresh_fold1_seed4_PG_fit_20261108.json"
   },
-  "latest_verified_external_full_endpoint_proof_path": "/ml2/alz/analysis/benchmark097_twentyninth_model_PG_full20k_audited_next_fresh_fold2_seed4_fit_20261108.json"
+  "latest_verified_external_full_endpoint_proof_path": "/ml2/alz/analysis/benchmark097_models30_and31_PG20k_SCVI400_full_audits_20261108.json",
+  "current_GPU1_phase": "BETWEEN_NATIVE_CELLS_DISPATCHER_LIVE",
+  "latest_completed_external_SCVI_endpoint": {
+    "attempt": "CAL_GPU0_V1_external097_f1_scvi_s1",
+    "cell": {
+      "experiment": "external097",
+      "fold": 1,
+      "method": "scvi",
+      "seed": 1
+    },
+    "from_zero": true,
+    "endpoint": {
+      "completed_epochs": 400
+    },
+    "source_result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_scvi_s1.json",
+    "source_result_SHA256": "633af6ba31584221ecbdc34c34ef6c6ea3254873514cfe8c51d4175ab725e376",
+    "authorization_SHA256": "ab257ace77488410a2d84b38fcb2cee0f0f1936238ef39369b36bd4334ebd457",
+    "all_result_file_hashes_actually_verified": 55,
+    "native_restore_actual_SHA256": "ae402f4acb0f29ee3c2f577dece6f4d628814d76ac05079ba0ce15ae509a0eb3",
+    "checkpoint_actual_SHA256": "ac5a6e0e3e3525c1ef7ae83e8dffb91c2605e1be9ad1d8e4d6d2153bd33be6a8",
+    "independent_CPU_audit_and_native_CUDA_restore_passed": true,
+    "own_guard_worker_and_registry_lease_absent": true,
+    "canonical_settlement_verified": true,
+    "actual_charged_GPU_seconds": 126.34661271597724,
+    "proof_path": "/ml2/alz/analysis/benchmark097_models30_and31_PG20k_SCVI400_full_audits_20261108.json"
+  }
 }

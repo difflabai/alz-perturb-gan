@@ -1,0 +1,130 @@
+{
+  "status": "MODELS30_AND31_FULL_PG20K_AND_SCVI400_ENDPOINTS_ALL_FILES_AND_CANONICAL_SETTLEMENTS_VERIFIED",
+  "UTC": "2026-11-08T18:04:45.153417+00:00",
+  "successful_logical_models_fully_audited": 31,
+  "required_successful_logical_models": 45,
+  "retained_infrastructure_failures": 3,
+  "completed_models": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f1_pg_s4",
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "pg",
+        "seed": 4
+      },
+      "from_zero": true,
+      "endpoint": {
+        "completed_optimizer_pairs": 20000
+      },
+      "source_result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_pg_s4.json",
+      "source_result_SHA256": "9646165588882c7012f027cf3c2d1f5e9f865f60e198a7cd9a62be99819ad8b8",
+      "authorization_SHA256": "dbdcab9122f169a61023710c912d1d295a7dfac3caa4ba07d5fa33a61d2d79d6",
+      "all_result_file_hashes_actually_verified": 56,
+      "native_restore_actual_SHA256": "79c5b36f1b772238b11b68a9549f99a7d5a6718b83262bbfab5269335583a884",
+      "checkpoint_actual_SHA256": "ddb5655a6c208423a2af707b907f60264ae9d4e625b12a91500b5f578f9119e8",
+      "independent_CPU_audit_and_native_CUDA_restore_passed": true,
+      "own_guard_worker_and_registry_lease_absent": true,
+      "canonical_settlement_verified": true,
+      "actual_charged_GPU_seconds": 1444.906471491966
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f1_scvi_s1",
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "scvi",
+        "seed": 1
+      },
+      "from_zero": true,
+      "endpoint": {
+        "completed_epochs": 400
+      },
+      "source_result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f1_scvi_s1.json",
+      "source_result_SHA256": "633af6ba31584221ecbdc34c34ef6c6ea3254873514cfe8c51d4175ab725e376",
+      "authorization_SHA256": "ab257ace77488410a2d84b38fcb2cee0f0f1936238ef39369b36bd4334ebd457",
+      "all_result_file_hashes_actually_verified": 55,
+      "native_restore_actual_SHA256": "ae402f4acb0f29ee3c2f577dece6f4d628814d76ac05079ba0ce15ae509a0eb3",
+      "checkpoint_actual_SHA256": "ac5a6e0e3e3525c1ef7ae83e8dffb91c2605e1be9ad1d8e4d6d2153bd33be6a8",
+      "independent_CPU_audit_and_native_CUDA_restore_passed": true,
+      "own_guard_worker_and_registry_lease_absent": true,
+      "canonical_settlement_verified": true,
+      "actual_charged_GPU_seconds": 126.34661271597724
+    }
+  ],
+  "verified_live_workers": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f2_pg_s4",
+      "cell": {
+        "experiment": "external097",
+        "fold": 2,
+        "method": "pg",
+        "seed": 4
+      },
+      "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "guard_identity": {
+        "pid": 3683469,
+        "birth": 31760068,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker_identity": {
+        "pid": 3683512,
+        "birth": 31760207,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "native_progress": {
+        "step": 10251
+      }
+    }
+  ],
+  "all_six_CPU_queues_verified_live": [
+    {
+      "name": "benchmark097-after-capacity-continuation-v6",
+      "pid": 2283066,
+      "birth": 28901418,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "benchmark097-infra1-pipeline",
+      "pid": 2348403,
+      "birth": 29037448,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "scalarcal097-after-recovered-science-v5",
+      "pid": 2348719,
+      "birth": 29037941,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "dispersion097-after-scalarcal097",
+      "pid": 2348925,
+      "birth": 29038447,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "released097-final-independent-audits",
+      "pid": 2368995,
+      "birth": 29080116,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "benchmark097-donor-matched-supplement-observer",
+      "pid": 2369483,
+      "birth": 29080902,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    }
+  ],
+  "updated_full_queue_forecast_path": "/ml2/alz/analysis/released097_full_queue31_constrained_metadata_forecast_20261108.json",
+  "updated_full_queue_forecast_SHA256": "d0f1e4d6a670c73adba8e4fa845dcf3a81623161e935ec212f89d724e50039cb",
+  "canonical_budget_snapshot": {
+    "revision": 604,
+    "cap_GPU_hours": 1124.0,
+    "charged_GPU_hours": 119.5948374322239,
+    "reserved_GPU_hours": 6.008333333333334,
+    "available_after_reservations_GPU_hours": 998.3968292344427
+  },
+  "quality_or_evaluation_target_values_inspected": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}

@@ -1,0 +1,396 @@
+{
+  "status": "CURRENT_V6_CONSTRAINED_COST_ONLY_FORECAST_ORIGINALS_REPLACEMENTS_SCALAR6_THETA6",
+  "UTC": "2026-11-08T18:01:50.746911+00:00",
+  "successful_logical_models": 30,
+  "failed_original_attempts_retained": 3,
+  "active_CPU_owner_identity_verified": {
+    "pid": 2283066,
+    "birth": 28901418,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "active_models_identity_verified": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f2_pg_s4",
+      "cell": {
+        "experiment": "external097",
+        "fold": 2,
+        "method": "pg",
+        "seed": 4
+      },
+      "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "guard": {
+        "pid": 3683469,
+        "birth": 31760068,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 3683512,
+        "birth": 31760207,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "elapsed_seconds": 891.9373483657837,
+      "conditional_remaining_seconds": 1302.6483792721992,
+      "remaining_allocation_seconds": 20708.062651634216,
+      "estimate_method": "Latest three settled same-method same-card median minus current charged elapsed; not an optimizer-throughput prediction. A zero estimate would not mean completion."
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f1_scvi_s1",
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "scvi",
+        "seed": 1
+      },
+      "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "guard": {
+        "pid": 3717616,
+        "birth": 31844425,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 3717679,
+        "birth": 31844566,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "elapsed_seconds": 48.35372495651245,
+      "conditional_remaining_seconds": 103.04159587298636,
+      "remaining_allocation_seconds": 21551.646275043488,
+      "estimate_method": "Latest three settled same-method same-card median minus current charged elapsed; not an optimizer-throughput prediction. A zero estimate would not mean completion."
+    }
+  ],
+  "pending_untouched_original_counts": {
+    "pg": 0,
+    "scvi": 10,
+    "cfgen": 0
+  },
+  "costs_seconds_by_method_card": {
+    "pg": [
+      2194.585727637983,
+      1734.6026192090067
+    ],
+    "scvi": [
+      547.5640669695131,
+      151.39532082949881
+    ],
+    "cfgen": [
+      14844.17624244999,
+      6357.228019809991
+    ]
+  },
+  "cost_source_attempts": {
+    "pg": [
+      [
+        "CAL_GPU0_V1_external097_f1_pg_s3",
+        "CAL_GPU0_V1_external097_f2_pg_s3",
+        "CAL_GPU0_V1_external097_f0_pg_s4"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f2_pg_s0",
+        "CAL_GPU0_V1_external097_f1_pg_s1",
+        "CAL_GPU0_V1_external097_f1_pg_s4"
+      ]
+    ],
+    "scvi": [
+      [
+        "CAL_GPU0_V1_external097_f0_scvi_s0",
+        "CAL_GPU0_V1_external097_f2_scvi_s0"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f1_scvi_s0",
+        "CAL_GPU0_V1_external097_f0_scvi_s1"
+      ]
+    ],
+    "cfgen": [
+      [
+        "CAL_GPU0_V1_external097_f1_cfgen_s0"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f0_cfgen_s4",
+        "CAL_GPU0_V1_external097_f1_cfgen_s4",
+        "CAL_GPU0_V1_external097_f2_cfgen_s4"
+      ]
+    ]
+  },
+  "untouched_originals": {
+    "counts_per_lane": {
+      "cfgen": [
+        0,
+        0
+      ],
+      "pg": [
+        0,
+        0
+      ],
+      "scvi": [
+        0,
+        10
+      ]
+    },
+    "predicted_lane_seconds": [
+      1302.6483792721992,
+      1616.9948041679745
+    ],
+    "predicted_makespan_seconds": 1616.9948041679745,
+    "CFGen_GPU0_excluded": true,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "untouched_originals_if_active_allocations_fully_consumed": {
+    "counts_per_lane": {
+      "cfgen": [
+        0,
+        0
+      ],
+      "pg": [
+        0,
+        0
+      ],
+      "scvi": [
+        3,
+        7
+      ]
+    },
+    "predicted_lane_seconds": [
+      22350.754852542756,
+      22611.41352084998
+    ],
+    "predicted_makespan_seconds": 22611.41352084998,
+    "CFGen_GPU0_excluded": true,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "three_fresh_replacements": {
+    "counts_per_lane": {
+      "cfgen": [
+        0,
+        2
+      ],
+      "pg": [
+        1,
+        0
+      ],
+      "scvi": [
+        0,
+        0
+      ]
+    },
+    "predicted_lane_seconds": [
+      2194.585727637983,
+      12714.456039619981
+    ],
+    "predicted_makespan_seconds": 12714.456039619981,
+    "CFGen_GPU0_excluded": true,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "six_theta_fixed_rate_fits": {
+    "counts_per_lane": {
+      "pg": [
+        3,
+        3
+      ]
+    },
+    "predicted_lane_seconds": [
+      6583.757182913949,
+      5203.80785762702
+    ],
+    "predicted_makespan_seconds": 6583.757182913949,
+    "CFGen_GPU0_excluded": true,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "overhead_scenarios": [
+    {
+      "scalar_cost_multiplier": 1.15,
+      "scalar_load_forecast": {
+        "counts_per_lane": {
+          "pg": [
+            3,
+            3
+          ]
+        },
+        "predicted_lane_seconds": [
+          7571.32076035104,
+          5984.379036271072
+        ],
+        "predicted_makespan_seconds": 7571.32076035104,
+        "CFGen_GPU0_excluded": true,
+        "conditional_on_cost_assumptions": true,
+        "not_a_native_admission": true
+      },
+      "originals_plus_replacements_hours": 3.9809585677188766,
+      "scalar_hours": 2.103144655653067,
+      "originals_replacements_scalar_hours": 6.084103223371943,
+      "originals_replacements_scalar_window_margin_hours": 6.331439346119655,
+      "theta_raw_forecast_hours": 1.8288214396983191,
+      "theta_window_forecast_with_1p25_safety_and_1200s_cleanup_hours": 2.619360132956232,
+      "all_current_studies_hours": 8.703463356328175,
+      "all_current_studies_window_margin_hours": 3.7120792131634235,
+      "all_studies_if_active_runs_use_full_remaining_allocations_hours": 14.535246333184288,
+      "full_active_allocation_scenario_window_margin_hours": -2.119703763692689
+    },
+    {
+      "scalar_cost_multiplier": 2.0,
+      "scalar_load_forecast": {
+        "counts_per_lane": {
+          "pg": [
+            3,
+            3
+          ]
+        },
+        "predicted_lane_seconds": [
+          13167.514365827898,
+          10407.61571525404
+        ],
+        "predicted_makespan_seconds": 13167.514365827898,
+        "CFGen_GPU0_excluded": true,
+        "conditional_on_cost_assumptions": true,
+        "not_a_native_admission": true
+      },
+      "originals_plus_replacements_hours": 3.9809585677188766,
+      "scalar_hours": 3.6576428793966382,
+      "originals_replacements_scalar_hours": 7.638601447115515,
+      "originals_replacements_scalar_window_margin_hours": 4.776941122376083,
+      "theta_raw_forecast_hours": 1.8288214396983191,
+      "theta_window_forecast_with_1p25_safety_and_1200s_cleanup_hours": 2.619360132956232,
+      "all_current_studies_hours": 10.257961580071747,
+      "all_current_studies_window_margin_hours": 2.157580989419851,
+      "all_studies_if_active_runs_use_full_remaining_allocations_hours": 16.089744556927858,
+      "full_active_allocation_scenario_window_margin_hours": -3.6742019874362613
+    },
+    {
+      "scalar_cost_multiplier": 5.0,
+      "scalar_load_forecast": {
+        "counts_per_lane": {
+          "pg": [
+            3,
+            3
+          ]
+        },
+        "predicted_lane_seconds": [
+          32918.785914569744,
+          26019.0392881351
+        ],
+        "predicted_makespan_seconds": 32918.785914569744,
+        "CFGen_GPU0_excluded": true,
+        "conditional_on_cost_assumptions": true,
+        "not_a_native_admission": true
+      },
+      "originals_plus_replacements_hours": 3.9809585677188766,
+      "scalar_hours": 9.144107198491595,
+      "originals_replacements_scalar_hours": 13.125065766210472,
+      "originals_replacements_scalar_window_margin_hours": -0.7095231967188738,
+      "theta_raw_forecast_hours": 1.8288214396983191,
+      "theta_window_forecast_with_1p25_safety_and_1200s_cleanup_hours": 2.619360132956232,
+      "all_current_studies_hours": 15.744425899166705,
+      "all_current_studies_window_margin_hours": -3.328883329675106,
+      "all_studies_if_active_runs_use_full_remaining_allocations_hours": 21.576208876022818,
+      "full_active_allocation_scenario_window_margin_hours": -9.160666306531219
+    }
+  ],
+  "canonical_budget_snapshot": {
+    "revision": 603,
+    "cap_GPU_hours": 1124.0,
+    "charged_GPU_hours": 119.55974115091391,
+    "reserved_GPU_hours": 12.016666666666667,
+    "available_after_reservations_GPU_hours": 992.4235921824195
+  },
+  "active_elapsed_hours_not_yet_settled": 0.26119196481174894,
+  "canonical_settled_charge_does_not_include_active_elapsed_as_final": true,
+  "authorized_window_remaining_hours": 12.415542569491599,
+  "authorized_GPU_window_end_UTC": "2026-11-09T06:26:46.606656+00:00",
+  "scalar_measurement_overhead_measured": false,
+  "active_PG_training_pace_projections": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f2_pg_s4",
+      "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "completed_updates": 8751,
+      "elapsed_seconds": 891.9373483657837,
+      "projected_full20k_plus120s_seconds": 2158.480969868092,
+      "training_pace_projection_not_a_settled_model_cost": true,
+      "future_shared_service_not_guaranteed": true
+    }
+  ],
+  "active_PG_same_card_future_pace_what_if_scenarios": [
+    {
+      "scalar_cost_multiplier": 1.15,
+      "all_current_studies_hours": 8.631253840788395,
+      "all_current_studies_window_margin_hours": 3.7842887287032045,
+      "projected_method_card_costs_seconds": {
+        "pg": [
+          2158.480969868092,
+          1734.6026192090067
+        ],
+        "scvi": [
+          547.5640669695131,
+          151.39532082949881
+        ],
+        "cfgen": [
+          14844.17624244999,
+          6357.228019809991
+        ]
+      },
+      "extrapolates_one_active_PG_training_pace_to_future_same_card_PG_fits": true,
+      "not_measured_future_fit_cost_or_admission_guarantee": true
+    },
+    {
+      "scalar_cost_multiplier": 2.0,
+      "all_current_studies_hours": 10.160177861111626,
+      "all_current_studies_window_margin_hours": 2.255364708379972,
+      "projected_method_card_costs_seconds": {
+        "pg": [
+          2158.480969868092,
+          1734.6026192090067
+        ],
+        "scvi": [
+          547.5640669695131,
+          151.39532082949881
+        ],
+        "cfgen": [
+          14844.17624244999,
+          6357.228019809991
+        ]
+      },
+      "extrapolates_one_active_PG_training_pace_to_future_same_card_PG_fits": true,
+      "not_measured_future_fit_cost_or_admission_guarantee": true
+    },
+    {
+      "scalar_cost_multiplier": 5.0,
+      "all_current_studies_hours": 15.556380285781856,
+      "all_current_studies_window_margin_hours": -3.1408377162902577,
+      "projected_method_card_costs_seconds": {
+        "pg": [
+          2158.480969868092,
+          1734.6026192090067
+        ],
+        "scvi": [
+          547.5640669695131,
+          151.39532082949881
+        ],
+        "cfgen": [
+          14844.17624244999,
+          6357.228019809991
+        ]
+      },
+      "extrapolates_one_active_PG_training_pace_to_future_same_card_PG_fits": true,
+      "not_measured_future_fit_cost_or_admission_guarantee": true
+    }
+  ],
+  "future_model_costs_still_use_only_settled_complete_models": true,
+  "current_method_device_exclusion": {
+    "method": "cfgen",
+    "GPU_index": 0,
+    "basis": "verified original postfit native cap failure"
+  },
+  "no_GPU_admission_or_active_source_changes": true,
+  "quality_or_evaluation_target_values_read": false,
+  "caveats": "Conditional two-card forecasts from settled costs, with future CFGen restricted toGPU1 and allthree fresh replacements included. Active PG pace projections are supplemental, not future settled costs. Both cards are currently running real native jobs, but this does not guarantee future eligibility. Excludes future capacity waits, failures/replacement amendments and most CPU report time. Scalar online-scoring overhead remains unmeasured; multipliers are scenarios, not estimates. Theta has its registered1.25 cost safety factor plus1200s cleanup. All four phases remain sequential. A full remaining-allocation scenario is a duration assumption, not a guarantee those models succeed by their caps. Neither forecast changes the owner window or any live authorization.",
+  "source_SHA256": {
+    "/ml2/alz/analysis/forecast_released097_full_queue_metadata_v3.py": "f34bb9318e55197c04b8469ece58db734a7499f71f70c1fd71e72a94251cdcfd",
+    "/ml2/alz/analysis/continue_benchmark097_after_capacity_v6.py": "ee04209a254142ba3fd419c53177232223eb287dfcb9a5bfee6659cf43643dc3",
+    "/ml2/alz/analysis/released097_remaining_runtime_balance.py": "b587c7fb4eadd29e80480bd06872ce2494aab52b72f84843364ac92e4a660680",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/budget_executor_v2_20261103_r2/budget_controller.py": "c8520f426e6b7a94741dd96804b96d9d22a224bff973b7e85d765e5b83c09848"
+  },
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
