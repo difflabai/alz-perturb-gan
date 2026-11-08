@@ -1,0 +1,104 @@
+{
+  "status": "BOTH_NATIVE_MODELS_AND_ALL_SIX_CPU_QUEUES_VERIFIED_LIVE_GOAL_INDEX_RECONCILED",
+  "UTC": "2026-11-08T14:12:21.441745+00:00",
+  "successful_logical_models": 23,
+  "required_successful_logical_models": 45,
+  "retained_infrastructure_failures": 3,
+  "active_models": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f0_pg_s3",
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "pg",
+        "seed": 3
+      },
+      "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "identity": {
+        "pid": 2999210,
+        "birth": 30375659,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "guard_identity": {
+        "pid": 2999150,
+        "birth": 30375522,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "native_progress": {
+        "step": 4001
+      },
+      "registry_heartbeat_age_seconds": 0.2198185920715332
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s4",
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "cfgen",
+        "seed": 4
+      },
+      "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "identity": {
+        "pid": 3019224,
+        "birth": 30418412,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "guard_identity": {
+        "pid": 3019176,
+        "birth": 30418277,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "native_progress": {
+        "phase": "FM",
+        "phase_optimizer_updates": 2750,
+        "total_optimizer_updates": 20450,
+        "completed_epochs": 46
+      },
+      "registry_heartbeat_age_seconds": 0.4387524127960205
+    }
+  ],
+  "pending_original_models": 17,
+  "unstarted_explicit_fresh_replacements": 3,
+  "CPU_queues": [
+    {
+      "name": "benchmark097-after-capacity-continuation-v6",
+      "pid": 2283066,
+      "birth": 28901418,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "benchmark097-infra1-pipeline",
+      "pid": 2348403,
+      "birth": 29037448,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "scalarcal097-after-recovered-science-v5",
+      "pid": 2348719,
+      "birth": 29037941,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "dispersion097-after-scalarcal097",
+      "pid": 2348925,
+      "birth": 29038447,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "released097-final-independent-audits",
+      "pid": 2368995,
+      "birth": 29080116,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "benchmark097-donor-matched-supplement-observer",
+      "pid": 2369483,
+      "birth": 29080902,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    }
+  ],
+  "quality_values_inspected": false,
+  "new_training_or_formulation_change": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}

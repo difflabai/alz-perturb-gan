@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-08T14:07:15.706902+00:00",
+  "UTC": "2026-11-08T14:12:21.441745+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -244,6 +244,7 @@
   "external_benchmark_first_two_native_workers_verified_path": "/ml2/alz/analysis/released097_full9_frozen_first_dual_native_workers_20261107.json",
   "current_verified_external_workers": [
     {
+      "attempt": "CAL_GPU0_V1_external097_f0_pg_s3",
       "cell": {
         "experiment": "external097",
         "fold": 0,
@@ -260,10 +261,10 @@
         "pid": 2999150,
         "birth": 30375522,
         "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "attempt": "CAL_GPU0_V1_external097_f0_pg_s3"
+      }
     },
     {
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s4",
       "cell": {
         "experiment": "external097",
         "fold": 1,
@@ -280,8 +281,7 @@
         "pid": 3019176,
         "birth": 30418277,
         "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
-      },
-      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s4"
+      }
     }
   ],
   "external_benchmark_completed_fits": 23,
@@ -685,7 +685,7 @@
   "training_loss_vs_calibration_distance_independent_audit_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_root_audit_20261108.json",
   "training_loss_vs_calibration_distance_plot_path": "/ml2/alz/analysis/t005_training_loss_calibration_relation_20261108.png",
   "training_loss_vs_calibration_distance_conclusion": "Existing t005 five-seed10k-to20k generator total loss and calibration ED changes have opposite signs in allfive. Fourseeds lowergeneratorloss yetworseED, onehigherlossyetbetterED. Retrospective descriptive calibration only; keep measured calibrationED as sole LR-control signal and still require fresh matched6fitcomparison.",
-  "next_required_runtime_action": "Preserve the live GPU1 fold1seed3 native guard. Perform CPU-only V5\u2192V6 handoff using the cleanly settled third postfit cutoff; resume untouched originals with CFGen routed toGPU1 and PG/scVI eligible onboth cards. Supersede unconsumed recovery/handoff/audit CPU qualifications for42 successful originals+3 fresh replacements=45 logical/48 physical outcomes, then restore scalar6, theta6 and descriptive supplement observers. No failed-weight training reuse or frozen candidate/metric change.",
+  "next_required_runtime_action": "Continue the two current fresh native fits and V6 untouched-original queue. After42 successful originals plus3 retained infrastructure failures, run the3 explicit from-zero replacements to reach45 successful logical models across48 physical attempts, audit both57/53 reports, then run the separately qualified scalar6 and eligible theta6 studies. Preserve fixed formulation, calibration ED control metric, native guards, existing endpoints and window.",
   "CFGen_anomaly_instrumentation_CPU_diagnostic_path": "/ml2/alz/analysis/cfgen_anomaly_instrumentation_CPU_result_20261108.json",
   "CFGen_anomaly_instrumentation_CPU_independent_audit_path": "/ml2/alz/analysis/cfgen_anomaly_instrumentation_CPU_root_audit_20261108.json",
   "CFGen_anomaly_detection_kept_for_all_current45": true,
@@ -714,7 +714,7 @@
   "latest_full_queue_metadata_forecast_path": "/ml2/alz/analysis/released097_full_queue23_constrained_metadata_forecast_20261108.json",
   "latest_full_queue_metadata_forecast_source_path": "/ml2/alz/analysis/forecast_released097_full_queue_metadata_v3.py",
   "latest_canonical_budget_live_metadata_snapshot_path": "/ml2/alz/analysis/benchmark097_all_six_CPU_queues_restored_48_attempts_and_native_PG_live_20261108.json",
-  "full_queue_time_feasibility_status": "SETTLED_COST_BASELINE_EXCEEDS_WINDOW_ACTIVE_PG_PACE_WHAT_IF_HAS_SMALL_POSITIVE_MARGIN",
+  "full_queue_time_feasibility_status": "LATEST_SETTLED_COST_LOW_OVERHEAD_SCENARIO_WITHIN_WINDOW_TWO_FOLD_SCALAR_OVERHEAD_MARGIN_NARROW_HIGHER_OVERHEAD_AT_RISK",
   "full_queue_time_feasibility_is_not_admission_or_completion_guarantee": true,
   "full_queue_time_feasibility_does_not_change_existing_priorities": true,
   "full_queue_feasibility_coordination_question": {
@@ -772,7 +772,10 @@
     "receipt_observed": false,
     "permission_requested_from_owner": false,
     "model_or_deadline_change": false,
-    "latest_observation": "Full native fit and CUDA restore complete. First neural evaluation replicate now complete; extrapolated remaining second replicate plus stage-swap still exceeds the native cleanup boundary under stable observed cost. Future shared service and control cost remain variable."
+    "latest_observation": "Historical reported fit ended in a retained postfit native-cutoff infrastructure failure. The exact failed outcome and charge are preserved; its planned replacement starts from zero. No coordinator answer has been received.",
+    "reported_attempt_now_terminal_failed": true,
+    "historical_attempt": "CAL_GPU0_V1_external097_f1_cfgen_s2",
+    "historical_outcome_evidence_path": "/ml2/alz/analysis/benchmark097_verified_third_original_postfit_cap_failure_20261108.json"
   },
   "donor_matched_supplement_CPU_preparation_path": "/ml2/alz/analysis/benchmark097_donor_matched_supplement_CPU_preparation_v2_20261108.json",
   "donor_matched_supplement_actual_CPU_tests": 14,
@@ -783,10 +786,10 @@
   "donor_matched_supplement_CPU_observer_identity_path": "/ml2/alz/artifacts/benchmark097-donor-matched-supplement-observer/identity.json",
   "donor_matched_supplement_CPU_observer_progress_path": "/ml2/alz/artifacts/benchmark097-donor-matched-supplement-observer/progress.json",
   "donor_matched_supplement_CPU_observer_session": 24919,
-  "successful_external_models": 17,
+  "successful_external_models": 23,
   "GPU1_CFGen_fold2_seed2_actual_charged_GPU_seconds": 5670.366205975995,
   "latest_GPU1_actual_native_admission_path": "/ml2/alz/analysis/benchmark097_seventeenth_model_audited_and_GPU1_fold1_seed3_started_20261108.json",
-  "current_GPU1_native_attempt": "CAL_GPU0_V1_external097_f1_cfgen_s3",
+  "current_GPU1_native_attempt": "CAL_GPU0_V1_external097_f1_cfgen_s4",
   "current_GPU1_native_training_from_zero": true,
   "single_scalar_LR_owner_confirmation_path": "/ml2/alz/analysis/scalarcal097_single_metric_owner_confirmation_20261108.json",
   "final_independent_audits_observer_queued": true,
@@ -815,7 +818,7 @@
   "postfit_native_cap_failure_classifier_prepared": true,
   "additional_cap_failure_actually_declared": true,
   "additional_fresh_recovery_runtime_not_yet_qualified": false,
-  "latest_external_settled_model_progress_path": "/ml2/alz/analysis/benchmark097_seventeenth_model_audited_and_GPU1_fold1_seed3_started_20261108.json",
+  "latest_external_settled_model_progress_path": "/ml2/alz/analysis/benchmark097_twentythird_model_CFGen_audited_next_fresh_fold1_seed4_fit_20261108.json",
   "capacity_V6_preparation_path": "/ml2/alz/analysis/benchmark097_capacity_continuation_v6_CPU_preparation_20261108.json",
   "capacity_V6_activated": true,
   "capacity_V6_still_requires_actual_terminal_failure_and_handoff": false,
@@ -823,7 +826,7 @@
   "capacity_V6_CPU_execution_check_path": "/ml2/alz/analysis/benchmark097_capacity_continuation_v6_CPU_check_20261108.json",
   "fresh_replacement_protocol_supersession_required": false,
   "future_CPU_chain_requalification_in_progress": false,
-  "current_GPU0_native_attempt": "CAL_GPU0_V1_external097_f0_pg_s2",
+  "current_GPU0_native_attempt": "CAL_GPU0_V1_external097_f0_pg_s3",
   "current_GPU0_native_training_from_zero": true,
   "GPU1_CFGen_fold1_seed3_native_fit_completed": true,
   "GPU1_CFGen_fold1_seed3_full_endpoint_audit_completed": false,
@@ -841,10 +844,10 @@
   "study_successful_fits": 23,
   "study_retained_failed_attempts": 3,
   "study_planned_physical_attempts": 48,
-  "current_verified_external_workers_observed_UTC": "2026-11-08T14:07:15.706902+00:00",
+  "current_verified_external_workers_observed_UTC": "2026-11-08T14:12:21.441745+00:00",
   "external_benchmark_queued_original_fits": 17,
   "external_benchmark_queued_fits_includes_three_explicit_unstarted_replacements": true,
-  "current_goal_index_reconciled_from_V6_authoritative_metadata_UTC": "2026-11-08T11:08:34.542720+00:00",
+  "current_goal_index_reconciled_from_V6_authoritative_metadata_UTC": "2026-11-08T14:12:21.441745+00:00",
   "latest_verified_external_PG_progress": {
     "UTC": "2026-11-08T14:00:05.662654+00:00",
     "attempt": "CAL_GPU0_V1_external097_f0_pg_s3",
@@ -881,5 +884,6 @@
     "reported_fit_now_completed": true,
     "completed_fit_proof_path": "/ml2/alz/analysis/benchmark097_twentysecond_model_PG_full20k_audited_next_fresh_seed3_fit_20261108.json",
     "subsequent_fresh_fit": "CAL_GPU0_V1_external097_f0_pg_s3"
-  }
+  },
+  "latest_current_worker_and_CPU_queue_liveness_path": "/ml2/alz/analysis/released097_goal_index_current_workers_reconciled_20261108T1416Z.json"
 }
