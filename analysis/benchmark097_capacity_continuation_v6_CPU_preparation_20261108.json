@@ -1,0 +1,35 @@
+{
+  "status": "CAP_CUTOFF_RECOVERY_DISPATCHER_CPU_PREPARATION_PASS_NOT_ACTIVATED",
+  "UTC": "2026-11-08T09:39:06.101525+00:00",
+  "actual_CPU_tests": 35,
+  "previous_dispatch_regressions": 22,
+  "resource_only_method_routing_tests": 7,
+  "exact_terminal_cutoff_tests": 6,
+  "synthetic_entire_frozen45_scheduled_exactly_once": true,
+  "inherited_native_runtime_qualification_path": "/ml2/alz/analysis/benchmark097_balanced/runtime_CPU_qualification_v2.json",
+  "inherited_native_runtime_qualification_SHA256": "041b81bba511c3bbe4824d231df47639aadc7dcfab8705c6f13c7f4f84d5ca45",
+  "all_inherited_native_source_pins_rechecked": 120,
+  "source_SHA256": {
+    "/ml2/alz/analysis/continue_benchmark097_after_capacity_v6.py": "9b6ae7d2b5c93c48256961acab739e51f7f34048cce2d9875827f15d293379f3",
+    "/ml2/alz/analysis/test_benchmark097_capacity_continuation_v6.py": "9425e2c59bcf4f416dd1fc28cb52776472d3fed01fe6eb4c7e677c02361247be",
+    "/ml2/alz/analysis/test_benchmark097_capacity_v6_method_routing.py": "64ead1891211d761dc7b8b16b51d04090a19a9ec94510daef48e4f051d75b8dc",
+    "/ml2/alz/analysis/verify_cfgen_postfit_cap_failure.py": "e4b822cfb1db84fa898de42d2b0cfc15403752a05ea7028d54fa5bb9e71f884d",
+    "/ml2/alz/analysis/test_cfgen_postfit_cap_failure.py": "780035016cedf39e66c9ce55abd0cacb5368f4a08858d0194768033f2471fb87"
+  },
+  "actual_current_cap_candidate": {
+    "status": "EXACT_NATIVE_JOB_STILL_LIVE_NO_FAILURE_DECLARED",
+    "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s2",
+    "recovery_qualified_or_launched": false,
+    "quality_values_read": false
+  },
+  "actual_additional_failure_declared": false,
+  "actual_V6_protocol_created": false,
+  "actual_V6_handoff_created": false,
+  "actual_V6_activated": false,
+  "actual_GPU_allocations_created": 0,
+  "old_live_dispatcher_or_native_sources_edited": false,
+  "CPU_handoff_and_actual_failed_result_hash_qualification_still_required": true,
+  "planned_resource_rule": "Only after an actual verified postfit cap failure, route future CFGen toGPU1 while keeping PG/scVI eligible onboth cards. Same45 cells and native endpoints; no model selection by quality.",
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
