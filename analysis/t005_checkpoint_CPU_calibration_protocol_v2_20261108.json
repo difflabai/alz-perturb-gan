@@ -1,0 +1,64 @@
+{
+  "status": "PRESPECIFIED_READ_ONLY_CPU_CALIBRATION_CHECKPOINT_DIAGNOSTIC",
+  "UTC": "2026-11-08T01:40:39.768641+00:00",
+  "source_SHA256": "660bc87e1c77241212776207d70671b165ffe4eca0ac40847b15567b7afaa0f2",
+  "existing_attempt": "CAL_GPU0_V1_lf097_t005_f0_pg_s0",
+  "training_seed": 0,
+  "saved_updates": [
+    5000,
+    10000,
+    20000
+  ],
+  "checkpoints": [
+    {
+      "path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/checkpoint05000.pt",
+      "SHA256": "2c3ec06b27b310f9644f871238d852e1bdf1c4d6d63e5ca5e5992c4a23b8a042",
+      "completed_updates": 5000
+    },
+    {
+      "path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/checkpoint10000.pt",
+      "SHA256": "8a31f2a9f40a962b1eec6d5569821ddfb3cc592bae0d5ee956507fb4cc7f9a9d",
+      "completed_updates": 10000
+    },
+    {
+      "path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/final.pt",
+      "SHA256": "ac55507c73d5927e464d1567e1a5366787909832796c0dd18189ffa2c0ac5351",
+      "completed_updates": 20000
+    }
+  ],
+  "fitting_cache": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0",
+  "hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "new_training_fits": 0,
+  "new_optimizer_updates": 0,
+  "CPU_threads": 1,
+  "CPU_wall_cap_seconds": 1200,
+  "only_calibration_donors": true,
+  "external_evaluation_values_prohibited": true,
+  "frozen45_and_separate6_protocols_unchanged": true,
+  "no_checkpoint_selection": true,
+  "CPU_sampling_comparison_not_bitwise_CUDA_replay": true,
+  "input_SHA256": {
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s0.json": "4f8f7940b9e2a3c6233613fc89469cc316d0128890100b80bc2271b86436c089",
+    "/ml2/alz/analysis/faithful097/model/released_adapter.py": "b3fe9b78771f1a85fa86646ae2e6c74e8725af211a7484ee0e08fb5b62093f09",
+    "/ml2/alz/analysis/faithful097/model/released_update.py": "7cba670fbc51740938b01ecb5f637bbc8cc23f4ed889e8f00d829b886643e3a8",
+    "/ml2/alz/calibration.py": "ce1ea5d5086db11712aa075b81daca799f2101a9ca3d8df3ff03e0b3d45da747",
+    "/ml2/alz/analysis/scalarcal097/protocol.json": "118f6248b61f47be8f6232f627d9ca7980c3325adb6d7d1238ebab53394dd004",
+    "/ml2/alz/analysis/benchmark097/protocol.json": "fd92d0afe5cfa9e6b152ae8a14858ffacb62b804d38bd876e2e589862db71de8",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/checkpoint05000.pt": "2c3ec06b27b310f9644f871238d852e1bdf1c4d6d63e5ca5e5992c4a23b8a042",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/checkpoint10000.pt": "8a31f2a9f40a962b1eec6d5569821ddfb3cc592bae0d5ee956507fb4cc7f9a9d",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/final.pt": "ac55507c73d5927e464d1567e1a5366787909832796c0dd18189ffa2c0ac5351"
+  },
+  "read_only_loader_revision": 2,
+  "previous_failed_CPU_load_failure_path": "/ml2/alz/artifacts/t005-checkpoint-calibration-CPU-20261108/failure.json",
+  "previous_failed_CPU_load_failure_SHA256": "c6785413e2e15f814236a07d41909716f6f139bf569bdb0907f6c719232847db",
+  "previous_protocol_path": "/ml2/alz/analysis/t005_checkpoint_CPU_calibration_protocol_20261108.json",
+  "previous_protocol_SHA256": "2f49de2985ed51abf60b285d5e524d22706ac4440fc4697dab730dd8332a5c1f",
+  "loader_fix": "Call the same native make_prior_regularizer factory as the qualified training adapter before strict loading, so the saved moment-tether buffers exist. No loss evaluation, backward, optimizer or policy continuation."
+}
