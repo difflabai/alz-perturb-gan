@@ -1,0 +1,62 @@
+{
+  "status": "VERIFIED_INFRASTRUCTURE_CAPACITY_PREEMPTION_ORIGINAL_ATTEMPT_RETAINED",
+  "UTC": "2026-11-08T02:45:26.725487+00:00",
+  "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s1",
+  "logical_cell": {
+    "experiment": "external097",
+    "fold": 2,
+    "method": "cfgen",
+    "seed": 1
+  },
+  "failure_trigger": "Capacity('Protected/registered GPU growth no longer fits; stop owned worker only')",
+  "worker_error": "SIGTERMException()",
+  "charged_GPU_seconds": 4231.694926147029,
+  "native_completed_AE_epochs": 300,
+  "native_FM_updates_at_last_progress": 12750,
+  "native_total_optimizer_updates_at_last_progress": 29850,
+  "own_gpu_bytes": 482344960,
+  "own_RAM_bytes": 1600466944,
+  "actual_free_GPU_bytes_at_guard": 11871977472,
+  "own_gpu_or_RAM_budget_exceeded": false,
+  "host_growth_forecast_fits": false,
+  "host_growth_required_bytes": 54738644992,
+  "new_foreign_compute_identities": [
+    {
+      "pid": 773354,
+      "birth": 26162605,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
+      "uid": 1000,
+      "exe": "/mnt/nvme/ai/runtimes/uv/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12",
+      "argv_sha256": "a0b292a284c893e7c64e27b351eeb6fd5ca1d1448026f752c9a367eade13242a",
+      "ppid": 773343
+    },
+    {
+      "pid": 843710,
+      "birth": 26281099,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
+      "uid": 1000,
+      "exe": "/mnt/nvme/ai/runtimes/uv/python/cpython-3.12.15-linux-x86_64-gnu/bin/python3.12",
+      "argv_sha256": "ead18ed105e5bbded177a88773446fab3ba734e175b1888a2bce0bec568e6e48",
+      "ppid": 843621
+    }
+  ],
+  "own_guard_and_worker_stopped": true,
+  "clean_settlement": true,
+  "foreign_processes_signalled": false,
+  "scientific_model_failure_established": false,
+  "failed_original_model_will_not_be_resumed": true,
+  "completed_models_retained": 13,
+  "healthy_GPU1_job_preserved": "CAL_GPU0_V1_external097_f0_cfgen_s1",
+  "new_admissions_stopped_by_existing_driver": true,
+  "proposed_recovery": "Keep all original source/results/failure/costs. Let the healthy GPU1 job finish. Qualify a new resource-only scope using current per-card and host capacity, plus a transparently versioned single infrastructure retry from update0 under a new attempt/allocation ID, without overwriting this failed original. Preserve the same45 logical scientific cells and record all46 physical attempts if the retry completes.",
+  "no_retry_or_new_allocation_started": true,
+  "required_scientific_models": 45,
+  "SOTA_claim": false,
+  "full_goal_complete": false,
+  "input_SHA256": {
+    "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f2_cfgen_s1.json": "38369df32e1433722d5b270289ec6d9f51aac05ef91ae6654a97e53d458dfdd0",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f2_cfgen_s1.json": "db92cbf4fb072f34035f15bede8e4652e10d3d5fd82b3463bae2583f3d87800e",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_external097_f2_cfgen_s1-settlement.json": "257319cea8f9f2496a0843b294d1ebbeaca70d80685bb8cde38eedf31bc2925a",
+    "/ml2/alz/runs/CAL_GPU0_V1_external097_f2_cfgen_s1/failure.json": "8ab1dbf7474f5508edb2b09461fa8dc1171ca0d4e6825dde3a555d561c926258"
+  }
+}
