@@ -797,7 +797,7 @@
   "latest_external_completed_model_audit_path": "/ml2/alz/analysis/benchmark097_twentyseventh_model_PG_full20k_audited_next_fresh_fold0_seed4_fit_20261108.json",
   "latest_verified_external_completed_fits": 42,
   "latest_verified_retained_infrastructure_failures": 3,
-  "latest_external_metadata_observation_UTC": "2026-11-08T16:35:28.832139+00:00",
+  "latest_external_metadata_observation_UTC": "2026-11-08T19:29:44.968689+00:00",
   "latest_external_new_native_start_audit_path": "/ml2/alz/analysis/benchmark097_twentyseventh_model_PG_full20k_audited_next_fresh_fold0_seed4_fit_20261108.json",
   "latest_verified_external_running_fits": 0,
   "latest_verified_external_pending_original_fits": 0,
@@ -807,7 +807,7 @@
   "study_successful_fits": 42,
   "study_retained_failed_attempts": 3,
   "study_planned_physical_attempts": 48,
-  "current_verified_external_workers_observed_UTC": "2026-11-08T18:58:17.874497+00:00",
+  "current_verified_external_workers_observed_UTC": "2026-11-08T19:29:44.968689+00:00",
   "external_benchmark_queued_original_fits": 0,
   "external_benchmark_queued_fits_includes_three_explicit_unstarted_replacements": true,
   "current_goal_index_reconciled_from_V6_authoritative_metadata_UTC": "2026-11-08T18:32:39.289593+00:00",
@@ -904,17 +904,67 @@
     "state": "V7_AND_ALL_FIVE_FOLLOWUP_CPU_ACTORS_LIVE",
     "restoration_proof_path": "/ml2/alz/analysis/benchmark097_all_six_CPU_queues_restored_v7_40_models_20261108.json"
   },
-  "current_verified_CPU_queues": [],
+  "current_verified_CPU_queues": [
+    {
+      "name": "benchmark097-infra1-pipeline",
+      "identity": {
+        "pid": 3961122,
+        "birth": 32369470,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "f8f3cdd6e21cc8f3f37bb836e992feccb37597de89328b7499c8d65b6cb6e65c",
+      "unified_session": 18331
+    },
+    {
+      "name": "scalarcal097-after-recovered-science-v5",
+      "identity": {
+        "pid": 3961578,
+        "birth": 32370064,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "a1c0d073bcf2a24505cdde6874dae6108be8225ed4ea4ea7f01a1c4d8cf85873",
+      "unified_session": 77546
+    },
+    {
+      "name": "dispersion097-after-scalarcal097",
+      "identity": {
+        "pid": 3961815,
+        "birth": 32370926,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "a30b9aee29a6cc1405bf733f185a47410ebde3b9b277591e89e43cc39865469a",
+      "unified_session": 45844
+    },
+    {
+      "name": "released097-final-independent-audits",
+      "identity": {
+        "pid": 3962293,
+        "birth": 32372576,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "43e83c4daeaed6ae8790eb8c52c048c7f37b8c9204b1b3479697c6dfd2453ebe",
+      "unified_session": 23452
+    },
+    {
+      "name": "benchmark097-donor-matched-supplement-observer",
+      "identity": {
+        "pid": 3962407,
+        "birth": 32372692,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "source_SHA256": "30440b26359cf788b2392ffccf648b39406b10627e7108f307a3892f4038e957",
+      "unified_session": 76192
+    }
+  ],
   "latest_fresh_infrastructure_runtime_qualification_path": "/ml2/alz/analysis/benchmark097_infra1/runtime_CPU_qualification_v7.json",
   "latest_scalar_runtime_qualification_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v11.json",
   "latest_theta_runtime_qualification_path": "/ml2/alz/analysis/dispersion097/runtime_CPU_qualification_v7.json",
   "latest_verified_canonical_budget_snapshot": {
-    "revision": 632,
+    "revision": 635,
     "cap_GPU_hours": 1124.0,
-    "charged_GPU_hours": 120.50623144375476,
+    "charged_GPU_hours": 120.68947559634198,
     "reserved_GPU_hours": 0.0,
-    "available_after_reservations_GPU_hours": 1003.4937685562453,
-    "UTC": "2026-11-08T18:52:36.544329+00:00"
+    "available_after_reservations_GPU_hours": 1003.3105244036581
   },
   "latest_V7_full_queue_forecast_window_margins_hours": {
     "low_scalar_overhead": 3.5902700283826117,
@@ -964,7 +1014,8 @@
     "completed_parent_and_commit_gate_CPU_tests": 8,
     "three_fresh_replacement_keys_unconsumed": true,
     "handoff_path": "/ml2/alz/analysis/benchmark097_infra1_postclosure_CPU_handoff_20261108.json",
-    "state": "QUALIFIED_FUTURE_QUEUES_RELAUNCH_PENDING"
+    "state": "ALL_FIVE_FUTURE_CPU_QUEUES_LIVE_ORIGINAL_PARENT_VERIFIED_COMPLETED",
+    "restoration_proof_path": "/ml2/alz/analysis/benchmark097_postclosure_five_future_CPU_queues_restored_20261108.json"
   },
   "full_queue_window_feasibility_question_message_id": "report_66fa850ce5e9e763c7924d803948d0f2ed66594ff5b2e811aca0a9acd757fefa"
 }
