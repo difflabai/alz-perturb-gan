@@ -1,0 +1,98 @@
+{
+  "status": "PG_ON_GPU0_CFGEN_ON_GPU1_ACTUAL_NATIVE_UPDATES_FROM_ZERO_VERIFIED",
+  "UTC": "2026-11-08T19:34:48.963922+00:00",
+  "live_replacement_pipeline_identity": {
+    "pid": 3961122,
+    "birth": 32369470,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "native_workers": [
+    {
+      "attempt": "CAL_GPU0_V1_external097infra1_f2_cfgen_s1",
+      "cell": {
+        "experiment": "external097infra1",
+        "fold": 2,
+        "method": "cfgen",
+        "seed": 1
+      },
+      "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "guard": {
+        "pid": 3973183,
+        "birth": 32400613,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 3973306,
+        "birth": 32400759,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "authorization_SHA256": "5d583cd59ea745ede7bfbbac07523b1a996ce3e45370bd4cb97e6caec7357681",
+      "initial_completed_updates": 0,
+      "source_model_path": null,
+      "is_continuation": false,
+      "particlegan_version": "0.9.7",
+      "fixed_endpoint": 1800,
+      "native_progress_path": "/ml2/alz/runs/CAL_GPU0_V1_external097infra1_f2_cfgen_s1/fit/progress.json",
+      "observed_progress": {
+        "phase": "AE",
+        "phase_optimizer_updates": 250,
+        "total_optimizer_updates": 250,
+        "completed_epochs": 4
+      },
+      "lease_heartbeat_age_seconds": 0.1598803997039795
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097infra1_f2_pg_s1",
+      "cell": {
+        "experiment": "external097infra1",
+        "fold": 2,
+        "method": "pg",
+        "seed": 1
+      },
+      "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "guard": {
+        "pid": 3973337,
+        "birth": 32400835,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 3973414,
+        "birth": 32400989,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "authorization_SHA256": "918996e1a08fe70308503c9d2187e7a5b35b903ae181bfda23d79d42cc6f3dd6",
+      "initial_completed_updates": 0,
+      "source_model_path": null,
+      "is_continuation": false,
+      "particlegan_version": "0.9.7",
+      "fixed_endpoint": 20000,
+      "native_progress_path": "/ml2/alz/runs/CAL_GPU0_V1_external097infra1_f2_pg_s1/fit/progress.json",
+      "observed_progress": {
+        "step": 501,
+        "G_prior_LRs": [
+          0.012,
+          0.06
+        ],
+        "D_LRs": [
+          0.018000000000000002
+        ],
+        "particle_usage": {
+          "rows_drawn": 512,
+          "rows_moved": 512,
+          "total_draws": 16032,
+          "total_unsampled_row_moves": 0,
+          "particle_covariance_trace": 9.364465713500977,
+          "particle_mean_squared_norm": 9.425947189331055
+        }
+      },
+      "lease_heartbeat_age_seconds": 1.6314749717712402
+    }
+  ],
+  "completed_successful_logical_models": 42,
+  "retained_original_infrastructure_failures": 3,
+  "remaining_untouched_replacement_cells": 1,
+  "heldout_quality_results_read": false,
+  "no_foreign_or_native_jobs_signalled": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
