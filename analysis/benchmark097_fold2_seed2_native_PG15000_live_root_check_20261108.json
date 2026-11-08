@@ -1,0 +1,113 @@
+{
+  "status": "FRESH_FOLD2_SEED2_NATIVE_PG15000_CHECKPOINT_BOTH_GPU_WORKERS_AND_SIX_CPU_QUEUES_LIVE",
+  "UTC": "2026-11-08T13:25:05.929176+00:00",
+  "attempt": "CAL_GPU0_V1_external097_f2_pg_s2",
+  "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f2_pg_s2/authorization.json",
+  "authorization_SHA256": "5630408cc8ba3e3997184d0aeb3553a993b2f772e2690e0a605bd963273e9532",
+  "official_ParticleGAN_version": "0.9.7",
+  "initial_completed_updates": 0,
+  "source_model_path": null,
+  "frozen_hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "completed_optimizer_pairs_at_observation": 15501,
+  "actual_G_prior_LRs": [
+    0.012,
+    0.06
+  ],
+  "actual_D_LRs": [
+    0.018000000000000002
+  ],
+  "actual_particle_usage": {
+    "rows_drawn": 512,
+    "rows_moved": 512,
+    "total_draws": 496032,
+    "total_unsampled_row_moves": 0,
+    "particle_covariance_trace": 7.035769462585449,
+    "particle_mean_squared_norm": 7.134677886962891
+  },
+  "checkpoint_receipt_path": "/ml2/alz/runs/CAL_GPU0_V1_external097_f2_pg_s2/fit/checkpoint_receipt.json",
+  "checkpoint_receipt_SHA256_at_observation": "73568546006cb0972c1ebc638a693409b5c5ed2cd522a36f91c8c2c180a6906d",
+  "durable_checkpoint_optimizer_pairs": 15000,
+  "durable_checkpoint_path": "/ml2/alz/runs/CAL_GPU0_V1_external097_f2_pg_s2/fit/recovery.pt",
+  "durable_checkpoint_actual_SHA256_at_observation": "6286e32c02c6343d3d94eec70c511ac3558cf6e2f780f13bfbac0b177bb82bae",
+  "checkpoint_is_intermediate_not_final": true,
+  "guard_identity": {
+    "pid": 2732468,
+    "birth": 29831474,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "worker_identity": {
+    "pid": 2732554,
+    "birth": 29831619,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "other_live_attempt": "CAL_GPU0_V1_external097_f0_cfgen_s4",
+  "other_live_guard_identity": {
+    "pid": 2707855,
+    "birth": 29780353,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "other_live_worker_identity": {
+    "pid": 2707896,
+    "birth": 29780483,
+    "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+  },
+  "other_native_progress_at_observation": {
+    "phase": "FM",
+    "total_optimizer_updates": 102600,
+    "completed_epochs": 1499
+  },
+  "six_CPU_process_identities_verified_live": [
+    {
+      "name": "original_dispatcher",
+      "pid": 2283066,
+      "birth": 28901418,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "replacement_pipeline",
+      "pid": 2348403,
+      "birth": 29037448,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "scalar_LR_queue",
+      "pid": 2348719,
+      "birth": 29037941,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "theta_queue",
+      "pid": 2348925,
+      "birth": 29038447,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "final_audit_observer",
+      "pid": 2368995,
+      "birth": 29080116,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "donor_matched_supplement_observer",
+      "pid": 2369483,
+      "birth": 29080902,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    }
+  ],
+  "audited_logical_models": 21,
+  "required_logical_models": 45,
+  "retained_original_infrastructure_failures": 3,
+  "no_quality_or_evaluation_target_values_inspected": true,
+  "no_native_source_or_configuration_changes": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false,
+  "other_full_fit_and_CUDA_restore_verified_path": "/ml2/alz/analysis/benchmark097_GPU1_fold0_seed4_full_native_fit_and_restore_20261108.json",
+  "other_completed_postfit_metric_files": []
+}
