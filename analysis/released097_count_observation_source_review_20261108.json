@@ -1,0 +1,43 @@
+{
+  "status": "CURRENT_RELEASED097_COUNT_OBSERVATION_PATH_SOURCE_REVIEW_COMPLETE",
+  "UTC": "2026-11-08T02:32:29.857099+00:00",
+  "current_formulation": "Released0.9.7 full512row SBNP bound thermal nonEMA",
+  "training_forward": "Current released_update.advance samples exact Poisson counts from reparameterized Gamma rates in both fake critic and generator paths. Critic features have discrete-count forward values.",
+  "training_backward": "The existing CountGenerator application uses its declared biased straight-through derivative through transformed Gamma rates. This is an application gradient estimator, not a missing Poisson forward draw.",
+  "evaluation_forward": "The fixed generation.iter_pg samples Gamma rates and Poisson integer counts with declared fitting-only exposure traces.",
+  "current_forward_omits_Poisson_noise": false,
+  "current_count_observation_changed": false,
+  "legacy_variance_evidence": [
+    {
+      "path": "/ml2/alz/analysis/nb_noise_diagnostic.json",
+      "SHA256": "f613d1d9bafd5ebd57e17ba671e672641480c4185f49e061a2ca0cf7481d1f82",
+      "checkpoint_SHA256": "444c22a5829b79d8ed0cd300be255d9410916d6c2248f930cf4cc0f886744da2",
+      "source_attempt": "CAL_GPU0_V1_latent8_v1_f0_pg_s0",
+      "current_t005_measurement": false
+    },
+    {
+      "path": "/ml2/alz/analysis/theta10_partial_nb_diagnostic.json",
+      "SHA256": "ba33a8af731d8c9e45fdd5ff52bf8382265b877bce3c2db0388081f470df171b",
+      "checkpoint_SHA256": "aaf1ce674f1cdf4bef9eda69c7127e151e93164b02bfd213afe2c836e58d5168",
+      "completed_updates": 6000,
+      "theta_initial_scale": 10,
+      "current_t005_measurement": false
+    }
+  ],
+  "legacy_interpretation": "Historical count-space variance fractions do not measure the current t005 checkpoints, do not directly decompose log/PCA energy distance, and do not establish that a dispersion change improves the current released formulation.",
+  "implication": "Preserve current count sampling and both frozen studies. Any later dispersion-initialization study must be a separately declared fresh-fit application experiment, selected using calibration and evaluated explicitly; it cannot be inferred from historical variance fractions alone.",
+  "frozen45_and_separate6_unchanged": true,
+  "new_training_fits": 0,
+  "new_optimizer_updates": 0,
+  "new_GPU_allocations": 0,
+  "new_target_values_read": false,
+  "source_SHA256": {
+    "/ml2/alz/analysis/faithful097/model/released_update.py": "7cba670fbc51740938b01ecb5f637bbc8cc23f4ed889e8f00d829b886643e3a8",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/pg_model.py": "47740d4039e680c48c9e5855753d7ebd797fe4f68109aaa75c3d56b57f13af85",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/generation.py": "4d092c75060eff24aa19e3ccbb8c6fdb8f592edd8e8b3b3c7f2084aa52a5f085",
+    "/ml2/alz/analysis/faithful097/model/released_adapter.py": "b3fe9b78771f1a85fa86646ae2e6c74e8725af211a7484ee0e08fb5b62093f09",
+    "/ml2/alz/analysis/inspect_nb_noise.py": "924b7ca1ae99b1922e81e43e78a5bbfad8adbc615b8a97a717bec460cf5c7b9a"
+  },
+  "SOTA_claim": false,
+  "full_goal_complete": false
+}
