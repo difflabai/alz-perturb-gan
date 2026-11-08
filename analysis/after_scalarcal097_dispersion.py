@@ -49,12 +49,13 @@ def main():
    wheels=[row for row in release['urls'] if row['filename']=='particlegan-0.9.7-py3-none-any.whl']
    assert len(wheels)==1 and wheels[0]['digests']['sha256']=='8e6e748c84984e9fe979261c262e0a1300fe1225d1f3bc63c6d6a2e2f94c8189'
    from runtime_dispatch import settled_cost_rows,cost_table
-   from released097_remaining_runtime_balance import balance_counts
-   costs,evidence=cost_table(settled_cost_rows());forecast=balance_counts({'pg':6},costs)
-   allowance=1.25*forecast['predicted_makespan_seconds']+1200
-   viability=dict(UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),costs_seconds=costs,cost_source_attempts=evidence,forecast=forecast,safety_multiplier=1.25,additional_report_cleanup_seconds=1200,required_seconds=allowance,remaining_window_seconds=expiry-time.time(),quality_values_read=False,not_a_completion_guarantee=True)
+   from window_fit import forecast as whole_study_forecast
+   costs,evidence=cost_table(settled_cost_rows())
+   theoretical={g:dict(GPU_fits=True,host_fits=True) for g in GPUS}
+   viability=whole_study_forecast(costs,theoretical,expiry-time.time())
+   viability.update(UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),costs_seconds=costs,cost_source_attempts=evidence,theoretical_both_cards_only=True)
    write(STATE/'window_cost_preflight.json',viability)
-   if allowance>expiry-time.time():
+   if not viability['all_six_predicted_to_fit']:
     deferred=dict(status='ALL_SIX_THETA_FITS_DEFERRED_UNSTARTED_INSUFFICIENT_REMAINING_WINDOW',new_GPU_allocations=0,actual_fresh_fits=0,viability=viability,full_goal_complete=False,SOTA_claim=False)
     write(STATE/'deferred.json',deferred)
     report('blocked','dispersion097-insufficient-window-all-six-unstarted','Current cost/window preflight cannot accommodate all six fresh theta fits; none admitted and full goal remains incomplete.',deferred)
@@ -69,7 +70,15 @@ def main():
      except AssertionError as exc:
       if not any(text in str(exc) for text in ('growth forecasts do not fit','ALZ early stop:')):raise
       observations[gpu]=dict(GPU_fits=False,host_fits=False,temporarily_unavailable=True)
-    if any(q['GPU_fits'] and q['host_fits'] for q in observations.values()):break
+    current=whole_study_forecast(costs,observations,expiry-time.time())
+    write(STATE/'current_capacity_window_preflight.json',current)
+    if current['all_six_predicted_to_fit']:break
+    best_possible=whole_study_forecast(costs,theoretical,expiry-time.time())
+    if not best_possible['all_six_predicted_to_fit']:
+     deferred=dict(status='ALL_SIX_THETA_FITS_DEFERRED_UNSTARTED_CAPACITY_WAIT_EXHAUSTED_WINDOW',new_GPU_allocations=0,actual_fresh_fits=0,viability=current,best_possible=best_possible,full_goal_complete=False,SOTA_claim=False)
+     write(STATE/'deferred.json',deferred)
+     report('blocked','dispersion097-capacity-wait-exhausted-window','Shared capacity wait consumed the window needed for all six fresh theta fits; none admitted.',deferred)
+     return
     write(STATE/'progress.json',dict(status='WAITING_FOR_SHARED_CAPACITY_BEFORE_FRESH_CALIBRATION',new_GPU_allocation=False));time.sleep(30)
    else:raise TimeoutError('Owner training window ended before shared capacity became available')
    review=dict(status='OWNER_AUTHORIZED_SOURCE_AND_RESOURCE_REVIEW_PASS',UTC=datetime.datetime.now(datetime.timezone.utc).isoformat(),reviewer_session='01a1a22b-f310-7190-a7c6-8697ecabae6c',independent_review_claimed=False,owner_authorization=s.read(ROOT/'analysis/faithful097_owner_execution_review.json')['owner_authorization'],scope=profile.SCOPE,policy_SHA256=profile.policy_sha(),source_SHA256=profile.review_sources(),handoff_SHA256=handoff,shared_capacity=observations)

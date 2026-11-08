@@ -88,5 +88,20 @@ class Scope(unittest.TestCase):
  def test_fitting_trace_endpoint_math_identical_except_fresh_seed_domain(self):
   old=(s.ROOT/'scalarcal097_runtime/endpoint_evaluation.py').read_text().replace('(5,6,7)','(8,9,10)')
   self.assertEqual(old,(b.HERE/'endpoint_evaluation.py').read_text())
+ def test_whole_study_window_uses_only_currently_eligible_cards(self):
+  from window_fit import forecast
+  both={g:dict(GPU_fits=True,host_fits=True) for g in d.GPUS};costs={'pg':[4000.,1000.]}
+  self.assertTrue(forecast(costs,both,10000.)['all_six_predicted_to_fit'])
+  slow={d.GPUS[0]:both[d.GPUS[0]]};q=forecast(costs,slow,10000.)
+  self.assertFalse(q['all_six_predicted_to_fit']);self.assertEqual(q['forecast']['counts_per_lane']['pg'],[6,0])
+  self.assertTrue(forecast(costs,{d.GPUS[1]:both[d.GPUS[1]]},10000.)['all_six_predicted_to_fit'])
+ def test_capacity_wait_never_counts_unverified_or_host_blocked_card(self):
+  from window_fit import forecast
+  q=forecast({'pg':[4000.,1000.]},{d.GPUS[1]:dict(GPU_fits=True,host_fits=False)},10000.)
+  self.assertFalse(q['all_six_predicted_to_fit']);self.assertFalse(q['eligible_cards']);self.assertIsNone(q['required_seconds'])
+ def test_elapsed_wait_can_make_even_both_card_forecast_infeasible(self):
+  from window_fit import forecast
+  both={g:dict(GPU_fits=True,host_fits=True) for g in d.GPUS}
+  self.assertFalse(forecast({'pg':[4000.,1000.]},both,7000.)['all_six_predicted_to_fit'])
 
 if __name__=='__main__':unittest.main(verbosity=2)
