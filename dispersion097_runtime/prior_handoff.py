@@ -28,7 +28,7 @@ def ready(root=ROOT):
  assert sha(report)==committed_sha(root,report),'Prior scalar report differs from its completed committed artifact'
  assert not read(root/'scalarcal097_runtime/plan.json')['enabled']
  for registry in (root/'artifacts').glob('gpu*-scalarcal097-20261107/live_registry/registry.json'):assert not read(registry)['jobs']
- proof_path=root/'analysis/scalarcal097/runtime_CPU_qualification_v6.json';proof=read(proof_path)
+ proof_path=root/'analysis/scalarcal097/runtime_CPU_qualification_v7.json';proof=read(proof_path)
  assert proof['status']=='SCALARCAL097_SIX_FRESH_CELLS_PREPARED_SCOPE_ACCOUNTING_CPU_PASS' and proof['actual_tests']==39 and proof['native_cell_device_bindings']==12
  for path,pin in proof['source_SHA256'].items():assert sha(path)==pin
  pins.update({str(p):sha(p) for p in (matrix,report,complete,proof_path,*extra)})

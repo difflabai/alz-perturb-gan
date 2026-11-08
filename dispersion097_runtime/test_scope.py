@@ -65,7 +65,7 @@ class Scope(unittest.TestCase):
    matrix.write_text(json.dumps(value));report.write_bytes(b'OPAQUE_CALIBRATION_REPORT_NEVER_DECODED')
    complete.write_text(json.dumps(dict(status='SCALARCAL097_COMPLETE_CALIBRATION_REPORT_FINAL_RESEARCH_AUDIT_REMAINS',report_path=str(report))))
    plan=root/'scalarcal097_runtime/plan.json';plan.parent.mkdir();plan.write_text('{"enabled":false}')
-   proof=root/'analysis/scalarcal097/runtime_CPU_qualification_v6.json';proof.write_text(json.dumps(dict(status='SCALARCAL097_SIX_FRESH_CELLS_PREPARED_SCOPE_ACCOUNTING_CPU_PASS',actual_tests=39,native_cell_device_bindings=12,source_SHA256={})))
+   proof=root/'analysis/scalarcal097/runtime_CPU_qualification_v7.json';proof.write_text(json.dumps(dict(status='SCALARCAL097_SIX_FRESH_CELLS_PREPARED_SCOPE_ACCOUNTING_CPU_PASS',actual_tests=39,native_cell_device_bindings=12,source_SHA256={})))
    committed=handoff.sha(report)
    with patch.object(handoff.recovered,'ready',return_value={'prior_benchmark_hashes':'CPU_fixture'}),patch.object(handoff,'committed_sha',return_value=committed):
     self.assertIn(str(report),handoff.ready(root))
