@@ -114,7 +114,9 @@ def main():
    try:
     auth,_=__import__('prepare').build_authorization(fold=2,method='scvi',seed=1,gpu=gpu,check_only=True);_,admission,_=b.modules(auth);observation=admission.snapshot();forecast=profile.capacity(observation,admission,gpu);profile.free_floor(gpu)
     enough=forecast['GPU_total_bytes']-forecast['GPU_required_bytes']>=plan['scheduling_only_extra_GPU_capacity_bytes']
-   except AssertionError:enough=False
+   except AssertionError as exc:
+    if not any(value in str(exc) for value in ('growth forecasts do not fit','ALZ early stop:')):raise
+    enough=False
    result=stability_ready(stable,gpu,time.time(),enough,plan['scheduling_only_stability_seconds']);polls[gpu]=(time.time(),result);write(STATE/('capacity-'+str(GPUS.index(gpu))+'.json'),dict(checked_unix=time.time(),capacity_fits=enough,stable_since=stable.get(gpu),ready=result,extra_GPU_scheduling_bytes=plan['scheduling_only_extra_GPU_capacity_bytes']));return result
   def select(pending,active,gpu):
    if not pending or not capacity_stable(gpu):return None
