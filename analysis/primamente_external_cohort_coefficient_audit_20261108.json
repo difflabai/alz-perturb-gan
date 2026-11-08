@@ -1,0 +1,31 @@
+{
+  "status": "EXTERNAL_COHORT_SOURCE_AND_GLOBAL_PATHOLOGY_COEFFICIENT_CODE_REVIEWED_BEFORE_MODEL_GENE_RESULTS",
+  "UTC": "2026-11-08T20:09:01.487295+00:00",
+  "local_cohort": "SEA-AD MTG microglia and perivascular macrophages",
+  "local_source_metadata_URL": "https://sea-ad-single-cell-profiling.s3.amazonaws.com/MTG/RNAseq/SEAAD_MTG_RNAseq_final-nuclei_metadata.2026-06-22.csv",
+  "external_cohort": "ROSMAP PFC427participants in Cell2023",
+  "cohort_separation_basis": "Distinct study provenance and tissue collection; subject crosswalk unavailable, so no subject-level linkage audit claimed",
+  "primary_external_table": "ROSMAP_Mic_gpath.csv",
+  "primary_table_coefficient_labels": [
+    "gpath"
+  ],
+  "author_RUVr_model_formula": "~gpath+pmi+age_death+msex+w_1+w_2+w_3+w_4+w_5+w_6+w_7+w_8+w_9+w_10",
+  "coefficient_interpretation": "Positive reported logFC corresponds to increasing expression with the author gpath covariate, conditional on listed covariates. gpath is a pathology association, not intervention response.",
+  "quantities_not_equated": "Our stage contrast is a difference in mean log1p panelCP10k; external coefficient is a covariate-adjusted expression association. Compare direction and evidence, not magnitude as identical scales.",
+  "published_R_code_input_matches_DecontX_output_unresolved": true,
+  "gene_identifier_examples": [
+    "AL627309.1",
+    "AL669831.5",
+    "NOC2L",
+    "KLHL17",
+    "ISG15",
+    "AGRN"
+  ],
+  "source_SHA256": {
+    "/ml2/alz/artifacts/primamente-external-evidence/ROSMAP_author_RUVr_gpath_Mic.R": "95195b33c6aa4aa52158910f640ce554731473ab103ad000633fe8de7ebf71d6",
+    "/ml2/alz/artifacts/primamente-external-evidence/ROSMAP_author_differential_expression_muscat.R": "8dc0e58df18e49b14ec5b7c8055a6a587764a726a606e16f8f56764d83c7bb09",
+    "/ml2/alz/artifacts/primamente-external-evidence/ROSMAP_Mic_gpath.csv": "648244af99a940a835116d06f0d5cd6fe34cb105cf07ddb71588b9ca142edcc5"
+  },
+  "model_gene_rankings_read": false,
+  "independent_replication_or_causal_target_claim": false
+}
