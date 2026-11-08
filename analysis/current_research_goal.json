@@ -35,7 +35,7 @@
   "current_release_check_path": "/ml2/alz/artifacts/dispersion097-preparation-release-20261108.json",
   "formulation_fidelity_correction_path": "/ml2/alz/analysis/native097_prior_fidelity_gap_20261107.json",
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
-  "study_status": "TWENTYSIX_AUDITED_BOTH_GPUS_FRESH_NATIVE_TRAINING",
+  "study_status": "TWENTYSEVEN_AUDITED_GPU0_FRESH_PG_TRAINING_GPU1_CFGEN_POSTFIT_EVALUATION",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
   "study_progress_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v6/progress.json",
   "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v6/identity.json",
@@ -98,7 +98,7 @@
   "conditional_local_search_design_CPU_proof_path": "/ml2/alz/analysis/released097_local_search_design_CPU_qualification_v2.json",
   "conditional_local_search_frozen": true,
   "conditional_local_search_activated": true,
-  "study_completed_attempts": 29,
+  "study_completed_attempts": 30,
   "latest_released_first20k_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json",
   "latest_released_first20k_mixture_diagnostic_path": "/ml2/alz/analysis/faithful097_first20k_mixture_diagnostic_20261107.json",
   "conditional_local_search_prepared_protocol_path": "/ml2/alz/analysis/localfaith097/protocol.json",
@@ -261,32 +261,40 @@
         "birth": 31047020,
         "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
       },
-      "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s4"
+      "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s4",
+      "native_progress": {
+        "phase": "FM",
+        "total_optimizer_updates": 102600,
+        "completed_epochs": 1499
+      }
     },
     {
       "cell": {
         "experiment": "external097",
-        "fold": 2,
+        "fold": 0,
         "method": "pg",
-        "seed": 3
+        "seed": 4
       },
       "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
       "identity": {
-        "pid": 3493241,
-        "birth": 31320192,
+        "pid": 3592279,
+        "birth": 31544398,
         "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
       },
       "guard_identity": {
-        "pid": 3493176,
-        "birth": 31320052,
+        "pid": 3592217,
+        "birth": 31544260,
         "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
       },
-      "attempt": "CAL_GPU0_V1_external097_f2_pg_s3"
+      "attempt": "CAL_GPU0_V1_external097_f0_pg_s4",
+      "native_progress": {
+        "step": 1501
+      }
     }
   ],
-  "external_benchmark_completed_fits": 23,
+  "external_benchmark_completed_fits": 27,
   "external_benchmark_running_fits": 2,
-  "external_benchmark_queued_fits": 17,
+  "external_benchmark_queued_fits": 16,
   "external_benchmark_first_completed_fit_audit_path": "/ml2/alz/analysis/benchmark097_first_completed_native_scvi_and_two_fresh_pg_workers_20261107.json",
   "full_confirmation_plot_path": "/ml2/alz/analysis/released097_full_confirmation_selection_20261107.png",
   "full_confirmation_plot_provenance_path": "/ml2/alz/analysis/released097_full_confirmation_plot_provenance_20261107.json",
@@ -608,8 +616,8 @@
   "supplementary_existing_t005_CPU_multiseed_checkpoint_audit_path": "/ml2/alz/analysis/t005_checkpoint_CPU_multiseed_root_audit_20261108.json",
   "supplementary_existing_t005_CPU_multiseed_checkpoint_plot_path": "/ml2/alz/analysis/t005_five_seed_checkpoint_CPU_calibration_20261108.png",
   "latest_count_observation_source_review_path": "/ml2/alz/analysis/released097_count_observation_source_review_20261108.json",
-  "study_resolved_attempts": 17,
-  "study_incomplete_attempts": 2,
+  "study_resolved_attempts": 30,
+  "study_incomplete_attempts": 3,
   "latest_infrastructure_failure_evidence_path": "/ml2/alz/analysis/benchmark097_verified_third_original_postfit_cap_failure_20261108.json",
   "automatic_frozen_study_successor_admissions_stopped": false,
   "study_required_successful_logical_fits": 45,
@@ -844,15 +852,16 @@
   "study_successful_fits": 27,
   "study_retained_failed_attempts": 3,
   "study_planned_physical_attempts": 48,
-  "current_verified_external_workers_observed_UTC": "2026-11-08T16:35:28.832139+00:00",
-  "external_benchmark_queued_original_fits": 14,
+  "current_verified_external_workers_observed_UTC": "2026-11-08T17:14:04.363923+00:00",
+  "external_benchmark_queued_original_fits": 13,
   "external_benchmark_queued_fits_includes_three_explicit_unstarted_replacements": true,
-  "current_goal_index_reconciled_from_V6_authoritative_metadata_UTC": "2026-11-08T14:12:21.441745+00:00",
+  "current_goal_index_reconciled_from_V6_authoritative_metadata_UTC": "2026-11-08T17:14:04.363923+00:00",
   "latest_verified_external_PG_progress": {
-    "UTC": "2026-11-08T17:13:21.162802+00:00",
+    "UTC": "2026-11-08T17:14:04.363923+00:00",
     "attempt": "CAL_GPU0_V1_external097_f0_pg_s4",
-    "optimizer_pairs": 1251,
-    "durable_optimizer_pairs": 0,
+    "optimizer_pairs": 1501,
+    "durable_optimizer_pairs": 1000,
+    "checkpoint_SHA256_at_observation": "ea502a2cd2d165ed473e3c9f348ef58f36c1be0f2fd003ecdd2fb811f13114d8",
     "quality_values_inspected": false,
     "observation_proof_path": "/ml2/alz/analysis/benchmark097_twentyseventh_model_PG_full20k_audited_next_fresh_fold0_seed4_fit_20261108.json"
   },
@@ -912,5 +921,6 @@
     "actual_charged_GPU_seconds": 2231.918239886989,
     "all_result_file_hashes_actually_verified": 56,
     "proof_path": "/ml2/alz/analysis/benchmark097_twentyseventh_model_PG_full20k_audited_next_fresh_fold0_seed4_fit_20261108.json"
-  }
+  },
+  "study_incomplete_attempts_meaning": "Retained terminal infrastructure failures; currently active native fits are counted separately."
 }
