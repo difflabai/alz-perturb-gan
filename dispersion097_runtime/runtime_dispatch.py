@@ -26,9 +26,9 @@ def verified_replaced_capacity_failure(root,path,job):
  def read(p):return json.loads(Path(p).read_bytes())
  def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
  matrix=read(root/'analysis/benchmark097/matrix_complete.json')
- amendment=read(root/'analysis/benchmark097_infra1/protocol_v2.json')
+ amendment=read(root/'analysis/benchmark097_infra1/protocol_v3.json')
  replacement='CAL_GPU0_V1_external097infra1_f2_pg_s1';result=root/'analysis/benchmark097_infra1/results'/(replacement+'.json')
- assert matrix['matrix_complete'] and matrix['complete_cells']==matrix['required_cells']==45 and matrix['physical_attempts']==47 and len(matrix['result_SHA256'])==45
+ assert matrix['matrix_complete'] and matrix['complete_cells']==matrix['required_cells']==45 and matrix['physical_attempts']==48 and len(matrix['result_SHA256'])==45
  assert matrix['logical_to_physical_attempt']['f2_pg_s1']==replacement
  assert matrix['failed_result_SHA256'][path.stem]==amendment['known_failed_attempts'][path.stem]==sha(path)
  assert matrix['result_SHA256'][replacement]==sha(result)

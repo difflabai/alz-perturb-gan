@@ -2,14 +2,14 @@
 import contextlib,fcntl,hashlib,json,os
 from pathlib import Path
 ROOT=Path('/ml2/alz');GPUS=('GPU-72c1b506-891d-b8bc-b353-e020585e1c47','GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69')
-RESOURCE_PROTOCOL=ROOT/'analysis/benchmark097_infra1/protocol_v2.json'
+RESOURCE_PROTOCOL=ROOT/'analysis/benchmark097_infra1/protocol_v3.json'
 def valid_cell(cell):
- assert cell==dict(experiment='external097infra1',fold=2,method=cell['method'],seed=1) and cell['method'] in ('pg','cfgen')
+ assert cell['experiment']=='external097infra1' and (cell['fold'],cell['method'],cell['seed']) in ((2,'pg',1),(2,'cfgen',1),(1,'cfgen',2))
  assert type(cell['fold']) is type(cell['seed']) is int
  return cell
 def eligible_gpus(cell):valid_cell(cell);return GPUS
 def validate_resource_protocol():
- p=json.loads(RESOURCE_PROTOCOL.read_text());assert p['new_attempt_limit']==2 and p['all_original_attempts_close_before_activation'] and p['cap_seconds']==21600
+ p=json.loads(RESOURCE_PROTOCOL.read_text());assert p['new_attempt_limit']==3 and p['all_original_attempts_close_before_activation'] and p['cap_seconds']==21600
  assert hashlib.sha256(Path(p['original_scientific_protocol_path']).read_bytes()).hexdigest()==p['original_scientific_protocol_SHA256']
  return p
 def identity(pid):

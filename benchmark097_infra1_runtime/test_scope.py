@@ -5,14 +5,14 @@ from dual_coordination import GPUS,valid_cell,validate_active_peers
 ORIGINAL=s.validate_authorization
 def prepared(a):return ORIGINAL(a,require_activation=False,require_handoff=False,require_runtime_proof=False)
 class Scope(unittest.TestCase):
- def test_all_four_real_cell_card_preimport_source_closures(self):
+ def test_all_six_real_cell_card_preimport_source_closures(self):
   seen=set()
-  for method in ('pg','cfgen'):
+  for fold,method,seed in s.CASES:
    for gpu in GPUS:
-    a,_=prepare.build_authorization(fold=2,method=method,seed=1,gpu=gpu,check_only=True);prepared(a)
+    a,_=prepare.build_authorization(fold=fold,method=method,seed=seed,gpu=gpu,check_only=True);prepared(a)
     with patch.object(s,'validate_authorization',side_effect=prepared):b.source_closure(a,b.NATIVE_LAYOUT)
-    seen.add((method,gpu));self.assertEqual(a['initial_completed_updates'],0);self.assertIsNone(a['source_model_path'])
-  self.assertEqual(len(seen),4);self.assertNotIn('torch',sys.modules)
+    seen.add((fold,method,seed,gpu));self.assertEqual(a['initial_completed_updates'],0);self.assertIsNone(a['source_model_path'])
+  self.assertEqual(len(seen),6);self.assertNotIn('torch',sys.modules)
  def test_other_original_cells_and_experiments_refused(self):
   for f,m,seed in ((0,'pg',1),(2,'scvi',1),(2,'cfgen',2)):
    with self.assertRaises(AssertionError):s.cell(f,m,seed)

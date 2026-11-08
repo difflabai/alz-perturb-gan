@@ -25,7 +25,7 @@ def report(kind,event,summary,details):
  from babel_reporting import report as send
  return send(kind,event,summary,details,log_root=STATE)
 
-def matrix():return [scope.cell(f,m,s) for s in range(5) for f in range(3) for m in ('pg','scvi','cfgen')]
+def matrix():return [scope.cell(*case) for case in scope.CASES]
 def public_handle(h):return {k:h[k] for k in ('cell','gpu','identity','attempt') if k in h}
 def run_queue(cells,*,initial_rows,start,ready,finish,observe,sleep,now,training_expiry,select):
  pending=list(cells);active={};rows=list(initial_rows);errors=[];unsettled=[]

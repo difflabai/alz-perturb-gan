@@ -1,4 +1,4 @@
-"""Use unchanged57/53 numerical analyses after the disclosed47-attempt lineage gate."""
+"""Use unchanged57/53 numerical analyses after the disclosed48-attempt lineage gate."""
 import argparse,json,os,sys
 from pathlib import Path
 ROOT=Path('/ml2/alz');sys.path.insert(0,str(ROOT/'analysis'))
@@ -13,6 +13,6 @@ def main():
   import score_calibration_excluded53_balanced as sensitivity
   sys.argv=[sys.argv[0]];sensitivity.main();path=ROOT/'analysis/benchmark097_calibration_excluded53_report.json'
  else:core.main();path=ROOT/'analysis/benchmark097/comparison.json'
- q=lineage.read(path);q.update(physical_attempts=47,successful_fresh_models=45,infrastructure_failed_attempts=list(lineage.FAILED),failed_infrastructure_GPU_seconds=lineage.read(ROOT/'analysis/benchmark097/matrix_complete.json')['failed_infrastructure_GPU_seconds'],scientific_protocol_unchanged=True,recovery_quality_reselection=False)
+ q=lineage.read(path);q.update(physical_attempts=48,successful_fresh_models=45,infrastructure_failed_attempts=list(lineage.FAILED),failed_infrastructure_GPU_seconds=lineage.read(ROOT/'analysis/benchmark097/matrix_complete.json')['failed_infrastructure_GPU_seconds'],scientific_protocol_unchanged=True,recovery_quality_reselection=False)
  q['source_SHA256'].update({str(p):lineage.sha(p) for p in (Path(__file__).resolve(),Path(lineage.__file__).resolve())});path.write_text(json.dumps(q,indent=2,allow_nan=False)+'\n')
 if __name__=='__main__':main()
