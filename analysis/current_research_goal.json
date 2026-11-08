@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-08T16:35:28.832139+00:00",
+  "UTC": "2026-11-08T16:41:05.244260+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -666,7 +666,7 @@
     "current_GPU0_throughput_warning": "Recent FM service improved, but postfit generation/audit/settlement allowance remains tight; see current actual observation. No cap extension or restart assumed."
   },
   "latest_CFGen_native_full_fit_and_restore_path": "/ml2/alz/analysis/benchmark097_CFGen_seed2_full_training_and_native_restore_20261108.json",
-  "latest_GPU1_CFGen_phase": "FRESH_FOLD2_SEED4_NATIVE_TRAINING",
+  "latest_GPU1_CFGen_phase": "FULL_TRAINING_AND_NATIVE_CUDA_RESTORE_COMPLETE_GENERATION_AUDIT_SETTLEMENT_REMAIN",
   "current_theta_analytic_sensitivity_path": "/ml2/alz/analysis/t005_theta_fixed_mean_counterfactual_CPU_20261108.json",
   "dispersion_followup_model_CPU_qualification_path": "/ml2/alz/analysis/dispersion097/model_CPU_qualification.json",
   "dispersion_followup_proposed_design_path": "/ml2/alz/analysis/dispersion097/proposed_fresh_six_design.json",
@@ -752,7 +752,7 @@
     "external_target_alignment_not_demonstrated": true
   },
   "latest_official_PyPI_release_recheck_path": "/ml2/alz/artifacts/particlegan-official-release-recheck-20261108T155948Z.json",
-  "latest_CFGen_GPU1_full_training_and_restore_proof_path": "/ml2/alz/analysis/benchmark097_GPU1_fold2_seed2_full_native_fit_and_restore_20261108.json",
+  "latest_CFGen_GPU1_full_training_and_restore_proof_path": "/ml2/alz/analysis/benchmark097_GPU1_fold2_seed4_full_native_fit_and_restore_20261108.json",
   "GPU1_CFGen_fold2_seed2_native_fit_completed": true,
   "GPU1_CFGen_fold2_seed2_full_endpoint_audit_completed": true,
   "frozen_mixture_weighting_metadata_audit_path": "/ml2/alz/analysis/released097_mixture_weights_metadata_audit_20261108.json",
@@ -797,7 +797,7 @@
   "final_independent_audits_observer_live_evidence_path": "/ml2/alz/analysis/released097_final_independent_audits_observer_live_20261108.json",
   "final_independent_audits_observer_CPU_qualification_path": "/ml2/alz/analysis/released097_final_audits_observer_CPU_check_v2_20261108.json",
   "final_independent_audits_actual_completed": 0,
-  "latest_GPU1_full_native_fit_and_restore_proof_path": "/ml2/alz/analysis/benchmark097_GPU1_fold1_seed4_full_native_fit_and_restore_20261108.json",
+  "latest_GPU1_full_native_fit_and_restore_proof_path": "/ml2/alz/analysis/benchmark097_GPU1_fold2_seed4_full_native_fit_and_restore_20261108.json",
   "GPU1_CFGen_fold0_seed3_native_fit_completed": true,
   "GPU1_CFGen_fold0_seed3_full_endpoint_audit_completed": false,
   "latest_full_queue_window_reassessment_path": "/ml2/alz/analysis/released097_full_queue16_window_reassessment_20261108.json",
@@ -900,7 +900,9 @@
     "available_after_reservations_GPU_hours": 995.8473416221536
   },
   "latest_GPU0_PG_shared_service_observation_path": "/ml2/alz/analysis/benchmark097_shared_service_change_current_PG8251_20261108.json",
-  "latest_GPU1_CFGen_full_native_fit_and_restore_path": "/ml2/alz/analysis/benchmark097_GPU1_fold1_seed4_full_native_fit_and_restore_20261108.json",
+  "latest_GPU1_CFGen_full_native_fit_and_restore_path": "/ml2/alz/analysis/benchmark097_GPU1_fold2_seed4_full_native_fit_and_restore_20261108.json",
   "GPU1_CFGen_fold1_seed4_native_fit_completed": true,
-  "GPU1_CFGen_fold1_seed4_full_endpoint_audit_completed": true
+  "GPU1_CFGen_fold1_seed4_full_endpoint_audit_completed": true,
+  "GPU1_CFGen_fold2_seed4_native_fit_completed": true,
+  "GPU1_CFGen_fold2_seed4_full_endpoint_audit_completed": false
 }
