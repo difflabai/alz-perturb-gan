@@ -1,0 +1,34 @@
+{
+  "status": "UNTOUCHED_CELL_CONTINUATION_CPU_CHECK_PASS",
+  "UTC": "2026-11-08T03:08:12.960557+00:00",
+  "tests_run": 9,
+  "source_SHA256": "9a6e3d9bef3d630718ffd901cfafb2f215a05787dbcd78d313ffebd566628953",
+  "test_source_SHA256": "0ea6d60fa2fc18d8a5336bbd816b014875ea1828f6da637620198f1c93867cf5",
+  "protocol_SHA256": "be1c61ecb729adc31d676bc1427ddbf3ac59cbd2c08e55f7680e42338562f2a2",
+  "inherited_native_runtime_qualification_path": "/ml2/alz/analysis/benchmark097_balanced/runtime_CPU_qualification_v2.json",
+  "inherited_native_runtime_qualification_SHA256": "041b81bba511c3bbe4824d231df47639aadc7dcfab8705c6f13c7f4f84d5ca45",
+  "checks": [
+    "Known settled failure is retained and never retried",
+    "Live legacy job drains without duplicate admission",
+    "Unexpected new incomplete outcome stops later admissions",
+    "Admission error drains healthy legacy job",
+    "Capacity wait does not consume scientific key",
+    "Admission expiry drains active legacy job",
+    "Duplicate original scientific key refused"
+  ],
+  "new_native_model_fits": 0,
+  "new_GPU_allocations": 0,
+  "physical_guards_changed": false,
+  "scientific_worker_or_auditor_changed": false,
+  "owner_authorization_existing": true,
+  "limitations": "Six CPU orchestration tests plus unchanged existing41-test90-binding native runtime evidence; this is not a new training or quality result.",
+  "test_stdout": "",
+  "test_stderr": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.000s\n\nOK\n",
+  "extra_tests": [
+    "Contiguous300second capacity stability",
+    "Capacity loss resets stabilization",
+    "Independent card stabilization"
+  ],
+  "known_clean_infra_failures_retained": 2,
+  "physical_guard_changed": false
+}
