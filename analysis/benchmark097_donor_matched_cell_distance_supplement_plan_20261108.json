@@ -1,0 +1,102 @@
+{
+  "status": "PREDECLARED_DESCRIPTIVE_DONOR_MATCHED_CELL_ED_SUPPLEMENT_PRIMARY_UNCHANGED",
+  "UTC": "2026-11-08T07:26:32.619753+00:00",
+  "motivation_metadata_audit_path": "/ml2/alz/analysis/released097_mixture_weights_metadata_audit_20261108.json",
+  "motivation_metadata_audit_SHA256": "1ee9a19c2274d26eb5a65a9cdaac5d9318d97f74d72c2822eaed0d693409506e",
+  "scope": "Descriptive supplementary reanalysis of the same45 frozen trained models and existing count-generated PCs, after all45 models and both original57/prespecified53 reports are complete. No new model or native count generation. No original result or model selection changes.",
+  "primary_and_53_reports_preserved": true,
+  "cohorts": [
+    "original57",
+    "calibration_excluded53"
+  ],
+  "methods": [
+    "pg",
+    "scvi",
+    "cfgen",
+    "hierarchical_resampling"
+  ],
+  "folds": [
+    0,
+    1,
+    2
+  ],
+  "training_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "generation_replicates": [
+    0,
+    1
+  ],
+  "required_before_numerical_targets_or_quality_reads": [
+    "Verified45 logical/47 physical native models with all independent per-cell audits and original failures retained.",
+    "Committed original57 primary and prespecified53 reports and matching infrastructure barrier.",
+    "Validate the full cohort/donor/source-hash map before any supplementary scoring."
+  ],
+  "real_reference": {
+    "cells_per_fold_cohort": 1500,
+    "donor_order": "Frozen fold evaluation donor order, filtered by the cohort allowlist.",
+    "allocation": "Every donor gets floor(1500/D) cells; remaining cells go to the first remainder donors in an independently seeded permutation. Exact per-cell weights1/(D*n_d) make every donor mass1/D despite rounding.",
+    "sample": "Select cells from each donor with its own predetermined stream; replacement only when donor has fewer than n_d cells, recorded. Use exactly the same real reference and weights for every method, training seed and generation replicate within a fold/cohort.",
+    "seed_namespace": [
+      20261108,
+      97,
+      271
+    ],
+    "seed_keys": [
+      "cohort_index",
+      "fold",
+      "purpose_code",
+      "donor_position"
+    ],
+    "expression_space": "Original fold-specific optimization-fitted50PC coordinates; no transform refit."
+  },
+  "generated_reference": {
+    "cells_per_model_replicate": 1500,
+    "source": "Existing retained evaluation_r{rep}/stage{stage}_all_generated_PCs.npy, shape200x400x50. The resampling baseline is replayed from its original frozen fitting-row trace and cached fitting PCs, without new RNA counts or a new model.",
+    "allocation": "For each stage, select without replacement the sum of n_d for its held-out donors from its80000 existing PC rows. Partition selected rows into the donor blocks in the same frozen donor order. Assign each row weight1/(D*n_d). This matches real and generated stage masses exactly.",
+    "seed_namespace": [
+      20261108,
+      97,
+      272
+    ],
+    "seed_keys": [
+      "cohort_index",
+      "fold",
+      "training_seed",
+      "generation_replicate",
+      "stage"
+    ],
+    "common_row_positions_across_methods": true,
+    "independent_model_and_real_sampling_streams": true
+  },
+  "metric": {
+    "name": "donor_matched_weighted_cell_energy_distance",
+    "estimator": "Weighted empirical V statistic:2*sum_i,j a_i*b_j*norm(X_i-Y_j)-sum_i,j a_i*a_j*norm(X_i-X_j)-sum_i,j b_i*b_j*norm(Y_i-Y_j). Both weight vectors are nonnegative, sum to1, and give each biological donor mass1/D within the fold.",
+    "within_fold_donor_weighting": "exactly equal",
+    "across_folds": "Equal-fold mean of the five training-seed means, with two generation replicates averaged per model. Keep all15 fold/seed points per method. This is not a pooled57-donor joint coordinate-space metric."
+  },
+  "selection_and_claims": {
+    "descriptive_only": true,
+    "no_new_hypothesis_test_or_CI_claim": true,
+    "not_used_to_choose_frozen_PG_candidate": true,
+    "no_current_LR_or_theta_metric_change": true,
+    "no_retrospective_primary_metric_change": true,
+    "no_automatic_SOTA_promotion": true,
+    "all_methods_all_seeds_and_negative_outcomes_required": true
+  },
+  "still_required_before_execution": [
+    "Implement independent weighted-distance calculation and sampling/count/weight audits with analytic synthetic checks.",
+    "Verify actual all45/both-report completion barrier; clinical metadata alone is not completion."
+  ],
+  "code_implemented": false,
+  "actual_supplementary_results": 0,
+  "new_GPU_allocations": 0,
+  "new_training_fits": 0,
+  "expression_target_values_decoded_for_this_plan": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}

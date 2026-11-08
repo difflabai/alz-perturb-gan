@@ -721,7 +721,7 @@
   "stage_diagnostic_has_not_changed_primary_metric_or_current_studies": true,
   "unactivated_future_application_hypothesis": {
     "name": "stage-balanced sampling with unchanged released PG formulation",
-    "reason": "Uniform fitting-donor sampling gives stage counts3/4/8/18 and probabilities9.09/12.12/24.24/54.55%, whereas frozen calibration/evaluation mixtures weight four stages equally. New diagnostic shows pooled and stage-matched distances rank PG versus resampling differently.",
+    "reason": "Uniform fitting-donor sampling gives stage counts3/4/8/18 and probabilities9.09/12.12/24.24/54.55%, whereas the fixed calibration mixture weights stages equally. The frozen external benchmark instead uses evaluation-donor-weighted model queries and an observed-cell-weighted real reference. Stage-balanced sampling is a calibration hypothesis, with no demonstrated external improvement. The earlier note incorrectly called the external mixture equal-stage; the metadata audit corrects this.",
     "actual_fits": 0,
     "queued": false,
     "activated": false,
@@ -734,10 +734,18 @@
     "existing_frozen_configuration_guard_unchanged_and_rejects_new_arm": true,
     "sampling_branch_checked": true,
     "new_application_native_update_prefix_qualified": false,
-    "future_GPU_trial_qualified": false
+    "future_GPU_trial_qualified": false,
+    "external_target_alignment_not_demonstrated": true
   },
   "latest_official_PyPI_release_recheck_path": "/ml2/alz/analysis/stagebalanced_sampler_CPU_diagnostic_20261108.json",
   "latest_CFGen_GPU1_full_training_and_restore_proof_path": "/ml2/alz/analysis/benchmark097_GPU1_fold2_seed2_full_native_fit_and_restore_20261108.json",
   "GPU1_CFGen_fold2_seed2_native_fit_completed": true,
-  "GPU1_CFGen_fold2_seed2_full_endpoint_audit_completed": false
+  "GPU1_CFGen_fold2_seed2_full_endpoint_audit_completed": false,
+  "frozen_mixture_weighting_metadata_audit_path": "/ml2/alz/analysis/released097_mixture_weights_metadata_audit_20261108.json",
+  "external_generated_vs_real_reference_weighting_distinction_verified": true,
+  "earlier_equal_stage_external_statement_corrected": true,
+  "donor_matched_supplement_plan_path": "/ml2/alz/analysis/benchmark097_donor_matched_cell_distance_supplement_plan_20261108.json",
+  "donor_matched_supplement_code_implemented": false,
+  "donor_matched_supplement_actual_results": 0,
+  "original_primary_and_53_reports_unchanged": true
 }
