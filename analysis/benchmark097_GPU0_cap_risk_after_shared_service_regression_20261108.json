@@ -1,0 +1,156 @@
+{
+  "status": "GPU0_CFGEN_RECENT_THROUGHPUT_REGRESSION_CAP_RISK_CPU_SCHEDULING_NOT_STARVED",
+  "UTC": "2026-11-08T07:32:57.010049+00:00",
+  "active_native_models": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s2",
+      "guard": {
+        "pid": 1088132,
+        "birth": 26707700,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 1088215,
+        "birth": 26707832,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "native_progress": {
+        "phase": "FM",
+        "phase_optimizer_updates": 53250,
+        "total_optimizer_updates": 70950,
+        "completed_epochs": 902,
+        "native_loss": 6.228732585906982
+      },
+      "progress_mtime_UTC": "2026-11-08T07:32:54.729708+00:00",
+      "allocation_hours_remaining": 2.1994334920247396,
+      "existing_completed_replicate_file_names": []
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s2",
+      "guard": {
+        "pid": 1593495,
+        "birth": 27590239,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 1593587,
+        "birth": 27590374,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "native_progress": {
+        "phase": "FM",
+        "phase_optimizer_updates": 85500,
+        "total_optimizer_updates": 102600,
+        "completed_epochs": 1499,
+        "native_loss": 5.739205360412598
+      },
+      "progress_mtime_UTC": "2026-11-08T07:15:25.327919+00:00",
+      "allocation_hours_remaining": 4.65093889315923,
+      "existing_completed_replicate_file_names": [
+        "evaluation_r0/metrics.json",
+        "resampling_r0/metrics.json"
+      ]
+    }
+  ],
+  "previous_observation_path": "/ml2/alz/analysis/benchmark097_GPU1_fold2_seed2_full_native_fit_and_restore_20261108.json",
+  "previous_observation_SHA256": "88302034e45c819a5d63d4e9efcda3e0e798dfccd3fc6c96e71cc7af6f444faa",
+  "GPU0_interval_seconds": 969.5080444812775,
+  "GPU0_FM_updates_since_previous_observation": 3500,
+  "GPU0_observed_updates_per_second": 3.6100783484190986,
+  "GPU0_conditional_training_hours_remaining": 2.7123141720607165,
+  "GPU0_cap_hours_remaining": 2.1994334920247396,
+  "GPU0_required_training_only_updates_per_second": 4.451903957165225,
+  "postfit_time_additionally_required": true,
+  "observation_window_uses_snapshot_UTC_and_coarse250_update_logs": true,
+  "CPU_scheduling_probe": {
+    "UTC": "2026-11-08T07:31:11.721182+00:00",
+    "duration_seconds": 10.00085334299365,
+    "worker_pid": 1088215,
+    "worker_birth": 26707832,
+    "nice": 0,
+    "allowed_CPUs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+    ],
+    "main_thread_runqueue_wait_seconds": 0.000774763,
+    "most_CPU_active_thread": 1088731,
+    "most_active_thread_running_seconds": 8.795865409,
+    "most_active_thread_runqueue_wait_seconds": 0.006804134,
+    "no_CPU_affinity_or_priority_change": true
+  },
+  "nvidia_process_observations_0731": {
+    "GPU0_other_ML_processes_and_framebuffer_MiB": {
+      "1214814": 5996,
+      "3300286": 5996,
+      "1802269": 16400
+    },
+    "GPU1_other_ML_process_and_framebuffer_MiB": {
+      "1857135": 26740
+    },
+    "GPU0_other_SM_usage_two_observations": {
+      "1214814": [
+        45,
+        66
+      ],
+      "3300286": [
+        37,
+        22
+      ]
+    },
+    "GPU0_owned_SM_usage_two_samples": "Reported dash/unavailable, not asserted zero",
+    "single_samples_not_a_causal_throughput_measurement": true
+  },
+  "foreign_process_identity_observations": [
+    {
+      "pid": 1214814,
+      "birth": 26961610,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
+      "cwd": "/ml2/particlesliders-working",
+      "ownership_not_authenticated": true
+    },
+    {
+      "pid": 3300286,
+      "birth": 23759526,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
+      "cwd": "/ml2/particlesliders-working",
+      "ownership_not_authenticated": true
+    },
+    {
+      "pid": 1857135,
+      "birth": 28041339,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614",
+      "cwd": "/ml2/particlesliders-working/sampler-studio",
+      "ownership_not_authenticated": true
+    }
+  ],
+  "no_foreign_or_owned_model_signals": true,
+  "no_live_authorization_or_deadline_changes": true,
+  "CPU_pinning_not_supported_by_observed_runqueue_wait": true,
+  "successful_logical_models": 15,
+  "known_native_failures_retained": 2,
+  "quality_JSON_or_molecular_targets_not_decoded": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
