@@ -1,0 +1,110 @@
+{
+  "status": "FROZEN_SEPARATE_THETA_INIT_SIX_FRESH_MODELS",
+  "UTC": "2026-11-08T05:03:39.919968+00:00",
+  "experiment": "dispersion097",
+  "native_version": "0.9.7",
+  "scientific_question": "Does initial NB theta multiplier5 improve full20k calibration cell-distribution matching compared with multiplier1 under the same released PG formulation and fixed t005 six scalars?",
+  "selection_basis": "Fitting-only raw-count variance decomposition and analytic fixed-mean final-theta counterfactual, not an observed scale5 energy-distance result. Counterfactual median5.2025 is rounded to5 as a hypothesis, not a prediction of the trained solution.",
+  "fold": 0,
+  "training_seeds": [
+    8,
+    9,
+    10
+  ],
+  "arms": [
+    "theta1",
+    "theta5"
+  ],
+  "required_new_fits": 6,
+  "updates_per_fit": 20000,
+  "cap_seconds": 21600,
+  "all_training_from_scratch": true,
+  "initial_completed_updates": 0,
+  "source_checkpoint": null,
+  "optimizer_states_fresh": true,
+  "no_warmstart_or_partial_fit_resume": true,
+  "hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "fixed_application": {
+    "z_dim": 8,
+    "stage_balance": false,
+    "cell_z_dim": 8,
+    "fourier_feature_scale": 1.0
+  },
+  "unchanged": [
+    "Native released full512row SBNP objective and thermal binding",
+    "NonEMA generator/critic/prior and native normalized optimizer calls",
+    "CountGenerator architecture and Gamma-Poisson law and straight-through count gradient",
+    "Stage conditioning and fitting-only donor/cell/library sampling law",
+    "Full20k endpoint with no early selection or stopping by quality"
+  ],
+  "primary_metric": "calibration_cell_energy_distance",
+  "secondary_metrics": [
+    "energy_score",
+    "spread_ratio",
+    "within_condition_spread_ratio",
+    "coverage80"
+  ],
+  "primary_comparison": "Mean of three matched seed-wise full20k endpoint ED differences theta5-minus-theta1; report every seed and retain negative results. Exact tie retains theta1.",
+  "calibration_only": true,
+  "matched_resampling_required": true,
+  "endpoint_generation_replicates": 2,
+  "bags_per_stage": 200,
+  "cells_per_bag": 400,
+  "stage_reservoir": 375,
+  "common_generation_streams_across_arms": true,
+  "all_actual_new_control_models_required": true,
+  "old_seed0to4_models_are_diagnostic_references_not_new_controls": true,
+  "only_four_reused_calibration_donors": true,
+  "not_independent_biological_confirmation": true,
+  "no_external_evaluation_target_values_for_selection": true,
+  "no_old45_reselection": true,
+  "no_interaction_with_pending_LR_arm_selection": true,
+  "priority": "After existing frozen45 logical comparison, original57 and53 analyses, and already-queued six fixed/adaptive LR fits. Reassess actual remaining window/cost before any admission; preserve current studies.",
+  "shared_GPUs_authorized": true,
+  "no_solo_access_required": true,
+  "no_foreign_signals": true,
+  "window_end_UTC": "2026-11-09T06:26:46.606656+00:00",
+  "model_CPU_qualification_path": "/ml2/alz/analysis/dispersion097/model_CPU_qualification.json",
+  "current_model_prefix_seeds_qualified": [
+    0,
+    1
+  ],
+  "new_seed_namespace_8to10_qualified": true,
+  "GPU_admission_runtime_qualified": false,
+  "activated": false,
+  "queued": false,
+  "actual_new_ALZ_fits": 0,
+  "remaining_before_admission": [
+    "Implement and qualify exact fresh six-cell two-card calibration namespace, immutable source/accounting/native closure, current-release check, shared-capacity review, deadline/cost admission and independent saved-score/native-state audit.",
+    "Verify upstream full comparison and six LR fits actually completed and all prior reservations settled; update cost/window forecast, then admit only if sufficient capacity and time remain."
+  ],
+  "formulation_change": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false,
+  "fresh_seed_model_CPU_qualification_path": "/ml2/alz/analysis/dispersion097/fresh_seed_model_CPU_qualification.json",
+  "fresh_seed_model_native_prefix_cases": 6,
+  "required_fresh_fits": 6,
+  "initialization_scales": {
+    "theta1": 1.0,
+    "theta5": 5.0
+  },
+  "metric_role": "calibration_selection",
+  "all_from_scratch": true,
+  "fidelity_evidence_SHA256": {
+    "/ml2/alz/analysis/t005_nb_variance_CPU_root_audit_20261108.json": "8240c9f4f28a3d67b229c1d57e21587d1f9a30f9e445d91bf979ee609c61df8d",
+    "/ml2/alz/analysis/t005_theta_fixed_mean_counterfactual_CPU_20261108.json": "adef82615ab029f57b249883a1c8ca757aec07b2d9ddd8fa10fa2eaad12ae813",
+    "/ml2/alz/analysis/dispersion097/model_CPU_qualification.json": "1efabbd0165c00b871df992322cb69313607f5581cbac340823b279ba5caccec",
+    "/ml2/alz/analysis/dispersion097/model_source_lineage.json": "90d0bf425efe0c0bd66b877497045d09ff2a8223f369a9cbd5500e7a1e5f8870",
+    "/ml2/alz/analysis/scalarcal097/protocol.json": "118f6248b61f47be8f6232f627d9ca7980c3325adb6d7d1238ebab53394dd004",
+    "/ml2/alz/analysis/benchmark097/protocol.json": "fd92d0afe5cfa9e6b152ae8a14858ffacb62b804d38bd876e2e589862db71de8",
+    "/ml2/alz/analysis/dispersion097/fresh_seed_model_CPU_qualification.json": "a273d85b5d1c6d67c9819974bc6a23ad113636b752742d52c4645b3d9f5fb194"
+  },
+  "calibration_manifest_SHA256": "597ff7929037aabd1d7bc2bd8631aa569dff56ca188ce4a48fbf946ef08e908b"
+}
