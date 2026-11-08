@@ -1,0 +1,234 @@
+{
+  "status": "CURRENT_TWO_CARD_COST_ONLY_REMAINING_ORIGINALS_REPLACEMENTS_SCALAR_FORECAST",
+  "UTC": "2026-11-08T04:52:52.177006+00:00",
+  "previous_goal_turn_classification": "PROGRESS: completed and independently audited ten current count-variance decompositions, checked live native identities and committed evidence.",
+  "successful_logical_models": 14,
+  "failed_original_attempts_retained": 2,
+  "active_models_identity_verified": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s2",
+      "cell": {
+        "experiment": "external097",
+        "fold": 0,
+        "method": "cfgen",
+        "seed": 2
+      },
+      "gpu_uuid": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "guard": {
+        "pid": 980409,
+        "birth": 26518725,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 980480,
+        "birth": 26518853,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "elapsed_seconds": 5966.982335329056,
+      "conditional_remaining_seconds": 927.8138143379474,
+      "estimate_method": "Latest three settled same-method same-card median minus current charged elapsed; not an optimizer-throughput prediction."
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f1_cfgen_s2",
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "cfgen",
+        "seed": 2
+      },
+      "gpu_uuid": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "guard": {
+        "pid": 1088132,
+        "birth": 26707700,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 1088215,
+        "birth": 26707832,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "elapsed_seconds": 4077.19113945961,
+      "conditional_remaining_seconds": 10766.98510299038,
+      "estimate_method": "Latest three settled same-method same-card median minus current charged elapsed; not an optimizer-throughput prediction."
+    }
+  ],
+  "pending_untouched_original_counts": {
+    "pg": 9,
+    "scvi": 11,
+    "cfgen": 7
+  },
+  "costs_seconds_by_method_card": {
+    "pg": [
+      8663.332578796486,
+      2175.035395207
+    ],
+    "scvi": [
+      547.5640669695131,
+      151.39532082949881
+    ],
+    "cfgen": [
+      14844.17624244999,
+      6894.796149667003
+    ]
+  },
+  "cost_source_attempts": {
+    "pg": [
+      [
+        "CAL_GPU0_V1_external097_f1_pg_s0",
+        "CAL_GPU0_V1_external097_f0_pg_s1"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f0_pg_s0",
+        "CAL_GPU0_V1_external097_f2_pg_s0",
+        "CAL_GPU0_V1_external097_f1_pg_s1"
+      ]
+    ],
+    "scvi": [
+      [
+        "CAL_GPU0_V1_external097_f0_scvi_s0",
+        "CAL_GPU0_V1_external097_f2_scvi_s0"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f1_scvi_s0",
+        "CAL_GPU0_V1_external097_f0_scvi_s1"
+      ]
+    ],
+    "cfgen": [
+      [
+        "CAL_GPU0_V1_external097_f1_cfgen_s0"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f2_cfgen_s0",
+        "CAL_GPU0_V1_external097_f1_cfgen_s1",
+        "CAL_GPU0_V1_external097_f0_cfgen_s1"
+      ]
+    ]
+  },
+  "untouched_originals": {
+    "counts_per_lane": {
+      "cfgen": [
+        2,
+        5
+      ],
+      "pg": [
+        1,
+        8
+      ],
+      "scvi": [
+        7,
+        4
+      ]
+    },
+    "predicted_lane_seconds": [
+      52951.61863547344,
+      53407.65900764696
+    ],
+    "predicted_makespan_seconds": 53407.65900764696,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "two_fresh_replacements": {
+    "counts_per_lane": {
+      "cfgen": [
+        0,
+        1
+      ],
+      "pg": [
+        1,
+        0
+      ],
+      "scvi": [
+        0,
+        0
+      ]
+    },
+    "predicted_lane_seconds": [
+      8663.332578796486,
+      6894.796149667003
+    ],
+    "predicted_makespan_seconds": 8663.332578796486,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "overhead_scenarios": [
+    {
+      "scalar_cost_multiplier": 1.15,
+      "scalar_load_forecast": {
+        "counts_per_lane": {
+          "pg": [
+            1,
+            5
+          ]
+        },
+        "predicted_lane_seconds": [
+          9962.832465615958,
+          12506.45352244025
+        ],
+        "predicted_makespan_seconds": 12506.45352244025,
+        "conditional_on_cost_assumptions": true,
+        "not_a_native_admission": true
+      },
+      "originals_plus_replacements_hours": 17.241942107345402,
+      "scalar_hours": 3.474014867344514,
+      "combined_hours": 20.715956974689917,
+      "conditional_remaining_window_margin_hours": 4.849167359142084
+    },
+    {
+      "scalar_cost_multiplier": 2.0,
+      "scalar_load_forecast": {
+        "counts_per_lane": {
+          "pg": [
+            1,
+            5
+          ]
+        },
+        "predicted_lane_seconds": [
+          17326.66515759297,
+          21750.35395207
+        ],
+        "predicted_makespan_seconds": 21750.35395207,
+        "conditional_on_cost_assumptions": true,
+        "not_a_native_admission": true
+      },
+      "originals_plus_replacements_hours": 17.241942107345402,
+      "scalar_hours": 6.041764986686111,
+      "combined_hours": 23.283707094031513,
+      "conditional_remaining_window_margin_hours": 2.281417239800487
+    },
+    {
+      "scalar_cost_multiplier": 5.0,
+      "scalar_load_forecast": {
+        "counts_per_lane": {
+          "pg": [
+            1,
+            5
+          ]
+        },
+        "predicted_lane_seconds": [
+          43316.66289398243,
+          54375.884880175
+        ],
+        "predicted_makespan_seconds": 54375.884880175,
+        "conditional_on_cost_assumptions": true,
+        "not_a_native_admission": true
+      },
+      "originals_plus_replacements_hours": 17.241942107345402,
+      "scalar_hours": 15.104412466715278,
+      "combined_hours": 32.346354574060676,
+      "conditional_remaining_window_margin_hours": -6.7812302402286795
+    }
+  ],
+  "authorized_window_remaining_hours": 25.565124333832,
+  "authorized_GPU_window_end_UTC": "2026-11-09T06:26:46.606656+00:00",
+  "scalar_measurement_overhead_measured": false,
+  "no_GPU_admission_or_source_changes": true,
+  "quality_or_evaluation_target_values_read": false,
+  "caveats": "Conditional allocation lower forecast from recent settled costs, assuming both cards remain available. Excludes future capacity waits/preemptions, CPU reports/audits, cell-dependent cost variation and unknown scalar measurement overhead. A nonnegative margin is not a completion guarantee. Original and recovery phases are sequential under the actual current pipeline.",
+  "source_SHA256": {
+    "/ml2/alz/analysis/forecast_released097_remaining_metadata.py": "4b49ea250625d5153261a36c5baf53f9cce56efc675e11e10f202bdf238b5780",
+    "/ml2/alz/analysis/continue_benchmark097_after_capacity_v2.py": "9a6e3d9bef3d630718ffd901cfafb2f215a05787dbcd78d313ffebd566628953",
+    "/ml2/alz/analysis/released097_remaining_runtime_balance.py": "b587c7fb4eadd29e80480bd06872ce2494aab52b72f84843364ac92e4a660680"
+  },
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
