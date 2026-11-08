@@ -112,13 +112,13 @@ class Scope(unittest.TestCase):
     path=root/'analysis/benchmark097/results'/(key+'.json');path.parent.mkdir(exist_ok=True);path.write_bytes(b'OPAQUE_FAILED_RESULT');failedpins[key]=s.sha(path)
    mapping={f'f{f}_{method}_s{seed}':f"CAL_GPU0_V1_{'external097infra1' if (f,method,seed) in ((2,'pg',1),(2,'cfgen',1),(1,'cfgen',2)) else 'external097'}_f{f}_{method}_s{seed}" for f in range(3) for seed in range(5) for method in ('pg','scvi','cfgen')}
    m=dict(matrix_complete=True,complete_cells=45,required_cells=45,physical_attempts=48,result_SHA256={key:'fixed' for key in mapping.values()},logical_to_physical_attempt=mapping,all_new_training_from_scratch=True,failed_weights_resumed=False,scientific_protocol_unchanged=True,infrastructure_failed_attempts=failed,failed_result_SHA256=failedpins);common[0].write_text(json.dumps(m))
-   aux=root/'analysis/benchmark097_infra1';aux.mkdir();source=root/'analysis/run_benchmark097_infra1_pipeline.py';source.write_text('CPU_FIXTURE_ONLY');proof=aux/'runtime_CPU_qualification_v5.json';proof.write_text(json.dumps(dict(status='ONE_FRESH_INFRASTRUCTURE_REPLACEMENT_NATIVE_SCOPE_CPU_PASS',actual_tests=22,native_cell_device_bindings=6,source_SHA256={str(source):s.sha(source)})))
+   aux=root/'analysis/benchmark097_infra1';aux.mkdir();source=root/'analysis/run_benchmark097_infra1_pipeline.py';source.write_text('CPU_FIXTURE_ONLY');proof=aux/'runtime_CPU_qualification_v6.json';proof.write_text(json.dumps(dict(status='ONE_FRESH_INFRASTRUCTURE_REPLACEMENT_NATIVE_SCOPE_CPU_PASS',actual_tests=22,native_cell_device_bindings=6,source_SHA256={str(source):s.sha(source)})))
    barrier=aux/'scientific_reports_completed.json';q=dict(status='RECOVERED_LOGICAL45_ORIGINAL57_PRIMARY_AND_PRESPECIFIED53_COMPLETE',complete_fresh_models=45,physical_attempts=48,failed_attempts=failed,original57_primary_preserved=True,prespecified53_complete=True,new_generated_counts_for53=0,source_pipeline_path=str(source),source_pipeline_SHA256=s.sha(source),runtime_qualification_path=str(proof),runtime_qualification_SHA256=s.sha(proof),report_SHA256={str(p):s.sha(p) for p in common});barrier.write_text(json.dumps(q))
    child=root/'artifacts/benchmark097-infra1-pipeline/completed.json';child.parent.mkdir(parents=True);child.write_text(json.dumps(dict(status='RECOVERED45_57_53_READY_FRESH_SCALAR_CALIBRATION_AND_FINAL_AUDIT_REMAIN')))
    for name in ('benchmark097_dual_runtime','benchmark097_balanced_runtime','benchmark097_infra1_runtime'):
     p=root/name/'plan.json';p.parent.mkdir();p.write_text('{"enabled":false}')
    self.assertEqual(len(s.prior_study_ready(root)),10)
-   for filename in ('runtime_CPU_qualification_v5.json',):
+   for filename in ('runtime_CPU_qualification_v6.json',):
     adopted=aux/filename;adopted.write_bytes(proof.read_bytes());q.update(runtime_qualification_path=str(adopted),runtime_qualification_SHA256=s.sha(adopted));barrier.write_text(json.dumps(q))
     self.assertEqual(len(s.prior_study_ready(root)),10)
    common[1].write_bytes(b'TAMPERED_PRIMARY')

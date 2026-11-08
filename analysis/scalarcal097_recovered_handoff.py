@@ -8,7 +8,7 @@ def paths(root):
 def ready(root):
  root=Path(root);matrix,primary,sensitivity,barrier,child=paths(root);assert all(p.is_file() for p in (matrix,primary,sensitivity,barrier,child))
  m=read(matrix);q=read(barrier);source=root/'analysis/run_benchmark097_infra1_pipeline.py';proof_path=Path(q['runtime_qualification_path'])
- assert proof_path==root/'analysis/benchmark097_infra1/runtime_CPU_qualification_v5.json'
+ assert proof_path==root/'analysis/benchmark097_infra1/runtime_CPU_qualification_v6.json'
  proof=read(proof_path)
  assert m['matrix_complete'] and m['complete_cells']==m['required_cells']==45 and m['physical_attempts']==48 and len(m['result_SHA256'])==45
  expected={f'f{f}_{method}_s{seed}':f"CAL_GPU0_V1_{'external097infra1' if (f,method,seed) in ((2,'pg',1),(2,'cfgen',1),(1,'cfgen',2)) else 'external097'}_f{f}_{method}_s{seed}" for f in range(3) for seed in range(5) for method in ('pg','scvi','cfgen')}
