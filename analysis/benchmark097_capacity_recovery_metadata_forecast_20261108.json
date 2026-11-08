@@ -1,0 +1,153 @@
+{
+  "status": "CONDITIONAL_METADATA_FORECAST_WITH_TWO_DISCLOSED_INFRA_FAILURES_AND_SEPARATE_SIX_FRESH_FITS",
+  "UTC": "2026-11-08T03:16:17.519681+00:00",
+  "completed_benchmark_successes": 14,
+  "failed_attempts_retained": 2,
+  "active_metadata": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s2",
+      "guard": {
+        "pid": 980409,
+        "birth": 26518725,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 980480,
+        "birth": 26518853,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "elapsed_seconds": 172.341402053833,
+      "conditional_remaining_seconds": 6722.45474761317
+    }
+  ],
+  "pending_untouched_original_counts": {
+    "pg": 9,
+    "scvi": 11,
+    "cfgen": 8
+  },
+  "method_card_settled_seconds": {
+    "pg": [
+      8663.332578796486,
+      2175.035395207
+    ],
+    "scvi": [
+      547.5640669695131,
+      151.39532082949881
+    ],
+    "cfgen": [
+      14844.17624244999,
+      6894.796149667003
+    ]
+  },
+  "cost_source_attempts": {
+    "pg": [
+      [
+        "CAL_GPU0_V1_external097_f1_pg_s0",
+        "CAL_GPU0_V1_external097_f0_pg_s1"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f0_pg_s0",
+        "CAL_GPU0_V1_external097_f2_pg_s0",
+        "CAL_GPU0_V1_external097_f1_pg_s1"
+      ]
+    ],
+    "scvi": [
+      [
+        "CAL_GPU0_V1_external097_f0_scvi_s0",
+        "CAL_GPU0_V1_external097_f2_scvi_s0"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f1_scvi_s0",
+        "CAL_GPU0_V1_external097_f0_scvi_s1"
+      ]
+    ],
+    "cfgen": [
+      [
+        "CAL_GPU0_V1_external097_f1_cfgen_s0"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f2_cfgen_s0",
+        "CAL_GPU0_V1_external097_f1_cfgen_s1",
+        "CAL_GPU0_V1_external097_f0_cfgen_s1"
+      ]
+    ]
+  },
+  "untouched_originals": {
+    "counts_per_lane": {
+      "cfgen": [
+        3,
+        5
+      ],
+      "pg": [
+        1,
+        8
+      ],
+      "scvi": [
+        10,
+        1
+      ]
+    },
+    "predicted_lane_seconds": [
+      58671.50197584159,
+      58748.113978433685
+    ],
+    "predicted_makespan_seconds": 58748.113978433685,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "two_fresh_replacements": {
+    "counts_per_lane": {
+      "cfgen": [
+        0,
+        1
+      ],
+      "pg": [
+        1,
+        0
+      ],
+      "scvi": [
+        0,
+        0
+      ]
+    },
+    "predicted_lane_seconds": [
+      8663.332578796486,
+      6894.796149667003
+    ],
+    "predicted_makespan_seconds": 8663.332578796486,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "separate_six_fresh_scalar_fits": {
+    "counts_per_lane": {
+      "cfgen": [
+        0,
+        0
+      ],
+      "pg": [
+        1,
+        5
+      ],
+      "scvi": [
+        0,
+        0
+      ]
+    },
+    "predicted_lane_seconds": [
+      8663.332578796486,
+      10875.176976035
+    ],
+    "predicted_makespan_seconds": 10875.176976035,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "two_cards_if_capacity_available_total_hours": 21.74628431479588,
+  "GPU1_only_scenario_hours": 29.233759707514636,
+  "remaining_authorized_window_hours": 27.17474637263351,
+  "two_cards_predicted_training_finish_UTC": "2026-11-09T01:01:04.143249+00:00",
+  "does_not_include_CPU_reports_or_resource_wait_or_new_preemptions": true,
+  "capacity_guaranteed": false,
+  "quality_or_target_values_read": false,
+  "SOTA_claim": false,
+  "full_goal_complete": false
+}
