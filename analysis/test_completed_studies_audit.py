@@ -23,7 +23,7 @@ class ScientificAudit(unittest.TestCase):
   value,donors=self.fixture_summary();value['fold_seed_rows'][-1]=value['fold_seed_rows'][0]
   with self.assertRaises(AssertionError):m.validate_summary(value,donors)
  def contrast_fixture(self):
-  summary={k:dict(cell_energy_distance=v) for k,v in [('pg',.1),('scvi',.2),('cfgen',.2),('hierarchical_resampling',.2)]};contrasts={k:dict(PG_minus_other_primary_distance=-.1,conditional_real_donor_cluster_interval=dict(mean_delta=-.1,lower=-.2,upper=-.01,interval_percent=98.33333333333333)) for k in summary if k!='pg'};return summary,contrasts
+  summary={k:dict(cell_energy_distance=v) for k,v in [('pg',.1),('scvi',.2),('cfgen',.2),('hierarchical_resampling',.2)]};contrasts={k:dict(PG_minus_other_primary_distance=-.1,conditional_real_donor_cluster_interval=dict(mean_delta=-.1,lower=-.2,upper=-.01,interval_percent=98.33333333333333,draws=10000,model_and_generation_reservoirs_fixed=True,independent_population_confirmation=False,unit='real donor cluster, stratified by fold and stage')) for k in summary if k!='pg'};return summary,contrasts
  def test_point_win_does_not_replace_missing_or_crossing_uncertainty(self):
   s,c=self.contrast_fixture();self.assertTrue(m.tested_ED_win(s,c));c['scvi']['conditional_real_donor_cluster_interval']=None;self.assertFalse(m.tested_ED_win(s,c));s,c=self.contrast_fixture();c['cfgen']['conditional_real_donor_cluster_interval']['upper']=.01;self.assertFalse(m.tested_ED_win(s,c))
  def test_scalar_choice_is_energy_distance_with_fixed_tie_break(self):

@@ -1,0 +1,61 @@
+{
+  "status": "COMPLETED_STUDIES_FINAL_AUDIT_HELPERS_CPU_CHECK_PASS_NOT_A_REAL_COMPLETION_AUDIT",
+  "UTC": "2026-11-08T04:06:09.074236+00:00",
+  "actual_CPU_tests": 8,
+  "source_SHA256": {
+    "/ml2/alz/analysis/audit_released097_completed_studies.py": "d45e288cdb1fdd0e81489afc9097b41514243212d632cfd194a1f533a1eee58f",
+    "/ml2/alz/analysis/test_completed_studies_audit.py": "8b612ff4eb9e230de0577b8e819eee238ccbfd4eff081eb1621bfdc0bb9961e0"
+  },
+  "producer_source_SHA256": {
+    "/ml2/alz/analysis/run_benchmark097_infra1_pipeline.py": "5fde87aa4e2c0d53fa58f5374b7421525f21d566df8dd200ffb0a7b461c496a2",
+    "/ml2/alz/analysis/after_benchmark097_scalarcal.py": "a1c0d073bcf2a24505cdde6874dae6108be8225ed4ea4ea7f01a1c4d8cf85873",
+    "/ml2/alz/analysis/aggregate_benchmark097_recovered.py": "aec762d605026523c2cea195afaaa200bd52ccc289ab223599fb7e7ffd808a5e",
+    "/ml2/alz/analysis/aggregate_scalarcal097.py": "cfe126d49b4cfed61321ca31555d57d3e1917f68781d7383a796681efc8f41f6"
+  },
+  "tests_cover": [
+    "Independent condensed-pair energy V statistic against analytic known value and identical samples",
+    "Reject nonfinite/wrong-width distances",
+    "Pooled donor energy weighted by donor count rather than equal-fold mean",
+    "Reject missing/duplicated fold-seed points",
+    "A lower point distance cannot replace absent/crossing familywise donor-cluster intervals",
+    "Scalar arm selection uses cell ED and retains fixed control on ties regardless of energy score",
+    "Metadata-only readiness never parses partial numerical reports",
+    "Present paths are not a completed audit or SOTA claim"
+  ],
+  "actual_current_readiness": {
+    "status": "INCOMPLETE_PRESPECIFIED_STUDIES",
+    "missing_paths": [
+      "/ml2/alz/analysis/benchmark097/matrix_complete.json",
+      "/ml2/alz/analysis/benchmark097/comparison.json",
+      "/ml2/alz/analysis/benchmark097_calibration_excluded53_report.json",
+      "/ml2/alz/analysis/benchmark097_infra1/scientific_reports_completed.json",
+      "/ml2/alz/artifacts/benchmark097-infra1-pipeline/completed.json",
+      "/ml2/alz/analysis/scalarcal097/matrix_complete.json",
+      "/ml2/alz/analysis/scalarcal097/comparison.json",
+      "/ml2/alz/artifacts/scalarcal097-after-recovered-science-v5/completed.json"
+    ],
+    "quality_values_read": false,
+    "full_goal_complete": false,
+    "SOTA_claim": false
+  },
+  "one_existing_plan_reversion_verified": {
+    "path": "/ml2/alz/benchmark097_dual_runtime/plan.json",
+    "activation": "99f0dfd87498f990bff9d4444c1225c18f5ddeb0"
+  },
+  "future_audit_scope": {
+    "logical_models": 45,
+    "physical_benchmark_attempts": 47,
+    "scalar_fresh_fits": 6,
+    "scalar_saved_observations": 120,
+    "scalar_replicate_ED_values": 240,
+    "independent_end_count_exemplars": 48,
+    "original_donors": 57,
+    "prespecified_sensitivity_donors": 53
+  },
+  "actual_real_completion_audit_executed": false,
+  "new_real_training_fits": 0,
+  "new_GPU_allocations": 0,
+  "new_quality_values_read": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}

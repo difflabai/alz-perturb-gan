@@ -43,6 +43,8 @@ def tested_ED_win(summaries,contrasts):
   interval=c.get('conditional_real_donor_cluster_interval',c.get('conditional_donor_cluster_interval'))
   if interval is None:supported.append(False);continue
   close(interval['mean_delta'],delta);assert interval['lower']<=interval['upper'];close(interval['interval_percent'],98.33333333333333)
+  assert interval['draws']==10000 and interval['model_and_generation_reservoirs_fixed'] and not interval['independent_population_confirmation']
+  assert interval['unit']=='real donor cluster, stratified by fold and stage'
   supported.append(interval['upper']<0)
  return all(supported)
 def preferred_arm(arms):return min(('fixed','adaptive'),key=lambda a:arms[a]['cell_energy_distance']['mean'])
