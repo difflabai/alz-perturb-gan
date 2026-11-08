@@ -6,7 +6,7 @@ import binding as b,preset_scope as s
 def main():
  assert os.environ.get('CUDA_VISIBLE_DEVICES')=='' and not s.read(s.PLAN)['enabled'] and not s.RUNTIME_PROOF.exists()
  paths=[*HERE.glob('*.py'),*[HERE/f'policy.gpu{i}.prepared.json' for i in (0,1)],*s.protocol_paths(s.protocol()),s.ROOT/'analysis/run_benchmark097_infra1.py',s.ROOT/'analysis/run_benchmark097_infra1_pipeline.py',s.ROOT/'analysis/benchmark097_recovered_lineage.py',s.ROOT/'analysis/aggregate_benchmark097_recovered.py']
- pins={str(p):b.sha(p) for p in paths if p!=s.PLAN};results=[];count=0
+ pins={str(p):b.sha(p) for p in paths if p.name!='plan.json'};results=[];count=0
  for name in ('test_integration.py','test_scope.py'):
   code='import sys,runpy;sys.path.insert(0,sys.argv[1]);p=sys.argv[2];sys.argv=[p];runpy.run_path(p,run_name="__main__")'
   p=subprocess.run([sys.executable,'-I','-S','-B','-c',code,str(HERE),str(HERE/name)],capture_output=True,text=True,timeout=240)
