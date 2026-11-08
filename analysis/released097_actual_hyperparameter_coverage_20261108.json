@@ -1,0 +1,1107 @@
+{
+  "status": "ACTUAL_CORRECTED_RELEASED097_FULL20K_CALIBRATION_HYPERPARAMETER_COVERAGE",
+  "UTC": "2026-11-08T04:14:23.855195+00:00",
+  "formulation": {
+    "native_version": "0.9.7",
+    "recipe": "bispf_optimized",
+    "EMA_decay": 0,
+    "generator_gradient_response": "none",
+    "prior_regularizer_domain": "all512rows",
+    "critic_thermal": "explicitly_bound",
+    "penalty_input_domain": "continuous"
+  },
+  "physical_fresh_calibration_fits": 25,
+  "unique_six_scalar_settings": 8,
+  "phase_counts": {
+    "faithful097": 4,
+    "localfaith097": 12,
+    "confirmfaith097": 9
+  },
+  "parameter_values_actually_trained": {
+    "generator_lr": [
+      0.006,
+      0.012,
+      0.024
+    ],
+    "critic_lr": [
+      0.009,
+      0.018,
+      0.036
+    ],
+    "particle_lr": [
+      0.015,
+      0.03,
+      0.06
+    ],
+    "reg_coeff": [
+      1.0
+    ],
+    "reg_kappa": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "prior_reg": [
+      0.003,
+      0.01,
+      0.03
+    ]
+  },
+  "reg_coeff_actually_varied": false,
+  "reg_coeff_half_proposal_was_skipped_not_a_test": true,
+  "reg_kappa_half_only_tested_jointly_with_all_three_half_learning_rates": true,
+  "reg_kappa_double_tested_in_isolation": true,
+  "prior_regularization_bracket_actually_tested": [
+    0.003,
+    0.01,
+    0.03
+  ],
+  "all_endpoints_20000": true,
+  "all_new_training_from_zero": true,
+  "all_previous_checkpoints_evaluation_only": true,
+  "heldout_benchmark_values_read": false,
+  "calibration_evidence_groups_kept_separate": true,
+  "candidate_group_summaries": [
+    {
+      "candidate_id": "f000",
+      "evidence_group": "exploratory_seeds01",
+      "seeds": [
+        0,
+        1
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.2913269319596661,
+          "initialization_SD": 0.015250199279446177
+        },
+        "energy_score": {
+          "mean": 1.999644588017866,
+          "initialization_SD": 0.13955338106822626
+        },
+        "spread_ratio": {
+          "mean": 0.9529591014928758,
+          "initialization_SD": 0.03511195972586868
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.882160731075073,
+          "initialization_SD": 0.03913359695479609
+        },
+        "coverage80": {
+          "mean": 0.6826923076923077,
+          "initialization_SD": 0.0611919329872974
+        }
+      }
+    },
+    {
+      "candidate_id": "f000",
+      "evidence_group": "fresh_initialization_confirmation_seeds234",
+      "seeds": [
+        2,
+        3,
+        4
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.30535797977032814,
+          "initialization_SD": 0.013896745201742689
+        },
+        "energy_score": {
+          "mean": 2.022148770402709,
+          "initialization_SD": 0.05791582737972116
+        },
+        "spread_ratio": {
+          "mean": 0.8986882905326495,
+          "initialization_SD": 0.033197262304349565
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.8283202473994714,
+          "initialization_SD": 0.03467672919230584
+        },
+        "coverage80": {
+          "mean": 0.657051282051282,
+          "initialization_SD": 0.029375485224075914
+        }
+      }
+    },
+    {
+      "candidate_id": "f001",
+      "evidence_group": "exploratory_seeds01",
+      "seeds": [
+        0,
+        1
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.29514903139367377,
+          "initialization_SD": 0.028461705031716945
+        },
+        "energy_score": {
+          "mean": 2.056882372937778,
+          "initialization_SD": 0.03692092998588817
+        },
+        "spread_ratio": {
+          "mean": 0.8770023343383443,
+          "initialization_SD": 0.059080737350541625
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.8057372700580461,
+          "initialization_SD": 0.07144310512135175
+        },
+        "coverage80": {
+          "mean": 0.5985576923076923,
+          "initialization_SD": 0.03739507015890398
+        }
+      }
+    },
+    {
+      "candidate_id": "t000",
+      "evidence_group": "exploratory_seeds01",
+      "seeds": [
+        0,
+        1
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.003
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.30689037470482017,
+          "initialization_SD": 0.015565221650084336
+        },
+        "energy_score": {
+          "mean": 2.004780408179262,
+          "initialization_SD": 0.041184768398882
+        },
+        "spread_ratio": {
+          "mean": 0.9015791116605185,
+          "initialization_SD": 0.05137020002412322
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.828295770593499,
+          "initialization_SD": 0.0652864308549891
+        },
+        "coverage80": {
+          "mean": 0.6201923076923077,
+          "initialization_SD": 0.006799103665255241
+        }
+      }
+    },
+    {
+      "candidate_id": "t001",
+      "evidence_group": "exploratory_seeds01",
+      "seeds": [
+        0,
+        1
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.03
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.3072366355027878,
+          "initialization_SD": 0.04790486807064311
+        },
+        "energy_score": {
+          "mean": 2.131431851126586,
+          "initialization_SD": 0.009107973117209038
+        },
+        "spread_ratio": {
+          "mean": 0.9178591225462718,
+          "initialization_SD": 0.10673345309511527
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.8283415935101849,
+          "initialization_SD": 0.10962692373249631
+        },
+        "coverage80": {
+          "mean": 0.610576923076923,
+          "initialization_SD": 0.0407946219915316
+        }
+      }
+    },
+    {
+      "candidate_id": "t002",
+      "evidence_group": "exploratory_seeds01",
+      "seeds": [
+        0,
+        1
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 2.0,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.33511170542497926,
+          "initialization_SD": 0.09809208734921407
+        },
+        "energy_score": {
+          "mean": 2.0604922730156376,
+          "initialization_SD": 0.2228330681074951
+        },
+        "spread_ratio": {
+          "mean": 0.9194348477485657,
+          "initialization_SD": 0.08751594110603206
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.8538755394366764,
+          "initialization_SD": 0.09985228927106715
+        },
+        "coverage80": {
+          "mean": 0.6538461538461539,
+          "initialization_SD": 0.11558476230933956
+        }
+      }
+    },
+    {
+      "candidate_id": "t003",
+      "evidence_group": "exploratory_seeds01",
+      "seeds": [
+        0,
+        1
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.024,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.29015273158862875,
+          "initialization_SD": 0.032195119236393704
+        },
+        "energy_score": {
+          "mean": 2.1976444151764225,
+          "initialization_SD": 0.010429182379809184
+        },
+        "spread_ratio": {
+          "mean": 0.8569821473134427,
+          "initialization_SD": 0.10854001575573057
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.7662542034319788,
+          "initialization_SD": 0.11898288442815817
+        },
+        "coverage80": {
+          "mean": 0.5625,
+          "initialization_SD": 0.006799103665255241
+        }
+      }
+    },
+    {
+      "candidate_id": "t004",
+      "evidence_group": "exploratory_seeds01",
+      "seeds": [
+        0,
+        1
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.2860942493096328,
+          "initialization_SD": 0.030602242642470145
+        },
+        "energy_score": {
+          "mean": 2.137114859539366,
+          "initialization_SD": 0.005171516131753085
+        },
+        "spread_ratio": {
+          "mean": 0.8236547340570395,
+          "initialization_SD": 0.07528610475520948
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.7352395344261571,
+          "initialization_SD": 0.055756457639702876
+        },
+        "coverage80": {
+          "mean": 0.5336538461538461,
+          "initialization_SD": 0.061191932987297325
+        }
+      }
+    },
+    {
+      "candidate_id": "t004",
+      "evidence_group": "fresh_initialization_confirmation_seeds234",
+      "seeds": [
+        2,
+        3,
+        4
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.30513901022518297,
+          "initialization_SD": 0.05905861573801064
+        },
+        "energy_score": {
+          "mean": 2.219801154209195,
+          "initialization_SD": 0.09930438507232389
+        },
+        "spread_ratio": {
+          "mean": 0.9173282297080814,
+          "initialization_SD": 0.05098169500623642
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.7982802260358269,
+          "initialization_SD": 0.030056056726300833
+        },
+        "coverage80": {
+          "mean": 0.5721153846153846,
+          "initialization_SD": 0.041076941083257386
+        }
+      }
+    },
+    {
+      "candidate_id": "t005",
+      "evidence_group": "exploratory_seeds01",
+      "seeds": [
+        0,
+        1
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.28964777947408216,
+          "initialization_SD": 0.021985305136048003
+        },
+        "energy_score": {
+          "mean": 1.9557775110172182,
+          "initialization_SD": 0.13983298957604243
+        },
+        "spread_ratio": {
+          "mean": 0.9546856610879382,
+          "initialization_SD": 0.021486964669504605
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.8907335797061262,
+          "initialization_SD": 0.04737315230629817
+        },
+        "coverage80": {
+          "mean": 0.6899038461538461,
+          "initialization_SD": 0.0645914848199251
+        }
+      }
+    },
+    {
+      "candidate_id": "t005",
+      "evidence_group": "fresh_initialization_confirmation_seeds234",
+      "seeds": [
+        2,
+        3,
+        4
+      ],
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "metrics": {
+        "cell_energy_distance": {
+          "mean": 0.28054688830266833,
+          "initialization_SD": 0.016040546254952184
+        },
+        "energy_score": {
+          "mean": 2.040915718067647,
+          "initialization_SD": 0.09973014250405741
+        },
+        "spread_ratio": {
+          "mean": 0.9106341802270723,
+          "initialization_SD": 0.02761088220435148
+        },
+        "within_condition_spread_ratio": {
+          "mean": 0.8343784417786239,
+          "initialization_SD": 0.035610560176233166
+        },
+        "coverage80": {
+          "mean": 0.6185897435897436,
+          "initialization_SD": 0.04815698461960492
+        }
+      }
+    }
+  ],
+  "physical_fits": [
+    {
+      "phase": "faithful097",
+      "attempt": "CAL_GPU0_V1_faith097_f000_f0_pg_s0",
+      "candidate_id": "f000",
+      "seed": 0,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1425.2270227230038,
+      "source_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json",
+      "source_result_SHA256": "090be880e2a9758348f2075419593b693523d9792db910d4bc69bb8bf5826ca4"
+    },
+    {
+      "phase": "faithful097",
+      "attempt": "CAL_GPU0_V1_faith097_f000_f0_pg_s1",
+      "candidate_id": "f000",
+      "seed": 1,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1433.4380333970184,
+      "source_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s1.json",
+      "source_result_SHA256": "e05cdb19ecb41376c8e56317e6402fb8743aa545a52ca8dd79774531d6563f3c"
+    },
+    {
+      "phase": "faithful097",
+      "attempt": "CAL_GPU0_V1_faith097_f001_f0_pg_s0",
+      "candidate_id": "f001",
+      "seed": 0,
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1428.002219618007,
+      "source_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f001_f0_pg_s0.json",
+      "source_result_SHA256": "2dcf3551cb764457b7fb33970b9a9ad557009836801a84607d92c9b53d97a1f6"
+    },
+    {
+      "phase": "faithful097",
+      "attempt": "CAL_GPU0_V1_faith097_f001_f0_pg_s1",
+      "candidate_id": "f001",
+      "seed": 1,
+      "hyperparameters": {
+        "generator_lr": 0.006,
+        "critic_lr": 0.009,
+        "particle_lr": 0.015,
+        "reg_coeff": 1.0,
+        "reg_kappa": 0.5,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1412.6042528309918,
+      "source_result_path": "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f001_f0_pg_s1.json",
+      "source_result_SHA256": "feefa49805d6bb7aecf0379b671e0ee3b9fce2dfbb1815f23065bc9eacf21655"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t000_f0_pg_s0",
+      "candidate_id": "t000",
+      "seed": 0,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.003
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1423.9727248519775,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t000_f0_pg_s0.json",
+      "source_result_SHA256": "8ec6ad1399c359a6dc2f2435e72ac8b68c2ecca945c696560ebfd5a8c9590212"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t000_f0_pg_s1",
+      "candidate_id": "t000",
+      "seed": 1,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.003
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1425.8652072359982,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t000_f0_pg_s1.json",
+      "source_result_SHA256": "8a439e0916cf3f03a0f8474375c4be86ba775afffcadc5f0cb365c3eb598a627"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t001_f0_pg_s0",
+      "candidate_id": "t001",
+      "seed": 0,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.03
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1418.8437817230006,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t001_f0_pg_s0.json",
+      "source_result_SHA256": "410b26210c477a7cc2f375c3e0b5a485810f9cff227bbc88b337b4522a255c2f"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t001_f0_pg_s1",
+      "candidate_id": "t001",
+      "seed": 1,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.03
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1447.612479611009,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t001_f0_pg_s1.json",
+      "source_result_SHA256": "df0c6b635eaa90ab52ae35f2ab2b6922b3026519f99a8f616952b5ec68380d77"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t002_f0_pg_s0",
+      "candidate_id": "t002",
+      "seed": 0,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 2.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1408.468343112996,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t002_f0_pg_s0.json",
+      "source_result_SHA256": "ce5c034e8d88a10d4a3449c6600f74b902d99d92baded4b38d6b3659e9df01cc"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t002_f0_pg_s1",
+      "candidate_id": "t002",
+      "seed": 1,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 2.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1430.1594656310044,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t002_f0_pg_s1.json",
+      "source_result_SHA256": "8c8a33c18bfaec30ba009ed6cf9ef1f31252d2e5b2f638a02468418dca2c2823"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t003_f0_pg_s0",
+      "candidate_id": "t003",
+      "seed": 0,
+      "hyperparameters": {
+        "generator_lr": 0.024,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1475.9891758500016,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t003_f0_pg_s0.json",
+      "source_result_SHA256": "592c8805483e4720213eecbf3631af24934e157851ab0e370a7407464a1c7245"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t003_f0_pg_s1",
+      "candidate_id": "t003",
+      "seed": 1,
+      "hyperparameters": {
+        "generator_lr": 0.024,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1416.549796767009,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t003_f0_pg_s1.json",
+      "source_result_SHA256": "9f43fd543a29d973f532acf2db253291829b6cd8319ec7bec01ed53979b9de32"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t004_f0_pg_s0",
+      "candidate_id": "t004",
+      "seed": 0,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1468.390021239,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t004_f0_pg_s0.json",
+      "source_result_SHA256": "6048edea749e5bf00468f26aca359b8c759a96d601ca32983ebb809b97e7af25"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t004_f0_pg_s1",
+      "candidate_id": "t004",
+      "seed": 1,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1842.3715584739984,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t004_f0_pg_s1.json",
+      "source_result_SHA256": "087e42ba8c4b410762dfbdefaadd3809a5c6e76ef49866b23db8f11dcf53cb4d"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t005_f0_pg_s0",
+      "candidate_id": "t005",
+      "seed": 0,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1442.2108617009944,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s0.json",
+      "source_result_SHA256": "4f8f7940b9e2a3c6233613fc89469cc316d0128890100b80bc2271b86436c089"
+    },
+    {
+      "phase": "localfaith097",
+      "attempt": "CAL_GPU0_V1_lf097_t005_f0_pg_s1",
+      "candidate_id": "t005",
+      "seed": 1,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1416.1164569190005,
+      "source_result_path": "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s1.json",
+      "source_result_SHA256": "5277287475c5b1e8e7b2861aad146a5ac88d13a92a6ef3012a7eb50f12347535"
+    },
+    {
+      "phase": "confirmfaith097",
+      "attempt": "CAL_GPU0_V1_cf097_f000_f0_pg_s2",
+      "candidate_id": "f000",
+      "seed": 2,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 3212.1238699740206,
+      "source_result_path": "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_f000_f0_pg_s2.json",
+      "source_result_SHA256": "489c90c6463bebd954fe320be7681102f8488f76fd10d90bb8e6a3868118dbf6"
+    },
+    {
+      "phase": "confirmfaith097",
+      "attempt": "CAL_GPU0_V1_cf097_f000_f0_pg_s3",
+      "candidate_id": "f000",
+      "seed": 3,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 2851.603813867987,
+      "source_result_path": "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_f000_f0_pg_s3.json",
+      "source_result_SHA256": "ad1e5c4e424a90b6e9161acffd7310569ee0a229787af2e920251b414e0c5702"
+    },
+    {
+      "phase": "confirmfaith097",
+      "attempt": "CAL_GPU0_V1_cf097_f000_f0_pg_s4",
+      "candidate_id": "f000",
+      "seed": 4,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 4087.9399663229997,
+      "source_result_path": "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_f000_f0_pg_s4.json",
+      "source_result_SHA256": "867de1ec8dbcf4ef0d4c057bde10612289a1cd28ce7cce73e29cfb9f43c27dc9"
+    },
+    {
+      "phase": "confirmfaith097",
+      "attempt": "CAL_GPU0_V1_cf097_t004_f0_pg_s2",
+      "candidate_id": "t004",
+      "seed": 2,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1439.8290422199934,
+      "source_result_path": "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s2.json",
+      "source_result_SHA256": "a8cb583e89575312c5f7c05741dd9d16bb9eddf8bbd0ba6b6be6477c99545f2d"
+    },
+    {
+      "phase": "confirmfaith097",
+      "attempt": "CAL_GPU0_V1_cf097_t004_f0_pg_s3",
+      "candidate_id": "t004",
+      "seed": 3,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 1993.8560400080169,
+      "source_result_path": "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s3.json",
+      "source_result_SHA256": "65bc57ef3a3177eb57afc5514b3efafd18a5b70fe04e78a5580b93ebf1d1198e"
+    },
+    {
+      "phase": "confirmfaith097",
+      "attempt": "CAL_GPU0_V1_cf097_t004_f0_pg_s4",
+      "candidate_id": "t004",
+      "seed": 4,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.036,
+        "particle_lr": 0.03,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 3368.7678758809925,
+      "source_result_path": "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s4.json",
+      "source_result_SHA256": "e2e77ac3f4edeaac26612a1184a5d448541371820d23a0996330630ee7047c7e"
+    },
+    {
+      "phase": "confirmfaith097",
+      "attempt": "CAL_GPU0_V1_cf097_t005_f0_pg_s2",
+      "candidate_id": "t005",
+      "seed": 2,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 3193.890827024996,
+      "source_result_path": "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s2.json",
+      "source_result_SHA256": "301f82e278ce69c5204f83d52b14d8b52800ae7e8851b5c5d92850b66490eaaf"
+    },
+    {
+      "phase": "confirmfaith097",
+      "attempt": "CAL_GPU0_V1_cf097_t005_f0_pg_s3",
+      "candidate_id": "t005",
+      "seed": 3,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 3274.7977196320135,
+      "source_result_path": "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s3.json",
+      "source_result_SHA256": "1ebc48e244c5b5390ac6abf7516869f68d069405f30616f58b376d1012049e95"
+    },
+    {
+      "phase": "confirmfaith097",
+      "attempt": "CAL_GPU0_V1_cf097_t005_f0_pg_s4",
+      "candidate_id": "t005",
+      "seed": 4,
+      "hyperparameters": {
+        "generator_lr": 0.012,
+        "critic_lr": 0.018,
+        "particle_lr": 0.06,
+        "reg_coeff": 1.0,
+        "reg_kappa": 1.0,
+        "prior_reg": 0.01
+      },
+      "completed_updates": 20000,
+      "from_update_zero": true,
+      "source_checkpoint": null,
+      "charged_GPU_seconds": 3250.494895724987,
+      "source_result_path": "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s4.json",
+      "source_result_SHA256": "19eb93a4f1eaed1e965e0a852198f4e1eb1d11f13a078f13fb2225bb06ee33d6"
+    }
+  ],
+  "input_SHA256": {
+    "/ml2/alz/analysis/faithful097_final_independent_audit_20261107.json": "b67ad4d2f940acc4671301d74bfda3189a82f1f20b10dbb0a1894d058f4b8963",
+    "/ml2/alz/analysis/faithful097/protocol.json": "aac06637de106c10e48a2ae76e04ac84ef5ef3b2bdf5c21e36e356cd46e68405",
+    "/ml2/alz/analysis/faithful097/report.json": "c2ac4bc66a96d8b209fb717a9bbe429b44928a98787fbda8c4eedffb7e25ef67",
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json": "090be880e2a9758348f2075419593b693523d9792db910d4bc69bb8bf5826ca4",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_faith097_f000_f0_pg_s0/authorization.json": "1afda8763e9486d14a2c6c0fda12f23d25b5a7a8fdc63ea7f643767aa1a79e7c",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_faith097_f000_f0_pg_s0.json": "fed3c8c109a21ff7008d85fb6f2c74d9247188d49c27f689c71bb173c859da16",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_faith097_f000_f0_pg_s0-settlement.json": "5b0985e6fc86f2a1456fa67597dcd1acc8e7afcfe922c648735745dd4d4ace96",
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f000_f0_pg_s1.json": "e05cdb19ecb41376c8e56317e6402fb8743aa545a52ca8dd79774531d6563f3c",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_faith097_f000_f0_pg_s1/authorization.json": "e076279b534ebc13947107782689f1af33fb5621c4fccd5d3274d6cf32bfccf5",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_faith097_f000_f0_pg_s1.json": "86bb05c87ec466c0c4dba51d43fe0dc4809a6f80ce21d0beab6267bbfacc6136",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_faith097_f000_f0_pg_s1-settlement.json": "ca2d912d113152e0911df98a70d31b4faf2fb902f30c2007ed342800aa1d2af1",
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f001_f0_pg_s0.json": "2dcf3551cb764457b7fb33970b9a9ad557009836801a84607d92c9b53d97a1f6",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_faith097_f001_f0_pg_s0/authorization.json": "2e47419a02f0a4b491064be5aa74c27c1a534589763e90fe0589510a005b301d",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_faith097_f001_f0_pg_s0.json": "532ea314a9326e69a35a6e99d11bd3727dd703fbefc577b475afef705e51abd1",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_faith097_f001_f0_pg_s0-settlement.json": "2af13f042bf01d00db43cd4a9179ac8fd378bf4980fb2801f440c0223ded4e64",
+    "/ml2/alz/analysis/faithful097/results/CAL_GPU0_V1_faith097_f001_f0_pg_s1.json": "feefa49805d6bb7aecf0379b671e0ee3b9fce2dfbb1815f23065bc9eacf21655",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_faith097_f001_f0_pg_s1/authorization.json": "8fe07fbfaec208842a42359367e2e4b283678f0cbf893528b9ff6662077967e3",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_faith097_f001_f0_pg_s1.json": "0af543bf4054e97411da50d81ae91dea14f01708dbaa51adfa92f74353c24cb8",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_faith097_f001_f0_pg_s1-settlement.json": "95b9ac1621d41cbc8b3cc5cfd144d413597a8ba1d17c379df1341a142b498cb1",
+    "/ml2/alz/analysis/localfaith097/protocol.json": "b5dfe66178a28aa15119f1d2b25766af9e8895e32dfd734c05b8e1622043ff5c",
+    "/ml2/alz/analysis/localfaith097/report.json": "d65205006517afbb92c1ab62e3a766d1c980461c9e64c92576651b45f8816b1d",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t000_f0_pg_s0.json": "8ec6ad1399c359a6dc2f2435e72ac8b68c2ecca945c696560ebfd5a8c9590212",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t000_f0_pg_s0/authorization.json": "feb950594db9c3c6fefcac2b54e46a3ec52f74200cb0017af108df30d4f538c5",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t000_f0_pg_s0.json": "23c9ef48f2bfe543af09df266a4331677c631e9a29c17022b8e7b25c1643b627",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t000_f0_pg_s0-settlement.json": "29c8e8b5c915904d3c8cb589e0c5dd92af537c614abedeeee16ef10eae54d354",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t000_f0_pg_s1.json": "8a439e0916cf3f03a0f8474375c4be86ba775afffcadc5f0cb365c3eb598a627",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t000_f0_pg_s1/authorization.json": "b97f1e2b9695459bd5da442ef82dbdea21ccfc48942d02c5ccedc35fa42961c6",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t000_f0_pg_s1.json": "e7ea1a6d49f386ddab2efb7b410658eeaccfc5b0252c7c6ea6f41e13233ba1fd",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t000_f0_pg_s1-settlement.json": "4acfbfbb0f1ab96da4a89b180be5abab0d5fd5f6bac7eafd73686c09658b1844",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t001_f0_pg_s0.json": "410b26210c477a7cc2f375c3e0b5a485810f9cff227bbc88b337b4522a255c2f",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t001_f0_pg_s0/authorization.json": "56d02eb33b771fd0a42b90454bd7e5ff9046f6956dc76b8dbe4fda0b8261c296",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t001_f0_pg_s0.json": "a98f4a7b90f31d564cbc472d9d5be95ceeaf8a343ee60190f6fc46b8499a1ebc",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t001_f0_pg_s0-settlement.json": "5f4e594ff729ca04343c51b53fc85153152a10ccef4f9a81f9624bd3922aaa4d",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t001_f0_pg_s1.json": "df0c6b635eaa90ab52ae35f2ab2b6922b3026519f99a8f616952b5ec68380d77",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t001_f0_pg_s1/authorization.json": "679ae4e7171a99ca2e28693acab093ccd6af6bc84c4523b6f8503eea341fffbd",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t001_f0_pg_s1.json": "701e224d41cb95b9f9cfcc4f54e05a200c197098907f28ffae1fac87a091d205",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t001_f0_pg_s1-settlement.json": "878786548735194d0f4baa26842613c74abab9176f4ef0ff28a33a48a031e2d3",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t002_f0_pg_s0.json": "ce5c034e8d88a10d4a3449c6600f74b902d99d92baded4b38d6b3659e9df01cc",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t002_f0_pg_s0/authorization.json": "ab38e5441ddbdc3531bb7132393a80eec1673b7602b4b5f765886e1decc86a50",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t002_f0_pg_s0.json": "614489599b3e5e4a5d7ffd2d9a1689bf78f318185792381a29cf886cbb8ba555",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t002_f0_pg_s0-settlement.json": "31ab76b65da6fa8084a2f96598c3b27df1ab04ecc97e793dfabad735fed3d7ac",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t002_f0_pg_s1.json": "8c8a33c18bfaec30ba009ed6cf9ef1f31252d2e5b2f638a02468418dca2c2823",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t002_f0_pg_s1/authorization.json": "8e9fbe88261428a3f3788d8445b70ea0d5281518a68b3ddc6579d9885d062e17",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t002_f0_pg_s1.json": "8be583bf6c8275e1c36635b128d1d449f4ae60377a19b3521761d0d125a40e3c",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t002_f0_pg_s1-settlement.json": "c6bac56f53736c730a0e9388ad642a30778ab0dd24d5797f71b716302f930d44",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t003_f0_pg_s0.json": "592c8805483e4720213eecbf3631af24934e157851ab0e370a7407464a1c7245",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t003_f0_pg_s0/authorization.json": "9253226387d00be7d3e5337ed727a960bdb6683faaeaf2beedb8322659d08b02",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t003_f0_pg_s0.json": "f9ad72b8a8eecba607f82180cf2d973db88054ba63cfe163ddfe90af132e1a6f",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t003_f0_pg_s0-settlement.json": "d829a1ab032b4932e74d30716824e70124e8d7b0e0ec134b75b716e5e23e9a7a",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t003_f0_pg_s1.json": "9f43fd543a29d973f532acf2db253291829b6cd8319ec7bec01ed53979b9de32",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t003_f0_pg_s1/authorization.json": "a980b3b4e6a4d1b25d880a80f043ffe6e3ac23c8d38e24d29ce84c220acb869f",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t003_f0_pg_s1.json": "c03332af8a50241ee199246738b3903e33362f8de7e00acd42124c02ecd12f90",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t003_f0_pg_s1-settlement.json": "856f904760d4e250519077446e3c45a6964565a2013a3a0203441652e81a90a0",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t004_f0_pg_s0.json": "6048edea749e5bf00468f26aca359b8c759a96d601ca32983ebb809b97e7af25",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t004_f0_pg_s0/authorization.json": "6142ea0480420309d7f77318c58e10dab2311031beb9ad0e71438c1365b9c4a7",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t004_f0_pg_s0.json": "900dd086a0de79957fb39e4e714bb716b48ae9b577024daa0f29459ffde6de5f",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t004_f0_pg_s0-settlement.json": "98576c72e2c0abe143f5f51af02e115b900c4410ce9e0991fef236b3b2bfb02a",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t004_f0_pg_s1.json": "087e42ba8c4b410762dfbdefaadd3809a5c6e76ef49866b23db8f11dcf53cb4d",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t004_f0_pg_s1/authorization.json": "222c52574121f969a516382a540f3659e1d4153d42a93694bddc2cf625922390",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t004_f0_pg_s1.json": "19eaabd736133c26b85e65867757a1f673f8c9741a7831c93570c4fe56120229",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t004_f0_pg_s1-settlement.json": "bfe91d035e3278e4bc698350256375d748acb10d8a00af1a72ad81596e8010a9",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s0.json": "4f8f7940b9e2a3c6233613fc89469cc316d0128890100b80bc2271b86436c089",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t005_f0_pg_s0/authorization.json": "c28a6e8b00aa5885d6536aa9e6c432fc5c4ed66dd8ff6e166af1726418d49010",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t005_f0_pg_s0.json": "dc6fb62ac256e378c751f70faa2885fae5e8bdf2faa8381e2278fff7536c7718",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t005_f0_pg_s0-settlement.json": "bf3c46eca0fc4f1d064bebdf8745e7ad6363cc0f91581f44365e0ceb12d7f0ae",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s1.json": "5277287475c5b1e8e7b2861aad146a5ac88d13a92a6ef3012a7eb50f12347535",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_lf097_t005_f0_pg_s1/authorization.json": "2f4f2b656cee3c006d364d81b3f58956f41125f023491c626a44e2b76e0fe24d",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t005_f0_pg_s1.json": "aeb9f2c72c4a48f2093263aaffa9d858f974d5d0bd4052c75dfeab671085d7f3",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_lf097_t005_f0_pg_s1-settlement.json": "a408159bead1054efe30182f62714eb620d5531616d05a24f1d942f4c30f13aa",
+    "/ml2/alz/analysis/confirmfaith097/protocol.json": "c5d040988e2e176b8778c73c182c01ad886103a253a257ac469ae9ab0a8cb604",
+    "/ml2/alz/analysis/confirmfaith097/report.json": "aa169bb5e16b4c5555f842d0ed2a9f61c87b48f17e1eeb46388bbeed0212484c",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_f000_f0_pg_s2.json": "489c90c6463bebd954fe320be7681102f8488f76fd10d90bb8e6a3868118dbf6",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_cf097_f000_f0_pg_s2/authorization.json": "c437f4ccc861da3312857e2e181b658503a0c159104c4ba573e5a9d97ec622ee",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_f000_f0_pg_s2.json": "9e55db3ec6754be72e58fe799541f62bccea75151e9588e25b197382aae43bfb",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_f000_f0_pg_s2-settlement.json": "1169577d896ebea0e2ac4cbfff863ca09c4a9b29636a347b8068a2f0a39036a6",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_f000_f0_pg_s3.json": "ad1e5c4e424a90b6e9161acffd7310569ee0a229787af2e920251b414e0c5702",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_cf097_f000_f0_pg_s3/authorization.json": "cd3eaf333a7d7e22dbfbd1ffbe44b55a33980b03c0a0aee86cba4f50cb59b23f",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_f000_f0_pg_s3.json": "3a17f96b6067018daf24ddf69c0fa07e26d9bbf25f689aedaac7e26dc5767793",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_f000_f0_pg_s3-settlement.json": "754bf6187160965475afe42ec449da2b3f87fe803f2d1a5e9c918bd2410e08ba",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_f000_f0_pg_s4.json": "867de1ec8dbcf4ef0d4c057bde10612289a1cd28ce7cce73e29cfb9f43c27dc9",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_cf097_f000_f0_pg_s4/authorization.json": "edf9c972be5642ecd367a07edc0637d877ff0d036852efd51c70f85398fb7997",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_f000_f0_pg_s4.json": "01daef2f4a5371d121cc4804feb2328f26d0d6e890106fff4e3ceffa1fc57040",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_f000_f0_pg_s4-settlement.json": "8f6446a19800cb7b12f3d70b71fa1ec28e41ca08905c224bcfdcb8d749a64b22",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s2.json": "a8cb583e89575312c5f7c05741dd9d16bb9eddf8bbd0ba6b6be6477c99545f2d",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_cf097_t004_f0_pg_s2/authorization.json": "936795b1e753220a3ac52c92c1fff37c750646beffd572f8bfaaeb232bd11437",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t004_f0_pg_s2.json": "145745a693b94168b27572495dceeb95516eb28baf078ae18cf2018a31b04fc5",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t004_f0_pg_s2-settlement.json": "908518ed6250417e370c6f6707409178ed00a36f0bfdd2ad7c08684838a4ee63",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s3.json": "65bc57ef3a3177eb57afc5514b3efafd18a5b70fe04e78a5580b93ebf1d1198e",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_cf097_t004_f0_pg_s3/authorization.json": "050a4ca6f114942db407d9e760678de5c24dfa75bcc2fc935217dafb46207bc9",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t004_f0_pg_s3.json": "daf192107e8697352c402ab9388d6894aaff50af208ada092987ab4904a27015",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t004_f0_pg_s3-settlement.json": "88ab2db97a29e6e2aa97958f7a1a0f0afc3a0880c85c07332aa37f339271437a",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t004_f0_pg_s4.json": "e2e77ac3f4edeaac26612a1184a5d448541371820d23a0996330630ee7047c7e",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_cf097_t004_f0_pg_s4/authorization.json": "6a252de003438a56b22a16c0cbc24150df11588c9ca31dccf0fb387035bed010",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t004_f0_pg_s4.json": "3bb1c83147a51d7d5e9700690f80c28207f40ae12ac7cf10399e08845f5d52ef",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t004_f0_pg_s4-settlement.json": "2ec53d343b28e58619099609ff55e9f7a56dbbf4811ee2c9bc2be102950674b1",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s2.json": "301f82e278ce69c5204f83d52b14d8b52800ae7e8851b5c5d92850b66490eaaf",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_cf097_t005_f0_pg_s2/authorization.json": "6f18704ff2f6aedf37e2b805aa863e31a6a957cce7a28481ac6c6e9ad8733a39",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t005_f0_pg_s2.json": "e6305aafab549246a75e784f07d96c10beaabe208663967f6fa3ef1e6e566954",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t005_f0_pg_s2-settlement.json": "8edbdbeac081c3e48de2e51fc3f7f54f7363b16efb3dec509531e0a539901c0d",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s3.json": "1ebc48e244c5b5390ac6abf7516869f68d069405f30616f58b376d1012049e95",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_cf097_t005_f0_pg_s3/authorization.json": "476527059f03913993b85fccb1cdb564c83eb8b6413902d170c8595d05e43faf",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t005_f0_pg_s3.json": "2a0b2085b782401c9cb3fbb76a50ba316103642c7bf72d238399d46bb557d987",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t005_f0_pg_s3-settlement.json": "0b9cabcba3cf047644d7dc4662776dd0565867c0b7b327b01b96c659544102ee",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s4.json": "19eb93a4f1eaed1e965e0a852198f4e1eb1d11f13a078f13fb2225bb06ee33d6",
+    "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_cf097_t005_f0_pg_s4/authorization.json": "49d175c8fc621291304c81fce3fb4efcb1f64055a1673821c19eddcc97824ce7",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t005_f0_pg_s4.json": "f6085247654ec4eb405595e7880855c6dcb20155905fd64d3e757fbd2d17a95d",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/calibration_gpu0_v1_ledgers/CAL_GPU0_V1_cf097_t005_f0_pg_s4-settlement.json": "ada9e80e4255b1cd7b743db65b4adc9d176a5917f1058422a64412343a222124",
+    "/ml2/alz/analysis/followfaith097/frozen_design.json": "39a630d9aab36a3500fd8d1ff4b8fcaa173780ab6f532ad85885550ff63168f6",
+    "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json": "b3ec603f6091ddd413fd5f264be0036503dd304339a60ae6f744a9597b607a3c"
+  },
+  "qualified_calibration_GPU_seconds": 49989.12545234102,
+  "unchanged_frozen_benchmark_candidate": "t005",
+  "real_scalar_LR_fits": 0,
+  "next_unexplored_public_axis": "reg_coeff; consider only a separately declared fresh study if actual calibration outcomes and remaining authorized resources justify it. Do not silently reactivate the skipped old nominal-anchor design or alter the frozen45/six-fit plans.",
+  "limitations": "Four adaptively reused calibration donors. Two-seed exploratory and three-seed fresh-initialization confirmation groups are not pooled or treated as biological replication. Native full20k fixed-formulation evidence only; excludes older sampled-row/500-update/warmstart variants. This coverage ledger does not supply an external ranking or SOTA claim.",
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
