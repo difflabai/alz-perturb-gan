@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-08T14:16:59.534035+00:00",
+  "UTC": "2026-11-08T14:29:01.984105+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -15,7 +15,7 @@
     "reuse_500step_or_20k_weights": false,
     "existing_checkpoints": "read-only diagnosis and explicitly labeled evaluation only; no training initialization"
   },
-  "project_GPU_hour_cap": 1024,
+  "project_GPU_hour_cap": 1124,
   "core_GPU_hour_cap": 180,
   "research_window_path": "/ml2/alz/analysis/research_window_20261104_five_days.json",
   "research_window_expires_UTC": "2026-11-09T06:26:46.606656+00:00",
@@ -886,5 +886,14 @@
     "completed_fit_proof_path": "/ml2/alz/analysis/benchmark097_twentysecond_model_PG_full20k_audited_next_fresh_seed3_fit_20261108.json",
     "subsequent_fresh_fit": "CAL_GPU0_V1_external097_f0_pg_s3"
   },
-  "latest_current_worker_and_CPU_queue_liveness_path": "/ml2/alz/analysis/released097_goal_index_current_workers_reconciled_20261108T1416Z.json"
+  "latest_current_worker_and_CPU_queue_liveness_path": "/ml2/alz/analysis/released097_goal_index_current_workers_reconciled_20261108T1416Z.json",
+  "latest_explicit_project_budget_extension_authorization_path": "/ml2/alz/analysis/owner_add100GPUh_authorization_20261108.json",
+  "latest_project_budget_extension_application_proof_path": "/ml2/alz/analysis/owner_add100GPUh_canonical_application_20261108.json",
+  "latest_canonical_budget_after_owner_extension": {
+    "revision": 582,
+    "cap_GPU_hours": 1124.0,
+    "charged_GPU_hours": 111.77803989933113,
+    "reserved_GPU_hours": 12.016666666666667,
+    "available_after_reservations_GPU_hours": 1000.2052934340021
+  }
 }
