@@ -1,0 +1,76 @@
+{
+  "status": "MEASURED_LATE_PG_CADENCE_CHANGE_BOTH_NATIVE_JOBS_REMAIN_LIVE",
+  "UTC": "2026-11-08T13:50:18.111407+00:00",
+  "attempt": "CAL_GPU0_V1_external097_f2_pg_s2",
+  "current_completed_updates": 19001,
+  "current_progress_mtime_unix": 1794145792.217168,
+  "current_progress_SHA256_at_observation": "ffd61f442cb83341bc13d97b8e67fc72e4593cc36504cfe1c48adff54b865984",
+  "earlier_verified_point": {
+    "UTC": "2026-11-08T13:03:41.009675+00:00",
+    "updates": 10001,
+    "proof_path": "/ml2/alz/analysis/benchmark097_fold2_seed2_native_PG10000_live_root_check_20261108.json",
+    "proof_SHA256": "1dd1cf368fc6abedbfd9a545a5981bc5469e811d1a9782a585a1bcc3a588303f"
+  },
+  "later_verified_point": {
+    "UTC": "2026-11-08T13:25:05.929176+00:00",
+    "updates": 15501,
+    "proof_path": "/ml2/alz/analysis/benchmark097_fold2_seed2_native_PG15000_live_root_check_20261108.json",
+    "proof_SHA256": "0ab37a039e9ae2e319e716d8abc77ebb8de2eb35d2b3017b499d9dd4f6b3c441"
+  },
+  "earlier_interval_updates_per_minute": 256.82542738527553,
+  "recent_interval_updates_per_minute": 138.87215157999037,
+  "recent_to_earlier_rate_ratio": 0.5407258657907806,
+  "owned_process_utilization_snapshot": [
+    {
+      "gpu_index": "0",
+      "pid": 2732554,
+      "SM_utilization_percent": "-",
+      "memory_utilization_percent": "-"
+    },
+    {
+      "gpu_index": "1",
+      "pid": 2707896,
+      "SM_utilization_percent": "9",
+      "memory_utilization_percent": "0"
+    }
+  ],
+  "nvidia_smi_pmon_exit_code": 0,
+  "snapshot_not_integrated_service_measurement": true,
+  "cause_not_established_by_this_observation": true,
+  "native_processes_verified_live": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s4",
+      "guard": {
+        "pid": 2707855,
+        "birth": 29780353,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 2707896,
+        "birth": 29780483,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      }
+    },
+    {
+      "attempt": "CAL_GPU0_V1_external097_f2_pg_s2",
+      "guard": {
+        "pid": 2732468,
+        "birth": 29831474,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 2732554,
+        "birth": 29831619,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      }
+    }
+  ],
+  "native_errors_or_unsettled_results": false,
+  "production_blocked": false,
+  "existing_window_and_native_guards_unchanged": true,
+  "proposed_resolution": "Ask the coordinator about shared GPU0 compute service and coordinate peers only at their normal safe boundaries; preserve admitted fits, desktop/Nano and existing protections. Continue current native jobs.",
+  "no_new_admission_or_model_change": true,
+  "quality_or_evaluation_target_values_inspected": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
