@@ -154,7 +154,7 @@
   "latest_local_coordinate_tradeoff_path": "/ml2/alz/analysis/localfaith097_t001_seed0_tradeoff_20261107.json",
   "latest_release_recheck_path": "/ml2/alz/analysis/released097_particle_sliders_new_develop_compatibility_20261107.json",
   "lowest_observed_paired_distance_is_not_final_selection": true,
-  "latest_shared_capacity_observation_path": "/ml2/alz/artifacts/alz-shared-capacity-20261107T2151.json",
+  "latest_shared_capacity_observation_path": "/ml2/alz/artifacts/benchmark097-after-capacity-continuation-v2/current_capacity_decomposition_20261108.json",
   "original_research_pipeline_superseded_evidence_path": "/ml2/alz/analysis/released097_adaptive_CPU_handoff_20261107.json",
   "optional_followup_prepared_protocol_path": "/ml2/alz/analysis/followfaith097/protocol.json",
   "optional_followup_design_source_path": "/ml2/alz/analysis/released097_followup_design.py",
@@ -402,7 +402,7 @@
   "resource_only_handoff_observed_PID": 474542,
   "resource_only_after_handoff_observed_PID": 475880,
   "latest_native_progress_observation": {
-    "UTC": "2026-11-08T03:25:36.673469+00:00",
+    "UTC": "2026-11-08T03:30:15.206332+00:00",
     "completed_benchmark_models": 14,
     "active_metadata": [
       {
@@ -423,10 +423,12 @@
     ],
     "last_observed_training": {
       "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s2",
-      "phase": "AE",
-      "total_optimizer_updates": 11500,
-      "completed_epochs": 201,
-      "native_loss": 372.2484436035156,
+      "phase": "FM",
+      "AE_optimizer_updates_completed": 17100,
+      "FM_optimizer_updates_completed": 4000,
+      "total_optimizer_updates": 21100,
+      "FM_completed_epochs": 70,
+      "native_loss": 6.610221862792969,
       "real_scalar_fits": 0
     }
   },
@@ -473,5 +475,6 @@
   },
   "countfm_native_sampler_resolution_CPU_review_path": "/ml2/alz/analysis/countfm_native_sampler_resolution_CPU_review_20261108.json",
   "countfm_real_ALZ_fits": 0,
-  "latest_scalar_runtime_cost_recovery_evidence_path": "/ml2/alz/analysis/scalarcal097_runtime_cost_recovery_v6_20261108.json"
+  "latest_scalar_runtime_cost_recovery_evidence_path": "/ml2/alz/analysis/scalarcal097_runtime_cost_recovery_v6_20261108.json",
+  "latest_shared_capacity_observation": "GPU0 transient workload departed;03:29 measured native admission margin21.54GB andhost capacity fit. Existing scheduler still requires contiguous300s stability plus6GiB scheduling margin before any new admission; no source or physical guard changed."
 }
