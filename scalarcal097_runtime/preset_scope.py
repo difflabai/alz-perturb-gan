@@ -7,7 +7,7 @@ MODEL_DIR=ROOT/'analysis/adaptive_lr097/model';CONTROLLER_DIR=ROOT/'analysis/ada
 MODEL_PROOF=CONTROLLER_DIR/'ALZ_integration_CPU_qualification.json'
 NATIVE_PROOF=ROOT/'analysis/distribution097/native_release.json';ENGINE_PROOF=ROOT/'analysis/shared_gpu0_candidate_CPU_qualification.json'
 ENDPOINT_PROOF=STUDY/'endpoint_CPU_qualification.json'
-RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v4.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
+RUNTIME_PROOF=STUDY/'runtime_CPU_qualification_v5.json';WINDOW=ROOT/'analysis/research_window_20261104_five_days.json'
 CFG=dict(z_dim=8,stage_balance=False,cell_z_dim=8,theta_init_scale=1.,fourier_feature_scale=1.)
 ENABLED=dict(enabled=True,experiment='scalarcal097',fold=0,training_seeds=[5,6,7],arms=['fixed','adaptive'],endpoint=20000,all_training_from_scratch=True,calibration_only=True)
 def read(p):return json.loads(Path(p).read_bytes())
@@ -45,13 +45,21 @@ def proof_source_pins():
    pins[path]=pin
  return pins
 def handoff_paths(root=ROOT):
- root=Path(root);common=[root/'analysis/benchmark097/matrix_complete.json',root/'analysis/benchmark097/comparison.json',root/'analysis/benchmark097_calibration_excluded53_report.json']
+ root=Path(root)
+ if (root/'analysis/benchmark097_infra1/scientific_reports_completed.json').exists():
+  from scalarcal097_recovered_handoff import paths
+  return paths(root)
+ common=[root/'analysis/benchmark097/matrix_complete.json',root/'analysis/benchmark097/comparison.json',root/'analysis/benchmark097_calibration_excluded53_report.json']
  barrier=root/'analysis/benchmark097_balanced/scientific_reports_completed.json'
  if barrier.exists():return [*common,barrier,root/'artifacts/released097-balanced-research-pipeline/completed.json']
  return [*common,root/'artifacts/released097-dual-research-pipeline-v2/completed.json',root/'artifacts/released097-dual-calibration53-boundary-v2/completed.json']
 def prior_study_ready(root=ROOT):
  """Accept either qualified resource lineage; hash, never parse target reports."""
- root=Path(root);matrix,primary,sensitivity,parent,child=handoff_paths(root)
+ root=Path(root)
+ if (root/'analysis/benchmark097_infra1/scientific_reports_completed.json').exists():
+  from scalarcal097_recovered_handoff import ready
+  return ready(root)
+ matrix,primary,sensitivity,parent,child=handoff_paths(root)
  paths=(matrix,primary,sensitivity,parent,child)
  assert all(p.is_file() for p in paths),'All45 and both scientific reports must finish before scalar calibration'
  q=read(matrix);assert q['matrix_complete'] and q['complete_cells']==q['required_cells']==45 and len(q['result_SHA256'])==45
@@ -78,7 +86,7 @@ def prior_study_ready(root=ROOT):
  return {str(p):sha(p) for p in paths}
 
 def protocol_paths():
- return [ROOT/'analysis/released097_remaining_runtime_balance.py',ROOT/'analysis/run_scalarcal097.py',ROOT/'analysis/after_benchmark097_scalarcal.py',ROOT/'analysis/aggregate_scalarcal097.py',PROTOCOL,RESOURCE_PROTOCOL,PLAN,MODEL_PROOF,ENDPOINT_PROOF,NATIVE_PROOF,ENGINE_PROOF,WINDOW,CONTROLLER_DIR/'published_integration_sources.json',*map(Path,protocol()['fidelity_evidence_SHA256']),ROOT/'benchmark097_runtime/resource_profile.py',*[ROOT/f'benchmark097_dual_runtime/policy.gpu{i}.prepared.json' for i in (0,1)]]
+ return [ROOT/'analysis/scalarcal097_recovered_handoff.py',ROOT/'analysis/released097_remaining_runtime_balance.py',ROOT/'analysis/run_scalarcal097.py',ROOT/'analysis/after_benchmark097_scalarcal.py',ROOT/'analysis/aggregate_scalarcal097.py',PROTOCOL,RESOURCE_PROTOCOL,PLAN,MODEL_PROOF,ENDPOINT_PROOF,NATIVE_PROOF,ENGINE_PROOF,WINDOW,CONTROLLER_DIR/'published_integration_sources.json',*map(Path,protocol()['fidelity_evidence_SHA256']),ROOT/'benchmark097_runtime/resource_profile.py',*[ROOT/f'benchmark097_dual_runtime/policy.gpu{i}.prepared.json' for i in (0,1)]]
 def validate_authorization(auth,*,require_runtime_proof=True,require_activation=True,require_handoff=True):
  p=protocol();v=auth['cell'];assert v==cell(auth['arm'],v['seed'])
  assert auth['operation']=='scalarcal097_cell' and auth['metric_role']=='calibration_selection' and auth['role']=='alz_core_pg'
