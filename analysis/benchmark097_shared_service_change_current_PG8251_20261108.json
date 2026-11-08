@@ -1,0 +1,77 @@
+{
+  "status": "READ_ONLY_CURRENT_SHARED_GPU_SERVICE_CHANGE_OBSERVED_NO_FOREIGN_CONTROL",
+  "UTC": "2026-11-08T14:32:26.643849+00:00",
+  "attempt": "CAL_GPU0_V1_external097_f0_pg_s3",
+  "native_step": 8501,
+  "progress_age_seconds": 34.95562028884888,
+  "CFGen_native_total_updates": 53200,
+  "process_identities": [
+    {
+      "pid": 2999150,
+      "birth": 30375522,
+      "state": "S",
+      "owned_current_ALZ": true
+    },
+    {
+      "pid": 2999210,
+      "birth": 30375659,
+      "state": "R",
+      "owned_current_ALZ": true
+    },
+    {
+      "pid": 3019176,
+      "birth": 30418277,
+      "state": "S",
+      "owned_current_ALZ": true
+    },
+    {
+      "pid": 3019224,
+      "birth": 30418412,
+      "state": "R",
+      "owned_current_ALZ": true
+    },
+    {
+      "pid": 3084306,
+      "birth": 30554085,
+      "state": "R",
+      "owned_current_ALZ": false
+    },
+    {
+      "pid": 3300286,
+      "birth": 23759526,
+      "state": "R",
+      "owned_current_ALZ": false
+    }
+  ],
+  "gpu_snapshot": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47, 100 %, 39745 MiB, 8794 MiB\nGPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69, 6 %, 483 MiB, 48059 MiB\n",
+  "pmon_snapshot": "# gpu         pid   type     sm    mem    enc    dec    jpg    ofa     fb   ccpm    command \n# Idx           #    C/G      %      %      %      %      %      %     MB     MB    name \n    0       5667     C      -      -      -      -      -      -    262      0    nano-work-serve\n    0       9595     G      -      -      -      -      -      -    427      0    gnome-shell    \n    0      10841   C+G      -      -      -      -      -      -     81      0    listener-brave \n    0      10848     G      -      -      -      -      -      -      8      0    Xwayland       \n    0      12924     G      -      -      -      -      -      -    726      0    Codex --change-\n    0    2396487   C+G      -      -      -      -      -      -    298      0    Codex --change-\n    0    2556660   C+G      -      -      -      -      -      -      9      0    Battle.net.exe \n    0    2562614   C+G     61     11      -      -      -      -   3414      0    SC2_x64.exe    \n    0    2999210     C     12      2      -      -      -      -   1108      0    python         \n    0    3084306     C      -      -      -      -      -      -  26848      0    python         \n    0    3300286     C     24      4      -      -      -      -   5996      0    python         \n    1       9595     G      -      -      -      -      -      -      4      0    gnome-shell    \n    1    3019224     C      5      0      -      -      -      -    460      0    python         \n",
+  "guarded_job_remains_active": true,
+  "worker_running_observed": true,
+  "native_errors_observed": false,
+  "shared_load_context": "Other compute allocations were visible on both cards at the initial snapshot. At the later snapshot the large other GPU1 allocation was no longer visible and PG had advanced to8501. Substantial other GPU0 allocations remain. These are point snapshots, not integrated service measurements or proof of causation. No exclusive access requested.",
+  "new_foreign_signals_or_process_controls": false,
+  "scientific_or_resource_guard_changes": false,
+  "primary_risk": "Reduced service can extend remaining work within the fixed wall-clock window; native guarded jobs continue while actual admissible.",
+  "quality_values_inspected": false,
+  "full_goal_complete": false,
+  "initial_observation_UTC": "2026-11-08T14:31:50.731611+00:00",
+  "initial_observation_native_step": 8251,
+  "initial_observation_progress_age_seconds": 150.0308313369751,
+  "initial_snapshot_GPU0": {
+    "total_used_MiB": 39746,
+    "free_MiB": 8793,
+    "owned_PG_PID": 2999210,
+    "owned_PG_SM_percent": 22,
+    "other_compute_PID_memory_MiB": {
+      "3084306": 26848,
+      "3300286": 5996
+    }
+  },
+  "initial_snapshot_GPU1": {
+    "total_used_MiB": 14761,
+    "free_MiB": 33782,
+    "other_compute_PID": 3095175,
+    "other_compute_memory_MiB": 14272,
+    "other_compute_SM_percent": 97
+  }
+}
