@@ -1,6 +1,6 @@
 {
   "status": "ACTIVE_OWNER_REQUESTED_PG_DISTRIBUTION_SOTA_RESEARCH",
-  "UTC": "2026-11-08T00:54:37.543901+00:00",
+  "UTC": "2026-11-08T01:00:58.103487+00:00",
   "objective": "Use the current released ParticleGAN formulation to pursue state-of-the-art ALZ distribution matching against external algorithms. Keep the PG formulation fixed; improve its application through evidence-led hyperparameter tuning and training choices, selecting settings for full-length performance rather than the 500-update endpoint. Minimize cell-distribution energy distance while tracking donor-level energy score and predictive spread to expose tradeoffs. Start by diagnosing the completed c014 20,000-update run and its saved checkpoints, then run reproducible, matched experiments with fresh-seed confirmation. Keep calibration tuning separate from held-out evaluation. Evaluate a frozen PG candidate against matched external algorithms and resampling across the planned folds and seeds, retain negative results and failures, and claim SOTA only if the completed comparison supports it. Use available shared capacity on either GPU within the existing authorized compute budget and run window; report actual progress, results, uncertainty and remaining gaps.",
   "native_goal_status": "active",
   "full_goal_complete": false,
@@ -37,8 +37,8 @@
   "native_model_parity_path": "/ml2/alz/analysis/faithful097/native_trainer_parity_CPU.json",
   "study_status": "ORIGINAL_NATIVE_GUARDS_CONTINUE_CPU_DISPATCHER_RESOURCE_HANDOFF_DRAINING",
   "study_protocol_path": "/ml2/alz/analysis/benchmark097/protocol.json",
-  "study_progress_path": "/ml2/alz/artifacts/benchmark097-dual-fullmatrix/progress.json",
-  "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-dual-fullmatrix/identity.json",
+  "study_progress_path": "/ml2/alz/artifacts/benchmark097-balanced-handoff/progress.json",
+  "study_driver_identity_path": "/ml2/alz/artifacts/benchmark097-balanced-handoff/identity.json",
   "faithful_restart_started": true,
   "faithful_restart_started_evidence_path": "/ml2/alz/analysis/faithful097_started_20261107.json",
   "study_required_fits": 45,
@@ -132,8 +132,8 @@
   "calibration_excluded53_observer_started_evidence_path": "/ml2/alz/analysis/released097_dual_pipeline_v2_started_20261107.json",
   "calibration_excluded53_observer_started": true,
   "latest_released_third20k_tradeoff_path": "/ml2/alz/analysis/faithful097_third20k_tradeoff_readout_20261107.json",
-  "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory_v2.py",
-  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_after_scalar_LR_CPU_integration_20261107.json",
+  "provenance_and_cost_inventory_source_path": "/ml2/alz/analysis/released097_provenance_and_cost_inventory_v3.py",
+  "latest_corrected_provenance_cost_snapshot_path": "/ml2/alz/analysis/released097_provenance_cost_scalar_queue_actual_20261108.json",
   "historical_recipe_disclosure_corrected_by_append_only_snapshot": true,
   "matched_seed0_calibration_comparison_path": "/ml2/alz/analysis/released097_matched_seed0_calibration_comparison_20261107.json",
   "current_calibration_distance_reference": {
@@ -350,11 +350,10 @@
     "separate_runtime_first27_test_record": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification.json",
     "endpoint_CPU_parity_qualified": true,
     "endpoint_CPU_parity_proof_path": "/ml2/alz/analysis/scalarcal097/endpoint_CPU_qualification.json",
-    "current_runtime_qualification_pending_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v2.json",
     "separate_runtime_CPU_qualification_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v4.json",
     "separate_runtime_CPU_tests": 35,
-    "separate_runtime_source_version": "v3_cost_and_capacity_aware_12_bindings",
-    "separate_runtime_current_qualification_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v3.json",
+    "separate_runtime_source_version": "v4_35tests_cost_capacity_aware_12_bindings",
+    "separate_runtime_current_qualification_path": "/ml2/alz/analysis/scalarcal097/runtime_CPU_qualification_v4.json",
     "scientific_worker_model_auditor_endpoint_unchanged": true,
     "balanced_scientific_handoff_barrier_prepared": true,
     "separate_runtime_native_cell_card_bindings": 12,
@@ -364,7 +363,12 @@
     "separate_runtime_queued_after_full_scientific_reports": true,
     "queue_source_path": "/ml2/alz/analysis/after_benchmark097_scalarcal.py",
     "queue_upstream_identity_path": "/ml2/alz/artifacts/after-balanced-handoff-pipeline/identity.json",
-    "existing45_unchanged": true
+    "existing45_unchanged": true,
+    "queue_identity_path": "/ml2/alz/artifacts/scalarcal097-after-balanced-science-v3/identity.json",
+    "queue_progress_path": "/ml2/alz/artifacts/scalarcal097-after-balanced-science-v3/progress.json",
+    "queue_unified_exec_session": 28880,
+    "queue_PID": 481315,
+    "queue_birth": 25686088
   },
   "latest_external_native_root_audit_path": "/ml2/alz/analysis/benchmark097_eleventh_complete_all_nine_seed0_cells_root_check_20261107.json",
   "latest_GPU0_native5000_runtime_evidence_path": "/ml2/alz/analysis/benchmark097_current_GPU0_second_fresh5000_runtime_20261107.json",
@@ -390,7 +394,20 @@
   "resource_only_after_handoff_unified_exec_session": 44953,
   "original_readonly_observer_session": 43150,
   "original_readonly_observer_superseded": true,
-  "next_scalar_calibration_work": "Adapt the disabled separate scalar-calibration scope to the verified balanced45/57/53 metadata completion barrier; qualify all12 possible6cell/card bindings and cost-only physical scheduling, keeping its fixed PG formulation, fresh seeds5..7 and one-scalar calibration controller unchanged. No real scalar fits yet.",
+  "next_scalar_calibration_work": "The qualified v4 CPU observer is live, waiting for all45 frozen models and both original57/prespecified53 reports. It then rechecks release/capacity, verifies all12 actual cell/card closures and runs six fresh fixed/adaptive20k calibration fits; only calibration cell ED changes the common LR scale. Actual scalar fits0 at this snapshot.",
   "resource_only_replacement_CPU_proof_path": "/ml2/alz/analysis/benchmark097_balanced/runtime_CPU_qualification_v2.json",
-  "resource_only_CPU_observation_resumed_proof_path": "/ml2/alz/analysis/benchmark097_balanced/CPU_observation_resumed_after_procfs_race_20261108.json"
+  "resource_only_CPU_observation_resumed_proof_path": "/ml2/alz/analysis/benchmark097_balanced/CPU_observation_resumed_after_procfs_race_20261108.json",
+  "resource_only_handoff_observed_PID": 474542,
+  "resource_only_after_handoff_observed_PID": 475880,
+  "latest_native_progress_observation": {
+    "UTC": "2026-11-08T01:00:58.103487+00:00",
+    "pg_f0_seed1_updates": 16751,
+    "cfgen_f1_seed1_native_FM_updates": 88500,
+    "original_models_restarted": false,
+    "same_native_guard_PIDs": [
+      4158163,
+      4016637
+    ],
+    "real_scalar_fits": 0
+  }
 }
