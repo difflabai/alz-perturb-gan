@@ -1,0 +1,131 @@
+{
+  "status": "TWENTYFIFTH_MODEL_PG_FULL20K_AUDITED_NEXT_FRESH_FOLD1_SEED3_NATIVE_FIT_LIVE",
+  "UTC": "2026-11-08T15:58:21.922547+00:00",
+  "successful_logical_models_fully_audited": 25,
+  "required_successful_logical_models": 45,
+  "retained_infrastructure_failures": 3,
+  "completed_attempt": "CAL_GPU0_V1_external097_f0_pg_s3",
+  "source_result_path": "/ml2/alz/analysis/benchmark097/results/CAL_GPU0_V1_external097_f0_pg_s3.json",
+  "source_result_SHA256": "b0f2b851a0ae17eb2252123d2f7cf5fa69e84693a2b3e841983adc92f232592b",
+  "authorization_path": "/ml2/alz/artifacts/allocations/CAL_GPU0_V1_external097_f0_pg_s3/authorization.json",
+  "authorization_SHA256": "2138387953237b50add0e9a3b928da0c79980df8c51c58356a8575ac91105e8b",
+  "completed_native_optimizer_pairs": 20000,
+  "all_training_from_scratch": true,
+  "final_checkpoint_actual_SHA256": "e758b67dda6f3c54351a6289f46433ca6abc895dc29a814be0e2d601323c23ba",
+  "native_restore_actual_SHA256": "1007c5237d838dda80ac6243ecb9583346abee356f02ec7ad080151d2d48b490",
+  "independent_CPU_saved_score_audit_passed": true,
+  "exact_native_CUDA_restore_passed": true,
+  "all_result_file_hashes_actually_verified": 56,
+  "own_guard_and_worker_absent": true,
+  "owned_registry_lease_actually_absent": true,
+  "canonical_settlement_verified": true,
+  "actual_charged_GPU_seconds": 7227.577630049025,
+  "next_fresh_attempt": "CAL_GPU0_V1_external097_f1_pg_s3",
+  "next_authorization_actual_SHA256": "49ee1c0e3d6b9ddfb539676566ced2cd1851570eff4ef6a5ee28ef1d224345e5",
+  "next_initial_completed_updates": 0,
+  "next_source_model_path": null,
+  "verified_live_workers": [
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 2,
+        "method": "cfgen",
+        "seed": 4
+      },
+      "gpu": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+      "identity": {
+        "pid": 3373542,
+        "birth": 31047160,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "guard_identity": {
+        "pid": 3373467,
+        "birth": 31047020,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f2_cfgen_s4",
+      "native_progress": {
+        "phase": "FM",
+        "total_optimizer_updates": 23350,
+        "completed_epochs": 109
+      }
+    },
+    {
+      "cell": {
+        "experiment": "external097",
+        "fold": 1,
+        "method": "pg",
+        "seed": 3
+      },
+      "gpu": "GPU-72c1b506-891d-b8bc-b353-e020585e1c47",
+      "identity": {
+        "pid": 3397508,
+        "birth": 31099666,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "guard_identity": {
+        "pid": 3397427,
+        "birth": 31099529,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "attempt": "CAL_GPU0_V1_external097_f1_pg_s3",
+      "native_progress": {
+        "step": 751
+      }
+    }
+  ],
+  "all_six_CPU_queues_verified_live": [
+    {
+      "name": "benchmark097-after-capacity-continuation-v6",
+      "pid": 2283066,
+      "birth": 28901418,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "benchmark097-infra1-pipeline",
+      "pid": 2348403,
+      "birth": 29037448,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "scalarcal097-after-recovered-science-v5",
+      "pid": 2348719,
+      "birth": 29037941,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "dispersion097-after-scalarcal097",
+      "pid": 2348925,
+      "birth": 29038447,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "released097-final-independent-audits",
+      "pid": 2368995,
+      "birth": 29080116,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    },
+    {
+      "name": "benchmark097-donor-matched-supplement-observer",
+      "pid": 2369483,
+      "birth": 29080902,
+      "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+    }
+  ],
+  "updated_full_queue_forecast_path": "/ml2/alz/analysis/released097_full_queue25_constrained_metadata_forecast_20261108.json",
+  "updated_full_queue_forecast_SHA256": "f384eea6d2ba26d37ab9e21d818f53ee289aa64fb7131b0baffb046d1ce8b1f5",
+  "canonical_budget_snapshot": {
+    "revision": 588,
+    "cap_GPU_hours": 1124.0,
+    "charged_GPU_hours": 115.52638456461364,
+    "reserved_GPU_hours": 12.016666666666667,
+    "available_after_reservations_GPU_hours": 996.4569487687196
+  },
+  "low_overhead_scenario_full_queue_margin_hours": -0.2527038766337359,
+  "twofold_scalar_overhead_scenario_full_queue_margin_hours": -2.81488692328806,
+  "low_overhead_45_and_scalar_before_theta_window_margin_hours": 3.848545701779486,
+  "forecast_is_conditional_not_guarantee": true,
+  "quality_or_evaluation_target_values_inspected": false,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
