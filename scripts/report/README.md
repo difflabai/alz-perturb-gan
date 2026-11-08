@@ -15,7 +15,7 @@ python3 -m http.server 8765 --directory docs
 
 Open `http://localhost:8765`. Modify `report.template.html` rather than the generated `docs/index.html`. Styles and explorer behavior live in `docs/report.css` and `docs/report.js`.
 
-The builder reads nine committed analysis JSON files and `docs/evidence/stage-profiles.json`. It exports all 2,000 gene results to CSV/JSON, embeds the same data in the page, and renders four scientific figures to SVG and PNG with Matplotlib. It checks every gene's four-stage profile against its independently aggregated endpoint contrast, screen counts, hashes, duplicate HTML IDs, internal anchors, local asset paths, and public exports for machine paths/known donor-ID prefixes. Exact figure bytes may vary with plotting dependencies/fonts; the manifest records the artifacts produced by the current build.
+The builder reads nine committed analysis JSON files and `docs/evidence/stage-profiles.json`. It exports all 2,000 gene results to CSV/JSON, embeds the same data in the page, and renders five scientific figures to SVG and PNG with Matplotlib. It checks every gene's four-stage profile against its independently aggregated endpoint contrast, screen counts, hashes, duplicate HTML IDs, internal anchors, local asset paths, and public exports for machine paths/known donor-ID prefixes. Exact figure bytes may vary with plotting dependencies/fonts; the manifest records the artifacts produced by the current build.
 
 ## Verify the explorer
 
@@ -38,3 +38,7 @@ python3 scripts/report/export_stage_profiles.py --state artifacts/primamente-t00
 ```
 
 Those retained artifacts and raw datasets are not bundled with the public repository. The export contains per-gene real stage means and per-model stage means, never individual donor records or raw generated cells. Source hashes and all endpoint reconstructions are checked by the report build. The 2026-11-08 study snapshot is rooted at research commit `89fa5ea`; the public repository also preserves the earlier experiment history.
+
+## Brand assets and dataset context
+
+The report uses the official [DiffLab brand kit](https://branding.difflab.ai/): unmodified logo assets, navy/amber/paper tokens, and locally served Space Grotesk, Inter, and JetBrains Mono. Brand asset origins and hashes are in `docs/brand/manifest.json`; font licenses are bundled. Scientific chart text is rendered as vector paths for consistent typography. The main story is concise; the explorer and full methods sit in expandable sections. The displayed dataset is explicitly SEA-AD, an independent proof of concept that does not use Prima Mente’s forthcoming challenge atlas.

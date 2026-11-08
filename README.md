@@ -4,6 +4,8 @@
 
 We trained five ParticleGAN 0.9.7 models of human microglial gene-expression distributions at four Alzheimer’s neuropathology stages. This repository contains the research code, experiment history, aggregate results, and a shareable report examining what the trained models actually support.
 
+**Dataset: SEA-AD middle temporal gyrus.** This is an independent proof of concept. Prima Mente’s challenge atlas is planned for Spring 2027 and was not used for training or analysis here. These are not challenge benchmark results.
+
 The current model conditions on **pathology stage**, not gene edits or compounds. It is an observational proof of concept for generating cell populations and prioritizing experiments. It does not predict a treatment response, and we have not demonstrated state-of-the-art performance.
 
 ## What the model says

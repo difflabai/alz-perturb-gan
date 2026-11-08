@@ -2,9 +2,11 @@
 
 This replaces the earlier literature-only draft. The [full evidence report](https://difflabai.github.io/alz-perturb-gan/) examines the trained model, all 2,000 genes, donor sensitivity, external cohort support, and model errors. The [original draft](archive/early-literature-suggestions.md) remains available as historical work.
 
+This analysis uses public **SEA-AD** data, not Prima Mente’s forthcoming challenge atlas. It is preparation for the challenge, not a result on its training set.
+
 ## Suggested optional registration answer
 
-> I’d like to test whether reducing CLEC5A in human stem-cell-derived microglia improves amyloid-β clearance without increasing synapse loss. Our analysis of human microglial gene expression, supported by a trained generative model, prioritizes CLEC5A as a pathology-associated candidate. Published mouse knockout results motivate testing whether the benefit translates to human cells, including across APOE3 and APOE4 backgrounds.
+> I’d like to test whether reducing CLEC5A in human stem-cell-derived microglia improves amyloid-β clearance without increasing synapse loss. In an independent proof of concept using public SEA-AD data, our trained generative model and donor-level analyses prioritize CLEC5A as a pathology-associated candidate. Published mouse knockout results motivate testing whether the benefit translates to human cells, including across APOE3 and APOE4 backgrounds.
 
 ## What supports that answer
 

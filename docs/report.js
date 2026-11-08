@@ -3,6 +3,18 @@
   const data = JSON.parse(document.getElementById('report-data').textContent);
   const byGene = new Map(data.rows.map(row => [row.gene, row]));
   const $ = id => document.getElementById(id);
+  const themeToggle = $('theme-toggle');
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    themeToggle.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    themeToggle.setAttribute('aria-label', `Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`);
+    try { localStorage.setItem('alz-report-theme', theme); } catch {}
+  }
+  applyTheme(document.documentElement.dataset.theme || 'dark');
+  themeToggle.addEventListener('click', () => applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'));
+  function openDisclosure(id) { const target = document.getElementById(id); if (target?.tagName === 'DETAILS') target.open = true; }
+  document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', () => openDisclosure(link.hash.slice(1))));
+  openDisclosure(location.hash.slice(1));
   const pageSize = 12;
   let page = 0;
   let selected = 'CLEC5A';
@@ -56,14 +68,14 @@
     const top = Math.max(...profile.real, ...profile.model_by_seed.flat(), .01) * 1.14;
     const x = i => 55 + i * 120;
     const y = value => 224 - value / top * 180;
-    shape('text', {x: 55, y: 17, fill: '#58656b', 'font-size': 11}, 'Mean log1p(panel CP10k)');
-    for (let i = 0; i <= 4; i++) { const value = top * i / 4; shape('line', {x1: 55, x2: 415, y1: y(value), y2: y(value), stroke: '#d6dcda', 'stroke-width': .7}); shape('text', {x: 45, y: y(value) + 4, fill: '#58656b', 'font-size': 10, 'text-anchor': 'end'}, value.toFixed(top < .1 ? 3 : 2)); }
-    ['Not AD', 'Low', 'Interm.', 'High'].forEach((label, i) => shape('text', {x: x(i), y: 247, 'text-anchor': 'middle', 'font-size': 11, fill: '#58656b'}, label));
+    shape('text', {x: 55, y: 17, fill: 'var(--dl-fg-muted)', 'font-size': 11}, 'Mean log1p(panel CP10k)');
+    for (let i = 0; i <= 4; i++) { const value = top * i / 4; shape('line', {x1: 55, x2: 415, y1: y(value), y2: y(value), stroke: 'var(--dl-border)', 'stroke-width': .7}); shape('text', {x: 45, y: y(value) + 4, fill: 'var(--dl-fg-muted)', 'font-size': 10, 'text-anchor': 'end'}, value.toFixed(top < .1 ? 3 : 2)); }
+    ['Not AD', 'Low', 'Interm.', 'High'].forEach((label, i) => shape('text', {x: x(i), y: 247, 'text-anchor': 'middle', 'font-size': 11, fill: 'var(--dl-fg-muted)'}, label));
     const line = (values, color, width, opacity) => shape('polyline', {points: values.map((v, i) => `${x(i)},${y(v)}`).join(' '), fill: 'none', stroke: color, 'stroke-width': width, opacity});
-    for (const seed of profile.model_by_seed) line(seed, '#11676a', 1.2, .23);
-    line(means, '#11676a', 2.6, 1); line(profile.real, '#1b2934', 2, 1);
-    means.forEach((v, i) => shape('circle', {cx: x(i), cy: y(v), r: 3.5, fill: '#11676a'}));
-    profile.real.forEach((v, i) => shape('rect', {x: x(i) - 3, y: y(v) - 3, width: 6, height: 6, fill: '#1b2934'}));
+    for (const seed of profile.model_by_seed) line(seed, 'var(--dl-accent)', 1.2, .23);
+    line(means, 'var(--dl-accent)', 2.6, 1); line(profile.real, 'var(--dl-fg)', 2, 1);
+    means.forEach((v, i) => shape('circle', {cx: x(i), cy: y(v), r: 3.5, fill: 'var(--dl-accent)'}));
+    profile.real.forEach((v, i) => shape('rect', {x: x(i) - 3, y: y(v) - 3, width: 6, height: 6, fill: 'var(--dl-fg)'}));
     $('detail-chart').replaceChildren(svg);
   }
   function drawDetail() {
