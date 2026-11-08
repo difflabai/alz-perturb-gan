@@ -1,0 +1,183 @@
+{
+  "status": "METADATA_FORECAST_WITH_EXPLICIT_UNMEASURED_SCALAR_MEASUREMENT_OVERHEAD_SCENARIOS",
+  "UTC": "2026-11-08T03:25:36.673469+00:00",
+  "completed_benchmark_successes": 14,
+  "failed_attempts_retained": 2,
+  "active_metadata": [
+    {
+      "attempt": "CAL_GPU0_V1_external097_f0_cfgen_s2",
+      "guard": {
+        "pid": 980409,
+        "birth": 26518725,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "worker": {
+        "pid": 980480,
+        "birth": 26518853,
+        "boot": "d43f3bf5-3308-4943-b16a-1daecba7a614"
+      },
+      "elapsed_seconds": 172.341402053833,
+      "conditional_remaining_seconds": 6722.45474761317
+    }
+  ],
+  "pending_untouched_original_counts": {
+    "pg": 9,
+    "scvi": 11,
+    "cfgen": 8
+  },
+  "method_card_settled_seconds": {
+    "pg": [
+      8663.332578796486,
+      2175.035395207
+    ],
+    "scvi": [
+      547.5640669695131,
+      151.39532082949881
+    ],
+    "cfgen": [
+      14844.17624244999,
+      6894.796149667003
+    ]
+  },
+  "cost_source_attempts": {
+    "pg": [
+      [
+        "CAL_GPU0_V1_external097_f1_pg_s0",
+        "CAL_GPU0_V1_external097_f0_pg_s1"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f0_pg_s0",
+        "CAL_GPU0_V1_external097_f2_pg_s0",
+        "CAL_GPU0_V1_external097_f1_pg_s1"
+      ]
+    ],
+    "scvi": [
+      [
+        "CAL_GPU0_V1_external097_f0_scvi_s0",
+        "CAL_GPU0_V1_external097_f2_scvi_s0"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f1_scvi_s0",
+        "CAL_GPU0_V1_external097_f0_scvi_s1"
+      ]
+    ],
+    "cfgen": [
+      [
+        "CAL_GPU0_V1_external097_f1_cfgen_s0"
+      ],
+      [
+        "CAL_GPU0_V1_external097_f2_cfgen_s0",
+        "CAL_GPU0_V1_external097_f1_cfgen_s1",
+        "CAL_GPU0_V1_external097_f0_cfgen_s1"
+      ]
+    ]
+  },
+  "untouched_originals": {
+    "counts_per_lane": {
+      "cfgen": [
+        3,
+        5
+      ],
+      "pg": [
+        1,
+        8
+      ],
+      "scvi": [
+        10,
+        1
+      ]
+    },
+    "predicted_lane_seconds": [
+      58671.50197584159,
+      58748.113978433685
+    ],
+    "predicted_makespan_seconds": 58748.113978433685,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "two_fresh_replacements": {
+    "counts_per_lane": {
+      "cfgen": [
+        0,
+        1
+      ],
+      "pg": [
+        1,
+        0
+      ],
+      "scvi": [
+        0,
+        0
+      ]
+    },
+    "predicted_lane_seconds": [
+      8663.332578796486,
+      6894.796149667003
+    ],
+    "predicted_makespan_seconds": 8663.332578796486,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "separate_six_fresh_scalar_fits": {
+    "counts_per_lane": {
+      "cfgen": [
+        0,
+        0
+      ],
+      "pg": [
+        1,
+        5
+      ],
+      "scvi": [
+        0,
+        0
+      ]
+    },
+    "predicted_lane_seconds": [
+      8663.332578796486,
+      10875.176976035
+    ],
+    "predicted_makespan_seconds": 10875.176976035,
+    "conditional_on_cost_assumptions": true,
+    "not_a_native_admission": true
+  },
+  "GPU1_only_scenario_hours": 29.233759707514636,
+  "remaining_authorized_window_hours": 27.17474637263351,
+  "does_not_include_CPU_reports_or_resource_wait_or_new_preemptions": true,
+  "capacity_guaranteed": false,
+  "quality_or_target_values_read": false,
+  "SOTA_claim": false,
+  "full_goal_complete": false,
+  "cost_samples_as_of_UTC": "2026-11-08T03:16:17.519681+00:00",
+  "supersedes_forecast_path": "/ml2/alz/analysis/benchmark097_capacity_recovery_metadata_forecast_20261108.json",
+  "previous_unscaled_scalar_forecast_not_a_measured_runtime": true,
+  "scalar_measurements_per_fit": 20,
+  "fullwidth_generated_cells_per_scalar_measurement": 640000,
+  "fullwidth_generated_cells_for_LR_measurements_alone_per_fit": 12800000,
+  "scalar_measurement_GPU_overhead_measured": false,
+  "scalar_future_cost_multiplier_used_by_queue": 1.15,
+  "overhead_scenarios": [
+    {
+      "scalar_cost_multiplier": 1.15,
+      "originals_plus_replacements_hours": 18.725401821452824,
+      "separate_scalar_hours": 3.4740148673445135,
+      "combined_hours": 22.19941668879734,
+      "conditional_on_both_cards_and_metadata_medians": true
+    },
+    {
+      "scalar_cost_multiplier": 2.0,
+      "originals_plus_replacements_hours": 18.725401821452824,
+      "separate_scalar_hours": 6.041764986686111,
+      "combined_hours": 24.767166808138935,
+      "conditional_on_both_cards_and_metadata_medians": true
+    },
+    {
+      "scalar_cost_multiplier": 5.0,
+      "originals_plus_replacements_hours": 18.725401821452824,
+      "separate_scalar_hours": 15.104412466715278,
+      "combined_hours": 33.8298142881681,
+      "conditional_on_both_cards_and_metadata_medians": true
+    }
+  ],
+  "caution": "The1.15x queue allowance is an unmeasured scheduling assumption. Twenty fullwidth two-replicate calibration measurements generate12.8million cells per fit before any endpoint reuse/extra generation. Actual first scalar-fit wall charge will update placement estimates; these scenarios do not guarantee completion inside the authorized window."
+}
