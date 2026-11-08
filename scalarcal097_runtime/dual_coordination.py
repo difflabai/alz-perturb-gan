@@ -19,7 +19,7 @@ def identity(pid):
   p=Path('/proc',str(pid));v=(p/'stat').read_text().rsplit(')',1)[1].split()
   if v[0]=='Z' or p.stat().st_uid!=os.getuid():return None
   return dict(pid=pid,birth=int(v[19]),boot=Path('/proc/sys/kernel/random/boot_id').read_text().strip())
- except (FileNotFoundError,PermissionError):return None
+ except (FileNotFoundError,ProcessLookupError,PermissionError):return None
 def validate_active_peers(state,auth):
  if any(state.get(k) for k in ('holds','project_holds','execution_holds')):raise ValueError('Project hold remains active')
  rows=state.get('open_reservations',[])

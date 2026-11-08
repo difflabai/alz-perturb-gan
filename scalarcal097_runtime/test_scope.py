@@ -98,4 +98,8 @@ class Scope(unittest.TestCase):
     auth,_=prepare.build_authorization(arm='fixed',seed=5,gpu=d.GPUS[0],check_only=True)
    self.assertEqual(auth['files_SHA256'][str(path)],s.sha(path))
 
+ def test_exiting_upstream_stat_race_is_missing_handle_not_success(self):
+  with patch.object(Path,'read_text',side_effect=ProcessLookupError(3,'No such process')):
+   self.assertIsNone(d.identity(os.getpid()))
+
 if __name__=='__main__':unittest.main(verbosity=2)
