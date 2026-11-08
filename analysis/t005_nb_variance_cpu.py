@@ -26,7 +26,8 @@ def components(np,mean,variance,theta):
  gamma=(variance+mean**2)/theta;poisson=mean;total=variance+gamma+poisson
  return dict(mean_variation=variance,gamma_excess=gamma,poisson=poisson,total=total)
 def main():
- assert os.environ.get('CUDA_VISIBLE_DEVICES')=='';plan=read(PLAN);assert plan['new_optimizer_updates']==0 and plan['saved_updates']==[10000,20000] and plan['bags_per_stage']==200 and plan['cells_per_bag']==400 and plan['source_SHA256']==sha(__file__)
+ assert os.environ.get('CUDA_VISIBLE_DEVICES')=='';plan=read(PLAN);assert plan['status']=='PRESPECIFIED_READONLY_CURRENT_T005_RAW_COUNT_VARIANCE_DIAGNOSTIC' and plan['new_optimizer_updates']==0 and plan['saved_updates']==[10000,20000] and plan['bags_per_stage']==200 and plan['cells_per_bag']==400 and plan['source_SHA256']==sha(__file__)
+ assert [g['seed'] for g in plan['checkpoint_groups']]==list(range(5)) and all([x['completed_updates'] for x in g['checkpoints']]==[10000,20000] for g in plan['checkpoint_groups'])
  for p,pin in plan['input_SHA256'].items():assert sha(p)==pin,p
  assert not RESULT.exists();STATE.mkdir(exist_ok=False)
  spec=importlib.util.spec_from_file_location('strict_native_saved_generation',ROOT/'analysis/diagnose_t005_calibration_checkpoints_multiseed_cpu.py');loader=importlib.util.module_from_spec(spec);spec.loader.exec_module(loader);m=loader.m;np=m.np;torch=m.torch;torch.set_num_threads(1);torch.set_grad_enabled(False);assert not torch.cuda.is_initialized();Moments=moments_class(np)

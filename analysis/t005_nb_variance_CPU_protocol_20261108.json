@@ -1,0 +1,173 @@
+{
+  "status": "PRESPECIFIED_READONLY_CURRENT_T005_RAW_COUNT_VARIANCE_DIAGNOSTIC",
+  "UTC": "2026-11-08T04:34:55.557678+00:00",
+  "source_SHA256": "3b2fc7265a63196ea772cdd47c7d84edad28b37b8fc3c0bbe10728c158c856b7",
+  "math_test_source_SHA256": "fa93b29e42736e9e88ceb3510af26b6fad56ae3280502eb53f82a6854a698ab9",
+  "CPU_math_tests": 6,
+  "math_test_stdout": "",
+  "math_test_stderr": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.019s\n\nOK\n",
+  "checkpoint_groups": [
+    {
+      "seed": 0,
+      "existing_attempt": "CAL_GPU0_V1_lf097_t005_f0_pg_s0",
+      "checkpoints": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/checkpoint10000.pt",
+          "SHA256": "8a31f2a9f40a962b1eec6d5569821ddfb3cc592bae0d5ee956507fb4cc7f9a9d",
+          "completed_updates": 10000
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/final.pt",
+          "SHA256": "ac55507c73d5927e464d1567e1a5366787909832796c0dd18189ffa2c0ac5351",
+          "completed_updates": 20000
+        }
+      ]
+    },
+    {
+      "seed": 1,
+      "existing_attempt": "CAL_GPU0_V1_lf097_t005_f0_pg_s1",
+      "checkpoints": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s1/fit/checkpoint10000.pt",
+          "SHA256": "6b3e1dbe4d9399c25941e3a722b293b2f8385f25c55a9a888695cd99fb969c6f",
+          "completed_updates": 10000
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s1/fit/final.pt",
+          "SHA256": "939eb69f8eaae43b2f52a799232e68d7deab4bd68126cf88dee7a276df722237",
+          "completed_updates": 20000
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "existing_attempt": "CAL_GPU0_V1_cf097_t005_f0_pg_s2",
+      "checkpoints": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s2/fit/checkpoint10000.pt",
+          "SHA256": "eaafa8d8c5f93a734fa1df6a906d7d95aeb16954dc9dcfb30d2d8ce8d488c121",
+          "completed_updates": 10000
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s2/fit/final.pt",
+          "SHA256": "c042196acb6ef72563299fb6025ad61892d06c44cc25813ed18ebeaf93759606",
+          "completed_updates": 20000
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "existing_attempt": "CAL_GPU0_V1_cf097_t005_f0_pg_s3",
+      "checkpoints": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s3/fit/checkpoint10000.pt",
+          "SHA256": "3ca09c4f08de1960e8e3f432f0c2c97923de8dd8399d6ed098f8bea7ff44df64",
+          "completed_updates": 10000
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s3/fit/final.pt",
+          "SHA256": "e758b67dda6f3c54351a6289f46433ca6abc895dc29a814be0e2d601323c23ba",
+          "completed_updates": 20000
+        }
+      ]
+    },
+    {
+      "seed": 4,
+      "existing_attempt": "CAL_GPU0_V1_cf097_t005_f0_pg_s4",
+      "checkpoints": [
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s4/fit/checkpoint10000.pt",
+          "SHA256": "da3a922e1d3879710cf555e8b468ddcd2c10af7e9e073594589be1454ea06489",
+          "completed_updates": 10000
+        },
+        {
+          "path": "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s4/fit/final.pt",
+          "SHA256": "3b626768f52d56aa05598a2977a4a72d630b429872400bedd231e186330bfea9",
+          "completed_updates": 20000
+        }
+      ]
+    }
+  ],
+  "saved_updates": [
+    10000,
+    20000
+  ],
+  "fitting_cache": "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0",
+  "hyperparameters": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "bags_per_stage": 200,
+  "cells_per_bag": 400,
+  "generation_probe_replicates": 2,
+  "schedule_seed_base": 20261108,
+  "latent_seed_base": 700000000,
+  "CPU_threads": 1,
+  "CPU_wall_cap_seconds": 1200,
+  "new_training_fits": 0,
+  "new_optimizer_updates": 0,
+  "new_RNA_count_draws": 0,
+  "new_GPU_allocations": 0,
+  "fullwidth_conditional_mean_vectors": 6400000,
+  "input_SHA256": {
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s0.json": "4f8f7940b9e2a3c6233613fc89469cc316d0128890100b80bc2271b86436c089",
+    "/ml2/alz/analysis/faithful097/model/released_adapter.py": "b3fe9b78771f1a85fa86646ae2e6c74e8725af211a7484ee0e08fb5b62093f09",
+    "/ml2/alz/analysis/faithful097/model/released_update.py": "7cba670fbc51740938b01ecb5f637bbc8cc23f4ed889e8f00d829b886643e3a8",
+    "/ml2/alz/calibration.py": "ce1ea5d5086db11712aa075b81daca799f2101a9ca3d8df3ff03e0b3d45da747",
+    "/ml2/alz/analysis/scalarcal097/protocol.json": "118f6248b61f47be8f6232f627d9ca7980c3325adb6d7d1238ebab53394dd004",
+    "/ml2/alz/analysis/benchmark097/protocol.json": "fd92d0afe5cfa9e6b152ae8a14858ffacb62b804d38bd876e2e589862db71de8",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/checkpoint05000.pt": "2c3ec06b27b310f9644f871238d852e1bdf1c4d6d63e5ca5e5992c4a23b8a042",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/checkpoint10000.pt": "8a31f2a9f40a962b1eec6d5569821ddfb3cc592bae0d5ee956507fb4cc7f9a9d",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s0/fit/final.pt": "ac55507c73d5927e464d1567e1a5366787909832796c0dd18189ffa2c0ac5351",
+    "/ml2/alz/analysis/t005_checkpoint_CPU_native_generation_loader_check_20261108.json": "9d9ffba74f760b72cca2f2de7bfb17bd65c3fe3404707bf53e3f0f60dfa220dd",
+    "/ml2/alz/artifacts/native-releases/particlegan-0.9.7/site-packages/particlegan/recipes.py": "55a1e6e2ec4d8e640de9b3e9cbe4ad2a305f48f2bed9342634595ae8a465d786",
+    "/ml2/alz/artifacts/native-releases/particlegan-0.9.7/site-packages/particlegan/moment_tether.py": "b2ae60a4322e788e6eeb0113eff9dd0260c91285680715f9b7f835e1561af587",
+    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/pg_model.py": "47740d4039e680c48c9e5855753d7ebd797fe4f68109aaa75c3d56b57f13af85",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/generation.py": "4d092c75060eff24aa19e3ccbb8c6fdb8f592edd8e8b3b3c7f2084aa52a5f085",
+    "/ml2/alz/artifacts/t005-checkpoint-calibration-CPU-20261108/failure.json": "c6785413e2e15f814236a07d41909716f6f139bf569bdb0907f6c719232847db",
+    "/ml2/alz/artifacts/t005-checkpoint-calibration-CPU-v2-20261108/failure.json": "c6785413e2e15f814236a07d41909716f6f139bf569bdb0907f6c719232847db",
+    "/ml2/alz/analysis/t005_checkpoint_CPU_calibration_result_v3_20261108.json": "dbb94c0b578235920d8a339fb1e88e7ed14a0fc24068907c31973bb12eae063c",
+    "/ml2/alz/analysis/t005_checkpoint_CPU_calibration_root_audit_20261108.json": "7ada4ebcdbf52ddb03ee5f611d8aa4755316d73600a3ba32f90a1661a37c849a",
+    "/ml2/alz/analysis/diagnose_t005_calibration_checkpoints_cpu_v3.py": "d30f682f4857ac666a3ac2802033a02f226a7cc653b38371e27272ccf0e5503f",
+    "/ml2/alz/analysis/localfaith097/results/CAL_GPU0_V1_lf097_t005_f0_pg_s1.json": "5277287475c5b1e8e7b2861aad146a5ac88d13a92a6ef3012a7eb50f12347535",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s1/fit/checkpoint05000.pt": "e836525672d837de511f0539736a0e87e29bdb66c7e5bd0691cfe5b52d471d62",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s1/fit/checkpoint10000.pt": "6b3e1dbe4d9399c25941e3a722b293b2f8385f25c55a9a888695cd99fb969c6f",
+    "/ml2/alz/runs/CAL_GPU0_V1_lf097_t005_f0_pg_s1/fit/final.pt": "939eb69f8eaae43b2f52a799232e68d7deab4bd68126cf88dee7a276df722237",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s2.json": "301f82e278ce69c5204f83d52b14d8b52800ae7e8851b5c5d92850b66490eaaf",
+    "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s2/fit/checkpoint05000.pt": "8b6c2f01cef456f35ad4424356a316e91fc6aa38a5155cf08b8cf8f01371e5a0",
+    "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s2/fit/checkpoint10000.pt": "eaafa8d8c5f93a734fa1df6a906d7d95aeb16954dc9dcfb30d2d8ce8d488c121",
+    "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s2/fit/final.pt": "c042196acb6ef72563299fb6025ad61892d06c44cc25813ed18ebeaf93759606",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s3.json": "1ebc48e244c5b5390ac6abf7516869f68d069405f30616f58b376d1012049e95",
+    "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s3/fit/checkpoint05000.pt": "db7f7106f6cf088b44f3ba3313596483c8ba8c89da0a8e2a2fd7d99525c1cd0a",
+    "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s3/fit/checkpoint10000.pt": "3ca09c4f08de1960e8e3f432f0c2c97923de8dd8399d6ed098f8bea7ff44df64",
+    "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s3/fit/final.pt": "e758b67dda6f3c54351a6289f46433ca6abc895dc29a814be0e2d601323c23ba",
+    "/ml2/alz/analysis/confirmfaith097/results/CAL_GPU0_V1_cf097_t005_f0_pg_s4.json": "19eb93a4f1eaed1e965e0a852198f4e1eb1d11f13a078f13fb2225bb06ee33d6",
+    "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s4/fit/checkpoint05000.pt": "1483c2c48ebb5c59c40a9392e5a29154d1b914bdae047a17d597bd8af5de87e7",
+    "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s4/fit/checkpoint10000.pt": "da3a922e1d3879710cf555e8b468ddcd2c10af7e9e073594589be1454ea06489",
+    "/ml2/alz/runs/CAL_GPU0_V1_cf097_t005_f0_pg_s4/fit/final.pt": "3b626768f52d56aa05598a2977a4a72d630b429872400bedd231e186330bfea9",
+    "/ml2/alz/analysis/t005_checkpoint_CPU_calibration_protocol_v3_20261108.json": "42eb2ea7a1aa64956c81782cd7acd811a7e88577d4484af180d33f6571667f01",
+    "/ml2/alz/analysis/t005_checkpoint_CPU_multiseed_protocol_20261108.json": "3a512d68ae0a8796328de7e53397074592254fa7dbd649b4a7393c06de2856d2",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0/manifest.json": "553fbe2ad8d901782e834a1e3a77fc959e95cf6aef51b9ca88528aea29f6c631",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0/train/counts_hvg.npz": "bf0e24ccadc1e78b789cdc18c571e049ea5b9bca5b5457929038c01ba2b104f7",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0/train/real_pcs.npy": "b1c644f9733771c17f31b569fc1a50df4a200bc8aed7dd9f676177bfed732dae",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/caches/fold0/train/metadata.npz": "5b7bb88301bc592786c585a7026e372e026a39d9b918d71bd804febc36be0a6a",
+    "/ml2/alz/analysis/diagnose_t005_calibration_checkpoints_multiseed_cpu.py": "dee69f5bcc30bbb8454f9092245aea8f6a532c5cbf7756b2058356e55eaaaa6a",
+    "/ml2/alz/analysis/faithful097/model/release_env.py": "841568c7d2132ac307bbc399f8739713aa1636a90259680dbae84f37c5dd115c",
+    "/ml2/alz/analysis/released097_count_observation_source_review_20261108.json": "3a7ef6bcdacd2e47b9ea7066a8795edccc8531b19430e0539fdc989e3a1874ce",
+    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/stage_law.py": "403b04bbaa285f5cc2ffbace9b67c133448c83c7304083da2aba9cc4daa6c5ae"
+  },
+  "formula": "Stage-conditional NB variance = variation in mu + expected Gamma excess mu^2/theta + Poisson mean mu; sum per-gene marginal variances only.",
+  "reference": "Same fitting-only hierarchical donor/cell/library traces across all ten snapshots. Fitting counts, not heldout evaluation targets.",
+  "source_states_immutable": true,
+  "critics_and_optimizers_and_update_policies_not_constructed": true,
+  "native_Gamma_and_Poisson_forward_already_present": true,
+  "not_a_decomposition_of_PCA_energy_distance": true,
+  "no_automatic_hyperparameter_or_checkpoint_selection": true,
+  "existing_frozen45_and_separate_six_fresh_fits_unchanged": true,
+  "full_goal_complete": false,
+  "SOTA_claim": false
+}
