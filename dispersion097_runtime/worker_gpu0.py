@@ -73,6 +73,12 @@ def main():
  if layout.fixture_mode:
   b.require('torch' not in sys.modules and os.environ.get('CUDA_VISIBLE_DEVICES')=='','Fixture exposed CUDA/model')
   if auth.get('fixture_fail_exit'):return 7
+  if auth.get('fixture_dual_barrier'):
+   barrier=layout.fixture_root/'dual_barrier';barrier.mkdir(exist_ok=True)
+   (barrier/(auth['allocation_id']+'.ready')).write_text('CPU_ONLY\n');deadline=time.monotonic()+5
+   while len(list(barrier.glob('*.ready')))<2:
+    if time.monotonic()>deadline:raise TimeoutError('Both confined CPU guards must overlap')
+    time.sleep(.02)
   out=Path(auth['output_dir']);out.mkdir(parents=True,exist_ok=False)
   (out/'CPU_FIXTURE_COMPLETE.json').write_text(json.dumps(dict(status='CPU_BINDING_FIXTURE_ONLY',allocation_id=auth['allocation_id'],attempt_id=auth['attempt_id'],model_imported=False,CUDA_VISIBLE_DEVICES=''))+'\n');return 0
  return scientific(auth,admission,layout)

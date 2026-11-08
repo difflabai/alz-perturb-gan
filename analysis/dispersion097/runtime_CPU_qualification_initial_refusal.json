@@ -1,0 +1,29 @@
+{
+  "status": "INITIAL_CPU_QUALIFICATION_REFUSED_MISSING_CONFINED_FIXTURE_OVERLAP_BARRIER",
+  "UTC": "2026-11-08T05:18:23.990229+00:00",
+  "test_groups": {
+    "test_integration.py": {
+      "tests": 13,
+      "passed": 13
+    },
+    "test_scope.py": {
+      "tests": 8,
+      "passed": 8
+    },
+    "test_driver.py": {
+      "tests": 13,
+      "passed": 13
+    },
+    "test_pair.py": {
+      "tests": 1,
+      "failed": 1
+    }
+  },
+  "failed_assertion": "Expected two simultaneous confined worker ready markers, observed0. Both fixtures otherwise exited0, but actual overlap was unproven.",
+  "cause": "New scientific worker fixture path omitted the existing CPU-only dual-barrier branch. Test correctly refused broad simultaneous-guard qualification.",
+  "resolution": "Restore the exact inherited CPU-only overlap barrier and rerun all source/guard/accounting closures after the worker source change.",
+  "actual_ALZ_training_fits": 0,
+  "new_GPU_allocations": 0,
+  "live_models_modified": false,
+  "qualified": false
+}
