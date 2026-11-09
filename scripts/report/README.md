@@ -41,7 +41,7 @@ Those retained artifacts and raw datasets are not bundled with the public reposi
 
 ## Brand assets and dataset context
 
-The report uses the official [DiffLab brand kit](https://branding.difflab.ai/): unmodified logo assets, navy/amber/paper tokens, and locally served Space Grotesk, Inter, and JetBrains Mono. Brand asset origins and hashes are in `docs/brand/manifest.json`; font licenses are bundled. Scientific chart text is rendered as vector paths for consistent typography. The main story is concise; the explorer and full methods sit in expandable sections. The displayed dataset is explicitly SEA-AD, an independent proof of concept that does not use Prima Mente’s forthcoming challenge atlas.
+The report uses the official [DiffLab brand kit](https://branding.difflab.ai/): unmodified logo assets, navy/amber/paper tokens, and locally served Space Grotesk, Inter, and JetBrains Mono. Brand asset origins and hashes are in `docs/brand/manifest.json`; font licenses are bundled. Scientific chart text is rendered as vector paths for consistent typography. The main story is concise; the explorer opens expanded by default, and the full methods sit in an expandable section. The displayed dataset is explicitly SEA-AD, an independent proof of concept that does not use Prima Mente’s forthcoming challenge atlas.
 
 Styles, scripts, and images receive content-versioned URLs in generated HTML so readers receive the assets that match each published revision. The main page focuses on model-versus-observation fit; resampling remains an empirical calibration reference inside the methods disclosure.
 
