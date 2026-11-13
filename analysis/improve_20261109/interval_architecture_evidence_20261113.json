@@ -1,0 +1,544 @@
+{
+  "scope": "Frozen inference and interval-construction audit; no optimizer updates, default changes or sealed donors.",
+  "definition": "Frozen, development-only audit of PC-summary intervals and donor geometry.\n\nNo optimizer updates or default/metric changes. The existing score averages\ncoordinatewise central percentile coverage across 50 PC means and 50 PC SDs\nof 64 cells; it is neither a patient-level clinical interval nor simultaneous\ncoverage of all coordinates. With M=32, interpolated sample percentiles have\nfinite-sample undercoverage even for iid exchangeable perfect-model draws.\n\nTraining-fitted shifts/width factors below are DIAGNOSTICS, not conformal\nintervals: these calibration donors were used to train the generator. Held-out\ndonors enter only reported evaluations. The rank-order interval has a perfect\niid-model marginal coverage calculation, not a guarantee for this fitted GAN.\n",
+  "n_fits": 18,
+  "summary": {
+    "train": {
+      "raw": {
+        "PC means": {
+          "coverage": 0.7529969907407408,
+          "below": 0.12344444444444444,
+          "above": 0.12355856481481481,
+          "width_ratio_to_raw": 1.0
+        },
+        "PC standard deviations": {
+          "coverage": 0.7660533950617284,
+          "below": 0.11183032407407406,
+          "above": 0.12211628086419751,
+          "width_ratio_to_raw": 1.0
+        },
+        "all coordinates": {
+          "coverage": 0.7595251929012347,
+          "below": 0.11763738425925926,
+          "above": 0.12283742283950619,
+          "width_ratio_to_raw": 1.0
+        }
+      },
+      "finite_rank": {
+        "PC means": {
+          "coverage": 0.8153854166666666,
+          "below": 0.09193873456790123,
+          "above": 0.0926758487654321,
+          "width_ratio_to_raw": 1.1687598741983445
+        },
+        "PC standard deviations": {
+          "coverage": 0.8279226851851852,
+          "below": 0.0826940586419753,
+          "above": 0.08938325617283953,
+          "width_ratio_to_raw": 1.1630898073712066
+        },
+        "all coordinates": {
+          "coverage": 0.8216540509259259,
+          "below": 0.08731639660493827,
+          "above": 0.0910295524691358,
+          "width_ratio_to_raw": 1.166757145106578
+        }
+      },
+      "center_only": {
+        "PC means": {
+          "coverage": 0.7560021604938272,
+          "below": 0.12172746913580247,
+          "above": 0.12227037037037038,
+          "width_ratio_to_raw": 1.0
+        },
+        "PC standard deviations": {
+          "coverage": 0.7758408179012346,
+          "below": 0.09396188271604938,
+          "above": 0.13019729938271607,
+          "width_ratio_to_raw": 1.0
+        },
+        "all coordinates": {
+          "coverage": 0.7659214891975308,
+          "below": 0.10784467592592592,
+          "above": 0.1262338348765432,
+          "width_ratio_to_raw": 1.0
+        }
+      },
+      "train_width_only": {
+        "PC means": {
+          "coverage": 0.8000000000000002,
+          "below": 0.09935254629629629,
+          "above": 0.10064745370370372,
+          "width_ratio_to_raw": 1.1159497653954535
+        },
+        "PC standard deviations": {
+          "coverage": 0.8000000000000002,
+          "below": 0.09195177469135801,
+          "above": 0.10804822530864198,
+          "width_ratio_to_raw": 1.0779417841708692
+        },
+        "all coordinates": {
+          "coverage": 0.8000000000000002,
+          "below": 0.09565216049382716,
+          "above": 0.10434783950617282,
+          "width_ratio_to_raw": 1.1022931358941641
+        }
+      },
+      "train_shift_and_width": {
+        "PC means": {
+          "coverage": 0.8000000000000002,
+          "below": 0.09914344135802468,
+          "above": 0.10085655864197532,
+          "width_ratio_to_raw": 1.1100883813805922
+        },
+        "PC standard deviations": {
+          "coverage": 0.8000000000000002,
+          "below": 0.08066041666666668,
+          "above": 0.11933958333333333,
+          "width_ratio_to_raw": 1.0573589263674055
+        },
+        "all coordinates": {
+          "coverage": 0.8000000000000002,
+          "below": 0.08990192901234567,
+          "above": 0.11009807098765433,
+          "width_ratio_to_raw": 1.091472497372603
+        }
+      }
+    },
+    "heldout": {
+      "raw": {
+        "PC means": {
+          "coverage": 0.8245773979107313,
+          "below": 0.08453288224121557,
+          "above": 0.09088971984805319,
+          "width_ratio_to_raw": 1.0
+        },
+        "PC standard deviations": {
+          "coverage": 0.5114087725546059,
+          "below": 0.45766915954415954,
+          "above": 0.03092206790123457,
+          "width_ratio_to_raw": 1.0
+        },
+        "all coordinates": {
+          "coverage": 0.6679930852326685,
+          "below": 0.27110102089268756,
+          "above": 0.06090589387464386,
+          "width_ratio_to_raw": 1.0
+        }
+      },
+      "finite_rank": {
+        "PC means": {
+          "coverage": 0.8748625949667617,
+          "below": 0.05985428537511869,
+          "above": 0.06528311965811966,
+          "width_ratio_to_raw": 1.167985403010424
+        },
+        "PC standard deviations": {
+          "coverage": 0.5915212488129156,
+          "below": 0.3854558404558405,
+          "above": 0.023022910731244062,
+          "width_ratio_to_raw": 1.1643300515872526
+        },
+        "all coordinates": {
+          "coverage": 0.7331919218898385,
+          "below": 0.2226550629154796,
+          "above": 0.044153015194681865,
+          "width_ratio_to_raw": 1.1667289505168619
+        }
+      },
+      "center_only": {
+        "PC means": {
+          "coverage": 0.8260116927825262,
+          "below": 0.08376602564102564,
+          "above": 0.09022228157644824,
+          "width_ratio_to_raw": 1.0
+        },
+        "PC standard deviations": {
+          "coverage": 0.5586265432098766,
+          "below": 0.41063568376068377,
+          "above": 0.03073777302943969,
+          "width_ratio_to_raw": 1.0
+        },
+        "all coordinates": {
+          "coverage": 0.6923191179962013,
+          "below": 0.2472008547008547,
+          "above": 0.06048002730294397,
+          "width_ratio_to_raw": 1.0
+        }
+      },
+      "train_width_only": {
+        "PC means": {
+          "coverage": 0.8627759971509972,
+          "below": 0.06518399810066478,
+          "above": 0.07204000474833808,
+          "width_ratio_to_raw": 1.1159497653954535
+        },
+        "PC standard deviations": {
+          "coverage": 0.5624566714150048,
+          "below": 0.4095533594491928,
+          "above": 0.027989969135802466,
+          "width_ratio_to_raw": 1.077941784170869
+        },
+        "all coordinates": {
+          "coverage": 0.712616334283001,
+          "below": 0.2373686787749288,
+          "above": 0.05001498694207027,
+          "width_ratio_to_raw": 1.1023184690056782
+        }
+      },
+      "train_shift_and_width": {
+        "PC means": {
+          "coverage": 0.8620690883190884,
+          "below": 0.06523652659069328,
+          "above": 0.07269438509021842,
+          "width_ratio_to_raw": 1.1100883813805922
+        },
+        "PC standard deviations": {
+          "coverage": 0.5953979700854701,
+          "below": 0.37582086894586897,
+          "above": 0.028781160968660964,
+          "width_ratio_to_raw": 1.0573589263674055
+        },
+        "all coordinates": {
+          "coverage": 0.7287335292022792,
+          "below": 0.22052869776828113,
+          "above": 0.050737773029439694,
+          "width_ratio_to_raw": 1.0915353760263617
+        }
+      }
+    },
+    "geometry": {
+      "PC means": {
+        "real_within_stage_effective_dimension": 15.024037575913528,
+        "generated_within_target_effective_dimension": 15.647736662576127,
+        "within_trace_SD_ratio": 1.3579910312046994
+      },
+      "PC standard deviations": {
+        "real_within_stage_effective_dimension": 2.8351195000806104,
+        "generated_within_target_effective_dimension": 8.015068909612202,
+        "within_trace_SD_ratio": 1.367983843405348
+      }
+    },
+    "scale_levels": {
+      "train": {
+        "real_PC_sd_mean": 0.8982962779201296,
+        "generated_PC_sd_mean": 0.9018533248263725
+      },
+      "heldout": {
+        "real_PC_sd_mean": 0.7386329460270701,
+        "generated_PC_sd_mean": 0.900662345252418
+      }
+    }
+  },
+  "finite_sample_null": {
+    "32": {
+      "interpolated_empirical": 0.75438,
+      "interpolated_uniform_exact": 0.7515151515151516,
+      "rank_empirical": 0.82166,
+      "rank_exact": 0.8181818181818182,
+      "ranks": [
+        3,
+        30
+      ],
+      "scope": "iid perfect Uniform(0,1) simulation; not fitted-model coverage"
+    },
+    "128": {
+      "interpolated_empirical": 0.78654,
+      "interpolated_uniform_exact": 0.7875968992248062,
+      "rank_empirical": 0.81354,
+      "rank_exact": 0.813953488372093,
+      "ranks": [
+        12,
+        117
+      ],
+      "scope": "iid perfect Uniform(0,1) simulation; not fitted-model coverage"
+    }
+  },
+  "projection_control_per_fold": {
+    "0": {
+      "fixed_random": {
+        "train_mean_SD": 0.9851200462952493,
+        "heldout_mean_SD": 0.9922621350604864,
+        "heldout_to_train_ratio": 1.0072499679527347
+      },
+      "train_PCA": {
+        "train_mean_SD": 0.9040839672088623,
+        "heldout_mean_SD": 0.763359785079956,
+        "heldout_to_train_ratio": 0.844346114705078
+      }
+    },
+    "1": {
+      "fixed_random": {
+        "train_mean_SD": 0.9647161504118112,
+        "heldout_mean_SD": 0.9707437706084824,
+        "heldout_to_train_ratio": 1.0062480763840205
+      },
+      "train_PCA": {
+        "train_mean_SD": 0.8914867043495178,
+        "heldout_mean_SD": 0.7136483788490295,
+        "heldout_to_train_ratio": 0.8005148875100164
+      }
+    },
+    "2": {
+      "fixed_random": {
+        "train_mean_SD": 0.9704383050224397,
+        "heldout_mean_SD": 0.9676488579083298,
+        "heldout_to_train_ratio": 0.9971255801634444
+      },
+      "train_PCA": {
+        "train_mean_SD": 0.8971800804138184,
+        "heldout_mean_SD": 0.7528658509254456,
+        "heldout_to_train_ratio": 0.8391468640032569
+      }
+    },
+    "3": {
+      "fixed_random": {
+        "train_mean_SD": 0.9690359608585879,
+        "heldout_mean_SD": 0.9934698874429729,
+        "heldout_to_train_ratio": 1.0252146747606106
+      },
+      "train_PCA": {
+        "train_mean_SD": 0.8905535340309143,
+        "heldout_mean_SD": 0.7320569753646851,
+        "heldout_to_train_ratio": 0.8220246704891215
+      }
+    },
+    "4": {
+      "fixed_random": {
+        "train_mean_SD": 0.9753902211502206,
+        "heldout_mean_SD": 0.9340267236078841,
+        "heldout_to_train_ratio": 0.9575928724264234
+      },
+      "train_PCA": {
+        "train_mean_SD": 0.9093456864356995,
+        "heldout_mean_SD": 0.7101657390594482,
+        "heldout_to_train_ratio": 0.7809634439934902
+      }
+    },
+    "5": {
+      "fixed_random": {
+        "train_mean_SD": 0.9746228265003983,
+        "heldout_mean_SD": 0.977197386705116,
+        "heldout_to_train_ratio": 1.0026415964563054
+      },
+      "train_PCA": {
+        "train_mean_SD": 0.8983103632926941,
+        "heldout_mean_SD": 0.755830705165863,
+        "heldout_to_train_ratio": 0.8413915012573363
+      }
+    },
+    "6": {
+      "fixed_random": {
+        "train_mean_SD": 0.977802457023553,
+        "heldout_mean_SD": 1.0076975839765425,
+        "heldout_to_train_ratio": 1.030573789969797
+      },
+      "train_PCA": {
+        "train_mean_SD": 0.9013298749923706,
+        "heldout_mean_SD": 0.7622474431991577,
+        "heldout_to_train_ratio": 0.8456919762097199
+      }
+    },
+    "7": {
+      "fixed_random": {
+        "train_mean_SD": 0.9728002760398674,
+        "heldout_mean_SD": 0.9470112637588206,
+        "heldout_to_train_ratio": 0.9734899208848601
+      },
+      "train_PCA": {
+        "train_mean_SD": 0.9034360647201538,
+        "heldout_mean_SD": 0.7424877882003784,
+        "heldout_to_train_ratio": 0.8218487363910689
+      }
+    },
+    "8": {
+      "fixed_random": {
+        "train_mean_SD": 0.9628589359375206,
+        "heldout_mean_SD": 0.9676725635226479,
+        "heldout_to_train_ratio": 1.0049993071731118
+      },
+      "train_PCA": {
+        "train_mean_SD": 0.8889403343200684,
+        "heldout_mean_SD": 0.7150338888168335,
+        "heldout_to_train_ratio": 0.8043665713107143
+      }
+    }
+  },
+  "projection_control_mean": {
+    "train_PCA": {
+      "train_mean_SD": 0.8982962899737887,
+      "heldout_mean_SD": 0.7386329505178664,
+      "heldout_to_train_ratio": 0.8222549739855336
+    },
+    "fixed_random": {
+      "train_mean_SD": 0.9725316865821831,
+      "heldout_mean_SD": 0.9730811302879202,
+      "heldout_to_train_ratio": 1.000570642907923
+    }
+  },
+  "frozen_noise_probe": {
+    "scope": "Separate frozen network cell heterogeneity from Gamma-Poisson count noise.\n\nLocal interventions only, NOT trained or calibrated candidate recipes. Use\nunchanged calibrated pbulk weights, matched donor latents, conditions, library\ndraws and cell-noise vectors. Vary only the within-bag mean heterogeneity or\nNB dispersion before drawing the first 64 cells. No saved raw cell tensors.\nReads only the 37-donor development caches. Never updates a default or fit.\n",
+    "n_fits": 6,
+    "summary": {
+      "baseline": {
+        "mean_coverage": 0.8074608262108263,
+        "SD_coverage": 0.5562028133903133,
+        "SD_below": 0.4039654558404559,
+        "generated_PC_SD_mean": 0.8854079462715981,
+        "observed_PC_SD_mean": 0.7432913333216725
+      },
+      "mean_contract_half": {
+        "mean_coverage": 0.8413185541310542,
+        "SD_coverage": 0.64588051994302,
+        "SD_below": 0.18867788461538462,
+        "generated_PC_SD_mean": 0.7496995480285403,
+        "observed_PC_SD_mean": 0.7432913333216725
+      },
+      "mean_contract_full": {
+        "mean_coverage": 0.8472177706552707,
+        "SD_coverage": 0.6173869301994303,
+        "SD_below": 0.10657674501424501,
+        "generated_PC_SD_mean": 0.6901728431177044,
+        "observed_PC_SD_mean": 0.7432913333216725
+      },
+      "theta_times4": {
+        "mean_coverage": 0.851014066951567,
+        "SD_coverage": 0.3824225427350427,
+        "SD_below": 0.6037624643874644,
+        "generated_PC_SD_mean": 0.9925680427583884,
+        "observed_PC_SD_mean": 0.7432913333216725
+      },
+      "poisson_limit": {
+        "mean_coverage": 0.8676522435897437,
+        "SD_coverage": 0.29840010683760687,
+        "SD_below": 0.6930760327635328,
+        "generated_PC_SD_mean": 1.053086394253109,
+        "observed_PC_SD_mean": 0.7432913333216725
+      }
+    },
+    "paired_inputs": [
+      "donor latents",
+      "stage conditions",
+      "cell noise",
+      "library sizes"
+    ],
+    "new_common_count_stream": true
+  },
+  "validation": {
+    "historical_coverage_values_reproduced": 18,
+    "tolerance": 1e-12,
+    "finite_M_and_train_only_tests": "passed"
+  },
+  "limitations": [
+    "37 development donors reused across overlapping folds; no independent final test",
+    "Training-fitted affine intervals are diagnostics without conformal guarantees",
+    "No network weights, selected defaults or historical scoring rules changed",
+    "The real-data random-projection control implicates feature-space selection/generalization; it does not by itself prove PCA caused the model error.",
+    "Frozen noise interventions are not refitted candidate recipes and cannot be adopted based on this diagnostic alone.",
+    "Projected-summary effective dimension includes finite-cell noise and snapshot mixtures; it is not latent dimension or identifiability."
+  ],
+  "input_generated_file_sha256": [
+    {
+      "fold": 0,
+      "seed": 0,
+      "sha256": "a219f47845422ac4bbf4efe61a22a37c28a33717bd095a6c65b57ea5a06cacc0"
+    },
+    {
+      "fold": 0,
+      "seed": 1,
+      "sha256": "fd369739ea010bb52282f24ea260e856faa2b78037dfe7d1b883333c3a25caa4"
+    },
+    {
+      "fold": 1,
+      "seed": 0,
+      "sha256": "7751639039a1c21e56009f77767f79a402968282ccec301d76ca0e375ec05302"
+    },
+    {
+      "fold": 1,
+      "seed": 1,
+      "sha256": "ab9f2a0b5775e63b9febf60e332e428765e95c7250951951f1e89dc6e1ce915e"
+    },
+    {
+      "fold": 2,
+      "seed": 0,
+      "sha256": "7bfbfa5850b87996804935392e8b20ff6c5152a4c14f745a7da8892352632f24"
+    },
+    {
+      "fold": 2,
+      "seed": 1,
+      "sha256": "edf41ee0626710088c4b62e54e46dbdd3f4bc2113672b761d7abaa14d79d1eda"
+    },
+    {
+      "fold": 3,
+      "seed": 0,
+      "sha256": "41069fb017e23e7a44e5fe4de0db030bf2beaf95d1cd6c0d6a96edec6ea36d29"
+    },
+    {
+      "fold": 3,
+      "seed": 1,
+      "sha256": "9b649129ac49fb8648a6f5d5ee0e9978c6051fc8c768b5e8f1e982e532808008"
+    },
+    {
+      "fold": 4,
+      "seed": 0,
+      "sha256": "af081358b3112d620b1e026678bebdbeb67ae66d213336ab148794fb3e5ff1eb"
+    },
+    {
+      "fold": 4,
+      "seed": 1,
+      "sha256": "3420de91947b93a13178966a90b0650853b1fbcd0078c33a4dcf176764e8a27e"
+    },
+    {
+      "fold": 5,
+      "seed": 0,
+      "sha256": "b31b43f61184c366a098fe0b136bd72ca58470397c3a919997cb597743e336b9"
+    },
+    {
+      "fold": 5,
+      "seed": 1,
+      "sha256": "96062e9b88331f117cfe5db736978a906f0ac43221183b7b057daf117d226673"
+    },
+    {
+      "fold": 6,
+      "seed": 0,
+      "sha256": "74414eaecb1bd5c126db18def2fb12d32bbe47de917c3de1189ec5881bd8027a"
+    },
+    {
+      "fold": 6,
+      "seed": 1,
+      "sha256": "4d0cdbb32b3ee93ae8b35c3b6a9990593d14451c9c78b4394d814f224e389211"
+    },
+    {
+      "fold": 7,
+      "seed": 0,
+      "sha256": "683c3f652f1956d897807ee6dda9646a7ba55742aa33131277dde408991cdc5b"
+    },
+    {
+      "fold": 7,
+      "seed": 1,
+      "sha256": "1b58f4231fa552c8811e4e48048bab3614dff7a3f3b48f18f76eb5569f85cd22"
+    },
+    {
+      "fold": 8,
+      "seed": 0,
+      "sha256": "12838efec188fe50aeb730852b2d229db11cc3210f002b80a3111cb7280b4df5"
+    },
+    {
+      "fold": 8,
+      "seed": 1,
+      "sha256": "b57b4f68795e9c8d8194de2ef0ffd3e5504c3ba9e0df953756c9f074bec5b90a"
+    }
+  ],
+  "source_sha256": {
+    "r5/interval_architecture_audit.py": "f684ee64a2a089239839e700521e7fbf9e87d5fb0c05bc2e103d89c22459947c",
+    "r5/test_interval_audit.py": "695da67933af5c35cd74e888f37fc0c9afc53fe89a7b5c9d46ba30696e142f33",
+    "r5/frozen_cell_noise_probe.py": "1cf00306b4e211ae1dc7b6ba2bcfca59ae5c3087e7c3061a84959b194d4b69f6",
+    "r5/plot_interval_audit.py": "e4b8b6c8ab6eb2c2d622ab358c0b0625fd2937286b6d32c3da73cb0e66708361"
+  },
+  "references": [
+    {
+      "title": "Shafer and Vovk: A Tutorial on Conformal Prediction",
+      "url": "https://jmlr.org/papers/v9/shafer08a.html"
+    }
+  ]
+}

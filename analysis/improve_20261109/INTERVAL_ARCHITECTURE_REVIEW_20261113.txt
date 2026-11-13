@@ -1,0 +1,162 @@
+Interval construction and network architecture review, 2026-11-13
+================================================================
+
+Request: explain nominal intervals, inspect what produces them, and identify
+changes that could improve a donor-distribution model and patient feature vectors.
+This is a frozen audit: no optimizer updates, no default changes, no sealed donors.
+
+What the intervals actually mean
+--------------------------------
+For each target donor, the evaluator draws 32 synthetic donors at matched
+cell depth. Each synthetic donor contributes 100 summary coordinates: the
+mean and SD of each of 50 train-fitted PCs across 64 generated cells. For
+each coordinate, the 10th and 90th sample percentiles define a central range.
+Coverage is averaged over donor-coordinate pairs and 24 real-cell subsamples.
+It is not an 80% probability statement about the whole patient, a clinical
+outcome, all genes simultaneously, or uncertainty in the model's weights.
+
+The earlier combined 66-68% coverage description was too coarse. Across all
+18 current-default fits (9 overlapping folds, 2 seeds):
+  Expression-pattern means:   82.46% covered
+  Cellular spread (PC SDs):   51.14% covered
+  Combined:                  66.80% covered
+For SD coordinates, 45.77% of observations lie BELOW the predicted lower
+bound and only 3.09% above the upper bound. This is predominantly a level/
+generalization error in cellular heterogeneity, not simply narrow uncertainty
+about donor means.
+
+Finite-sample construction also contributes. For iid perfect Uniform(0,1)
+samples, the exact expected coverage of NumPy's interpolated 10/90 sample
+percentiles is .8*(M-1)/(M+1): .7515 at M=32, .7876 at M=128. A 50,000-trial
+simulation reproduces this. This example is not an exact correction for every
+distribution or for the fixed snapshot/stage mixture used by the GAN.
+Using order-statistic ranks 3 and 30 at M=32 has iid perfect-model marginal
+coverage 27/33=.8182. Applied diagnostically, it raises current combined
+coverage to 73.32%, with intervals about 16.7% wider; mean coverage becomes
+87.49% and SD coverage 59.15%. It does not repair the cellular-spread model.
+Historical scoring was not replaced.
+
+What the current architecture does
+----------------------------------
+Generator: an 8-dimensional donor particle plus a seven-slot condition vector
+(only pathology stage active), through a width-128 donor MLP into FiLM scale/
+shift. Independent 8-dimensional cell noise enters a width-128 cell layer.
+A shared nonlinear head emits 2,000 softmax gene proportions, scaled by library
+size. Each gene has ONE shared NB dispersion parameter. Gamma-Poisson sampling
+produces counts. There is no patient encoder, explicit microglial cell-state
+mixture, or separately identified biological patient-feature vector.
+
+Critic: 150 bag features from 50 train-selected PCs (means, SDs and Fourier
+means), plus the 2,000-gene pseudobulk block, into a width-128 MLP. The selected
+read-out mixes late training snapshots and half own-stage/half train-stage
+conditions; bias calibration changes output gene levels only.
+
+The new audit does not justify repeating a wider/deeper-network screen.
+Earlier matched capacity probes already found no clear gain from width,
+depth or a larger cell latent. Donor-dependent dispersion was also tried;
+its extra-fold primary gain did not confirm. It is not an untested fix.
+The current snapshot mixture's projected mean covariance has similar
+participation ratio to real summaries in this audit, but that includes cell
+sampling noise and multiple model states. It is not evidence that its latent
+variables are identifiable or free of single-state collapse.
+
+A feature-space issue must be resolved before architectural claims
+------------------------------------------------------------------
+Real train donors have mean PC SD .8983; held-out donors .7386. Generated
+donors have .9019 on train targets and .9007 on held-out targets: they mostly
+reproduce the training feature-space variance.
+
+As a real-data-only control, project the SAME genes and SAME train-fitted
+gene standardization through 50 fixed random orthogonal directions. Choose
+the directions independently of expression, normalize only on train cells,
+and use the same donor/64-cell subsamples. The real held-out/train SD ratio:
+  Train-selected PCA directions: .8223
+  Fixed random directions:       1.0006
+
+This implicates feature selection or donor-specific covariance in the
+PCA representation. It does not prove PCA alone caused the generator error;
+the two direction sets measure different structures. It does show that a
+model can match training PCA variability and still miss new donors, while
+the same raw cells show no comparable aggregate shift in the control.
+Simply increasing noise or widening every interval is poorly targeted.
+
+Frozen decoder interventions
+-----------------------------
+Six fits on original folds 0-2, seeds 0-1. Use the same donor latents, stage
+conditions, library draws and cell-noise inputs. Reuse each fit's existing
+training-only output-bias calibration. Change only the indicated count-head
+quantity; do not retrain or refit calibration. A new common count stream is
+used for these local probes, so their baseline is not byte-identical to the
+historical generation. Summary measurements:
+
+                              PC-SD coverage  generated mean SD  real mean SD
+  Baseline                       .5562             .8854            .7433
+  Half network mean variation    .6459             .7497            .7433
+  Remove network mean variation  .6174             .6902            .7433
+  NB shape multiplied by 4       .3824             .9926            .7433
+  Poisson limit                  .2984            1.0531            .7433
+
+Mean contraction preserves each 256-cell bag's expected gene totals and each
+cell's expected library, using the same formula as the earlier count-shape
+experiment. Reducing Gamma-Poisson overdispersion does NOT monotonically
+reduce SD after log normalization and PCA; it worsens this local metric.
+These are diagnostic interventions, not validated new default recipes.
+
+What to test next, in order
+---------------------------
+1. Keep the historical raw score, and report separate mean/SD coverage,
+   widths and proper interval score. Add a larger-M or order-statistic
+   comparison for interval-estimation bias. For calibrated coverage claims,
+   use calibration DONORS excluded from model training, plus separate test
+   donors. Training-fitted interval shifts/width factors reached only .7287
+   held-out combined coverage here and have no conformal guarantee.
+   Donor dependence must remain intact; treating cells as independent patients
+   cannot supply the missing calibration sample size. Conformal guarantees
+   require their stated exchangeability assumptions.
+
+2. First fresh-training ablation: change the critic's observation space,
+   preserving generator width, recipe, feature count, block scale and update
+   rule. Compare 50 train-selected PCs with 50 fixed random orthogonal
+   projections; keep the same mean/SD/Fourier layout and pbulk block. Keep the
+   evaluator's PCA space separate from the training observation space.
+   A cross-donor-validated gene-program basis is another subsequent arm.
+   Score coverage and sharpness separately for donor means and cellular
+   spread, plus gene-level means, detection, variance and covariance. A
+   higher coverage number obtained only by wider intervals is not sufficient.
+
+3. If the observation ablation leaves a decoder limitation, test a modest
+   hierarchical decoder that separates donor gene-program activity,
+   donor-specific cell-state mixture, within-state cell variation and count
+   dispersion. The current FiLM path entangles these effects. Avoid merely
+   enlarging the MLP or re-enabling the already unconfirmed dispersion arm.
+   Test one added component at a time with fresh matched fits and protected
+   donor splits before promotion.
+
+4. For patient feature vectors, add a permutation-invariant DONOR encoder
+   over a set of cells, or explicitly validate an inverse-fitting procedure.
+   The current generator supplies latent samples but cannot directly encode
+   a real patient's cells. Validate split-cell repeatability, reconstruction
+   of held-out genes/cells, depth sensitivity and reproducibility across
+   seeds. Separate nuisance/technical variation from proposed biological
+   programs; an interpretable name on a latent axis is not validation.
+
+No new training screen was launched and no default was changed in this audit.
+The next architecture experiment is defined above; its performance is unknown.
+
+Reproduction and evidence
+-------------------------
+  r5/interval_architecture_audit.py
+  r5/test_interval_audit.py
+  r5/frozen_cell_noise_probe.py
+  r5/plot_interval_audit.py
+  interval_architecture_evidence_20261113.json (compact aggregate + hashes)
+  interval_architecture_20261113.png (figure)
+Full local outputs: runs/improve_20261109/results_r5/interval_architecture/.
+All 18 historical coverage values reproduce to 1e-12. Finite-M simulation,
+rank endpoints, training-only fitting and effective-dimension checks pass.
+No independent-agent review was run. All folds reuse the same 37 development
+donors; no independent final-test performance is claimed.
+
+Background on conformal assumptions (primary source):
+Shafer and Vovk, A Tutorial on Conformal Prediction, JMLR 9 (2008), 371-421.
+https://jmlr.org/papers/v9/shafer08a.html

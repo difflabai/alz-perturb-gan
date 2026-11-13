@@ -35,6 +35,8 @@ Training uses fresh weights or resumes its own checkpoints; generation produces 
 
 An experimental **`--profile count-shape`** reduces excessive within-donor cellular heterogeneity before train-only bias/dispersion calibration. In six paired fits it lowers mean-log error to **0.0763**, nonzero error to **0.0161**, and variance error to **0.1779**. It remains opt-in because its profile RMSE rises to **0.48656**, failing the pre-declared guard against its dispersion-calibrated reference (**0.48623**). No sealed donors or new training were used in this pass. See [the recorded experiment](analysis/improve_20261109/RESULTS.md).
 
+The [interval/architecture audit](analysis/improve_20261109/INTERVAL_ARCHITECTURE_REVIEW_20261113.txt) separates the combined coverage score: **82.5% for PC means versus 51.1% for cellular-spread coordinates** across the current default fits. The ranges use only 32 synthetic donors, so sample-percentile estimation also affects coverage. They are marginal ranges for projected summaries. The audit identifies feature-space generalization and excessive network-generated cellular heterogeneity as targets for the next controlled architectural experiment.
+
 ## What the model says
 
 Training used 14,762 SEA-AD middle temporal gyrus cells from 33 donors, a 2,000-gene panel, and five independent 20,000-update fits. All five fits started from scratch using the released ParticleGAN 0.9.7 formulation, with generator EMA disabled. We sampled 12.8 million unique synthetic cells from the frozen models; this adds no biological donors.

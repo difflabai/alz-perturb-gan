@@ -768,6 +768,35 @@ pass. Additional-fold default evaluation: 24 units, zero errors. Full source,
 config, environment versions and compact evidence are committed; raw cells,
 model checkpoints, generated tensors and machine credentials are excluded.
 
+### 8j. Interval construction and architecture audit (2026-11-13)
+
+The combined coverage metric hides different behaviors: on all 18 default
+fits, expression-pattern mean coordinates cover 82.46%, cellular-spread
+coordinates 51.14%, and their average 66.80%. Real SDs predominantly miss
+below the model's lower bound. These are marginal coordinate ranges, not
+clinical patient intervals or simultaneous coverage of whole profiles.
+
+Finite M=32 also makes interpolated sample percentile intervals undercover
+in a perfect-model null simulation. A conservative order-statistic diagnostic
+raises combined coverage to 73.32% at a cost of about 16.7% more width; it
+does not fix the cellular-spread model. Historical scores remain unchanged.
+
+The same real cells show a held-out/train SD ratio of 0.822 in training-selected
+PC directions versus 1.001 in fixed random directions with train-only scaling.
+This implicates feature-space generalization, rather than establishing a
+simple shortage of network capacity. Frozen decoder interventions further
+support separating network mean heterogeneity from count dispersion:
+halving the former improves PC-SD coverage from 55.6% to 64.6% on six original-fold
+fits, whereas multiplying NB shape by four reduces it to 38.2%.
+
+The full [architecture review](INTERVAL_ARCHITECTURE_REVIEW_20261113.txt),
+[compact evidence](interval_architecture_evidence_20261113.json) and
+[diagnostic figure](interval_architecture_20261113.png) specify a matched
+observation-space ablation, a subsequent donor/cell-state decoder experiment,
+and the donor encoder needed for real-patient feature vectors. No training
+or default change was made. All 18 historical coverage values reproduce;
+synthetic finite-M and held-out-exclusion checks pass.
+
 ## 9. Limits
 
 Three inner folds whose training sets overlap by about half; two seeds; 37
