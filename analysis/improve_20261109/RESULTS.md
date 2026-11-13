@@ -797,6 +797,64 @@ and the donor encoder needed for real-patient feature vectors. No training
 or default change was made. All 18 historical coverage values reproduce;
 synthetic finite-M and held-out-exclusion checks pass.
 
+### 8k. Interval and architecture improvement pass (2026-11-13, in progress)
+
+Owner requested all proposed improvements and an explicit goal to improve
+results/metrics. `PROTOCOL_ARCHITECTURE_PASS_20261113.txt` fixes the arms,
+comparisons and adoption guards before fresh training scores. Implementation
+commit `4c2f3f3`; default unchanged. New optional critic projector retains the
+evaluation PCA. Original base/pbulk training paths reproduce bitwise against
+frozen earlier rounds; all three new arms pass finite-gradient, count-mass and
+bitwise-resume CPU checks plus 300-update GPU smoke tests. Fifteen interval/
+default CLI tests pass. Only37 development donors, no sealed/external counts.
+
+Completed frozen read-out experiment, all18 fits (9 overlapping folds x2 seeds):
+
+| Construction | Mean coverage | SD coverage | Combined coverage | Width | Interval score |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| M32 interpolated percentiles (historical) | .8246 | .5114 | .6680 | .6109 | 1.0183 |
+| M32 finite ranks | .8749 | .5915 | .7332 | .7127 | 1.0129 |
+| M128 interpolated percentiles | .8539 | .5331 | .6935 | .6400 | 1.0001 |
+| M128 finite ranks | .8725 | .5654 | .7189 | .6794 | .9977 |
+
+Lower interval score rewards narrow ranges and penalizes misses. More draws
+improve it on original and additional folds. M128 retains each fit's M32
+train-only bias delta; snapshot/stage allocations and Monte Carlo draws also
+change with M. M128 profile RMSE improves .48575 to .47940, but PC energy
+increases2.02896 to2.04052. Do not call this a repaired biological model or
+silently replace matched-M architectural scores. Width increases are explicit.
+
+Donor-split CQR experiment: for each frozen M32 model, partition its held-out
+donors into two fixed halves, calibrate on one half and test on the other,
+then swap. Each calibration donor supplies ONE64-cell summary, per coordinate;
+test scoring uses24 subsamples. No calibration donor was in that fit's GAN
+training, and perturbing test observations leaves the fitted corrections
+unchanged. Calibrating all coordinates raises coverage .6680 to .8861 but
+worsens interval score1.0183 to1.0272 and increases width .6109 to .8986.
+Blanket calibration therefore fails the sharpness tradeoff. SD coordinates
+alone improve score .8889 to .7875; mean-coordinate score worsens1.1477 to
+1.2668. This supports targeted SD calibration as a subsequent experiment,
+not a retrospective independent-test claim. All37 donors were already used
+in model selection, so no independent coverage guarantee follows.
+
+Patient encoder: permutation-invariant cell network with mean/SD pooling,
+trained2,000 Adam updates on frozen-generator synthetic bags only. Hold128
+of512 particle rows out of encoder training. Two frozen pbulk seeds on fold0:
+synthetic latent MSE .730/.109 vs null1.049/1.032; real split-cell repeatability
+.779/.915. Held-out-cell reconstruction RMSE .755/.606, worse than train mean
+.476 and input64-cell pseudobulk .484. Both fail the predeclared reconstruction
+guard. Across seeds, held-out predicted gene-deviation correlation .062;
+train-fitted orthogonal alignment gives held-out latent R2 -1.059. These are
+experimental inverse encoders, not reliable biological patient vectors. The
+encoder inverts each final state, not a shared latent across snapshot states.
+
+Running:6 matched20k fits per arm for `d.randproj,pbulk`, `g.split,pbulk`,
+`g.hier,pbulk`; same seeds/folds/recipe/read-out as default. Serial GPU queue,
+memory cap .04, three CPU threads, recoverable checkpoints. Scores and paired
+guards must finish before any architecture promotion. See compact committed
+`architecture_pass_evidence_20261113.json`; live status/artifacts under
+`runs/improve_20261109/{fits_r5,smoke_r5,results_r5,logs_r5}/architecture_pass`.
+
 ## 9. Limits
 
 Three inner folds whose training sets overlap by about half; two seeds; 37

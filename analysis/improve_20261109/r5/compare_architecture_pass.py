@@ -13,8 +13,8 @@ def load(label):
             for p in (ROOT/label).glob('fold*/seed*.json')}
 
 
-def compare(data,baseline,method='percentile',base_method='percentile'):
-    keys=sorted(set(data)&set(baseline))
+def compare(data,baseline,method='percentile',base_method='percentile',folds=(0,1,2)):
+    keys=sorted(k for k in set(data)&set(baseline) if k[0] in folds and k[1] in (0,1))
     metrics={}
     def value(row,metric,construction):
         if metric in METRICS:return row['historical'][metric]
@@ -25,10 +25,10 @@ def compare(data,baseline,method='percentile',base_method='percentile'):
         differences={f:[value(data[(f,s)],metric,method)-value(baseline[(f,s)],metric,base_method)
                          for ff,s in keys if ff==f] for f in sorted({k[0] for k in keys})}
         metrics[metric]=paired(differences)
-    complete=set(keys)=={(f,s) for f in range(3) for s in (0,1)}
+    complete=set(keys)=={(f,s) for f in folds for s in (0,1)}
     targets=metrics.get('sd/interval_score')
     def guard(p):return p and p['se_seed_noise'] is not None and p['mean_diff']<=2*p['se_seed_noise']
-    passes=bool(complete and targets['n_folds_lower']==3 and targets['mean_diff']<-2*targets['se_seed_noise']
+    passes=bool(complete and targets['n_folds_lower']==len(folds) and targets['mean_diff']<-2*targets['se_seed_noise']
                 and metrics['sd/coverage']['mean_diff']<0 and all(guard(metrics[m]) for m in METRICS))
     return {'n_pairs':len(keys),'complete_screen':complete,'comparison':metrics,
             'passes_initial_architecture_rule':passes,
@@ -51,7 +51,12 @@ def main():
     for label in ('baseline32','baseline128'):
         data=load(label)
         for method in ('percentile','rank'):
-            out['intervals'][label+'/'+method]={'means':means(data,method),**compare(data,baseline,method)}
+            screen={k:v for k,v in data.items() if k[0]<3}
+            extra={k:v for k,v in data.items() if k[0]>=3}
+            out['intervals'][label+'/'+method]={'means':means(data,method),
+                'screen_means':means(screen,method),'extra_fold_means':means(extra,method),
+                'screen':compare(data,baseline,method),
+                'extra_folds':compare(data,baseline,method,folds=tuple(range(3,9)))}
     path=ROOT/'comparison.json'
     path.parent.mkdir(parents=True,exist_ok=True)
     path.write_text(json.dumps(out,indent=2)+'\n')

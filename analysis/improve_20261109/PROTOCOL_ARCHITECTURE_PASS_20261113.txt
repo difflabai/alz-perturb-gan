@@ -20,6 +20,18 @@ and percentile vs finite-rank endpoints. At M=128 preserve fixed fitted
 training-only calibration from M=32, to isolate Monte Carlo/read-out effects.
 These are model predictive ranges, not a claim of conformal calibration.
 Always compare models at the same M/construction. Report increased width.
+Additional donor-calibration experiment, declared before scoring: for each
+frozen M32 fit, split its generator-held-out donors into two fixed halves
+(seed20261113); use one half for calibration and the other for testing, then
+swap roles. For each of100 coordinates, fit nonnegative CQR correction
+max(0,low-y,y-high) using one64-cell observation per calibration donor.
+Choose order ceil((n_cal+1)*.8); if it exceeds n_cal, report unbounded rather
+than clip to a false finite quantile. Apply low-q,high+q and score on24
+independent real-cell subsamples of test donors. Compare percentile and rank
+baselines unchanged, with widths and interval scores. No calibration donor
+is in that fit's generator training set, and no test donor enters q. These
+are development experiments after model selection on the same37 donors,
+so no independent coverage guarantee or default promotion is claimed.
 
 Fresh training, one change at a time, same pbulk/20k/late-snapshot/stagehalf/
 train-only bias calibration baseline, same random streams/folds/seeds:
