@@ -1,0 +1,408 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-11-13T20:18:29.810118+00:00",
+  "status": "complete",
+  "scope": "Bounded authorized improvement pass complete on same37 development donors; no independent final population test. No sealed/external donor counts. Outcomes include successful readout selection and failed fixed architecture/patient-probe experiments.",
+  "requirements": [
+    {
+      "requirement": "Explain nominal intervals and identify failures",
+      "status": "complete",
+      "evidence": "interval_architecture_evidence_20261113.json",
+      "result": "80% is the intended marginal10/90 range for projected means/SD, not a patient probability; finite32draws, undercoverage and PCA generalization diagnosed."
+    },
+    {
+      "requirement": "M128, finite-rank and donor-disjoint CQR comparisons",
+      "status": "complete",
+      "evidence": "architecture_pass_evidence_20261113.json",
+      "fits": 18,
+      "result": "Fixed M32 training-only calibration held atM128; width/score tradeoffs retained. Blanket CQR rejected on combined proper score. No combined count-shape/M128 or SD-onlyCQR experiment required."
+    },
+    {
+      "requirement": "Count-shape prospective confirmation and application decision",
+      "status": "complete_selected",
+      "evidence": "default_config_distribution_evidence_20261113.json",
+      "pairs": 12,
+      "result": "Distribution-focused gates pass within TOTAL0.5% original-profile allowance. Actual RMSE cost0.0493%; original strict-profile failure retained. Training deterioration/complementary-direction failure retained."
+    },
+    {
+      "requirement": "Empirical population-interval reference",
+      "status": "complete",
+      "evidence": "empirical_interval_reference_evidence_20261113.json",
+      "archives": 12,
+      "historical_values_exact": 888,
+      "result": "Stage-blind resampling has lower SD/combined proper score than selected GAN; descriptive one empirical stream per fold versus two model seeds, no population/significance or promotion claim."
+    },
+    {
+      "requirement": "Learned patient-feature vectors: neural encoder, explicit inverse and critic features",
+      "status": "completed_failed_initial_gates_stopped",
+      "evidence": [
+        "architecture_pass_evidence_20261113.json",
+        "inverse_donor_evidence_20261113.json",
+        "critic_features_evidence_20261113.json"
+      ],
+      "result": "All three fixed probes fail. Conditional extra folds not triggered; no patient encoder or biological axes promoted."
+    },
+    {
+      "requirement": "Recover earlier distribution-metric confirmation work",
+      "status": "complete",
+      "evidence": "confirmation_distributions_evidence_20261113.json",
+      "reproduction": {
+        "n_scores": 42,
+        "n_metric_values": 2058,
+        "max_absolute_difference": 0.0,
+        "primary_identical_to_prior_profile_analysis": true
+      },
+      "result": "42scores/2058values exact; original primary nulls preserved; no external counts read."
+    },
+    {
+      "requirement": "Finish all18 fixed architecture fits",
+      "status": "complete",
+      "evidence": "architecture_screen_complete_audit_20261113.json",
+      "verified_fits": 18,
+      "missing": 0,
+      "matched_original_references": 6,
+      "cache_manifests": 3,
+      "cache_payloads": 18,
+      "queue_exit_code": 0,
+      "result": "Strict normal CLI passes; complete immutable audit retained, not an allow-incomplete result."
+    },
+    {
+      "requirement": "Apply original numeric gates and conditional branches",
+      "status": "complete_no_eligible_arm",
+      "evidence": "architecture_screen_complete_comparison_20261113.json",
+      "result": "All three arms fail original SD-score conditions; no architecture confirmation or final CPU recipe comparison triggered. Current default retained. No retrospective tuning or winner claim."
+    },
+    {
+      "requirement": "Historical mutable partial-audit hash reconciliation",
+      "status": "complete_superseded_without_mutating_history",
+      "evidence": [
+        "architecture_screen_audit_verification_20261113.json",
+        "architecture_screen_complete_audit_20261113.json"
+      ],
+      "result": "Earlier FOUR-fit verification and its31fixture tests remain historical; its hash of a live partial path is superseded by immutable complete18-fit audit."
+    },
+    {
+      "requirement": "Actual default inference and required checks",
+      "status": "complete",
+      "evidence": "default_inference_verification_20261113.json",
+      "CLI_tests_passed": 14,
+      "current_config_and_CLI_match_proof": true,
+      "result": "Implicit-default generation is byte-identical to confirmation and every score is exact. Current config/CLI sources unchanged; no new inference/test rerun needed."
+    }
+  ],
+  "selected_default": {
+    "name": "microglia-pbulk-countshape-v2",
+    "arm": "pbulk",
+    "updates": 20000,
+    "generation_mode": "cellshape@0.5:biascal:stagehalf",
+    "objective": "distribution-focused development simulation of finiteK256 donor bags",
+    "rule": "PROTOCOL_DISTRIBUTION_CONFIRM_20261113.txt",
+    "profile_noninferiority_fraction": 0.005,
+    "actual_profile_relative_cost": 0.0004927788769710784,
+    "maximum_fold_relative_cost": 0.000936239350031018,
+    "scope": "same37 development donors; six overlapping extra splits, two seeds; selection-conditioned, no sealed/external donor counts"
+  },
+  "confirmation_CPU_M32_K256": {
+    "n_pairs": 12,
+    "complete": true,
+    "means": {
+      "default": {
+        "historical": {
+          "pb_rmse": 0.4841923051739279,
+          "meanlog_rmse_gene": 0.10607902514311113,
+          "nonzero_rmse_gene": 0.023115238689676743,
+          "logvar_rmse_gene": 0.20883693573171525,
+          "pc_energy_rep": 2.029346240442401,
+          "cell_energy_rep": 0.8090801072367638,
+          "pc_spread_rep": 1.260678020704472,
+          "pc_coverage80_rep": 0.6606592770655271
+        },
+        "intervals": {
+          "mean": {
+            "coverage": 0.8355947293447293,
+            "width": 0.8273466824329305,
+            "interval_score": 1.1519108425934206
+          },
+          "sd": {
+            "coverage": 0.48572382478632475,
+            "width": 0.41231671506683615,
+            "interval_score": 0.9256666747856613
+          },
+          "combined": {
+            "coverage": 0.6606592770655271,
+            "width": 0.6198316987498833,
+            "interval_score": 1.038788758689541
+          }
+        }
+      },
+      "count_shape": {
+        "historical": {
+          "pb_rmse": 0.48443090491430957,
+          "meanlog_rmse_gene": 0.08102059841891265,
+          "nonzero_rmse_gene": 0.01715889585949463,
+          "logvar_rmse_gene": 0.1945207493346267,
+          "pc_energy_rep": 1.843773456793011,
+          "cell_energy_rep": 0.697315259973147,
+          "pc_spread_rep": 1.0679094663646247,
+          "pc_coverage80_rep": 0.700005787037037
+        },
+        "intervals": {
+          "mean": {
+            "coverage": 0.8110955306267806,
+            "width": 0.7558917665478395,
+            "interval_score": 1.1285116820006313
+          },
+          "sd": {
+            "coverage": 0.5889160434472934,
+            "width": 0.2236912809597005,
+            "interval_score": 0.7111108334286619
+          },
+          "combined": {
+            "coverage": 0.700005787037037,
+            "width": 0.48979152375377,
+            "interval_score": 0.9198112577146467
+          }
+        }
+      }
+    },
+    "passes_distribution_focused_rule": true,
+    "passes_strict_profile_guard_on_extra_folds": false,
+    "profile_cost_upper_2seedSE": 0.0003899318757033902,
+    "profile_noninferiority_margin": 0.005
+  },
+  "architecture_original_screen": {
+    "d.randproj,pbulk": {
+      "n_pairs": 6,
+      "complete": true,
+      "passes_original_rule": false,
+      "SD_interval_score": 0.8282658004732405,
+      "paired_SD_score": {
+        "mean_diff": 0.004627678249994401,
+        "per_fold": {
+          "0": 0.13979276925197776,
+          "1": -0.04157845404153171,
+          "2": -0.08433128046046284
+        },
+        "se_seed_noise": 0.029303523337513668,
+        "se_fold_scatter": 0.06870019992907019,
+        "t_fold": 0.06736047718598005,
+        "z_seed": 0.15792224698352766,
+        "n_folds_lower": 2,
+        "n_pairs": 6
+      },
+      "paired_SD_coverage_distance": {
+        "mean_diff": -0.025390847578347576,
+        "per_fold": {
+          "0": 0.008680555555555552,
+          "1": 0.025737179487179518,
+          "2": -0.1105902777777778
+        },
+        "se_seed_noise": 0.01615025655649029,
+        "se_fold_scatter": 0.04288332731461377,
+        "t_fold": -0.5920913597041452,
+        "z_seed": -1.57216372938322,
+        "n_folds_lower": 1,
+        "n_pairs": 6
+      },
+      "extra_fold_confirmation": "not_triggered",
+      "final_CPU_recipes": "not_triggered",
+      "default_change": false
+    },
+    "g.split,pbulk": {
+      "n_pairs": 6,
+      "complete": true,
+      "passes_original_rule": false,
+      "SD_interval_score": 0.8880580717807999,
+      "paired_SD_score": {
+        "mean_diff": 0.06441994955755383,
+        "per_fold": {
+          "0": 0.013992412897188777,
+          "1": 0.21347223842908608,
+          "2": -0.034204802653613364
+        },
+        "se_seed_noise": 0.03212346771937764,
+        "se_fold_scatter": 0.07581376636226134,
+        "t_fold": 0.8497130883820707,
+        "z_seed": 2.005385910397656,
+        "n_folds_lower": 1,
+        "n_pairs": 6
+      },
+      "paired_SD_coverage_distance": {
+        "mean_diff": 0.04728276353276354,
+        "per_fold": {
+          "0": 0.027604166666666652,
+          "1": 0.16823717948717953,
+          "2": -0.05399305555555556
+        },
+        "se_seed_noise": 0.024772136504534983,
+        "se_fold_scatter": 0.06490250309181994,
+        "t_fold": 0.7285198764348254,
+        "z_seed": 1.9087075321140583,
+        "n_folds_lower": 1,
+        "n_pairs": 6
+      },
+      "extra_fold_confirmation": "not_triggered",
+      "final_CPU_recipes": "not_triggered",
+      "default_change": false
+    },
+    "g.hier,pbulk": {
+      "n_pairs": 6,
+      "complete": true,
+      "passes_original_rule": false,
+      "SD_interval_score": 0.8382760461634509,
+      "paired_SD_score": {
+        "mean_diff": 0.014637923940204947,
+        "per_fold": {
+          "0": 0.09420243977048154,
+          "1": 0.0497504984902194,
+          "2": -0.10003916644008609
+        },
+        "se_seed_noise": 0.04067322581795061,
+        "se_fold_scatter": 0.058756900486845086,
+        "t_fold": 0.24912689095099885,
+        "z_seed": 0.3598909023278081,
+        "n_folds_lower": 1,
+        "n_pairs": 6
+      },
+      "paired_SD_coverage_distance": {
+        "mean_diff": -0.009763176638176635,
+        "per_fold": {
+          "0": 0.05069444444444446,
+          "1": 0.04814102564102568,
+          "2": -0.12812500000000004
+        },
+        "se_seed_noise": 0.02300486845571147,
+        "se_fold_scatter": 0.05918550191009064,
+        "t_fold": -0.1649589227613206,
+        "z_seed": -0.42439610802263505,
+        "n_folds_lower": 1,
+        "n_pairs": 6
+      },
+      "extra_fold_confirmation": "not_triggered",
+      "final_CPU_recipes": "not_triggered",
+      "default_change": false
+    }
+  },
+  "default_inference": {
+    "status": "passed",
+    "default_config_sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+    "CLI_source_sha256": "40d6102e77fa6a4ece2c64cd431db3d907449d7bd69335cb597370d5f860b80e",
+    "byte_identical_to_confirmation": true,
+    "all_scores_identical": true,
+    "CLI_tests": {
+      "command": "python3 -B -m pytest -q tests/test_microglia_default.py",
+      "passed": 14
+    },
+    "rerun_at_final_closure": false,
+    "reason": "Current source/config hashes match actual inference proof; final closure changes evidence/documentation only."
+  },
+  "historical_partial_audit_supersession": {
+    "historical_verification": "architecture_screen_audit_verification_20261113.json",
+    "historical_verification_sha256": "fa2e7d9ba6b892c413ada5348443bf279208b80b91069000e1df2ba3cee9a09d",
+    "scope": "The four-fit hash of a mutable partial-audit path is a historical snapshot, preserved unchanged. Current completion proof is the immutable complete18-fit audit.",
+    "superseding_complete_audit": "architecture_screen_complete_audit_20261113.json",
+    "superseding_complete_audit_sha256": "7cd0fef29753be11ce7903741ad5e92a28ae1ae6291a91f3531d83cbe98f9970"
+  },
+  "supporting_evidence_sha256": {
+    "analysis/improve_20261109/interval_architecture_evidence_20261113.json": "643f7901f02f87c4243c8f65d5da10dc8238f61d2b8dfbf7f77ecd52d0005bc3",
+    "analysis/improve_20261109/architecture_pass_evidence_20261113.json": "bd89c678d3a37fd219c082d47684e4ffe86c9de0b576912c159f9e7e9bee09a2",
+    "analysis/improve_20261109/default_config_distribution_evidence_20261113.json": "3fb5bcb23efd58c47b25946a00cf63cd051b40f9b86d1b9ad4f7ec62498dcbdc",
+    "analysis/improve_20261109/shape_random_projection_evidence_20261113.json": "cdffc7c4a8264153e9e65bc2554e75018fbff5a3c11891c4ce9d83b75aa97967",
+    "analysis/improve_20261109/empirical_interval_reference_evidence_20261113.json": "53353ba0448bed01fb912f99c39e58f88c6d1905c34ef3ff370e061fb98aca60",
+    "analysis/improve_20261109/inverse_donor_evidence_20261113.json": "b9ecab40479e6c1a51a9ce2da4250cbee4765933e0b15a6a30db831ceaaba4cf",
+    "analysis/improve_20261109/critic_features_evidence_20261113.json": "7324265e76d6b74451f8608bb52686aa427788de3c983c6f5e51b10751fb8f8f",
+    "analysis/improve_20261109/confirmation_distributions_evidence_20261113.json": "48a4ce3610caf031011092442febc021595b35b3cfac4f274df4aee2e9bfdced",
+    "analysis/improve_20261109/default_config.json": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+    "analysis/improve_20261109/default_inference_verification_20261113.json": "f242db26286a55061d9ff3f9df6a2dc0b70b50d19497a4bc886cf0ba70cfc30f",
+    "analysis/improve_20261109/architecture_screen_audit_verification_20261113.json": "fa2e7d9ba6b892c413ada5348443bf279208b80b91069000e1df2ba3cee9a09d",
+    "analysis/improve_20261109/architecture_screen_complete_audit_20261113.json": "7cd0fef29753be11ce7903741ad5e92a28ae1ae6291a91f3531d83cbe98f9970",
+    "analysis/improve_20261109/architecture_screen_complete_comparison_20261113.json": "e852135b43fc9d199c6d038addab6cc09bd4bbe57f54dccfe429be0f9a4e8d3a",
+    "analysis/improve_20261109/PROTOCOL_ARCHITECTURE_PASS_20261113.txt": "ddfa8f48cf9d1cec3b361861758c8ca75f6ef4512c6ad91b1c59427c37f1c133",
+    "analysis/improve_20261109/PROTOCOL_ARCHITECTURE_FINAL_SELECTION_20261113.txt": "75471c0c0a84faaabb0eca4cec9e066e278969eb8d015187594e157a4c5029dd",
+    "analysis/improve_20261109/APPLICATION_DEFAULT_DECISION_20261113.txt": "33ea928de146a447ddc28e489ea16123d7057a6f42b2b1af92515739f6e8117c",
+    "analysis/improve_20261109/architecture_recipe_gate_verification_20261113.json": "08f06c421367fa47e8ea9b31b766a056b77fa57fd67f3938c31427130959d099"
+  },
+  "CQR_summary_sha256": "09a49de9646128b9b80253848ff17b44057cdd4bd789323a8ecfdd227e8e68e2",
+  "queue": {
+    "status": "completed",
+    "phase": "full",
+    "exit_code": 0,
+    "status_sha256": "bb3874c3f0319bc47ff0b5fa3ee686a5b78cbd8e5aca54960f6a01df6ae060ff",
+    "runner_alive_at_verified_completion": false
+  },
+  "resources": {
+    "threads_per_process_max": 3,
+    "GPU_index": 1,
+    "GPU_memory_fraction": 0.04,
+    "task_GPU_processes_at_completion": 0,
+    "logical_bytes_by_task_output_root": {
+      "runs/improve_20261109/fits_r5/architecture_pass": 1234133590,
+      "runs/improve_20261109/smoke_r5/architecture_pass": 232477152,
+      "runs/improve_20261109/results_r5/architecture_pass": 1057913,
+      "runs/improve_20261109/logs_r5/architecture_pass": 745863
+    },
+    "total_logical_bytes": 1468414518,
+    "cap_bytes": 3000000000,
+    "all18_temporary_architecture_mode_archives_absent": true,
+    "all18_fit_checkpoints_native_summaries_receipts_and_score_hashes_retained": true
+  },
+  "verification_scope": {
+    "strict_complete_artifact_audit_rerun_at_closure": true,
+    "previous_tests_preserved": {
+      "default_CLI": 14,
+      "architecture_artifact_negative_completeness": 31,
+      "final_recipe_numeric_gates": 18,
+      "architecture_parity_interval_encoder": 15
+    },
+    "metadata_and_hashes_are_not_independent_rescoring_of_pruned_arrays": true,
+    "seed_noise_SE_is_computational_not_biological": true
+  },
+  "material_limits": [
+    "Same37 donors reused in overlapping selected development splits; no population confirmation.",
+    "Selected GAN SD/combined coverage58.9/70.0% remains below80%; training SD fit and random-direction coverage deteriorate.",
+    "Stage-blind empirical resampling remains stronger for tested population interval scores.",
+    "FiniteK256 cells are dependent; marginal projected summaries do not validate joint cell-state biology.",
+    "Patient-vector/biological-axis, stage prediction and intervention-response claims are unsupported.",
+    "Hier final-seed instability produces large computational SE; passing nonregression guards does not establish equivalence.",
+    "Bounded original-screen design can miss readout-combination-only effects; no globally best network claim."
+  ],
+  "remaining_experiments": [],
+  "conditional_experiments_not_triggered": [
+    "extra-fold fresh architecture confirmation for every arm",
+    "final CPU recipes for every architecture",
+    "extra-fold patient-probe continuations after failed initial gates"
+  ],
+  "pending_closure_actions": [],
+  "implementation_head_before_final_documentation_closure": "e96fc1f01a8c6499096da87fdaec33c468e2a2fb",
+  "historical_in_progress_labels_superseded": {
+    "files": [
+      "architecture_pass_evidence_20261113.json",
+      "default_config_distribution_evidence_20261113.json"
+    ],
+    "scope": "Their in-progress architecture labels describe their historical recording time. All18-fit current status is supplied by the immutable complete audit/comparison and this closure evidence; original numeric results, selection gates and limits remain unchanged."
+  },
+  "independent_final_application_review": {
+    "status": "final_arithmetic_provenance_scope_and_interpretation_verified",
+    "screen_fits_at_review": 18,
+    "all_three_arm_aggregate_numeric_fields_checked": 144,
+    "paired_statistic_blocks_checked": 45,
+    "all_original_numeric_gates_checked": true,
+    "new_hier_fold2_numeric_fields_checked": 144,
+    "new_hier_fold2_changes_checked": 8,
+    "latest_fit_numeric_fields_checked": 48,
+    "latest_fit_changes_checked": 8,
+    "new_arm_screen_score_hashes_checked": 12,
+    "JSON_source_protocol_default_hash_checks_passed": 163,
+    "immutable_audit_and_comparison_match_live_outputs_bytewise": true,
+    "strict_audit_18_complete_zero_missing_six_references": true,
+    "closure_supporting_hashes_checked": 17,
+    "requirement_dispositions_checked": 10,
+    "current_CLI_and_config_match_preserved_inference_proof": true,
+    "total_task_logical_bytes_verified": 1468414518,
+    "documentation_corrections_verified": true,
+    "historical_supersession_labels_verified": true,
+    "interpretation": "All three fixed arms fail original eligibility; architecture confirmation/final recipes not triggered, count-shape unchanged. Empirical interval superiority, undercoverage, hier instability and failed patient probes remain explicit. Bounded pass ready for final commit.",
+    "no_test_audit_generation_training_reruns_writes_GPU_or_count_weight_arrays_by_reviewer": true
+  },
+  "documentation_and_commit_disposition": "Final evidence/documentation committed locally with this artifact; no push requested or performed."
+}

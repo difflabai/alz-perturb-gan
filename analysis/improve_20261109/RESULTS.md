@@ -1,10 +1,11 @@
 # improve_20261109: results of the 48-fit screen
 
-Status 2026-11-13: the selected development default and improvement pass are
-recorded in section 8i and `default_config.json`. The initial screen and seed confirmation are complete
-(sections 1-7). The latest resumed analyses are in sections 8f and 8h:
-extra-fold primary profile confirmation fails, and the round-5 zero-fraction
-critic makes the matched control worse. Development study only: 37 development
+Status 2026-11-13: the selected count-shape development default is recorded in
+section8o and `default_config.json`; section8r closes the completed18-fit
+architecture screen and improvement pass. Section8q retains the stronger
+empirical population-interval reference. The initial screen and seed confirmation
+are complete (sections1-7). Earlier resumed analyses in8f/8h retain failed
+primary profile confirmation and a harmful zero-fraction critic. Development study only: 37 development
 donors, repeated inner folds, no sealed donors read, not comparable with
 benchmark097 or any sealed result. See `TAKEOVER_20261113.txt` for the handoff.
 
@@ -797,7 +798,10 @@ and the donor encoder needed for real-patient feature vectors. No training
 or default change was made. All 18 historical coverage values reproduce;
 synthetic finite-M and held-out-exclusion checks pass.
 
-### 8k. Interval and architecture improvement pass (2026-11-13, in progress)
+### 8k. Interval and architecture improvement pass (2026-11-13, completed)
+
+The dated milestones below preserve the experiment's history. All18 fresh
+fits are now complete; section8r records the final verdict and completion audit.
 
 Owner requested all proposed improvements and an explicit goal to improve
 results/metrics. `PROTOCOL_ARCHITECTURE_PASS_20261113.txt` fixes the arms,
@@ -1266,9 +1270,9 @@ results kept separate and the full artifact audit:
 default CLI reproduces the final confirmation archive byte-for-byte and every
 historical/interval score exactly;14 CLI checks pass with the selected config.
 The duplicate archive was hash-pruned, preserving its receipt and full score.
-See `default_inference_verification_20261113.json`. Fresh architecture training continues under
-its original fixed comparison; passing that screen also requires comparison
-with the selected default before any later replacement.
+See `default_inference_verification_20261113.json`. The later architecture
+screen is now complete with no eligible arm (section8r). The forward rule
+requires comparison with this selected default before any later replacement.
 
 ![Completed count-shape development comparison](count_shape_confirmation_20261113.png)
 
@@ -1296,7 +1300,8 @@ fails to qualify as an improvement. The application reviewer found no
 statistical/protocol mismatch. See
 `architecture_recipe_gate_verification_20261113.json`. No training recipe,
 default or model-performance result changes in this implementation step;
-the planned18-fit architecture screen is still running.
+the planned18-fit architecture screen was still running at that checkpoint.
+Its final outcome is recorded in section8r.
 
 `r5/audit_architecture_pass.py` supplies a separate full-screen artifact
 check: frozen training/readout/scorer sources, resolved optimizer/regularizer
@@ -1367,6 +1372,84 @@ differences, training/held partitions, rank secondary results and provenance:
 `empirical_interval_reference_evidence_20261113.json`. Cached resumption also
 passes with generation forbidden, unchanged numerical results/score hashes,
 and no temporary NPZs remaining.
+
+### 8r. Completed architecture screen and improvement pass (2026-11-13)
+
+All18 planned20k fits completed normally: three fixed architectures, three
+folds and two seeds. These comparisons use the original pbulk
+`biascal@stagehalf` reference, CUDA generation, M32/K256 and matched streams.
+They remain separate from the twelve CPU count-shape confirmation pairs.
+
+| Original architecture screen | Profile RMSE | Held SD interval score | Held SD coverage | SD width | Folds with lower SD score |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Original pbulk | .486280 | .823638 | 55.68% | .411543 | reference |
+| Random-projection critic | .483362 | .828266 | 58.21% | .220055 | 2/3 |
+| Split donor/cell decoder | .478578 | .888058 | 50.95% | .426904 | 1/3 |
+| Four-state hierarchical decoder | .517172 | .838276 | 60.41% | .457450 | 1/3 |
+
+**No architecture is eligible.** Each worsens mean SD proper interval score
+and misses the mandatory lower-score direction in all three folds. Randproj
+also fails the meanlog/detection/logvar nonregression guards; split worsens
+SD-coverage distance. Hier improves per-fit SD-coverage distance by only
+.009763 despite its raw coverage mean increasing .047309: undercoverage
+and overcoverage cannot cancel in this gate. Extra-fold architecture
+confirmation and final CPU recipe comparisons are **not triggered**, as
+specified prospectively. No retrospective rule change or combined-component
+search was used to rescue a failed arm.
+
+Hier's final seed is particularly unstable: profile RMSE .492022->.666966,
+with all six historical errors worse. Its held SD coverage reaches91.26%
+with width .640924 versus .400086; SD score improves but mean/combined scores
+worsen. The fold2 pair's profile rises .483030->.579524. Across all six fits,
+hier's SD-score difference is +.014638, computational seed-noise SE .040673,
+fold-scatter SE .058757. Its historical guards pass with these large SEs;
+this is not evidence of equivalence. Training SD score worsens
+.619315->.700644. Full train/held mean/SD/combined coverages, widths, scores,
+all15 paired blocks per arm and per-fold directions remain in the
+[complete comparison](architecture_screen_complete_comparison_20261113.json)
+and [detailed evidence](architecture_screen_progress_evidence_20261113.json).
+
+The strict artifact CLI passes18/18 with zero missing fits, six matched
+original references, three predefined donor caches and all18 cache-payload
+hashes. Checkpoint, source, configuration, receipt, train-only calibration,
+score and pruning checks pass. The verbatim
+[complete audit](architecture_screen_complete_audit_20261113.json) is retained
+as an immutable committed artifact. It supersedes the historical FOUR-fit
+hash of the advancing partial-audit path in
+`architecture_screen_audit_verification_20261113.json`; that earlier file and
+its31-case verification remain unchanged and correctly scoped. Artifact
+verification does not independently rescore the pruned arrays or validate
+biology.
+
+The independent application reviewer recomputed144 aggregate numeric fields
+across all three arms, all45 paired-statistic blocks and every original gate,
+plus the final hier fold2/latest fields. Both immutable snapshots match live
+outputs byte-for-byte;163 JSON/source/protocol/default hash checks and all17
+closure supporting hashes pass. All10 requirement dispositions and the final
+documentation corrections are verified. The reviewer reran no training,
+generation, tests or audits and read no count/weight arrays. Task outputs total
+1,468,414,518 logical bytes, below the3GB limit; fit artifacts are retained
+and all18 temporary architecture-mode archives are hash-scored and pruned.
+
+The improvement pass retains **microglia-pbulk-countshape-v2**. Its twelve
+matched CPU pairs support23.6% lower meanlog error,25.8% lower detection error
+and23.2% lower SD interval score for0.0493% higher profile RMSE. The actual
+implicit-default CLI reproduces the confirmation archive and all scores
+exactly; current config/source hashes still match that proof and its14
+passing checks. The original strict profile failure remains recorded.
+Held SD/combined coverage is58.9/70.0%, below80%; training SD fit and the
+complementary-direction coverage diagnostic deteriorate. Stage-blind
+resampling remains the stronger tested population-interval reference.
+
+The [completion evidence](improvement_pass_completion_evidence_20261113.json)
+accounts for original interval/M128/rank/CQR work, count-shape confirmation,
+empirical references, the failed-and-stopped encoder/inverse/critic probes,
+earlier distribution recovery, all18 architecture fits and default inference.
+All work uses the same37 development donors; sealed donors remain untouched.
+No useful patient feature vectors or independent population calibration have
+been established. These fixed failed implementations do not refute the
+architecture ideas generally. The bounded pass is complete; no new tuning,
+training combination, deployment or push is implied.
 
 ## 9. Limits
 

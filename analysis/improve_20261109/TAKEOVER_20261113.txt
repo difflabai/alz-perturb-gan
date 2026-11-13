@@ -11,7 +11,7 @@ preserves the original reference. See RESULTS.md8o for the later promotion.
 Communication preference: the owner asked for fewer check-ins. Keep routine
 training monitoring quiet; report substantive milestones or actual blockers.
 
-ACTIVE ARCHITECTURE FOLLOW-UP, 2026-11-13
+COMPLETED ARCHITECTURE FOLLOW-UP, 2026-11-13
 --------------------------------------
 The owner then authorized all interval/architecture/patient-vector proposals
 and asked root to decide applications with a subagent. See RESULTS.md8j-8m,
@@ -20,84 +20,30 @@ PROTOCOL_ARCHITECTURE_PASS_20261113.txt and APPLICATION_DEFAULT_DECISION_
 Do not relaunch already-running jobs merely because a status file is old.
 Check actual processes/handles and their logs before resuming a queue.
 
-- GPU queue: r5/run_architecture_pass.py full; serial GPU1, memory fraction
-  .04,3threads/process. One task GPU process at a time; do not disturb other
-  projects. Eighteen20k fits (three arms x three folds x two seeds). The first
-  two seeds for each arm on folds0 and1 plus all three fold2,seed0 fits and
-  randproj/split fold2,seed1 are scored,17/18 total. Hier
-  fold2,seed1 is training; inspect
-  the actual child/phase.
-  All three arms now miss the mandatory
-  lower SD-score direction in their first paired fold. This necessary
-  all-fold condition cannot be repaired by other fold scores with the fixed
-  rule, but all18 planned fits continue and the full screen is incomplete.
-  Both randproj seeds worsen SD interval score. Its fold0 means are
-  .875238->1.015031 for SD score and .473327->.477509 for profile RMSE;
-  raw gene-marginal errors also worsen. Thus this paired fold misses the
-  required direction; all planned fits continue, with no gate changes.
-  Split improves profile in both seeds, but its second seed worsens SD score:
-  fold0 means profile .473327->.467214, SD score .875238->.889231 and SD
-  coverage52.70->49.94%. This fold also misses the required SD direction;
-  the screen remains incomplete and all18 fits continue. Hier's pair means
-  profile .473327->.471752, SD score .875238->.969441 and SD coverage
-  52.70->47.63%. No biological inferiority or default-promotion claim.
-  Randproj fold1,seed0 improves profile .514273->.488348 and held SD score
-  .710782->.650749, but detection error worsens23.34%, held SD coverage
-  62.91->61.00%, and train SD coverage81.09->20.70%. This is one unpaired
-  seed, not a fold mean or a repair of the mandatory fold0 condition.
-  Split fold1,seed0 improves all six historical errors, including profile
-  .514273->.479229 (6.81%), but SD score worsens .710782->.929102 (30.72%)
-  and SD coverage62.91->43.04%. Hier fold1,seed0 improves profile4.63% but
-  worsens SD score9.16% and coverage62.91->54.19%; detection error rises5.58%.
-  Randproj's completed fold1 pair improves profile2.67% and held SD score5.92%,
-  but gene-mean/detection/logvar errors worsen11.84/17.20/8.37%, held SD
-  coverage62.31->59.74% and train SD coverage79.40->20.32%. Its fold0 miss
-  stands; the full screen is incomplete. Split's fold1 pair improves profile
-  3.77%, meanlog7.39% and detection4.57%, but worsens SD score30.41% and
-  coverage62.31->45.49%. Its combined interval score and PC/cell energy
-  mean errors worsen; mean coverage overshoots80%. Hier's completed fold1
-  pair improves profile0.45%, but worsens meanlog/detection19.30/18.16%,
-  SD score7.09% and SD coverage62.31->57.50%. All three arms now have two
-  paired folds. Randproj fold2,seed0 improves held SD score10.49% and SD
-  coverage49.01->61.60%, but worsens profile2.17% and gene errors; training
-  SD coverage falls78.56->21.42%. Split fold2,seed0 improves SD score5.88%
-  and coverage49.01->50.63%, but worsens profile0.47% and gene errors.
-  Hier fold2,seed0 improves SD score14.26% and coverage49.01->60.92%, but
-  worsens profile3.81%; meanlog/detection improve, logvar/cell energy worsen.
-  Randproj's completed fold2 pair improves SD score9.44% and coverage
-  52.01->63.07%, but gene errors worsen. Split's complete fold2 pair improves
-  SD score .893780->.859575 and coverage52.01->57.41% with wider ranges;
-  profile and all three gene errors worsen. Hier fold2 remains unpaired.
-  Randproj's full6-fit screen is COMPLETE and NOT ELIGIBLE: SD score mean
-  .823638->.828266, lower in only2/3 folds; meanlog/detection/logvar each
-  regress>2computational seed-noise SE. No extra-fold/finalrecipe branch
-  is triggered for this arm. Split's full6-fit screen is also COMPLETE and
-  NOT ELIGIBLE: SD score .823638->.888058, lower in only1/3 folds; SDcoverage
-  distance worsens. All6 historical guards pass but cannot rescue these
-  failed targets. No split confirmation/finalrecipe branch is triggered.
-  One remaining fit and full18 audit are pending.
-  No default change or restored fold0 gate.
-  All seventeen checkpoint/source/recipe/receipt checks and six references pass. Latest
-  committed snapshot: architecture_screen_progress_evidence_20261113.json;
-  older local details:
-  results_r5/architecture_pass/{first_seed_artifact_checks,
-  randproj_fold0_seed1_artifact_checks}.json. The refreshed comparison.json
-  reports randproj/split complete and not eligible; hier is incomplete5/6.
-  Inspect live state before any action.
-  r5/audit_architecture_pass.py now checks the full18-fit artifact set and
-  matched original references without deserializing counts/weights. It pins
-  the original resolved training settings and donor folds, verifies donor
-  uniqueness/identities and all18 cache payload hashes, and checks reference
-  fit/archive links. Thirty-one negative/completeness cases pass. Normal
-  invocation rejects partial screens; --allow-incomplete is only for progress
-  inspection and still records status=incomplete. This audit does not replace
-  numeric eligibility/confirmation. See architecture_screen_audit_
-  verification_20261113.json and RESULTS.md8p.
-  Final completion must preserve an immutable complete18-fit audit, explicitly
-  superseding that dated verification's FOUR-fit hash of the mutable live
-  partial file. Completion-scope review found the other tracks accounted for;
-  do not revive stopped probes, SD-onlyCQR or count-shape/M128 experiments.
-  See progress evidence completion_audit_preparation for the final checklist.
+- GPU queue is COMPLETE: r5/run_architecture_pass.py full exited0; all18
+  fixed20k fits are scored and strictly audited, zero missing. Serial GPU1,
+  memory fraction.04,3threads/process; no task training process remains.
+  Three arms x three folds x two seeds, original biascal@stagehalf CUDA/M32/
+  K256 reference. Every arm fails original eligibility; confirmation and
+  final CPU recipe branches are NOT TRIGGERED. No rule rescue or default
+  change. Final held SD proper score original .823638, randproj .828266,
+  split .888058, hier .838276. Lower fold means2/3,1/3,1/3 respectively;
+  the rule requires all3 and>2computational SE improvement. Randproj also
+  fails three gene guards; split worsens SD coverage distance. Hier's final
+  seed is unstable (profile .666966, SDcoverage91.26%); passing historical
+  guards with large seed noise is not equivalence. Keep all train/held
+  deterioration and under/overcoverage visible.
+  Immutable complete audit: architecture_screen_complete_audit_20261113.json
+  (18fits,6original references,3cache manifests/18payload hashes).
+  Complete comparison: architecture_screen_complete_comparison_20261113.json.
+  Detailed dated progression/reviews: architecture_screen_progress_evidence_
+  20261113.json. RESULTS.md8r records the final verdict. The new immutable
+  complete audit explicitly supersedes the historical FOUR-fit hash of a
+  mutable partial path in architecture_screen_audit_verification_20261113.json;
+  preserve that earlier file unchanged as historical31-case verification.
+  r5/audit_architecture_pass.py audits source/settings/checkpoints/receipts/
+  caches/score and pruning metadata; it does not independently rescore the
+  pruned arrays or establish biological validity. No reruns are outstanding.
 - CPU queue: r5/run_shape_confirmation.py; frozen pbulk fits, no training.
   All twelve matched CPU pairs on folds3-8,seeds0/1 are COMPLETE; every gate
   and the source/checkpoint/receipt audit passes. Compare with
@@ -151,9 +97,11 @@ of fits_r5,smoke_r5,results_r5,logs_r5. Keep this task below3GB; hash/score/prun
 temporary generated NPZs, retain fit checkpoints and receipts. Frozen r3/r4
 source and old fit folders remain untouched. No sealed/external donor counts.
 Read the queue-specific source manifests before changing training/math code.
-The current goal is active: finish queues and predeclared comparisons, confirm
-any promising architecture on extra folds, select/verify/commit the best
-default, and report actual limitations. No push requested.
+The bounded improvement pass is complete: all required queues/comparisons and
+conditional stopping decisions are accounted for in improvement_pass_completion_
+evidence_20261113.json. The supported count-shape default is committed and
+verified; no architecture replacement qualified. Do not restart failed probes
+or launch extra tuning as unfinished work. No push requested.
 
 Aim
 ---
@@ -234,8 +182,9 @@ Boundaries to carry forward
 Read PROTOCOL.md and r5/PROTOCOL_R5.md. Only 37 SEA-AD development donors;
 sealed evaluation donors stay sealed. Frozen r3/r4 source and existing fits
 are read-only. Writes for this continuation are under analysis/improve_20261109
-and runs/improve_20261109, with r5 outputs under *_r5. No commits, pushes,
-checkouts or stashes. Python /mnt/nvme/ai/conda/anaconda3/bin/python3 -B;
+and runs/improve_20261109, with r5 outputs under *_r5. The original no-commit
+restriction is historical and superseded above; no
+pushes, checkouts or stashes. Python /mnt/nvme/ai/conda/anaconda3/bin/python3 -B;
 at most 3 CPU threads per process. GPUs are shared and memory-capped when
 authorised. About 37 GB disk space remained at takeover, so keep outputs small.
 
