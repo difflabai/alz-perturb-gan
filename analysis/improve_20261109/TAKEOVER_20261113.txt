@@ -20,9 +20,9 @@ Check actual processes/handles and their logs before resuming a queue.
 - GPU queue: r5/run_architecture_pass.py full; serial GPU1, memory fraction
   .04,3threads/process. One task GPU process at a time; do not disturb other
   projects. Eighteen20k fits (three arms x three folds x two seeds). The first
-  two seeds for each arm on folds0 and1 plus randproj/split fold2,seed0 are
-  scored,14/18 total. Hier
-  fold2,seed0 is training; inspect
+  two seeds for each arm on folds0 and1 plus all three fold2,seed0 fits are
+  scored,15/18 total. Randproj
+  fold2,seed1 is training; inspect
   the actual child/phase.
   All three arms now miss the mandatory
   lower SD-score direction in their first paired fold. This necessary
@@ -59,9 +59,11 @@ Check actual processes/handles and their logs before resuming a queue.
   coverage49.01->61.60%, but worsens profile2.17% and gene errors; training
   SD coverage falls78.56->21.42%. Split fold2,seed0 improves SD score5.88%
   and coverage49.01->50.63%, but worsens profile0.47% and gene errors.
-  Both fold2 results are unpaired; four fits remain.
+  Hier fold2,seed0 improves SD score14.26% and coverage49.01->60.92%, but
+  worsens profile3.81%; meanlog/detection improve, logvar/cell energy worsen.
+  All three fold2 results are unpaired; three second-seed fits remain.
   No default change or restored fold0 gate.
-  All fourteen checkpoint/source/recipe/receipt checks pass. Latest
+  All fifteen checkpoint/source/recipe/receipt checks pass. Latest
   committed snapshot: architecture_screen_progress_evidence_20261113.json;
   older local details:
   results_r5/architecture_pass/{first_seed_artifact_checks,
@@ -76,6 +78,11 @@ Check actual processes/handles and their logs before resuming a queue.
   inspection and still records status=incomplete. This audit does not replace
   numeric eligibility/confirmation. See architecture_screen_audit_
   verification_20261113.json and RESULTS.md8p.
+  Final completion must preserve an immutable complete18-fit audit, explicitly
+  superseding that dated verification's FOUR-fit hash of the mutable live
+  partial file. Completion-scope review found the other tracks accounted for;
+  do not revive stopped probes, SD-onlyCQR or count-shape/M128 experiments.
+  See progress evidence completion_audit_preparation for the final checklist.
 - CPU queue: r5/run_shape_confirmation.py; frozen pbulk fits, no training.
   All twelve matched CPU pairs on folds3-8,seeds0/1 are COMPLETE; every gate
   and the source/checkpoint/receipt audit passes. Compare with

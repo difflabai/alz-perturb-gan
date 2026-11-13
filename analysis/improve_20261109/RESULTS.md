@@ -980,6 +980,32 @@ Training mean/combined scores improve, while SD score rises slightly
 All fourteen finalized fits pass the artifact audit; four fits remain.
 No change to the fixed gates or selected default.
 
+The fifteenth fit completes the first seeds on fold2. Hier improves held SD
+interval score .950135->.814629 (14.26%) and coverage49.01->60.92%, with
+slightly wider SD ranges .437502->.446887. Profile error worsens3.81%,
+logvar7.87% and cell energy4.24%; meanlog/detection errors improve0.96/2.85%.
+Held combined score improves1.084520->1.034388, while mean interval score
+worsens. Training mean/combined scores improve, while SD score rises
+.604323->.613886. All fifteen finalized fits pass the artifact audit.
+
+Fold2,seed0 only; these are unpaired values, not fold means:
+
+| Recipe | Profile RMSE | SD interval score | SD coverage | SD width |
+|---|---:|---:|---:|---:|
+| Original pbulk biascal | .474038 | .950135 | 49.01% | .437502 |
+| Random-direction critic | .484310 | .850498 | 61.60% | .234582 |
+| Split decoder | .476285 | .894240 | 50.63% | .438262 |
+| Hierarchical decoder | .492082 | .814629 | 60.92% | .446887 |
+
+All three first seeds improve SD score and coverage but worsen profile
+error. The three second-seed fits remain. This does not restore any missed
+fold0 condition or change the selected default. A read-only completion-scope
+review accounts for the other finished workstreams and confirms that stopped
+patient probes and untriggered conditional branches need no new experiments.
+The complete18-fit artifact/numeric comparison and final default disposition
+remain required; a final immutable audit must supersede the historical
+four-fit verification's reference to the advancing partial-audit file.
+
 An additional calibration-compatibility check passes for all three optional
 architectures: shifting the existing output bias changes expected gene log
 odds once, including through centered state/cell residuals, and leaves NB
