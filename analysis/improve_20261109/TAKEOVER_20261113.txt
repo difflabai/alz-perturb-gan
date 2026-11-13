@@ -20,8 +20,9 @@ Check actual processes/handles and their logs before resuming a queue.
 - GPU queue: r5/run_architecture_pass.py full; serial GPU1, memory fraction
   .04,3threads/process. One task GPU process at a time; do not disturb other
   projects. Eighteen20k fits (three arms x three folds x two seeds). The first
-  two seeds for each arm on fold0 are scored,6/18 total. Fold1 has started;
-  inspect the actual child/phase. All three arms now miss the mandatory
+  two seeds for each arm on fold0 plus randproj fold1,seed0 are scored,7/18
+  total. Split fold1,seed0 is training; inspect the actual child/phase.
+  All three arms now miss the mandatory
   lower SD-score direction in their first paired fold. This necessary
   all-fold condition cannot be repaired by other fold scores with the fixed
   rule, but all18 planned fits continue and the full screen is incomplete.
@@ -35,7 +36,11 @@ Check actual processes/handles and their logs before resuming a queue.
   the screen remains incomplete and all18 fits continue. Hier's pair means
   profile .473327->.471752, SD score .875238->.969441 and SD coverage
   52.70->47.63%. No biological inferiority or default-promotion claim.
-  All six checkpoint/source/recipe/receipt checks pass. Latest
+  Randproj fold1,seed0 improves profile .514273->.488348 and held SD score
+  .710782->.650749, but detection error worsens23.34%, held SD coverage
+  62.91->61.00%, and train SD coverage81.09->20.70%. This is one unpaired
+  seed, not a fold mean or a repair of the mandatory fold0 condition.
+  All seven checkpoint/source/recipe/receipt checks pass. Latest
   committed snapshot: architecture_screen_progress_evidence_20261113.json;
   older local details:
   results_r5/architecture_pass/{first_seed_artifact_checks,

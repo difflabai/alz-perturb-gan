@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "recorded_utc": "2026-11-13T11:37:56.738278+00:00",
+  "recorded_utc": "2026-11-13T12:14:03.000100+00:00",
   "status": "screen_incomplete",
   "planned_fits": 18,
-  "completed_scored_fits": 6,
-  "scope": "Same37 development donors; first complete paired fold for all three architectures; no biological independence or completed-screen claim",
+  "completed_scored_fits": 7,
+  "scope": "Same37 development donors; complete paired fold0 and one unpaired fold1 seed; no biological independence or completed-screen claim",
   "governing_protocols": {
     "PROTOCOL_ARCHITECTURE_PASS_20261113.txt": "ddfa8f48cf9d1cec3b361861758c8ca75f6ef4512c6ad91b1c59427c37f1c133",
     "PROTOCOL_ARCHITECTURE_FINAL_SELECTION_20261113.txt": "75471c0c0a84faaabb0eca4cec9e066e278969eb8d015187594e157a4c5029dd"
@@ -12,15 +12,9 @@
   "artifact_audit_snapshot": {
     "status": "incomplete",
     "complete": false,
-    "verified_fits": 6,
+    "verified_fits": 7,
     "planned_fits": 18,
     "missing": [
-      {
-        "arm": "d.randproj,pbulk",
-        "fold": 1,
-        "seed": 0,
-        "reason": "score not finalized"
-      },
       {
         "arm": "d.randproj,pbulk",
         "fold": 1,
@@ -313,6 +307,28 @@
         "pruned_mode_summary_sha256": "1b393c411ce38842ae22f4e153509c2c16552b598d32b257d335ff0264d23e13"
       },
       {
+        "arm": "d.randproj,pbulk",
+        "fold": 1,
+        "seed": 0,
+        "cache_manifest_sha256": "fb856d7f69eb37655bc08e4dd511da5ccf243cf17a700edd392af288a579140b",
+        "config_sha256": "3511d0d84eb9b8239724165465d8b96094797be76e0de02ba62ce74c497f1256",
+        "fit_receipt_sha256": "64c4bd7fe0bd10e567ac31987d7211ae12f67bf2bc2ac339708b3a59ebe9a368",
+        "mode_receipt_sha256": "aab618b4af787e76883b0a20c070820b120350f44f271c83ae65ff72eeb393a1",
+        "score_sha256": "b26938319302c52c3bf0ab02c0d105dc4cdd4f8edb37a5e2bdb6e638c8a468f3",
+        "checkpoints": {
+          "final.pt": "f8cbd3cada65b092f70bc206c5ff43c61542e35e9fe6eeb39615763e428c55c5",
+          "snap_5000.pt": "d607324d3b7f571b420cc6c3ab678d5f644651ed91842050204022ca117c6b76",
+          "snap_10000.pt": "405ab0a8f605ceda19e6a7927d7d934626847e9c1fa3b2530055408a3d0efb03",
+          "snap_15000.pt": "4eb080a4d4195555fbd44b448bf52ec020aca3372178e9bc276d6f8856f00cc2",
+          "snap_16000.pt": "6e82ea89ec4e23f12f47bbae5f19394150dd33da72c06ce60fcaadc270b2178b",
+          "snap_17000.pt": "16f107dc823a0b44f422695a57d7450968f5c8fd997a836acbd2bdb73d7ca0fb",
+          "snap_18000.pt": "4e80876c2220d122c5aacdec6d2cdac3699c1b83f2f67d68b82ae8e576771804",
+          "snap_19000.pt": "9c67b342c7bd2fb59b6ef02432c645b94ff3c30426681327c4b2bfea81764a1e"
+        },
+        "native_summary_sha256": "4cb247ed5d622bee54b3ec96b519f449ebfba469433537322e67adb88834b626",
+        "pruned_mode_summary_sha256": "bde633d923e3d950edc2a8ef7c4b04b7233e2e6c8e84138d59c7c8823e6efa49"
+      },
+      {
         "arm": "g.hier,pbulk",
         "fold": 0,
         "seed": 0,
@@ -413,12 +429,18 @@
         "receipt_sha256": "691d1886a13912ba31ba4c9644e1d42c31d92faf14f3f834ffc35976e677dd61",
         "config_sha256": "f7a72b6210548e7717f22b9caf7d3a5ca729357b80db7aec31562b9beadf8e76",
         "generated_sha256": "fd369739ea010bb52282f24ea260e856faa2b78037dfe7d1b883333c3a25caa4"
+      },
+      "fold1/seed0": {
+        "score_sha256": "c94e59425349db92a5f66b7469512cba7c156a45bd7459f11676082f379841c5",
+        "receipt_sha256": "018b22c7436ddf380f63aed4e746bafc608c6b91b81577a874b48548dbe5901e",
+        "config_sha256": "c5ceb0041e4b3b6146dc9655bf145a5dd1bf4d65e8e9e3bead2ce617cf5e46a4",
+        "generated_sha256": "7751639039a1c21e56009f77767f79a402968282ccec301d76ca0e375ec05302"
       }
     },
     "auditor_sha256": "2f807e5ffaa6a79d162ae77795e01d50679ffbfef098ca2b8c7b0cd86e47ff80",
     "scope": "Artifact/metadata/source verification only; numerical gates remain separate; pruned arrays not rescored"
   },
-  "comparison_snapshot_sha256": "5d6f004be1c3b6d92949226a2c8a6a523f25bc5323ae21029f8d35c30c8a99ad",
+  "comparison_snapshot_sha256": "ed0eb3c56b5df9dfdd12ba3db8d54f508be4e9955473586ebb71eafa76e30b76",
   "split_fold0_pair": {
     "candidate": "g.split,pbulk",
     "reference": "original pbulk",
@@ -1175,6 +1197,126 @@
     "protocol_comparison_default_hashes_checked": true,
     "artifact_audit_snapshot_checked": true,
     "interpretation": "All three completed fold0 pairs miss a necessary all-fold SD-score direction condition. Remaining folds cannot restore eligibility if verified scores and fixed rules stand. Full18-fit screen remains incomplete; no biological inferiority claim.",
-    "no_file_writes_CLI_GPU_or_deserialization": true
+    "no_file_writes_CLI_GPU_or_deserialization": true,
+    "evidence_commit": "7df84e9",
+    "snapshot_scope": "Previous six-fit snapshot; first-fold paired numeric fields unchanged"
+  },
+  "latest_fit": {
+    "arm": "d.randproj,pbulk",
+    "fold": 1,
+    "seed": 0,
+    "reference": "original pbulk biascal@stagehalf",
+    "mode": "biascal@stagehalf",
+    "generation_device": "cuda",
+    "M": 32,
+    "K": 256,
+    "candidate": {
+      "historical": {
+        "pb_rmse": 0.488348323704883,
+        "meanlog_rmse_gene": 0.11257926056401518,
+        "nonzero_rmse_gene": 0.024461549590273912,
+        "logvar_rmse_gene": 0.20511572367727327,
+        "pc_energy_rep": 1.847223321071872,
+        "cell_energy_rep": 0.7438744236465124
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.6311458333333333,
+            "width": 0.6407413973069439,
+            "interval_score": 1.4053335306761154
+          },
+          "sd": {
+            "coverage": 0.2070138888888889,
+            "width": 0.21747538912399572,
+            "interval_score": 1.7788405503548972
+          },
+          "combined": {
+            "coverage": 0.4190798611111111,
+            "width": 0.42910839321546984,
+            "interval_score": 1.592087040515506
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.7251923076923077,
+            "width": 0.6194855934133611,
+            "interval_score": 1.1497676326897537
+          },
+          "sd": {
+            "coverage": 0.61,
+            "width": 0.21217368551236937,
+            "interval_score": 0.6507487941864255
+          },
+          "combined": {
+            "coverage": 0.6675961538461539,
+            "width": 0.4158296394628653,
+            "interval_score": 0.9002582134380895
+          }
+        }
+      }
+    },
+    "original": {
+      "historical": {
+        "pb_rmse": 0.5142725029301963,
+        "meanlog_rmse_gene": 0.09675868732146974,
+        "nonzero_rmse_gene": 0.019832014159088425,
+        "logvar_rmse_gene": 0.2021503777471785,
+        "pc_energy_rep": 1.9426361959428415,
+        "cell_energy_rep": 0.7974860915488543
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.7515277777777778,
+            "width": 0.7998319508943242,
+            "interval_score": 1.3242056823328867
+          },
+          "sd": {
+            "coverage": 0.8109027777777778,
+            "width": 0.45615652488845704,
+            "interval_score": 0.61050305508228
+          },
+          "combined": {
+            "coverage": 0.7812152777777778,
+            "width": 0.6279942378913906,
+            "interval_score": 0.9673543687075834
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.8264102564102564,
+            "width": 0.781590722326476,
+            "interval_score": 1.0813261779414127
+          },
+          "sd": {
+            "coverage": 0.6291025641025642,
+            "width": 0.4359456419898678,
+            "interval_score": 0.710782402603141
+          },
+          "combined": {
+            "coverage": 0.7277564102564102,
+            "width": 0.6087681821581719,
+            "interval_score": 0.8960542902722768
+          }
+        }
+      }
+    },
+    "candidate_score_sha256": "b26938319302c52c3bf0ab02c0d105dc4cdd4f8edb37a5e2bdb6e638c8a468f3",
+    "original_score_sha256": "c94e59425349db92a5f66b7469512cba7c156a45bd7459f11676082f379841c5",
+    "historical_relative_changes": {
+      "pb_rmse": -0.050409421226302764,
+      "meanlog_rmse_gene": 0.16350545548415085,
+      "nonzero_rmse_gene": 0.23343748113773444,
+      "logvar_rmse_gene": 0.014669010086161727,
+      "pc_energy_rep": -0.04911515345499973,
+      "cell_energy_rep": -0.06722583436937302
+    },
+    "heldout_sd_interval_score_relative_change": -0.08446130376448657,
+    "interpretation": [
+      "One unpaired seed only; it cannot establish a fold mean or a screen verdict.",
+      "Profile, PC/cell energy and held-out SD interval score improve, while gene-mean/detection/logvar errors worsen.",
+      "SD and combined coverages decline; training SD coverage and score deteriorate sharply. No default change or altered eligibility rules."
+    ]
   }
 }

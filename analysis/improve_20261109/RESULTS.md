@@ -856,7 +856,7 @@ guards must finish before any architecture promotion. See compact committed
 `architecture_pass_evidence_20261113.json`; live status/artifacts under
 `runs/improve_20261109/{fits_r5,smoke_r5,results_r5,logs_r5}/architecture_pass`.
 
-Interim fresh screen:6/18 fits scored, with complete fold0 seed pairs for
+First paired-fold milestone:6/18 fits scored, with complete fold0 seed pairs for
 all three architectures. Split's second seed improves profile RMSE
 .471100->.461793 but worsens held-out SD interval score .883350->.991115.
 Its two-seed fold means are profile .473327->.467214 (1.29% lower), SD score
@@ -883,6 +883,16 @@ change. Fold1 has started. All six fits pass the source/config/cache/
 checkpoint/receipt audit; see
 `architecture_screen_progress_evidence_20261113.json` for the dated snapshot,
 per-seed values and train/held-out interval results.
+
+One additional fit is now scored,7/18 total: randproj fold1,seed0 improves
+profile .514273->.488348 (5.04%) and held SD interval score .710782->.650749
+(8.45%), but detection error worsens23.34%, meanlog error16.35%, and held
+SD coverage62.91->61.00%. Training SD coverage falls81.09->20.70% and its
+SD score worsens .610503->1.778841. This is an unpaired seed; it does not
+establish a fold mean or restore the missed fold0 direction. All seven fits
+pass the artifact audit, including the new matched original reference.
+The same evidence file records this fit separately from the completed
+first-fold pairs; the prior independent reviews retain their dated scope.
 
 An additional calibration-compatibility check passes for all three optional
 architectures: shifting the existing output bias changes expected gene log
