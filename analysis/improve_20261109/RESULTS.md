@@ -970,6 +970,43 @@ stage-only activation offsets do not create residual repeatability. Exact
 per-seed diagnostics, fixed-grid readout choices, depth32/128 sensitivity and
 source/checkpoint hashes: `critic_features_evidence_20261113.json`.
 
+### 8n. Finished distribution recovery of the earlier confirmation (2026-11-13)
+
+`r5/resume_confirmation_distributions.py` closes the outstanding distribution
+part of the completed r4 study. It reads existing synthetic SEA-AD summaries,
+the37-donor development caches, and saved baseline scores. No external count
+files, new generation, calibration or model updates. All48 primary fits on
+folds3-8,seeds0/1, all three declared readouts, both ensemble sizes and saved
+reference scores are complete. The original-fold exploratory block lacks
+three unplanned dispersion seed1 fits and some original biascal outputs;
+those absences are reported, without substituting different recipes.
+
+The recovered primary factor analysis is identical to the prior profile-only
+report: dispersion and external pooling remain NOT CONFIRMED. Independently
+recomputed42 existing full evaluator scores reproduce all2,058 finite metric
+values exactly. The run reads204 generated archives and117 baseline score
+files. M64 pooled ensembles and M32 alternating-seed ensembles are distinct.
+Neither secondary distribution scores nor ensemble gains override the primary
+null or the previously found external-source contamination.
+
+On the same extra folds, under `biascal@stagehalf`, single-fit averages are:
+
+| Method | Mean-log error | Detection error | Log-variance error | PC energy | Cell energy | Coverage distance from .8 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| pbulk | .10623 | .02321 | .21067 | 2.03264 | .81403 | .13863 |
+| pbulk + donor-dependent dispersion | .11365 | .02572 | .21667 | 1.97423 | .78281 | .07871 |
+| Empirical stage-blind resampling | .08290 | .01797 | .20421 | 1.84508 | .73625 | .04958 |
+
+All columns are losses, lower is better; coverage distance is not raw coverage.
+Better projected energy/coverage can coexist with worse gene marginals. Simple
+empirical resampling remains a strong reference. This supports evaluating the
+current fixed count-shape candidate on all declared raw-gene and distribution
+checks rather than choosing on one projected score. It does not promote any
+old factor or establish patient/biological feature validity. Exact tables,
+M32/M64 ensemble comparisons, missing-source list and provenance hashes:
+`confirmation_distributions_evidence_20261113.json`. Full local outputs:
+`runs/improve_20261109/results_r5/confirmation_distributions/`.
+
 ## 9. Limits
 
 Three inner folds whose training sets overlap by about half; two seeds; 37

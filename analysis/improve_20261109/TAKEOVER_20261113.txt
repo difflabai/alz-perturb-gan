@@ -34,10 +34,13 @@ Check actual processes/handles and their logs before resuming a queue.
 - Patient vectors: neural generator encoder, direct inverse fit and frozen
   learned-critic feature probe all fail their fixed initial checks. No
   patient encoder/biological axes promoted. Evidence files are committed.
-- The old confirmation distribution backfill is now running CPU-only via
-  r5/resume_confirmation_distributions.py. It reads existing synthetic
-  SEA-AD outputs and saved baseline SCORES, not external counts. Primary
-  profile nulls remain binding. M32 and M64 ensembles are kept separate.
+- The old confirmation distribution backfill is COMPLETE via
+  r5/resume_confirmation_distributions.py, RESULTS.md8n and committed
+  confirmation_distributions_evidence_20261113.json. All extra-fold singles,
+  M32/M64 ensembles and saved references exist;42 old scores/2,058 metric
+  values reproduce exactly. Original primary nulls are unchanged. This read
+  existing synthetic SEA-AD outputs and saved baseline SCORES, not external
+  counts. Do not rerun it as outstanding work.
 
 New training/interval/shape outputs are under the architecture_pass children
 of fits_r5,smoke_r5,results_r5,logs_r5. Keep this task below3GB; hash/score/prune
@@ -109,8 +112,9 @@ gains do not override the primary null or the earlier contamination finding.
 
 Remaining work and the useful next direction
 -------------------------------------------
-- The full distribution-metric/extra-baseline part of the 54-fit confirmation
-  is still outstanding; the recovered report is explicitly profile-only.
+- The full distribution-metric/extra-baseline part was outstanding at
+  takeover; it is now recovered separately (RESULTS.md8n). The earlier
+  confirmation_profiles report remains explicitly profile-only.
 - No new training or GPU jobs were started during this takeover.
 - Keep the earlier recipe; do not call the latest block an improvement.
 - Before another large screen, investigate whether the count-gradient and
