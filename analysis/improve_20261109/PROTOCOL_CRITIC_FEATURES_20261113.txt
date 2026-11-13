@@ -1,0 +1,52 @@
+Frozen learned-critic features: bounded donor-reconstruction probe
+================================================================
+Declared before running any probe scores. This follows the owner's interest
+in model-learned patient feature vectors and independent application review.
+It does not replace the failed generator-latent encoder/inversion or the
+ongoing architecture/distribution experiments. No GAN training or updates.
+
+Use only the final pbulk critic's existing phi output (128 coordinates), on
+real64-cell bags. Critic inputs are the existing150 PCA mean/SD/Fourier plus
+2000 pseudobulk summaries and7 condition slots. Only stage slot3 is active.
+Exact original critic initialization is the matched untrained control.
+Frozen train-only standardization/feature transforms remain unchanged.
+
+Development fold0,seeds0,1 first. Split each donor's cells into disjoint A/B
+halves using the previously fixed encoder-cell-halves stream. Input64 cells
+from one half, predict log-CP10K pseudobulk of the entire other half, in both
+directions. All observations of each donor remain grouped during selection.
+Readout ridge standardization and hyperparameter selection use TRAIN donors
+only, never outer held-out donors. GAN features were trained on all TRAIN
+donors; inner validation selects readout regularization, not a new GAN.
+
+Controls: train mean, observed input pseudobulk, conditions-only, ridge on
+direct input pseudobulk, ridge on FULL2150 original summaries, matched
+untrained phi, learned phi. Each ridge has the same fixed alpha grid
+(.01,.1,1,10,100), squared-error objective mean over rows plus alpha times
+coefficient norm, normalized by input dimension. No rank/layer selection.
+All feature readouts include four-level stage one-hot indicators (stronger
+than a linear stage-only control). Inner leave-one-TRAIN-donor-out RMSE
+chooses alpha; normalize from each inner-training subset. Final readouts
+refit on all TRAIN donors. Donor errors average both directions.
+
+Report centered/scaled feature split-cell repeatability, and repeatability
+after train-fitted stage-mean residualization (not raw activation offsets).
+Report reconstruction of stage-residualized gene deviations, depth32/128
+feature sensitivity, donor-paired errors and cross-seed predicted gene
+deviation correlation. These do not add independent biological donors.
+
+Continuation gate fixed here: each seed improves learned-feature held-out
+reconstruction over train mean, categorical-stage-only predictor and the
+untrained phi; mean relative RMSE improvement over train mean and untrained
+phi must each be >=1%; condition-residualized feature repeatability >=.8
+in BOTH seeds. Only then run folds1/2,seeds0/1, without parameter changes.
+Stronger usefulness claim also requires beating direct pseudobulk/full-
+summary ridge, or explicitly showing comparable accuracy with compression.
+Otherwise report that observed information survives a transform, without
+claiming incremental information. A failed screen stops this probe.
+
+Scope: compact discriminator fingerprint/reconstruction audit only. Critic
+features can encode technical discrepancies and generator blind spots.
+Success would not identify biological programs, patient axes, causality,
+clinical utility, or a native generator latent for real patients. No sealed
+evaluation donors or external count files; CPU3threads, existing task paths.

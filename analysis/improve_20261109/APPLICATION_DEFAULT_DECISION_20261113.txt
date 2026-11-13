@@ -62,6 +62,14 @@ Raw neural encoders and direct inverse fits both fail real reconstruction;
 none is promoted as a biological patient feature map. The initial direct
 inverse fit improves neural reconstruction but remains below train mean.
 
+A separate frozen final-critic128phi probe also fails its predeclared initial
+gate. Learned-feature reconstruction RMSE .4760/.4715 loses to exact untrained
+critic features .4439/.4546 and direct observed-pseudobulk ridge .4136.
+Stage-residual split-cell repeatability .617/.807 fails in one seed. No
+extra-fold probe or patient-feature promotion follows. This is distinct from
+generator-native latent inversion; useful patient representations remain an
+open research objective, with direct-expression references essential.
+
 Sources: default_config_evidence.json; architecture_pass_evidence_20261113.
 json; INTERVAL_ARCHITECTURE_REVIEW_20261113.txt; inverse_donor_evidence_
 20261113.json; live shape_confirmation scores. Root aggregates this review

@@ -911,6 +911,50 @@ biological states. The independent application reviewer retains the same
 conditional recommendation after examining both seeds. See
 `shape_random_projection_evidence_20261113.json` for exact per-seed values.
 
+### 8m. Frozen critic features and matched controls (2026-11-13)
+
+The user-requested application reviewer proposed a bounded direct probe of
+learned model features. `PROTOCOL_CRITIC_FEATURES_20261113.txt` fixes the final
+critic's128-dimensional phi output and all controls before scoring. No GAN
+updates. Input64 cells from A predict the entire disjoint B-half profile, and
+vice versa; average errors by donor. The two directions stay grouped during
+leave-one-TRAIN-donor-out ridge selection. Normalization is refitted within
+each inner-training subset. Outer held-out counts cannot tune the readout.
+
+Initial fold0,seeds0-1 results on12 held-out donors:
+
+| Readout | Seed0 RMSE | Seed1 RMSE |
+| --- | ---: | ---: |
+| Learned final-critic phi + stage | .47601 | .47145 |
+| Exact original untrained phi + stage | .44389 | .45463 |
+| Direct observed pseudobulk ridge + stage | .41355 | .41355 |
+| Full original2150-summary ridge + stage | .41480 | .41480 |
+| Categorical stage only | .47752 | .47752 |
+| Training mean | .47730 | .47730 |
+| Input64-cell pseudobulk | .48122 | .48122 |
+
+Learned features beat train mean by only .27%/1.23% and lose to the untrained
+control by7.24%/3.70%. Train-normalized, stage-residual split-cell repeatability
+is .617/.807, so seed0 also misses the .8 gate. Predicted gene-deviation
+correlation across seeds is .251 (each model's own train-stage effect removed:
+.294). Subtracting a common target-derived stage reference inflates agreement;
+the comparator and a constant-predictor test guard against that artifact.
+The fixed continuation
+gate fails; stop this probe rather than select a new layer or extend folds.
+No patient encoder or biological coordinates are promoted. Critic training
+can emphasize generator errors rather than robust donor identity. Direct
+observed-expression ridge is a useful reference for subsequent feature work.
+These numbers use both cell directions and differ from the earlier one-way
+encoder/inverse test; do not pool their RMSEs as one benchmark.
+The critic trained on128-cell bags; the negative finding concerns this fixed
+final layer and64-cell probe, not every layer or possible bag size.
+
+All GAN tensors remain unchanged and have no gradients. Isolation tests show
+outer held-out inputs/targets cannot choose alpha or change train predictions;
+stage-only activation offsets do not create residual repeatability. Exact
+per-seed diagnostics, fixed-grid readout choices, depth32/128 sensitivity and
+source/checkpoint hashes: `critic_features_evidence_20261113.json`.
+
 ## 9. Limits
 
 Three inner folds whose training sets overlap by about half; two seeds; 37

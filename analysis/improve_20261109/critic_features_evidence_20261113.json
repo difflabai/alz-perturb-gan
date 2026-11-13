@@ -1,0 +1,386 @@
+{
+  "seeds": [
+    {
+      "fold": 0,
+      "seed": 0,
+      "aggregate": {
+        "train": {
+          "rmse": {
+            "train_mean": 0.4826354068996075,
+            "input_pseudobulk": 0.4658384421997939,
+            "conditions": 0.4807892696122306,
+            "pseudobulk": 0.13650064104078377,
+            "full_summary": 0.136009153275235,
+            "untrained": 0.3636289046684418,
+            "learned": 0.36412753180657936
+          },
+          "n_donors": 25,
+          "stage_residual_gene_correlation": 0.6626224410274615,
+          "stage_residual_gene_r2": 0.35814410636092564
+        },
+        "heldout": {
+          "rmse": {
+            "train_mean": 0.4773002792255927,
+            "input_pseudobulk": 0.48121644518690004,
+            "conditions": 0.4775150563020678,
+            "pseudobulk": 0.41355282166652385,
+            "full_summary": 0.4148020782950705,
+            "untrained": 0.4438890008595227,
+            "learned": 0.4760079815797757
+          },
+          "n_donors": 12,
+          "stage_residual_gene_correlation": 0.32662709450402505,
+          "stage_residual_gene_r2": 0.10197387287516935
+        }
+      },
+      "readouts": {
+        "conditions": {
+          "alpha": 10.0,
+          "alphas": [
+            0.01,
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "inner_train_donor_rmse": [
+            0.5311466863612203,
+            0.5190541157555322,
+            0.5014690205457464,
+            0.5000491983209373,
+            0.5001354477401406
+          ],
+          "n_train_donors": 25
+        },
+        "pseudobulk": {
+          "alpha": 0.01,
+          "alphas": [
+            0.01,
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "inner_train_donor_rmse": [
+            0.4153751707211025,
+            0.4479830772868498,
+            0.4898420730870355,
+            0.4990103705940575,
+            0.5000344320078676
+          ],
+          "n_train_donors": 25
+        },
+        "full_summary": {
+          "alpha": 0.01,
+          "alphas": [
+            0.01,
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "inner_train_donor_rmse": [
+            0.41533686938959424,
+            0.4481539910329432,
+            0.48987039933611437,
+            0.4990130398954882,
+            0.5000346960572623
+          ],
+          "n_train_donors": 25
+        },
+        "untrained": {
+          "alpha": 0.1,
+          "alphas": [
+            0.01,
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "inner_train_donor_rmse": [
+            0.4663056990024246,
+            0.46036768103589454,
+            0.49138972698493527,
+            0.4991661884509801,
+            0.5000500122864314
+          ],
+          "n_train_donors": 25
+        },
+        "learned": {
+          "alpha": 0.1,
+          "alphas": [
+            0.01,
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "inner_train_donor_rmse": [
+            0.5245925704328702,
+            0.4803239469912865,
+            0.4954341544463212,
+            0.49962533722654556,
+            0.5000965600735442
+          ],
+          "n_train_donors": 25
+        }
+      },
+      "feature_diagnostics": {
+        "learned": {
+          "train": {
+            "split_cell_repeatability": 0.7702790928624037,
+            "stage_residual_repeatability": 0.7382358026926523,
+            "stage_residual_variance": 2.2095993019695097
+          },
+          "heldout": {
+            "split_cell_repeatability": 0.6261111438068475,
+            "stage_residual_repeatability": 0.6167120022912684,
+            "stage_residual_variance": 1.785738629589577
+          }
+        },
+        "untrained": {
+          "train": {
+            "split_cell_repeatability": 0.4581988868629577,
+            "stage_residual_repeatability": 0.4030895713541155,
+            "stage_residual_variance": 0.00022778830772364958
+          },
+          "heldout": {
+            "split_cell_repeatability": 0.45178882240780865,
+            "stage_residual_repeatability": 0.5088972439809489,
+            "stage_residual_variance": 0.0002544579627819157
+          }
+        }
+      },
+      "depth_standardized_feature_mse": {
+        "32": {
+          "learned": {
+            "train": 1.5071299330084045,
+            "heldout": 8.93814240551795
+          },
+          "untrained": {
+            "train": 1.2250017526631192,
+            "heldout": 1.2721285698544544
+          }
+        },
+        "128": {
+          "learned": {
+            "train": 0.39220501845574934,
+            "heldout": 2.604642376974496
+          },
+          "untrained": {
+            "train": 0.5486303702102706,
+            "heldout": 0.5311000315422459
+          }
+        }
+      },
+      "GAN_weights_unchanged": true,
+      "fit_final_sha256": "d1ef47641dbcc73af5b86478d9c7fbf829883918af732c6a723f771b0a2fa146",
+      "source_sha256": "fc59cd8d818c6ab75c4452d31fd94b20782c0f81dfac1cc5f8606d29ccbc938d",
+      "protocol_sha256": "3151855be67e931c89af39563ed682a7aeda6eaf6ba1d3f9acdda74d5ac819eb",
+      "wall_seconds": 5.313975313096307
+    },
+    {
+      "fold": 0,
+      "seed": 1,
+      "aggregate": {
+        "train": {
+          "rmse": {
+            "train_mean": 0.4826354068996075,
+            "input_pseudobulk": 0.4658384421997939,
+            "conditions": 0.4807892696122306,
+            "pseudobulk": 0.13650064104078377,
+            "full_summary": 0.136009153275235,
+            "untrained": 0.36141298612918454,
+            "learned": 0.46185695582093184
+          },
+          "n_donors": 25,
+          "stage_residual_gene_correlation": 0.12102679512479597,
+          "stage_residual_gene_r2": -0.03335592387458486
+        },
+        "heldout": {
+          "rmse": {
+            "train_mean": 0.4773002792255927,
+            "input_pseudobulk": 0.48121644518690004,
+            "conditions": 0.4775150563020678,
+            "pseudobulk": 0.41355282166652385,
+            "full_summary": 0.4148020782950705,
+            "untrained": 0.45462747821320554,
+            "learned": 0.4714519948850351
+          },
+          "n_donors": 12,
+          "stage_residual_gene_correlation": 0.38699545886331216,
+          "stage_residual_gene_r2": 0.1444144072139245
+        }
+      },
+      "readouts": {
+        "conditions": {
+          "alpha": 10.0,
+          "alphas": [
+            0.01,
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "inner_train_donor_rmse": [
+            0.5311466863612203,
+            0.5190541157555322,
+            0.5014690205457464,
+            0.5000491983209373,
+            0.5001354477401406
+          ],
+          "n_train_donors": 25
+        },
+        "pseudobulk": {
+          "alpha": 0.01,
+          "alphas": [
+            0.01,
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "inner_train_donor_rmse": [
+            0.4153751707211025,
+            0.4479830772868498,
+            0.4898420730870355,
+            0.4990103705940575,
+            0.5000344320078676
+          ],
+          "n_train_donors": 25
+        },
+        "full_summary": {
+          "alpha": 0.01,
+          "alphas": [
+            0.01,
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "inner_train_donor_rmse": [
+            0.41533686938959424,
+            0.4481539910329432,
+            0.48987039933611437,
+            0.4990130398954882,
+            0.5000346960572623
+          ],
+          "n_train_donors": 25
+        },
+        "untrained": {
+          "alpha": 0.1,
+          "alphas": [
+            0.01,
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "inner_train_donor_rmse": [
+            0.4603122222671082,
+            0.4574451687837917,
+            0.4910514787618818,
+            0.49913295487328574,
+            0.5000466988377206
+          ],
+          "n_train_donors": 25
+        },
+        "learned": {
+          "alpha": 1.0,
+          "alphas": [
+            0.01,
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "inner_train_donor_rmse": [
+            0.7322180185696456,
+            0.5070125183317414,
+            0.49310444463003267,
+            0.49925177049868935,
+            0.5000576190507539
+          ],
+          "n_train_donors": 25
+        }
+      },
+      "feature_diagnostics": {
+        "learned": {
+          "train": {
+            "split_cell_repeatability": 0.840027283144828,
+            "stage_residual_repeatability": 0.8205932012050072,
+            "stage_residual_variance": 3.877037161258458
+          },
+          "heldout": {
+            "split_cell_repeatability": 0.786144708063447,
+            "stage_residual_repeatability": 0.8069242631371252,
+            "stage_residual_variance": 1.4601623330208404
+          }
+        },
+        "untrained": {
+          "train": {
+            "split_cell_repeatability": 0.4452958717737142,
+            "stage_residual_repeatability": 0.3928356191577887,
+            "stage_residual_variance": 0.0002398994535257176
+          },
+          "heldout": {
+            "split_cell_repeatability": 0.3263626581266534,
+            "stage_residual_repeatability": 0.395156219658815,
+            "stage_residual_variance": 0.00023947934516016183
+          }
+        }
+      },
+      "depth_standardized_feature_mse": {
+        "32": {
+          "learned": {
+            "train": 0.6037617743678002,
+            "heldout": 0.8418864447869271
+          },
+          "untrained": {
+            "train": 1.2488089422429751,
+            "heldout": 1.2857118468812867
+          }
+        },
+        "128": {
+          "learned": {
+            "train": 0.24391060932736242,
+            "heldout": 0.3230230852812248
+          },
+          "untrained": {
+            "train": 0.5439235675420149,
+            "heldout": 0.5559555669670627
+          }
+        }
+      },
+      "GAN_weights_unchanged": true,
+      "fit_final_sha256": "428b4ebb012234656fa0c15be7ed9bff613023df2d480d6a1bc8ea191ef35374",
+      "source_sha256": "fc59cd8d818c6ab75c4452d31fd94b20782c0f81dfac1cc5f8606d29ccbc938d",
+      "protocol_sha256": "3151855be67e931c89af39563ed682a7aeda6eaf6ba1d3f9acdda74d5ac819eb",
+      "wall_seconds": 3.2443100720411167
+    }
+  ],
+  "comparator_sha256": "eb642a1f6f0b3c6fa59c3a694cf54aacb1827a3b000f9542af839c81a37addfd",
+  "relative_rmse_improvement": {
+    "train_mean": [
+      0.0027075149587461045,
+      0.012252840811336485
+    ],
+    "conditions": [
+      0.0031560779129418126,
+      0.012697110461784789
+    ],
+    "untrained": [
+      -0.07235813606117647,
+      -0.037007258641633234
+    ]
+  },
+  "stage_residual_repeatability": [
+    0.6167120022912684,
+    0.8069242631371252
+  ],
+  "passes_initial_gate": false,
+  "heldout_prediction_deviation_cross_seed_correlation": 0.2511690345945474,
+  "heldout_stage_residual_prediction_cross_seed_correlation": 0.2941283931196,
+  "decision": "stop this fixed critic-feature probe; do not promote a patient encoder",
+  "scope": "two initial fits on same development split; discriminator fingerprint, not biological axes"
+}
