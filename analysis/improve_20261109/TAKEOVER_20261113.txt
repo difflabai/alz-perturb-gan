@@ -1,0 +1,95 @@
+ALZ study handoff recovered from Claude, 2026-11-13
+================================================
+
+CURRENT FOLLOW-UP: Mikkel authorized an improvement pass and committing the
+best configuration as default. See PROTOCOL_DEFAULT_PASS_20261113.txt,
+default_config.json and RESULTS.md 8i. That instruction supersedes the
+historical no-commit rule quoted below. scripts/microglia.py is the current
+entry point; count-shape is an explicit experimental option.
+
+Aim
+---
+Improve ParticleGAN 0.9.7 generation of human SEA-AD microglial gene-expression
+populations, including pathology-stage differences. The study wants held-out
+development-donor accuracy competitive with simple predictors, plus realistic
+cell and donor distributions. This is an exploratory development score, not a
+public challenge result. Root pyproject.toml installs an older smoke project;
+use the study's recorded Python and runners instead.
+
+Scores and the main trap
+------------------------
+Profile RMSE (pb_rmse) is lower-is-better: original generator about 0.69;
+pseudobulk critic plus snapshot averaging about 0.54; stage-blind read-outs
+about 0.49. Simple mean/ridge predictors are about 0.46. Calibrated ensembles
+approach them, but earlier gains sometimes compared different sample counts
+or pushed the generator toward a trivial mean predictor.
+
+A low RMSE or energy distance alone is insufficient. Always read donor spread
+and 80% coverage beside it. The untrained mean-like generator scores about
+0.499 despite losing donor variation. Stage-effect prediction remains weak;
+there are only four Not AD development donors.
+
+Where Claude stopped
+--------------------
+Claude reached its weekly limit after launching reviewed round-5 work.
+1. Short-training/EMA analysis was done: no replacement for snapens.
+2. Count-shape diagnosis and zcal were done: calibration helps, but simple
+   train-statistic predictors do better; it does not meet the full targets.
+3. pzero Block A finished 21/21 fits at 2026-11-13 02:31 UTC, no failures.
+   They had not been scored.
+4. The 54-fit dispersion/external-donor confirmation was fully trained,
+   also awaiting analysis.
+
+Work recovered by Codex
+-----------------------
+Scored Block A and existing controls using the unchanged r5 evaluator;
+paired report: runs/improve_20261109/results_r5/pzero/pzero_compare.json.
+Added runner: r5/resume_evaluate_pzero.sh (CPU, 3 threads per process).
+
+Result at snapens, six matched fold/seed pairs:
+                         control       add pzero
+  profile RMSE           0.5211        0.6854
+  mean-log gene error    0.1023        0.1648
+  nonzero gene error     0.0220        0.0353
+All six pairs worsen on all three. Same-kappa controls isolate the block.
+Raw-array recalculation reproduces all 36 values from the 12 fits to 1e-12.
+Decision: reject this pzero implementation. Optional Block B (12 fits) is
+unstarted; there is no reason to launch it automatically after this failure.
+
+Recovered the confirmation's profile analysis from existing synthetic
+SEA-AD summaries only. r5/resume_confirmation_profiles.py calls the existing
+r4 factor-analysis functions. Output:
+  runs/improve_20261109/results_r5/confirmation_profiles/analysis.{txt,json}
+All 48 primary fits / 12 complete 2x2 blocks exist. Dispersion effect -0.0035
+(seed-noise SE 0.0058); external-pooling effect -0.0029 (SE 0.0055).
+Neither passes its pre-declared primary confirmation rule. 57 existing
+evaluator profile scores reproduced to 1e-12. Secondary calibrated profile
+gains do not override the primary null or the earlier contamination finding.
+
+Remaining work and the useful next direction
+-------------------------------------------
+- The full distribution-metric/extra-baseline part of the 54-fit confirmation
+  is still outstanding; the recovered report is explicitly profile-only.
+- No new training or GPU jobs were started during this takeover.
+- Keep the earlier recipe; do not call the latest block an improvement.
+- Before another large screen, investigate whether the count-gradient and
+  gene-block scaling give a useful training signal. The count-gradient
+  ablation was explicitly deferred in r3/PROTOCOL_R3.md. This is a candidate
+  next investigation, not an approved new recipe or a demonstrated fix.
+- Better stage prediction also needs stronger donor support. Naively pooling
+  external donors was already found to contaminate synthetic cell profiles;
+  do not revive it on profile RMSE alone.
+
+Boundaries to carry forward
+---------------------------
+Read PROTOCOL.md and r5/PROTOCOL_R5.md. Only 37 SEA-AD development donors;
+sealed evaluation donors stay sealed. Frozen r3/r4 source and existing fits
+are read-only. Writes for this continuation are under analysis/improve_20261109
+and runs/improve_20261109, with r5 outputs under *_r5. No commits, pushes,
+checkouts or stashes. Python /mnt/nvme/ai/conda/anaconda3/bin/python3 -B;
+at most 3 CPU threads per process. GPUs are shared and memory-capped when
+authorised. About 37 GB disk space remained at takeover, so keep outputs small.
+
+RESULTS.md sections 8f and 8h contain the current numbers and verification
+limits. Original checkpoints and generation files were retained. No separate
+independent-agent review was run for the takeover calculations.

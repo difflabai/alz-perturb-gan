@@ -8,6 +8,33 @@ We trained five ParticleGAN 0.9.7 models of human microglial gene-expression dis
 
 The current model conditions on **pathology stage**, not gene edits or compounds. It is an observational proof of concept for generating cell populations and prioritizing experiments. It does not predict a treatment response, and we have not demonstrated state-of-the-art performance.
 
+## Development default
+
+The follow-up development study now has an explicit [default configuration](analysis/improve_20261109/default_config.json) and [training/generation entry point](scripts/microglia.py). It uses **`pbulk`, 20,000 updates, ParticleGAN 0.9.7**, with late-snapshot generation, half-shrunk stage conditioning, and output-bias calibration fitted on training donors only (`biascal@stagehalf`). Donor-dependent dispersion, external-donor pooling and the failed zero-fraction critic are excluded from this default.
+
+In the three-fold development comparison, this default scores profile RMSE **0.4863**, per-gene mean-log error **0.0953**, and nonzero-fraction error **0.0209**, with PC-space spread ratio **1.192** and central-80% coverage **0.681**. On six additional folds it reduces RMSE from **0.5024 to 0.4855** against the same fits without bias calibration. These are selection-conditioned results on the same 37 development donors. Stage-effect prediction remains unresolved. The [selection evidence](analysis/improve_20261109/default_config_evidence.json) records comparisons and verification; the published report above still describes its original frozen models.
+
+Inspect the complete configuration or preview the actual commands:
+
+```bash
+PY=/mnt/nvme/ai/conda/anaconda3/bin/python3
+$PY -B scripts/microglia.py config
+$PY -B scripts/microglia.py train --fold 0 --seed 0 --device cuda --dry-run
+```
+
+Run in the [recorded research environment](analysis/improve_20261109/runtime_environment.json), with the development caches and original dependencies described in the [study protocol](analysis/improve_20261109/PROTOCOL.md):
+
+```bash
+CUDA_VISIBLE_DEVICES=1 $PY -B scripts/microglia.py train --fold 0 --seed 0 --device cuda
+# Generate from an existing compatible fit, writing outside its frozen folder:
+CUDA_VISIBLE_DEVICES=1 $PY -B scripts/microglia.py generate --device cuda \
+  --fit runs/improve_20261109/fits_r3/pbulk/hvg2000/fold0/seed0
+```
+
+Training uses fresh weights or resumes its own checkpoints; generation produces depth-matched evaluation summaries for the selected development cache. GPU memory is capped at 4% and CPU use at three threads per process. The root package installation remains the earlier synthetic smoke project.
+
+An experimental **`--profile count-shape`** reduces excessive within-donor cellular heterogeneity before train-only bias/dispersion calibration. In six paired fits it lowers mean-log error to **0.0763**, nonzero error to **0.0161**, and variance error to **0.1779**. It remains opt-in because its profile RMSE rises to **0.48656**, failing the pre-declared guard against its dispersion-calibrated reference (**0.48623**). No sealed donors or new training were used in this pass. See [the recorded experiment](analysis/improve_20261109/RESULTS.md).
+
 ## What the model says
 
 Training used 14,762 SEA-AD middle temporal gyrus cells from 33 donors, a 2,000-gene panel, and five independent 20,000-update fits. All five fits started from scratch using the released ParticleGAN 0.9.7 formulation, with generator EMA disabled. We sampled 12.8 million unique synthetic cells from the frozen models; this adds no biological donors.

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "name": "microglia-pbulk-calibrated-v1",
+  "status": "development-selected",
+  "training": {
+    "arm": "pbulk",
+    "panel": "hvg2000",
+    "updates": 20000,
+    "particlegan_version": "0.9.7",
+    "recipe": "bispf_optimized",
+    "particles": 512,
+    "z_dim": 8,
+    "batch_donors": 32,
+    "cells_per_bag": 128,
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.06,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01,
+    "native_ema_decay": 0.0
+  },
+  "generation": {
+    "mode": "biascal@stagehalf",
+    "generated_donors_per_target": 32,
+    "cells_per_generated_donor": 256,
+    "state_readout": "late snapshots at 15000 through 19000 plus final",
+    "stage_handling": "half own stage, half training-stage mixture",
+    "calibration": "training donors only; output bias"
+  },
+  "data": {
+    "cohort": "SEA-AD middle temporal gyrus",
+    "development_donors": 37,
+    "external_donors": false,
+    "sealed_evaluation_donors": false
+  },
+  "runtime": {
+    "threads": 3,
+    "gpu_memory_fraction": 0.04,
+    "fit_output_root": "runs/improve_20261109/fits_r5/default",
+    "generation_output_root": "runs/improve_20261109/smoke_r5/default_inference"
+  },
+  "evidence": "default_config_evidence.json",
+  "experimental_profiles": {
+    "count-shape": {
+      "mode": "cellshape@0.5:biascal:stagehalf",
+      "status": "experimental; fails the pre-declared profile-RMSE guard",
+      "tradeoff": "lower gene-mean, detection and variance error; profile RMSE +0.00032 versus zcal"
+    }
+  }
+}

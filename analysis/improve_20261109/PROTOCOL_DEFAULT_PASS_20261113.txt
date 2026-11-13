@@ -1,0 +1,44 @@
+Owner request, 2026-11-13: improve the models and commit the best configuration
+as the default. This explicitly supersedes the earlier no-commit rule for
+this pass and permits a documented default entry point in the repository.
+The donor boundary remains unchanged: only the 37 development donors.
+
+Focused hypothesis, declared before any score of the candidate exists:
+the generator's excessive cell-to-cell variation in expected counts prevents
+dispersion calibration from matching observed detection fractions. Reduce
+within-generated-donor mean variation, preserving each donor's expected
+per-gene count totals and each cell's expected library size, then apply the
+existing train-only joint bias/dispersion calibration. Do not retrain or
+change the ParticleGAN update rule in this pass.
+
+Candidate: cellshape@0.5:biascal:stagehalf, on the pbulk fits.
+For mu[b,k,g], L[b,k]=sum_g mu, and q[b,g]=sum_k mu/sum_k L:
+mu' = (1-alpha) mu + alpha L q, alpha=0.5. Theta is unchanged before zcal.
+This is a bag-level read-out for K=256, not a new iid single-cell model.
+
+Compare with zcal@biascal:stagehalf and biascal@stagehalf on the same fits,
+folds and seeds (0-2, seeds 0-1), M=32, K=256, CUDA streams. No candidate
+selection among multiple shrink strengths using held-out scores. Alpha=0
+must reproduce the original zcal path; tests check expected mass/library
+preservation, positivity and the neutral path. Calibration must use only
+train targets. The unchanged evaluator scores all metrics.
+
+Adoption rule: both meanlog and nonzero gene errors improve over zcal by
+more than 2 paired seed-noise SE, in all three fold means. No >2 SE cost in
+profile RMSE, PC/cell energy, log-variance error, distance of coverage to .8,
+or distance of PC spread ratio to 1. Also compare against resampling and the
+direct train-statistic predictor. A candidate failing this rule stays
+experimental. A successful candidate must repeat directionally on folds
+3-8, seeds 0-1, before becoming the default.
+
+Default selection uses the complete evidence, not the smallest RMSE: retain
+pbulk training and late-snapshot read-outs unless the above rule supports a
+replacement. Distinguish stage-conditioned, stage-blind and calibrated
+outputs. No new external donors, no sealed evaluation counts, no claim of
+independent final-test performance. Preserve existing fit folders.
+
+Outputs under runs/improve_20261109/{smoke_r5,results_r5,logs_r5}; code under
+analysis/improve_20261109/r5 plus the documented default config/entry point.
+At most 3 CPU threads per process. GPU generation: one process at a time,
+memory fraction .04; no interference with other jobs. Keep generated mode
+files only as long as necessary to score and verify, with provenance hashes.
