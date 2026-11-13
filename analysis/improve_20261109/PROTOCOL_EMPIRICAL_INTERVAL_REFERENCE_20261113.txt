@@ -1,0 +1,44 @@
+Empirical interval references, declared before new interval scores
+=================================================================
+Purpose: put the selected count-shape ranges beside existing empirical
+population references. This is a descriptive post-selection benchmark on
+the same37 development donors, not independent model confirmation or a
+change to any architecture/default selection rule.
+
+Inputs: ONLY the existing SEA-AD r3 baseline archives resample and
+resample_blind, folds3-8, hvg2000. Their saved metadata specifies M32,K256,
+64 retained cells in50 training PCs, a single fixed baseline random stream
+per fold/recipe, train-only source donors and target library-size matching.
+Verify fold/cache/donor lists and recipe metadata before scoring. Hash all
+archives and their old scores, retain them unchanged. No external variants,
+count generation, fitting, added seeds or parameter search.
+
+Run the existing r5 architecture_score.py implementation on each of these12
+archives, CPU with <=3threads. It supplies mean/SD/combined coverage, width,
+and central80% proper interval score on the same24 observed64-cell repeats,
+with percentile10/90 endpoints; retain finite-rank results as secondary.
+Verify every historical headline metric against its saved r3 score; report
+any mismatch before interpreting new interval results. Record source/cache/
+archive hashes. Never prune original baseline inputs.
+
+Compare against BOTH already-frozen CPU shape-confirmation readouts on the
+matching folds3-8,seeds0/1: original pbulk biascal@stagehalf and selected
+cellshape@0.5:biascal:stagehalf. Use per-fold means of the TWO model seeds
+against the ONE baseline archive. Report six equally weighted fold means,
+per-fold differences and both repeat means (folds3-5 and6-8); do not inflate
+the baseline sample count to12 or treat reused seeds/folds as new patients.
+Include all historical raw-gene/energy/spread losses and train/held-out
+interval partitions. Keep these CPU results separate from GPU screens.
+No significance gate, winner selection, recipe tuning or automatic default
+change is attached to this descriptive reference comparison.
+
+Interpretation: resample selects same-stage training donors, while
+resample_blind ignores stage; the model uses half own-stage and half train-
+stage-mixture conditioning. These conditioning recipes differ. Both
+resamplers exclude a training target itself from its donor source pool;
+the GAN was fitted to its training targets. Source-cell selection favours
+cells deep enough for the target library, with deepest-cell fallback when
+none qualifies; retain the saved depth-unmatched fraction. Resampling is a
+strong empirical reference, not an independent population sample, clinical
+predictor or learned patient feature map. Stage biology, cell-state fidelity
+and patient interpretation remain unvalidated regardless of this comparison.
