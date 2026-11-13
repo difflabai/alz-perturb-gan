@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "recorded_utc": "2026-11-13T16:49:32.808878+00:00",
+  "recorded_utc": "2026-11-13T17:30:12.008898+00:00",
   "status": "screen_incomplete",
   "planned_fits": 18,
-  "completed_scored_fits": 13,
-  "scope": "Same37 development donors; all three arms paired on folds0 and1, plus unpaired randproj fold2 seed0; five fits remain; no biological independence or completed-screen claim",
+  "completed_scored_fits": 14,
+  "scope": "Same37 development donors; all three arms paired on folds0 and1, plus unpaired randproj/split fold2 seed0; four fits remain; no biological independence or completed-screen claim",
   "governing_protocols": {
     "PROTOCOL_ARCHITECTURE_PASS_20261113.txt": "ddfa8f48cf9d1cec3b361861758c8ca75f6ef4512c6ad91b1c59427c37f1c133",
     "PROTOCOL_ARCHITECTURE_FINAL_SELECTION_20261113.txt": "75471c0c0a84faaabb0eca4cec9e066e278969eb8d015187594e157a4c5029dd"
@@ -12,7 +12,7 @@
   "artifact_audit_snapshot": {
     "status": "incomplete",
     "complete": false,
-    "verified_fits": 13,
+    "verified_fits": 14,
     "planned_fits": 18,
     "missing": [
       {
@@ -31,12 +31,6 @@
         "arm": "g.hier,pbulk",
         "fold": 2,
         "seed": 1,
-        "reason": "score not finalized"
-      },
-      {
-        "arm": "g.split,pbulk",
-        "fold": 2,
-        "seed": 0,
         "reason": "score not finalized"
       },
       {
@@ -511,6 +505,28 @@
         },
         "native_summary_sha256": "5e1e3680217e439be78a6f62ac070835b3bf69a51f8fcb05f7c9cbeee47e5538",
         "pruned_mode_summary_sha256": "d6d3e27fc423b676207c55b9b2ff2354b084d31d639a52f7cc6c73fef6ee1bd5"
+      },
+      {
+        "arm": "g.split,pbulk",
+        "fold": 2,
+        "seed": 0,
+        "cache_manifest_sha256": "b46b7d37e47d9ca796e129bbccf91fc3acd48ff9e900ca30c2f6d9c59ff9fb92",
+        "config_sha256": "fb435aeb528a45700dad4defc5d1d6db2cdb91b8e704e466b712e3ace6060146",
+        "fit_receipt_sha256": "a4cbc32448d25f5aa00d4f210372f77dec16120da4675ddac78f8cc75fdd7b18",
+        "mode_receipt_sha256": "eadda58acbfa8b640d625bf7141d9b169d7dc09afa328db77e4f1d9cca439120",
+        "score_sha256": "7fad87862235cc005114feb693737e0fbb6133abe34cfed7d77d37a90ed4b55b",
+        "checkpoints": {
+          "final.pt": "32628427cedc0758d3fb317460a09c25d6f6b29d7cc376b228bba4ad249f7055",
+          "snap_5000.pt": "e7383cd5d8b6a22f38b12447ea6a90a97d9106769ccdb7c020071b8e4d5f2812",
+          "snap_10000.pt": "4bf7136f15dc0da517eea8f1f45c92b47dfeefe70defad486c0163807c4e8d55",
+          "snap_15000.pt": "c61936663509fcb9dccdeee5803e89fa624559a37208f2faf96d1f35b691d147",
+          "snap_16000.pt": "4985ab9d0aa081ec51b5618f78fd3827e0e81ac4a0cfcf352fb5259590e3eb17",
+          "snap_17000.pt": "16835184c6a95f7432a04fce9ccc594b341e80608b49013d5b58fea5446b97e5",
+          "snap_18000.pt": "e52f05b35355d196b4215153163b8fd7c6caa0667dccc83ece3b502c306ac1fa",
+          "snap_19000.pt": "3514f4f38645bec7a9a541a89058a75bb6791cb4ee5b0a74834df2cc9a4dcae6"
+        },
+        "native_summary_sha256": "c6b601c1a17575b1b9851cf9292449264e41d56c3900d476ab6cbce00dfe1cce",
+        "pruned_mode_summary_sha256": "91a57add4ad95afa61db9b70f945c5eb6dfdc81d8095d7ab5288394d977366f6"
       }
     ],
     "matched_original_references": {
@@ -548,7 +564,7 @@
     "auditor_sha256": "2f807e5ffaa6a79d162ae77795e01d50679ffbfef098ca2b8c7b0cd86e47ff80",
     "scope": "Artifact/metadata/source verification only; numerical gates remain separate; pruned arrays not rescored"
   },
-  "comparison_snapshot_sha256": "de784872d643f947a90e9fd72d235430f178c8d85a38604d74d5186859e69fd5",
+  "comparison_snapshot_sha256": "d92cfc74d2568ddade75111b04e5a23dda8de2a3bd9eff31fb44ffa22b027c69",
   "split_fold0_pair": {
     "candidate": "g.split,pbulk",
     "reference": "original pbulk",
@@ -1310,7 +1326,7 @@
     "snapshot_scope": "Previous six-fit snapshot; first-fold paired numeric fields unchanged"
   },
   "latest_fit": {
-    "arm": "d.randproj,pbulk",
+    "arm": "g.split,pbulk",
     "fold": 2,
     "seed": 0,
     "reference": "original pbulk biascal@stagehalf",
@@ -1320,46 +1336,46 @@
     "K": 256,
     "candidate": {
       "historical": {
-        "pb_rmse": 0.48431048462944987,
-        "meanlog_rmse_gene": 0.10788257035086546,
-        "nonzero_rmse_gene": 0.02509491943293732,
-        "logvar_rmse_gene": 0.1772316142192955,
-        "pc_energy_rep": 2.1163258883330314,
-        "cell_energy_rep": 0.9151066262318465
+        "pb_rmse": 0.4762849798115225,
+        "meanlog_rmse_gene": 0.11015892084653932,
+        "nonzero_rmse_gene": 0.024033286912446754,
+        "logvar_rmse_gene": 0.18069376472853466,
+        "pc_energy_rep": 2.0923825757075347,
+        "cell_energy_rep": 0.8973979487211782
       },
       "intervals": {
         "train": {
           "mean": {
-            "coverage": 0.6789333333333334,
-            "width": 0.6709870473748446,
-            "interval_score": 1.3200637209978086
+            "coverage": 0.7957666666666666,
+            "width": 0.8506297588520498,
+            "interval_score": 1.2678629058149031
           },
           "sd": {
-            "coverage": 0.21423333333333333,
-            "width": 0.22524539383034717,
-            "interval_score": 1.7463822581168293
+            "coverage": 0.7893,
+            "width": 0.4216625216336597,
+            "interval_score": 0.6077817356625341
           },
           "combined": {
-            "coverage": 0.44658333333333333,
-            "width": 0.44811622060259587,
-            "interval_score": 1.5332229895573193
+            "coverage": 0.7925333333333333,
+            "width": 0.6361461402428548,
+            "interval_score": 0.9378223207387189
           }
         },
         "heldout": {
           "mean": {
-            "coverage": 0.7325694444444445,
-            "width": 0.713587102686676,
-            "interval_score": 1.275729685899118
+            "coverage": 0.8407638888888889,
+            "width": 0.9066073663467542,
+            "interval_score": 1.2316508601106744
           },
           "sd": {
-            "coverage": 0.6160416666666667,
-            "width": 0.23458239950572168,
-            "interval_score": 0.8504981655980259
+            "coverage": 0.5063194444444444,
+            "width": 0.4382621639778993,
+            "interval_score": 0.8942396444956495
           },
           "combined": {
-            "coverage": 0.6743055555555556,
-            "width": 0.4740847510961989,
-            "interval_score": 1.063113925748572
+            "coverage": 0.6735416666666667,
+            "width": 0.6724347651623268,
+            "interval_score": 1.0629452523031617
           }
         }
       }
@@ -1410,24 +1426,24 @@
         }
       }
     },
-    "candidate_score_sha256": "6d656a76a1e407da41621c5907bc82da0f37c5b1eee8d915727f19486e79942c",
+    "candidate_score_sha256": "7fad87862235cc005114feb693737e0fbb6133abe34cfed7d77d37a90ed4b55b",
     "original_score_sha256": "ee1a7d5f928322407de8165079de16964e4e150114206dba85aa244e154b388e",
     "historical_relative_changes": {
-      "pb_rmse": 0.02166956788255736,
-      "meanlog_rmse_gene": 0.06644236989406505,
-      "nonzero_rmse_gene": 0.1027908453418489,
-      "logvar_rmse_gene": 0.03599090755146461,
-      "pc_energy_rep": -0.014092508484415678,
-      "cell_energy_rep": 0.0057727477915041625
+      "pb_rmse": 0.004739490381458822,
+      "meanlog_rmse_gene": 0.08894458326755728,
+      "nonzero_rmse_gene": 0.05613763221467072,
+      "logvar_rmse_gene": 0.05622858616171755,
+      "pc_energy_rep": -0.025246693867353343,
+      "cell_energy_rep": -0.013690454341561797
     },
-    "heldout_sd_interval_score_relative_change": -0.1048659353953405,
-    "heldout_sd_coverage_difference": 0.1259027777777778,
+    "heldout_sd_interval_score_relative_change": -0.0588288134105831,
+    "heldout_sd_coverage_difference": 0.01618055555555553,
     "interpretation": [
-      "First randproj seed on fold2; no completed paired fold2 comparison or full-screen verdict.",
-      "Held-out SD proper interval score improves10.49% and coverage rises49.01% to61.60%, with narrower SD ranges.",
-      "Profile RMSE worsens2.17%; meanlog/detection/logvar and cell energy errors worsen, while PC energy improves.",
-      "Held-out mean coverage/score worsen; combined coverage/score improve in this seed.",
-      "Training SD coverage falls78.56% to21.42% and its proper score worsens sharply.",
+      "First split seed on fold2; no completed paired fold2 comparison or full-screen verdict.",
+      "Held-out SD proper interval score improves5.88% and coverage rises49.01% to50.63%; SD width is nearly unchanged.",
+      "Profile RMSE worsens0.47%; meanlog/detection/logvar errors worsen while PC/cell energy improve.",
+      "Held-out combined coverage/score improve, but mean coverage overshoots nominal farther and mean interval score worsens.",
+      "Training mean/combined proper interval scores improve while SD score worsens slightly; training coverages move closer to nominal in this seed.",
       "The mandatory fold0 miss, fixed gates and selected default remain unchanged."
     ]
   },
@@ -2150,6 +2166,128 @@
         "Held-out mean/SD/combined proper interval scores worsen and SD coverage falls; mean/combined raw coverage rises.",
         "Training mean/SD/combined proper interval scores improve in this seed.",
         "No changed default, retrospective rule change or restoration of the missed mandatory fold0 SD-score direction."
+      ]
+    },
+    "d.randproj,pbulk/fold2/seed0": {
+      "arm": "d.randproj,pbulk",
+      "fold": 2,
+      "seed": 0,
+      "reference": "original pbulk biascal@stagehalf",
+      "mode": "biascal@stagehalf",
+      "generation_device": "cuda",
+      "M": 32,
+      "K": 256,
+      "candidate": {
+        "historical": {
+          "pb_rmse": 0.48431048462944987,
+          "meanlog_rmse_gene": 0.10788257035086546,
+          "nonzero_rmse_gene": 0.02509491943293732,
+          "logvar_rmse_gene": 0.1772316142192955,
+          "pc_energy_rep": 2.1163258883330314,
+          "cell_energy_rep": 0.9151066262318465
+        },
+        "intervals": {
+          "train": {
+            "mean": {
+              "coverage": 0.6789333333333334,
+              "width": 0.6709870473748446,
+              "interval_score": 1.3200637209978086
+            },
+            "sd": {
+              "coverage": 0.21423333333333333,
+              "width": 0.22524539383034717,
+              "interval_score": 1.7463822581168293
+            },
+            "combined": {
+              "coverage": 0.44658333333333333,
+              "width": 0.44811622060259587,
+              "interval_score": 1.5332229895573193
+            }
+          },
+          "heldout": {
+            "mean": {
+              "coverage": 0.7325694444444445,
+              "width": 0.713587102686676,
+              "interval_score": 1.275729685899118
+            },
+            "sd": {
+              "coverage": 0.6160416666666667,
+              "width": 0.23458239950572168,
+              "interval_score": 0.8504981655980259
+            },
+            "combined": {
+              "coverage": 0.6743055555555556,
+              "width": 0.4740847510961989,
+              "interval_score": 1.063113925748572
+            }
+          }
+        }
+      },
+      "original": {
+        "historical": {
+          "pb_rmse": 0.474038279943288,
+          "meanlog_rmse_gene": 0.10116118169759324,
+          "nonzero_rmse_gene": 0.02275582857704832,
+          "logvar_rmse_gene": 0.17107448813250442,
+          "pc_energy_rep": 2.1465765363844773,
+          "cell_energy_rep": 0.9098542670213086
+        },
+        "intervals": {
+          "train": {
+            "mean": {
+              "coverage": 0.77,
+              "width": 0.7975817873439939,
+              "interval_score": 1.2738457887605337
+            },
+            "sd": {
+              "coverage": 0.7856,
+              "width": 0.3917599326587469,
+              "interval_score": 0.6043231776998187
+            },
+            "combined": {
+              "coverage": 0.7778,
+              "width": 0.5946708600013704,
+              "interval_score": 0.9390844832301759
+            }
+          },
+          "heldout": {
+            "mean": {
+              "coverage": 0.8159027777777778,
+              "width": 0.8494947564490141,
+              "interval_score": 1.2189056374412983
+            },
+            "sd": {
+              "coverage": 0.4901388888888889,
+              "width": 0.43750150640580227,
+              "interval_score": 0.9501349565706146
+            },
+            "combined": {
+              "coverage": 0.6530208333333334,
+              "width": 0.6434981314274081,
+              "interval_score": 1.0845202970059562
+            }
+          }
+        }
+      },
+      "candidate_score_sha256": "6d656a76a1e407da41621c5907bc82da0f37c5b1eee8d915727f19486e79942c",
+      "original_score_sha256": "ee1a7d5f928322407de8165079de16964e4e150114206dba85aa244e154b388e",
+      "historical_relative_changes": {
+        "pb_rmse": 0.02166956788255736,
+        "meanlog_rmse_gene": 0.06644236989406505,
+        "nonzero_rmse_gene": 0.1027908453418489,
+        "logvar_rmse_gene": 0.03599090755146461,
+        "pc_energy_rep": -0.014092508484415678,
+        "cell_energy_rep": 0.0057727477915041625
+      },
+      "heldout_sd_interval_score_relative_change": -0.1048659353953405,
+      "heldout_sd_coverage_difference": 0.1259027777777778,
+      "interpretation": [
+        "First randproj seed on fold2; no completed paired fold2 comparison or full-screen verdict.",
+        "Held-out SD proper interval score improves10.49% and coverage rises49.01% to61.60%, with narrower SD ranges.",
+        "Profile RMSE worsens2.17%; meanlog/detection/logvar and cell energy errors worsen, while PC energy improves.",
+        "Held-out mean coverage/score worsen; combined coverage/score improve in this seed.",
+        "Training SD coverage falls78.56% to21.42% and its proper score worsens sharply.",
+        "The mandatory fold0 miss, fixed gates and selected default remain unchanged."
       ]
     }
   },

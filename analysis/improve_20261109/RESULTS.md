@@ -967,7 +967,18 @@ coverage and mean interval score worsen. Training SD coverage falls
 78.56->21.42%, with SD score .604323->1.746382. This is one unpaired seed;
 the second seed is pending. All thirteen finalized fits pass the artifact
 audit, including the fifth matched original reference. Five fits remain;
-the screen, mandatory fold0 miss and selected default are unchanged.
+the screen is incomplete, with the fold0 miss and selected default unchanged.
+
+The fourteenth fit is split fold2,seed0. Held SD interval score improves
+.950135->.894240 (5.88%), SD coverage rises49.01->50.63%, and SD width is
+nearly unchanged .437502->.438262. Profile error worsens .474038->.476285
+(0.47%); meanlog/detection/logvar errors rise8.89/5.61/5.62%, while PC/cell
+energy improve2.52/1.37%. Held combined score improves1.084520->1.062945,
+but mean interval score worsens and mean coverage overshoots nominal farther.
+Training mean/combined scores improve, while SD score rises slightly
+.604323->.607782. This is another unpaired seed, with its repeat pending.
+All fourteen finalized fits pass the artifact audit; four fits remain.
+No change to the fixed gates or selected default.
 
 An additional calibration-compatibility check passes for all three optional
 architectures: shifting the existing output bias changes expected gene log
