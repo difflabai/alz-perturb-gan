@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "recorded_utc": "2026-11-13T10:55:34.637915+00:00",
+  "recorded_utc": "2026-11-13T11:37:56.738278+00:00",
   "status": "screen_incomplete",
   "planned_fits": 18,
-  "completed_scored_fits": 5,
-  "scope": "Same37 development donors; first complete split-generator fold only; no biological independence or completed screen claim",
+  "completed_scored_fits": 6,
+  "scope": "Same37 development donors; first complete paired fold for all three architectures; no biological independence or completed-screen claim",
   "governing_protocols": {
     "PROTOCOL_ARCHITECTURE_PASS_20261113.txt": "ddfa8f48cf9d1cec3b361861758c8ca75f6ef4512c6ad91b1c59427c37f1c133",
     "PROTOCOL_ARCHITECTURE_FINAL_SELECTION_20261113.txt": "75471c0c0a84faaabb0eca4cec9e066e278969eb8d015187594e157a4c5029dd"
@@ -12,7 +12,7 @@
   "artifact_audit_snapshot": {
     "status": "incomplete",
     "complete": false,
-    "verified_fits": 5,
+    "verified_fits": 6,
     "planned_fits": 18,
     "missing": [
       {
@@ -36,12 +36,6 @@
       {
         "arm": "d.randproj,pbulk",
         "fold": 2,
-        "seed": 1,
-        "reason": "score not finalized"
-      },
-      {
-        "arm": "g.hier,pbulk",
-        "fold": 0,
         "seed": 1,
         "reason": "score not finalized"
       },
@@ -341,6 +335,28 @@
         "pruned_mode_summary_sha256": "cb1b3ffc674e2ada94ad30b7c8571517bc49c443b9f0c83551526d57ed02cffc"
       },
       {
+        "arm": "g.hier,pbulk",
+        "fold": 0,
+        "seed": 1,
+        "cache_manifest_sha256": "65d5e2f405ceeeb14ac35f8660bc9c42272ac35c64aeda4f7c3bd9ee21dbd09c",
+        "config_sha256": "8a401dde3b63c94a945877a9dd58f858bc8a1acc255c7df024d39279dbbe59f6",
+        "fit_receipt_sha256": "d239cf72bf49e122290105a3be13aa5a8d4fee19def8b78f26930b09211f571d",
+        "mode_receipt_sha256": "106e06ca944851ed1c413df3e741256a7d77bad3bcd38023a551c0a8ddce00fd",
+        "score_sha256": "6f6dee1ca13362be7d31b9711d8b783edb00561f9bbb87b284c8f4cd1d53cb01",
+        "checkpoints": {
+          "final.pt": "e93b1be1f111cd1129a2c4bfc032e69055290dcce34db0286049472ab0452bc9",
+          "snap_5000.pt": "936b63b01e8441d20c48f50eb8a4cd18f58f1bfe2430afb3f7866bc75b09fec6",
+          "snap_10000.pt": "09ffec01b0cfc0c787bdad9590016f333e1b33fecdecd199bbca31a7aec4194a",
+          "snap_15000.pt": "3f79318571f606b216f95dce6421b3d640f4e6697370f8897cf5450760dd1b41",
+          "snap_16000.pt": "b2439f1c533c4168cb126087d99c48d491964a05d469109b22fe5de172203ec7",
+          "snap_17000.pt": "e0750ed57abeb66351ff012552a8b1db9a9003874afc88ba41db07814f75038d",
+          "snap_18000.pt": "8c143c56f01bd39317073e7470c747258a8c5abb643346a577c5f0dbf9bb6313",
+          "snap_19000.pt": "4296bf976c5d3a46049461f90315dd7556c85bd015fbbeddc68eef202ad6e42a"
+        },
+        "native_summary_sha256": "6f2ee59322ed081f08ff83fe1a926055e955e2abbca792e59176441e4370964c",
+        "pruned_mode_summary_sha256": "d74207f6e3a243929df981a5be64681c6b48bab19fca2efd9924f81ad8a3acb5"
+      },
+      {
         "arm": "g.split,pbulk",
         "fold": 0,
         "seed": 0,
@@ -402,7 +418,7 @@
     "auditor_sha256": "2f807e5ffaa6a79d162ae77795e01d50679ffbfef098ca2b8c7b0cd86e47ff80",
     "scope": "Artifact/metadata/source verification only; numerical gates remain separate; pruned arrays not rescored"
   },
-  "comparison_snapshot_sha256": "7472def08a802f09d4670ddc4f2d2bc8ba6bb1eb2257d2e5818ee8c91f4ddef5",
+  "comparison_snapshot_sha256": "5d6f004be1c3b6d92949226a2c8a6a523f25bc5323ae21029f8d35c30c8a99ad",
   "split_fold0_pair": {
     "candidate": "g.split,pbulk",
     "reference": "original pbulk",
@@ -715,7 +731,7 @@
     "changed": false
   },
   "remaining_work": "Finish the fixed18-fit screen, audit and apply original gates; only eligible arms proceed to predeclared confirmation and final-recipe comparison.",
-  "independent_application_review": {
+  "independent_split_review_at_five_fits": {
     "status": "arithmetic_provenance_and_interpretation_verified",
     "numeric_fields_checked": 144,
     "comparison_metric_blocks_checked": 15,
@@ -728,6 +744,437 @@
     ],
     "paired_seed_noise_sd_score_SE": 0.0937724803642247,
     "interpretation": "One completed fold misses a necessary all-fold direction condition; complete screen remains pending. Difference is small relative to one-fold computational seed noise and does not establish biological inferiority.",
+    "no_file_writes_CLI_GPU_or_deserialization": true,
+    "screen_fits_at_review": 5,
+    "evidence_commit": "db7c308",
+    "snapshot_scope": "Previous five-fit snapshot; split paired numeric fields unchanged"
+  },
+  "first_complete_fold": {
+    "fold": 0,
+    "seeds": [
+      0,
+      1
+    ],
+    "reference": "original pbulk biascal@stagehalf",
+    "generation_device": "cuda",
+    "M": 32,
+    "K": 256,
+    "original": {
+      "historical": {
+        "pb_rmse": 0.47332735597465914,
+        "meanlog_rmse_gene": 0.08939390581447512,
+        "nonzero_rmse_gene": 0.020357670471326243,
+        "logvar_rmse_gene": 0.19843363212928833,
+        "pc_energy_rep": 1.9858730293503735,
+        "cell_energy_rep": 0.7056120200002134
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.7343333333333333,
+            "width": 0.7928152678035574,
+            "interval_score": 1.431403103663607
+          },
+          "sd": {
+            "coverage": 0.76895,
+            "width": 0.402797376653927,
+            "interval_score": 0.6138520909389393
+          },
+          "combined": {
+            "coverage": 0.7516416666666668,
+            "width": 0.5978063222287422,
+            "interval_score": 1.0226275973012728
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.8081944444444444,
+            "width": 0.7739509409087866,
+            "interval_score": 1.1247673705368504
+          },
+          "sd": {
+            "coverage": 0.5269791666666667,
+            "width": 0.3977500717696054,
+            "interval_score": 0.8752382255196858
+          },
+          "combined": {
+            "coverage": 0.6675868055555556,
+            "width": 0.5858505063391961,
+            "interval_score": 1.000002798028268
+          }
+        }
+      }
+    },
+    "arms": {
+      "d.randproj,pbulk": {
+        "mean": {
+          "historical": {
+            "pb_rmse": 0.47750920119653484,
+            "meanlog_rmse_gene": 0.11901109387151021,
+            "nonzero_rmse_gene": 0.028799251124401192,
+            "logvar_rmse_gene": 0.2399043079696065,
+            "pc_energy_rep": 1.9858690247099535,
+            "cell_energy_rep": 0.6754636471641342
+          },
+          "intervals": {
+            "train": {
+              "mean": {
+                "coverage": 0.6476166666666667,
+                "width": 0.6666586762523652,
+                "interval_score": 1.5432277323521753
+              },
+              "sd": {
+                "coverage": 0.17553333333333332,
+                "width": 0.21137412462984878,
+                "interval_score": 1.923936871160958
+              },
+              "combined": {
+                "coverage": 0.411575,
+                "width": 0.43901640044110696,
+                "interval_score": 1.733582301756567
+              }
+            },
+            "heldout": {
+              "mean": {
+                "coverage": 0.7368402777777778,
+                "width": 0.6497629586942495,
+                "interval_score": 1.1225740806589646
+              },
+              "sd": {
+                "coverage": 0.5182986111111111,
+                "width": 0.21096079347528673,
+                "interval_score": 1.0150309947716636
+              },
+              "combined": {
+                "coverage": 0.6275694444444444,
+                "width": 0.43036187608476806,
+                "interval_score": 1.068802537715314
+              }
+            }
+          }
+        },
+        "profile_relative_change": 0.008834995841862092,
+        "sd_score_relative_change": 0.1597196799408227,
+        "completed_fold_misses_necessary_sd_improvement_direction": true
+      },
+      "g.split,pbulk": {
+        "mean": {
+          "historical": {
+            "pb_rmse": 0.4672139926977806,
+            "meanlog_rmse_gene": 0.08460733639118126,
+            "nonzero_rmse_gene": 0.019334727141203663,
+            "logvar_rmse_gene": 0.19631744229126213,
+            "pc_energy_rep": 1.926851623041753,
+            "cell_energy_rep": 0.6978440157391113
+          },
+          "intervals": {
+            "train": {
+              "mean": {
+                "coverage": 0.7886500000000001,
+                "width": 0.9032439881922305,
+                "interval_score": 1.3883423951428249
+              },
+              "sd": {
+                "coverage": 0.7515833333333334,
+                "width": 0.3986440468262553,
+                "interval_score": 0.6240805930827473
+              },
+              "combined": {
+                "coverage": 0.7701166666666667,
+                "width": 0.6509440175092429,
+                "interval_score": 1.006211494112786
+              }
+            },
+            "heldout": {
+              "mean": {
+                "coverage": 0.8422916666666667,
+                "width": 0.8701496617399778,
+                "interval_score": 1.1349530007054458
+              },
+              "sd": {
+                "coverage": 0.499375,
+                "width": 0.38970069341947877,
+                "interval_score": 0.8892306384168747
+              },
+              "combined": {
+                "coverage": 0.6708333333333334,
+                "width": 0.6299251775797282,
+                "interval_score": 1.0120918195611601
+              }
+            }
+          }
+        },
+        "profile_relative_change": -0.012915719321335506,
+        "sd_score_relative_change": 0.015986976447333268,
+        "completed_fold_misses_necessary_sd_improvement_direction": true
+      },
+      "g.hier,pbulk": {
+        "mean": {
+          "historical": {
+            "pb_rmse": 0.4717524731973509,
+            "meanlog_rmse_gene": 0.09339066581467942,
+            "nonzero_rmse_gene": 0.021250353976144335,
+            "logvar_rmse_gene": 0.2057771607340227,
+            "pc_energy_rep": 1.9933151959148299,
+            "cell_energy_rep": 0.7354626504884785
+          },
+          "intervals": {
+            "train": {
+              "mean": {
+                "coverage": 0.7774166666666666,
+                "width": 0.8742889120480419,
+                "interval_score": 1.4220494433269373
+              },
+              "sd": {
+                "coverage": 0.7505666666666666,
+                "width": 0.4112681437038276,
+                "interval_score": 0.6512957304774769
+              },
+              "combined": {
+                "coverage": 0.7639916666666666,
+                "width": 0.6427785278759347,
+                "interval_score": 1.036672586902207
+              }
+            },
+            "heldout": {
+              "mean": {
+                "coverage": 0.8423263888888889,
+                "width": 0.8473310359289561,
+                "interval_score": 1.1442788385727054
+              },
+              "sd": {
+                "coverage": 0.4762847222222222,
+                "width": 0.3972038663871533,
+                "interval_score": 0.9694406652901674
+              },
+              "combined": {
+                "coverage": 0.6593055555555556,
+                "width": 0.6222674511580547,
+                "interval_score": 1.0568597519314364
+              }
+            }
+          }
+        },
+        "profile_relative_change": -0.0033272591525272954,
+        "sd_score_relative_change": 0.10763062789510536,
+        "completed_fold_misses_necessary_sd_improvement_direction": true
+      }
+    },
+    "score_sha256": {
+      "baseline32/fold0/seed0": "cacf60019296b46600a918a2d9c886caae141f0c6711952b2e7bd11be05d3275",
+      "baseline32/fold0/seed1": "bd0cae84aa716bab911ab4b074606874c8a3e217b4f58391a99827c07153b6fc",
+      "d.randproj,pbulk/fold0/seed0": "8d85c8d3fad3d5dcda765ba72a6a79c634302355b03ecda97f6df8cfa66dfe79",
+      "d.randproj,pbulk/fold0/seed1": "b35680b4aeaa249431113d159f3a9c8a77cbd32413488a6060a6cc05986275a0",
+      "g.split,pbulk/fold0/seed0": "fd477a7b39a91f91c2743943652d9ccb298662ac34c1d43333c350ca3f2e821e",
+      "g.split,pbulk/fold0/seed1": "47f175ad471f40b4c83dcd7704105ba9d51b6f77670d642cca88cb3f1969f8cc",
+      "g.hier,pbulk/fold0/seed0": "e575124de3c499203ce8ab9a506ab79bc64ebb16ca715a061b1cc37d6eb2742b",
+      "g.hier,pbulk/fold0/seed1": "6f6dee1ca13362be7d31b9711d8b783edb00561f9bbb87b284c8f4cd1d53cb01"
+    },
+    "interpretation": [
+      "Each architecture misses the required lower SD interval-score direction in the first paired fold.",
+      "This necessary all-fold condition cannot be repaired by other fold scores under the fixed rule; all18 planned fits nevertheless continue.",
+      "The full screen remains incomplete; no biological inferiority claim, retrospective gate change, readout rescue or default promotion."
+    ]
+  },
+  "hier_fold0_per_seed": {
+    "0": {
+      "original": {
+        "historical": {
+          "pb_rmse": 0.4755550657889358,
+          "meanlog_rmse_gene": 0.08730301323847914,
+          "nonzero_rmse_gene": 0.01990294776521031,
+          "logvar_rmse_gene": 0.20251611013877852,
+          "pc_energy_rep": 1.963852202045094,
+          "cell_energy_rep": 0.704661039123698
+        },
+        "intervals": {
+          "train": {
+            "mean": {
+              "coverage": 0.7429666666666667,
+              "width": 0.8178581356261672,
+              "interval_score": 1.4250071631855874
+            },
+            "sd": {
+              "coverage": 0.7765666666666666,
+              "width": 0.4069147570769814,
+              "interval_score": 0.5934766932742862
+            },
+            "combined": {
+              "coverage": 0.7597666666666667,
+              "width": 0.6123864463515744,
+              "interval_score": 1.0092419282299365
+            }
+          },
+          "heldout": {
+            "mean": {
+              "coverage": 0.8275,
+              "width": 0.798960068026868,
+              "interval_score": 1.1079536816775635
+            },
+            "sd": {
+              "coverage": 0.5332638888888889,
+              "width": 0.40046776029017267,
+              "interval_score": 0.8671264092257346
+            },
+            "combined": {
+              "coverage": 0.6803819444444444,
+              "width": 0.5997139141585204,
+              "interval_score": 0.9875400454516489
+            }
+          }
+        }
+      },
+      "candidate": {
+        "historical": {
+          "pb_rmse": 0.4676274465631978,
+          "meanlog_rmse_gene": 0.08345760532832296,
+          "nonzero_rmse_gene": 0.019317331914409132,
+          "logvar_rmse_gene": 0.19374541978012308,
+          "pc_energy_rep": 2.015107178832752,
+          "cell_energy_rep": 0.7307178259865912
+        },
+        "intervals": {
+          "train": {
+            "mean": {
+              "coverage": 0.7630666666666667,
+              "width": 0.8433881576230379,
+              "interval_score": 1.460238407811186
+            },
+            "sd": {
+              "coverage": 0.725,
+              "width": 0.4137009108494145,
+              "interval_score": 0.694446938132136
+            },
+            "combined": {
+              "coverage": 0.7440333333333333,
+              "width": 0.6285445342362261,
+              "interval_score": 1.077342672971661
+            }
+          },
+          "heldout": {
+            "mean": {
+              "coverage": 0.8475694444444445,
+              "width": 0.8314400680031008,
+              "interval_score": 1.1262936423586505
+            },
+            "sd": {
+              "coverage": 0.4263888888888889,
+              "width": 0.4040577398185665,
+              "interval_score": 1.07706178339078
+            },
+            "combined": {
+              "coverage": 0.6369791666666667,
+              "width": 0.6177489039108337,
+              "interval_score": 1.1016777128747153
+            }
+          }
+        }
+      }
+    },
+    "1": {
+      "original": {
+        "historical": {
+          "pb_rmse": 0.4710996461603825,
+          "meanlog_rmse_gene": 0.0914847983904711,
+          "nonzero_rmse_gene": 0.02081239317744218,
+          "logvar_rmse_gene": 0.19435115411979814,
+          "pc_energy_rep": 2.007893856655653,
+          "cell_energy_rep": 0.7065630008767287
+        },
+        "intervals": {
+          "train": {
+            "mean": {
+              "coverage": 0.7257,
+              "width": 0.7677723999809475,
+              "interval_score": 1.4377990441416266
+            },
+            "sd": {
+              "coverage": 0.7613333333333333,
+              "width": 0.3986799962308726,
+              "interval_score": 0.6342274886035923
+            },
+            "combined": {
+              "coverage": 0.7435166666666667,
+              "width": 0.58322619810591,
+              "interval_score": 1.0360132663726094
+            }
+          },
+          "heldout": {
+            "mean": {
+              "coverage": 0.7888888888888889,
+              "width": 0.7489418137907051,
+              "interval_score": 1.141581059396137
+            },
+            "sd": {
+              "coverage": 0.5206944444444445,
+              "width": 0.3950323832490382,
+              "interval_score": 0.8833500418136371
+            },
+            "combined": {
+              "coverage": 0.6547916666666667,
+              "width": 0.5719870985198717,
+              "interval_score": 1.012465550604887
+            }
+          }
+        }
+      },
+      "candidate": {
+        "historical": {
+          "pb_rmse": 0.47587749983150407,
+          "meanlog_rmse_gene": 0.10332372630103588,
+          "nonzero_rmse_gene": 0.02318337603787954,
+          "logvar_rmse_gene": 0.21780890168792233,
+          "pc_energy_rep": 1.9715232129969076,
+          "cell_energy_rep": 0.7402074749903659
+        },
+        "intervals": {
+          "train": {
+            "mean": {
+              "coverage": 0.7917666666666666,
+              "width": 0.9051896664730461,
+              "interval_score": 1.3838604788426885
+            },
+            "sd": {
+              "coverage": 0.7761333333333333,
+              "width": 0.40883537655824065,
+              "interval_score": 0.608144522822818
+            },
+            "combined": {
+              "coverage": 0.78395,
+              "width": 0.6570125215156433,
+              "interval_score": 0.9960025008327532
+            }
+          },
+          "heldout": {
+            "mean": {
+              "coverage": 0.8370833333333333,
+              "width": 0.8632220038548113,
+              "interval_score": 1.1622640347867603
+            },
+            "sd": {
+              "coverage": 0.5261805555555555,
+              "width": 0.3903499929557401,
+              "interval_score": 0.8618195471895547
+            },
+            "combined": {
+              "coverage": 0.6816319444444444,
+              "width": 0.6267859984052757,
+              "interval_score": 1.0120417909881574
+            }
+          }
+        }
+      }
+    }
+  },
+  "independent_first_fold_review": {
+    "status": "arithmetic_provenance_and_interpretation_verified",
+    "screen_fits_at_review": 6,
+    "numeric_fields_checked": 336,
+    "comparison_metric_blocks_checked": 45,
+    "score_hashes_checked": 8,
+    "protocol_comparison_default_hashes_checked": true,
+    "artifact_audit_snapshot_checked": true,
+    "interpretation": "All three completed fold0 pairs miss a necessary all-fold SD-score direction condition. Remaining folds cannot restore eligibility if verified scores and fixed rules stand. Full18-fit screen remains incomplete; no biological inferiority claim.",
     "no_file_writes_CLI_GPU_or_deserialization": true
   }
 }

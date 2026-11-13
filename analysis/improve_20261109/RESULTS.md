@@ -856,16 +856,31 @@ guards must finish before any architecture promotion. See compact committed
 `architecture_pass_evidence_20261113.json`; live status/artifacts under
 `runs/improve_20261109/{fits_r5,smoke_r5,results_r5,logs_r5}/architecture_pass`.
 
-Interim fresh screen:5/18 fits scored, with complete fold0 seed pairs for
-randproj and split. Split's second seed improves profile RMSE
+Interim fresh screen:6/18 fits scored, with complete fold0 seed pairs for
+all three architectures. Split's second seed improves profile RMSE
 .471100->.461793 but worsens held-out SD interval score .883350->.991115.
 Its two-seed fold means are profile .473327->.467214 (1.29% lower), SD score
 .875238->.889231 (1.60% higher), and SD coverage52.70->49.94%. Thus its first
 seed's SD improvement does not repeat, and this fold misses the required
-all-fold direction. Randproj also misses that direction. This is not a
-completed screen or biological conclusion; the full18-fit schedule continues
-with the original gates and no default change. Hier's second seed is running.
-All five fits pass the source/config/cache/checkpoint/receipt audit; see
+all-fold direction. Hier's second seed improves SD score .883350->.861820
+but worsens profile .471100->.475877. Its pair mean SD score remains higher.
+
+First paired fold only, same original CUDA/M32/K256 readout; lower scores
+are better and nominal coverage is80%:
+
+| Recipe | Profile RMSE | SD interval score | SD coverage | SD width |
+|---|---:|---:|---:|---:|
+| Original pbulk biascal | .473327 | .875238 | 52.70% | .397750 |
+| Random-direction critic | .477509 | 1.015031 | 51.83% | .210961 |
+| Split decoder | .467214 | .889231 | 49.94% | .389701 |
+| Hierarchical decoder | .471752 | .969441 | 47.63% | .397204 |
+
+Each arm thus misses a necessary all-fold SD-score improvement condition
+on this completed fold. Other folds cannot repair that condition under the
+fixed rule. This is not a completed screen or a biological conclusion;
+the full18-fit schedule continues with the original gates and no default
+change. Fold1 has started. All six fits pass the source/config/cache/
+checkpoint/receipt audit; see
 `architecture_screen_progress_evidence_20261113.json` for the dated snapshot,
 per-seed values and train/held-out interval results.
 
