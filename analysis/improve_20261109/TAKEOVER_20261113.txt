@@ -8,6 +8,9 @@ historical no-commit rule quoted below. scripts/microglia.py is the current
 entry point; count-shape is now the development default and profile-rmse
 preserves the original reference. See RESULTS.md8o for the later promotion.
 
+Communication preference: the owner asked for fewer check-ins. Keep routine
+training monitoring quiet; report substantive milestones or actual blockers.
+
 ACTIVE ARCHITECTURE FOLLOW-UP, 2026-11-13
 --------------------------------------
 The owner then authorized all interval/architecture/patient-vector proposals
@@ -20,8 +23,8 @@ Check actual processes/handles and their logs before resuming a queue.
 - GPU queue: r5/run_architecture_pass.py full; serial GPU1, memory fraction
   .04,3threads/process. One task GPU process at a time; do not disturb other
   projects. Eighteen20k fits (three arms x three folds x two seeds). The first
-  two seeds for each arm on folds0 and1 plus all three fold2,seed0 fits are
-  scored,15/18 total. Randproj
+  two seeds for each arm on folds0 and1 plus all three fold2,seed0 fits and
+  randproj fold2,seed1 are scored,16/18 total. Split
   fold2,seed1 is training; inspect
   the actual child/phase.
   All three arms now miss the mandatory
@@ -61,9 +64,14 @@ Check actual processes/handles and their logs before resuming a queue.
   and coverage49.01->50.63%, but worsens profile0.47% and gene errors.
   Hier fold2,seed0 improves SD score14.26% and coverage49.01->60.92%, but
   worsens profile3.81%; meanlog/detection improve, logvar/cell energy worsen.
-  All three fold2 results are unpaired; three second-seed fits remain.
+  Randproj's completed fold2 pair improves SD score9.44% and coverage
+  52.01->63.07%, but gene errors worsen. Split/hier fold2 remain unpaired.
+  Randproj's full6-fit screen is COMPLETE and NOT ELIGIBLE: SD score mean
+  .823638->.828266, lower in only2/3 folds; meanlog/detection/logvar each
+  regress>2computational seed-noise SE. No extra-fold/finalrecipe branch
+  is triggered for this arm. Two remaining fits and full18 audit are pending.
   No default change or restored fold0 gate.
-  All fifteen checkpoint/source/recipe/receipt checks pass. Latest
+  All sixteen checkpoint/source/recipe/receipt checks and six references pass. Latest
   committed snapshot: architecture_screen_progress_evidence_20261113.json;
   older local details:
   results_r5/architecture_pass/{first_seed_artifact_checks,

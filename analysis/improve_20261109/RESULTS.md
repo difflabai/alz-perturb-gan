@@ -1006,6 +1006,40 @@ The complete18-fit artifact/numeric comparison and final default disposition
 remain required; a final immutable audit must supersede the historical
 four-fit verification's reference to the advancing partial-audit file.
 
+The sixteenth fit completes randproj's six-fit original screen. Its fold2
+pair improves SD score .893780->.809449 (9.44%) and SD coverage52.01->63.07%,
+but meanlog/detection/logvar errors worsen22.29/26.02/6.35%; profile error
+is0.097% higher in that fold mean. Both seeds lower SD score and raise SD
+coverage, with narrower ranges. Training SD coverage falls77.76->22.96%.
+
+Across its full three-fold/two-seed screen, original reference versus randproj:
+
+| Metric | Original pbulk biascal | Random-direction critic |
+|---|---:|---:|
+| Profile RMSE | .486280 | .483362 |
+| Mean-log error | .095320 | .116366 |
+| Detection error | .020903 | .026790 |
+| Log-variance error | .187611 | .210446 |
+| Held SD interval score | .823638 | .828266 |
+| Held SD coverage | 55.68% | 58.21% |
+| Held SD width | .411543 | .220055 |
+| Held combined interval score | .987182 | 1.008606 |
+| Training SD coverage | 78.02% | 20.28% |
+| Training SD interval score | .619315 | 1.808857 |
+
+Randproj is not eligible for extra-fold confirmation. SD-score difference
+is+.004628 with computational seed-noise SE .029304; it is lower in only2/3
+fold means. Meanlog/detection/logvar errors each regress by more than2SE.
+Better profile/energy means and closer aggregate SD coverage do not satisfy
+the fixed conjunction. This concludes that arm against the original reference;
+the full18-fit study is incomplete, with split/hier second seeds pending.
+All sixteen finalized artifacts and all six matched references pass the audit.
+The selected count-shape default remains unchanged.
+The independent application reviewer recomputed all15 paired statistic blocks,
+48 aggregate values and every original gate, including per-fit coverage
+distances; exact agreement. Its review scope is the completed randproj arm
+within the sixteen-fit artifact snapshot, not the full eighteen-fit study.
+
 An additional calibration-compatibility check passes for all three optional
 architectures: shifting the existing output bias changes expected gene log
 odds once, including through centered state/cell residuals, and leaves NB
