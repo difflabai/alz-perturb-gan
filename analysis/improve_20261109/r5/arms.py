@@ -1333,7 +1333,11 @@ class Features:
         self.ctx = ctx
         names = round1_names(flags)
         self.kind = 'genemean' if 'genemean' in names else 'donorpc' if 'donorpc' in names else 'base'
-        self.W = ctx.W
+        # A critic-only projector must never replace ctx.W: generation and
+        # evaluation continue to use the original, train-fitted PCA space.
+        self.W = getattr(ctx, 'critic_W', ctx.W)
+        self.trainpcs = getattr(ctx, 'critic_trainpcs', ctx.trainpcs)
+        self.base_scale = getattr(ctx, 'critic_feature_scale', 1.)
         self.info = {'kind': self.kind}
         if self.kind == 'base':
             self.n_extra = 0
@@ -1390,7 +1394,9 @@ class Features:
         return t
 
     def real(self, idx, ds=None):
-        base = self.bag_features(self.ctx.trainpcs[idx])
+        base = self.bag_features(self.trainpcs[idx])
+        if self.base_scale != 1.:
+            base = base * self.base_scale
         if self.kind == 'base' and not self.blocks:
             return base
         parts = [base]
@@ -1401,6 +1407,8 @@ class Features:
 
     def fake(self, cf, rate=None, counts=None):
         base = self.bag_features(cf @ self.W)
+        if self.base_scale != 1.:
+            base = base * self.base_scale
         if self.kind == 'base' and not self.blocks:
             return base
         parts = [base]

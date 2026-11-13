@@ -1,0 +1,73 @@
+Owner request: "great lets do all those. the goal is to ipmrove results and
+metrics." Goal: improve the interval, cell-heterogeneity, and patient-vector
+deficiencies identified in INTERVAL_ARCHITECTURE_REVIEW_20261113.txt.
+
+This authorizes new matched training ablations and a donor encoder. It
+supersedes the audit's no-training scope, and the old <=300-update test-fit
+limit that was tied to now-completed r3/r4 confirmation screens. Keep the
+shared-machine limits: one GPU process at a time for this task, memory cap
+.04, <=3 CPU threads/process. Start with short smoke tests. Never interrupt
+another project's processes. Notify Ember of this resource interpretation.
+Only the same 37 development donors; no sealed or external donor counts.
+Original fit folders and r3/r4 code remain frozen. Retain the best validated
+default unless a candidate meets the rules below. User's prior request to
+commit the best config still applies. No push requested.
+
+Intervals: retain the historical interpolated M=32 score. Add marginal
+mean/SD coverage, below/above misses, width and central-80% interval score
+(width + 10 times distance outside either endpoint). Compare M=32 vs128
+and percentile vs finite-rank endpoints. At M=128 preserve fixed fitted
+training-only calibration from M=32, to isolate Monte Carlo/read-out effects.
+These are model predictive ranges, not a claim of conformal calibration.
+Always compare models at the same M/construction. Report increased width.
+
+Fresh training, one change at a time, same pbulk/20k/late-snapshot/stagehalf/
+train-only bias calibration baseline, same random streams/folds/seeds:
+A d.randproj,pbulk: 50 fixed random orthogonal directions, train-normalized,
+  same mean/SD/Fourier blocks and matched reference feature norm. Preserve
+  original evaluation PCA and existing pbulk block scale.
+B g.split,pbulk: separate donor logits and library-weighted centered cell
+  residuals; learn scalar within-cell amplitude initialized .5.
+C g.hier,pbulk: B plus four shared gene-expression states and donor-specific
+  mixture weights. ST categorical states during training; exact hard states
+  in the count forward. Shared NB dispersion unchanged.
+Do not select among widths, state counts or shrinkage strengths on test data.
+Only combine components after separate results are measured; any combination
+needs a fresh matched validation. No architecture change implied by a wider
+interval alone.
+
+Screen folds0-2, seeds0-1 (6 pairs/arm), 20k each. Existing baseline fits are
+reused only at the same device/generation recipe. Report paired seed-noise
+SE and fold scatter; these reuse 37 donors and are not independent tests.
+Promote only if PC-SD interval score improves >2 paired seed-noise SE and in
+all three fold means; coverage closer to .8; no >2 SE worsening in profile
+RMSE, meanlog, nonzero, logvar or PC/cell energy. A promising arm must repeat
+directionally on folds3-8,seeds0-1 before becoming default. Otherwise keep
+as experimental or reject. If no arm meets all conditions, retain current
+default and report which tradeoffs remain.
+
+Patient encoder: fit a permutation-invariant set encoder with the frozen
+generator, using synthetic donor latents and count bags, not held-out donor
+labels or expression. No change to GAN update machinery. Validate latent
+recovery on separate synthetic draws, real split-cell repeatability,
+held-out-cell reconstruction, depth sensitivity, across-seed predictions;
+compare reconstruction against train-mean and an input-cell pseudobulk.
+Report reconstruction separately from unconditional distribution prediction.
+Do not name axes as biological programs without validation. An encoder is
+experimental unless real held-out donor reconstruction and repeatability
+pass the predeclared comparisons. Raw cells from an evaluation donor may
+enter that donor's encoder input, but disjoint cells alone score output;
+no parameter fitting or tuning on them.
+Initial encoder: final frozen pbulk state only (not a common latent across
+the snapshot mixture), 2,000 synthetic Adam updates at .001. Hold128 of512
+particle rows out of encoder training. Require validation latent MSE <80%
+of the train-center null, real split-cell repeatability >=.8, and held-out
+cell reconstruction RMSE below the train-mean predictor. Also report the
+stronger input-cell pseudobulk reference, with no requirement to beat it.
+No tuning or early stopping on real held-out cells. If synthetic validation
+or real checks fail, retain as an experimental inverse model.
+
+Code uses isolated new r5 plug-ins and scripts, with a minimal optional
+critic-projector hook in Features; default-path parity must pass. Outputs:
+runs/improve_20261109/{fits_r5,smoke_r5,results_r5,logs_r5}/architecture_pass.
+Keep task disk below3GB, hash/prune scored generated modes, preserve fits.
