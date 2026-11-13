@@ -7,6 +7,47 @@ default_config.json and RESULTS.md 8i. That instruction supersedes the
 historical no-commit rule quoted below. scripts/microglia.py is the current
 entry point; count-shape is an explicit experimental option.
 
+ACTIVE ARCHITECTURE FOLLOW-UP, 2026-11-13
+--------------------------------------
+The owner then authorized all interval/architecture/patient-vector proposals
+and asked root to decide applications with a subagent. See RESULTS.md8j-8m,
+PROTOCOL_ARCHITECTURE_PASS_20261113.txt and APPLICATION_DEFAULT_DECISION_
+20261113.txt. These supersede this handoff's earlier no-training scope.
+Do not relaunch already-running jobs merely because a status file is old.
+Check actual processes/handles and their logs before resuming a queue.
+
+- GPU queue: r5/run_architecture_pass.py full; serial GPU1, memory fraction
+  .04,3threads/process. One task GPU process at a time; do not disturb other
+  projects. Eighteen20k fits (three arms x three folds x two seeds). The first
+  random-direction critic fit is scored, with worse profile/SD-interval
+  scores; g.split is now training. One seed cannot select/reject the arm.
+- CPU queue: r5/run_shape_confirmation.py; frozen pbulk fits, no training.
+  Twelve matched CPU pairs on folds3-8,seeds0/1. Six complete at07:15UTC;
+  no promotion from partial data. Compare with r5/compare_shape_confirmation.py.
+  Fixed prospective distribution-focused rule allows <=.5% profile cost
+  only with all target/guard checks; original strict-profile failure stays
+  recorded. Default currently biascal@stagehalf; profile-rmse remains an
+  explicit reference if count-shape passes and is promoted.
+- Intervals: all18 M128 and finite-rank comparisons completed. Blanket CQR
+  rejected on overall interval score. These are marginal summary ranges,
+  not validated80% patient/clinical probabilities.
+- Patient vectors: neural generator encoder, direct inverse fit and frozen
+  learned-critic feature probe all fail their fixed initial checks. No
+  patient encoder/biological axes promoted. Evidence files are committed.
+- The old confirmation distribution backfill is now running CPU-only via
+  r5/resume_confirmation_distributions.py. It reads existing synthetic
+  SEA-AD outputs and saved baseline SCORES, not external counts. Primary
+  profile nulls remain binding. M32 and M64 ensembles are kept separate.
+
+New training/interval/shape outputs are under the architecture_pass children
+of fits_r5,smoke_r5,results_r5,logs_r5. Keep this task below3GB; hash/score/prune
+temporary generated NPZs, retain fit checkpoints and receipts. Frozen r3/r4
+source and old fit folders remain untouched. No sealed/external donor counts.
+Read the queue-specific source manifests before changing training/math code.
+The current goal is active: finish queues and predeclared comparisons, confirm
+any promising architecture on extra folds, select/verify/commit the best
+default, and report actual limitations. No push requested.
+
 Aim
 ---
 Improve ParticleGAN 0.9.7 generation of human SEA-AD microglial gene-expression

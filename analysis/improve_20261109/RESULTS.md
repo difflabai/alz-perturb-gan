@@ -911,6 +911,14 @@ biological states. The independent application reviewer retains the same
 conditional recommendation after examining both seeds. See
 `shape_random_projection_evidence_20261113.json` for exact per-seed values.
 
+The actual user-facing `scripts/microglia.py generate --profile count-shape`
+command was also run on CPU at fold3,seed0. Its37-target,M32,K256 archive is
+byte-identical to the separate confirmation queue's output; every historical
+and interval score reproduces exactly. The duplicate archive was hash-pruned,
+with its receipt/scores retained. This verifies the candidate route without
+promoting it before the complete confirmation. Evidence:
+`count_shape_cli_verification_20261113.json`.
+
 ### 8m. Frozen critic features and matched controls (2026-11-13)
 
 The user-requested application reviewer proposed a bounded direct probe of
