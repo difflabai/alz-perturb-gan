@@ -20,7 +20,8 @@ Check actual processes/handles and their logs before resuming a queue.
 - GPU queue: r5/run_architecture_pass.py full; serial GPU1, memory fraction
   .04,3threads/process. One task GPU process at a time; do not disturb other
   projects. Eighteen20k fits (three arms x three folds x two seeds). The first
-  two seeds for each arm on folds0 and1 are scored,12/18 total. Randproj
+  two seeds for each arm on folds0 and1 plus randproj fold2,seed0 are scored,
+  13/18 total. Split
   fold2,seed0 is training; inspect
   the actual child/phase.
   All three arms now miss the mandatory
@@ -54,8 +55,11 @@ Check actual processes/handles and their logs before resuming a queue.
   mean errors worsen; mean coverage overshoots80%. Hier's completed fold1
   pair improves profile0.45%, but worsens meanlog/detection19.30/18.16%,
   SD score7.09% and SD coverage62.31->57.50%. All three arms now have two
-  paired folds; six fold2 fits remain. No default change or restored fold0 gate.
-  All twelve checkpoint/source/recipe/receipt checks pass. Latest
+  paired folds. Randproj fold2,seed0 improves held SD score10.49% and SD
+  coverage49.01->61.60%, but worsens profile2.17% and gene errors; training
+  SD coverage falls78.56->21.42%. This seed is unpaired; five fits remain.
+  No default change or restored fold0 gate.
+  All thirteen checkpoint/source/recipe/receipt checks pass. Latest
   committed snapshot: architecture_screen_progress_evidence_20261113.json;
   older local details:
   results_r5/architecture_pass/{first_seed_artifact_checks,

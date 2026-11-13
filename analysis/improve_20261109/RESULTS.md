@@ -957,6 +957,18 @@ remain incomplete at four matched fits per arm; six fits on fold2 remain.
 This second-fold milestone does not restore any arm's mandatory fold0 miss,
 provide independent patient-population evidence, or change the selected default.
 
+The thirteenth fit is randproj fold2,seed0. Against its matched original
+reference, held SD interval score improves .950135->.850498 (10.49%),
+SD coverage rises49.01->61.60%, and SD width narrows .437502->.234582.
+Profile error worsens .474038->.484310 (2.17%); meanlog/detection/logvar
+errors rise6.64/10.28/3.60%, and cell energy worsens slightly. PC energy
+improves1.41%. Held combined score improves1.084520->1.063114, while mean
+coverage and mean interval score worsen. Training SD coverage falls
+78.56->21.42%, with SD score .604323->1.746382. This is one unpaired seed;
+the second seed is pending. All thirteen finalized fits pass the artifact
+audit, including the fifth matched original reference. Five fits remain;
+the screen, mandatory fold0 miss and selected default are unchanged.
+
 An additional calibration-compatibility check passes for all three optional
 architectures: shifting the existing output bias changes expected gene log
 odds once, including through centered state/cell residuals, and leaves NB
