@@ -934,6 +934,29 @@ seed1's marginal SD-score decrease. All eleven finalized fits pass the
 artifact audit; seven remain missing, with hier fold1 still unpaired.
 The mandatory fold0 miss, selection rules and default remain unchanged.
 
+The twelfth fit completes hier's fold1 pair and the second paired fold for
+every arm. Hier's mean profile error is .502481->.500240 (0.45% lower), but
+meanlog/detection/logvar errors rise19.30/18.16/9.10%, and PC/cell energy
+errors rise1.09/4.96%. Its second seed worsens all six historical errors,
+including profile .490690->.510000. Both seeds worsen held SD interval score
+and coverage; paired combined interval score rises .892960->.924710.
+Training mean/combined interval scores improve, while paired SD score
+rises .626399->.632466 despite seed1's improvement.
+
+Completed fold1 pairs only, same original CUDA/M32/K256 readout:
+
+| Recipe | Profile RMSE | SD interval score | SD coverage | SD width |
+|---|---:|---:|---:|---:|
+| Original pbulk biascal | .502481 | .701896 | 62.31% | .418086 |
+| Random-direction critic | .489079 | .660318 | 59.74% | .207142 |
+| Split decoder | .483526 | .915368 | 45.49% | .405301 |
+| Hierarchical decoder | .500240 | .751646 | 57.50% | .431242 |
+
+All twelve finalized fits pass the artifact audit. All three comparisons
+remain incomplete at four matched fits per arm; six fits on fold2 remain.
+This second-fold milestone does not restore any arm's mandatory fold0 miss,
+provide independent patient-population evidence, or change the selected default.
+
 An additional calibration-compatibility check passes for all three optional
 architectures: shifting the existing output bias changes expected gene log
 odds once, including through centered state/cell residuals, and leaves NB

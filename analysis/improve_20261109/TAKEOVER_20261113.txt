@@ -20,8 +20,8 @@ Check actual processes/handles and their logs before resuming a queue.
 - GPU queue: r5/run_architecture_pass.py full; serial GPU1, memory fraction
   .04,3threads/process. One task GPU process at a time; do not disturb other
   projects. Eighteen20k fits (three arms x three folds x two seeds). The first
-  two seeds for each arm on fold0 plus all three fold1,seed0 fits and randproj/
-  split fold1,seed1 are scored,11/18 total. Hier fold1,seed1 is training; inspect
+  two seeds for each arm on folds0 and1 are scored,12/18 total. Randproj
+  fold2,seed0 is training; inspect
   the actual child/phase.
   All three arms now miss the mandatory
   lower SD-score direction in their first paired fold. This necessary
@@ -51,8 +51,11 @@ Check actual processes/handles and their logs before resuming a queue.
   stands; the full screen is incomplete. Split's fold1 pair improves profile
   3.77%, meanlog7.39% and detection4.57%, but worsens SD score30.41% and
   coverage62.31->45.49%. Its combined interval score and PC/cell energy
-  mean errors worsen; mean coverage overshoots80%. Hier fold1 remains unpaired.
-  All eleven checkpoint/source/recipe/receipt checks pass. Latest
+  mean errors worsen; mean coverage overshoots80%. Hier's completed fold1
+  pair improves profile0.45%, but worsens meanlog/detection19.30/18.16%,
+  SD score7.09% and SD coverage62.31->57.50%. All three arms now have two
+  paired folds; six fold2 fits remain. No default change or restored fold0 gate.
+  All twelve checkpoint/source/recipe/receipt checks pass. Latest
   committed snapshot: architecture_screen_progress_evidence_20261113.json;
   older local details:
   results_r5/architecture_pass/{first_seed_artifact_checks,
