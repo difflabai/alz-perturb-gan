@@ -884,7 +884,7 @@ checkpoint/receipt audit; see
 `architecture_screen_progress_evidence_20261113.json` for the dated snapshot,
 per-seed values and train/held-out interval results.
 
-Three additional fits are scored,9/18 total: all three arms on fold1,seed0.
+Fold1 first-seed milestone (9/18 scored): all three arms on fold1,seed0.
 These are unpaired first seeds, using the same original reference:
 
 | Recipe | Profile RMSE | SD interval score | SD coverage |
@@ -909,6 +909,17 @@ no fold means and do not restore the missed fold0 direction. All nine fits
 pass the artifact audit, including the new matched original
 reference. The same evidence file keeps these fits separate from completed
 first-fold pairs; prior independent reviews retain their dated scope.
+
+The tenth fit completes randproj's fold1 seed pair. Paired means, original
+reference versus randproj: profile .502481->.489079 (2.67% lower), held SD
+interval score .701896->.660318 (5.92% lower), SD width .418086->.207142 and
+SD coverage62.31->59.74%. Both seeds improve SD score but worsen coverage
+and all three gene-marginal errors; paired meanlog/detection/logvar errors
+rise11.84/17.20/8.37%. Held combined score worsens .892960->.906110. Training
+SD coverage falls79.40->20.32% and SD score worsens .626399->1.801615.
+This does not restore the mandatory fold0 direction or establish population
+validity. The full screen remains incomplete,10/18 fits audited with eight
+missing; split/hier fold1 seed pairs are still pending. No default/rule change.
 
 An additional calibration-compatibility check passes for all three optional
 architectures: shifting the existing output bias changes expected gene log
