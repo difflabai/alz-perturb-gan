@@ -16,6 +16,8 @@ In twelve matched CPU comparisons on six additional development splits, mean-exp
 
 Held-out coverage of nominal 80% ranges is **81.1% for expression-pattern means, 58.9% for cellular variability, and 70.0% combined**. Training-space variability coverage worsens **75.6% → 30.0%**. This is a development readout correction for marginal summaries; biological cell-state fidelity, stage prediction, and real-patient feature vectors remain unvalidated. Donor-dependent dispersion, external pooling and the failed zero-fraction critic remain excluded.
 
+The selected GAN still trails **stage-blind empirical resampling** on interval quality in these six extra splits: variability interval score **0.711 versus 0.670** and combined score **0.920 versus 0.874** (lower is better). Empirical variability coverage is **63.7%**, also below nominal 80%. The GAN has somewhat better gene marginals and cell-energy distance, but this comparison includes its calibration step and different stage handling. Treat the default as the best supported selected GAN recipe, with resampling as an essential population reference. See the [empirical interval comparison](analysis/improve_20261109/empirical_interval_reference_evidence_20261113.json).
+
 Inspect the complete configuration or preview the actual commands:
 
 ```bash

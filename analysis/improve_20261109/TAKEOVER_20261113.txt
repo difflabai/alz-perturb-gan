@@ -65,6 +65,16 @@ Check actual processes/handles and their logs before resuming a queue.
   values reproduce exactly. Original primary nulls are unchanged. This read
   existing synthetic SEA-AD outputs and saved baseline SCORES, not external
   counts. Do not rerun it as outstanding work.
+- Empirical interval references are COMPLETE: r5/score_empirical_intervals.py
+  reconstructs ONLY the original r3 resample/resample_blind recipes on
+  folds3-8, with all888 historical values exact. One empirical stream/fold
+  versus two GAN seeds averaged within fold; no significance/default gate.
+  Stage-blind resampling beats selected count-shape SD/combined proper
+  scores (.6700/.8742 versus .7111/.9198) in both repeats. GAN gene-marginal
+  gains include calibration, so cannot be credited to adversarial learning.
+  Both empirical and GAN SD coverage remain below80%. See RESULTS.md8q and
+  empirical_interval_reference_evidence_20261113.json. Original profile
+  archives/scores retained; temporary generated summaries hash-pruned.
 
 New training/interval/shape outputs are under the architecture_pass children
 of fits_r5,smoke_r5,results_r5,logs_r5. Keep this task below3GB; hash/score/prune

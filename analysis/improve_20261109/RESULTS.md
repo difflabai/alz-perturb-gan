@@ -1090,6 +1090,60 @@ statistical/protocol mismatch. See
 default or model-performance result changes in this implementation step;
 the planned18-fit architecture screen is still running.
 
+### 8q. Empirical references remain stronger for population intervals (2026-11-13)
+
+The fixed descriptive protocol in
+`PROTOCOL_EMPIRICAL_INTERVAL_REFERENCE_20261113.txt` compares the two original
+r3 resampling recipes with both frozen CPU GAN readouts on folds3-8. Original
+baseline archives retained profile summaries only; original cell-bag streams
+were reconstructed using byte-identical frozen r3 baseline/metrics code.
+All888 saved headline values reproduce exactly across all-gene and risk
+subsets. This establishes metric reproduction, not byte identity with the
+unavailable original generated summaries. Temporary reconstructed summaries
+were hash-scored and pruned; original inputs remain unchanged.
+
+Six equally weighted folds; each GAN row averages two seeds within each fold,
+while each empirical recipe has ONE fixed stream per fold. All use M32,K256
+and64-cell summary coordinates with24 observed repeats. Primary percentile
+results (proper interval scores are lower-is-better):
+
+| Metric | Original GAN | Count-shape GAN | Same-stage resampling | Stage-blind resampling |
+| --- | ---: | ---: | ---: | ---: |
+| Profile RMSE | .48419 | .48443 | .50368 | .47414 |
+| Mean-log error | .10608 | .08102 | .08403 | .08290 |
+| Detection error | .02312 | .01716 | .01825 | .01797 |
+| Held-out SD coverage | 48.57% | 58.89% | 61.19% | 63.74% |
+| Held-out SD width | .41232 | .22369 | .40612 | .41770 |
+| Held-out SD interval score | .92567 | .71111 | .72764 | .67003 |
+| Held-out combined coverage | 66.07% | 70.00% | 70.19% | 75.04% |
+| Held-out combined interval score | 1.03879 | .91981 | .98059 | .87415 |
+| Training SD coverage | 75.61% | 30.03% | 67.88% | 74.89% |
+| Training SD interval score | .63237 | 1.45372 | .78017 | .67241 |
+
+Against stage-blind resampling, the selected GAN's SD and combined interval
+scores are6.1% and5.2% worse, respectively, with worse means in BOTH repeats
+and4/6 folds. Narrower ranges do not compensate for missed observations in
+this proper score. Mean-log, detection and log-variance errors and cell
+energy modestly favour the selected GAN; profile error favours stage-blind
+resampling. Neither recipe attains nominal80% SD coverage.
+
+This is an end-to-end recipe comparison. Stage handling differs, and the
+GAN includes train-only bias/dispersion calibration while the exact empirical
+recipes are uncalibrated. Marginal gains cannot be attributed specifically
+to adversarial learning. Empirical donors cycle over a permutation, creating
+dependent/stratified draws, and depth-qualified source selection can bias
+cell composition. Recorded unmatched-depth fractions cover all37 targets,
+not held-out targets only. Overlapping splits reuse the same donors.
+
+The application reviewer recommends stage-blind resampling as the primary
+empirical population-range reference among these options. Count-shape remains
+the selected GAN recipe under its frozen rule; this benchmark supplies no
+new significance or default-promotion rule. Full means, fold/repeat
+differences, training/held partitions, rank secondary results and provenance:
+`empirical_interval_reference_evidence_20261113.json`. Cached resumption also
+passes with generation forbidden, unchanged numerical results/score hashes,
+and no temporary NPZs remaining.
+
 ## 9. Limits
 
 Original screens use three inner folds; confirmation adds six overlapping
