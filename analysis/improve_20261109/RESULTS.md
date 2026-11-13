@@ -855,6 +855,13 @@ guards must finish before any architecture promotion. See compact committed
 `architecture_pass_evidence_20261113.json`; live status/artifacts under
 `runs/improve_20261109/{fits_r5,smoke_r5,results_r5,logs_r5}/architecture_pass`.
 
+An additional calibration-compatibility check passes for all three optional
+architectures: shifting the existing output bias changes expected gene log
+odds once, including through centered state/cell residuals, and leaves NB
+dispersion unchanged. CPU finite-update/checkpoint-resume and default-feature
+checks also pass. This verifies a fair calibration path without changing
+training code or any running fit. The interim evidence records the test hash.
+
 ### 8l. Application objective and inverse follow-up (2026-11-13)
 
 The owner asked root to consider applications and decide the profile/distribution

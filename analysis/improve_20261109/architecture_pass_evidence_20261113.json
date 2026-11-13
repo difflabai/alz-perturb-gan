@@ -2458,5 +2458,32 @@
       "interval_metrics.py": "0be538e9fc2027d40baf752e1f85a3f90dd985193b15ecc2095f96c2921a545f"
     },
     "scope": "37 development donors; no default change; frozen-source matched architecture experiment"
+  },
+  "decoder_calibration_compatibility": {
+    "scope": "all3 optional architectures; CPU3updates; output bias must change gene log odds once and leave NB dispersion unchanged",
+    "checks": {
+      "d.randproj,pbulk": {
+        "finite_updates": 3,
+        "resume_bitwise": true,
+        "evaluation_PCA_unchanged": true,
+        "output_bias_calibration_compatible": true
+      },
+      "g.split,pbulk": {
+        "finite_updates": 3,
+        "resume_bitwise": true,
+        "evaluation_PCA_unchanged": true,
+        "output_bias_calibration_compatible": true
+      },
+      "g.hier,pbulk": {
+        "finite_updates": 3,
+        "resume_bitwise": true,
+        "evaluation_PCA_unchanged": true,
+        "output_bias_calibration_compatible": true
+      },
+      "default_features_unchanged": true
+    },
+    "test_source_sha256": "065558afab9f64be4ead8d6bbe6798432e004c643ec745ead44f038a51d8d369",
+    "check_file_sha256": "d3e177d821490207ab94c812876888e3f3f4035aea61164ae428e0b8ae8f6ff8",
+    "training_source_changed": false
   }
 }

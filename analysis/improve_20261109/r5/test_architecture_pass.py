@@ -47,7 +47,21 @@ def run():
         assert bool(torch.isfinite(mu).all()) and bool((mu > 0).all())
         assert torch.allclose(mu.sum(-1),library,atol=2e-5)
         assert bool((theta > 0).all())
-        checks[name] = {'finite_updates':3, 'resume_bitwise':True, 'evaluation_PCA_unchanged':True}
+        # Bias calibration must still change output gene log odds exactly
+        # once. Centered state/cell residuals must not cancel or duplicate it.
+        import mode_biascal as MB
+        delta = torch.linspace(-.1,.1,ctx.n_genes)
+        with torch.no_grad():
+            original_bias = MB.head(G).clone()
+            MB.head(G).add_(delta)
+            shifted, shifted_theta = G.parameters_nb(z,c,16,library,torch.Generator().manual_seed(2))
+            expected_rates = mu.detach()*delta.exp()
+            expected_rates *= library[...,None]/expected_rates.sum(-1,keepdim=True)
+            assert torch.allclose(shifted,expected_rates,rtol=2e-5,atol=2e-5), 'bias calibration is not a direct logit shift'
+            assert torch.equal(theta,shifted_theta), 'bias calibration changed dispersion'
+            MB.head(G).copy_(original_bias)
+        checks[name] = {'finite_updates':3, 'resume_bitwise':True, 'evaluation_PCA_unchanged':True,
+                        'output_bias_calibration_compatible':True}
         del ctx, bundle, restored_ctx, restored
     # Registration is inert for the default path and its released feature values.
     ctx = T.Context(CACHE, 'cpu', arms.parse_arm('pbulk' + fast))
