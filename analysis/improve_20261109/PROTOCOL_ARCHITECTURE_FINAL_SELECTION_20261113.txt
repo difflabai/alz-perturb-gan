@@ -1,0 +1,92 @@
+Forward selection after the count-shape default promotion
+========================================================
+Declared before any complete fresh-architecture screen or extra-fold fresh
+architecture confirmation. Current completed fits: fold0,seed0 for randproj
+and split; hier first fit is training. No extra-fold fresh fit exists yet.
+Independent application_default_review supports this separate final-recipe
+comparison and the clarifications below. No new training arms or tuning.
+
+Purpose: preserve the original architecture experiment while requiring a
+later default to improve on the best supported eligible recipe. A network
+beating the old biascal reference does not establish superiority over the
+new count-shape default. These are THREE separately recorded verdicts.
+
+1. Original architecture eligibility screen, UNCHANGED
+---------------------------------------------------
+PROTOCOL_ARCHITECTURE_PASS_20261113.txt remains binding: each of randproj,
+split and hier, folds0-2,seeds0/1,20k updates, biascal@stagehalf, M32,K256,
+same CUDA generation device as the frozen baseline. All18 planned fits.
+SD interval score improves >2 paired seed-noise SE and in all3 fold means;
+coverage closer to .8; existing profile/raw-gene/energy guards. Do not use
+the new application margin to relabel a failed original screen as passed.
+Only passing arms proceed. An effect appearing only after a combined readout
+can be missed by this bounded design; do not claim a globally best network.
+
+2. Architecture confirmation on the already-planned extra splits
+---------------------------------------------------------------
+For each eligible arm, train the original fixed recipe on folds3-8,seeds0/1,
+20k updates. Same serial GPU lease, .04 memory fraction,3threads/process.
+Score original biascal@stagehalf against the original frozen pbulk biascal
+reference on the same CUDA device/M32/K256. Before these extra scores, make
+the original directional-confirmation requirement explicit: overall SD
+interval-score improvement >2 paired seed-noise SE, lower mean score and
+lower SD-coverage distance in BOTH repeats (folds3-5 and6-8), and no >2SE
+regression in the original profile, meanlog, detection, logvar, PC/cell energy
+guards. Always report fold directions, widths and training/held partitions.
+This verdict is separate from the eligibility screen and final-recipe rule.
+
+3. Final recipes against the fixed promoted reference
+-----------------------------------------------------
+Components are combined only after their separate measured success. After
+architecture confirmation, evaluate TWO fixed readouts for that arm:
+  a biascal@stagehalf (its original recipe)
+  b cellshape@0.5:biascal:stagehalf (the already-selected fixed readout).
+No new alpha, state count, fit length, layer, regularization or calibration
+method. Both use their existing TRAIN-only calibration, refitted on CPU with
+3threads. Compare all recipes at M32,K256, interpolated10/90 endpoints, with
+the fixed CPU generation streams. Keep primary CUDA results separate.
+
+Distribution reference: frozen pbulk count-shape from commitdac8c95, using
+the12 already-audited CPU scores in results_r5/architecture_pass/
+shape_confirmation/count_shape. Do not rebase as candidates are considered.
+PROFILE BUDGET reference: frozen pbulk biascal@stagehalf from the matching
+shape_confirmation/default scores. The .5% allowance remains TOTAL relative
+to the original profile reference; it does not compound after promotion.
+
+Every candidate needs all12 final-recipe scores. Require:
+- SD interval-score improvement >2 paired seed-noise SE, lower in >=5/6
+  fold means and in BOTH repeat means against the distribution reference.
+- Lower SD-coverage distance from .8 overall and in BOTH repeat means.
+  Compute absolute distance PER FIT before averaging, preventing under- and
+  overcoverage from cancelling. Use the same per-fit transform for every
+  coverage guard; spread guard is abs(log(spread ratio)) per fit.
+- No >2SE regression in meanlog, detection, logvar, PC/cell energy, absolute
+  log spread or combined coverage distance against the distribution reference.
+- Profile cost+2 paired seed-noise SE <=.005*original-reference mean RMSE,
+  and every fold mean relative cost <=.005 against the PROFILE reference.
+- Recipe/source/cache/checkpoint/receipt provenance audit and explicit train/
+  held mean/SD coverages, widths and scores. Repeat the fixed random-direction
+  diagnostic for a proposed winner; report its outcome separately without
+  inventing a retrospective numerical veto. Biological claims need their
+  own validation, irrespective of these losses.
+
+Deterministic choice if several final recipes pass
+-------------------------------------------------
+Use fold-balanced held-out means. Start with the lowest SD interval score;
+retain recipes within2 paired seed-noise SE of that fixed minimum as tied.
+Within that set repeat for meanlog error, then detection error. This anchored
+set reduction avoids order-dependent pairwise ties. For remaining ties prefer
+the simpler readout (biascal), then fewer generator parameters, then canonical
+arm/readout name. Computational ties are not biological confidence intervals.
+If none passes, retain count-shape. No default change from partial evidence.
+
+Selection scope and reporting
+----------------------------
+Same37 development donors in overlapping splits, no independent population
+confirmation. Preserve training-fit deterioration, complementary-direction
+results, strong empirical resampling/profile references and failed patient
+encoders. Keep original strict-profile failures recorded. No sealed/external
+donor counts, frozen-source/fit mutations, extra parameter search or push.
+Hash/score/prune generated archives and retain fits within the existing task
+disk cap. Future winners need actual CLI inference verification, applicable
+checks, documentation/evidence and a commit before claiming the new default.
