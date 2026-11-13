@@ -24,7 +24,7 @@ Check actual processes/handles and their logs before resuming a queue.
   .04,3threads/process. One task GPU process at a time; do not disturb other
   projects. Eighteen20k fits (three arms x three folds x two seeds). The first
   two seeds for each arm on folds0 and1 plus all three fold2,seed0 fits and
-  randproj fold2,seed1 are scored,16/18 total. Split
+  randproj/split fold2,seed1 are scored,17/18 total. Hier
   fold2,seed1 is training; inspect
   the actual child/phase.
   All three arms now miss the mandatory
@@ -65,18 +65,25 @@ Check actual processes/handles and their logs before resuming a queue.
   Hier fold2,seed0 improves SD score14.26% and coverage49.01->60.92%, but
   worsens profile3.81%; meanlog/detection improve, logvar/cell energy worsen.
   Randproj's completed fold2 pair improves SD score9.44% and coverage
-  52.01->63.07%, but gene errors worsen. Split/hier fold2 remain unpaired.
+  52.01->63.07%, but gene errors worsen. Split's complete fold2 pair improves
+  SD score .893780->.859575 and coverage52.01->57.41% with wider ranges;
+  profile and all three gene errors worsen. Hier fold2 remains unpaired.
   Randproj's full6-fit screen is COMPLETE and NOT ELIGIBLE: SD score mean
   .823638->.828266, lower in only2/3 folds; meanlog/detection/logvar each
   regress>2computational seed-noise SE. No extra-fold/finalrecipe branch
-  is triggered for this arm. Two remaining fits and full18 audit are pending.
+  is triggered for this arm. Split's full6-fit screen is also COMPLETE and
+  NOT ELIGIBLE: SD score .823638->.888058, lower in only1/3 folds; SDcoverage
+  distance worsens. All6 historical guards pass but cannot rescue these
+  failed targets. No split confirmation/finalrecipe branch is triggered.
+  One remaining fit and full18 audit are pending.
   No default change or restored fold0 gate.
-  All sixteen checkpoint/source/recipe/receipt checks and six references pass. Latest
+  All seventeen checkpoint/source/recipe/receipt checks and six references pass. Latest
   committed snapshot: architecture_screen_progress_evidence_20261113.json;
   older local details:
   results_r5/architecture_pass/{first_seed_artifact_checks,
   randproj_fold0_seed1_artifact_checks}.json. The refreshed comparison.json
-  still reports every arm incomplete. Inspect live state before any action.
+  reports randproj/split complete and not eligible; hier is incomplete5/6.
+  Inspect live state before any action.
   r5/audit_architecture_pass.py now checks the full18-fit artifact set and
   matched original references without deserializing counts/weights. It pins
   the original resolved training settings and donor folds, verifies donor

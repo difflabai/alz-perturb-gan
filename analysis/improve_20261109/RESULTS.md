@@ -1040,6 +1040,29 @@ The independent application reviewer recomputed all15 paired statistic blocks,
 distances; exact agreement. Its review scope is the completed randproj arm
 within the sixteen-fit artifact snapshot, not the full eighteen-fit study.
 
+The seventeenth fit completes split's six-fit original screen. Its fold2
+pair improves held SD score .893780->.859575 and coverage52.01->57.41%,
+with width .418794->.485709. Profile .483030->.484994 and all three
+gene-marginal errors worsen in this pair; PC energy improves, cell energy
+worsens. Mean/combined proper scores and training SD score worsen.
+
+Across all six split fits, profile improves .486280->.478578 (1.58%),
+meanlog .095320->.092488 and detection .020903->.020322. However, held SD
+score worsens .823638->.888058 (7.82%), coverage55.68->50.95% and width
+.411543->.426904. The score difference is +.064420, with computational
+seed-noise SE .032123 and fold-scatter SE .075814. Only one of three fold
+means improves. All six historical guards pass, but neither SD-score condition
+nor the SD-coverage condition passes. Mean/combined proper scores worsen,
+and mean coverage overshoots80% farther. Training SD coverage78.02->77.08%
+and proper score .619315->.629115 also worsen. Split is **not eligible**;
+its extra-fold confirmation and final CPU recipe comparisons are not triggered.
+All seventeen finalized artifacts and six references pass the progress audit;
+the final hier seed and strict eighteen-fit completion audit remain pending.
+The selected default remains unchanged.
+The independent reviewer recomputed all15 paired blocks,48 aggregate values,
+the new fold2 pair/latest seed and every gate, and matched all12 score hashes
+plus the seventeen-fit artifact snapshot. No correction was needed.
+
 An additional calibration-compatibility check passes for all three optional
 architectures: shifting the existing output bias changes expected gene log
 odds once, including through centered state/cell residuals, and leaves NB
