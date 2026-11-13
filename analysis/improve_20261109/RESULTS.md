@@ -884,7 +884,7 @@ checkpoint/receipt audit; see
 `architecture_screen_progress_evidence_20261113.json` for the dated snapshot,
 per-seed values and train/held-out interval results.
 
-Two additional fits are scored,8/18 total: randproj and split on fold1,seed0.
+Three additional fits are scored,9/18 total: all three arms on fold1,seed0.
 These are unpaired first seeds, using the same original reference:
 
 | Recipe | Profile RMSE | SD interval score | SD coverage |
@@ -892,6 +892,7 @@ These are unpaired first seeds, using the same original reference:
 | Original pbulk biascal | .514273 | .710782 | 62.91% |
 | Random-direction critic | .488348 | .650749 | 61.00% |
 | Split decoder | .479229 | .929102 | 43.04% |
+| Hierarchical decoder | .490479 | .775921 | 54.19% |
 
 Randproj improves profile5.04% and held SD score8.45%, but detection error
 worsens23.34% and meanlog error16.35%. Training SD coverage falls81.09->20.70%
@@ -899,8 +900,13 @@ and its SD score worsens .610503->1.778841. Split improves all six historical
 errors, including profile6.81%, but held SD score worsens30.72%, coverage
 falls19.87 percentage points and combined interval score also worsens.
 Training SD coverage falls81.09->73.28% and its SD score worsens slightly.
-Neither result establishes a fold mean or restores the missed fold0 direction.
-All eight fits pass the artifact audit, including the new matched original
+Hier improves profile4.63%, log variance and PC/cell energy errors, but meanlog
+error rises3.24% and detection error5.58%. Its held SD score worsens9.16%;
+SD/combined coverage and combined score worsen, while mean interval score
+improves. Training SD coverage falls81.09->77.78% and SD score worsens,
+while training mean/combined scores improve. These unpaired seeds establish
+no fold means and do not restore the missed fold0 direction. All nine fits
+pass the artifact audit, including the new matched original
 reference. The same evidence file keeps these fits separate from completed
 first-fold pairs; prior independent reviews retain their dated scope.
 
