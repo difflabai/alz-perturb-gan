@@ -71,12 +71,13 @@ def test_resource_override_cannot_exceed_cap():
 
 
 def test_count_shape_is_explicit_and_does_not_mutate_defaults(capsys):
+    original = M.load_config()
     M.main(['generate', '--profile', 'count-shape', '--dry-run'])
     plan = json.loads(capsys.readouterr().out)
     command = plan['commands'][0]
     assert command[command.index('--mode') + 1] == 'cellshape@0.5:biascal:stagehalf'
     assert command[2].endswith('mode_cellshape.py')
-    assert M.load_config()['generation']['mode'] == 'biascal@stagehalf'
+    assert M.load_config() == original
 
 
 def test_profile_rmse_reference_remains_available_after_distribution_promotion(monkeypatch, capsys):
@@ -93,8 +94,13 @@ def test_profile_rmse_reference_remains_available_after_distribution_promotion(m
     assert M.load_config()['generation']['mode'] == 'cellshape@0.5:biascal:stagehalf'
 
 
-def test_reference_configuration_reports_its_actual_calibration(capsys):
+def test_reference_configuration_reports_its_actual_calibration_and_evidence(monkeypatch, capsys):
+    selected = M.load_config()
+    expected_evidence = selected['reference_profiles']['profile-rmse']['evidence']
+    selected['evidence'] = 'different-distribution-selection.json'
+    monkeypatch.setattr(M, 'load_config', lambda: copy.deepcopy(selected))
     M.main(['config', '--profile', 'profile-rmse'])
     cfg = json.loads(capsys.readouterr().out)
     assert cfg['generation']['calibration'] == 'training donors only; output bias'
     assert cfg['generation']['mode'] == 'biascal@stagehalf'
+    assert cfg['evidence'] == expected_evidence

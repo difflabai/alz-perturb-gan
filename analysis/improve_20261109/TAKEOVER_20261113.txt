@@ -22,12 +22,18 @@ Check actual processes/handles and their logs before resuming a queue.
   random-direction critic fit is scored, with worse profile/SD-interval
   scores; g.split is now training. One seed cannot select/reject the arm.
 - CPU queue: r5/run_shape_confirmation.py; frozen pbulk fits, no training.
-  Twelve matched CPU pairs on folds3-8,seeds0/1. Six complete at07:15UTC;
-  no promotion from partial data. Compare with r5/compare_shape_confirmation.py.
+  All twelve matched CPU pairs on folds3-8,seeds0/1 are COMPLETE; every gate
+  and the source/checkpoint/receipt audit passes. Compare with
+  r5/compare_shape_confirmation.py and r5/audit_shape_confirmation.py.
   Fixed prospective distribution-focused rule allows <=.5% profile cost
   only with all target/guard checks; original strict-profile failure stays
-  recorded. Default currently biascal@stagehalf; profile-rmse remains an
-  explicit reference if count-shape passes and is promoted.
+  recorded. Count-shape is selected as the development default; implicit
+  root-CLI output and all scores reproduce exactly, with14 CLI checks passed.
+  See default_inference_verification_20261113.json. profile-rmse remains the
+  explicit original reference with its own evidence. See RESULTS.md8o and
+  default_config_distribution_evidence_20261113.json. A later architecture
+  must compare against this selected readout before replacing it; beating
+  the old biascal reference alone is insufficient.
 - Intervals: all18 M128 and finite-rank comparisons completed. Blanket CQR
   rejected on overall interval score. These are marginal summary ranges,
   not validated80% patient/clinical probabilities.

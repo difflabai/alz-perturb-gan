@@ -6,12 +6,24 @@ subagent. Independent reviewer: application_default_review. Read-only local
 evidence review; no independent model reruns, edits or GPU work by reviewer.
 
 Decision: distribution-first development selection with a prospective .5%
-profile-RMSE noninferiority margin. Keep the existing biascal default until
-the complete12-pair confirmation passes. If it passes, choose the fixed
-count-shape read-out for finite-cell donor-population simulation and retain
-the strict profile recipe as an explicit option. Do not reinterpret the
-original strict-profile failure or assume pending scores pass. Fresh20k
-architecture experiments continue regardless of this read-out decision.
+profile-RMSE noninferiority margin. The complete12-pair confirmation now
+passes every declared gate. Choose the fixed count-shape read-out as the
+development default for finiteK256 donor-population simulation, retaining
+the original profile recipe as an explicit option. Root and independent
+reviewer agree after independently recomputing all gates and verifying the
+retained artifacts. Original strict-profile failures remain failed. Fresh
+20k architecture experiments continue independently.
+
+Completed confirmation: profile RMSE cost .0493%, worst fold .0936%, and
+cost+2seedSE .00038993 below the allowed .00242096. All targets improve in
+6/6 fold means and both repeats. Coverage means .8356 to .8111, cellular
+SDs .4857 to .5889, combined .6607 to .7000. SD interval score .9257 to
+.7111 with narrower width .4123 to .2237. Train SD coverage worsens .7561
+to .3003 and score .6324 to1.4537. This is a cohort/readout correction,
+not universally better biological cell heterogeneity. The random-direction
+caveats below still apply. Full evidence: default_config_distribution_
+evidence_20261113.json. Pruned generated arrays were not independently
+rescored by the reviewer; all retained source/checkpoint/receipt hashes match.
 
 Why this objective fits the intended work
 ----------------------------------------

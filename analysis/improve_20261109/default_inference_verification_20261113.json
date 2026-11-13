@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "selected_readout": "cellshape@0.5:biascal:stagehalf",
+  "profile_option": "omitted; actual committed-default route",
+  "fold": 8,
+  "seed": 1,
+  "M": 32,
+  "K": 256,
+  "targets": 37,
+  "device": "cpu",
+  "command": [
+    "/mnt/nvme/ai/conda/anaconda3/bin/python3",
+    "-B",
+    "scripts/microglia.py",
+    "generate",
+    "--fold",
+    "8",
+    "--seed",
+    "1",
+    "--fit",
+    "runs/improve_20261109/fits_r3/pbulk/hvg2000/fold8/seed1",
+    "--out",
+    "runs/improve_20261109/smoke_r5/architecture_pass/default_profile_smoke/implicit_default_fold8_seed1.npz",
+    "--device",
+    "cpu"
+  ],
+  "default_config_sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "CLI_source_sha256": "40d6102e77fa6a4ece2c64cd431db3d907449d7bd69335cb597370d5f860b80e",
+  "generation_receipt_sha256": "8969ea3e2b58ac7fa6f34281567848306539023b12120a5ee8b556989dca3f6c",
+  "generated_sha256": "8b32e0b4eb1b1535386b41f92521d070421c5ea5a99c2d9cbf33f20da1bde335",
+  "byte_identical_to_confirmation": true,
+  "all_historical_and_interval_scores_identical": true,
+  "temporary_archive_pruned": true,
+  "score_path": "runs/improve_20261109/results_r5/architecture_pass/default_profile_smoke/implicit_default_fold8_seed1.json",
+  "reference_score_path": "runs/improve_20261109/results_r5/architecture_pass/shape_confirmation/count_shape/fold8/seed1.json",
+  "CLI_tests": {
+    "command": "python3 -B -m pytest -q tests/test_microglia_default.py",
+    "passed": 14
+  }
+}

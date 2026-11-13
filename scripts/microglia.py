@@ -61,6 +61,7 @@ def resolve_profile(cfg, name):
     resolved['generation']['mode'] = profile['mode']
     resolved['generation']['calibration'] = profile['calibration']
     resolved['status'] = profile['status']
+    resolved['evidence'] = profile.get('evidence', cfg['evidence'])
     return resolved
 
 
@@ -91,7 +92,7 @@ def main(argv=None):
     p.add_argument('--out', type=Path, help='generation NPZ output; original fit folders are never modified')
     p.add_argument('--device', choices=['cpu', 'cuda'], default='cpu')
     p.add_argument('--profile', choices=['default', 'count-shape', 'profile-rmse'], default='default',
-                   help='choose the committed default, experimental count-shape, or original profile-RMSE read-out')
+                   help='choose the committed default or an explicit distribution/profile-RMSE read-out')
     p.add_argument('--gpu-mem-fraction', type=float, default=None)
     p.add_argument('--dry-run', action='store_true')
     args = p.parse_args(argv)

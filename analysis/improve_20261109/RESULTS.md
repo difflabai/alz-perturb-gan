@@ -1007,10 +1007,68 @@ M32/M64 ensemble comparisons, missing-source list and provenance hashes:
 `confirmation_distributions_evidence_20261113.json`. Full local outputs:
 `runs/improve_20261109/results_r5/confirmation_distributions/`.
 
+### 8o. Distribution-focused default passes full confirmation (2026-11-13)
+
+All twelve prospective CPU pairs (folds3-8,seeds0/1) pass the fixed rule in
+`PROTOCOL_DISTRIBUTION_CONFIRM_20261113.txt`. The default readout becomes
+`cellshape@0.5:biascal:stagehalf`, retaining the same pbulk20k training recipe.
+`--profile profile-rmse` preserves the original `biascal@stagehalf` reference
+and its own evidence. The original strict profile screen and the strict
+extra-fold guard remain failed; the application-selected distribution rule
+permits a small profile cost. It was declared before these confirmation scores.
+
+| Metric, twelve matched CPU pairs | Bias-calibrated reference | Count-shape |
+| --- | ---: | ---: |
+| Profile RMSE | .484192 | .484431 |
+| Mean-log expression error | .106079 | .081021 |
+| Detection error | .023115 | .017159 |
+| Log-variance error | .208837 | .194521 |
+| PC energy | 2.029346 | 1.843773 |
+| Cell energy | .809080 | .697315 |
+| PC spread ratio | 1.260678 | 1.067909 |
+| Variability interval score | .925667 | .711111 |
+
+All three targets improve in6/6 fold means and both repeats, exceeding2
+paired seed-noise SE; all guards pass. Mean profile cost is .0493%, worst
+fold .0936%, with mean cost+2SE .00038993 below the .00242096 allowance.
+Seed SE describes numerical repeatability, not independent biological sampling.
+
+Held-out mean/SD/combined coverages are83.56/48.57/66.07% before, versus
+81.11/58.89/70.00% after. Corresponding mean widths .82735/.41232/.61983
+become .75589/.22369/.48979; interval scores1.15191/.92567/1.03879 become
+1.12851/.71111/.91981. Thus the measured SD gain accompanies narrower ranges.
+Training SD coverage worsens75.61% to30.03%, and score .63237 to1.45372;
+this is a cohort/readout correction, not universally improved biological
+cell heterogeneity. Random-direction coverage also worsens with narrower
+ranges despite modest aggregate score gains. Combined coverage remains
+below80%; marginal summary ranges do not establish patient probabilities.
+
+The independent application reviewer recomputed all numerical gates from
+the24 score files and reran the read-only artifact audit: exact agreement.
+The audit verifies recipes, CPU/M32/K256 metadata, calibration train-target
+counts, unchanged sources, cache and frozen checkpoint/receipt hashes.
+Partial11-pair promotion is explicitly rejected without changing the default.
+Pruned generated arrays were not independently rescored by the reviewer.
+Raw train-statistic/resampling comparisons and the failed patient-vector
+probes remain part of the interpretation. Sealed20 donors stay untouched.
+
+Complete evidence, including train/held-out partitions, original six-fit GPU
+results kept separate and the full artifact audit:
+`default_config_distribution_evidence_20261113.json`. The actual implicit
+default CLI reproduces the final confirmation archive byte-for-byte and every
+historical/interval score exactly;14 CLI checks pass with the selected config.
+The duplicate archive was hash-pruned, preserving its receipt and full score.
+See `default_inference_verification_20261113.json`. Fresh architecture training continues under
+its original fixed comparison; passing that screen also requires comparison
+with the selected default before any later replacement.
+
+![Completed count-shape development comparison](count_shape_confirmation_20261113.png)
+
 ## 9. Limits
 
-Three inner folds whose training sets overlap by about half; two seeds; 37
+Original screens use three inner folds; confirmation adds six overlapping
+splits of the same37 donors. Two seeds; 37
 donors with 4 Not AD (2-3 per training split, 1-2 held out); Not AD donors are
 all APOE4-negative and 3 of 4 are male; the 2,000-gene set differs between
-folds (1,286 genes shared by all three); one hyperparameter setting per arm,
+folds (1,286 genes shared by the original three); one hyperparameter setting per arm,
 so a failed arm is a failed implementation, not a refuted idea.

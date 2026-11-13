@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "name": "microglia-pbulk-calibrated-v1",
+  "name": "microglia-pbulk-countshape-v2",
   "status": "development-selected",
   "training": {
     "arm": "pbulk",
@@ -21,12 +21,12 @@
     "native_ema_decay": 0.0
   },
   "generation": {
-    "mode": "biascal@stagehalf",
+    "mode": "cellshape@0.5:biascal:stagehalf",
     "generated_donors_per_target": 32,
     "cells_per_generated_donor": 256,
     "state_readout": "late snapshots at 15000 through 19000 plus final",
     "stage_handling": "half own stage, half training-stage mixture",
-    "calibration": "training donors only; output bias"
+    "calibration": "train-only joint bias/dispersion calibration after fixed within-donor mean shrinkage"
   },
   "data": {
     "cohort": "SEA-AD middle temporal gyrus",
@@ -40,21 +40,21 @@
     "fit_output_root": "runs/improve_20261109/fits_r5/default",
     "generation_output_root": "runs/improve_20261109/smoke_r5/default_inference"
   },
-  "evidence": "default_config_evidence.json",
-  "experimental_profiles": {
-    "count-shape": {
-      "mode": "cellshape@0.5:biascal:stagehalf",
-      "calibration": "train-only joint bias/dispersion calibration after fixed within-donor mean shrinkage",
-      "status": "experimental; fails the pre-declared profile-RMSE guard",
-      "tradeoff": "lower gene-mean, detection and variance error; profile RMSE +0.00032 versus zcal"
-    }
-  },
+  "evidence": "default_config_distribution_evidence_20261113.json",
+  "experimental_profiles": {},
   "reference_profiles": {
     "profile-rmse": {
       "mode": "biascal@stagehalf",
       "calibration": "training donors only; output bias",
       "status": "development-selected profile-RMSE reference",
       "evidence": "default_config_evidence.json"
+    },
+    "count-shape": {
+      "mode": "cellshape@0.5:biascal:stagehalf",
+      "calibration": "train-only joint bias/dispersion calibration after fixed within-donor mean shrinkage",
+      "status": "development-selected distribution readout; original strict profile guard failed",
+      "tradeoff": "extra-fold profile RMSE +0.0493%; better gene marginals and heldout projected distribution metrics",
+      "evidence": "default_config_distribution_evidence_20261113.json"
     }
   }
 }
