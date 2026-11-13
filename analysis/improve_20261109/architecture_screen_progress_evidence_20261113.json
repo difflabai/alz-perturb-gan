@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "recorded_utc": "2026-11-13T14:41:26.307699+00:00",
+  "recorded_utc": "2026-11-13T15:27:23.479836+00:00",
   "status": "screen_incomplete",
   "planned_fits": 18,
-  "completed_scored_fits": 10,
-  "scope": "Same37 development donors; paired fold0 for all arms and paired fold1 for randproj; split/hier fold1 still unpaired; no biological independence or completed-screen claim",
+  "completed_scored_fits": 11,
+  "scope": "Same37 development donors; paired fold0 for all arms and paired fold1 for randproj/split; hier fold1 still unpaired; no biological independence or completed-screen claim",
   "governing_protocols": {
     "PROTOCOL_ARCHITECTURE_PASS_20261113.txt": "ddfa8f48cf9d1cec3b361861758c8ca75f6ef4512c6ad91b1c59427c37f1c133",
     "PROTOCOL_ARCHITECTURE_FINAL_SELECTION_20261113.txt": "75471c0c0a84faaabb0eca4cec9e066e278969eb8d015187594e157a4c5029dd"
@@ -12,7 +12,7 @@
   "artifact_audit_snapshot": {
     "status": "incomplete",
     "complete": false,
-    "verified_fits": 10,
+    "verified_fits": 11,
     "planned_fits": 18,
     "missing": [
       {
@@ -42,12 +42,6 @@
       {
         "arm": "g.hier,pbulk",
         "fold": 2,
-        "seed": 1,
-        "reason": "score not finalized"
-      },
-      {
-        "arm": "g.split,pbulk",
-        "fold": 1,
         "seed": 1,
         "reason": "score not finalized"
       },
@@ -463,6 +457,28 @@
         },
         "native_summary_sha256": "804785eff24ffe0383675172cbfdcaa120355ffa15b5adf9144f79ae7ee47d0d",
         "pruned_mode_summary_sha256": "f416ab5401be9c1d58f51f173cac49c0ff15159b198d67006a9ac7b6b2015b52"
+      },
+      {
+        "arm": "g.split,pbulk",
+        "fold": 1,
+        "seed": 1,
+        "cache_manifest_sha256": "fb856d7f69eb37655bc08e4dd511da5ccf243cf17a700edd392af288a579140b",
+        "config_sha256": "4d058de7f513e7aa42834d6e0652ad41e99deb5371bffea4d4efe11a71622602",
+        "fit_receipt_sha256": "0f40f7f8d1f00d7db405d0d5aebc770bc974ec043929d87e046974105a2115c0",
+        "mode_receipt_sha256": "fa2c8361de5038790e850f6f79dc5b4e4adf3832f8609d7b8d1fdf8eb57ec65b",
+        "score_sha256": "976000af12e9f114901ff94b221399d9292f93e339b94c44094eb64182c3f2c4",
+        "checkpoints": {
+          "final.pt": "2b1dbdd46b86121367c0899058ea007ae8ac998c992786ea6ceb4a7e5dba911d",
+          "snap_5000.pt": "5fdfebe31df7702f005353967bac61b430028c85963432bae69b4cbc88c0817d",
+          "snap_10000.pt": "f28ec509b23b214c8e3da178badc71dbc7dc5cf80ca2b72a431a00b7d7b36088",
+          "snap_15000.pt": "0a32fd0ff07f06e5e19906ed1ae30c022fb882bef6c2c41afeeb57795ffe438b",
+          "snap_16000.pt": "1eb84c67efe2f182f4855dfa8ce3ed2766b9e8bc8cfbc6cda6bf2e32821a6e2b",
+          "snap_17000.pt": "70d99c3bfede4578d8bbdc16924c4f9cff9d793199285ebefc9e972466342c19",
+          "snap_18000.pt": "8a483d2c29d6c1ba12efc29cbcd9dad5fe2f87d3fedc322f16824539ef7bf9e3",
+          "snap_19000.pt": "197c5bd8b36a1c7fa046dd4cbd06b0f1ef08349fa9452975679ecb877746f226"
+        },
+        "native_summary_sha256": "5e1e3680217e439be78a6f62ac070835b3bf69a51f8fcb05f7c9cbeee47e5538",
+        "pruned_mode_summary_sha256": "d6d3e27fc423b676207c55b9b2ff2354b084d31d639a52f7cc6c73fef6ee1bd5"
       }
     ],
     "matched_original_references": {
@@ -494,7 +510,7 @@
     "auditor_sha256": "2f807e5ffaa6a79d162ae77795e01d50679ffbfef098ca2b8c7b0cd86e47ff80",
     "scope": "Artifact/metadata/source verification only; numerical gates remain separate; pruned arrays not rescored"
   },
-  "comparison_snapshot_sha256": "a4bda2ece26b8ce3de3fbfd9ac9689f05541736fcd07bee0ce8d1bb3269e4afe",
+  "comparison_snapshot_sha256": "0e31746560fc279bd5dba08154103e6025dfd15dbd04666f3fd8e772bf62df28",
   "split_fold0_pair": {
     "candidate": "g.split,pbulk",
     "reference": "original pbulk",
@@ -1256,7 +1272,7 @@
     "snapshot_scope": "Previous six-fit snapshot; first-fold paired numeric fields unchanged"
   },
   "latest_fit": {
-    "arm": "d.randproj,pbulk",
+    "arm": "g.split,pbulk",
     "fold": 1,
     "seed": 1,
     "reference": "original pbulk biascal@stagehalf",
@@ -1266,46 +1282,46 @@
     "K": 256,
     "candidate": {
       "historical": {
-        "pb_rmse": 0.4898099136276144,
-        "meanlog_rmse_gene": 0.1079145121671481,
-        "nonzero_rmse_gene": 0.023340596944853867,
-        "logvar_rmse_gene": 0.21227927928440954,
-        "pc_energy_rep": 1.8376375174363089,
-        "cell_energy_rep": 0.7213725764200868
+        "pb_rmse": 0.4878236283676569,
+        "meanlog_rmse_gene": 0.09326309677088963,
+        "nonzero_rmse_gene": 0.019380738301451775,
+        "logvar_rmse_gene": 0.1913352978974144,
+        "pc_energy_rep": 1.9871815003232458,
+        "cell_energy_rep": 0.8333584055151768
       },
       "intervals": {
         "train": {
           "mean": {
-            "coverage": 0.5869444444444445,
-            "width": 0.5702407821627956,
-            "interval_score": 1.534294574390066
+            "coverage": 0.7828819444444445,
+            "width": 0.8926879890081474,
+            "interval_score": 1.395765125423914
           },
           "sd": {
-            "coverage": 0.199375,
-            "width": 0.20071485737737516,
-            "interval_score": 1.8243889176220738
+            "coverage": 0.7672569444444445,
+            "width": 0.4500563688413838,
+            "interval_score": 0.6420890685920226
           },
           "combined": {
-            "coverage": 0.39315972222222223,
-            "width": 0.3854778197700854,
-            "interval_score": 1.67934174600607
+            "coverage": 0.7750694444444445,
+            "width": 0.6713721789247656,
+            "interval_score": 1.0189270970079685
           }
         },
         "heldout": {
           "mean": {
-            "coverage": 0.699551282051282,
-            "width": 0.5660744425691666,
-            "interval_score": 1.1540384261730903
+            "coverage": 0.8653846153846154,
+            "width": 0.8697413823540109,
+            "interval_score": 1.1099770734838323
           },
           "sd": {
-            "coverage": 0.5848076923076924,
-            "width": 0.20211120043556627,
-            "interval_score": 0.6698862907666076
+            "coverage": 0.47935897435897434,
+            "width": 0.4304585418716696,
+            "interval_score": 0.9016343210235311
           },
           "combined": {
-            "coverage": 0.6421794871794871,
-            "width": 0.38409282150236634,
-            "interval_score": 0.9119623584698489
+            "coverage": 0.6723717948717949,
+            "width": 0.6500999621128403,
+            "interval_score": 1.0058056972536815
           }
         }
       }
@@ -1356,22 +1372,22 @@
         }
       }
     },
-    "candidate_score_sha256": "7f7f8ea9f8c592bd2d6eb71ad48e3df2af49f4f120cf0a1a134a079e1ed99c3c",
+    "candidate_score_sha256": "976000af12e9f114901ff94b221399d9292f93e339b94c44094eb64182c3f2c4",
     "original_score_sha256": "516f35e0e8e49c5ac5d66597575ab8fc5b77da258166403f391124f01f69c3d1",
     "historical_relative_changes": {
-      "pb_rmse": -0.0017935831944625447,
-      "meanlog_rmse_gene": 0.07498572670876946,
-      "nonzero_rmse_gene": 0.11381542706999159,
-      "logvar_rmse_gene": 0.15997502352712245,
-      "pc_energy_rep": -0.03447871032709526,
-      "cell_energy_rep": -0.05886220299389289
+      "pb_rmse": -0.0058415263596210965,
+      "meanlog_rmse_gene": -0.07096371151566305,
+      "nonzero_rmse_gene": -0.07514939060191195,
+      "logvar_rmse_gene": 0.04552911347868216,
+      "pc_energy_rep": 0.044093857902385514,
+      "cell_energy_rep": 0.08723996381356813
     },
-    "heldout_sd_interval_score_relative_change": -0.03336649302631112,
-    "heldout_sd_coverage_difference": -0.03237179487179487,
+    "heldout_sd_interval_score_relative_change": 0.30104162117040545,
+    "heldout_sd_coverage_difference": -0.13782051282051289,
     "interpretation": [
-      "Completes the randproj fold1 seed pair; the full architecture screen remains incomplete.",
-      "Profile, PC/cell energy and held-out SD interval score improve; gene-mean/detection/logvar errors worsen.",
-      "Held mean/SD/combined coverage and combined interval score worsen; training SD coverage and score deteriorate sharply.",
+      "Completes the split fold1 seed pair; the full architecture screen remains incomplete.",
+      "Profile, meanlog and detection errors improve, but log variance and PC/cell energy errors worsen in this seed.",
+      "Held mean/SD/combined proper interval scores worsen; SD and combined coverage fall, while mean coverage rises above nominal.",
       "No changed default, retrospective rule change or restoration of the missed mandatory fold0 SD-score direction."
     ]
   },
@@ -1734,6 +1750,126 @@
         "Training SD coverage/score worsen, while mean and combined interval scores improve.",
         "All three fold1 first seeds are scored; no fold1 seed pair is complete. Partial unbalanced means are not used for selection. No default or rule changes."
       ]
+    },
+    "d.randproj,pbulk/fold1/seed1": {
+      "arm": "d.randproj,pbulk",
+      "fold": 1,
+      "seed": 1,
+      "reference": "original pbulk biascal@stagehalf",
+      "mode": "biascal@stagehalf",
+      "generation_device": "cuda",
+      "M": 32,
+      "K": 256,
+      "candidate": {
+        "historical": {
+          "pb_rmse": 0.4898099136276144,
+          "meanlog_rmse_gene": 0.1079145121671481,
+          "nonzero_rmse_gene": 0.023340596944853867,
+          "logvar_rmse_gene": 0.21227927928440954,
+          "pc_energy_rep": 1.8376375174363089,
+          "cell_energy_rep": 0.7213725764200868
+        },
+        "intervals": {
+          "train": {
+            "mean": {
+              "coverage": 0.5869444444444445,
+              "width": 0.5702407821627956,
+              "interval_score": 1.534294574390066
+            },
+            "sd": {
+              "coverage": 0.199375,
+              "width": 0.20071485737737516,
+              "interval_score": 1.8243889176220738
+            },
+            "combined": {
+              "coverage": 0.39315972222222223,
+              "width": 0.3854778197700854,
+              "interval_score": 1.67934174600607
+            }
+          },
+          "heldout": {
+            "mean": {
+              "coverage": 0.699551282051282,
+              "width": 0.5660744425691666,
+              "interval_score": 1.1540384261730903
+            },
+            "sd": {
+              "coverage": 0.5848076923076924,
+              "width": 0.20211120043556627,
+              "interval_score": 0.6698862907666076
+            },
+            "combined": {
+              "coverage": 0.6421794871794871,
+              "width": 0.38409282150236634,
+              "interval_score": 0.9119623584698489
+            }
+          }
+        }
+      },
+      "original": {
+        "historical": {
+          "pb_rmse": 0.4906900069778205,
+          "meanlog_rmse_gene": 0.10038692559904457,
+          "nonzero_rmse_gene": 0.02095553390408118,
+          "logvar_rmse_gene": 0.1830033190188306,
+          "pc_energy_rep": 1.9032594486433914,
+          "cell_energy_rep": 0.7664898580365971
+        },
+        "intervals": {
+          "train": {
+            "mean": {
+              "coverage": 0.6866319444444444,
+              "width": 0.6982063267511938,
+              "interval_score": 1.350527600451021
+            },
+            "sd": {
+              "coverage": 0.7770833333333333,
+              "width": 0.4206020680931409,
+              "interval_score": 0.642294553925844
+            },
+            "combined": {
+              "coverage": 0.7318576388888889,
+              "width": 0.5594041974221673,
+              "interval_score": 0.9964110771884326
+            }
+          },
+          "heldout": {
+            "mean": {
+              "coverage": 0.7664102564102564,
+              "width": 0.6781451326522691,
+              "interval_score": 1.0867221728888903
+            },
+            "sd": {
+              "coverage": 0.6171794871794872,
+              "width": 0.4002256363064081,
+              "interval_score": 0.6930095904329555
+            },
+            "combined": {
+              "coverage": 0.6917948717948718,
+              "width": 0.5391853844793386,
+              "interval_score": 0.8898658816609231
+            }
+          }
+        }
+      },
+      "candidate_score_sha256": "7f7f8ea9f8c592bd2d6eb71ad48e3df2af49f4f120cf0a1a134a079e1ed99c3c",
+      "original_score_sha256": "516f35e0e8e49c5ac5d66597575ab8fc5b77da258166403f391124f01f69c3d1",
+      "historical_relative_changes": {
+        "pb_rmse": -0.0017935831944625447,
+        "meanlog_rmse_gene": 0.07498572670876946,
+        "nonzero_rmse_gene": 0.11381542706999159,
+        "logvar_rmse_gene": 0.15997502352712245,
+        "pc_energy_rep": -0.03447871032709526,
+        "cell_energy_rep": -0.05886220299389289
+      },
+      "heldout_sd_interval_score_relative_change": -0.03336649302631112,
+      "heldout_sd_coverage_difference": -0.03237179487179487,
+      "interpretation": [
+        "Completes the randproj fold1 seed pair; the full architecture screen remains incomplete.",
+        "Profile, PC/cell energy and held-out SD interval score improve; gene-mean/detection/logvar errors worsen.",
+        "Held mean/SD/combined coverage and combined interval score worsen; training SD coverage and score deteriorate sharply.",
+        "No changed default, retrospective rule change or restoration of the missed mandatory fold0 SD-score direction."
+      ]
     }
   },
   "additional_paired_folds": {
@@ -2064,6 +2200,340 @@
         "artifact_audit_snapshot_checked": true,
         "interpretation": "Narrower SD ranges improve that proper score while coverage, combined interval score and gene marginals worsen. This does not establish better nominal calibration or broadly improved heterogeneity modeling. Mandatory fold0 miss, incomplete screen and default remain unchanged.",
         "snapshot_scope": "Ten-fit snapshot and this paired comparison only; no final gate claim from partial/unbalanced means.",
+        "no_file_writes_CLI_GPU_or_deserialization": true
+      }
+    },
+    "g.split,pbulk/fold1": {
+      "arm": "g.split,pbulk",
+      "fold": 1,
+      "seeds": [
+        0,
+        1
+      ],
+      "reference": "original pbulk biascal@stagehalf",
+      "mode": "biascal@stagehalf",
+      "generation_device": "cuda",
+      "M": 32,
+      "K": 256,
+      "original_mean": {
+        "historical": {
+          "pb_rmse": 0.5024812549540084,
+          "meanlog_rmse_gene": 0.09857280646025715,
+          "nonzero_rmse_gene": 0.0203937740315848,
+          "logvar_rmse_gene": 0.19257684838300454,
+          "pc_energy_rep": 1.9229478222931164,
+          "cell_energy_rep": 0.7819879747927256
+        },
+        "intervals": {
+          "train": {
+            "mean": {
+              "coverage": 0.7190798611111111,
+              "width": 0.749019138822759,
+              "interval_score": 1.3373666413919538
+            },
+            "sd": {
+              "coverage": 0.7939930555555555,
+              "width": 0.438379296490799,
+              "interval_score": 0.626398804504062
+            },
+            "combined": {
+              "coverage": 0.7565364583333334,
+              "width": 0.593699217656779,
+              "interval_score": 0.981882722948008
+            }
+          },
+          "heldout": {
+            "mean": {
+              "coverage": 0.7964102564102564,
+              "width": 0.7298679274893725,
+              "interval_score": 1.0840241754151516
+            },
+            "sd": {
+              "coverage": 0.6231410256410257,
+              "width": 0.41808563914813796,
+              "interval_score": 0.7018959965180482
+            },
+            "combined": {
+              "coverage": 0.7097756410256411,
+              "width": 0.5739767833187552,
+              "interval_score": 0.8929600859665999
+            }
+          }
+        }
+      },
+      "candidate_mean": {
+        "historical": {
+          "pb_rmse": 0.48352607717238394,
+          "meanlog_rmse_gene": 0.09129191538009951,
+          "nonzero_rmse_gene": 0.01946201451230636,
+          "logvar_rmse_gene": 0.19232247422920043,
+          "pc_energy_rep": 1.961891996300134,
+          "cell_energy_rep": 0.807425406549776
+        },
+        "intervals": {
+          "train": {
+            "mean": {
+              "coverage": 0.7717708333333333,
+              "width": 0.8655066141505183,
+              "interval_score": 1.3592066976875328
+            },
+            "sd": {
+              "coverage": 0.7500520833333333,
+              "width": 0.42090099107140444,
+              "interval_score": 0.6350987004847835
+            },
+            "combined": {
+              "coverage": 0.7609114583333334,
+              "width": 0.6432038026109614,
+              "interval_score": 0.9971526990861582
+            }
+          },
+          "heldout": {
+            "mean": {
+              "coverage": 0.855576923076923,
+              "width": 0.8431412494992838,
+              "interval_score": 1.0942484703765745
+            },
+            "sd": {
+              "coverage": 0.45490384615384616,
+              "width": 0.40530097652762537,
+              "interval_score": 0.9153682349471344
+            },
+            "combined": {
+              "coverage": 0.6552403846153847,
+              "width": 0.6242211130134546,
+              "interval_score": 1.004808352661854
+            }
+          }
+        }
+      },
+      "historical_relative_changes": {
+        "pb_rmse": -0.03772315403757587,
+        "meanlog_rmse_gene": -0.07386307990625363,
+        "nonzero_rmse_gene": -0.045688430098096644,
+        "logvar_rmse_gene": -0.0013208968572286928,
+        "pc_energy_rep": 0.020252330071325986,
+        "cell_energy_rep": 0.03252918532895954
+      },
+      "heldout_sd_interval_score_relative_change": 0.3041365665113849,
+      "heldout_sd_coverage_difference": -0.16823717948717953,
+      "per_seed": {
+        "0": {
+          "original": {
+            "historical": {
+              "pb_rmse": 0.5142725029301963,
+              "meanlog_rmse_gene": 0.09675868732146974,
+              "nonzero_rmse_gene": 0.019832014159088425,
+              "logvar_rmse_gene": 0.2021503777471785,
+              "pc_energy_rep": 1.9426361959428415,
+              "cell_energy_rep": 0.7974860915488543
+            },
+            "intervals": {
+              "train": {
+                "mean": {
+                  "coverage": 0.7515277777777778,
+                  "width": 0.7998319508943242,
+                  "interval_score": 1.3242056823328867
+                },
+                "sd": {
+                  "coverage": 0.8109027777777778,
+                  "width": 0.45615652488845704,
+                  "interval_score": 0.61050305508228
+                },
+                "combined": {
+                  "coverage": 0.7812152777777778,
+                  "width": 0.6279942378913906,
+                  "interval_score": 0.9673543687075834
+                }
+              },
+              "heldout": {
+                "mean": {
+                  "coverage": 0.8264102564102564,
+                  "width": 0.781590722326476,
+                  "interval_score": 1.0813261779414127
+                },
+                "sd": {
+                  "coverage": 0.6291025641025642,
+                  "width": 0.4359456419898678,
+                  "interval_score": 0.710782402603141
+                },
+                "combined": {
+                  "coverage": 0.7277564102564102,
+                  "width": 0.6087681821581719,
+                  "interval_score": 0.8960542902722768
+                }
+              }
+            }
+          },
+          "candidate": {
+            "historical": {
+              "pb_rmse": 0.47922852597711096,
+              "meanlog_rmse_gene": 0.08932073398930938,
+              "nonzero_rmse_gene": 0.019543290723160946,
+              "logvar_rmse_gene": 0.19330965056098645,
+              "pc_energy_rep": 1.9366024922770222,
+              "cell_energy_rep": 0.7814924075843752
+            },
+            "intervals": {
+              "train": {
+                "mean": {
+                  "coverage": 0.7606597222222222,
+                  "width": 0.8383252392928894,
+                  "interval_score": 1.3226482699511515
+                },
+                "sd": {
+                  "coverage": 0.7328472222222222,
+                  "width": 0.39174561330142504,
+                  "interval_score": 0.6281083323775443
+                },
+                "combined": {
+                  "coverage": 0.7467534722222222,
+                  "width": 0.6150354262971571,
+                  "interval_score": 0.975378301164348
+                }
+              },
+              "heldout": {
+                "mean": {
+                  "coverage": 0.8457692307692307,
+                  "width": 0.8165411166445569,
+                  "interval_score": 1.0785198672693164
+                },
+                "sd": {
+                  "coverage": 0.430448717948718,
+                  "width": 0.38014341118358114,
+                  "interval_score": 0.9291021488707375
+                },
+                "combined": {
+                  "coverage": 0.6381089743589744,
+                  "width": 0.598342263914069,
+                  "interval_score": 1.0038110080700267
+                }
+              }
+            }
+          }
+        },
+        "1": {
+          "original": {
+            "historical": {
+              "pb_rmse": 0.4906900069778205,
+              "meanlog_rmse_gene": 0.10038692559904457,
+              "nonzero_rmse_gene": 0.02095553390408118,
+              "logvar_rmse_gene": 0.1830033190188306,
+              "pc_energy_rep": 1.9032594486433914,
+              "cell_energy_rep": 0.7664898580365971
+            },
+            "intervals": {
+              "train": {
+                "mean": {
+                  "coverage": 0.6866319444444444,
+                  "width": 0.6982063267511938,
+                  "interval_score": 1.350527600451021
+                },
+                "sd": {
+                  "coverage": 0.7770833333333333,
+                  "width": 0.4206020680931409,
+                  "interval_score": 0.642294553925844
+                },
+                "combined": {
+                  "coverage": 0.7318576388888889,
+                  "width": 0.5594041974221673,
+                  "interval_score": 0.9964110771884326
+                }
+              },
+              "heldout": {
+                "mean": {
+                  "coverage": 0.7664102564102564,
+                  "width": 0.6781451326522691,
+                  "interval_score": 1.0867221728888903
+                },
+                "sd": {
+                  "coverage": 0.6171794871794872,
+                  "width": 0.4002256363064081,
+                  "interval_score": 0.6930095904329555
+                },
+                "combined": {
+                  "coverage": 0.6917948717948718,
+                  "width": 0.5391853844793386,
+                  "interval_score": 0.8898658816609231
+                }
+              }
+            }
+          },
+          "candidate": {
+            "historical": {
+              "pb_rmse": 0.4878236283676569,
+              "meanlog_rmse_gene": 0.09326309677088963,
+              "nonzero_rmse_gene": 0.019380738301451775,
+              "logvar_rmse_gene": 0.1913352978974144,
+              "pc_energy_rep": 1.9871815003232458,
+              "cell_energy_rep": 0.8333584055151768
+            },
+            "intervals": {
+              "train": {
+                "mean": {
+                  "coverage": 0.7828819444444445,
+                  "width": 0.8926879890081474,
+                  "interval_score": 1.395765125423914
+                },
+                "sd": {
+                  "coverage": 0.7672569444444445,
+                  "width": 0.4500563688413838,
+                  "interval_score": 0.6420890685920226
+                },
+                "combined": {
+                  "coverage": 0.7750694444444445,
+                  "width": 0.6713721789247656,
+                  "interval_score": 1.0189270970079685
+                }
+              },
+              "heldout": {
+                "mean": {
+                  "coverage": 0.8653846153846154,
+                  "width": 0.8697413823540109,
+                  "interval_score": 1.1099770734838323
+                },
+                "sd": {
+                  "coverage": 0.47935897435897434,
+                  "width": 0.4304585418716696,
+                  "interval_score": 0.9016343210235311
+                },
+                "combined": {
+                  "coverage": 0.6723717948717949,
+                  "width": 0.6500999621128403,
+                  "interval_score": 1.0058056972536815
+                }
+              }
+            }
+          }
+        }
+      },
+      "score_sha256": {
+        "baseline32/fold1/seed0": "c94e59425349db92a5f66b7469512cba7c156a45bd7459f11676082f379841c5",
+        "baseline32/fold1/seed1": "516f35e0e8e49c5ac5d66597575ab8fc5b77da258166403f391124f01f69c3d1",
+        "g.split,pbulk/fold1/seed0": "04e8aef03c99c12534f8382c9866158d13509051ad2b5656896cc363364f812a",
+        "g.split,pbulk/fold1/seed1": "976000af12e9f114901ff94b221399d9292f93e339b94c44094eb64182c3f2c4"
+      },
+      "interpretation": [
+        "Both seeds improve profile, meanlog and detection errors but worsen held-out SD proper interval score and SD/combined coverage.",
+        "Paired profile RMSE improves3.77%, but held-out SD interval score worsens30.41%; PC/cell energy mean errors rise.",
+        "Paired training SD coverage falls and SD/combined proper interval scores worsen; seed1 training SD score is marginally lower than its reference.",
+        "Higher held-out mean coverage overshoots nominal80%; the paired distance from nominal worsens.",
+        "This is a computational two-seed fold comparison, not independent population evidence or a completed architecture verdict.",
+        "The missed mandatory fold0 SD-score direction remains; remaining planned fits continue with fixed gates."
+      ],
+      "independent_application_review": {
+        "status": "arithmetic_provenance_and_interpretation_verified",
+        "screen_fits_at_review": 11,
+        "numeric_fields_checked": 144,
+        "relative_or_difference_calculations_checked": 8,
+        "latest_fit_numeric_fields_checked": 48,
+        "latest_fit_relative_or_difference_calculations_checked": 8,
+        "score_hashes_checked": 4,
+        "artifact_JSON_hashes_checked": 44,
+        "protocol_comparison_source_default_hashes_checked": true,
+        "artifact_audit_snapshot_checked": true,
+        "interpretation": "Profile, meanlog and detection errors improve, while held-out SD interval score worsens30.41% and coverage falls62.31% to45.49%. Higher mean coverage85.56% increases mean per-fit distance from nominal by2.558 percentage points. Paired training SD score worsens despite seed1 marginal improvement. Mandatory fold0 miss, incomplete screen and default remain unchanged.",
+        "snapshot_scope": "Eleven-fit snapshot and this paired comparison only; no final gate claim from partial/unbalanced means. Three-cache/18-payload result checked within saved root audit, not independently rehashed.",
         "no_file_writes_CLI_GPU_or_deserialization": true
       }
     }

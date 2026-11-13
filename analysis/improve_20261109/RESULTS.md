@@ -918,8 +918,21 @@ and all three gene-marginal errors; paired meanlog/detection/logvar errors
 rise11.84/17.20/8.37%. Held combined score worsens .892960->.906110. Training
 SD coverage falls79.40->20.32% and SD score worsens .626399->1.801615.
 This does not restore the mandatory fold0 direction or establish population
-validity. The full screen remains incomplete,10/18 fits audited with eight
-missing; split/hier fold1 seed pairs are still pending. No default/rule change.
+validity. At this ten-fit checkpoint, eight fits were missing and the
+split/hier fold1 seed pairs remained pending. No default/rule change.
+
+The eleventh fit completes split's fold1 seed pair. Paired means, original
+reference versus split: profile .502481->.483526 (3.77% lower), meanlog
+error .098573->.091292 and detection error .020394->.019462. Held SD interval
+score worsens .701896->.915368 (30.41%), SD coverage falls62.31->45.49%,
+and width changes .418086->.405301. Both seeds worsen SD score and SD/combined
+coverage. Combined interval score rises .892960->1.004808; PC/cell energy
+errors rise2.03/3.25% in the pair mean. Higher mean coverage79.64->85.56%
+overshoots nominal80%, worsening its distance from the target. Training SD
+coverage falls79.40->75.01% and SD score rises .626399->.635099, despite
+seed1's marginal SD-score decrease. All eleven finalized fits pass the
+artifact audit; seven remain missing, with hier fold1 still unpaired.
+The mandatory fold0 miss, selection rules and default remain unchanged.
 
 An additional calibration-compatibility check passes for all three optional
 architectures: shifting the existing output bias changes expected gene log
