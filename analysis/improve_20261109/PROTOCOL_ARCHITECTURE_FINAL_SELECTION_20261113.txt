@@ -90,3 +90,17 @@ donor counts, frozen-source/fit mutations, extra parameter search or push.
 Hash/score/prune generated archives and retain fits within the existing task
 disk cap. Future winners need actual CLI inference verification, applicable
 checks, documentation/evidence and a commit before claiming the new default.
+
+Numeric implementation (no change to the prospective rules)
+----------------------------------------------------------
+r5/compare_architecture_recipes.py checks all12 final CPU scores, the fixed
+original-profile budget, per-fit coverage distances, both repeats and every
+distribution guard. It verifies24 frozen reference score hashes against the
+original promotion evidence from dac8c95, whose own hash is pinned in code.
+It reports TRAIN and held-out interval partitions. It cannot approve an
+architecture, replace the separate provenance audit or select/promote a
+default. Deterministic tie selection above remains a separate step if needed.
+Usage after a separately confirmed arm has all12 final-recipe scores:
+  python3 -B r5/compare_architecture_recipes.py --candidate SCORE_DIRECTORY --out REPORT.json
+Relative paths here assume analysis/improve_20261109 as the working directory.
+Analytic selection checks live in r5/test_architecture_recipes.py.

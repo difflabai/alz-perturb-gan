@@ -5,7 +5,8 @@ CURRENT FOLLOW-UP: Mikkel authorized an improvement pass and committing the
 best configuration as default. See PROTOCOL_DEFAULT_PASS_20261113.txt,
 default_config.json and RESULTS.md 8i. That instruction supersedes the
 historical no-commit rule quoted below. scripts/microglia.py is the current
-entry point; count-shape is an explicit experimental option.
+entry point; count-shape is now the development default and profile-rmse
+preserves the original reference. See RESULTS.md8o for the later promotion.
 
 ACTIVE ARCHITECTURE FOLLOW-UP, 2026-11-13
 --------------------------------------
@@ -19,8 +20,9 @@ Check actual processes/handles and their logs before resuming a queue.
 - GPU queue: r5/run_architecture_pass.py full; serial GPU1, memory fraction
   .04,3threads/process. One task GPU process at a time; do not disturb other
   projects. Eighteen20k fits (three arms x three folds x two seeds). The first
-  random-direction critic fit is scored, with worse profile/SD-interval
-  scores; g.split is now training. One seed cannot select/reject the arm.
+  random-direction critic and split-generator fits are scored (fold0,seed0);
+  the first hierarchical fit is training. Randproj worsens the initial
+  profile/SD scores; split improves both. One seed cannot select/reject an arm.
 - CPU queue: r5/run_shape_confirmation.py; frozen pbulk fits, no training.
   All twelve matched CPU pairs on folds3-8,seeds0/1 are COMPLETE; every gate
   and the source/checkpoint/receipt audit passes. Compare with
@@ -38,6 +40,13 @@ Check actual processes/handles and their logs before resuming a queue.
   extra-fold architecture confirmation, then matched CPU final recipes.
   The .5% profile budget stays anchored to the original biascal reference,
   not compounded against each later default. No new training arms/tuning.
+  r5/compare_architecture_recipes.py implements only the final numeric gates
+  and verifies both reference score sets against pinned promotion evidence.
+  It requires all12 matched CPU scores; original architecture eligibility,
+  confirmation, provenance audit and any tie selection remain separate.
+  Eighteen analytic checks and the real-reference self-comparison pass;
+  see architecture_recipe_gate_verification_20261113.json. This is selection
+  infrastructure, not new model-performance or population evidence.
 - Intervals: all18 M128 and finite-rank comparisons completed. Blanket CQR
   rejected on overall interval score. These are marginal summary ranges,
   not validated80% patient/clinical probabilities.

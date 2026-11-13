@@ -1064,6 +1064,32 @@ with the selected default before any later replacement.
 
 ![Completed count-shape development comparison](count_shape_confirmation_20261113.png)
 
+### 8p. Final-recipe selection automation (2026-11-13)
+
+`PROTOCOL_ARCHITECTURE_FINAL_SELECTION_20261113.txt` preserves the original
+architecture screen and extra-fold confirmation as separate verdicts. A
+subsequent final recipe must improve on the promoted count-shape reference,
+while its total .5% profile allowance remains anchored to the original
+biascal reference. This allowance cannot compound across promotions.
+
+`r5/compare_architecture_recipes.py` implements the final numeric gates only.
+It requires all12 matched CPU/M32 scores, transforms coverage distance per
+fit before averaging, checks both repeats, all distribution guards, and the
+overall and per-fold profile limits. Both reference score sets are checked
+against the24 hashes in the pinned original promotion evidence. Training
+and held-out interval partitions remain visible in its reports. It does
+not establish architecture eligibility, K256/stream provenance, winner tie
+selection or default promotion.
+
+Eighteen analytic checks pass, covering misleading averaging, repeat/fold
+regressions, compounded allowances, missing or incompatible scores and
+reference mutation. The real12-fit current-default self-comparison correctly
+fails to qualify as an improvement. The application reviewer found no
+statistical/protocol mismatch. See
+`architecture_recipe_gate_verification_20261113.json`. No training recipe,
+default or model-performance result changes in this implementation step;
+the planned18-fit architecture screen is still running.
+
 ## 9. Limits
 
 Original screens use three inner folds; confirmation adds six overlapping

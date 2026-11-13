@@ -1,0 +1,63 @@
+{
+  "recorded_utc": "2026-11-13T08:47:04.432557+00:00",
+  "purpose": "Verify final-recipe numeric selection automation; no new model-performance evidence",
+  "protocol": "PROTOCOL_ARCHITECTURE_FINAL_SELECTION_20261113.txt",
+  "protocol_sha256": "75471c0c0a84faaabb0eca4cec9e066e278969eb8d015187594e157a4c5029dd",
+  "implementation": "r5/compare_architecture_recipes.py",
+  "implementation_sha256": "f5ad7a1701ff4e486e45932f48be591aa764f830e3aac1bce0aeb2a114ccc2a5",
+  "tests": {
+    "path": "r5/test_architecture_recipes.py",
+    "sha256": "946a27a7a248d7ff2c168aca6dde30cc2cb5afbfd314ec7741518a52c6017e8c",
+    "command": "OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 /mnt/nvme/ai/conda/anaconda3/bin/python3 -B -m pytest -q analysis/improve_20261109/r5/test_architecture_recipes.py",
+    "exit_code": 0,
+    "passed": 18
+  },
+  "real_reference_self_comparison": {
+    "path": "runs/improve_20261109/results_r5/architecture_pass/recipe_gate_self_check.json",
+    "sha256": "266598e4a561de1df6f2b4fab9a617a97e1e8476cd06bb54610c564857e0b49e",
+    "complete_pairs": 12,
+    "expected_passes_numeric_rule": false,
+    "actual_passes_numeric_rule": false,
+    "gates": {
+      "sd_score": false,
+      "sd_coverage_distance": false,
+      "profile_budget_from_original_reference": true,
+      "distribution_guards": true
+    }
+  },
+  "fixed_references": {
+    "promotion_commit": "dac8c95",
+    "promotion_evidence_sha256": "3fb5bcb23efd58c47b25946a00cf63cd051b40f9b86d1b9ad4f7ec62498dcbdc",
+    "score_hashes_verified": 24,
+    "reference_hashes_match_pinned_promotion_evidence": true
+  },
+  "training_source_manifests": {
+    "verified": 18,
+    "math_source_hashes_unchanged": true
+  },
+  "default_config_sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "default_unchanged_from_promoted_config": true,
+  "independent_application_review": {
+    "agent": "/root/application_default_review",
+    "verdict": "No blocking statistical or protocol mismatch found",
+    "suggested_coverage_cases_added": [
+      "single-fold profile failure despite passing aggregate",
+      "SD coverage repeat failure despite passing aggregate",
+      "distribution guard regression despite primary target gains"
+    ]
+  },
+  "additional_requirements": [
+    "original architecture screen",
+    "extra-fold architecture confirmation",
+    "artifact/source/receipt audit including K256 and fixed random streams",
+    "fixed random-direction diagnostic",
+    "deterministic tie selection if needed",
+    "actual CLI verification, documentation and commit before default change"
+  ],
+  "limits": [
+    "Not architecture eligibility or confirmation",
+    "Not K256/random-stream or full artifact audit",
+    "Not tie selection or default promotion",
+    "Seed SE measures computational noise on overlapping development splits, not independent biological confidence"
+  ]
+}
