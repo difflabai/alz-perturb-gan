@@ -44,8 +44,17 @@
   "experimental_profiles": {
     "count-shape": {
       "mode": "cellshape@0.5:biascal:stagehalf",
+      "calibration": "train-only joint bias/dispersion calibration after fixed within-donor mean shrinkage",
       "status": "experimental; fails the pre-declared profile-RMSE guard",
       "tradeoff": "lower gene-mean, detection and variance error; profile RMSE +0.00032 versus zcal"
+    }
+  },
+  "reference_profiles": {
+    "profile-rmse": {
+      "mode": "biascal@stagehalf",
+      "calibration": "training donors only; output bias",
+      "status": "development-selected profile-RMSE reference",
+      "evidence": "default_config_evidence.json"
     }
   }
 }

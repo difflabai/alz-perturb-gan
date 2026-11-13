@@ -77,3 +77,24 @@ def test_count_shape_is_explicit_and_does_not_mutate_defaults(capsys):
     assert command[command.index('--mode') + 1] == 'cellshape@0.5:biascal:stagehalf'
     assert command[2].endswith('mode_cellshape.py')
     assert M.load_config()['generation']['mode'] == 'biascal@stagehalf'
+
+
+def test_profile_rmse_reference_remains_available_after_distribution_promotion(monkeypatch, capsys):
+    cfg = M.load_config()
+    cfg['generation']['mode'] = 'cellshape@0.5:biascal:stagehalf'
+    monkeypatch.setattr(M, 'load_config', lambda: copy.deepcopy(cfg))
+    M.main(['generate', '--dry-run'])
+    default = json.loads(capsys.readouterr().out)['commands'][0]
+    assert default[2].endswith('mode_cellshape.py')
+    M.main(['generate', '--profile', 'profile-rmse', '--dry-run'])
+    reference = json.loads(capsys.readouterr().out)['commands'][0]
+    assert reference[2].endswith('generate.py')
+    assert reference[reference.index('--mode') + 1] == 'biascal@stagehalf'
+    assert M.load_config()['generation']['mode'] == 'cellshape@0.5:biascal:stagehalf'
+
+
+def test_reference_configuration_reports_its_actual_calibration(capsys):
+    M.main(['config', '--profile', 'profile-rmse'])
+    cfg = json.loads(capsys.readouterr().out)
+    assert cfg['generation']['calibration'] == 'training donors only; output bias'
+    assert cfg['generation']['mode'] == 'biascal@stagehalf'

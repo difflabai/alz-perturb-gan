@@ -29,6 +29,8 @@ CUDA_VISIBLE_DEVICES=1 $PY -B scripts/microglia.py train --fold 0 --seed 0 --dev
 # Generate from an existing compatible fit, writing outside its frozen folder:
 CUDA_VISIBLE_DEVICES=1 $PY -B scripts/microglia.py generate --device cuda \
   --fit runs/improve_20261109/fits_r3/pbulk/hvg2000/fold0/seed0
+# Explicitly select the original profile-RMSE read-out:
+$PY -B scripts/microglia.py config --profile profile-rmse
 ```
 
 Training uses fresh weights or resumes its own checkpoints; generation produces depth-matched evaluation summaries for the selected development cache. GPU memory is capped at 4% and CPU use at three threads per process. The root package installation remains the earlier synthetic smoke project.

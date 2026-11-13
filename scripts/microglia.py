@@ -46,6 +46,24 @@ def cache_path(cfg, fold):
     return ROOT / 'runs/improve_20261109/caches' / cfg['training']['panel'] / f'fold{fold}'
 
 
+def resolve_profile(cfg, name):
+    """Choose an explicit read-out independently of the committed default.
+
+    Keep the original profile-RMSE reference available if a distribution
+    read-out later passes its prospective promotion rule.
+    """
+    if name == 'default':
+        return cfg
+    profiles = {**cfg.get('experimental_profiles', {}), **cfg.get('reference_profiles', {})}
+    profile = profiles[name]
+    resolved = copy.deepcopy(cfg)
+    resolved['name'] += '-' + name
+    resolved['generation']['mode'] = profile['mode']
+    resolved['generation']['calibration'] = profile['calibration']
+    resolved['status'] = profile['status']
+    return resolved
+
+
 def generation_command(cfg, fit, cache, out, device, memory):
     mode = cfg['generation']['mode']
     module = 'mode_cellshape.py' if mode.startswith('cellshape@') else 'generate.py'
@@ -72,19 +90,12 @@ def main(argv=None):
     p.add_argument('--fit', type=Path, help='existing compatible fit; otherwise use the default fit output root')
     p.add_argument('--out', type=Path, help='generation NPZ output; original fit folders are never modified')
     p.add_argument('--device', choices=['cpu', 'cuda'], default='cpu')
-    p.add_argument('--profile', choices=['default', 'count-shape'], default='default',
-                   help='count-shape is experimental and trades a small profile-RMSE cost for better distribution fit')
+    p.add_argument('--profile', choices=['default', 'count-shape', 'profile-rmse'], default='default',
+                   help='choose the committed default, experimental count-shape, or original profile-RMSE read-out')
     p.add_argument('--gpu-mem-fraction', type=float, default=None)
     p.add_argument('--dry-run', action='store_true')
     args = p.parse_args(argv)
-    cfg = load_config()
-    if args.profile != 'default':
-        cfg = copy.deepcopy(cfg)
-        profile = cfg['experimental_profiles'][args.profile]
-        cfg['name'] += '-experimental-' + args.profile
-        cfg['generation']['mode'] = profile['mode']
-        cfg['generation']['calibration'] = 'train-only joint bias/dispersion calibration after fixed within-donor mean shrinkage'
-        cfg['status'] = profile['status']
+    cfg = resolve_profile(load_config(), args.profile)
     if args.command == 'config':
         print(json.dumps(cfg, indent=2))
         return 0
