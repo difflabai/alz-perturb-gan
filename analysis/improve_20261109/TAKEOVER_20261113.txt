@@ -20,16 +20,21 @@ Check actual processes/handles and their logs before resuming a queue.
 - GPU queue: r5/run_architecture_pass.py full; serial GPU1, memory fraction
   .04,3threads/process. One task GPU process at a time; do not disturb other
   projects. Eighteen20k fits (three arms x three folds x two seeds). The first
-  fit for each arm (fold0,seed0) plus randproj fold0,seed1 are scored,4/18
+  fit for each arm (fold0,seed0) plus randproj/split fold0,seed1 are scored,5/18
   total. The remaining schedule is running; inspect the actual child/phase.
   Both randproj seeds worsen SD interval score. Its fold0 means are
   .875238->1.015031 for SD score and .473327->.477509 for profile RMSE;
   raw gene-marginal errors also worsen. Thus this paired fold misses the
   required direction; all planned fits continue, with no gate changes.
-  Split's first seed improves profile/SD scores. Hier's first seed improves
+  Split improves profile in both seeds, but its second seed worsens SD score:
+  fold0 means profile .473327->.467214, SD score .875238->.889231 and SD
+  coverage52.70->49.94%. This fold also misses the required SD direction;
+  the screen remains incomplete and all18 fits continue. Hier's first seed improves
   profile .475555->.467627 but worsens SD score .867126->1.077062 and SD
-  coverage53.33->42.64%; those arms still have only one scored fit each.
-  All four checkpoint/source/recipe/receipt checks pass; local details:
+  coverage53.33->42.64%; only hier still has one scored fit. Its second seed
+  is training. All five checkpoint/source/recipe/receipt checks pass. Latest
+  committed snapshot: architecture_screen_progress_evidence_20261113.json;
+  older local details:
   results_r5/architecture_pass/{first_seed_artifact_checks,
   randproj_fold0_seed1_artifact_checks}.json. The refreshed comparison.json
   still reports every arm incomplete. Inspect live state before any action.

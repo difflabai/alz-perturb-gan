@@ -849,11 +849,25 @@ experimental inverse encoders, not reliable biological patient vectors. The
 encoder inverts each final state, not a shared latent across snapshot states.
 
 Running:6 matched20k fits per arm for `d.randproj,pbulk`, `g.split,pbulk`,
-`g.hier,pbulk`; same seeds/folds/recipe/read-out as default. Serial GPU queue,
+`g.hier,pbulk`; same fixed seeds/folds/training recipe/readout as the original
+pbulk biascal reference. Serial GPU queue,
 memory cap .04, three CPU threads, recoverable checkpoints. Scores and paired
 guards must finish before any architecture promotion. See compact committed
 `architecture_pass_evidence_20261113.json`; live status/artifacts under
 `runs/improve_20261109/{fits_r5,smoke_r5,results_r5,logs_r5}/architecture_pass`.
+
+Interim fresh screen:5/18 fits scored, with complete fold0 seed pairs for
+randproj and split. Split's second seed improves profile RMSE
+.471100->.461793 but worsens held-out SD interval score .883350->.991115.
+Its two-seed fold means are profile .473327->.467214 (1.29% lower), SD score
+.875238->.889231 (1.60% higher), and SD coverage52.70->49.94%. Thus its first
+seed's SD improvement does not repeat, and this fold misses the required
+all-fold direction. Randproj also misses that direction. This is not a
+completed screen or biological conclusion; the full18-fit schedule continues
+with the original gates and no default change. Hier's second seed is running.
+All five fits pass the source/config/cache/checkpoint/receipt audit; see
+`architecture_screen_progress_evidence_20261113.json` for the dated snapshot,
+per-seed values and train/held-out interval results.
 
 An additional calibration-compatibility check passes for all three optional
 architectures: shifting the existing output bias changes expected gene log
