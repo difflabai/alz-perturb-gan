@@ -20,9 +20,14 @@ Check actual processes/handles and their logs before resuming a queue.
 - GPU queue: r5/run_architecture_pass.py full; serial GPU1, memory fraction
   .04,3threads/process. One task GPU process at a time; do not disturb other
   projects. Eighteen20k fits (three arms x three folds x two seeds). The first
-  random-direction critic and split-generator fits are scored (fold0,seed0);
-  the first hierarchical fit is training. Randproj worsens the initial
-  profile/SD scores; split improves both. One seed cannot select/reject an arm.
+  fit for each arm is scored (fold0,seed0),3/18 total; the remaining schedule
+  is running. Randproj worsens the initial profile/SD scores; split improves
+  both. Hier improves profile RMSE .475555->.467627 but worsens SD interval
+  score .867126->1.077062 and SD coverage53.33->42.64%. One seed cannot
+  select/reject an arm. First-three-fit checkpoint/source/recipe/receipt
+  checks pass; local details: results_r5/architecture_pass/
+  first_seed_artifact_checks.json. The refreshed comparison.json still
+  reports every arm incomplete. Inspect live queue state before any action.
 - CPU queue: r5/run_shape_confirmation.py; frozen pbulk fits, no training.
   All twelve matched CPU pairs on folds3-8,seeds0/1 are COMPLETE; every gate
   and the source/checkpoint/receipt audit passes. Compare with
