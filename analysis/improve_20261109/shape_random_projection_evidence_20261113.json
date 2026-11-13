@@ -1,0 +1,510 @@
+{
+  "recorded_utc": "2026-11-13T06:51:46.073123+00:00",
+  "n_pairs": 2,
+  "fold": 3,
+  "seeds": [
+    0,
+    1
+  ],
+  "scope": "bounded independent random-direction diagnostic, one development fold, two seeds, not independent population validation",
+  "means": {
+    "default": {
+      "train": {
+        "intervals": {
+          "mean": {
+            "coverage": 0.7996,
+            "width": 0.5424047203705087,
+            "interval_score": 0.7497193309620327
+          },
+          "sd": {
+            "coverage": 0.7389833333333333,
+            "width": 0.27028822240654626,
+            "interval_score": 0.43731174861947514
+          },
+          "combined": {
+            "coverage": 0.7692916666666667,
+            "width": 0.40634647138852753,
+            "interval_score": 0.5935155397907539
+          }
+        },
+        "energy": {
+          "energy_score": 1.166843394145341,
+          "cell_energy_distance": 0.20255087173922726
+        }
+      },
+      "heldout": {
+        "intervals": {
+          "mean": {
+            "coverage": 0.7892013888888889,
+            "width": 0.5310972770219669,
+            "interval_score": 0.7499756265000188
+          },
+          "sd": {
+            "coverage": 0.6890972222222222,
+            "width": 0.26706822829205845,
+            "interval_score": 0.46599222220783043
+          },
+          "combined": {
+            "coverage": 0.7391493055555556,
+            "width": 0.3990827526570127,
+            "interval_score": 0.6079839243539247
+          }
+        },
+        "energy": {
+          "energy_score": 1.1915414228157175,
+          "cell_energy_distance": 0.20237247844521072
+        }
+      }
+    },
+    "count_shape": {
+      "train": {
+        "intervals": {
+          "mean": {
+            "coverage": 0.8026333333333333,
+            "width": 0.5409069495338947,
+            "interval_score": 0.7411198297380641
+          },
+          "sd": {
+            "coverage": 0.7137,
+            "width": 0.2554043092775881,
+            "interval_score": 0.4395825922383034
+          },
+          "combined": {
+            "coverage": 0.7581666666666667,
+            "width": 0.39815562940574145,
+            "interval_score": 0.5903512109881839
+          }
+        },
+        "energy": {
+          "energy_score": 1.1521025584902915,
+          "cell_energy_distance": 0.1960628847260141
+        }
+      },
+      "heldout": {
+        "intervals": {
+          "mean": {
+            "coverage": 0.7931250000000001,
+            "width": 0.531036230207421,
+            "interval_score": 0.7482885597210356
+          },
+          "sd": {
+            "coverage": 0.6642708333333334,
+            "width": 0.2525230670354724,
+            "interval_score": 0.46383294644261164
+          },
+          "combined": {
+            "coverage": 0.7286979166666667,
+            "width": 0.39177964862144665,
+            "interval_score": 0.6060607530818237
+          }
+        },
+        "energy": {
+          "energy_score": 1.1738985692787325,
+          "cell_energy_distance": 0.19540154074233834
+        }
+      }
+    }
+  },
+  "per_seed": [
+    {
+      "fold": 3,
+      "seed": 0,
+      "results": {
+        "default": {
+          "intervals": {
+            "train": {
+              "mean": {
+                "coverage": 0.7976666666666666,
+                "below": 0.10153333333333334,
+                "above": 0.1008,
+                "width": 0.5384123159401865,
+                "interval_score": 0.747375992304793
+              },
+              "sd": {
+                "coverage": 0.7213,
+                "below": 0.1701,
+                "above": 0.1086,
+                "width": 0.2624135972612646,
+                "interval_score": 0.4374402566860748
+              },
+              "combined": {
+                "coverage": 0.7594833333333333,
+                "below": 0.13581666666666667,
+                "above": 0.1047,
+                "width": 0.4004129566007255,
+                "interval_score": 0.5924081244954339
+              }
+            },
+            "heldout": {
+              "mean": {
+                "coverage": 0.7995833333333333,
+                "below": 0.09444444444444444,
+                "above": 0.10597222222222222,
+                "width": 0.5321670258743688,
+                "interval_score": 0.7389553490758557
+              },
+              "sd": {
+                "coverage": 0.6898611111111111,
+                "below": 0.12423611111111112,
+                "above": 0.18590277777777778,
+                "width": 0.26167057661541054,
+                "interval_score": 0.45171804698019263
+              },
+              "combined": {
+                "coverage": 0.7447222222222222,
+                "below": 0.10934027777777777,
+                "above": 0.1459375,
+                "width": 0.39691880124488976,
+                "interval_score": 0.5953366980280241
+              }
+            }
+          },
+          "projected_distribution": {
+            "n_pc_repeats": 24,
+            "n_cell_repeats": 4,
+            "definition": "round-1 pc_space metrics averaged over R independent real-cell subsample draws (seed stable_seed('pc-summary-rep'|'ed-real-rep'|'ed-gen-rep', donor, r)); <metric>_draw_sd = SD over draws (single-draw redraw error); <metric>_mcse = draw_sd/sqrt(R)",
+            "heldout": {
+              "energy_score": 1.1710399830127554,
+              "energy_score_draw_sd": 0.02041937687509926,
+              "energy_score_mcse": 0.004168087850798305,
+              "coverage80": 0.7447222222222223,
+              "coverage80_draw_sd": 0.012464119195145285,
+              "coverage80_mcse": 0.0025442276767779414,
+              "spread_ratio": 1.0870921642420577,
+              "spread_ratio_draw_sd": 0.01556616556434184,
+              "spread_ratio_mcse": 0.003177430240360005,
+              "within_stage_spread_ratio": 1.056758526781959,
+              "within_stage_spread_ratio_draw_sd": 0.022867358442953435,
+              "within_stage_spread_ratio_mcse": 0.004667779995880063,
+              "cell_energy_distance": 0.1926323876064417,
+              "cell_energy_distance_draw_sd": 0.006409460575170639,
+              "cell_energy_distance_mcse": 0.0032047302875853195,
+              "pooled_cell_energy_distance": 0.0278190525767954,
+              "pooled_cell_energy_distance_draw_sd": 0.002361885942144845,
+              "pooled_cell_energy_distance_mcse": 0.0011809429710724225
+            },
+            "train": {
+              "energy_score": 1.1663207633986512,
+              "energy_score_draw_sd": 0.014089416969903207,
+              "energy_score_mcse": 0.0028759901957977627,
+              "coverage80": 0.7594833333333333,
+              "coverage80_draw_sd": 0.006175946797097571,
+              "coverage80_mcse": 0.0012606598609554269,
+              "spread_ratio": 1.0814466785531065,
+              "spread_ratio_draw_sd": 0.014958207337120699,
+              "spread_ratio_mcse": 0.0030533312868917693,
+              "within_stage_spread_ratio": 1.0577945842603997,
+              "within_stage_spread_ratio_draw_sd": 0.015101296120446693,
+              "within_stage_spread_ratio_mcse": 0.003082539162480465,
+              "cell_energy_distance": 0.20188412051304583,
+              "cell_energy_distance_draw_sd": 0.0011931498288320478,
+              "cell_energy_distance_mcse": 0.0005965749144160239,
+              "pooled_cell_energy_distance": 0.020070308132764225,
+              "pooled_cell_energy_distance_draw_sd": 0.0008408538325265935,
+              "pooled_cell_energy_distance_mcse": 0.00042042691626329674
+            }
+          },
+          "calibration_receipt_sha256": "45ee045afc431062fc0e57954de0d26fd049d3546034e96f0f1413e0cb3329de"
+        },
+        "count_shape": {
+          "intervals": {
+            "train": {
+              "mean": {
+                "coverage": 0.7916666666666666,
+                "below": 0.1043,
+                "above": 0.10403333333333334,
+                "width": 0.527935453991592,
+                "interval_score": 0.7389212444966128
+              },
+              "sd": {
+                "coverage": 0.7002666666666667,
+                "below": 0.18123333333333333,
+                "above": 0.1185,
+                "width": 0.2490514703990979,
+                "interval_score": 0.43914974285277225
+              },
+              "combined": {
+                "coverage": 0.7459666666666667,
+                "below": 0.14276666666666665,
+                "above": 0.11126666666666667,
+                "width": 0.388493462195345,
+                "interval_score": 0.5890354936746927
+              }
+            },
+            "heldout": {
+              "mean": {
+                "coverage": 0.7907638888888889,
+                "below": 0.10069444444444445,
+                "above": 0.10854166666666666,
+                "width": 0.5201444644608225,
+                "interval_score": 0.7408973774697644
+              },
+              "sd": {
+                "coverage": 0.6536111111111111,
+                "below": 0.14048611111111112,
+                "above": 0.20590277777777777,
+                "width": 0.24597313026220546,
+                "interval_score": 0.45973786815061757
+              },
+              "combined": {
+                "coverage": 0.7221875,
+                "below": 0.12059027777777778,
+                "above": 0.15722222222222224,
+                "width": 0.383058797361514,
+                "interval_score": 0.6003176228101911
+              }
+            }
+          },
+          "projected_distribution": {
+            "n_pc_repeats": 24,
+            "n_cell_repeats": 4,
+            "definition": "round-1 pc_space metrics averaged over R independent real-cell subsample draws (seed stable_seed('pc-summary-rep'|'ed-real-rep'|'ed-gen-rep', donor, r)); <metric>_draw_sd = SD over draws (single-draw redraw error); <metric>_mcse = draw_sd/sqrt(R)",
+            "heldout": {
+              "energy_score": 1.1632095493756611,
+              "energy_score_draw_sd": 0.01926178962401167,
+              "energy_score_mcse": 0.00393179634263867,
+              "coverage80": 0.7221875000000001,
+              "coverage80_draw_sd": 0.01433470776187494,
+              "coverage80_mcse": 0.0029260599690422565,
+              "spread_ratio": 1.0619881303353609,
+              "spread_ratio_draw_sd": 0.015206698758326406,
+              "spread_ratio_mcse": 0.003104054385842852,
+              "within_stage_spread_ratio": 1.0339439142329157,
+              "within_stage_spread_ratio_draw_sd": 0.022373669573004355,
+              "within_stage_spread_ratio_mcse": 0.004567006177291188,
+              "cell_energy_distance": 0.19030031380133688,
+              "cell_energy_distance_draw_sd": 0.005685386539688626,
+              "cell_energy_distance_mcse": 0.002842693269844313,
+              "pooled_cell_energy_distance": 0.027286831626190278,
+              "pooled_cell_energy_distance_draw_sd": 0.0016711968916013956,
+              "pooled_cell_energy_distance_mcse": 0.0008355984458006978
+            },
+            "train": {
+              "energy_score": 1.1538761379989728,
+              "energy_score_draw_sd": 0.014328306262513184,
+              "energy_score_mcse": 0.0029247532684568353,
+              "coverage80": 0.7459666666666666,
+              "coverage80_draw_sd": 0.0047002929295085795,
+              "coverage80_mcse": 0.0009594432765756302,
+              "spread_ratio": 1.0529408499693356,
+              "spread_ratio_draw_sd": 0.014563924287638324,
+              "spread_ratio_mcse": 0.00297284859643674,
+              "within_stage_spread_ratio": 1.0295785589351665,
+              "within_stage_spread_ratio_draw_sd": 0.014698478257585041,
+              "within_stage_spread_ratio_mcse": 0.003000314310539677,
+              "cell_energy_distance": 0.1970586689002672,
+              "cell_energy_distance_draw_sd": 0.001366117075234635,
+              "cell_energy_distance_mcse": 0.0006830585376173175,
+              "pooled_cell_energy_distance": 0.015510740632278974,
+              "pooled_cell_energy_distance_draw_sd": 0.0007726111697781054,
+              "pooled_cell_energy_distance_mcse": 0.0003863055848890527
+            }
+          },
+          "calibration_receipt_sha256": "71bf20c201d80b5e684fe8045ddc0e0cf5dbaf8aa46627043fb7ec39a548d01b"
+        }
+      },
+      "source_sha256": "02c2c25a51a66723e7f23cdd0fc0c7d050d3cdc1d4e6cdf35b2746d5c6e97e0d"
+    },
+    {
+      "fold": 3,
+      "seed": 1,
+      "results": {
+        "default": {
+          "intervals": {
+            "train": {
+              "mean": {
+                "coverage": 0.8015333333333333,
+                "below": 0.09716666666666667,
+                "above": 0.1013,
+                "width": 0.546397124800831,
+                "interval_score": 0.7520626696192723
+              },
+              "sd": {
+                "coverage": 0.7566666666666667,
+                "below": 0.10853333333333333,
+                "above": 0.1348,
+                "width": 0.27816284755182785,
+                "interval_score": 0.4371832405528755
+              },
+              "combined": {
+                "coverage": 0.7791,
+                "below": 0.10285,
+                "above": 0.11805,
+                "width": 0.4122799861763295,
+                "interval_score": 0.5946229550860738
+              }
+            },
+            "heldout": {
+              "mean": {
+                "coverage": 0.7788194444444444,
+                "below": 0.09729166666666667,
+                "above": 0.1238888888888889,
+                "width": 0.530027528169565,
+                "interval_score": 0.7609959039241819
+              },
+              "sd": {
+                "coverage": 0.6883333333333334,
+                "below": 0.08583333333333333,
+                "above": 0.22583333333333333,
+                "width": 0.2724658799687064,
+                "interval_score": 0.4802663974354683
+              },
+              "combined": {
+                "coverage": 0.7335763888888889,
+                "below": 0.0915625,
+                "above": 0.1748611111111111,
+                "width": 0.40124670406913565,
+                "interval_score": 0.6206311506798252
+              }
+            }
+          },
+          "projected_distribution": {
+            "n_pc_repeats": 24,
+            "n_cell_repeats": 4,
+            "definition": "round-1 pc_space metrics averaged over R independent real-cell subsample draws (seed stable_seed('pc-summary-rep'|'ed-real-rep'|'ed-gen-rep', donor, r)); <metric>_draw_sd = SD over draws (single-draw redraw error); <metric>_mcse = draw_sd/sqrt(R)",
+            "heldout": {
+              "energy_score": 1.2120428626186797,
+              "energy_score_draw_sd": 0.019325494238348197,
+              "energy_score_mcse": 0.003944799992587443,
+              "coverage80": 0.7335763888888889,
+              "coverage80_draw_sd": 0.014207059139318164,
+              "coverage80_mcse": 0.002900003803072821,
+              "spread_ratio": 1.096742637891641,
+              "spread_ratio_draw_sd": 0.015704351520919386,
+              "spread_ratio_mcse": 0.0032056373306294534,
+              "within_stage_spread_ratio": 1.0666821798150055,
+              "within_stage_spread_ratio_draw_sd": 0.023082097879843732,
+              "within_stage_spread_ratio_mcse": 0.004711613499882881,
+              "cell_energy_distance": 0.21211256928397978,
+              "cell_energy_distance_draw_sd": 0.0026769265513128583,
+              "cell_energy_distance_mcse": 0.0013384632756564291,
+              "pooled_cell_energy_distance": 0.0359707819259647,
+              "pooled_cell_energy_distance_draw_sd": 0.0018956784701385223,
+              "pooled_cell_energy_distance_mcse": 0.0009478392350692612
+            },
+            "train": {
+              "energy_score": 1.167366024892031,
+              "energy_score_draw_sd": 0.015130089906514032,
+              "energy_score_mcse": 0.0030884166694494517,
+              "coverage80": 0.7791,
+              "coverage80_draw_sd": 0.006596178076537302,
+              "coverage80_mcse": 0.001346439211670783,
+              "spread_ratio": 1.1111078812419828,
+              "spread_ratio_draw_sd": 0.015368471133281401,
+              "spread_ratio_mcse": 0.00313707603360268,
+              "within_stage_spread_ratio": 1.0847060445838144,
+              "within_stage_spread_ratio_draw_sd": 0.01548548974123522,
+              "within_stage_spread_ratio_mcse": 0.003160962356927484,
+              "cell_energy_distance": 0.20321762296540866,
+              "cell_energy_distance_draw_sd": 0.0033465406483541176,
+              "cell_energy_distance_mcse": 0.0016732703241770588,
+              "pooled_cell_energy_distance": 0.020872171781508353,
+              "pooled_cell_energy_distance_draw_sd": 0.001326279439113301,
+              "pooled_cell_energy_distance_mcse": 0.0006631397195566505
+            }
+          },
+          "calibration_receipt_sha256": "dec098e3782880e4e22b5526159fdad6d2620bd9d01800318d7ea6a442393589"
+        },
+        "count_shape": {
+          "intervals": {
+            "train": {
+              "mean": {
+                "coverage": 0.8136,
+                "below": 0.09213333333333333,
+                "above": 0.09426666666666667,
+                "width": 0.5538784450761975,
+                "interval_score": 0.7433184149795155
+              },
+              "sd": {
+                "coverage": 0.7271333333333333,
+                "below": 0.13913333333333333,
+                "above": 0.13373333333333334,
+                "width": 0.26175714815607837,
+                "interval_score": 0.44001544162383455
+              },
+              "combined": {
+                "coverage": 0.7703666666666666,
+                "below": 0.11563333333333334,
+                "above": 0.114,
+                "width": 0.40781779661613793,
+                "interval_score": 0.5916669283016751
+              }
+            },
+            "heldout": {
+              "mean": {
+                "coverage": 0.7954861111111111,
+                "below": 0.09493055555555556,
+                "above": 0.10958333333333334,
+                "width": 0.5419279959540194,
+                "interval_score": 0.7556797419723069
+              },
+              "sd": {
+                "coverage": 0.6749305555555556,
+                "below": 0.10583333333333333,
+                "above": 0.2192361111111111,
+                "width": 0.2590730038087393,
+                "interval_score": 0.46792802473460576
+              },
+              "combined": {
+                "coverage": 0.7352083333333334,
+                "below": 0.10038194444444444,
+                "above": 0.16440972222222222,
+                "width": 0.40050049988137937,
+                "interval_score": 0.6118038833534564
+              }
+            }
+          },
+          "projected_distribution": {
+            "n_pc_repeats": 24,
+            "n_cell_repeats": 4,
+            "definition": "round-1 pc_space metrics averaged over R independent real-cell subsample draws (seed stable_seed('pc-summary-rep'|'ed-real-rep'|'ed-gen-rep', donor, r)); <metric>_draw_sd = SD over draws (single-draw redraw error); <metric>_mcse = draw_sd/sqrt(R)",
+            "heldout": {
+              "energy_score": 1.1845875891818036,
+              "energy_score_draw_sd": 0.017853405081744468,
+              "energy_score_mcse": 0.0036443110517905123,
+              "coverage80": 0.7352083333333335,
+              "coverage80_draw_sd": 0.012873056346887665,
+              "coverage80_mcse": 0.0026277016233309356,
+              "spread_ratio": 1.1020444777445295,
+              "spread_ratio_draw_sd": 0.01578026901868112,
+              "spread_ratio_mcse": 0.003221133924968214,
+              "within_stage_spread_ratio": 1.0754765429555746,
+              "within_stage_spread_ratio_draw_sd": 0.02327240044104028,
+              "within_stage_spread_ratio_mcse": 0.004750458847522573,
+              "cell_energy_distance": 0.20050276768333983,
+              "cell_energy_distance_draw_sd": 0.003791833640008298,
+              "cell_energy_distance_mcse": 0.001895916820004149,
+              "pooled_cell_energy_distance": 0.03061169874572789,
+              "pooled_cell_energy_distance_draw_sd": 0.00256771807679261,
+              "pooled_cell_energy_distance_mcse": 0.001283859038396305
+            },
+            "train": {
+              "energy_score": 1.15032897898161,
+              "energy_score_draw_sd": 0.014244940587731859,
+              "energy_score_mcse": 0.002907736321350414,
+              "coverage80": 0.7703666666666665,
+              "coverage80_draw_sd": 0.006382494174228282,
+              "coverage80_mcse": 0.0013028211677621306,
+              "spread_ratio": 1.114566494005813,
+              "spread_ratio_draw_sd": 0.01541630950372179,
+              "spread_ratio_mcse": 0.003146841000078113,
+              "within_stage_spread_ratio": 1.0893879458340276,
+              "within_stage_spread_ratio_draw_sd": 0.015552329540037574,
+              "within_stage_spread_ratio_mcse": 0.0031746059737254887,
+              "cell_energy_distance": 0.19506710055176102,
+              "cell_energy_distance_draw_sd": 0.001826871174164737,
+              "cell_energy_distance_mcse": 0.0009134355870823685,
+              "pooled_cell_energy_distance": 0.014486105374786895,
+              "pooled_cell_energy_distance_draw_sd": 0.0012562071463010998,
+              "pooled_cell_energy_distance_mcse": 0.0006281035731505499
+            }
+          },
+          "calibration_receipt_sha256": "06ec85df4c61ff85861a64457023a824bc10ea070aafa42b7e8b2872381d4b26"
+        }
+      },
+      "source_sha256": "02c2c25a51a66723e7f23cdd0fc0c7d050d3cdc1d4e6cdf35b2746d5c6e97e0d"
+    }
+  ],
+  "regeneration": "stored rounded train-only bias/theta coefficients; not bitwise original incremental calibration",
+  "interpretation": "Complementary views disagree on interval behavior; report a marginal/PCA simulator improvement rather than universal calibration or cell-state fidelity."
+}

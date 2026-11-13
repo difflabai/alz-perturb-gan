@@ -66,3 +66,22 @@ Sources: default_config_evidence.json; architecture_pass_evidence_20261113.
 json; INTERVAL_ARCHITECTURE_REVIEW_20261113.txt; inverse_donor_evidence_
 20261113.json; live shape_confirmation scores. Root aggregates this review
 and remains responsible for verifying the full confirmation before promotion.
+
+Completed complementary diagnostic (fold3,seeds0-1)
+---------------------------------------------------
+Two matched CPU regenerations use50 fixed random orthogonal directions,
+chosen independently of expression and scaled on training cells only. The
+stored rounded train-only calibration coefficients are reused; these are
+not claimed bitwise reproductions of the original incremental calibration.
+Held-out random-direction SD coverage decreases .6891 to .6643 as width
+decreases .2671 to .2525. Aggregate SD interval score improves slightly
+.4660 to .4638, combined score .6080 to .6061, donor energy1.1915 to1.1739,
+and cell energy .2024 to .1954. Seed0's interval score worsens, seed1's
+improves, so a single seed does not describe the aggregate.
+
+The independent reviewer rechecked this aggregate and retains the same
+conditional recommendation. It supports modest benefit beyond PCA with a
+coverage/width tradeoff, not general interval calibration or biological
+cell-state fidelity. One development fold with two seeds is diagnostic,
+not an independent population test. See shape_random_projection_evidence_
+20261113.json. Keep full12-pair primary confirmation pending until complete.

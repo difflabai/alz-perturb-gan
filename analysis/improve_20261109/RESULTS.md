@@ -900,6 +900,17 @@ gradients; a row-isolation test verifies that another donor's observations do
 not change a donor's batched inverse fit. Evidence:
 `inverse_donor_evidence_20261113.json` and `r5/inverse_donor.py`.
 
+The complementary random-direction diagnostic is now complete on fold3,
+both seeds. Held-out SD coverage .6891 to .6643, with narrower ranges .2671
+to .2525; SD interval score .4660 to .4638 and combined .6080 to .6061.
+Projected donor/cell energy improves1.1915 to1.1739 / .2024 to .1954.
+Individual seeds disagree on interval-score direction. This narrows claims
+to marginal/PCA-summary simulation improvement while supporting a small
+benefit beyond PCA. It does not establish calibrated80% ranges or faithful
+biological states. The independent application reviewer retains the same
+conditional recommendation after examining both seeds. See
+`shape_random_projection_evidence_20261113.json` for exact per-seed values.
+
 ## 9. Limits
 
 Three inner folds whose training sets overlap by about half; two seeds; 37
