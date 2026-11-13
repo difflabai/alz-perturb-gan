@@ -1,0 +1,104 @@
+{
+  "recorded_utc": "2026-11-13T10:36:25.424255+00:00",
+  "status": "verification_passed_screen_incomplete",
+  "scope": "Fixed18-fit architecture artifact/metadata audit only; not numerical eligibility or a model-performance result",
+  "auditor_sha256": "2f807e5ffaa6a79d162ae77795e01d50679ffbfef098ca2b8c7b0cd86e47ff80",
+  "tests_sha256": "2eaa1ff546c15b1f15823251a91c1a3c7738db9c196cee1edfc0ae25bc687a43",
+  "targeted_test_cases": 31,
+  "commands": [
+    {
+      "argv": [
+        "/mnt/nvme/ai/conda/anaconda3/bin/python3",
+        "-B",
+        "-m",
+        "pytest",
+        "-o",
+        "addopts=",
+        "-q",
+        "analysis/improve_20261109/r5/test_architecture_audit.py"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "stdout": "...............................                                          [100%]\n31 passed in 0.48s\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/nvme/ai/conda/anaconda3/bin/python3",
+        "-B",
+        "analysis/improve_20261109/r5/audit_architecture_pass.py",
+        "--allow-incomplete"
+      ],
+      "expected_exit_code": 0,
+      "exit_code": 0,
+      "stdout": "{\n  \"status\": \"incomplete\",\n  \"verified_fits\": 4,\n  \"planned_fits\": 18\n}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/mnt/nvme/ai/conda/anaconda3/bin/python3",
+        "-B",
+        "analysis/improve_20261109/r5/audit_architecture_pass.py"
+      ],
+      "expected_exit_code": 1,
+      "exit_code": 1,
+      "stdout": "{\n  \"status\": \"incomplete\",\n  \"verified_fits\": 4,\n  \"planned_fits\": 18\n}\n",
+      "stderr": "all18 finalized architecture fits required for a complete screen audit\n"
+    }
+  ],
+  "real_partial_audit": {
+    "path": "runs/improve_20261109/results_r5/architecture_pass/screen_artifact_audit_partial.json",
+    "sha256": "3d8af33b4a2b1eee99b040ec468be0a8db5334f48a40a93cbf5417f1311e8f52",
+    "status": "incomplete",
+    "verified_fits": 4,
+    "planned_fits": 18,
+    "missing_fits": 14,
+    "matched_original_references": 2,
+    "cache_manifests_verified": 3,
+    "cache_payload_hashes_verified": 18,
+    "training_specification_sha256": "bc943a36bb8e1f63c5eac67eeec466ffe9f18f3a1a3222376b559ecf00409e47",
+    "fold_definitions_sha256": "53ae204b0730416383112702a3e09d0ac6a336249ad963484787b757015baa52",
+    "extended_fold_definitions_sha256": "6e5c587cc9f4e08dfa2c17e420da333c971edc8a3d961dfbdc1ad783433f765a"
+  },
+  "negative_cases": [
+    "incomplete screen",
+    "snapshot corruption",
+    "candidate/reference K mismatch",
+    "calibration target count mismatch",
+    "candidate/reference resolved LR and rates",
+    "candidate/reference recipe regularization",
+    "candidate/reference training options",
+    "candidate/reference effective schedule",
+    "training source change",
+    "score/receipt hash disagreement",
+    "parent prune race",
+    "all six cache payload corruptions with unchanged manifest",
+    "donor duplicate",
+    "donor substitution",
+    "wrong fold",
+    "unexpected payload path",
+    "original fit link",
+    "original score source link",
+    "frozen training/donor anchor changes"
+  ],
+  "independent_application_reviewer": {
+    "status": "no_remaining_blocker_within_stated_scope",
+    "real_audit_reproduced": true,
+    "previous_false_pass_probes_now_rejected": [
+      "resolved learning rate",
+      "original reference fit link",
+      "original score source link"
+    ],
+    "tests_reviewed_not_rerun": true,
+    "no_file_writes_or_deserialization": true
+  },
+  "default_sha256_before": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "default_sha256_after": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "default_unchanged": true,
+  "limitations": [
+    "Hashes and metadata cannot independently prove execution history.",
+    "Pruned generated arrays are not independently rescored.",
+    "Numerical eligibility and confirmation remain separate.",
+    "Four completed fits do not establish a complete18-fit screen."
+  ]
+}

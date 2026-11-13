@@ -1090,6 +1090,22 @@ statistical/protocol mismatch. See
 default or model-performance result changes in this implementation step;
 the planned18-fit architecture screen is still running.
 
+`r5/audit_architecture_pass.py` supplies a separate full-screen artifact
+check: frozen training/readout/scorer sources, resolved optimizer/regularizer
+and training settings against a SHA-pinned original configuration, exact
+predefined donor identities with uniqueness checks, all three cache manifests
+and their18 payload hashes,20k completion, checkpoint and native-summary hashes, selected
+readout receipts, train-only calibration metadata, pruned-summary/score hashes
+and matched original references. It hashes files without deserializing model
+weights or counts. Numeric eligibility remains separate. The strict CLI
+rejects the real four-fit partial screen with14 missing and leaves the
+selected default unchanged. Thirty-one synthetic cases check corrupted cache
+payloads, altered resolved settings, reference links, donor substitutions,
+other mismatched artifacts and the all18-fit completeness requirement. See
+`architecture_screen_audit_verification_20261113.json`. This verifies stored
+metadata and file provenance; it does not independently rescore generated
+cells or establish biological validity.
+
 ### 8q. Empirical references remain stronger for population intervals (2026-11-13)
 
 The fixed descriptive protocol in

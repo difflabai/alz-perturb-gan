@@ -33,6 +33,15 @@ Check actual processes/handles and their logs before resuming a queue.
   results_r5/architecture_pass/{first_seed_artifact_checks,
   randproj_fold0_seed1_artifact_checks}.json. The refreshed comparison.json
   still reports every arm incomplete. Inspect live state before any action.
+  r5/audit_architecture_pass.py now checks the full18-fit artifact set and
+  matched original references without deserializing counts/weights. It pins
+  the original resolved training settings and donor folds, verifies donor
+  uniqueness/identities and all18 cache payload hashes, and checks reference
+  fit/archive links. Thirty-one negative/completeness cases pass. Normal
+  invocation rejects partial screens; --allow-incomplete is only for progress
+  inspection and still records status=incomplete. This audit does not replace
+  numeric eligibility/confirmation. See architecture_screen_audit_
+  verification_20261113.json and RESULTS.md8p.
 - CPU queue: r5/run_shape_confirmation.py; frozen pbulk fits, no training.
   All twelve matched CPU pairs on folds3-8,seeds0/1 are COMPLETE; every gate
   and the source/checkpoint/receipt audit passes. Compare with
