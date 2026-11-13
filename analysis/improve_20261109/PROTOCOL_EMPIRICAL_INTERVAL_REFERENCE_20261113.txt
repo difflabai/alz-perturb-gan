@@ -5,21 +5,26 @@ population references. This is a descriptive post-selection benchmark on
 the same37 development donors, not independent model confirmation or a
 change to any architecture/default selection rule.
 
-Inputs: ONLY the existing SEA-AD r3 baseline archives resample and
-resample_blind, folds3-8, hvg2000. Their saved metadata specifies M32,K256,
+Inputs: ONLY the existing SEA-AD r3 baselines resample and resample_blind,
+folds3-8, hvg2000, reconstructed with their exact original fixed recipes
+from the same37-donor caches. Their saved metadata specifies M32,K256,
 64 retained cells in50 training PCs, a single fixed baseline random stream
 per fold/recipe, train-only source donors and target library-size matching.
-Verify fold/cache/donor lists and recipe metadata before scoring. Hash all
-archives and their old scores, retain them unchanged. No external variants,
-count generation, fitting, added seeds or parameter search.
+Verify fold/cache/donor lists and recipe metadata before reconstruction.
+Hash original profile-summary archives and old scores; retain them unchanged.
+The r3/r5 baseline and metrics source files must remain byte-identical.
+No external variants, fitting, added seeds or parameter search.
 
-Run the existing r5 architecture_score.py implementation on each of these12
-archives, CPU with <=3threads. It supplies mean/SD/combined coverage, width,
+Run the existing r5 architecture_score.py implementation on each of the12
+reconstructed summary archives, CPU with <=3threads. It supplies mean/SD/combined coverage, width,
 and central80% proper interval score on the same24 observed64-cell repeats,
 with percentile10/90 endpoints; retain finite-rank results as secondary.
 Verify every historical headline metric against its saved r3 score; report
 any mismatch before interpreting new interval results. Record source/cache/
-archive hashes. Never prune original baseline inputs.
+archive hashes. Hash/score/prune temporary reconstructed arrays; never prune
+original baseline inputs. Original generated cell-bag summaries were not
+retained, so historical metric reproduction cannot establish their byte
+identity. The reconstructed summaries have their own recorded hashes.
 
 Compare against BOTH already-frozen CPU shape-confirmation readouts on the
 matching folds3-8,seeds0/1: original pbulk biascal@stagehalf and selected
@@ -42,3 +47,11 @@ none qualifies; retain the saved depth-unmatched fraction. Resampling is a
 strong empirical reference, not an independent population sample, clinical
 predictor or learned patient feature map. Stage biology, cell-state fidelity
 and patient interpretation remain unvalidated regardless of this comparison.
+
+Input-format correction before any new interval outcome
+-------------------------------------------------------
+The initial declaration assumed saved baseline NPZs retained generated cell
+bags. Inspection instead found profile summaries only. An initial scorer
+stopped on the absent pcs field before computing any new interval scores.
+This amendment permits only reconstruction of the two original fixed
+resampling recipes. It does not add a new method, tuning or selection rule.
