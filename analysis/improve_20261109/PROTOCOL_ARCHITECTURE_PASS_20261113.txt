@@ -79,6 +79,28 @@ stronger input-cell pseudobulk reference, with no requirement to beat it.
 No tuning or early stopping on real held-out cells. If synthetic validation
 or real checks fail, retain as an experimental inverse model.
 
+Follow-up after both initial encoders fail (declared before inverse-fit
+scores): test explicit inversion of each frozen final pbulk generator. The
+hypothesis is that conditional-mean latent regression decodes poorly in a
+nonlinear generator; do not infer a failed generative manifold from that
+regression alone. Initialize at the nearest of512 prior particles by the
+expected pseudobulk profile at the patient's stage. Optimize that patient's
+8 latent coordinates only, with200 Adam steps, lr .05, squared log-profile
+loss plus .01 standardized squared displacement from the initial particle.
+Fixed128-cell common-noise integration during optimization; evaluate the
+decoded mean with fresh1024-cell integration. Bound standardized coordinates
+to[-4,4]. GAN weights, biases and train-only calibration remain frozen.
+Use the exact same real64-cell input halves and held-out target halves as
+the failed encoders. Each donor's input cells alone determine its inverse
+fit; no target cells enter initialization, gradients or stopping. Evaluate
+split-cell repeatability, depth32/128 sensitivity, reconstruction against
+train mean and input pseudobulk, and across-seed prediction reproducibility.
+First fold0,seeds0-1; if reconstruction beats train mean and repeatability
+>=.8 in both seeds, confirm folds1-2,seeds0-1. Record synthetic latent recovery
+on32 independent count bags as an inverse diagnostic. These inverse fits
+are reconstruction experiments, not unconditional held-out donor predictions
+or identified biological features. CPU only while the GPU queue trains.
+
 Code uses isolated new r5 plug-ins and scripts, with a minimal optional
 critic-projector hook in Features; default-path parity must pass. Outputs:
 runs/improve_20261109/{fits_r5,smoke_r5,results_r5,logs_r5}/architecture_pass.

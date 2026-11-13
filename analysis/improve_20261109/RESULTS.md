@@ -855,6 +855,51 @@ guards must finish before any architecture promotion. See compact committed
 `architecture_pass_evidence_20261113.json`; live status/artifacts under
 `runs/improve_20261109/{fits_r5,smoke_r5,results_r5,logs_r5}/architecture_pass`.
 
+### 8l. Application objective and inverse follow-up (2026-11-13)
+
+The owner asked root to consider applications and decide the profile/distribution
+tradeoff with a subagent. Read-only `application_default_review` and root agree:
+use distribution-first development selection with a prospective .5% profile-RMSE
+noninferiority margin. The original strict-profile failure remains failed.
+`PROTOCOL_DISTRIBUTION_CONFIRM_20261113.txt` declares a12-pair CPU confirmation
+on extra folds3-8,seeds0-1 before their scores; all raw-gene and distribution
+guards must pass before promotion. Both paths use M32,K256 and the same device.
+The fresh18-fit20k GPU architecture screen continues independently. See
+`APPLICATION_DEFAULT_DECISION_20261113.txt` for applications and limitations.
+
+The intended useful application is a finite-cell, depth-matched development
+simulator, with detection and variability fidelity important alongside mean
+profiles. It is not a validated biological patient embedding or clinical model.
+The reviewer noted that PCA-space improvement can partly repair a representation
+generalization artifact. A bounded independent-random-direction diagnostic on
+the first two completed extra pairs is running; it is reported separately and
+does not retrospectively redefine the declared numerical gate.
+
+Explicit latent inversion follow-up: initialize each patient's8 coordinates at
+the nearest of512 frozen prior particles, optimize only those coordinates for
+200 Adam steps using64 INPUT cells, and test on disjoint TARGET cells. Library/
+normalization/calibration and all GAN weights remain frozen. Repeat on both
+cell halves and at32/128 input cells. Fixed128-cell nuisance integration during
+optimization; fresh1024-cell integration during reconstruction. Both initial
+fold0,seeds0-1 runs fail the predeclared checks, so no extra-fold inverse screen:
+
+| Method | Seed0 reconstruction RMSE | Seed1 reconstruction RMSE |
+| --- | ---: | ---: |
+| Neural latent encoder | .7552 | .6063 |
+| Direct latent inversion | .5892 | .5288 |
+| Train mean | .4761 | .4761 |
+| Input64-cell pseudobulk | .4838 | .4838 |
+
+Inverse split-cell repeatability is .914/.527; standardized synthetic latent
+recovery MSE1.486/.245 versus null .995/.985. Across-seed predicted gene-deviation
+correlation is .078. Better reconstruction than the neural encoder does not
+clear the real train-mean baseline or establish identifiable patient features.
+The result concerns frozen final states; it is not a common latent of the
+snapshot mixture. Actual runs verify unchanged GAN tensors and no parameter
+gradients; a row-isolation test verifies that another donor's observations do
+not change a donor's batched inverse fit. Evidence:
+`inverse_donor_evidence_20261113.json` and `r5/inverse_donor.py`.
+
 ## 9. Limits
 
 Three inner folds whose training sets overlap by about half; two seeds; 37

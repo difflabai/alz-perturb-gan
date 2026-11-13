@@ -1,0 +1,68 @@
+Application-aligned default decision, 2026-11-13
+================================================
+
+Owner asked root to consider possible applications and decide with a
+subagent. Independent reviewer: application_default_review. Read-only local
+evidence review; no independent model reruns, edits or GPU work by reviewer.
+
+Decision: distribution-first development selection with a prospective .5%
+profile-RMSE noninferiority margin. Keep the existing biascal default until
+the complete12-pair confirmation passes. If it passes, choose the fixed
+count-shape read-out for finite-cell donor-population simulation and retain
+the strict profile recipe as an explicit option. Do not reinterpret the
+original strict-profile failure or assume pending scores pass. Fresh20k
+architecture experiments continue regardless of this read-out decision.
+
+Why this objective fits the intended work
+----------------------------------------
+The intended research use needs realistic gene detection and cellular
+variation, not only a mean expression vector. Original6-fit evidence costs
+about .057% in profile RMSE against the current default while reducing
+mean-log and detection errors by about20% and23%, with better variance and
+projected distribution scores. Protecting every seed-detectable RMSE change
+would overweight computational repeatability relative to usefulness.
+The .5% margin was declared before new extra-fold scores, not chosen to fit
+them. All target and distribution guards in PROTOCOL_DISTRIBUTION_CONFIRM_
+20261113.txt still bind. Seed SE describes computational stability; it does
+not supply independent biological uncertainty from37 reused donors.
+
+Useful development applications
+-------------------------------
+- Finite, depth-matched synthetic donor bags for exploratory simulations and
+  pipeline stress tests under explicit model assumptions.
+- Comparing gene detection, expression marginals and population summaries,
+  always next to empirical resampling and direct training-statistic baselines.
+- Diagnosing which structures a generative model captures or misses.
+
+Do not treat generated bag cells as iid single-cell samples: count-shape
+contracts within K256 bags and leaves trained weights/latents unchanged.
+Do not infer validated cell-state composition, stage biology, clinical
+prediction, treatment response or identified patient axes. Simple profile
+prediction can favor direct mean/ridge references. Feature-vector research
+needs real reconstruction and repeatability gates of its own.
+
+Material representation caveat
+------------------------------
+The donor and cell energy scores use the same50 training-selected PCs.
+Real heldout/train SD is .822 in that PCA space versus1.001 in fixed random
+directions. Contraction could partly repair representation-specific error.
+One completed extra-fold pair improves held-out SD interval score .860 to
+.625 while worsening training SD score .626 to1.446. This is a diagnostic,
+not a reason to change declared thresholds retrospectively. Report training
+and held-out partitions and raw gene marginals alongside projected metrics.
+Passing supports a better measured development simulator, not validated
+biological cell-state fidelity. Sealed20 donors remain untouched.
+
+Other tracks
+------------
+Keep M32 for matched architecture/read-out promotion; any M128/count-shape
+combination needs a separate matched comparison. Reject blanket CQR as a
+default: coverage improves by widening, while overall interval score worsens.
+Raw neural encoders and direct inverse fits both fail real reconstruction;
+none is promoted as a biological patient feature map. The initial direct
+inverse fit improves neural reconstruction but remains below train mean.
+
+Sources: default_config_evidence.json; architecture_pass_evidence_20261113.
+json; INTERVAL_ARCHITECTURE_REVIEW_20261113.txt; inverse_donor_evidence_
+20261113.json; live shape_confirmation scores. Root aggregates this review
+and remains responsible for verifying the full confirmation before promotion.

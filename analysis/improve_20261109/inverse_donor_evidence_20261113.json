@@ -1,0 +1,98 @@
+{
+  "recorded_utc": "2026-11-13T06:34:12.909641+00:00",
+  "protocol": "PROTOCOL_ARCHITECTURE_PASS_20261113.txt (inverse follow-up)",
+  "result": {
+    "seeds": [
+      {
+        "fold": 0,
+        "seed": 0,
+        "steps": 200,
+        "aggregate": {
+          "train": {
+            "inverse_reconstruction_rmse": 0.5427222662661767,
+            "input_pseudobulk_rmse": 0.46487737397462175,
+            "train_mean_rmse": 0.48198687936051554,
+            "split_cell_repeatability": 0.9243165161985125,
+            "depth_standardized_latent_mse": {
+              "32": 0.36434565773233774,
+              "128": 0.4496329631470144
+            }
+          },
+          "heldout": {
+            "inverse_reconstruction_rmse": 0.5892329581696553,
+            "input_pseudobulk_rmse": 0.48377615584152034,
+            "train_mean_rmse": 0.47608984634082324,
+            "split_cell_repeatability": 0.9142554851014472,
+            "depth_standardized_latent_mse": {
+              "32": 0.2594277367461473,
+              "128": 0.6395678138166355
+            }
+          }
+        },
+        "fit_diagnostics": {
+          "initial_input_mse": 0.5404427647590637,
+          "final_input_mse": 0.4127574563026428,
+          "standardized_displacement": 1.4050582647323608,
+          "steps": 200
+        },
+        "synthetic_latent_standardized_mse": 1.4857323169708252,
+        "synthetic_null_mse": 0.9947425723075867,
+        "passes_initial_checks": false,
+        "GAN_weights_unchanged": true,
+        "wall_seconds": 245.7318771459395,
+        "fit_final_sha256": "d1ef47641dbcc73af5b86478d9c7fbf829883918af732c6a723f771b0a2fa146",
+        "calibration_receipt_sha256": "514d3a5aa24ea04bc00de77f1d2e50ce6359dac0a4396715b2f73413b4b82700"
+      },
+      {
+        "fold": 0,
+        "seed": 1,
+        "steps": 200,
+        "aggregate": {
+          "train": {
+            "inverse_reconstruction_rmse": 0.46052682626831,
+            "input_pseudobulk_rmse": 0.46487737397462175,
+            "train_mean_rmse": 0.48198687936051554,
+            "split_cell_repeatability": 0.8421884928596111,
+            "depth_standardized_latent_mse": {
+              "32": 0.7951882872730494,
+              "128": 0.6082003352418542
+            }
+          },
+          "heldout": {
+            "inverse_reconstruction_rmse": 0.5287750973241746,
+            "input_pseudobulk_rmse": 0.48377615584152034,
+            "train_mean_rmse": 0.47608984634082324,
+            "split_cell_repeatability": 0.5266294965714564,
+            "depth_standardized_latent_mse": {
+              "32": 1.3176155528053641,
+              "128": 0.483457895849521
+            }
+          }
+        },
+        "fit_diagnostics": {
+          "initial_input_mse": 0.42002633213996887,
+          "final_input_mse": 0.33358049392700195,
+          "standardized_displacement": 0.8161636590957642,
+          "steps": 200
+        },
+        "synthetic_latent_standardized_mse": 0.24546998739242554,
+        "synthetic_null_mse": 0.9850408434867859,
+        "passes_initial_checks": false,
+        "GAN_weights_unchanged": true,
+        "wall_seconds": 247.3837024490349,
+        "fit_final_sha256": "428b4ebb012234656fa0c15be7ed9bff613023df2d480d6a1bc8ea191ef35374",
+        "calibration_receipt_sha256": "691d1886a13912ba31ba4c9644e1d42c31d92faf14f3f834ffc35976e677dd61"
+      }
+    ],
+    "heldout_predicted_gene_deviation_correlation_across_seeds": 0.07811841769344265,
+    "decision": "stop this inverse-fit screen; neither seed passes both real reconstruction and repeatability",
+    "scope": "final-state latent inversion; input and target cell halves disjoint; no GAN parameter updates"
+  },
+  "row_isolation_test_pass": true,
+  "source_sha256": {
+    "inverse_donor.py": "892a55a9418d99786aba9e0b9122cc60bfa38632d271f3c230b604dbb99a89db",
+    "compare_inverse_donors.py": "c9f6e0d747b5e19210c496d4a5ea4363772404494a458369804a3769e31b6f00",
+    "test_inverse_donor.py": "a9543fe224f1cd846aaa03b67165dcbfb547bde680276173f9850db63854ca59"
+  },
+  "default_changed": false
+}

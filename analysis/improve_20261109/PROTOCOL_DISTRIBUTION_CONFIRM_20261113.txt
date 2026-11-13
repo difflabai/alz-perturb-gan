@@ -1,0 +1,62 @@
+Additional validation of the existing fixed count-shape read-out. The original
+strict profile-RMSE guard remains recorded as failed; do not relabel it passed.
+The user's research goal emphasizes patient distributions. An optional user
+preference question asks whether a <=.5% profile RMSE cost is acceptable for
+clear distribution gains. This experiment makes that choice reviewable and
+does not interrupt or replace the fresh-architecture20k screen.
+
+Candidate fixed before these extra-fold scores: cellshape@0.5:biascal:stagehalf.
+Reference: current default biascal@stagehalf. No new alpha, tuning, optimization
+or sealed/external donor counts. Reuse frozen pbulk20k fits. Both paths refit
+their existing output calibrations on TRAIN donors only. Both generated on
+CPU with3 threads and M32,K256, to leave the serial GPU training queue alone.
+Thus every candidate/reference pair shares a known device. Extra folds3-8,
+seeds0-1. The earlier3 folds used CUDA and are reported separately, not pooled
+silently with the new CPU pairs. All folds reuse the same37 donors.
+
+Distribution-focused prospective rule for these new12 pairs:
+- Noninferiority: mean profile-RMSE cost +2 paired seed-noise SE <=.005 times
+  reference mean RMSE; each fold mean relative cost <=.005.
+- Mean-log and detection errors and PC-SD central-80% interval score each
+  improve by >2 paired seed-noise SE and in >=5 of6 fold means; each extra
+  repeat (folds3-5 and6-8) has lower target errors on average.
+- No >2SE worsening in log-variance error, PC/cell energy, absolute log PC
+  spread ratio or distance of combined coverage to .8.
+- Widths and separate PC mean/SD coverage always reported. A wider range
+  alone does not qualify. Report train-mean/resampling comparisons as context.
+
+Keep strict-profile and distribution-focused decisions distinct. Default
+selection remains pending measured confirmation;
+passing this alternative rule does not repair the original strict guard.
+All outputs under the existing architecture_pass subfolders. Score/hash and
+prune temporary NPZs; preserve fit folders. The task disk cap stays3GB.
+
+Owner clarification after the optional preference question: "what do you
+think would be most useful? consider possible applications and decide with
+a subagent". Root and independent application_default_review agree to use
+the prospective distribution-focused objective above. No further owner
+confirmation is needed. If all confirmation gates pass, this supports a
+development default for finite-cell donor-population simulation, while the
+strict point-profile recipe remains available. Original guard failure stays
+explicit. Do not assume the pending scores pass.
+
+Reviewer caveat: projected cell/donor scores use training-selected PCs and
+could partly reward correction of representation-specific generalization
+error. Training PC-SD performance can worsen while held-out scores improve.
+Report both, and do not claim learned biological cell-state fidelity from
+this read-out. Raw gene marginals give complementary evidence; cell-state
+covariance and biological patient features remain separate validation needs.
+
+Representation diagnostic after the independent application review: on the
+first two completed CPU pairs (fold3,seeds0-1), regenerate both recipes using
+their stored TRAIN-only calibration coefficients, with50 fixed random
+orthogonal gene directions (seed20261113), scaled on TRAIN cells only.
+Evaluate the same64-cell mean/SD summaries, intervals, PC-style energy and
+cell energy in that independent observation space; retain the original PCA
+score separately. No re-estimation or tuning of recipe parameters. This is
+a diagnostic of the reviewer's PCA concern, not a new retrospective numeric
+promotion threshold. Report any disagreement and limit claims accordingly.
+Stored float32 total calibration deltas may round differently from the
+original incremental additions; regeneration is not claimed bitwise equal
+to the original generated files. Both diagnostic recipes use the same CPU
+generation streams and frozen fit, with no new calibration or model update.
