@@ -1,0 +1,27 @@
+{
+  "status": "scheduler_reviewed_budget_feasible_not_admitted",
+  "recorded_unix": 1794665334.5979838,
+  "authenticated_reporter": "bits255.dots.ada_20261002",
+  "message_id": "ember-alz-covariance-scheduler-review-20261114-v1",
+  "claim_id": "wake_8236c8f9a1c4e9d5a7a1c9a3b63cf3bfadbfec33dd397baf1469c859833be610",
+  "receipt_acknowledged": true,
+  "evidence_scope": "Authenticated coordinator report of existing scheduler review; not independent local telemetry or execution evidence.",
+  "reviewed_commit": "addc440",
+  "source_pins_matched_as_reported": 222,
+  "bounded_probe_budget_feasible_as_reported": true,
+  "estimated_minutes": [
+    5,
+    15
+  ],
+  "hard_maximum_seconds": 1200,
+  "execution_admitted": false,
+  "blockers": [
+    "Scheduler fresh GPU telemetry query could not reach the driver; ownership and capacity remain unverified.",
+    "Probe-specific guard for the complete deadline, actual physical GPU and host memory, cleanup and accounting is missing."
+  ],
+  "reservation_created": false,
+  "GPU_or_fullscreen_launched": false,
+  "instruction": "Keep the packet and hold; no repeat request or full screen unless those blockers change.",
+  "goal_status": "blocked",
+  "default_changed": false
+}
