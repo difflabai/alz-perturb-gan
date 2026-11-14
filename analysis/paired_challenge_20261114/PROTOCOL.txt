@@ -1,0 +1,104 @@
+Fixed paired-cell semiparametric challenge, declared before implementation
+=======================================================================
+The owner goal remains active: beat stage-blind empirical resampling on
+held-out donor SD AND combined proper interval scores, retain every protected
+profile/gene/distribution metric, confirm prospectively, then verify/commit
+the default. Three completed studies failed their full gates. Preserve each
+failure and all old185 execution sources/evidence. No fourth-study output,
+kernel code or fitted parameter exists when this protocol is declared.
+
+Scientific choice with application_default_review: one fixed two-cell pooled
+empirical/GAN hybrid. The earlier fixed50/50 whole-bag hybrid beat empirical
+SD/combined scores16%/5%, but gene-logvar/spread guards failed. Scalar donor
+precision variation improved current only modestly and did not beat empirical.
+Pairing addresses excessive empirical cell covariance while preserving donor
+mean profiles. No mixture-weight, pairing-strength, architecture-rank or
+calibration grid. This is a distinct fixed count-generation mechanism.
+
+Same37 development donors, predefined9 folds, frozen pbulk20k fits, HVG2000,
+50PCs, M32/K256/64PCcells. Sealed20 and external counts untouched. One serial
+CPU ML worker, Torch/BLAS <=3 compute threads and <=3 inherited CPU affinity
+cores; idle native thread-pool threads may remain. No GPU lease or push.
+All architecture/empirical/hybrid/dispersion/paired outputs together below3GB
+logical bytes. Hash/prune generated NPZs; retain receipts and frozen fits.
+Hold all predecessor queue leases. Quiet routine monitoring10-15minutes.
+
+One eligible candidate paired32
+------------------------------
+Exactly16 complete bags from frozen current cellshape@0.5:biascal:stagehalf
+and16 bags of paired empirical cells, concatenated without modifying summary
+arrays. Model bags replay the fresh current32 M32 TRAIN-only rounded joint
+calibration via unchanged replay code, using valid M16 six-state/stagehalf
+allocation. They are not claimed to be the first16 M32 reference bags.
+
+Each paired empirical bag uses ONE TRAIN donor from the unchanged stage-blind
+source-donor permutation cycle; exclude the target when it is a TRAIN donor.
+Use target-owned library draws as the frozen empirical comparator does.
+For each desired cell/library L, independently select TWO source cells from
+that same source donor and the same depth-qualified pool: uniform over cells
+whose library >=L; if none qualifies, deepest cell (stable sort) as before.
+For j=1,2 let p_j=min(1,L/L_j). Independently draw gene counts
+ Binomial(X_j, p_j/2), then sum the two integer vectors.
+Selection and thinning occur in order j=1,2 within each bag. Use the same
+pool/target library for both draws; do not select across different donors.
+Source rows with positive counts are required for positive target libraries.
+
+This preserves the original resampler's conditional expected count vector
+including deepest-cell fallback, which is not upsampled. At fixed source
+donor and target L, if the original single-cell mean/covariance are mu/Sigma,
+the paired kernel has covariance .5*Sigma+.5*diag(mu); off-diagonal covariance
+halves while count noise remains. These are count-space claims before log/
+CP normalization. Nonzero rates, logvariance and PC summaries need not match
+or improve. No summary-space contraction or postscore correction is allowed.
+Outputs are artificial pooled cells, not native single cells or biological
+patient vectors. Between-donor source identity remains whole-bag coherent.
+
+Fresh references and fixed streams
+---------------------------------
+Regenerate original32/current32/empirical32 on fresh streams. Original remains
+the biascal/stagehalf total profile-budget anchor; current is the unchanged
+default; empirical uses the exact frozen depth-qualified resample_blind code.
+Model five streams: SeedSequence([20261114,4,fold,dev_index,rep]).spawn(5),
+global/latent/cell/count/library order unchanged. Empirical streams:
+ stable_seed('paired-challenge',20261114,panel,fold,target,rep,role)
+role is reference or component. Paired component uses its own component RNG,
+never the M32 comparator stream. Rep0/1 use fitseed0/1 respectively. Paired
+SE is computational, not biological uncertainty. No historical scores used
+as fresh controls. No target expression fitted; only TRAIN source cells and
+allowed target library distributions/covariates enter generation.
+
+Mandatory identity and count-kernel controls
+------------------------------------------
+Before any paired candidate output, fixed f0/r0 must run the new empirical
+kernel with parts=1, M32 and the reference stream. It must exactly match all
+10 canonical common array fingerprints from the fresh frozen empirical32
+receipt, including identity flags and dtypes. Save/hash/prune its control
+NPZ and retain proof with source/receipt/hash links. No rounded/allclose
+substitute. Failure aborts implementation and is not a scientific result.
+Synthetic checks must prove parts=1 frozen equality, two independent draws
+from the same TRAIN source donor, fallback expectation preservation, integer
+nonnegative counts, count-space mean/covariance identity, exact summary
+concatenation and held-out source exclusion. Production candidate parts=2
+is fixed and cannot be changed to rescue failed scores.
+
+Unchanged numeric gates and conditional confirmation
+---------------------------------------------------
+Use exact unchanged first-challenge compare.verdict. Screen24jobs across
+4recipes x folds0-2 x reps0,1. Held percentile10/90 SD AND combined proper
+scores >2paired computational SE lower vs BOTH current/empirical and lower
+ALL3 fold means. Per-fit SD/combined |coverage-.8| has no>2SE regression vs
+either. Gene meanlog/detection/logvar, PC/cell energy and per-fit abs(log PC
+spread) have no>2SE worsening vs current. Profile mean cost+2SE <=.005 times
+ORIGINAL reference mean RMSE; everyfold relative profile cost<=.005.
+
+Only full screen pass triggers48 confirmation jobs folds3-8 x reps0,1 x
+4recipes. Same guards; >=5/6folds and BOTH repeat means(folds3-5,6-8) lower
+on both proper scores vs both comparators. No optional rank/control rescue.
+Failure of any gate falsifies this fixed recipe. Never weaken an old guard.
+
+Default promotion requires complete24 or72 conditional artifact audit,
+source/cache/fit/calibration/component/pruning/control links, independent
+review, actual public CLI parity, appropriate checks, documentation and
+local commit. Queue never promotes. Same37 donors have been reused for
+development: even success is selected simulator evidence, not population
+calibration, native-cell-state fidelity, or patient-feature-vector validity.
