@@ -72,3 +72,11 @@ def test_ordered_queue_prefix_is_fold_then_repeat_then_recipe():
     assert len(jobs)==24 and len(set(jobs))==24
     assert jobs[:4]==[(n,0,0) for n in B.RECIPES]
     assert jobs[4:8]==[(n,0,1) for n in B.RECIPES]
+
+
+def test_comparison_serialization_normalizes_fold_keys_without_allowing_numeric_changes():
+    actual={'per_fold':{0:.125,1:.25},'passes':False}
+    saved=json.loads(json.dumps(actual))
+    assert A.serialized_equal(saved,actual)
+    saved['per_fold']['0']+=1e-10
+    assert not A.serialized_equal(saved,actual)

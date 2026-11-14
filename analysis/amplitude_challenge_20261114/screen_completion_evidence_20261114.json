@@ -1,0 +1,153 @@
+{
+  "status": "complete_failed_screen_verified",
+  "recorded_utc": "2026-11-14T12:04:17.760633+00:00",
+  "queue_exit_code": 0,
+  "exec_session_id": 13979,
+  "runner_pid": 1268694,
+  "implementation_commit": "e1ccbed",
+  "protocol_commits": [
+    "337a65b",
+    "e53c324"
+  ],
+  "runtime_status_sha256": "02d775610a28df9d09a6f8a8563b5011931aa6051b915b204acc84a0e22fc546",
+  "runtime_sha256": {
+    "status.json": "02d775610a28df9d09a6f8a8563b5011931aa6051b915b204acc84a0e22fc546",
+    "artifact_audit.json": "1e38b8787acc7500fef175c218de266100c1d171cddf1583ac630ee2007e5ac7",
+    "screen_comparison.json": "df72094ec4f1b050de129949d16d904d98108f99f6cdeef0ea62b027f363db56"
+  },
+  "prelaunch_manifest_sha256": "17ab33dae2bf13c1995eea5b74a2aa813ccb635643db7cb00a089118f44020e4",
+  "execution_sources": 202,
+  "verified_artifacts": 24,
+  "required_artifacts": 24,
+  "control_fidelity_sha256": "d19bca4e634c343b40a38d6754f6cb89a414c5742f685b211f1f8f878d02fe4a",
+  "checks_passed_prelaunch": 52,
+  "postlaunch_auditor_serialization_regression_checks": 12,
+  "unique_synthetic_checks": 53,
+  "auditor_serialization_correction": "Integer fold keys become strings in JSON. Compare exact persisted representation; numerical values and execution sources unchanged. Regression rejects1e-10 numeric mutation.",
+  "full_control_common_arrays_and_delta_s_exact": true,
+  "first_raw_law_metadata_independent_review": "cleared; no execution/payload reads",
+  "raw_law_summaries": [
+    {
+      "fold": 0,
+      "replicate": 0,
+      "sha256": "26e9cd0cf80d8778419d98d88e5ecddf84efeffcf60c4b9ef630d9bfb2582012",
+      "positive_fraction": 0.88,
+      "normalized_t_sd": 0.3162288969760502,
+      "normalized_t_range": [
+        0.0,
+        0.8836022768371266
+      ],
+      "second_moment": 0.25000000000000006,
+      "second_moment_float32": 0.24999999812899432,
+      "clipped_fits": 10,
+      "degenerate_fits": 0
+    },
+    {
+      "fold": 0,
+      "replicate": 1,
+      "sha256": "8b3a5868ca9b35f38d5efa5aa93442115f85c700c3cea7437467b81e5c57c770",
+      "positive_fraction": 0.92,
+      "normalized_t_sd": 0.31955426932843123,
+      "normalized_t_range": [
+        0.0,
+        0.9092486598053551
+      ],
+      "second_moment": 0.25,
+      "second_moment_float32": 0.24999999930931163,
+      "clipped_fits": 10,
+      "degenerate_fits": 0
+    },
+    {
+      "fold": 1,
+      "replicate": 0,
+      "sha256": "9f3fd1c5b72a03875a4bff1b4e7cc199a1ca8bf3ea702d758d9ce91fc723ab92",
+      "positive_fraction": 0.9583333333333334,
+      "normalized_t_sd": 0.2767910965153603,
+      "normalized_t_range": [
+        0.0,
+        0.8967778343322118
+      ],
+      "second_moment": 0.25,
+      "second_moment_float32": 0.2500000012783952,
+      "clipped_fits": 7,
+      "degenerate_fits": 0
+    },
+    {
+      "fold": 1,
+      "replicate": 1,
+      "sha256": "676e3f4fb8f832ee984579accdec501851f5a1bad21ce6520b6fb65f8ef7c76c",
+      "positive_fraction": 0.9583333333333334,
+      "normalized_t_sd": 0.28838193192420997,
+      "normalized_t_range": [
+        0.0,
+        0.9219550201847841
+      ],
+      "second_moment": 0.25,
+      "second_moment_float32": 0.2499999964521582,
+      "clipped_fits": 8,
+      "degenerate_fits": 0
+    },
+    {
+      "fold": 2,
+      "replicate": 0,
+      "sha256": "d404d4f1cd4bbb3acf0680767bd683095fbaf9090dfa6ff9262e7105256658e9",
+      "positive_fraction": 0.96,
+      "normalized_t_sd": 0.29091877780412617,
+      "normalized_t_range": [
+        0.0,
+        0.8420936708265019
+      ],
+      "second_moment": 0.25,
+      "second_moment_float32": 0.24999999690003713,
+      "clipped_fits": 7,
+      "degenerate_fits": 0
+    },
+    {
+      "fold": 2,
+      "replicate": 1,
+      "sha256": "0ed65a74acdf383972d99f0fd0fc21a611380098b1e94f623b316761de729e6a",
+      "positive_fraction": 0.96,
+      "normalized_t_sd": 0.28820411093102777,
+      "normalized_t_range": [
+        0.0,
+        0.8102314764192013
+      ],
+      "second_moment": 0.25000000000000006,
+      "second_moment_float32": 0.24999999847607426,
+      "clipped_fits": 7,
+      "degenerate_fits": 0
+    }
+  ],
+  "failed_gates": [
+    "current32/combined/interval_score/more_than_two_SE",
+    "current32/combined/interval_score/fold_direction",
+    "empirical32/sd/interval_score/more_than_two_SE",
+    "empirical32/sd/interval_score/fold_direction",
+    "empirical32/combined/interval_score/more_than_two_SE",
+    "empirical32/combined/interval_score/fold_direction",
+    "empirical32/sd/coverage_distance/nonregression",
+    "empirical32/combined/coverage_distance/nonregression",
+    "current32/logvar_rmse_gene/nonregression"
+  ],
+  "confirmation_disposition": "not_triggered",
+  "default_changed": false,
+  "default_sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "public_cli_sha256": "40d6102e77fa6a4ece2c64cd431db3d907449d7bd69335cb597370d5f860b80e",
+  "logical_task_bytes": 1495093338,
+  "sealed_or_external_counts_accessed": false,
+  "scope": "Same37 development donors; no independent biological or population confirmation; broader goal remains active",
+  "independent_closure_review": {
+    "reviewer": "application_default_review",
+    "status": "cleared",
+    "execution_sources_checked": 202,
+    "score_receipt_artifacts_checked": 24,
+    "raw_laws_checked": 6,
+    "TRAIN_donor_fit_records_checked": 148,
+    "paired_metric_blocks_recomputed": 48,
+    "aggregate_fields_recomputed": 148,
+    "gates_recomputed": 20,
+    "counts_arrays_weights_opened": false,
+    "tests_models_or_auditor_executed": false,
+    "scope": "Recorded metadata and independent summary arithmetic, not independent rescoring"
+  }
+}

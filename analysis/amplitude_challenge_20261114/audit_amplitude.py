@@ -9,6 +9,12 @@ import run_amplitude as R
 PRELAUNCH_SHA256='17ab33dae2bf13c1995eea5b74a2aa813ccb635643db7cb00a089118f44020e4'
 
 
+def serialized_equal(saved,recomputed):
+    # Frozen compare.verdict uses integer fold keys; JSON receipts use strings.
+    # Compare the exact persisted representation, preserving all numeric values.
+    return saved==json.loads(json.dumps(recomputed,allow_nan=False))
+
+
 def ordered_jobs(folds):
     return [(name,f,r) for f in folds for r in (0,1) for name in B.RECIPES]
 
@@ -98,9 +104,9 @@ def audit():
         B.require(control_verified,'full constant amplitude calibration fidelity required')
         exact_artifacts(required,[failed] if failed else [])
         if not infeasible:
-            B.require(status['screen_passes']==screen_passes and B.P.read(B.ROOT/'screen_comparison.json')==screen,
+            B.require(status['screen_passes']==screen_passes and serialized_equal(B.P.read(B.ROOT/'screen_comparison.json'),screen),
                       'terminal screen comparison/status differs')
-            if screen_passes:B.require(B.P.read(B.ROOT/'confirmation_comparison.json')==C.report(tuple(range(3,9)),True),
+            if screen_passes:B.require(serialized_equal(B.P.read(B.ROOT/'confirmation_comparison.json'),C.report(tuple(range(3,9)),True)),
                                        'terminal confirmation comparison differs')
     B.require(R.disk_bytes()<3_000_000_000,'combined output cap exceeded')
     return {'status':'passed' if complete else 'incomplete','complete':complete,'scope':'full_conditional_study',
