@@ -1,0 +1,103 @@
+Empirical-reference challenge, declared 2026-11-14 before new candidate scores
+===========================================================================
+Owner: "update the goal to beat it and let it rip". New active goal: beat
+stage-blind empirical resampling on donor variability AND combined proper
+interval scores, preserve useful gene/profile performance, then verify and
+commit a qualified default. This authorizes a new experiment pass; it does
+not relabel the completed architecture screen or its failures.
+
+Same37 SEA-AD development donors only, same predefined folds and frozen
+pbulk20k fits. No sealed/external counts. All results are development-selected
+and do not supply independent biological validation. Keep r3/r4 and all old
+source/fit/evidence files unchanged. New code is isolated in this directory;
+outputs under runs/improve_20261109/{smoke_r5,results_r5,logs_r5}/
+empirical_challenge_20261114. Retain receipts/scores; hash/prune NPZs. Combined
+old architecture-pass plus new challenge outputs remain below3GB. CPU only,
+serial worker, at most3threads/process. No push. Routine monitoring quiet.
+
+Fixed hypotheses
+----------------
+B blind32: cellshape@0.5:biascal:stageblind. Same trained weights, cells and
+  joint TRAIN-only calibration as current recipe; remove weak stage handling.
+C radial32: radialshape@biascal:stagehalf. Replace constant alpha=.5 by the
+  midrank of squared distance of each sampled latent from the mean of its
+  snapshot's512 prior particles. Tied distances receive their midrank.
+  Uniform sampling of an untied particle table gives a discrete uniform
+  alpha law. This is radial-dependent contraction, NOT independent donor
+  noise or a learned biological axis. No new RNG consumption or fitted
+  strength. Each bag's expected gene totals and cell libraries are preserved
+  before the existing joint train-only bias/nonzero calibration is refitted.
+No parameter grid, optional combination or postscore alpha/stage/M rescue
+in this first fixed screen. Failed hypotheses remain failed.
+
+A, separately labelled Monte Carlo CONTROL: current count-shape withM128
+  versus empiricalM128, plus rounded-coefficient currentM32 replay. M32
+  train-only coefficients are frozen/replayed at bothM values. This control
+  is not a distinct eligible candidate against the identical current recipe
+  atM128. No promotion from this control; any laterM128 recipe needs a new
+  prospective comparison. Report changed state/stage allocation and width.
+
+Comparators and computational replicates
+---------------------------------------
+PrimaryM32/K256,64PC cells, interpolated10/90 bounds; rank secondary only.
+For each fold use replicate0 = frozen fitseed0 + empirical stream0, and
+replicate1 = frozen fitseed1 + independent empirical stream1. Candidate,
+current count-shape and original biascal use the SAME new generation streams
+within replicate: SeedSequence([20261114,1,fold,development_index,replicate])
+spawned in original global/latent/cell/count/library order. Calibration uses
+only training targets on those streams. Empirical streams use stable_seed
+('empirical-challenge',20261114,panel,fold,target,replicate), otherwise the
+unchanged original stage-blind depth-qualified cell-resampling algorithm.
+No claim of shared count noise across GAN and empirical algorithms.
+Two replicate differences include both fit/generation and empirical draw
+variation. Report paired computational-replicate SE and fold scatter;
+neither is biological uncertainty. Do not duplicate the historical single
+empirical stream into two pairs. Preserve its stronger/weaker descriptive
+comparison separately. M128 controls use matchedM128 empirical generation.
+
+Current comparator: unchanged pbulk count-shape=.5 stagehalf, recalibrated
+on the new training-only streams. Profile-budget reference: ORIGINAL pbulk
+biascal stagehalf, regenerated on the same CPU streams, never the latest
+selected candidate. Published historical numbers stay separate. The total
+allowance remains0.5% against the original recipe; it cannot compound.
+
+Prospective screen, folds0-2, replicate0/1
+----------------------------------------
+All six pairs required for each fixed candidate. Against BOTH current
+count-shape AND empiricalM32, require held SD and combined proper interval
+scores lower by>2paired computational-replicate SE and lower in ALL3 fold
+means. Per-fit SD/combined absolute coverage distance to.8 must not regress
+by>2SE against either comparator. No>2SE regression versus current in
+meanlog, detection, logvar, PC/cell energy or abs(log PC spread).
+Profile cost +2SE <=.005*original-reference mean RMSE and each fold mean
+relative cost<=.005 against the original profile reference.
+Report profile versus empirical descriptively too; no every-metric dominance
+claim. Always retain train/held mean/SD/combined coverage, width, proper
+score, below/above misses, raw gene errors and fold/replicate directions.
+
+Confirmation, only fixed qualifying recipes
+------------------------------------------
+Folds3-8,replicate0/1, using the same two empirical namespaces. All12 pairs
+required. Both proper-score targets must improve>2SE versus BOTH comparators,
+lower in>=5/6fold means and in BOTH repeat means(folds3-5 and6-8). Same
+coverage/gene/profile guards and every-fold0.5% original-profile budget.
+No winner based on the old empirical single stream or a partial screen.
+Passing recipes ranked by combined proper score, then SD score, then fewer
+changes/simpler recipe, then canonical name; report computational ties.
+Default promotion additionally requires source/cache/checkpoint/calibration/
+receipt/pruning audit, independent review, actual CLI verification, relevant
+tests, documentation and local commit. Neither control nor queue can promote.
+Keep random-direction, empirical-reference, undercoverage and patient-vector
+limits explicit. If this fixed screen fails, record it and design any next
+hypothesis prospectively under the owner's broader active research goal.
+
+Prelaunch provenance: complete prior audit SHA7cd0fef29753be11ce7903741ad5e92a
+28ae1ae6291a91f3531d83cbe98f9970, immutable promotion and full fold definitions
+are pinned before trusting their records. All18 fit configs match old
+immutable evidence. Folds3-8 checkpoint hashes match the immutable promotion;
+folds0-2 checkpoint hashes match current original fit receipts and are then
+frozen in committed prelaunch anchors. Verify exact donor partitions and all
+six allowlisted cache payload hashes once per represented fold before work/
+resume; validate model fit files and receipt links per job. Pin actual
+resolved model/released modules, all r5 source and ParticleGAN Python code
+in a committed prelaunch manifest; reject source changes between jobs.
