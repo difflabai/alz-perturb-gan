@@ -41,16 +41,20 @@ monotone with variable libraries. With r=mu_raw-L*qbar,
  F'(t)=mean[r*(1+mu(t)/theta)^(-theta-1)].
 Locate the maximum: derivative at0<=0 gives peak0; derivative at1>=0 gives
 peak1; otherwise exactly12 derivative bisections and the bracket midpoint.
+Retain that final peak bracket and its width: the interior peak is approximate.
 If the response is numerically constant at endpoints/peak (range<=1e-12),
 choose baseline t=.5. Record that degeneracy and observed residual.
 On each nonempty monotone segment [0,peak] and [peak,1], if the target lies
 within the evaluated endpoint responses, use exactly12 response bisections
-and the final bracket midpoint. Among reachable roots choose nearest .5,
+and the final bracket midpoint. Exact equality to either endpoint response
+retains that exact endpoint amplitude, especially literal zero, with no root
+bisections. Tiny numerical positives must not bypass feasibility. Among reachable roots choose nearest .5,
 then smaller t on an exact distance tie. If unreachable, choose among the
 evaluated extrema0/peak/1 the closest response, then nearest .5, then lower t.
 Record endpoints/derivatives/peak, roots/brackets, clipping/degeneracy, chosen
 raw t and residual, generated dimensions and exact TRAIN donor identities.
 No assumption of monotonicity over the full interval is allowed.
+Degenerate or clipped fits are recorded as such, not evidence of donor variation.
 
 Normalize the empirical raw TRAIN law using t'=min(1,c*t) so mean(t'^2)=.25.
 This is a fixed moment constraint, not a performance-tuned strength. The law
