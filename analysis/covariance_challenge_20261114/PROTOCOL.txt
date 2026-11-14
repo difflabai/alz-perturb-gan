@@ -1,0 +1,165 @@
+Explicit covariance-observation training study, declared before implementation
+===========================================================================
+Owner goal remains to beat stage-blind empirical resampling on donor-SD and
+combined proper interval scores, preserve protected gene/profile/distribution
+performance, and commit a default only after prospective confirmation.
+This sixth scored hypothesis follows the failed fixed TRAIN count-dependence
+diagnostic, closed4942eb7. That diagnostic is stopped: no a/module/rank rescue.
+Existing207 execution sources and historical evidence stay unchanged.
+
+Decision made with independent application_default_review as the owner asked.
+The next hypothesis is an explicit covariance OBSERVATION during fresh
+ParticleGAN training, not another generated-noise/mean calibration law.
+The released150 already includes50means,50SDs and25 JOINT Fourier frequencies
+(cos/sin50) over the PCA coordinates. Its MLP can learn their joint donor-bag
+distribution. The old cellwhite critic also exposed related dependence and
+failed. Do not claim SD/covariance was wholly invisible or identify an
+architectural impossibility. New signed quadratic coordinates could supply
+different training gradients; success is uncertain.
+
+Fixed arm, no grid or postscore strength/coordinate rescue
+--------------------------------------------------------
+Keep pbulk and released150. Add ONE covmom block comprising:
+  PCA50 within-bag sample covariance: strict upper off-diagonal1225 entries;
+  independent fixed-random50 covariance: upper triangle including diagonal1275.
+No PCA-random cross-space terms. Off-diagonal entries multiplied by sqrt2,
+diagonal by1. Each covariance uses divisor(K-1), within-bag centered cells;
+training K128. Generation/evaluation K256/64 conventions stay unchanged.
+PCA covariance diagonal is omitted because the existing SD coordinates
+determine it. Total width2150+2500=4650.
+
+PCA projection is unchanged frozen TRAIN W/pc_sd. Random basis is numpy
+default_rng(20261113).normal(G,50) followed by numpy QR, exactly the old
+TRAIN geometry/count diagnostic convention without sign canonicalization.
+Normalize random coordinates by full TRAIN-cell population SD, computed in
+FP64 with the frozen gene standardizer; floor1e-6. Cast projection to FP32
+for actual training. No direction/rank selection or feature-space refitting.
+
+For each TRAIN donor draw16 reference128-cell bags with replacement, each
+private stable_seed('covariance-critic-reference',20261114,fold,donor,bag).
+Every donor gets equal reference weight. Center each of2500 covariance
+coordinates on the mean of these reference bags (store FP32). ONE scalar
+global scale, rounded six significant digits, makes E||centered covmom||²
+equal E||released150||² on the SAME reference bags. No per-coordinate,
+per-space, per-donor whitening or optional scale. Retain before/after PCA
+and random energies. Existing pbulk scale remains unchanged.
+
+Real observation is this function of standardized sampled counts. Fake
+observation uses the existing straight-through standardized-count tensor,
+with its unchanged Poisson forward/Gamma-rate backward. No new surrogate,
+likelihood, loss, optimizer or prior law. Training gradients reach the
+generator through the same native calls. No covariance target loss.
+
+Native kappa for candidate is sqrt(2150/4650), canonical six significant
+digits in the named t.kappa flag. This mechanically matches the old pbulk
+absolute gradient-CAP threshold. It does not make all penalty terms,
+initialization, optimizer geometry or training trajectories identical:
+the first critic layer has4650+7 inputs and different random draws and
+DualNorm geometry; the RMS floor and feature geometry change too.
+Fresh ordinary pbulk CPU controls have width2150 and native kappa1.
+This is a fixed application/observation recipe, not a pure causal estimate
+of covariance-content effects. No zero-padding or extra matched-cap arm.
+
+Fresh fits, comparisons, resources
+---------------------------------
+All fresh training starts from scratch, native ParticleGAN0.9.7/t005:
+512particles, donor z8, cell z8, batch32x128,20,000updates, original learning
+rates/penalty/prior/policy order, native EMAoff. Same original eleven
+training streams by fold/seed, CPU for BOTH candidate and ordinary pbulk
+control. Candidate differs only in the declared observation and derived cap.
+Named candidate arm covmom,pbulk,t.kappa@VALUE. No other architecture options.
+Keep the six late states15k..19k/final and unchanged stagehalf readout;
+apply the same cellshape.5 and fresh TRAIN-only joint bias/nonzero calibration
+to both. No calibration coefficient reused from another fit.
+
+Screen folds0-2,fitseeds0/1: six fresh candidate/control pairs,12fits.
+Fit order per fold/seed: ordinary CPUcontrol first, then covmom candidate.
+Fresh CPU controls are necessary: old GPU-trained weights alone confound
+training device with architecture. Also retain the stronger historical
+frozen-default comparison; do not replace its existing protected baseline.
+
+Recipes, all generated/scored anew on the same namespace6 CPU streams:
+ original32: frozen original GPU-trained pbulk fit, biascal:stagehalf;
+ current32: same frozen fit, current cellshape.5+biascal:stagehalf;
+ empirical32: unchanged stage-blind depth-qualified real TRAIN resampling;
+ cpu_control32: fresh ordinary CPU pbulk fit, current cellshape readout;
+ covariance32: fresh CPU covmom fit, same cellshape readout.
+Generation streams SeedSequence([20261114,6,fold,development_index,replicate])
+spawn original global/latent/cell/count/library order. Empirical seed is
+stable_seed('covariance-challenge',20261114,panel,fold,target,replicate).
+No claim of shared count noise between different algorithms/architectures.
+M32,K256,64PC cells, unchanged interpolated10/90 primary bounds; ranks
+secondary only. Same37development donors/nine predefined overlapping folds,
+HVG2000/caches unchanged, sealed/external donors untouched.
+
+Train process may open exactly that fold's manifest.json,space.npz,
+train/counts.npz,train/metadata.npz under the cache root; audit guard all
+other count payloads. Defer trainer's automatic post-fit generation using a
+documented passthrough hook, so TRAIN fitting never opens held depth/counts.
+Generate only in the separate generation process after fit is complete;
+held target libraries/metadata are depth matching and scoring inputs only.
+No fit choices depend on held scores or partial screen results.
+
+CPU only, one serial worker, Torch/BLAS3compute threads/affinity<=3cores;
+no GPU/push. Hold all prior queue leases. Combined nine-task logical output
+bytes <3GB, check before/after every phase; stop with explicit cap failure
+before starting a fit if headroom<150MB. Hash/prune temporary generated
+archives only after score/receipt/control verification. Retain candidate
+weights and all fit/source/config/curve/calibration/score metadata. Ordinary
+CPUcontrol weight files may be hash-verified and pruned AFTER all its scored
+outputs/control proof are finalized, retaining complete preprune digests and
+receipts. Verify pruning links separately; never describe pruned weights as
+independently rehashed later. Retain candidate fit weights through decision.
+Do not delete any predecessor artifact. No raw generated counts on disk.
+
+Launch requirements and fidelity
+-------------------------------
+Commit protocol before implementation, then freeze committed source manifest
+with all207 old pins preserved plus actual new execution dependencies.
+Verify resolved local model/released/ParticleGAN modules and cache/fit
+ancestry as earlier challenges. Independent source review before launch.
+Synthetic checks: feature forward vs direct covariance, offdiagonal geometry,
+within-bag centering/divisor, permutation invariance, exact real/fake forward,
+finite-difference rate gradient, finite/nonzero generator/critic gradients,
+scale and state/no-RNG contracts. Ordinary pbulk must retain exact existing
+CPU initialization/first5updates and bitwise resume with plug-in imported.
+Exercise actual candidate CPU updates/resume on TRAIN-only fold0 in a bounded
+at-most300-update smoke with the four-file audit guard before full fits.
+Smoke is finite/gradient/resume/cost verification, not eligibility or tuning.
+Hash/prune smoke weights, retain proof; no screen scores from the smoke.
+
+Before first candidate inference, use the completed fresh ordinary CPUcontrol
+fold0/seed0 for a full real unmodified G.generate_fit TRAIN joint-calibration
+and generation control against this study's literal passthrough orchestration.
+Require all10canonical array fingerprints, complete2000delta/2000s and
+state/condition allocation equality before trusting the worker route. This
+is an orchestration control; the different covmom architecture is not expected
+to equal pbulk. Both control routes must be freshly jointly calibrated,
+not replay-only or synthetic equality. Hash/prune control archives with proof.
+
+Unchanged gates, with an added fresh-training control
+---------------------------------------------------
+Use original empirical-challenge compare.verdict unchanged for covariance32
+against frozen current32/empirical32/original32: held SD AND combined proper
+scores improve>2paired computational-replicate SE and lower in ALL3fold
+means; per-fit SD/combined distance to.8 nonregression; all current meanlog,
+detection,logvariance,PC/cell energy and abs(logPCspread) guards; profile+2SE
+<=0.5% ORIGINAL mean and each fold<=0.5% ORIGINAL. Budget cannot compound.
+Also apply that SAME verdict with cpu_control32 as current32, sameempirical
+and original. Both complete verdicts must pass. Report all train/held mean/
+SD/combined widths/scores/coverage/below/above and raw gene/profile errors,
+matched paired differences, replicate SE and fold scatter. No optional
+winner among readouts. CPUcontrol is a comparator, not an eligible candidate.
+
+Confirmation only if BOTH screen verdicts pass: folds3-8,seed0/1, same fresh
+candidate/control training, streams6,all five recipes and all protected
+gates; both score targets improve>2SE against all comparators, lower>=5/6folds
+and in BOTH extra-fold repeat means. No confirmation on a failed screen.
+No selected/default change from partial results or TRAIN diagnostics.
+
+Promotion additionally requires full cache/checkpoint/source/config/training/
+calibration/receipt/score/pruning provenance, independent review, real public
+CLI parity, relevant tests, docs and local commit. Historical default proofs
+remain immutable. No patient-vector identification, clinical calibration,
+independent biological validation, or architecture-causality claim. This
+remains repeatedly selected evidence on the same37development donors.
