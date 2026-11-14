@@ -1,0 +1,49 @@
+{
+  "status": "passed_prelaunch_no_pair_control_or_candidate_generation",
+  "recorded_utc": "2026-11-14T08:39:48.193875+00:00",
+  "test_command": "python3 -B -m pytest -q /ml2/alz/analysis/paired_challenge_20261114/test_pair_cells.py /ml2/alz/analysis/paired_challenge_20261114/test_pair_protocol.py /ml2/alz/analysis/paired_challenge_20261114/test_pair_audit.py",
+  "tests_passed": 51,
+  "test_groups": {
+    "paired_kernel": 11,
+    "protocol_and_proofs": 31,
+    "artifact_auditor": 9
+  },
+  "test_source_sha256": {
+    "/ml2/alz/analysis/paired_challenge_20261114/test_pair_cells.py": "7919947a64a3856e4b62405c16faedf5f812cd0c91a594cd17a6e2992c8d43ab",
+    "/ml2/alz/analysis/paired_challenge_20261114/test_pair_protocol.py": "6236116a0545e4285c4cd01c046eee0597da327bd77df7d6a18ebb5b7c1aff73",
+    "/ml2/alz/analysis/paired_challenge_20261114/test_pair_audit.py": "c5f69543984d00fc8ba539361d3257e36a956f136cc199cefc92b7a05a2e4696"
+  },
+  "prelaunch_source_manifest_sha256": "f6feb5844ac3088677c9d7f4324a5630a35df20c98c2e3f75c7aafe887876255",
+  "execution_source_files_pinned": 192,
+  "prior185_dependency_equality_required": true,
+  "prior_complete_evidence_sha256": "def81025f41d207cd0614818c48af849c5151cdc09eb589376f91d1bad1c111f",
+  "prior_full_artifact_audit": {
+    "passed": true,
+    "verified": 24,
+    "required": 24,
+    "sha256": "4011b4b0c4ea24b49fb7c474642fdd7a5580998ac6b263963a6e139548db654e"
+  },
+  "independent_read_only_review": {
+    "reviewer": "application_default_review",
+    "scientific_recipe_implementation_provenance_and_auditor": "cleared",
+    "reviewer_ran_models_tests_or_audits": false,
+    "reviewer_read_counts_or_weights": false
+  },
+  "resource_limits": {
+    "CPU_ML_workers": 1,
+    "library_compute_threads": 3,
+    "CPU_affinity_max_cores": 3,
+    "preflight_affinity": [
+      0,
+      1,
+      2
+    ],
+    "idle_native_thread_pool_threads_may_remain": true,
+    "GPU_workers": 0,
+    "combined_output_cap_bytes": 3000000000
+  },
+  "default_changed": false,
+  "default_sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "scope": "One fixed16model+16two-cell pooled empirical hypothesis; fresh matched references; mandatory real parts1 identity; conditional confirmation",
+  "logical_task_bytes_prelaunch": 1483905886
+}
