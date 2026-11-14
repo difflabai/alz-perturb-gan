@@ -1,0 +1,21 @@
+{
+  "status": "cleared_before_real_execution",
+  "recorded_utc": "2026-11-14T12:43:15.693270+00:00",
+  "execution_sources": 207,
+  "preserved_predecessor_sources": 202,
+  "source_manifest_sha256": "103cc98aea29ce16fc8d4bec3961bc0aac7b801413da7db37305e09681c53f69",
+  "synthetic_checks_passed": 27,
+  "checks_command": "python3 -B -m pytest -q -p no:cacheprovider analysis/count_dependence_20261114/test_gamma_head.py analysis/count_dependence_20261114/test_joint_diagnostic.py",
+  "independent_source_only_review": {
+    "reviewer": "application_default_review",
+    "status": "cleared",
+    "tests_or_models_executed": false,
+    "payloads_read": false,
+    "corrections": "Clone theta/group inputs; direct offdiagonal kernel; full floored Jacobian; global underflow bounds/cast loss; FP32 diagnostic coordinates; full256 zero stop; frozen gene-RMSE convention"
+  },
+  "predecessor_full24_verified": true,
+  "real_models_or_data_generated": false,
+  "default_changed": false,
+  "logical_task_bytes": 1495093338,
+  "scope": "TRAIN-only diagnostic; no scored candidate/default eligibility"
+}

@@ -76,6 +76,9 @@ Torch Gamma sampling clamps numerical underflow draws to dtype.tiny, including
 in the original head. Retain those sampled values and explicitly count/report
 tiny hits in BOTH shared increments and independent components, minimum
 positive shapes/times/samples and any final-cast underflow.
+Retain minimum positive times/independent shapes and summed/maximal lost-rate
+mass from the final dtype cast. The summed clamp-error bound covers ALL six
+loaded state heads, not a separate1e-8 allowance per state.
 For each affected output bound the extra rate mass by
  (group_size+1)*float64.tiny*mu/theta; retain maximum and summed rate-error
 bounds, requiring maximum<1e-12 and sum across the full diagnostic<1e-8.
@@ -101,6 +104,9 @@ contain>=64 cells or stop explicitly. Within each half form16 independent
 draws within a half may overlap. Reused TRAIN PCA and donors mean these halves
 are sampling-stability controls, not independent donor validation.
 Model comparisons use the first64 generated cells of each of16 bags.
+Retain full float32 diagnostic PCA/random coordinates for both real and model
+before covariance/SD arithmetic in float64. Canonical FP16 model PCA arrays
+remain unchanged for the literal-zero fingerprint control.
 
 For each donor, branch, half and projection retain average64-cell within-bag
 population covariance (ddof0), PC SD centers (mean of per-bag population SD),
@@ -123,7 +129,9 @@ Gamma off-diagonal kernel, and its projection at exactly one fixed conditional
 point (first cell) of each of16bags x25targets=400 points. Use fully replayed
 mu/theta and the FULL derivative of standardize_counts/logCP, including the
 random-total denominator derivative, at mean counts. Label this a delta-method
-approximation; raw projected and nonlinear actual-count responses are separate.
+approximation. Implement the frozen max(total,1) floor's constant-denominator
+branch when total<1; stop at the nondifferentiable exact total=1 kink.
+Raw projected and nonlinear actual-count responses are separate.
 No unobserved real conditional MU residual is identified by real-minus-model
 covariance. Actual sampled count response determines normalized direction.
 
@@ -132,7 +140,9 @@ Decision, preservation and resources
 This mechanism stops if a=.5 fails to strictly reduce BOTH donor-averaged
 covariance error AND SD-center MSE in BOTH fixed real halves in BOTH PCA and
 fixed-random projections. Stop also if its zero-total-cell rate exceeds the
-baseline. Report all gates/signs/marginal/total changes, including failures.
+baseline over ALL256 generated cells per bag; retain the matching64-cell
+zero-total rates descriptively. Report all gates/signs/marginal/total changes,
+including failures.
 Analytic/raw alignment never overrides a worsening actual normalized joint
 gap. Analytic-versus-actual disagreement is retained as approximation failure,
 not repaired by changing groups, a or rank. No second response or rescue.
