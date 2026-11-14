@@ -1,0 +1,42 @@
+{
+  "status": "passed_prelaunch_no_factor_or_zero_control_generation",
+  "recorded_utc": "2026-11-14T06:54:40.024515+00:00",
+  "test_command": "python3 -B -m pytest -q /ml2/alz/analysis/dispersion_challenge_20261114/test_factor_model.py /ml2/alz/analysis/dispersion_challenge_20261114/test_factor_protocol.py /ml2/alz/analysis/dispersion_challenge_20261114/test_factor_audit.py",
+  "tests_passed": 49,
+  "test_groups": {
+    "factor_kernel": 13,
+    "factor_protocol": 27,
+    "artifact_auditor": 9
+  },
+  "test_source_sha256": {
+    "/ml2/alz/analysis/dispersion_challenge_20261114/test_factor_model.py": "2cd71ee56bb7e74e7f77ac818aca96e832aa5f9d1f838c01f7c97e72300dc3b1",
+    "/ml2/alz/analysis/dispersion_challenge_20261114/test_factor_protocol.py": "543fd567308ce81db930ae5cb883949e62ff4cc5147f93a8f22c0cde4c6839c5",
+    "/ml2/alz/analysis/dispersion_challenge_20261114/test_factor_audit.py": "16fd8452a7cda206a817dcea89470e9f0a157932dea99ef903ebdcac48e4433c"
+  },
+  "prelaunch_source_manifest_sha256": "a42a25df33429c4eb16cc2160d6f0459eec8bd30200e4641c28e39ea2044513c",
+  "execution_source_files_pinned": 185,
+  "prior178_dependency_equality_required": true,
+  "prior_complete_evidence_sha256": "8836e7823a1357f64894ab5a139a2b9f4912d5ff3137bca666435287821cda06",
+  "prior_full_artifact_audit": {
+    "passed": true,
+    "verified": 24,
+    "required": 24,
+    "sha256": "b3193367222f8f732b55f7c06058b977e4d77c2477939f4f9b8bd00049a7a62d"
+  },
+  "independent_read_only_review": {
+    "reviewer": "application_default_review",
+    "scientific_recipe_implementation_and_auditor": "cleared",
+    "reviewer_ran_models_tests_or_audits": false,
+    "reviewer_read_counts_or_weights": false
+  },
+  "resource_limits": {
+    "CPU_ML_workers": 1,
+    "threads_per_process": 3,
+    "GPU_workers": 0,
+    "combined_output_cap_bytes": 3000000000
+  },
+  "default_changed": false,
+  "default_sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "scope": "One fixed TRAIN donor-dispersion law with full zero-factor calibration fidelity before candidate output; unchanged conditional gates",
+  "actual_prior_ML_processes": "none observed prelaunch; all three advisory queue leases required at launch"
+}
