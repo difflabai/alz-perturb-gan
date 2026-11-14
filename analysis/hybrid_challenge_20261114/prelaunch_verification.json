@@ -1,0 +1,42 @@
+{
+  "status": "passed_prelaunch_no_hybrid_generation",
+  "recorded_utc": "2026-11-14T05:17:38.822116+00:00",
+  "test_command": "python3 -B -m pytest -q analysis/empirical_challenge_20261114/test_audit.py analysis/hybrid_challenge_20261114/test_hybrid.py analysis/hybrid_challenge_20261114/test_hybrid_audit.py",
+  "tests_passed": 84,
+  "test_groups": {
+    "prior_artifact_auditor": 41,
+    "hybrid_core": 37,
+    "hybrid_artifact_auditor": 6
+  },
+  "test_source_sha256": {
+    "analysis/empirical_challenge_20261114/test_audit.py": "43ea1606d04898b788bd45a7e55a903d3a585563d2a7446f4022c571ecb38b4a",
+    "analysis/hybrid_challenge_20261114/test_hybrid.py": "7d1f0116d1747334fc100f3a013d2f60485eb7d78b4d09856abd55d6533ae713",
+    "analysis/hybrid_challenge_20261114/test_hybrid_audit.py": "5690656f83cc3eb87a4e0e97b3a17b640dc5396efcc58027ecb5d7e29538ad24"
+  },
+  "prelaunch_source_manifest_sha256": "e4098a9d08d63a451c08709f4e5a9317b8441e618a1bcfd60325e3c517dbdf24",
+  "execution_source_files_pinned": 178,
+  "prior172_dependency_equality_required": true,
+  "prior_complete_evidence_sha256": "cd6ded5cefacafee748301853e7970fe3d324307e66ef828f9f91f6b3af56bae",
+  "prior_full_artifact_audit": {
+    "passed": true,
+    "verified": 48,
+    "required": 48,
+    "sha256": "de35c82e472187a7d70298c7218a001a16b5cd06a8d8f49f8913cef79d1fe9de"
+  },
+  "independent_read_only_review": {
+    "reviewer": "application_default_review",
+    "scientific_recipe_and_implementation": "cleared",
+    "provenance_resume_and_auditor_snapshot_fixes": "cleared",
+    "reviewer_ran_models_tests_or_audits": false,
+    "reviewer_read_counts_or_weights": false
+  },
+  "resource_limits": {
+    "CPU_ML_workers": 1,
+    "threads_per_process": 3,
+    "GPU_workers": 0,
+    "combined_output_cap_bytes": 3000000000
+  },
+  "default_changed": false,
+  "default_sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "scope": "One fixed16model+16empirical whole-bag hypothesis; fresh matched references; conditional confirmation. No new performance claim."
+}

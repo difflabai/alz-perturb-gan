@@ -1,0 +1,82 @@
+Fixed whole-bag hybrid challenge, declared before any hybrid generation
+=====================================================================
+Owner goal: beat stage-blind empirical resampling on held-out SD AND combined
+proper interval scores, preserve useful expression/distribution performance,
+confirm and verify before committing any new default. The first fixed
+blind/radial screen failed its empirical gates. Those failures stay failed.
+The broader goal remains active. No default changes from a failed screen.
+
+Before examining those candidate outcomes, root and application_default_review
+recorded a fixed50/50 whole-bag empirical/GAN hypothesis in commit7a9eae9.
+This is that ONE next hypothesis. No weight, contraction, stage, M or strength
+grid. The GAN component is the CURRENT stagehalf count-shape recipe, not a
+postscore combination with the failed blind/radial candidates. This is a
+semiparametric simulator reusing observed training cells, not a pure GAN
+advance or validation of learned patient vectors.
+
+Same37 development donors, predefined nine folds, frozen pbulk20k fits,
+HVG2000/50PC caches. Sealed/external counts stay untouched. Old source/fit/
+evidence files remain unchanged. CPU only, one serial ML worker, <=3threads
+per process. Do not launch until the first queue exits and is inspected.
+All old architecture-pass + empirical challenge + this challenge outputs
+together stay below3GB logical bytes. Hash/prune NPZs, retain receipts/scores.
+No push. Quiet monitoring at natural10-15minute checkpoints.
+
+Single candidate hybrid32
+-------------------------
+M32 total, K256 cells/bag,64PC cells. Exactly16 complete bags from the frozen
+current count-shape GAN and16 complete bags from stage-blind empirical
+resampling. Concatenate whole-bag summary arrays; never mix cells from two
+unrelated patients inside one bag. Preserve every component bag's pb_counts,
+mean_log, nonzero, sq_log, lib and pcs without reweighting or interpolation.
+Model bags first, empirical bags second; percentile/rank scores are invariant
+to this ordering. Targets/held flags/stage/gene axes must match exactly.
+Because only the model half uses stagehalf, the mixture's effective own-stage
+weight is roughly25%, with the rest stage-marginal; it is not a full stage model.
+
+The model component replays this fit's newly generated current32 rounded
+TRAIN-only joint bias/dispersion coefficients, without recalibration. M16
+generation uses valid six-state allocation3,3,3,3,2,2 and the original
+stagehalf interleaving/apportionment at M16. This changes Monte Carlo
+allocation/draws; it is not bitwise the first16 current32 bags. The existing
+replay implementation also writes a component NPZ. Hash it and retain its
+receipt metadata, combine its arrays unchanged, then prune component NPZs.
+Empirical component uses the unchanged depth-qualified resample_blind rule
+at M16, excluding each TRAIN target from its source-donor pool. Its random
+stream is independent of the M32 empirical comparator. Save/hash that
+component before concatenation and prune it after the final archive exists.
+
+Regenerate original32, current32 and empirical32 M32 references on fresh
+streams. Original biascal/stagehalf remains the total profile-budget anchor.
+Current32 remains the unchanged default cellshape@0.5:biascal:stagehalf.
+Candidate/model references use SeedSequence([20261114,2,fold,dev_index,rep])
+spawned in global/latent/cell/count/library order. Empirical streams use
+stable_seed('hybrid-challenge',20261114,panel,fold,target,rep,role), where role
+is 'reference' or 'component'. Never claim shared count noise across methods
+or duplicate a historical empirical stream into replicate pairs. Rep0 uses
+fitseed0/empirical0; rep1 fitseed1/empirical1. Paired computational SE includes
+both fit/generation and empirical randomness and is not biological uncertainty.
+
+Frozen numeric gates
+--------------------
+Reuse the exact unchanged compare.verdict gates from the first challenge.
+Screen folds0-2/reps0,1: all6 pairs required. Held percentile10/90 SD AND
+combined proper scores improve by>2 paired computational SE versus BOTH
+current32 and empirical32, lower in ALL3 fold means. SD/combined absolute
+coverage distance to.8 does not regress>2SE against either comparator.
+No>2SE regression versus current in gene meanlog/detection/logvar, PC energy,
+cell energy or per-fit abs(log PC spread). Total profile cost+2SE <=.5% of
+ORIGINAL reference mean RMSE, and every fold's relative cost<=.5%.
+
+Only a passing fixed hybrid triggers folds3-8/reps0,1 confirmation (12pairs).
+Same proper-score/coverage/gene/profile gates, >=5/6 fold means lower and
+BOTH repeat means(folds3-5,6-8) lower against each comparator. No optional
+rescue from rank intervals, controls or another mixture fraction. Retain
+train/held mean/SD/combined coverage, widths, scores, below/above tails,
+raw gene metrics, fold directions and both computational/fold SEs.
+
+Default promotion requires complete conditional artifact provenance, source/
+cache/fit/calibration/component/pruning links, independent review, actual
+public CLI proof, relevant checks, documentation and local commit. This queue
+never promotes. Even success remains selected development evidence on the
+same37 donors, not biological population calibration or patient-vector proof.
