@@ -1,0 +1,121 @@
+Independent composition-amplitude probe, declared before implementation
+======================================================================
+The owner goal remains active: beat matched stage-blind empirical resampling
+on held SD AND combined proper interval scores with every protected guard,
+prospective confirmation and verified public CLI before default promotion.
+Four completed fixed studies failed their full gates; preserve their failures.
+The bounded TRAIN geometry diagnostic was committed at b3cbdf2. No fifth
+candidate code, generation or fitted amplitude exists at this declaration.
+
+Scientific choice with application_default_review: vary correlated decoder
+cell-mean structure within each generated bag, independently of donor latent,
+instead of another empirical-mixture correction or NB-precision random effect.
+The diagnostic found mean-PC-summary variation dominates the mixture spread
+tradeoff; center alignment alone is insufficient. TRAIN/held spread ratios
+do NOT isolate denominator shifts. Never derive a shrink factor from them.
+
+One fixed amplitude32 recipe, no strength/rank/mixture/normalizer grid
+------------------------------------------------------------------
+Same37 development donors, frozen pbulk20k fits, nine predefined folds,
+HVG2000/50PCs, six stagehalf states, M32/K256/64PCcells. Current baseline
+cellshape alpha=.5 is composition amplitude t=.5. For each bag/cell define
+ unshrunk decoder mean mu_raw, supplied positive library L,
+ qbar=sum_cells(mu_raw)/sum_cells(L),
+ mu(t)=L*qbar+t*(mu_raw-L*qbar), 0<=t<=1.
+This preserves expected per-bag gene totals and per-cell expected library,
+up to floating roundoff. Amplitude acts on all genes coherently; it does not
+multiply theta. A fresh pooled joint bias/nonzero calibration follows.
+
+TRAIN-only law fitting
+---------------------
+Replay the fresh current32 TRAIN-only rounded bias delta and gene theta s
+onto separately loaded bare weights, WITHOUT the current alpha=.5 mean
+contraction. The full patched theta, not ZC.base_nb bypass, enters fitting.
+Cache fixed M32/K256 unshrunk mu/theta/library chunks for one TRAIN donor
+at a time, then discard them. No target receives its personally fitted t.
+
+Observed target is that TRAIN donor's mean nonzero fraction across its cells
+and2000 genes. Evaluate F(t)=mean[1-(1+mu(t)/theta)^(-theta)] in float64,
+using fixed cached float32 model parameters. F is concave, not necessarily
+monotone with variable libraries. With r=mu_raw-L*qbar,
+ F'(t)=mean[r*(1+mu(t)/theta)^(-theta-1)].
+Locate the maximum: derivative at0<=0 gives peak0; derivative at1>=0 gives
+peak1; otherwise exactly12 derivative bisections and the bracket midpoint.
+If the response is numerically constant at endpoints/peak (range<=1e-12),
+choose baseline t=.5. Record that degeneracy and observed residual.
+On each nonempty monotone segment [0,peak] and [peak,1], if the target lies
+within the evaluated endpoint responses, use exactly12 response bisections
+and the final bracket midpoint. Among reachable roots choose nearest .5,
+then smaller t on an exact distance tie. If unreachable, choose among the
+evaluated extrema0/peak/1 the closest response, then nearest .5, then lower t.
+Record endpoints/derivatives/peak, roots/brackets, clipping/degeneracy, chosen
+raw t and residual, generated dimensions and exact TRAIN donor identities.
+No assumption of monotonicity over the full interval is allowed.
+
+Normalize the empirical raw TRAIN law using t'=min(1,c*t) so mean(t'^2)=.25.
+This is a fixed moment constraint, not a performance-tuned strength. The law
+is infeasible if fewer than25% of raw t values are strictly positive: STOP
+explicitly, retain raw-law/source metadata, generate no candidate, and report
+the infeasibility. Do not substitute an additive shift or all-zero fallback.
+At equality, choose the smallest c saturating every positive value. Otherwise
+solve the unique capped quadratic moment by a deterministic sorted active
+set: candidate saturated count k, c=sqrt((n*.25-k)/sum_unsaturated(t^2)),
+and require saturation/unsaturation inequalities. No parameter search/grid.
+Retain c, raw/normalized tables, float64 and actual float32 second moments;
+require abs(moment-.25)<1e-12 in float64 and<1e-6 after float32 generation cast.
+
+Conservation claim is limited: mean(t'^2)=.25 preserves expected WITHIN-BAG
+covariance of decoder composition mu/L about its across-cell mean before
+recalibration, conditional on fixed latent/cell draws. It does not conserve
+full mean-count covariance with varying libraries (cross terms depend on
+E[t]), NB count variance, generated logCP moments or final PC-summary spread.
+This is a scalar simulation random effect, not an identified learned donor/
+style decomposition or validated patient feature vector.
+
+Reload fresh bare weights. Install the amplitude mean wrapper INSIDE the
+outer ZC calibration wrapper, then run the unchanged three-step pooled
+TRAIN-only joint bias/nonzero calibration. Every expected/sampled calibration
+pass and final generation uses the SAME private target/bag assignments to
+the fitted empirical t' table, uniform with replacement, independent of all
+five original model streams. All targets use the same TRAIN law.
+
+Fresh streams/references and mandatory fidelity
+----------------------------------------------
+Model streams: SeedSequence([20261114,5,fold,dev_index,rep]).spawn(5) in frozen
+global/latent/cell/count/library order. Empirical reference RNG:
+ stable_seed('amplitude-challenge',20261114,panel,fold,target,rep).
+Private amplitude assignment RNG:
+ stable_seed('donor-composition-amplitude',20261114,'hvg2000',fold,target,rep).
+Rep0/1 use fitseed0/1. Fresh original32/current32/empirical32 references are
+required; no historical score substitutes. Computational SE is not biological.
+
+Before any amplitude candidate output, fixed f0/r0 constant t=.5 must run a
+FULL fresh joint calibration and generation, exactly matching fresh current32
+canonical10 array fingerprints AND complete delta/s coefficient vectors.
+The literal constant branch must call frozen CS.shrink_mu(mu,.5), preserving
+the original floating operation/RNG path. Hash/prune the control NPZ and
+retain proof. Synthetic loop identity and concavity/two-root/normalization/
+TRAIN-exclusion checks precede real generation. Failure aborts implementation,
+not a scientific result or a strength-tuning opportunity.
+
+Unchanged gates/resources/default rule
+-------------------------------------
+Exact unchanged first-challenge compare.verdict. Screen24jobs:4recipes x
+folds0-2 x reps0,1. SD AND combined held percentile10/90 proper scores improve
+>2paired computationalSE vs BOTH current/empirical and lower ALL3 fold means.
+Per-fit SD/combined |coverage-.8| has no>2SE regression vs either. Gene
+meanlog/detection/within-baglogvar, PC/cell energy and per-fit abs(logPCspread)
+have no>2SE worsening vs current. Total profile mean cost+2SE<=.005*ORIGINAL
+reference mean RMSE and everyfold relative profile cost<=.005.
+Only complete screen pass triggers48 confirmation jobs folds3-8/reps0,1.
+Same guards, >=5/6folds and BOTH repeat means lower on both proper scores
+versus both comparators. No optional rank/control rescue. Queue never promotes.
+
+Preserve all old195 execution sources, fits, evidence and default. Hold all
+predecessor/diagnostic queue leases. CPU only, one serial ML worker,3 compute
+threads and affinity<=3cores, no GPU lease/push. All seven task outputs below
+3GB logical bytes; hash/prune full generated NPZs, retain receipts. Sealed20
+and external counts untouched. Routine monitoring quiet10-15minutes.
+Default requires full conditional provenance/control proof, independent review,
+actual public CLI parity, appropriate checks/docs and local commit. Reused37
+development donors do not establish population calibration or biological axes.
