@@ -55,3 +55,20 @@ No delivery/receipt/admission claimed, no new/replacement/alternate task or
 scheduler created. Retain packet+hold per Ember's explicit unavailable-route
 fallback. Sameconversation reply reportedactualfailure; detailed local record
 scheduler_route_attempt_20261114.json. No GPU/reservation/policy/job change.
+
+GOAL STATUS NOW BLOCKED (2026-11-14, actual update_goal result).
+Same required-scheduler dependency recurred across three goal-work turns:
+initial hold/planning handoff, exact-route unavailable handoff, current
+revalidation. Duplicate acknowledged wake was skipped, not counted.
+Previous goal-work turn: progress (concrete route failure evidence/retained
+handoff). Current turn: no progress, not a verified wait. Exact scheduler
+read_thread again returned threadnotloaded(-32600); Babel inbox empty.
+No live process/toolhandle supports waiting for model progress. Independent
+CPU verification, code/source review, tests and planning packet are finished;
+required GPU smoke/fulltraining/heldqualitycomparison cannot proceed under
+Ember's specific hold, no weeklongCPUfallback or alternate scheduler allowed.
+External change needed: existing authorized scheduler route restored, followed
+by planning response and actual guarded execution admission. No owner action
+requested, no default/metric success claimed. Goal objective remains intact.
+Do not repeatedly poll or restart. Resume only on genuine authorized routing/
+admission change; after a blocked goal is resumed, begin a fresh blocked audit.
