@@ -67,7 +67,9 @@ All fresh training starts from scratch, native ParticleGAN0.9.7/t005:
 rates/penalty/prior/policy order, native EMAoff. Same original eleven
 training streams by fold/seed, CPU for BOTH candidate and ordinary pbulk
 control. Candidate differs only in the declared observation and derived cap.
-Named candidate arm covmom,pbulk,t.kappa@VALUE. No other architecture options.
+Named candidate arm d.covmom,pbulk,t.kappa@0.679975. The d. prefix records
+the observation departure in the unchanged trainer config machinery.
+No other architecture options.
 Keep the six late states15k..19k/final and unchanged stagehalf readout;
 apply the same cellshape.5 and fresh TRAIN-only joint bias/nonzero calibration
 to both. No calibration coefficient reused from another fit.
@@ -101,7 +103,9 @@ held target libraries/metadata are depth matching and scoring inputs only.
 No fit choices depend on held scores or partial screen results.
 
 CPU only, one serial worker, Torch/BLAS3compute threads/affinity<=3cores;
-no GPU/push. Hold all prior queue leases. Combined nine-task logical output
+no GPU/push. Each compute worker holds all prior queue leases; the serial
+orchestrator has its own exclusive orchestration lock and starts one worker
+at a time. Combined nine-task logical output
 bytes <3GB, check before/after every phase; stop with explicit cap failure
 before starting a fit if headroom<150MB. Hash/prune temporary generated
 archives only after score/receipt/control verification. Retain candidate
@@ -127,6 +131,20 @@ Exercise actual candidate CPU updates/resume on TRAIN-only fold0 in a bounded
 at-most300-update smoke with the four-file audit guard before full fits.
 Smoke is finite/gradient/resume/cost verification, not eligibility or tuning.
 Hash/prune smoke weights, retain proof; no screen scores from the smoke.
+Verification itself has a separately committed213-source manifest (all207
+prior pins plus its six new dependencies), source-only independent clearance
+and synthetic checks before its first real TRAIN update. The native candidate
+smoke advances200 steps and repeats100 after step100 restore:300 actual
+update calls, unchanged20k recipe horizon. The full screen additionally needs
+its complete execution-source manifest, verified smoke receipt and separate
+source-only review/prelaunch clearance; smoke clearance cannot launch20k fits.
+Checkpoint peak measurement includes temporary and old files before atomic
+rename, not only post-phase retained size. Delegate native Torch serialization
+to an in-memory buffer, preflight its exact byte length against all retained
+task bytes, then write those exact bytes before the unchanged native rename.
+This preserves checkpoint contents/updates, with Torch's file-like archive
+root naming; archive byte hashes need not equal path-based native saves.
+Record maximum serialized checkpoint length and actual temporary-file peak.
 
 Before first candidate inference, use the completed fresh ordinary CPUcontrol
 fold0/seed0 for a full real unmodified G.generate_fit TRAIN joint-calibration
