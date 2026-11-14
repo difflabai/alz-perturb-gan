@@ -1,0 +1,267 @@
+{
+  "status": "interval_targets_beaten_but_fixed_distribution_guards_failed",
+  "recorded_utc": "2026-11-14T06:27:01.002195+00:00",
+  "runtime_sha256": {
+    "status.json": "4eedb435ebcdeeb457f6279659d99a54f0ce38f1a3b2a0c5d8fa8d7a6bf93e08",
+    "artifact_audit.json": "b3193367222f8f732b55f7c06058b977e4d77c2477939f4f9b8bd00049a7a62d",
+    "screen_comparison.json": "656774345a68429a06173a099feca62f3e0fe022d688ac31c15ac2a21a779a01"
+  },
+  "immutable_snapshots": {
+    "analysis/hybrid_challenge_20261114/artifact_audit_complete_20261114.json": "b3193367222f8f732b55f7c06058b977e4d77c2477939f4f9b8bd00049a7a62d",
+    "analysis/hybrid_challenge_20261114/screen_comparison_complete_20261114.json": "656774345a68429a06173a099feca62f3e0fe022d688ac31c15ac2a21a779a01"
+  },
+  "prelaunch_manifest_sha256": "e4098a9d08d63a451c08709f4e5a9317b8441e618a1bcfd60325e3c517dbdf24",
+  "auditor_sha256": "3b58a6001440b03cda3ccd062084e5807845a106a1ff494e0d1ffd84fd09e041",
+  "failed_gates": [
+    "current32/logvar_rmse_gene/nonregression",
+    "current32/abs_log_spread/nonregression"
+  ],
+  "tests_passed_prelaunch": 84,
+  "queue_exit_code": 0,
+  "verified_artifacts": 24,
+  "required_artifacts": 24,
+  "confirmation": "not_triggered_screen_failed",
+  "default_changed": false,
+  "logical_task_bytes": 1479838623,
+  "means": {
+    "candidate": {
+      "historical": {
+        "pb_rmse": 0.47936140249977127,
+        "meanlog_rmse_gene": 0.07562333096835362,
+        "nonzero_rmse_gene": 0.016169967900370348,
+        "logvar_rmse_gene": 0.17949991511818406,
+        "pc_energy_rep": 1.8081433534589157,
+        "cell_energy_rep": 0.7211827643308157,
+        "pc_spread_rep": 1.2367361145752709
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.7434650462962963,
+            "below": 0.13034699074074074,
+            "above": 0.12618796296296297,
+            "width": 0.8180134555149736,
+            "interval_score": 1.3510932919421674
+          },
+          "sd": {
+            "coverage": 0.6991560185185185,
+            "below": 0.01616527777777778,
+            "above": 0.2846787037037037,
+            "width": 0.4006647829759717,
+            "interval_score": 0.7998489477821551
+          },
+          "combined": {
+            "coverage": 0.7213105324074074,
+            "below": 0.07325613425925925,
+            "above": 0.20543333333333333,
+            "width": 0.6093391192454727,
+            "interval_score": 1.0754711198621614
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.8290438034188035,
+            "below": 0.08738782051282051,
+            "above": 0.08356837606837607,
+            "width": 0.8237935411997965,
+            "interval_score": 1.1141643538228698
+          },
+          "sd": {
+            "coverage": 0.811679131054131,
+            "below": 0.1450721153846154,
+            "above": 0.04324875356125356,
+            "width": 0.40224131246021605,
+            "interval_score": 0.5376481367304841
+          },
+          "combined": {
+            "coverage": 0.8203614672364672,
+            "below": 0.11622996794871795,
+            "above": 0.06340856481481481,
+            "width": 0.6130174268300063,
+            "interval_score": 0.825906245276677
+          }
+        }
+      }
+    },
+    "current32": {
+      "historical": {
+        "pb_rmse": 0.48443594224469777,
+        "meanlog_rmse_gene": 0.07555376116438914,
+        "nonzero_rmse_gene": 0.01583987902257572,
+        "logvar_rmse_gene": 0.17470120948666704,
+        "pc_energy_rep": 1.9064808513191192,
+        "cell_energy_rep": 0.7355514062525502,
+        "pc_spread_rep": 1.0549556093068564
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.7168629629629629,
+            "below": 0.14585578703703705,
+            "above": 0.13728125,
+            "width": 0.740309301923094,
+            "interval_score": 1.362744517527003
+          },
+          "sd": {
+            "coverage": 0.31812106481481484,
+            "below": 0.01005949074074074,
+            "above": 0.6718194444444444,
+            "width": 0.23601688127778078,
+            "interval_score": 1.4218157485843512
+          },
+          "combined": {
+            "coverage": 0.5174920138888889,
+            "below": 0.07795763888888889,
+            "above": 0.4045503472222222,
+            "width": 0.4881630916004373,
+            "interval_score": 1.392280133055677
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.7930956196581197,
+            "below": 0.107053952991453,
+            "above": 0.09985042735042735,
+            "width": 0.7509607311440275,
+            "interval_score": 1.1532196103206367
+          },
+          "sd": {
+            "coverage": 0.6196456552706553,
+            "below": 0.09865384615384615,
+            "above": 0.28170049857549856,
+            "width": 0.23918176760318685,
+            "interval_score": 0.7260042501233988
+          },
+          "combined": {
+            "coverage": 0.7063706374643874,
+            "below": 0.10285389957264957,
+            "above": 0.19077546296296297,
+            "width": 0.49507124937360714,
+            "interval_score": 0.9396119302220178
+          }
+        }
+      }
+    },
+    "empirical32": {
+      "historical": {
+        "pb_rmse": 0.47310485098134447,
+        "meanlog_rmse_gene": 0.07941598271293374,
+        "nonzero_rmse_gene": 0.017183945529307677,
+        "logvar_rmse_gene": 0.19127132576301092,
+        "pc_energy_rep": 1.8669098883388402,
+        "cell_energy_rep": 0.74954822867094,
+        "pc_spread_rep": 1.3112375898770243
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.7468254629629629,
+            "below": 0.12615162037037037,
+            "above": 0.12702291666666665,
+            "width": 0.8740026575888079,
+            "interval_score": 1.4147030792416688
+          },
+          "sd": {
+            "coverage": 0.7489541666666667,
+            "below": 0.08001759259259258,
+            "above": 0.17102824074074074,
+            "width": 0.4219828110419588,
+            "interval_score": 0.6832673957057318
+          },
+          "combined": {
+            "coverage": 0.7478898148148148,
+            "below": 0.10308460648148149,
+            "above": 0.1490255787037037,
+            "width": 0.6479927343153834,
+            "interval_score": 1.0489852374737005
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.8463942307692308,
+            "below": 0.07553062678062678,
+            "above": 0.07807514245014245,
+            "width": 0.8715002963780685,
+            "interval_score": 1.0929293269916298
+          },
+          "sd": {
+            "coverage": 0.6601602564102564,
+            "below": 0.3245219017094017,
+            "above": 0.015317841880341881,
+            "width": 0.4187143670803841,
+            "interval_score": 0.6421086492565108
+          },
+          "combined": {
+            "coverage": 0.7532772435897436,
+            "below": 0.20002626424501424,
+            "above": 0.046696492165242166,
+            "width": 0.6451073317292263,
+            "interval_score": 0.8675189881240704
+          }
+        }
+      }
+    },
+    "original32": {
+      "historical": {
+        "pb_rmse": 0.4841597894545896,
+        "meanlog_rmse_gene": 0.09475361255404702,
+        "nonzero_rmse_gene": 0.020753924234205735,
+        "logvar_rmse_gene": 0.18553872212935626,
+        "pc_energy_rep": 2.0251076966620243,
+        "cell_energy_rep": 0.8127272500572363,
+        "pc_spread_rep": 1.1977943397569286
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.7374451388888889,
+            "below": 0.13052199074074075,
+            "above": 0.13203287037037037,
+            "width": 0.781124350499203,
+            "interval_score": 1.3546549684326774
+          },
+          "sd": {
+            "coverage": 0.7760337962962963,
+            "below": 0.08822430555555555,
+            "above": 0.13574189814814816,
+            "width": 0.41017506075808563,
+            "interval_score": 0.6268904845643544
+          },
+          "combined": {
+            "coverage": 0.7567394675925926,
+            "below": 0.10937314814814815,
+            "above": 0.13388738425925925,
+            "width": 0.5956497056286443,
+            "interval_score": 0.9907727264985159
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.8076469017094017,
+            "below": 0.09628828347578347,
+            "above": 0.09606481481481481,
+            "width": 0.7917207490211616,
+            "interval_score": 1.165857936846508
+          },
+          "sd": {
+            "coverage": 0.5612428774928775,
+            "below": 0.39872150997150996,
+            "above": 0.04003561253561254,
+            "width": 0.413430692997475,
+            "interval_score": 0.8150118926369804
+          },
+          "combined": {
+            "coverage": 0.6844448896011396,
+            "below": 0.24750489672364673,
+            "above": 0.06805021367521367,
+            "width": 0.6025757210093183,
+            "interval_score": 0.9904349147417443
+          }
+        }
+      }
+    }
+  },
+  "broader_owner_goal": "active; superiority plus all protected metrics and confirmation still required",
+  "interpretation": "Fixed50/50 hybrid supports the complementary-tail mechanism, but cannot be promoted. No postscore mixture-weight rescue.",
+  "scope": "Same37 development donors; no biological calibration or patient-vector validity claim"
+}
