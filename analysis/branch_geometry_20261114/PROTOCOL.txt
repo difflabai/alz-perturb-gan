@@ -1,0 +1,58 @@
+Bounded TRAIN-only branch geometry diagnostic, before any fifth recipe
+====================================================================
+All four fixed candidate studies have completed and failed their complete
+gates. The fourth paired candidate beat empirical SD/combined proper scores
+22%/8% but failed meanlog/detection/within-bag-logvar/PC-summary-spread guards.
+No fifth candidate, new strength, pairing size, architecture rank or default
+is selected. Preserve all192 execution sources and immutable old evidence.
+
+Source inspection establishes that pc_spread_rep is variance of100D bag
+summaries (50PCmeans+50within-bagSDs), not pooled cellular covariance. The
+equal-weight mixture numerator includes .25||mu_model-mu_empirical||^2.
+This diagnostic measures that decomposition before another mechanism.
+
+Fixed fold0/fitseed0 only, HVG2000/50PCs, CPU serial3 compute threads and
+affinity3cores, no GPU/push. Read TRAIN count/metadata and space payloads
+only. No heldout payload opens (even hashes), no sealed/external counts or
+heldout target covariates/libraries. Python file-audit guard must enforce
+the heldout directory restriction throughout actual data/model replay.
+No interval scoring, heldout scoring, coefficient fitting, or candidate grid.
+
+Replay current32 calibration from fourth-study f0/r0 receipt with frozen
+W.replay at M16 but explicitly restrict G.targets to ZC.train_targets.
+Restore hook afterward. Use same frozen namespace4 streams and original
+M16 six-state/stagehalf allocation, actual TRAIN targets only. This is a
+TRAIN-restricted diagnostic replay, not independent rescoring of pruned
+fourth-study component archives. Retain calibration/source/fit links and
+new TRAIN array fingerprints; do not claim old full-array hash identity.
+
+From the same TRAIN-only RealFold, generate fixed M16 empirical components
+with parts1 and parts2 on fourth-study component seeds. Their source donor
+cycles and target library draws must agree. Form fixed16+16 mixtures with
+the model component, without any summary transformation or fitting.
+
+For model, unpaired empirical, paired empirical and both mixtures:
+  - retain compact100D bag summaries and observed TRAIN bag summaries from
+    the frozen repeated64-cell subsample rule;
+  - split population variance trace into50mean and50SD coordinate blocks;
+  - decompose branch variation into within-target plus between-target terms;
+  - decompose equal mixture into .5model+.5empirical within-branch traces
+    plus component-center separation; prove exact algebraic identity;
+  - record per-target component-center separation as well;
+  - report TRAIN spread under original ddof1 numerator/denominator and the
+    frozen real-repeat convention, separately from population decomposition.
+Record signed gene meanlog/detection/within-bag-logvariance error vectors
+for every branch/mixture. Use frozen evaluator convention: mean over M of
+max(0,(sq_log-mean_log^2)*256/255), compared to real TRAIN ddof1 variances.
+Retain signed errors and RMSE/bias/quartile summaries, not only headline
+norms. Gene-logvariance uses within-bag moments; component center separation
+cannot directly explain that guard.
+
+Hash/prune the full temporary model archive; retain compact diagnostic NPZ
+and JSON moments/receipt with hashes. Hold all predecessor queue leases.
+All architecture/empirical/hybrid/dispersion/paired/diagnostic outputs together
+stay below3GB logical bytes. Commit protocol, implementation, tests, source
+pins and predecessor links before replay. A failure stays a diagnostic or
+implementation failure, never numerical superiority/default eligibility.
+The owner goal remains active; no user confirmation needed for this bounded
+investigation. Decide any later recipe only after reading these results.
