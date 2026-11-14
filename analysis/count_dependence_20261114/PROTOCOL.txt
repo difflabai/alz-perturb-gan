@@ -1,0 +1,149 @@
+Bounded TRAIN-only count-dependence response diagnostic
+=====================================================
+The owner goal remains active. Five fixed studies failed their full gates;
+the fifth is closed at4931e3b with24/24 artifacts audited and independently
+reviewed. Preserve all202 execution sources, fits, defaults and old evidence.
+No sixth scored candidate, coupling/module/rank search or patient encoder is
+declared. This protocol precedes any new sampler, diagnostic code or data.
+
+Choice made with application_default_review
+-----------------------------------------
+The frozen CountGenerator.rates samples independent per-gene Gamma rates
+conditional on decoder mu/theta. Failed split/hier decoders changed MU/state
+paths while retaining that head. Test joint count dependence separately from
+the scalar MU/precision laws already rejected. A high-dimensional donor
+residual transport from24-25 donors is not the next probe.
+
+For a fixed cell and gene g in a fixed group m, consider
+ U_g = H_m(a*theta_g) + I_g,
+ H_m(t)-H_m(s) ~ Gamma(t-s,rate1), independent increments,
+ I_g ~ Gamma((1-a)*theta_g,rate1), independent of H and other I,
+ rate_g = mu_g/theta_g * U_g; count_g|rate_g ~ Poisson(rate_g).
+Each H_m is fresh and independent for EVERY CELL, not shared across cells
+or bags. Groups are independent. At a=.5, U_g has Gamma(theta_g,rate1)
+marginal, and within-group off-diagonal conditional count covariance is
+ a*mu_i*mu_j*min(theta_i,theta_j)/(theta_i*theta_j).
+The conditional raw-count covariance diagonal is unchanged. This adds only
+nonnegative conditional raw-count dependence; it cannot remove MU covariance
+or represent arbitrary signed dependence. Exact statements are mathematical
+distribution statements, not byte identity or exact finite-precision laws.
+
+This is our proposed model diagnostic, not a published validated patient
+model. Gamma independent-increment definition: Regazzini/Lijoi/Pruenster2003,
+https://didattica.unibocconi.it/mypage/dwload.php?nomefile=AnnStatist200320170210164836.pdf
+Joint expression and Poisson measurement can be distinguished in coexpression
+models; sequencing depth matters (Su etal2023, CS-CORE):
+https://www.nature.com/articles/s41467-023-40503-7
+These sources motivate/check the construction, not its ALZ performance.
+
+Fixed scope, streams, groups and control
+--------------------------------------
+Fold0/fitseed0 only, TRAIN25 donors, HVG2000, M16/K256/64 cells per projected
+bag, same six-state/stagehalf plan. Replay the fifth-study fresh current32
+rounded delta/s coefficients and existing alpha=.5 MU contraction. No refit.
+Use fifth-study namespace5 streams with replicate0, preserving all five
+model stream seeds/order. Explicitly restrict targets to ZC.train_targets.
+No heldout metadata/count/library payload opens, even hashes. No sealed or
+external donors. No interval/heldout scoring, coefficient fitting or tuning.
+
+Define100 fixed gene groups from frozen space['W'] eigenvector coefficients
+in gene-standardized expression: PC_g=argmax_k abs(W[g,k]) over50 columns,
+lowest-index exact tie; group_g=2*PC_g+int(W[g,PC_g]<0). Retain empty groups
+and exact gene order. This is an engineering grouping, not biological modules.
+Do not change groups, rank, coupling or signs after seeing the diagnostic.
+
+Only two actual count branches: current a=0 and one fixed response a=.5.
+Before the response, the new count-summary loop and literal a=0 wrapper
+must reproduce ALL10 canonical TRAIN M16 array fingerprints from ordinary
+frozen W.replay, with identical complete rounded calibration vectors.
+The literal zero branch calls original bound model.rates directly, with no
+extra random draws. Synthetic full-loop identity precedes this real control.
+Record the zero proof and hash/prune every temporary full generated archive.
+Failure is implementation failure; stop and inspect, never tune around it.
+
+Gamma numerical requirements
+----------------------------
+For a=.5 sort exact float64 a*theta within each group. Draw every strictly
+positive time increment in float64 and accumulate the independent increments
+within that group. Exact tied times have deterministic zero increments.
+Never floor, omit or merge a strictly positive shape/time increment. Add the
+independent float64 Gamma((1-a)*theta,1), scale by mu/theta, then cast rates
+to the original mean dtype before the frozen explicit count-stream Poisson.
+Validate positive finite theta, nonnegative finite mu/rates/counts throughout.
+
+Torch Gamma sampling clamps numerical underflow draws to dtype.tiny, including
+in the original head. Retain those sampled values and explicitly count/report
+tiny hits, minimum positive shapes/times/samples and any final-cast underflow.
+For each affected output bound the extra rate mass by
+ (group_size+1)*float64.tiny*mu/theta; require max bound<1e-12.
+Do not call the resulting machine marginals exact. Before any data, synthetic
+checks must cover ties/tiny increments, nonfinite rejection, Gamma marginal
+moments and covariance at moderate shapes, and tiny-hit frequencies against
+the analytic Gamma CDF mass at float64.tiny. Any material numerical failure
+aborts this diagnostic; no shape-floor rescue or kernel/precision search.
+
+Measurements fixed before data
+------------------------------
+Use frozen TRAIN PCA projection W/pc_sd and the already-fixed random50 basis
+from interval_architecture_audit.projection_control: numpy QR of the normal
+matrix from default_rng(20261113), no expression-dependent direction choice;
+normalize each random coordinate by its full TRAIN-cell population SD,
+floored at1e-6 as in that old control. Standardize genes with frozen mean/sd.
+
+Split each TRAIN donor's cell indices into two fixed disjoint halves using
+stable_seed('count-dependence-real-halves',20261114,donor). Each half must
+contain>=64 cells or stop explicitly. Within each half form16 independent
+64-cell draws without replacement using private stable_seed(
+ 'count-dependence-real-bag',20261114,donor,half,bag). Pools are disjoint;
+draws within a half may overlap. Reused TRAIN PCA and donors mean these halves
+are sampling-stability controls, not independent donor validation.
+Model comparisons use the first64 generated cells of each of16 bags.
+
+For each donor, branch, half and projection retain average64-cell within-bag
+population covariance (ddof0), PC SD centers (mean of per-bag population SD),
+and the complete signed covariance/SD gaps. Give donors equal weight.
+Report covariance squared-Frobenius error averaged over donors, SD-center
+MSE averaged over donors/directions, response/gap inner products/cosines,
+per-donor and per-direction signs, and aggregate matrices separately.
+No biological-significance or population-coverage claim follows.
+
+Also retain raw-count covariance in the same100 fixed linear gene projections
+(W/pc_sd and random/scale, both divided by gene sd; no log or total scaling),
+and raw panel-total means/variances/zero-total rates on matching64 cells.
+Retain changes in TRAIN gene meanlog, detection and within-bag logvariance
+using frozen evaluator definitions, plus raw marginal mean/variance checks.
+Univariate conditional NB conservation does NOT conserve library totals,
+normalized logCP marginals, gene metrics or final PC/bag-summary covariance.
+
+Analytic response is diagnostic only: retain the zero-diagonal raw conditional
+Gamma off-diagonal kernel, and its projection at exactly one fixed conditional
+point (first cell) of each of16bags x25targets=400 points. Use fully replayed
+mu/theta and the FULL derivative of standardize_counts/logCP, including the
+random-total denominator derivative, at mean counts. Label this a delta-method
+approximation; raw projected and nonlinear actual-count responses are separate.
+No unobserved real conditional MU residual is identified by real-minus-model
+covariance. Actual sampled count response determines normalized direction.
+
+Decision, preservation and resources
+-----------------------------------
+This mechanism stops if a=.5 fails to strictly reduce BOTH donor-averaged
+covariance error AND SD-center MSE in BOTH fixed real halves in BOTH PCA and
+fixed-random projections. Stop also if its zero-total-cell rate exceeds the
+baseline. Report all gates/signs/marginal/total changes, including failures.
+Analytic/raw alignment never overrides a worsening actual normalized joint
+gap. Analytic-versus-actual disagreement is retained as approximation failure,
+not repaired by changing groups, a or rank. No second response or rescue.
+Even a positive TRAIN response only justifies a separately committed scored-
+candidate protocol with fresh references and unchanged original held gates.
+It neither predicts held success nor validates patient feature vectors.
+
+File-audit guard must permit exactly fold0 manifest/space/TRAIN metadata/counts
+under the cache root and prohibit any other count payload. Hash TRAIN inputs
+against frozen anchors without opening heldout payloads. Preserve all202 old
+execution pins, predecessor completion/control/default links and original fits.
+Commit this protocol, then implementation/tests/review/source extension before
+model/data execution. Hold all predecessor and diagnostic queue leases.
+CPU only, one serial worker,3 compute threads and affinity<=3 cores. No GPU
+lease/push. Combined logical outputs of all eight task names stay below3GB.
+Hash/prune full archives; retain compact moments and independently auditable
+metadata/control proof. Routine monitoring quiet10-15minutes. Default unchanged.
