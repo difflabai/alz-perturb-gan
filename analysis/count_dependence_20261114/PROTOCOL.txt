@@ -50,6 +50,7 @@ Define100 fixed gene groups from frozen space['W'] eigenvector coefficients
 in gene-standardized expression: PC_g=argmax_k abs(W[g,k]) over50 columns,
 lowest-index exact tie; group_g=2*PC_g+int(W[g,PC_g]<0). Retain empty groups
 and exact gene order. This is an engineering grouping, not biological modules.
+An all-zero loading row deterministically enters PC0/nonnegative group0.
 Do not change groups, rank, coupling or signs after seeing the diagnostic.
 
 Only two actual count branches: current a=0 and one fixed response a=.5.
@@ -73,9 +74,11 @@ Validate positive finite theta, nonnegative finite mu/rates/counts throughout.
 
 Torch Gamma sampling clamps numerical underflow draws to dtype.tiny, including
 in the original head. Retain those sampled values and explicitly count/report
-tiny hits, minimum positive shapes/times/samples and any final-cast underflow.
+tiny hits in BOTH shared increments and independent components, minimum
+positive shapes/times/samples and any final-cast underflow.
 For each affected output bound the extra rate mass by
- (group_size+1)*float64.tiny*mu/theta; require max bound<1e-12.
+ (group_size+1)*float64.tiny*mu/theta; retain maximum and summed rate-error
+bounds, requiring maximum<1e-12 and sum across the full diagnostic<1e-8.
 Do not call the resulting machine marginals exact. Before any data, synthetic
 checks must cover ties/tiny increments, nonfinite rejection, Gamma marginal
 moments and covariance at moderate shapes, and tiny-hit frequencies against
