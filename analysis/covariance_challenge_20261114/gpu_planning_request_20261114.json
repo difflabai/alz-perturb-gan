@@ -1,0 +1,48 @@
+{
+  "status": "planning_only_source_review_passed_pending_scheduler_route_and_response",
+  "request_ref": "alz-covariance-bounded-GPU-parity-timing-20261114",
+  "created_unix": 1794664158.7844138,
+  "request_to": "existing ALZ scheduler, via authenticated Ember until its route is provided",
+  "execution_or_reservation_requested": false,
+  "scope": "Bounded TRAIN-only GPU parity/resume/timing estimate; not the12fit screen",
+  "fixed_science": {
+    "protocol_sha256": "f8c73150424714941b0b77eb80fa9d52756837188a3cafbb318068a150c74aa8",
+    "resource_amendment_sha256": "6c2f138411200f36641d3b447ffecb9aedd4af628f534f2b4d4c94f8c64c83f1",
+    "candidate": "d.covmom,pbulk,t.kappa@0.679975",
+    "candidate_update_calls": 300,
+    "ordinary_update_calls": 10,
+    "candidate_fresh_steps": 200,
+    "candidate_repeat_steps": 100,
+    "native_recipe_horizon": 20000,
+    "held_payloads_allowed": false,
+    "default_change_allowed": false
+  },
+  "proposed_hard_caps": {
+    "GPU": "GPU-cb4ce47d-d968-bffd-5646-e830a9fa1c69",
+    "physical_index": 1,
+    "concurrent_GPU_workers": 1,
+    "Torch_memory_fraction": 0.04,
+    "CPU_compute_threads": 3,
+    "CPU_affinity_cores": 3,
+    "all_nine_task_output_bytes": 3000000000,
+    "owned_job_wall_seconds_including_reference_and_cleanup": 1200,
+    "GPU_hours": 0.3333333333333333
+  },
+  "timing_evidence": {
+    "CPU_candidate_300calls_seconds": 899.3615205140086,
+    "historical_GPU_ordinary20k_receipt_path": "/ml2/alz/runs/improve_20261109/fits_r3/pbulk/hvg2000/fold0/seed0/fit_receipt.json",
+    "historical_GPU_ordinary20k_receipt_sha256": "02abebba48eefa8de1c0d6e6436b2d70e1e18c3cec6103528ec31c4b1f357cf8",
+    "historical_GPU_ordinary_seconds_per_update": 0.41149034175359994,
+    "caveat": "Historical device/numerical/core-thread route differs. New covariance GPU timing unmeasured; no throughput claim. Provisional planning5-15minutes with20minute hardmaximum."
+  },
+  "evidence_sha256": {
+    "gpu_planning_budget_snapshot_20261114.json": "f24170fa5d0ca23f5d28f1479e11f78923ff491b3d199e260d8990cded193451",
+    "gpu_planning_resource_snapshot_20261114.json": "c308e9454aee8e72d5b497822741aa2aa9b8eae7e8b4e97427fcc5cf5f1a24a6",
+    "cpu_training_verification_evidence_20261114.json": "882ae64829601f6df245255d3ef5ea57955d40f0611de0ac7708b69331e9b39f",
+    "source_review_before_scheduler_20261114.json": "b8770687e10657a7f098d0cb81e9207f057bf5fce9d3fb00a3bf132982bb4dcd"
+  },
+  "current_task_lease": null,
+  "required_scheduler_response": "Identify authoritative scheduling route/current lease policy, inspect budget and resource receipts, assess the bounded timing/parity plan. Do not reserve or launch in response to this planning request. Separate explicit execution admission required. No displaced jobs or CPU fallback.",
+  "execution_source_manifest_sha256": "fe731077c3426fc54a39f40e9bb43fc10e52c351d49098c4a8a9a059c9790c0a",
+  "execution_source_count": 222
+}
