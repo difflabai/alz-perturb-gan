@@ -1,0 +1,272 @@
+{
+  "status": "paired_interval_gains_but_fixed_distribution_guards_failed",
+  "recorded_utc": "2026-11-14T09:40:43.544228+00:00",
+  "runtime_sha256": {
+    "status.json": "74f17584a15717e2e4351618436c9ba75277408bc0c64eff2adfd3c7268f829e",
+    "artifact_audit.json": "eabee92dea64898f9b592cbbaf08d5601a7831e055666b44055d673ea52696cd",
+    "screen_comparison.json": "9ada45570436a044256d7a2dd4534592d992e3846ddecb368899c5420b70b617"
+  },
+  "immutable_snapshots": {
+    "analysis/paired_challenge_20261114/artifact_audit_complete_20261114.json": "eabee92dea64898f9b592cbbaf08d5601a7831e055666b44055d673ea52696cd",
+    "analysis/paired_challenge_20261114/screen_comparison_complete_20261114.json": "9ada45570436a044256d7a2dd4534592d992e3846ddecb368899c5420b70b617"
+  },
+  "prelaunch_manifest_sha256": "f6feb5844ac3088677c9d7f4324a5630a35df20c98c2e3f75c7aafe887876255",
+  "auditor_sha256": "405cf1ea98de83938b145fc409c8660a23c93fc3f343c5a7eb29b7bfa02b1b30",
+  "single_cell_identity_sha256": "8e596f060ba6ddde63105be2d443685464fa56bc73224ec3dfa0752e202ba23b",
+  "failed_gates": [
+    "current32/meanlog_rmse_gene/nonregression",
+    "current32/nonzero_rmse_gene/nonregression",
+    "current32/logvar_rmse_gene/nonregression",
+    "current32/abs_log_spread/nonregression"
+  ],
+  "tests_passed_prelaunch": 51,
+  "queue_exit_code": 0,
+  "verified_artifacts": 24,
+  "required_artifacts": 24,
+  "confirmation": "not_triggered_screen_failed",
+  "default_changed": false,
+  "default_sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "logical_task_bytes": 1487908367,
+  "means": {
+    "candidate": {
+      "historical": {
+        "pb_rmse": 0.4741315838599529,
+        "meanlog_rmse_gene": 0.08049495762248529,
+        "nonzero_rmse_gene": 0.018115274153447873,
+        "logvar_rmse_gene": 0.18178656300472404,
+        "pc_energy_rep": 1.794674330574602,
+        "cell_energy_rep": 0.7120440086872186,
+        "pc_spread_rep": 1.271091741837437
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.7594877314814815,
+            "below": 0.12000462962962963,
+            "above": 0.1205076388888889,
+            "width": 0.8667793575011634,
+            "interval_score": 1.3571819673638448
+          },
+          "sd": {
+            "coverage": 0.5780268518518519,
+            "below": 0.015367361111111111,
+            "above": 0.40660578703703704,
+            "width": 0.3420498486932982,
+            "interval_score": 0.9371777248101407
+          },
+          "combined": {
+            "coverage": 0.6687572916666666,
+            "below": 0.06768599537037037,
+            "above": 0.26355671296296296,
+            "width": 0.6044146030972308,
+            "interval_score": 1.1471798460869929
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.8435861823361823,
+            "below": 0.07813034188034187,
+            "above": 0.07828347578347578,
+            "width": 0.8633778579401064,
+            "interval_score": 1.1188688778903215
+          },
+          "sd": {
+            "coverage": 0.7871545584045584,
+            "below": 0.13006232193732195,
+            "above": 0.08278311965811966,
+            "width": 0.34018912532885703,
+            "interval_score": 0.5026677305587067
+          },
+          "combined": {
+            "coverage": 0.8153703703703703,
+            "below": 0.10409633190883191,
+            "above": 0.08053329772079772,
+            "width": 0.6017834916344817,
+            "interval_score": 0.8107683042245141
+          }
+        }
+      }
+    },
+    "current32": {
+      "historical": {
+        "pb_rmse": 0.4852616183384024,
+        "meanlog_rmse_gene": 0.07505316953477714,
+        "nonzero_rmse_gene": 0.015761872837046192,
+        "logvar_rmse_gene": 0.17408599788507298,
+        "pc_energy_rep": 1.8998052278991142,
+        "cell_energy_rep": 0.7304256200765096,
+        "pc_spread_rep": 1.0509297148072387
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.7144506944444444,
+            "below": 0.14616782407407408,
+            "above": 0.13938148148148147,
+            "width": 0.7418476970190447,
+            "interval_score": 1.3723731244123882
+          },
+          "sd": {
+            "coverage": 0.3162333333333333,
+            "below": 0.010335416666666666,
+            "above": 0.67343125,
+            "width": 0.23576666280759961,
+            "interval_score": 1.4254968157878893
+          },
+          "combined": {
+            "coverage": 0.5153420138888889,
+            "below": 0.07825162037037037,
+            "above": 0.40640636574074074,
+            "width": 0.4888071799133221,
+            "interval_score": 1.3989349701001388
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.7918376068376068,
+            "below": 0.10580840455840455,
+            "above": 0.1023539886039886,
+            "width": 0.7500462243073944,
+            "interval_score": 1.1491802404101195
+          },
+          "sd": {
+            "coverage": 0.6172204415954415,
+            "below": 0.10210559116809118,
+            "above": 0.28067396723646726,
+            "width": 0.23664454193265624,
+            "interval_score": 0.7253607765628318
+          },
+          "combined": {
+            "coverage": 0.7045290242165242,
+            "below": 0.10395699786324787,
+            "above": 0.19151397792022792,
+            "width": 0.4933453831200253,
+            "interval_score": 0.9372705084864756
+          }
+        }
+      }
+    },
+    "empirical32": {
+      "historical": {
+        "pb_rmse": 0.47503404027849155,
+        "meanlog_rmse_gene": 0.07909061284762942,
+        "nonzero_rmse_gene": 0.017116310792997795,
+        "logvar_rmse_gene": 0.1903169239251438,
+        "pc_energy_rep": 1.868440960826127,
+        "cell_energy_rep": 0.749413120659774,
+        "pc_spread_rep": 1.3082325966979114
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.751244212962963,
+            "below": 0.1236400462962963,
+            "above": 0.12511574074074075,
+            "width": 0.8736558229077821,
+            "interval_score": 1.4107605438176545
+          },
+          "sd": {
+            "coverage": 0.7475722222222222,
+            "below": 0.08065324074074075,
+            "above": 0.17177453703703705,
+            "width": 0.42261824593720676,
+            "interval_score": 0.6835128760198435
+          },
+          "combined": {
+            "coverage": 0.7494082175925926,
+            "below": 0.10214664351851852,
+            "above": 0.14844513888888888,
+            "width": 0.6481370344224944,
+            "interval_score": 1.047136709918749
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.8461636396011396,
+            "below": 0.07663105413105413,
+            "above": 0.07720530626780626,
+            "width": 0.8719422719965065,
+            "interval_score": 1.1086594809284744
+          },
+          "sd": {
+            "coverage": 0.6605119301994302,
+            "below": 0.3224332264957265,
+            "above": 0.017054843304843303,
+            "width": 0.414679351939796,
+            "interval_score": 0.6468240750455143
+          },
+          "combined": {
+            "coverage": 0.7533377849002849,
+            "below": 0.1995321403133903,
+            "above": 0.047130074786324784,
+            "width": 0.6433108119681512,
+            "interval_score": 0.8777417779869944
+          }
+        }
+      }
+    },
+    "original32": {
+      "historical": {
+        "pb_rmse": 0.4850423318148832,
+        "meanlog_rmse_gene": 0.09365849331038713,
+        "nonzero_rmse_gene": 0.02051993573651187,
+        "logvar_rmse_gene": 0.18490180691448893,
+        "pc_energy_rep": 2.019523689144788,
+        "cell_energy_rep": 0.807086879142657,
+        "pc_spread_rep": 1.1976867355941485
+      },
+      "intervals": {
+        "train": {
+          "mean": {
+            "coverage": 0.7346201388888889,
+            "below": 0.13300324074074074,
+            "above": 0.13237662037037037,
+            "width": 0.7835925240724918,
+            "interval_score": 1.3695177396965788
+          },
+          "sd": {
+            "coverage": 0.7663097222222222,
+            "below": 0.09457453703703704,
+            "above": 0.13911574074074073,
+            "width": 0.40859550080343543,
+            "interval_score": 0.6366831861582525
+          },
+          "combined": {
+            "coverage": 0.7504649305555555,
+            "below": 0.11378888888888888,
+            "above": 0.13574618055555557,
+            "width": 0.5960940124379636,
+            "interval_score": 1.0031004629274156
+          }
+        },
+        "heldout": {
+          "mean": {
+            "coverage": 0.8098513176638177,
+            "below": 0.09384437321937322,
+            "above": 0.09630430911680912,
+            "width": 0.7927409732497366,
+            "interval_score": 1.1570489285337413
+          },
+          "sd": {
+            "coverage": 0.5605920584045584,
+            "below": 0.4009116809116809,
+            "above": 0.038496260683760684,
+            "width": 0.41117209482857786,
+            "interval_score": 0.8251327892486391
+          },
+          "combined": {
+            "coverage": 0.685221688034188,
+            "below": 0.24737802706552706,
+            "above": 0.0674002849002849,
+            "width": 0.6019565340391572,
+            "interval_score": 0.9910908588911902
+          }
+        }
+      }
+    }
+  },
+  "broader_owner_goal": "active; all protected metrics plus confirmation remain required",
+  "interpretation": "Fixed paired count kernel improved bag interval scores but failed4 marginal/spread guards. No pair-size or weight rescue.",
+  "scope": "Same37 development donors; artificial pooled cells, no native-cell or patient-vector validity claim",
+  "next_step": "Bounded TRAIN-only component/bag-summary geometry and signed gene-error diagnostic before choosing another recipe"
+}
