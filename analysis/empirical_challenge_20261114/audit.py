@@ -221,35 +221,40 @@ def audit_path(out):
     return W.ROOT/(stem+('' if out['complete'] else '_partial')+'.json')
 
 
+def ready_artifact(name,fold,replicate):
+    path=W.ROOT/name/f'fold{fold}/seed{replicate}.json'
+    row=P.read(path) if path.exists() else {}
+    return bool(row.get('challenge') and row.get('pruned_source_sha256') and
+                not (W.MODES/name/f'fold{fold}/seed{replicate}.npz').exists())
+
+
 def audit(screen_only=False):
     expected=sources()
     required=[(name,f,r) for name in (*PRIMARY,*CONTROLS) for f in range(3) for r in (0,1)]
     # Do not ask the numeric comparator to read an in-flight scorer's row.
-    ready=True
-    for name in PRIMARY:
-        for f in range(3):
-            for r in (0,1):
-                p=W.ROOT/name/f'fold{f}/seed{r}.json'
-                row=P.read(p) if p.exists() else {}
-                if (not row.get('challenge') or not row.get('pruned_source_sha256') or
-                        (W.MODES/name/f'fold{f}/seed{r}.npz').exists()):ready=False
+    primary={(name,f,r) for name in PRIMARY for f in range(3) for r in (0,1)}
+    accepted={key for key in primary if ready_artifact(*key)}
+    ready=accepted==primary
     arms=primary_eligibility() if ready else None
     screen_complete=ready and all(x['status']=='complete' for x in arms.values())
     eligible=[name for name in C.CANDIDATES if arms[name]['passes']] if screen_complete else []
     if screen_complete and eligible and not screen_only:
         required += [(name,f,r) for name in ('original32','current32','empirical32',*eligible)
                      for f in range(3,9) for r in (0,1)]
+    # Freeze acceptance before cache hashing. A row finishing later must wait
+    # for the next audit, including when it changes conditional eligibility.
+    accepted.update(key for key in required if key not in primary and ready_artifact(*key))
     if not screen_only:
         allowed=set(required)
         for p in W.ROOT.glob('*/fold*/seed*.json'):
             key=(p.parents[1].name,int(p.parent.name[4:]),int(p.stem[4:]))
             require(key in allowed,'unplanned result outside fixed conditional study')
-    represented={f for name,f,r in required if (W.ROOT/name/f'fold{f}/seed{r}.json').exists()}
+    represented={f for name,f,r in accepted}
     caches={f:cache_metadata(f,P.verify_cache(f)) for f in sorted(represented)}
     fits={(f,r):P.verify_fit(f,r) for f in represented for r in (0,1)}
     artifacts=[];missing=[]
     for name,f,r in required:
-        result=one(name,f,r,expected,caches.get(f),fits)
+        result=one(name,f,r,expected,caches.get(f),fits) if (name,f,r) in accepted else None
         if result is None:missing.append({'recipe':name,'fold':f,'replicate':r})
         else:artifacts.append(result)
     if not missing:mode_artifact_set(required,screen_only)

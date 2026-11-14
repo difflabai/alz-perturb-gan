@@ -156,3 +156,30 @@ def test_scope_and_completeness_have_distinct_proof_paths():
 def test_declared_snapshot_and_stage_allocation_examples(draws,blind,expected):
     # Manually tabulated contiguous runs + round-robin mix; train counts7,6,6,6.
     assert A.expected_allocation(draws,3,[i%4 for i in range(25)],blind)==expected
+
+
+def test_row_finishing_during_payload_hashing_cannot_skip_conditional_eligibility(tmp_path,monkeypatch):
+    root=tmp_path/'results';modes=tmp_path/'modes'
+    monkeypatch.setattr(W,'ROOT',root);monkeypatch.setattr(W,'MODES',modes)
+    monkeypatch.setattr(A,'sources',lambda:{})
+    missing=('radial32',2,1)
+    def create(key):
+        name,f,r=key;path=root/name/f'fold{f}/seed{r}.json'
+        path.parent.mkdir(parents=True,exist_ok=True)
+        path.write_text('{"challenge":{"recipe":"fixed"},"pruned_source_sha256":"hash"}')
+    for name in (*A.PRIMARY,*A.CONTROLS):
+        for f in range(3):
+            for r in (0,1):
+                if (name,f,r)!=missing:create((name,f,r))
+    def cache(fold):create(missing);return {}
+    monkeypatch.setattr(A.P,'verify_cache',cache)
+    monkeypatch.setattr(A.P,'verify_fit',lambda *a:{})
+    monkeypatch.setattr(A,'cache_metadata',lambda f,c:c)
+    monkeypatch.setattr(A,'one',lambda *args:{'recipe':args[0]})
+    def no_eligibility():raise AssertionError('initial screen was incomplete')
+    monkeypatch.setattr(A,'primary_eligibility',no_eligibility)
+    result=A.audit()
+    assert not result['complete'] and result['status']=='incomplete'
+    assert result['verified_artifacts']==47 and result['required_artifacts']==48
+    assert result['confirmation_disposition']=='eligibility_incomplete'
+    assert result['missing']==[{'recipe':'radial32','fold':2,'replicate':1}]
