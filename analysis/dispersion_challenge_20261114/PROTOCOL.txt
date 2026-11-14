@@ -1,0 +1,118 @@
+Independent donor dispersion probe, declared before candidate generation
+======================================================================
+Owner goal remains active: beat stage-blind empirical SD AND combined proper
+interval scores, preserve protected expression/distribution performance,
+confirm and verify before any default promotion. The fixed50/50 hybrid beat
+the interval targets but failed gene-logvar/spread guards. It stays failed,
+with no confirmation or weight-grid rescue. The default remains unchanged.
+
+This is the second mechanism recorded before hybrid outcomes in commit7a9eae9:
+independent TRAIN-fitted donor count-dispersion variation, not a learned Az+b
+head or an identified biological patient coordinate. Root and the existing
+application_default_review reviewer refined the procedure before any factor
+output: use bounded bisection and protect the inverse-precision noise moment,
+rather than an approximate Newton step with arithmetic log-factor centering.
+
+One fixed factor32 recipe
+-------------------------
+Use frozen pbulk20k weights, current within-bag contraction alpha=.5, six
+snapshot states and stagehalf allocation, M32/K256/64PC cells. Do not retrain.
+First regenerate original32/current32/empirical32 on fresh matched streams.
+
+Replay this fit's current32 rounded TRAIN-only bias and gene-dispersion
+coefficients on separately loaded original weights. For each TRAIN donor d:
+use its fixed M32/K256 model means and dispersions, generated with the same
+model streams/plans as the fresh current32 reference. Cache ONE donor's
+tensors in RAM, then discard them. Let target_d be its observed nonzero
+fraction averaged uniformly over its cells and the2000 genes. Let F_d(u)
+be the expected NB nonzero probability averaged over those generated bags,
+cells and genes under theta*exp(u), with means fixed.
+
+Fit u_d in[-1,1] with exactly12 bisection steps. Targets at/below F_d(-1)
+receive-1; targets at/above F_d(1) receive+1. Otherwise bisect, move the lower
+endpoint when F(mid)<target and upper otherwise, then use the final bracket
+midpoint. Record endpoints, clipping, residual and all TRAIN donor IDs.
+No held-out nonzero/profile/count statistic enters this fit.
+
+Normalize h_d = u_d + log(mean_j exp(-u_j)). Then h lies in[-2,2] and
+mean_j exp(-h_j)=1 (up to rounding). Uniform independent factor draws thus
+preserve the population NB excess-variance multiplier BEFORE pooled
+recalibration, conditional on a fixed mean/dispersion. This protects a noise
+moment; it does not guarantee final logvariance or PC-spread guards pass.
+Do not arithmetic-center logs, rescale strength, fit a latent regression,
+or search a bound/mixture/strength grid. The same uniformly weighted TRAIN
+factor law applies to all targets. Never assign a target its personally
+fitted factor or condition selection on held-out observations.
+
+Reload fresh original weights. Install theta*exp(h) INSIDE the outer pooled
+ZC wrapper and apply the fixed cell-shape contraction. Refit the existing
+unchanged three-step joint TRAIN-only bias/nonzero calibration. Precompute
+factor assignments by target identity and bag index on a separate private
+stream and reuse them across every calibration pass and final generation.
+Factor draws do not consume the original global/latent/cell/count/library
+streams. Sampled factors are empirical simulation parameters, potentially
+absorbing composition, depth and technical effects as well as biology.
+
+Execution contracts and controls
+-------------------------------
+Both the ZC expected-nonzero iterator and EVERY generation call used for
+bias updates, diagnostics and final counts must use the identical factor
+assignment mechanism. base_nb must include the factor during the solve.
+Preserve each generated bag's expected gene means/libraries before pooled
+calibration. All actual final metrics are rescored from generated cells;
+never transform interval endpoints or average component scores.
+
+A literal zero-factor path must reproduce frozen generation byte for byte
+on identical models/plans/streams in a synthetic check. Before any factor
+candidate output, a fixed fold0/rep0 real CPU control must also reproduce
+the FULL current32 joint-calibration recipe: exact common generated-array
+fingerprints and bias/dispersion coefficient vectors. Container metadata
+can differ; no allclose or rounded-coefficient comparison can substitute
+for equality of the actual generated arrays. Hash/prune control archives,
+retain the fidelity receipt. A fidelity failure aborts the implementation;
+it cannot count as a scientific result or permit postscore strength tuning.
+
+Model streams: SeedSequence([20261114,3,fold,development_index,replicate])
+spawned in original global/latent/cell/count/library order. Empirical32:
+stable_seed('dispersion-challenge',20261114,panel,fold,target,replicate).
+Factor assignments: stable_seed('donor-dispersion-factor',20261114,panel,
+fold,target,replicate), drawing uniformly with replacement from TRAIN h.
+These are separate namespaces. Two computational replicates per fold use
+fitseed0/empirical0 and fitseed1/empirical1; include both sources of random
+variation in paired computational SE. No biological significance claim.
+
+Unchanged prospective gates
+---------------------------
+Exactly24 screen jobs: original32,current32,empirical32,factor32 over
+folds0-2/reps0,1. The fidelity control is separately declared above.
+Use the original unchanged compare.verdict gates from the first empirical
+challenge: held percentile10/90 SD AND combined proper scores improve>2
+paired computational SE versus BOTH current32 and empirical32, lower in
+ALL3fold means. Per-fit SD/combined absolute coverage distance to.8 must
+not regress>2SE against either. No>2SE worsening versus current in gene
+meanlog/detection/logvar, PC energy, cell energy or abs(log PC spread).
+Profile cost+2SE <=.5% of ORIGINAL biascal reference mean RMSE, and every
+fold relative profile cost<=.5%. Preserve all train/held mean/SD/combined
+coverage/width/proper scores/tails, raw gene metrics and fold directions.
+
+Only a qualifying fixed factor32 triggers48 confirmation jobs on folds3-8,
+reps0,1. Same gates, >=5/6fold means lower and BOTH repeat means lower
+against each comparator. No optional rescue, parameter grid or weakened
+guard if detection improves while interval/distribution targets fail.
+
+Same37 development donors, frozen caches/fits; sealed/external untouched.
+Old source/evidence/fit files stay unchanged. Before launch require exact
+equality to all prior178 execution pins, verified immutable completed
+hybrid24-artifact failed-screen evidence, independent code review, relevant
+checks, a new committed launch manifest and no active earlier queue.
+Hold predecessor queue leases to prevent overlapping own ML workers.
+CPU only, one serial ML worker, <=3threads/process, no GPU lease or push.
+Combined architecture_pass + empirical_challenge_20261114 +
+hybrid_challenge_20261114 + dispersion_challenge_20261114 outputs under
+fits/smoke/results/logs remain below3GB logical bytes. Hash/prune archives,
+keep receipts. Monitor quietly at natural10-15minute checkpoints.
+
+Default promotion still requires complete conditional provenance audit,
+numeric confirmation, independent review, actual public CLI proof, checks,
+documentation and local commit. Success would support a synthetic patient
+distribution model, not establish latent-vector or biological validity.
