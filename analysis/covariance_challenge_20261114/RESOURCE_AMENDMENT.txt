@@ -1,0 +1,57 @@
+Prospective resource amendment, before GPU smoke, full fits or held scores
+========================================================================
+The CPU-only choice in PROTOCOL.txt is superseded for NEW TRAINING only.
+The scientific recipe, native update/loss/optimizer, seeds, folds, six late
+states, calibration, CPU inference, five comparators, all protected gates,
+screen/confirmation order and promotion conditions remain fixed.
+
+Reason: the completed CPU verification took899.36 seconds for300candidate
+calls, projecting roughly seven days for twelve20k fits. Existing owner
+authorization in PROTOCOL_ARCHITECTURE_PASS_20261113.txt permits new matched
+training ablations with one GPU worker, .04 memory fraction and <=3CPU
+threads. The latest owner instruction continues that work. Notify Ember;
+this amendment uses standing authorization, not a new coordinator approval.
+
+One serial worker on physical GPU1, CUDA_VISIBLE_DEVICES=1, native device
+cuda, per-process Torch memory fraction .04, CPU/BLAS3threads and <=3core
+affinity. Never interrupt another project. Keep all nine task leases and
+combined task outputs<3GB with exact temporary-checkpoint preflight. Both
+fresh ordinary control AND covmom candidate use this same training route.
+The comparator name becomes training_control32 (previous cpu_control32).
+Old frozen GPU fits remain the original32/current32 comparators. Automatic
+postfit generation remains deferred; all generation/calibration stays CPU.
+
+Before CUDA initialization set CUBLAS_WORKSPACE_CONFIG=:4096:8, deterministic
+Torch algorithms on, cuDNN benchmark off/deterministic on and CUDA/cuDNN
+TF32 off. These are fixed numerical-route choices for both fresh arms.
+Unsupported deterministic operations or failed bitwise resume stop launch;
+do not silently relax or tune numerical flags. Native twenty-thousand-step
+recipe, schedules, eleven explicit streams and policy calls stay unchanged.
+
+Frozen CPU213source proof is retained separately and never relabelled GPU.
+New adapter computes covmom references using the exact frozen CPU setup in
+a fresh CPU Context for the same TRAIN cache/flags, copies that arm's exact
+projection/center/basis/scale/reference hash/info, and transfers only forward
+tensors to CUDA. This avoids changing reference geometry with GPU arithmetic
+and makes later CPU inference recompute exactly the saved arm state. This
+does not promise GPU/CPU model weights or update arithmetic are equal.
+
+Freeze all222 execution sources (old213, four full-orchestration files, this
+amendment and resource_common.py/covmom_gpu.py/train_gpu.py/verify_gpu.py).
+Independent source-only review and synthetic checks precede GPU smoke.
+GPU smoke: ordinary pbulk fresh initialization and first5nativeupdates in
+separate processes without/with covmom registration must match full native
+snapshots/metrics exactly (10ordinarycalls). Candidate200fresh+100repeated
+after step100restore=300actualnativecalls, same20k recipe horizon. Recreate
+Context before restore; compare full final snapshot including CUDA/CPU RNG,
+optimizers/penalty/prior/arm/stream state and final metrics exactly. Require
+finite/nonzero native gradients,4650width/derivedcap, CPU-reference arm-state
+identity, .04 GPU resource bound and exact four TRAIN-only cache opens.
+Hash/prune smoke weights; retain report and temporary/old checkpoint peak.
+Smoke reports only parity/gradients/resume/resources, no metric eligibility.
+
+Full screen needs separate complete222source manifest, retained CPU proof,
+passed exact222GPU proof and separate independent full-source clearance.
+Public training/inference entrypoints must refuse folds3-8 unless the exact
+complete30row screen and both unchanged verdicts pass. Confirmation retains
+same matched GPU control/candidate route. No default from partial evidence.
