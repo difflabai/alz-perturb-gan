@@ -1,0 +1,38 @@
+{
+  "status": "auditor_verified_study_incomplete",
+  "recorded_utc": "2026-11-14T03:01:36.682290+00:00",
+  "auditor_sha256": "4c122e944ed3e28b5d757d77a958a48f2ded189cf2e2035a12870f6c85bfa28d",
+  "test_source_sha256": "6660fc5e3290a0e5094a06982f7241acb99156be43cf04251e4109ece331d6e4",
+  "auditor_tests": {
+    "passed": 40,
+    "command": "python3 -B -m pytest -q analysis/empirical_challenge_20261114/test_audit.py"
+  },
+  "unchanged_core_prelaunch_tests": {
+    "passed": 27,
+    "verification_file": "prelaunch_verification.json",
+    "sha256": "aa8f01c151b192417a81684db5be9dc52719978c265314085eb9c42d2603111d"
+  },
+  "strict_actual_partial_audit": {
+    "exit_code": 1,
+    "verified_artifacts": 3,
+    "required_artifacts": 48,
+    "reason": "complete declared artifact set required",
+    "immutable_snapshot": "artifact_audit_initial_partial_20261114.json",
+    "sha256": "b6331740c7a6978336252507b6c81e32a26699d32c777d889ea3fc0742e5fd78"
+  },
+  "prelaunch_source_manifest_sha256": "1f31f30fd94d8c30bed04afd2635d2de0638643302d0aee3085e48a4b418790d",
+  "independent_review": {
+    "reviewer": "application_default_review",
+    "status": "no_remaining_promotion_proof_blocker_by_inspection",
+    "reviewer_ran_tests_audits_or_queue_polls": false,
+    "reviewer_opened_counts_or_weights": false
+  },
+  "scope": "Separate auditor added after launch outside172 pinned queue sources. No generation, numerical superiority or default-promotion claim.",
+  "default_changed": false,
+  "limitations": [
+    "Hash/metadata verification, not independent rescoring of pruned arrays",
+    "Calibration counts, streams and radial digests are recorded metadata; execution rests on pinned code",
+    "Numerical superiority and actual CLI proof remain separate",
+    "Same37 development donors; no biological calibration claim"
+  ]
+}

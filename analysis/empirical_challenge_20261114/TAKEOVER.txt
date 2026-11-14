@@ -39,3 +39,23 @@ design/implementation before launch; status evidence is recorded separately.
 All9 exact donor caches/54payload hashes and18 original fit lineages are
 preanchored without deserializing counts/weights. See PROTOCOL.txt for the
 different immutable-checkpoint versus original-receipt scope across folds.
+
+Separate provenance auditor added while the fixed queue runs
+----------------------------------------------------------
+audit.py stays outside the172 frozen execution sources; it does not change
+the live worker, scorer, comparator, protocol or default. All40 focused
+auditor checks pass; independent read-only review found no remaining
+promotion-proof blocker. A strict actual partial audit verified3/48
+finalized artifacts and correctly exited1 because the study is incomplete.
+See artifact_auditor_verification_20261114.json and its immutable initial
+partial snapshot. That snapshot is historical; runtime partial reports
+may advance and must not be assumed to retain the initial hash.
+
+Run Python -B audit.py for a strict conditional study proof. Use
+--allow-incomplete only for progress inspection; it still reports
+incomplete. --screen-only writes separate screen proof paths and cannot
+overwrite a full proof. Exact frozen donor/state/stage allocation,
+cache/fit hashes, coefficient/stream metadata, score math fingerprints,
+pruning links and final mode artifact set are checked. This is not
+independent rescoring of pruned arrays or evidence of biological
+calibration; numerical gates and actual CLI verification remain separate.
