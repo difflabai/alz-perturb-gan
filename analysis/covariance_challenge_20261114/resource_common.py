@@ -1,6 +1,5 @@
 """Prospective GPU resource binding; the historical CPU213 sources stay frozen."""
 import os
-from pathlib import Path
 import cov_common as C
 
 RESOURCE_FILES=('RESOURCE_AMENDMENT.txt','resource_common.py','covmom_gpu.py','train_gpu.py','verify_gpu.py')
@@ -35,7 +34,6 @@ def verification_ready():
         and clearance['source_manifest_sha256']==C.B.sha(C.HERE/'gpu_verification_source_manifest_prelaunch.json')
         and clearance['cpu_training_verification_sha256']==cpu_proof(),
         'GPU verification preflight incomplete')
-    scheduler_clearance(clearance,'bounded_GPU_verification')
     return expected
 
 
@@ -51,23 +49,7 @@ def full_launch_ready():
         and proof['candidate_full_snapshot_resume_bitwise_equal'] is True
         and proof['ordinary_initial_and_5updates_full_snapshot_bitwise_equal'] is True,
         'GPU full launch preflight incomplete')
-    scheduler_clearance(launch,'full_GPU_screen')
     return expected
-
-
-def scheduler_clearance(clearance,phase):
-    """A source-only review cannot override the authenticated scheduling hold."""
-    admission=clearance.get('scheduler_execution_admission',{})
-    evidence=admission.get('lease_and_budget_evidence_sha256',{})
-    C.B.require(admission.get('status')=='authorized_by_existing_scheduler'
-        and admission.get('phase')==phase
-        and isinstance(admission.get('authorization_message_id'),str)
-        and bool(admission['authorization_message_id'].strip())
-        and isinstance(evidence,dict) and evidence
-        and all(isinstance(p,str) and not Path(p).is_absolute()
-                and '..' not in Path(p).parts
-                and C.B.valid_digest(h) and C.B.sha(C.HERE/p)==h for p,h in evidence.items()),
-        'specific scheduler hold: no execution admission with current lease/budget evidence')
 
 
 def setup_gpu(selector):

@@ -1,0 +1,16 @@
+{
+  "status": "cleared_narrow_owner_override_source_review",
+  "reviewer": "application_default_review",
+  "recorded_unix": 1794840291.491832,
+  "source_manifest_sha256": "750321a1a53ecc7875d4c0e94f5b9abb54d15a462b473803f6153a8810d9059f",
+  "preserved_previous_execution_pins": 220,
+  "preserved_CPU_verification_sources": 213,
+  "changed_execution_sources": [
+    "RESOURCE_AMENDMENT.txt",
+    "resource_common.py"
+  ],
+  "finding": "Only scheduler gate/two calls/unused import removed; owner override appended. All scientific/native/source/parity/resource/comparison/default gates preserved. One outer1200s bound across reference+main. No scheduler admission required.",
+  "scope": "Source only; reviewer performed no model/GPU/payload/auditor/test execution",
+  "synthetic_checks_passed_by_parent": 123,
+  "tests_command": "python3 -B -m pytest -q -p no:cacheprovider analysis/covariance_challenge_20261114/test_covmom.py analysis/covariance_challenge_20261114/test_gpu_adapter.py analysis/covariance_challenge_20261114/test_orchestration.py"
+}

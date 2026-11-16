@@ -52,23 +52,16 @@ def test_GPU_setup_rejects_unapproved_selector_before_CUDA(monkeypatch):
     assert seen==['cpu limits'] and not C.torch.cuda.is_initialized()
 
 
-@pytest.mark.parametrize('admission',[{}, {'status':'source_only_cleared'},
-    {'status':'authorized_by_existing_scheduler','phase':'bounded_GPU_verification',
-     'authorization_message_id':'synthetic','lease_and_budget_evidence_sha256':{}}])
-def test_source_review_or_empty_evidence_cannot_override_scheduler_hold(admission):
-    with pytest.raises(ValueError,match='scheduler hold'):
-        U.scheduler_clearance({'scheduler_execution_admission':admission},'bounded_GPU_verification')
-
-
-def test_scheduler_scope_and_exact_retained_evidence_are_required(tmp_path,monkeypatch):
+def test_owner_sharing_override_retains_source_and_CPU_proof_checks_without_scheduler(tmp_path,monkeypatch):
     monkeypatch.setattr(C,'HERE',tmp_path)
-    p=tmp_path/'synthetic_metadata.json';p.write_text('{"fixture":true}')
-    admission={'status':'authorized_by_existing_scheduler','phase':'bounded_GPU_verification',
-        'authorization_message_id':'synthetic_fixture_only',
-        'lease_and_budget_evidence_sha256':{p.name:C.B.sha(p)}}
-    clearance={'scheduler_execution_admission':admission}
-    U.scheduler_clearance(clearance,'bounded_GPU_verification')
-    with pytest.raises(ValueError,match='scheduler hold'):U.scheduler_clearance(clearance,'full_GPU_screen')
-    p.write_text('{"fixture":"changed"}')
-    with pytest.raises(ValueError,match='scheduler hold'):U.scheduler_clearance(clearance,'bounded_GPU_verification')
+    sources={f'synthetic{i}':'a'*64 for i in range(222)}
+    clearance={'status':'cleared_before_bounded_GPU_TRAIN_verification',
+        'source_manifest_sha256':'b'*64,'cpu_training_verification_sha256':'c'*64}
+    monkeypatch.setattr(U,'sources',lambda:sources)
+    monkeypatch.setattr(U,'cpu_proof',lambda:'c'*64)
+    monkeypatch.setattr(C.B,'sha',lambda p:'b'*64)
+    monkeypatch.setattr(C.B.P,'read',lambda p:sources if 'source_manifest' in p.name else clearance)
+    assert U.verification_ready()==sources
+    clearance['cpu_training_verification_sha256']='d'*64
+    with pytest.raises(ValueError,match='preflight'):U.verification_ready()
     assert not C.torch.cuda.is_initialized()

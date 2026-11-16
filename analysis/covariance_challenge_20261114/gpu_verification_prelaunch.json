@@ -1,9 +1,13 @@
 {
-  "status": "source_only_prepared_pending_scheduler_admission",
-  "source_manifest_sha256": "fe731077c3426fc54a39f40e9bb43fc10e52c351d49098c4a8a9a059c9790c0a",
+  "status": "cleared_before_bounded_GPU_TRAIN_verification",
+  "source_manifest_sha256": "750321a1a53ecc7875d4c0e94f5b9abb54d15a462b473803f6153a8810d9059f",
   "cpu_training_verification_sha256": "443f35cd440d629cfa3296720862b64a2097c4f92b6524ac61f59cb37c3b6480",
-  "source_review_sha256": "b8770687e10657a7f098d0cb81e9207f057bf5fce9d3fb00a3bf132982bb4dcd",
-  "scheduler_execution_admission": null,
-  "GPU_execution_cleared": false,
-  "full_screen_execution_cleared": false
+  "source_review_sha256": "17ab92fb2173f91470d273712d2740833c41bda9c07423f2ff75155e53c382a1",
+  "authorization": "Direct owner instruction20261116: share GPUs; no scheduler admission",
+  "owner_override_sha256": "15c4f28096b1663d6308656ef8ac5b79c2c3e6e82b7f4e00c3f9d487508e0f67",
+  "synthetic_checks_passed": 123,
+  "GPU_execution_cleared": true,
+  "full_screen_execution_cleared": false,
+  "maximum_total_wall_seconds": 1200,
+  "timeout_command": "timeout --signal=TERM --kill-after=10s 1190s (one outer process group for reference+main)"
 }
