@@ -1,0 +1,46 @@
+Owner-requested isolated ParticleGAN v0.10.0 release test (2026-11-17).
+Tag v0.10.0 at952c3b62ba434f7da194067923351ff5748ef8dd, published Nov16.
+PyPI served0.9.7 at discovery; build unmodified tagged source into isolated
+artifacts/native-releases/particlegan-0.10.0/site-packages without dependencies.
+Keep global environment, selected0.9.7default, old sources/results unchanged.
+
+First test release compatibility under explicit bispf_optimized + frozen T005
+and pbulk ALZ host. This separates package compatibility from new RHBI recipe.
+Same architecture, named streams, cell/count sampling, prior, train donors,
+20k horizon, snapshots and generation/scoring as existing model. Fresh fits;
+never restore a0.9.7 checkpoint into0.10.0. Separate old-version subprocess
+provides fresh matched update reference; compare actual tensor states/losses
+and RNG positions, accounting explicitly for additive recipe/schema fields.
+New-version same-device save/restart continuation must reproduce fresh
+continuation, including full policy/optimizers/RNG/shadow states and metrics.
+TRAIN-only smoke opens exactly manifest/space/train counts/train metadata.
+One GPU1 ALZ worker,.04 Torch allocator fraction,<=3 CPU threads; direct
+sharing, no scheduler/approval gate, no changes to other workers.
+
+Pilot fixed before quality results: fold0,seed0,full20k compatibility fit.
+Serve fixed six late snapshots15k..19k/final, stagehalf, countshape.5 plus
+TRAIN-only joint bias/nonzero calibration, M32K256/64PC cells. Matched
+20261114 covariance-study generation streams allow direct comparison with
+retained old-version control. Lower heldout SD/combined proper interval
+scores are primary; report profile/gene/cell/coverage metrics too. A one-fit
+pilot is compatibility evidence, never population/default qualification.
+No strength/readout/seed sweep; sealed20/external donors untouched.
+
+Second fixed pilot (fold0,seed0,20k): explicitly adapted native recipe
+rhbi_optimized_alz_conditional_no_simplex. Public recipe override
+rhbi_simplex_weight=0, plus task-owned ALZ dimensions/horizon/batch.
+All other rhbi_optimized fields remain unchanged. This is NOT an exact
+upstream-default result. The generic unconditional simplex callback has no
+defined c/library assignment for ALZ's conditional stochastic generator;
+cycling conditions or silently omitting the mechanism would be invalid.
+Package recipe owns learning rates,
+penalty/prior regularizer/loss/gradient law. Requires faithful conditional
+adapter including RHBI record binding, fresh real G logits, conditional
+fibre and discrete-prior binding (simplicial_active=False) with finally reset.
+Record native conditional CMMD activity and shared record identities before
+launch; checkpoint loss buffers as well as full native policy/host RNG.
+Do not run an undeclared partial mechanism or
+claim a BISPF compatibility result as RHBI. Unsupported native host semantics
+must be recorded concretely; investigate without silently disabling fields.
+Only a prospectively fixed full screen/confirmation under existing profile
+and distribution gates can make any default change. This pilot makes none.
