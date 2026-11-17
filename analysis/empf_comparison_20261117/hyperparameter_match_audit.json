@@ -1,0 +1,175 @@
+{
+  "status": "passed_exact_native_and_matched_hyperparameter_audit",
+  "full_field_count": 163,
+  "native_to_matched": {
+    "name": {
+      "native": "empf",
+      "matched": "empf_alz_rhbi_shared_hyperparameters"
+    },
+    "training_precision": {
+      "native": "bf16_channels_last",
+      "matched": "float32"
+    },
+    "lr": {
+      "native": 0.012,
+      "matched": 0.014
+    },
+    "prior_lr_mult": {
+      "native": 2.5,
+      "matched": 2.9
+    },
+    "ebi_beta": {
+      "native": 6.0,
+      "matched": 12.0
+    },
+    "prior_reg": {
+      "native": 0.01,
+      "matched": 0.02
+    },
+    "optimizer_smoothing": {
+      "native": 0.001,
+      "matched": 0.0061
+    },
+    "optimizer_svd_backend": {
+      "native": "batched",
+      "matched": "native"
+    },
+    "optimizer_dense_profile": {
+      "native": "newton_schulz_hybrid_v1",
+      "matched": "polar_cpu_v1"
+    }
+  },
+  "remaining_different_shared_fields_vs_rhbi": {},
+  "method_owned_differences_vs_rhbi": {
+    "name": {
+      "rhbi": "rhbi_optimized_alz_conditional_no_simplex",
+      "empf_matched": "empf_alz_rhbi_shared_hyperparameters"
+    },
+    "critic_formulation": {
+      "rhbi": "rhbi",
+      "empf_matched": "empf"
+    },
+    "prior_regularizer": {
+      "rhbi": "sbnp",
+      "empf_matched": "empf"
+    },
+    "rhbi_weight": {
+      "rhbi": 1.0,
+      "empf_matched": 0.0
+    },
+    "rhbi_rho": {
+      "rhbi": 3.0,
+      "empf_matched": 2.0
+    },
+    "rhbi_self_coupling": {
+      "rhbi": "feydy_discrete",
+      "empf_matched": "hollow"
+    },
+    "rhbi_lambda_floor": {
+      "rhbi": 0.005,
+      "empf_matched": 0.0
+    },
+    "rhbi_gamma_gauge": {
+      "rhbi": 0.03,
+      "empf_matched": 0.0
+    },
+    "rhbi_rapidity_screening": {
+      "rhbi": false,
+      "empf_matched": true
+    },
+    "rhbi_conditional_fibre": {
+      "rhbi": "slack",
+      "empf_matched": "joint"
+    },
+    "rhbi_akt_horizon": {
+      "rhbi": true,
+      "empf_matched": false
+    },
+    "rhbi_akt_mode": {
+      "rhbi": "weibull",
+      "empf_matched": "sqrt"
+    },
+    "rhbi_slack_gain": {
+      "rhbi": 0.35,
+      "empf_matched": 0.0
+    },
+    "rhbi_chord_weight": {
+      "rhbi": 0.25,
+      "empf_matched": 0.0
+    },
+    "rhbi_thermal_tau": {
+      "rhbi": 0.084,
+      "empf_matched": 0.0
+    },
+    "rhbi_thermal_shock_mu": {
+      "rhbi": 0.35,
+      "empf_matched": 0.15
+    },
+    "rhbi_settle_beta": {
+      "rhbi": 16.0,
+      "empf_matched": 0.0
+    },
+    "rhbi_settle_mode": {
+      "rhbi": "thermal",
+      "empf_matched": "residual"
+    },
+    "rhbi_cond_ot_weight": {
+      "rhbi": 1.5,
+      "empf_matched": 0.0
+    },
+    "rhbi_cond_ot_mode": {
+      "rhbi": "diag_imq_cmmd",
+      "empf_matched": "kernel_ed"
+    },
+    "rhbi_cvx_mu_gain": {
+      "rhbi": 0.58,
+      "empf_matched": 0.4
+    },
+    "rhbi_simplex_chart_weight": {
+      "rhbi": 4.0,
+      "empf_matched": 0.0
+    },
+    "rhbi_tail_spill_gain": {
+      "rhbi": 0.95,
+      "empf_matched": 0.0
+    },
+    "rhbi_simplex_macro_settle": {
+      "rhbi": true,
+      "empf_matched": false
+    },
+    "rhbi_simplex_curve_settle": {
+      "rhbi": true,
+      "empf_matched": false
+    },
+    "rhbi_cond_step_damp": {
+      "rhbi": 0.68,
+      "empf_matched": 0.0
+    },
+    "rhbi_ae_coord_whiten": {
+      "rhbi": true,
+      "empf_matched": false
+    },
+    "rhbi_support_completion": {
+      "rhbi": true,
+      "empf_matched": false
+    }
+  },
+  "lazy_k_all_lanes": 1,
+  "native_EMPF_learning_rates": {
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.03,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01
+  },
+  "matched_learning_rates": {
+    "generator_lr": 0.014,
+    "critic_lr": 0.021,
+    "particle_lr": 0.0406,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.02
+  },
+  "runtime_precision": "native convolution-only autocast is inactive for the fixed ALZ MLP; both usefloat32"
+}

@@ -1,0 +1,81 @@
+{
+  "status": "passed_fresh_process_exact_200_to_300",
+  "lane": "native",
+  "full_checkpoint_and_metrics_exact": true,
+  "verification_code_sha256": "39523bf343ecd4e5388a774bfb56aea74629867db3b693b8e0279204f2cd1c14",
+  "provenance": {
+    "release": "0.10.0",
+    "commit": "952c3b62ba434f7da194067923351ff5748ef8dd",
+    "lane": "native",
+    "host_derivation_sha256": "db5224008ea8c88799d310d7dcaa1d984319f634263ac799c64f1f336a690466",
+    "files": {
+      "release_env.py": {
+        "original": "/ml2/alz/analysis/faithful097/model/release_env.py",
+        "original_sha256": "841568c7d2132ac307bbc399f8739713aa1636a90259680dbae84f37c5dd115c",
+        "derived": "/ml2/alz/artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native/release_env.py",
+        "derived_sha256": "f426d77c30e56cdbfaa928442a6aa5e8c0daf88f50594a10f7ca46646d9ef3a3"
+      },
+      "trainer.py": {
+        "original": "/ml2/alz/analysis/improve_20261109/r5/trainer.py",
+        "original_sha256": "55efdd644bbffdf6891a9528ea226cdbb3b1786a332fec7025208500ebd164cb",
+        "derived": "/ml2/alz/artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native/trainer.py",
+        "derived_sha256": "da40847c8db8fa47b0bde8a06d4b3658a055eb4de6ea4d943c3459179aec552c"
+      },
+      "generate.py": {
+        "original": "/ml2/alz/analysis/improve_20261109/r5/generate.py",
+        "original_sha256": "abf84dbc371ff0165dc7fc4b800105559e0dfee27a479c66528bd06a6d16d7a7",
+        "derived": "/ml2/alz/artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native/generate.py",
+        "derived_sha256": "ee8778bc8f536bd67d4ad793e9be36a359ee12532bec3dbf851ae030c3c5042e"
+      }
+    }
+  },
+  "semantics": {
+    "lazy_k": 1,
+    "regularizer_calls": 100,
+    "differentiable_penalty_calls": 100,
+    "nonzero_penalty_calls": 100,
+    "prototype_bank_inactive_native_highdim_route": true,
+    "feature_width": 2150,
+    "condition_width": 7,
+    "shared_record": true,
+    "rejected_wrong_lazy_k_and_automatic_domain": true,
+    "initial_prior_moment_reference_bound": true
+  },
+  "TRAIN_files_opened": [
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/manifest.json",
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/space.npz",
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/train/counts.npz",
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/train/metadata.npz"
+  ],
+  "cache_anchor": {
+    "manifest_sha256": "65d5e2f405ceeeb14ac35f8660bc9c42272ac35c64aeda4f7c3bd9ee21dbd09c",
+    "payload_sha256": {
+      "space.npz": "87959216f5d912a340e483b1a5635e5e777644d8566c19da96eee2f8b8ba8fc1",
+      "train/counts.npz": "aacf88cbc48708656cc2d07581dff27a169fa95a42350b24752dc1e1d055a0b9",
+      "train/metadata.npz": "754ac5db9bb2623237395067c80b8cec44027aa7c42b797ef28245ae0d99a84d"
+    }
+  },
+  "initial_parameter_control": {
+    "checkpoint": "/ml2/alz/runs/particlegan_upgrade_20261117/verification/fresh_0.10.0.pt",
+    "checkpoint_sha256": "573595c4bc0d299290cee18e3431d4261dbe1c98c137f8d6a7b420527f9694e5",
+    "proof": "/ml2/alz/analysis/particlegan_upgrade_20261117/verification/verification_0.10.0.json",
+    "proof_sha256": "38b85e4b3ce1129077cf6443634d966fefd65974d394db103ad0a3dba52fef5f"
+  },
+  "checkpoint_sha256": {
+    "replay200_native.pt": "93886531ef14646edc6ed8f97e1492644baf644b9fa5d502e985b1c67ed17ad2",
+    "expected300_native.pt": "efc11c43d634023a252d63e8fa5e1a493784e4b07400118f932ef43f33f88849"
+  },
+  "affinity": [
+    0,
+    1,
+    2
+  ],
+  "seconds": 17.22222360491287,
+  "gpu": {
+    "selector": "1",
+    "memory_fraction": 0.04,
+    "max_allocated_bytes": 633503232,
+    "max_reserved_bytes": 761266176,
+    "total_bytes": 50899386368
+  }
+}

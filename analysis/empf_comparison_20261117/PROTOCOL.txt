@@ -1,0 +1,48 @@
+Owner-requested ParticleGAN0.10.0 EMPF comparison, Nov17,2026.
+Pinned unmodified tag952c3b62ba434f7da194067923351ff5748ef8dd, same isolated
+installation as completed release pilot. Native release sources, dependencies,
+all326 original/330 corrected readout sources, default config and old receipts
+remain unchanged. Record the preceding numerical RHBI result honestly.
+
+Two prospectively fixed EMPF20k fits, fold0/seed0, no seed/hyperparameter sweep:
+ native: get_recipe('gan',trainer='empf') with task B32,z8,512particles,20k,
+         reg_every=1 and host penalty input_domain='continuous'.
+ matched: same EMPF recipe plus exactly8 shared-field overrides to match the
+          completed RHBI recipe: lr.014,prior_lr_mult2.9,ebi_beta12,prior_reg.02,
+          smoothing.0061,precision float32,SVD native,denseprofile polar_cpu_v1.
+All other shared fields already match. EMPF keeps its formulation, native EMPF
+prior regularizer and all RHBI-specific defaults (especially rhbi_weight=0).
+The matched lane is explicitly named empf_alz_rhbi_shared_hyperparameters;
+its results never stand in for the unchanged released EMPF preset.
+
+Both compare to completed compatibility/BISPF and adapted RHBI pilots and the
+unchanged current/original/empirical references. Same architecture/init11streams,
+data order, count sampling, batch, particle capacity/horizon, fixed six late
+states15k..19k/final, stagehalf,cellshape.5,TRAIN joint bias/nonzero calibration,
+M32K256/64PC cells and20261114 covariance-control generation streams. No state,
+readout, strength or seed selection. Sealed/external donors untouched.
+
+Native EMPF owns all optimizers, loss, gradient transformations, prior moves,
+regularizers and state. No repairs or hand-coded EMPF mechanisms. Native
+non-saturating GANLoss is correct; do not silently switch to relativistic.
+Keep separate continuous2150feature inputs and7condition columns. Auto domain
+would incorrectly invoke the width-based categorical heuristic. EMPF's native
+prototype/chord branch requires dim<=64 and is inactive here, even with an
+explicit continuous domain. Do not invent prototypes or omit this limitation.
+The bf16_channels_last preset enables autocast only for qualifying convolution
+modules in the native trainer; this task's MLP remains float32 under that law.
+
+Before full fits require actual TRAIN-only native GPU semantics: lazy_k1 and
+penalty calls=observed_steps=completed_updates, shared records, proper native
+high-dimensional route, initial G/D/prior parameters equal prior release control,
+full300fresh+100same-process replay and100fresh-process replay per lane with
+all checkpoint/optimizer/policy/initial-prior-moment/RNG/shadow state equal.
+Reject wrong release/recipe checkpoints. Four TRAIN payloads only, cache hashes,
+one sharedGPU1worker,.04allocator,<=3CPU threads/affinity; no scheduler admission.
+
+Serial native20k/CPUscore then matched20k/CPUscore. Freeze exact source and all
+four native verification proofs before full runs. Tail logs under own run root.
+1.5GB output cap, weights retained; generated arrays scored/hashed/pruned. No
+default change from a onefold/seed pilot. Primary lower heldout SD/combined
+proper interval scores, report profile/gene/cell/spread/coverage guards. Existing
+prospective full screen and untouched confirmation rules still govern promotion.
