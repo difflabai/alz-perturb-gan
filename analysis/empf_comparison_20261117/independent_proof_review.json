@@ -1,0 +1,81 @@
+{
+  "status": "passed_independent_retained_EMPF_proof_and_prelaunch_review",
+  "reviewer": "/root/application_default_review",
+  "reviewed_utc": "2026-11-17T02:19:24.180770+00:00",
+  "prelaunch_sha256": "bfc650854dec11d8c8e6bc0939ce8dc4af6560b809d854aa6f7eb38d026a47e4",
+  "source_manifest_sha256": "6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958",
+  "source_files_rehashed": 345,
+  "prelaunch_exact_four_proof_hashes_and_retained_copies_verified": true,
+  "proofs": {
+    "verification_native.json": {
+      "sha256": "3a5445846c1da6ae1b39d97f87618c10a06853a085b0c3239ebf25d51cc8bba3",
+      "status": "passed_actual_EMPF_semantics_and_full_replay",
+      "lane": "native",
+      "directly_observed_penalty_calls": 300,
+      "all_observed_penalties_differentiable_and_nonzero": true,
+      "seconds": 48.96548180701211,
+      "checkpoint_sha256": {
+        "replay200_native.pt": "93886531ef14646edc6ed8f97e1492644baf644b9fa5d502e985b1c67ed17ad2",
+        "expected300_native.pt": "efc11c43d634023a252d63e8fa5e1a493784e4b07400118f932ef43f33f88849"
+      }
+    },
+    "fresh_process_native.json": {
+      "sha256": "f1dfdcc7976ea357309be0fec67cfb4a731b813c0c28e3c754d50cc3f89afd71",
+      "status": "passed_fresh_process_exact_200_to_300",
+      "lane": "native",
+      "directly_observed_penalty_calls": 100,
+      "all_observed_penalties_differentiable_and_nonzero": true,
+      "seconds": 17.22222360491287,
+      "checkpoint_sha256": {
+        "replay200_native.pt": "93886531ef14646edc6ed8f97e1492644baf644b9fa5d502e985b1c67ed17ad2",
+        "expected300_native.pt": "efc11c43d634023a252d63e8fa5e1a493784e4b07400118f932ef43f33f88849"
+      }
+    },
+    "verification_matched.json": {
+      "sha256": "d8749e69b7612413fdc2dcf6e7482c63df47933cd873dfdcc15f836722b5592c",
+      "status": "passed_actual_EMPF_semantics_and_full_replay",
+      "lane": "matched",
+      "directly_observed_penalty_calls": 300,
+      "all_observed_penalties_differentiable_and_nonzero": true,
+      "seconds": 69.02589899802115,
+      "checkpoint_sha256": {
+        "replay200_matched.pt": "6ababc642e6aab7b8318220e75be1137a0269172eadf2ce9545064e22f27b0a3",
+        "expected300_matched.pt": "9f4487e793c5677770bae189305514c8d2ab704bd07ee8246b3fa279c085c66f"
+      }
+    },
+    "fresh_process_matched.json": {
+      "sha256": "c9ca4f034701d8d4b6931cd512cf28cbd669ef73a525f2dd8cb0b9ef37a3d224",
+      "status": "passed_fresh_process_exact_200_to_300",
+      "lane": "matched",
+      "directly_observed_penalty_calls": 100,
+      "all_observed_penalties_differentiable_and_nonzero": true,
+      "seconds": 23.188437743927352,
+      "checkpoint_sha256": {
+        "replay200_matched.pt": "6ababc642e6aab7b8318220e75be1137a0269172eadf2ce9545064e22f27b0a3",
+        "expected300_matched.pt": "9f4487e793c5677770bae189305514c8d2ab704bd07ee8246b3fa279c085c66f"
+      }
+    }
+  },
+  "verified": [
+    "Expected per-lane status, method identity and exact two checkpoint filenames; each linked archive SHA256 rehashed without deserialization.",
+    "Both fresh-process proofs bind the identical per-lane update200 and expected300 archives used by their original continuation proofs.",
+    "All four proofs bind the pinned verification/host/derived source identities and exact completed-release initial parameter control.",
+    "Every recorded penalty call is differentiable and nonzero; lazy_k1, shared record, initial moment reference and native inactive high-dimensional prototype branch metadata agree.",
+    "All four receipts name exactly the four TRAIN cache files, match the frozen cache hash metadata, and stay within GPU1/.04 allocator and three-core affinity bounds.",
+    "Prelaunch source-review/hyperparameter-audit hashes match; exact8 overrides plus name recomputed from the retained full163-field recipes."
+  ],
+  "actual_verification_updates_recomputed_from_frozen_execution_contract": 1000,
+  "direct_observer_calls_recorded_across_four_proofs": 800,
+  "elapsed_seconds_sum": 158.40204215387348,
+  "max_reported_gpu_allocated_bytes": 830553088,
+  "max_reported_gpu_reserved_bytes": 979369984,
+  "findings": [],
+  "scope": "Retained evidence and source/hash admission verification only; no full-fit progress or performance reviewed.",
+  "limits": [
+    "No model construction, training, generation, CUDA work, checkpoint deserialization, cache array loading, proof execution or rescore. Checkpoint files were SHA256-hashed only.",
+    "Full tensor/optimizer/policy/RNG/shadow equality is asserted by the retained execution proofs and pinned verifier, not independently re-executed by this metadata review.",
+    "The four proof observer totals are800 calls; the additional200 same-process replay updates are asserted by the fixed verifier and reproduce the expected snapshots/metrics, yielding1000 actual updates in total.",
+    "TRAIN cache payload hashes were compared as recorded metadata against frozen anchors; array payloads were not opened.",
+    "Passing integration proofs does not establish EMPF scientific superiority or permit default promotion."
+  ]
+}
