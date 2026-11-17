@@ -1,0 +1,15 @@
+Generation launcher registration repair, after the first compatibility20k fit.
+Original326 source manifest and all training/verification/native sources stay
+unchanged. The first CPU launcher failed before generating arrays or scoring:
+the documented cellshape mode was not registered. Its existing implementation
+was already pinned in the original source manifest. No numerical result drove
+this change. No fit, recipe, sampling, calibration or scoring law changes.
+
+readout_fix.py explicitly registers the frozen mode_cellshape (which imports
+mode_zcal) after the isolated host activates and before the frozen generation
+worker runs. run_pilot.py routes only generation children through this entry;
+all training children still execute the original frozen worker unchanged.
+The original worker validates/hashes/prunes scores as before. A supplemental
+receipt links each finalized score to this additive execution-source manifest.
+The corrected runner requires those links before completing its report.
+No existing receipts or source pins are rewritten; the failed attempt is kept.
