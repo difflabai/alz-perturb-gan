@@ -29,7 +29,7 @@ replay, three-thread affinity and.04GPU allocator limit. Pin source/proof
 hashes in source_manifest.json/prelaunch.json before any full pilot.
 
 Start/reconnect the fixed queue (one ALZ GPU1 worker, shared with others):
-  /mnt/nvme/ai/conda/anaconda3/bin/python3 -B analysis/particlegan_upgrade_20261117/run_pilot.py
+  /mnt/nvme/ai/conda/anaconda3/bin/python3 -B analysis/particlegan_upgrade_20261117/postfit/run_pilot.py
 It performs train/CPU generation+scoring serially for both lanes. Check
 runs/particlegan_upgrade_20261117/status.json and logs/; valid terminal
 receipts/hash links are required for resume. Partial scores fail closed.
@@ -40,3 +40,12 @@ covariance-control CRN namespace, allowing comparison with verified retained
 0.9.7control and empirical scores. pilot_comparison.json records every result
 and full20k compatibility identity. A single development fold/seed provides
 no population/default qualification. No sealed or external donors are used.
+
+Launcher correction: the first compatibility20k fit completed successfully,
+then its CPU launcher missed registration of the already-pinned cellshape
+mode. The additive postfit/ wrapper fixes registration without changing any
+of the326 original sources, fit/verification receipts or numerical laws.
+postfit/source_manifest.json adds four execution pins; a supplemental receipt
+links each finalized score to the corrected launcher. The original launcher
+and failed log remain historical evidence. No arrays/scores existed when the
+registration failure was fixed, and the completed fit was retained.
