@@ -1,0 +1,187 @@
+{
+  "status": "passed_completed_fixed_EMPF_artifact_and_arithmetic_audit",
+  "release": "0.10.0",
+  "fold": 0,
+  "seed": 0,
+  "source_files": 345,
+  "source_manifest_sha256": "6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958",
+  "prelaunch_sha256": "bfc650854dec11d8c8e6bc0939ce8dc4af6560b809d854aa6f7eb38d026a47e4",
+  "native_verification_updates": 1000,
+  "full_fits": 2,
+  "updates_per_full_fit": 20000,
+  "actual_final_checkpoint_regularizer_counters": {
+    "native": {
+      "status": "passed_actual_full_EMPF_no_skips",
+      "lane": "native",
+      "source_manifest_sha256": "6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958",
+      "final_checkpoint_sha256": "4f42d9250224c7ed5cbab7d6e973d49ca7ec596f0540187102040e3f9334cb25",
+      "penalty_calls": 20000,
+      "observed_steps": 20000,
+      "completed_updates": 20000,
+      "lazy_k": 1,
+      "native_highdim_prototype_bank_inactive": true
+    },
+    "matched": {
+      "status": "passed_actual_full_EMPF_no_skips",
+      "lane": "matched",
+      "source_manifest_sha256": "6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958",
+      "final_checkpoint_sha256": "68a7d82e9c547c50ccfd0319dc37320ea896aa08dc6b88d29b22502c14081dbd",
+      "penalty_calls": 20000,
+      "observed_steps": 20000,
+      "completed_updates": 20000,
+      "lazy_k": 1,
+      "native_highdim_prototype_bank_inactive": true
+    }
+  },
+  "full_fit_score_generation_pruning_links_revalidated": true,
+  "all_source_pins_revalidated": true,
+  "all_prior_summary_rows_preserved": true,
+  "all_current_summary_rows_recomputed_exact": true,
+  "original_default_sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "default_changed": false,
+  "sealed_or_external_donors_used": false,
+  "percent_changes": {
+    "native": {
+      "current32": {
+        "profile_RMSE": -1.5700650826774076,
+        "held_sd_interval_score": -2.362814181148676,
+        "held_combined_interval_score": -0.6689513958659021
+      },
+      "rhbi": {
+        "profile_RMSE": -0.7948712561780424,
+        "held_sd_interval_score": -4.591284936842133,
+        "held_combined_interval_score": -0.6055558295274488
+      },
+      "empirical32": {
+        "profile_RMSE": 1.6236276383672088,
+        "held_sd_interval_score": 30.343909953875638,
+        "held_combined_interval_score": 11.894404429340156
+      }
+    },
+    "matched": {
+      "current32": {
+        "profile_RMSE": 1.1256567126147754,
+        "held_sd_interval_score": 5.403276886398656,
+        "held_combined_interval_score": 5.5301533349871645
+      },
+      "rhbi": {
+        "profile_RMSE": 1.922080939148696,
+        "held_sd_interval_score": 2.997552897882727,
+        "held_combined_interval_score": 5.5975053254319285
+      },
+      "empirical32": {
+        "profile_RMSE": 4.406815783025753,
+        "held_sd_interval_score": 40.711503676620396,
+        "held_combined_interval_score": 18.877569729631173
+      }
+    }
+  },
+  "descriptive_protected_metric_checks": {
+    "native": {
+      "profile_percent_change_vs_original_anchor": -1.570206823433895,
+      "single_fold_profile_within_0_5_percent_original_anchor": true,
+      "historical_percent_changes_vs_current": {
+        "meanlog_rmse_gene": 2.3944197311691173,
+        "nonzero_rmse_gene": 1.5278352324907596,
+        "logvar_rmse_gene": 3.077165202631571,
+        "pc_energy_rep": -0.7067232804582657,
+        "cell_energy_rep": -1.7826414662549306
+      },
+      "abs_log_pc_spread_change_vs_current": -0.020326306487898307,
+      "coverage_distance_changes_vs_current": {
+        "sd": 0.011666666666666714,
+        "combined": 0.015520833333333317
+      }
+    },
+    "matched": {
+      "profile_percent_change_vs_original_anchor": 1.1255110899737186,
+      "single_fold_profile_within_0_5_percent_original_anchor": false,
+      "historical_percent_changes_vs_current": {
+        "meanlog_rmse_gene": -1.9686437900062415,
+        "nonzero_rmse_gene": -1.3841935786613857,
+        "logvar_rmse_gene": 0.4959023979459909,
+        "pc_energy_rep": 1.2829850231663276,
+        "cell_energy_rep": 2.6847281825484126
+      },
+      "abs_log_pc_spread_change_vs_current": -0.00462453611442587,
+      "coverage_distance_changes_vs_current": {
+        "sd": 0.014861111111111103,
+        "combined": 0.018437499999999996
+      }
+    }
+  },
+  "result": "Native EMPF improves profile and both primary scores vs current/RHBI but worsens gene-error/coverage guards and loses to empirical. Matched EMPF is worse on all three headline scores and exceeds the original-anchor profile allowance. No promotion or confirmation advancement.",
+  "limitations": [
+    "One fixed development fold/seed, not population or default qualification",
+    "Matched EMPF is a separately named8-override public variant, not the native released preset",
+    "Native high-dimensional route does not activate low-dimensional prototype/chord bank",
+    "Arrays were scored/hashed/pruned; this is metadata/hash/arithmetic verification, not an independent rescore",
+    "Eight shared fields changed together; this does not identify an individual cause"
+  ],
+  "retained_compact_artifacts": {
+    "comparison.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/comparison.json",
+      "sha256": "91c3d493a78f6716268289de5696ec3da52076f90eda8ceecc3dd96f425c3e47"
+    },
+    "status.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/status.json",
+      "sha256": "7157e4c55a91b33812871004c3723a31ca99e01d207f4e051a179be7f022268e"
+    },
+    "results/native.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/results/native.json",
+      "sha256": "574c4c97f42ffe01d2ec972bd55b0f10d900e2f6824d09df5b88ed8b016c9ba8"
+    },
+    "generated/native.receipt.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/generated/native.receipt.json",
+      "sha256": "bb429bef02339d276c495a5b42ffe21e06e7f99da21b72f32e18bafb4de3a9fd"
+    },
+    "fits/native/pbulk/hvg2000/fold0/seed0/release_test_receipt.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0/release_test_receipt.json",
+      "sha256": "58eeb9ed7aa8cf4ae7689983e86d39d4ed87d6247eb39ee6458e7e13fdf1e9bd"
+    },
+    "fits/native/pbulk/hvg2000/fold0/seed0/fit_receipt.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0/fit_receipt.json",
+      "sha256": "12db781cd450a8733462d9e98f0eeb695d1c0bce5caea8f2ec596f453442c8a6"
+    },
+    "fits/native/pbulk/hvg2000/fold0/seed0/config.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0/config.json",
+      "sha256": "467f835cb0a9d30129eba0cca9373fca574c8436ab762bb03689549f5b575bd8"
+    },
+    "fits/native/pbulk/hvg2000/fold0/seed0/checkpoint_receipt.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0/checkpoint_receipt.json",
+      "sha256": "81dfd66b1c05ebcf9e52f1ce6645862f8c57b31a4f513fb8bcab7e0147db6304"
+    },
+    "fits/native/pbulk/hvg2000/fold0/seed0/no_skip_audit.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0/no_skip_audit.json",
+      "sha256": "e828d20a1f39d7b17ebea633c93da1b3b0633eeed6c0ba9d1fd07e14787137d4"
+    },
+    "results/matched.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/results/matched.json",
+      "sha256": "837ea6d8d232ed198ad72c2155edfad290bfba1dfcbee0ee338df72a5d496c96"
+    },
+    "generated/matched.receipt.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/generated/matched.receipt.json",
+      "sha256": "bafcb00f9e32e4b4f8933e27e51b77ac80f3ace0e3485f0caf454f21539976d6"
+    },
+    "fits/matched/pbulk/hvg2000/fold0/seed0/release_test_receipt.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/fits/matched/pbulk/hvg2000/fold0/seed0/release_test_receipt.json",
+      "sha256": "bdd6f3c5d75b2844cddd8ac6744a79a400f759b37672765cb15f879adc9a0d32"
+    },
+    "fits/matched/pbulk/hvg2000/fold0/seed0/fit_receipt.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/fits/matched/pbulk/hvg2000/fold0/seed0/fit_receipt.json",
+      "sha256": "b0803cd0de174b7238546ef8dc6ba8d5537087449c4b86a9af7b2f80c6c481ce"
+    },
+    "fits/matched/pbulk/hvg2000/fold0/seed0/config.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/fits/matched/pbulk/hvg2000/fold0/seed0/config.json",
+      "sha256": "fe5ad76e8e51f19af49780ad3cbd7841bf26e45f2c844d901b0f88118d25e909"
+    },
+    "fits/matched/pbulk/hvg2000/fold0/seed0/checkpoint_receipt.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/fits/matched/pbulk/hvg2000/fold0/seed0/checkpoint_receipt.json",
+      "sha256": "40980d60739670dc66573e8e8b7617b2fda02355aa267917889d24354883bd2d"
+    },
+    "fits/matched/pbulk/hvg2000/fold0/seed0/no_skip_audit.json": {
+      "runtime": "/ml2/alz/runs/empf_comparison_20261117/fits/matched/pbulk/hvg2000/fold0/seed0/no_skip_audit.json",
+      "sha256": "4f53987e6cf2b7567a55a31471b2da04149fdfa6d308f112210a0f90282a06a1"
+    }
+  }
+}

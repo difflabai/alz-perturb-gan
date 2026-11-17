@@ -1,0 +1,286 @@
+{
+  "study": "improve_20261109",
+  "round": 3,
+  "arm": "pbulk",
+  "flags": [
+    "pbulk"
+  ],
+  "panel": "hvg2000",
+  "fold": 0,
+  "seed": 0,
+  "cache": "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0",
+  "cache_manifest_SHA256": "65d5e2f405ceeeb14ac35f8660bc9c42272ac35c64aeda4f7c3bd9ee21dbd09c",
+  "protocol_split": true,
+  "train_donors": [
+    "H20.33.001",
+    "H20.33.005",
+    "H20.33.011",
+    "H20.33.015",
+    "H20.33.026",
+    "H20.33.027",
+    "H20.33.028",
+    "H20.33.030",
+    "H20.33.032",
+    "H20.33.041",
+    "H20.33.044",
+    "H21.33.001",
+    "H21.33.003",
+    "H21.33.009",
+    "H21.33.017",
+    "H21.33.023",
+    "H21.33.025",
+    "H21.33.026",
+    "H21.33.029",
+    "H21.33.033",
+    "H21.33.035",
+    "H21.33.037",
+    "H21.33.040",
+    "H21.33.044",
+    "H21.33.047"
+  ],
+  "heldout_donors": [
+    "H20.33.008",
+    "H20.33.012",
+    "H20.33.013",
+    "H20.33.029",
+    "H20.33.033",
+    "H20.33.043",
+    "H21.33.002",
+    "H21.33.021",
+    "H21.33.027",
+    "H21.33.034",
+    "H21.33.041",
+    "H21.33.043"
+  ],
+  "n_genes": 2000,
+  "hyperparameters": {
+    "generator_lr": 0.014,
+    "critic_lr": 0.021,
+    "particle_lr": 0.0406,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.02
+  },
+  "recipe": {
+    "name": "empf_alz_rhbi_shared_hyperparameters",
+    "critic_formulation": "empf",
+    "model": "gan",
+    "z_dim": 8,
+    "num_particles": 512,
+    "prior_kind": "particles",
+    "sigma_rel": 0.0,
+    "standardize": true,
+    "num_classes": null,
+    "conditioning": "scalar",
+    "ucd_target": "class",
+    "ucd_weight": 0.02,
+    "alpha_bar": [
+      1.0,
+      0.9,
+      0.5,
+      0.05,
+      0.0001
+    ],
+    "batch_size": 32,
+    "total_steps": 20000,
+    "continuous_policy": null,
+    "lr": 0.014,
+    "d_lr_mult": 1.5,
+    "prior_lr_mult": 2.9,
+    "betas": [
+      0.0,
+      0.999
+    ],
+    "prior_betas": null,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "reg_every": 1,
+    "ebi_beta": 12.0,
+    "prior_reg": 0.02,
+    "prior_regularizer": "empf",
+    "ema_decay": 0.0,
+    "lr_anneal_start": 0.6,
+    "lr_floor": 1.0,
+    "network_lr_floor": 1.0,
+    "network_lr_horizon_cap": null,
+    "reg_anchor_min_decay": 0.9,
+    "reg_anchor_weight": 0.0,
+    "direct_particle_gain": false,
+    "d_guard_ratio": 0.0,
+    "d_guard_min_steps": 200,
+    "latent_damping_max_rate": 0.0,
+    "direct_particle_betas": [
+      0.0,
+      0.9
+    ],
+    "input_noise_std": 0.0,
+    "input_noise_anneal_end": 0.1,
+    "output_noise_std": 0.0,
+    "output_noise_warmup": 0.0,
+    "encoder_mode": "none",
+    "routing_temperature": 0.25,
+    "distance_reduction": "sum",
+    "observation_sigma": 0.03,
+    "reconstruction_weight": 1.0,
+    "amsgrad": false,
+    "critic_r1_real": true,
+    "critic_payoff_damping": true,
+    "output_noise_mode": "fixed",
+    "lr_control": "mobility",
+    "particle_birth_death": false,
+    "row_evidence_gate": false,
+    "table_release_rule": "any",
+    "row_evidence_hot": true,
+    "row_evidence_exclude": true,
+    "row_evidence_hold": true,
+    "birth_death_space": "data",
+    "serve_average": 0.0,
+    "reopen_signal": "data",
+    "reopen_anchor": "hold",
+    "row_evidence_null": "theory",
+    "birth_death_isolation": false,
+    "birth_death_feature_scale": "none",
+    "row_policy": "independent",
+    "optimizer_family": "dualnorm",
+    "optimizer_smoothing": 0.0061,
+    "optimizer_convolution": "per_offset",
+    "optimizer_convolution_rule": "quintic",
+    "optimizer_dense_profile": "polar_cpu_v1",
+    "constraint_geometry_mode": "direction_blend",
+    "loss": "non_saturating"
+  },
+  "native_recipe": "empf_alz_rhbi_shared_hyperparameters",
+  "particlegan_version": "0.10.0",
+  "updates": 20000,
+  "recipe_total_steps": 20000,
+  "device": "cuda",
+  "stream_root": 20261109,
+  "batch": [
+    32,
+    128
+  ],
+  "checkpoint_every": 2000,
+  "snapshot_updates": [
+    5000,
+    10000,
+    15000,
+    16000,
+    17000,
+    18000,
+    19000
+  ],
+  "folds_file": "/ml2/alz/analysis/improve_20261109/r5/folds_r2.json",
+  "critic_features": 2150,
+  "arm_info": {
+    "kind": "base",
+    "r2_blocks": [
+      {
+        "flag": "pbulk",
+        "block": "pb",
+        "columns": [
+          150,
+          2150
+        ],
+        "info": {
+          "formula": "out = s * s_pb * (log1p(1e4 pb/sum pb) - m)/sd, pb = sum over the 128 cells of counts; fake: counts + (rate - rate.detach())",
+          "reference_bags": 512,
+          "reference_seed": "SeedSequence([20261109, crc32('pbulk'), 0])",
+          "s_pb": 0.161858,
+          "multiplier": 1.0,
+          "scale_effective": 0.161858,
+          "E_norm2_150_reference": 52.3958,
+          "sd_floor": 0.112095,
+          "sd_floor_rule": "0.25 x median gene bag SD",
+          "genes_floored": 0,
+          "median_bag_sd": 0.448382,
+          "median_donor_pb_sd_over_bag_sd": 0.796036
+        }
+      }
+    ],
+    "age_mean_train": 87.96,
+    "age_sd_train": 8.282415106718572,
+    "age_space": [
+      87.96,
+      8.282415106718572
+    ]
+  },
+  "r2_arms": {
+    "pbulk": {
+      "name": "pbulk",
+      "value": null,
+      "info": {
+        "multiplier": 1.0,
+        "s_pb": 0.161858,
+        "scale_effective": 0.161858,
+        "genes_floored": 0
+      }
+    }
+  },
+  "training_options": {
+    "steps": 20000,
+    "anneal": null,
+    "annealstart": null,
+    "netfloor": null,
+    "nethorizon": null,
+    "ema": null,
+    "glr": 1.0,
+    "dlr": 1.0,
+    "plr": 1.0,
+    "particles": 512,
+    "zdim": 8,
+    "batch": 32,
+    "bag": 128,
+    "reg": 1.0,
+    "kappa": 1.0,
+    "priorreg": 1.0
+  },
+  "departures": {},
+  "learning_rates": {
+    "generator": 0.014,
+    "critic": 0.021,
+    "particle": 0.0406,
+    "schedule": {
+      "lr_schedule": "cosine",
+      "lr_anneal_start": 0.6,
+      "lr_floor": 1.0,
+      "network_lr_floor": 1.0,
+      "network_lr_horizon_cap": null
+    }
+  },
+  "shadow_ema_decays": [
+    0.999,
+    0.9995,
+    0.9998
+  ],
+  "native_ema_decay": 0.0,
+  "default_generation_state": "raw",
+  "critic_layout": {
+    "n_features": 2150,
+    "cond_dim": 7,
+    "hidden": 128,
+    "batch": 32,
+    "cells": 128,
+    "blocks": [
+      {
+        "flag": null,
+        "name": "released",
+        "columns": [
+          0,
+          150
+        ],
+        "cell_dim": null
+      },
+      {
+        "flag": "pbulk",
+        "name": "pb",
+        "columns": [
+          150,
+          2150
+        ],
+        "cell_dim": null
+      }
+    ]
+  },
+  "critic_module": null,
+  "generator_kwargs": {}
+}

@@ -43,3 +43,37 @@ Preceding release pilot completed and was committed9fb2372: exact old-recipe
 compatibility; RHBI profile-0.7814%,SDscore+2.3357%,combined-0.0638% vs current.
 Empirical still wins both primary scores. Both final checkpoints contain
 exactly20,000 penalty calls for20,000 updates; no skipping occurred.
+
+Completed fixed pilot (lower is better for all3columns):
+                            Profile RMSE   SD interval   Combined interval
+ current/BISPF                 .472544        .825765         .951601
+ adapted RHBI                  .468851        .845053         .950994
+ EMPF native preset            .465124        .806254         .945235
+ EMPF with RHBI shared hypers   .477863        .870384        1.004226
+ empirical resampling          .457693        .618559         .844756
+
+Native EMPF improved profile1.5701%,SDscore2.3628%,combined0.6690% vs current;
+vs RHBI, SDscore improved4.5913% and combined0.6056%. Its gene mean/detection/
+logvar errors worsened2.3944%/1.5278%/3.0772%, and coverage distances also
+worsened. PC/cell energy and spread improved. Empirical still wins both
+primary scores. Matching RHBI's shared parameters made EMPF worse on all
+3headline scores, and profile error exceeds the original-anchor0.5% allowance.
+Eight fields changed together; this comparison cannot identify one cause.
+
+Both full EMPF final checkpoints verify20,000 penalty calls,20,000 observed
+critic steps and20,000 updates with lazy_k1. Both full fits/registered readouts
+completed, arrays scored/hashed/pruned and weights retained. The1,000native
+verification updates and40,000full-fit updates used one sharedGPUworker.
+The native highdimensional prototype/chord bank remained inactive as required
+by the released law; no mechanism was invented or silently substituted.
+
+Result: no promotion, no confirmation advancement, default unchanged at
+microglia-pbulk-countshape-v2/ParticleGAN0.9.7. Singlefold/seed findings do not
+establish population/default qualification or biological patient axes.
+See completion/comparison.json, final_audit.json and independent_final_review.json
+for exact rows, scope and checks. Metadata/hash/arithmetic verification does
+not independently rescore the pruned generated arrays. Frozen sources and
+all prior qualification receipts remain unchanged. No new fits are pending.
+Independent final audit passed:345source pins,16retained copies,16weight
+hashes,4proofs,no-skips sidecars,392summary values and all relative/protected
+checks. ReviewSHA926b2f460975b389d9a14b392326bf5c2d577dec614ec8f26b7c97dc8eea2a38.

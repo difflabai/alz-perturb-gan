@@ -1,0 +1,77 @@
+{
+  "status": "completed_native_TRAIN_only",
+  "lane": "matched",
+  "particlegan": "0.10.0",
+  "provenance": {
+    "release": "0.10.0",
+    "commit": "952c3b62ba434f7da194067923351ff5748ef8dd",
+    "lane": "matched",
+    "host_derivation_sha256": "db5224008ea8c88799d310d7dcaa1d984319f634263ac799c64f1f336a690466",
+    "files": {
+      "release_env.py": {
+        "original": "/ml2/alz/analysis/faithful097/model/release_env.py",
+        "original_sha256": "841568c7d2132ac307bbc399f8739713aa1636a90259680dbae84f37c5dd115c",
+        "derived": "/ml2/alz/artifacts/native-releases/particlegan-0.10.0/alz-host-empf-matched/release_env.py",
+        "derived_sha256": "f426d77c30e56cdbfaa928442a6aa5e8c0daf88f50594a10f7ca46646d9ef3a3"
+      },
+      "trainer.py": {
+        "original": "/ml2/alz/analysis/improve_20261109/r5/trainer.py",
+        "original_sha256": "55efdd644bbffdf6891a9528ea226cdbb3b1786a332fec7025208500ebd164cb",
+        "derived": "/ml2/alz/artifacts/native-releases/particlegan-0.10.0/alz-host-empf-matched/trainer.py",
+        "derived_sha256": "764842babac6656f656d2c0346016f39a5a60d2c38d8312223d6d422accff398"
+      },
+      "generate.py": {
+        "original": "/ml2/alz/analysis/improve_20261109/r5/generate.py",
+        "original_sha256": "abf84dbc371ff0165dc7fc4b800105559e0dfee27a479c66528bd06a6d16d7a7",
+        "derived": "/ml2/alz/artifacts/native-releases/particlegan-0.10.0/alz-host-empf-matched/generate.py",
+        "derived_sha256": "ee8778bc8f536bd67d4ad793e9be36a359ee12532bec3dbf851ae030c3c5042e"
+      }
+    }
+  },
+  "source_manifest_sha256": "6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958",
+  "TRAIN_files_opened": [
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/manifest.json",
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/space.npz",
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/train/counts.npz",
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/train/metadata.npz"
+  ],
+  "default_changed": false,
+  "cache_manifest_sha256": "65d5e2f405ceeeb14ac35f8660bc9c42272ac35c64aeda4f7c3bd9ee21dbd09c",
+  "cache_anchor": {
+    "manifest_sha256": "65d5e2f405ceeeb14ac35f8660bc9c42272ac35c64aeda4f7c3bd9ee21dbd09c",
+    "payload_sha256": {
+      "space.npz": "87959216f5d912a340e483b1a5635e5e777644d8566c19da96eee2f8b8ba8fc1",
+      "train/counts.npz": "aacf88cbc48708656cc2d07581dff27a169fa95a42350b24752dc1e1d055a0b9",
+      "train/metadata.npz": "754ac5db9bb2623237395067c80b8cec44027aa7c42b797ef28245ae0d99a84d"
+    }
+  },
+  "fit_receipt_sha256": "b0803cd0de174b7238546ef8dc6ba8d5537087449c4b86a9af7b2f80c6c481ce",
+  "metadata_sha256": {
+    "config.json": "fe5ad76e8e51f19af49780ad3cbd7841bf26e45f2c844d901b0f88118d25e909",
+    "fit_receipt.json": "b0803cd0de174b7238546ef8dc6ba8d5537087449c4b86a9af7b2f80c6c481ce",
+    "checkpoint_receipt.json": "40980d60739670dc66573e8e8b7617b2fda02355aa267917889d24354883bd2d",
+    "learning_curve.jsonl": "11ca627d7f817c5fd1dd11acd7184d52c84623095fa4d6f83ae3ab9083f36e69"
+  },
+  "weights_sha256": {
+    "snap_18000.pt": "106caa2a70a052a8827750ac69baa75dcb6e4556ee47c0d0ed9f717ae685ab01",
+    "snap_5000.pt": "b6e077b02f4f0ad0796c4770e9fe534a5182f2d3a657aaf8cee2b896270a465f",
+    "final.pt": "68a7d82e9c547c50ccfd0319dc37320ea896aa08dc6b88d29b22502c14081dbd",
+    "snap_19000.pt": "913d2ae5e8daa719b2ed43af51227381e59f70f50c7f79a7e6001469959f14d6",
+    "snap_10000.pt": "86f23cde446b59ad44359076046a0790ddae5f20deffebc54040ec4164ee9827",
+    "snap_16000.pt": "fa94bc013d3fa1a17a65cbb06790c688dbe2d84b68042ccde358ff3beeaeafdf",
+    "snap_15000.pt": "9b6f8bda7f52ba51aed1e41e58aebc45eeb9d2b3da0c1b9c4903dbf9cb508dfe",
+    "snap_17000.pt": "497881705b4246b4c65b7dac3aaf3431f4f2982aa2bad10b64e5384080c17ff3"
+  },
+  "affinity": [
+    0,
+    1,
+    2
+  ],
+  "gpu": {
+    "selector": "1",
+    "memory_fraction": 0.04,
+    "max_allocated_bytes": 553605120,
+    "max_reserved_bytes": 822083584,
+    "total_bytes": 50899386368
+  }
+}

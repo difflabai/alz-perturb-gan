@@ -1,53 +1,58 @@
-ACTIVE owner steering: compare release with EMPF; lazy_k1 and matched hypers.
-Separate two fixed20k lanes implemented, no native/old sources modified.
-Frozen345manifestSHA6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958.
-Do not edit .py/PROTOCOL/resolved recipes/dependencies after proof freeze.
-Independent source review passed2aa5a5a4afcb22e63eb9e996c72ef0504fe2522324539ca1299f77d951a1182c.
-Actual verification currently execsession91222: native300+100same-process and
-100fresh-process already passed, matched running, then fresh matched. Driver
-logs under runs/empf_comparison_20261117/logs/. Await session exit0, inspect
-all four proof JSONs, copy compact proofs into analysis verification/, write
-prelaunch with exact proof hashes/manifest/source-review/hyperparameter audit,
-run common.preflight. Then commit and launch run.py serial full20k/CPUscore
-native then matched, retaining live session/PID and logfile in this file.
+FINAL Nov17,2026: owner-requested ParticleGAN0.10.0 EMPF comparison COMPLETE.
+Both full20k fits, same fixed CPU generation/scoring, and retained no-skips
+checkpoint audits finished. Execsession44936 exited0; runner641523 and workers
+are historical, no ALZ process remains running. Comparison/status are complete
+under runs/empf_comparison_20261117. Do not restart or retune this concluded
+study. run.py is idempotent if revalidating completed receipts.
 
-Prior release pilot completed exit0, audited/committed9fb2372; no promotion.
-Original release default/BISPF generated arrays/all scores exactly equal0.9.7.
-RHBI profile.4688512,SDscore.8450527,combined.9509940; current.4725437/.8257652/
-.9516009. Both actual final checkpoints verified20,000 penalty calls for20,000
-steps. Original326/330pins are unchanged and inherited into new345.
+Results(profileRMSE/heldSDscore/heldCombined):
+ current/BISPF .4725436875/.8257651948/.9516009358
+ adaptedRHBI .4688512075/.8450526738/.9509939876
+ EMPFnative .4651244441/.8062538977/.9452351881
+ EMPFmatched .4778629072/.8703835747/1.0042259267
+ empirical .4576932106/.6185589322/.8447564406
+Native EMPF improves3headline metrics vs current/RHBI, but gene mean/detection/
+logvar errors and coverage distances vs current worsen, and empirical wins
+both primary scores. Matching8shared RHBI fields makes EMPF worse; profile
+also exceeds original-anchor0.5% allowance. No promotion/confirmation.
+Default microglia-pbulk-countshape-v2 / ParticleGAN0.9.7 unchanged. Broad
+beat-empirical objective remains unachieved; do not mark goal complete for this
+pilot (host goal flag historically blocked and tool cannot resume it).
 
-Helpers: common reuses frozen old cache/fit/score validators with own host
-HERE/RUNS/PIN; own wrapper requires extra full-fit no_skip_audit. run.py's own
-CPU generation explicitly registers already-pinned cellshape/zcal modes.
-Native get_recipe(empf) non-saturating GANLoss, continuous2150features+c7;
-prototype/chord branch is natively inactive at this dimension, no invented bank.
-Matched exactly8common overrides vs native EMPF; retain EMPF rhbi_weight0 etc.
-Fresh setup imports only one release/lane; full20k inputs four TRAIN files,
-held payloads scoring only, sealed/external untouched. Direct owner sharing:
-oneGPU1worker,.04cap,3CPUthreads/affinity, no scheduler admission orGPUfreewait.
-User dislikes questions and frequent updates; monitor actual job10-15min.
-Broad beat-empirical goal unachieved; no marking goal complete for this pilot.
-Own Babel UUID01a1d30a-b60a-74c2-840f-26186159b1fe, use existing account helper.
-Last experiment transition queuedreport_b617fd2c45b968942ec1faaece40311f4b8e77825498ec6dfec3fb5a8887661b
-closed release pilot and noted EMPFpreflight preparation. No routine reports.
+Both final EMPF checkpoints contain exactly20,000 penalty calls/observed critic
+steps/completed updates, lazy_k1. Actual native verification1000updates across
+300fresh+100same-process replay+100fresh-process replay per lane, full snapshots/
+metrics exact, task initialparameters match baseline, incompatible headers
+rejected. All4TRAIN payloads only, one sharedGPU1worker,.04cap,3CPUthreads/
+affinity. Held developmentpayloads used only for scoring; sealed/external unused.
+No scheduler admission/permission flow or waiting forGPUfree. User explicitly
+authorized sharing and dislikes frequent questions/checkins.
 
-LIVE: all four actual verification proofs passed;1,000nativeupdates total
-(two lanes each300fresh+100same-process+100fresh-process), exact full snapshot/
-metrics, all300/100regularizer calls differentiable/nonzero per proof.
-PrelaunchSHAbfc650854dec11d8c8e6bc0939ce8dc4af6560b809d854aa6f7eb38d026a47e4;
-common.preflight passed. Implementation/proofs committed8eee1c1. Fixed full
-queue ACTUALLY RUNNING in execsession44936, runnerPID641523, nativeworker641524.
-Command python3 -B analysis/empf_comparison_20261117/run.py, outer log
-/tmp/alz-empf-comparison-20261117.log. Actual nativeupdate1 observed with finite
-positive G/D/prior gradients and penalty applied. Order native20k→CPUscore→
-matched20k→CPUscore; status.json/progress.json own run root. Await session44936
-via write_stdin, inspect actual phase/progress about10-15min apart. Last prior
-session91222 verification driver exited0. No old release process remains live.
+Source345manifest6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958.
+Prelaunchbfc650854dec11d8c8e6bc0939ce8dc4af6560b809d854aa6f7eb38d026a47e4.
+Code/proofs commit8eee1c1, livehandles0c741ae, independentproofreview58556e5.
+All previous326/330pins and receipts remain intact. Native0.10.0 taggedsource
+is unmodified and isolated; neither global dependencies nor publicdefault
+changed. Matched recipe preserves EMPF formulation/prior and all RHBI-specific
+defaults; exactly8common fields match RHBI. Native2150feature+c7 route has no
+lowdimensional prototype/chord bank. Explicit continuousdomain, GANLoss and
+native factory/record bindings preserved. See PROTOCOL/resolvedrecipes/audits.
 
-Next when finished: require status completed/comparison.json; rerun source
-checks and valid_fit/valid_score both (includes actual final20k no-skips audit),
-metadata/hash/calibration/pruning/default/source audit and independent final
-review. Copy compact comparison/scores/receipts into completion/, update docs,
-commit and report meaningful completion to Ember and owner. No automatic
-default promotion from either singlefold/seed pilot, no fit retuning or reseeding.
+Compact final16artifact copies and root final_audit.json in completion/;
+independent final review records precise scope. Weights retained locally;
+generated arrays scored/hashed/pruned. Hash/metadata audit is not an independent
+rescore. No bulk logs/checkpoints committed. No push. Previous release pilot
+completed/audited/committed9fb2372, same exact original-recipe generated data/
+metrics; RHBI pilot not promoted. Covariance screen also closedFAIL earlier.
+
+Own Babel UUID01a1d30a-b60a-74c2-840f-26186159b1fe/mailbox
+bits255.codex.auto_5f8a9ca090b22e57c87df9046053998c; preserve own helper session.
+Workerinstructions/coordinatorpermissions remain in force. Verified completion
+notice uses stableevent alz-empf-fixed-comparison-completed-20261117-v1; delivery
+and receipt remain separate, with exact status in local .babel-reports. No routine
+Babel checkins. Independent final review passed with no findings, SHA
+926b2f460975b389d9a14b392326bf5c2d577dec614ec8f26b7c97dc8eea2a38. All345pins,
+16compact copies,16weights,4proofs,no-skips sidecars,392summary values and
+relative/protected comparisons independently verified. No model/array loading
+or rescoring by that reviewer. No required work or ALZ jobs remain in this
+concluded release/EMPF pilot. The broader beat-empirical goal remains open.

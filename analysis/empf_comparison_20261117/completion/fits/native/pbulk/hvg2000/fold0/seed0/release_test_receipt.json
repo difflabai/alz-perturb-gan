@@ -1,0 +1,77 @@
+{
+  "status": "completed_native_TRAIN_only",
+  "lane": "native",
+  "particlegan": "0.10.0",
+  "provenance": {
+    "release": "0.10.0",
+    "commit": "952c3b62ba434f7da194067923351ff5748ef8dd",
+    "lane": "native",
+    "host_derivation_sha256": "db5224008ea8c88799d310d7dcaa1d984319f634263ac799c64f1f336a690466",
+    "files": {
+      "release_env.py": {
+        "original": "/ml2/alz/analysis/faithful097/model/release_env.py",
+        "original_sha256": "841568c7d2132ac307bbc399f8739713aa1636a90259680dbae84f37c5dd115c",
+        "derived": "/ml2/alz/artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native/release_env.py",
+        "derived_sha256": "f426d77c30e56cdbfaa928442a6aa5e8c0daf88f50594a10f7ca46646d9ef3a3"
+      },
+      "trainer.py": {
+        "original": "/ml2/alz/analysis/improve_20261109/r5/trainer.py",
+        "original_sha256": "55efdd644bbffdf6891a9528ea226cdbb3b1786a332fec7025208500ebd164cb",
+        "derived": "/ml2/alz/artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native/trainer.py",
+        "derived_sha256": "da40847c8db8fa47b0bde8a06d4b3658a055eb4de6ea4d943c3459179aec552c"
+      },
+      "generate.py": {
+        "original": "/ml2/alz/analysis/improve_20261109/r5/generate.py",
+        "original_sha256": "abf84dbc371ff0165dc7fc4b800105559e0dfee27a479c66528bd06a6d16d7a7",
+        "derived": "/ml2/alz/artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native/generate.py",
+        "derived_sha256": "ee8778bc8f536bd67d4ad793e9be36a359ee12532bec3dbf851ae030c3c5042e"
+      }
+    }
+  },
+  "source_manifest_sha256": "6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958",
+  "TRAIN_files_opened": [
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/manifest.json",
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/space.npz",
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/train/counts.npz",
+    "/ml2/alz/runs/improve_20261109/caches/hvg2000/fold0/train/metadata.npz"
+  ],
+  "default_changed": false,
+  "cache_manifest_sha256": "65d5e2f405ceeeb14ac35f8660bc9c42272ac35c64aeda4f7c3bd9ee21dbd09c",
+  "cache_anchor": {
+    "manifest_sha256": "65d5e2f405ceeeb14ac35f8660bc9c42272ac35c64aeda4f7c3bd9ee21dbd09c",
+    "payload_sha256": {
+      "space.npz": "87959216f5d912a340e483b1a5635e5e777644d8566c19da96eee2f8b8ba8fc1",
+      "train/counts.npz": "aacf88cbc48708656cc2d07581dff27a169fa95a42350b24752dc1e1d055a0b9",
+      "train/metadata.npz": "754ac5db9bb2623237395067c80b8cec44027aa7c42b797ef28245ae0d99a84d"
+    }
+  },
+  "fit_receipt_sha256": "12db781cd450a8733462d9e98f0eeb695d1c0bce5caea8f2ec596f453442c8a6",
+  "metadata_sha256": {
+    "config.json": "467f835cb0a9d30129eba0cca9373fca574c8436ab762bb03689549f5b575bd8",
+    "fit_receipt.json": "12db781cd450a8733462d9e98f0eeb695d1c0bce5caea8f2ec596f453442c8a6",
+    "checkpoint_receipt.json": "81dfd66b1c05ebcf9e52f1ce6645862f8c57b31a4f513fb8bcab7e0147db6304",
+    "learning_curve.jsonl": "4293ffbe004e70f157724d74ebe19c889aea3c811209338eff004ac96d8400fa"
+  },
+  "weights_sha256": {
+    "snap_18000.pt": "0db6c373d76d5f2cedc0ffbde9e5902d04078238f6e4fa83f5b1b8c93080b892",
+    "snap_5000.pt": "5ed440ed7b0066907dc02dfb78f81591bc23558827f75a919051a767d4512422",
+    "final.pt": "4f42d9250224c7ed5cbab7d6e973d49ca7ec596f0540187102040e3f9334cb25",
+    "snap_19000.pt": "9ef81002749e96002119b740627f4c6444d98da7bcb8664cdce71c4776fa24d6",
+    "snap_10000.pt": "cb04902219440d879b2ab9b4a734f0488e9f0cf9f1623c512c4d8e1aa966d81f",
+    "snap_16000.pt": "1e5cb8c7d78a956f6b8d1006ec6d8a723dd3e9e12570049a97bca9df87a53c41",
+    "snap_15000.pt": "d49ec7d2812ca2e598bf0d0bdf92bfd650cb473fae81d752970748e1cdf1b1a5",
+    "snap_17000.pt": "dae274386a0d1b42ff4bf4a330b1fecbd3425a26d4f25065cf30106b07e56783"
+  },
+  "affinity": [
+    0,
+    1,
+    2
+  ],
+  "gpu": {
+    "selector": "1",
+    "memory_fraction": 0.04,
+    "max_allocated_bytes": 633503232,
+    "max_reserved_bytes": 761266176,
+    "total_bytes": 50899386368
+  }
+}
