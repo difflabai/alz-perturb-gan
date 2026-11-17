@@ -2,52 +2,40 @@
 
 [**Read the evidence report →**](https://difflabai.github.io/alz-perturb-gan/)
 
-We trained five ParticleGAN 0.9.7 models of human microglial gene-expression distributions at four Alzheimer’s neuropathology stages. This repository contains the research code, experiment history, aggregate results, and a shareable report examining what the trained models actually support.
+The published report examines five frozen ParticleGAN 0.9.7 models of human microglial gene-expression distributions at four Alzheimer’s neuropathology stages. The current experimental CLI default uses native EMPF on ParticleGAN 0.10.0. This repository contains the research code, experiment history, aggregate results, and a shareable report examining what the trained models actually support.
 
 **Dataset: SEA-AD middle temporal gyrus.** This is an independent proof of concept. Prima Mente’s challenge atlas is planned for Spring 2027 and was not used for training or analysis here. These are not challenge benchmark results.
 
 The current model conditions on **pathology stage**, not gene edits or compounds. It is an observational proof of concept for generating cell populations and prioritizing experiments. It does not predict a treatment response, and we have not demonstrated state-of-the-art performance.
 
-## Development default
+## Current experimental default
 
-The [default configuration](analysis/improve_20261109/default_config.json) and [training/generation entry point](scripts/microglia.py) use **`pbulk`, 20,000 updates, ParticleGAN 0.9.7**. The selected readout is **`cellshape@0.5:biascal:stagehalf`**: late snapshots, half-shrunk stage conditioning, fixed within-donor mean contraction, and joint output-bias/dispersion calibration fitted on training donors only. It generates finite bags of 256 cells; cells within each bag are dependent.
+The [application config](configs/microglia_default.json) and [CLI](scripts/microglia.py) now select **ParticleGAN 0.10.0, the released native EMPF preset, `pbulk`, 20,000 updates**. This is an **owner-selected experimental default**, chosen after the fixed release comparison. The default generation command loads the retained, fully trained **fold 0/seed 0** model (25 training donors, 12 held-out development donors). It is not a full-cohort refit.
 
-In twelve matched CPU comparisons on six additional development splits, mean-expression error falls **23.6%**, detection error **25.8%**, and cellular-variability interval score **23.2%** against the original bias-calibrated readout. Profile RMSE rises **0.049%** (**0.48419 → 0.48443**). All prospective distribution gates pass under the application-selected 0.5% profile-error allowance; the original strict profile guard remains failed. These are selection-conditioned results on the same 37 donors. See the [selection evidence](analysis/improve_20261109/default_config_distribution_evidence_20261113.json), [comparison figure](analysis/improve_20261109/count_shape_confirmation_20261113.png), and [application decision](analysis/improve_20261109/APPLICATION_DEFAULT_DECISION_20261113.txt). The published report above still describes its original frozen models.
+Both EMPF comparison fits completed 20,000 updates. Each final checkpoint records exactly **20,000 regularizer calls in 20,000 updates (`lazy_k=1`)**. The selected native preset uses generator/critic/prior learning rates **0.012/0.018/0.03**, prior regularization 0.01 and EBI beta 6. The shared-parameter variant tested separately is not selected.
 
-Held-out coverage of nominal 80% ranges is **81.1% for expression-pattern means, 58.9% for cellular variability, and 70.0% combined**. Training-space variability coverage worsens **75.6% → 30.0%**. This is a development readout correction for marginal summaries; biological cell-state fidelity, stage prediction, and real-patient feature vectors remain unvalidated. Donor-dependent dispersion, external pooling and the failed zero-fraction critic remain excluded.
+In the one-fold/seed pilot, native EMPF improves profile RMSE **1.57%**, SD interval score **2.36%**, and combined interval score **0.67%** against the previous default. Gene mean, detection and log-variance errors worsen, and coverage also regresses. Empirical resampling still wins both interval scores. This application choice does **not** change those results, pass the prospective promotion rule, or establish population qualification. See the [comparison](analysis/empf_comparison_20261117/completion/comparison.json), [independent audit](analysis/empf_comparison_20261117/completion/independent_final_review.json), and [owner-selection record](analysis/default_empf_20261117/selection.json).
 
-The selected GAN still trails **stage-blind empirical resampling** on interval quality in these six extra splits: variability interval score **0.711 versus 0.670** and combined score **0.920 versus 0.874** (lower is better). Empirical variability coverage is **63.7%**, also below nominal 80%. The GAN has somewhat better gene marginals and cell-energy distance, but this comparison includes its calibration step and different stage handling. Treat the default as the best supported selected GAN recipe, with resampling as an essential population reference. See the [empirical interval comparison](analysis/improve_20261109/empirical_interval_reference_evidence_20261113.json).
+The readout remains **`cellshape@0.5:biascal:stagehalf`**: six late states (15,000 through 19,000 plus final), half-shrunk stage conditioning, fixed within-donor mean contraction and training-only joint bias/dispersion calibration. Each generated donor contains 256 dependent cells; generation uses 32 donors per target. No sealed or external donor counts were used.
 
-Inspect the complete configuration or preview the actual commands:
+Inspect or use the default:
 
 ```bash
 PY=/mnt/nvme/ai/conda/anaconda3/bin/python3
 $PY -B scripts/microglia.py config
-$PY -B scripts/microglia.py train --fold 0 --seed 0 --device cuda --dry-run
-```
-
-Run in the [recorded research environment](analysis/improve_20261109/runtime_environment.json), with the development caches and original dependencies described in the [study protocol](analysis/improve_20261109/PROTOCOL.md):
-
-```bash
+$PY -B scripts/microglia.py generate --dry-run
+# Use the retained selected model; output is outside the frozen fit:
+$PY -B scripts/microglia.py generate
+# Fresh 20k training/resume in a separate application output directory:
+CUDA_VISIBLE_DEVICES=1 $PY -B scripts/microglia.py train --fold 0 --seed 0 --device cuda --dry-run
 CUDA_VISIBLE_DEVICES=1 $PY -B scripts/microglia.py train --fold 0 --seed 0 --device cuda
-# Generate from an existing compatible fit, writing outside its frozen folder:
-CUDA_VISIBLE_DEVICES=1 $PY -B scripts/microglia.py generate --device cuda \
-  --fit runs/improve_20261109/fits_r3/pbulk/hvg2000/fold0/seed0
-# Explicitly select the original profile-RMSE read-out:
-$PY -B scripts/microglia.py config --profile profile-rmse
 ```
 
-Training uses fresh weights or resumes its own checkpoints; generation produces depth-matched evaluation summaries for the selected development cache. GPU memory is capped at 4% and CPU use at three threads per process. The root package installation remains the earlier synthetic smoke project.
+The [runtime instructions](analysis/default_empf_20261117/README.md) describe setup, checkpoint paths and alternative readouts. `--fit` explicitly selects another compatible native EMPF fit. Training uses a separate output root and does not overwrite the retained pilot. GPU memory is capped at 4% and CPU use at three threads. The root package installation remains the earlier synthetic smoke project.
 
-**`--profile profile-rmse`** retains the original `biascal@stagehalf` readout and its [original evidence](analysis/improve_20261109/default_config_evidence.json). **`--profile count-shape`** explicitly selects the new default readout. The original six-fit GPU experiment is reported separately from the twelve CPU confirmation pairs. No sealed or external donor counts were used for this selection.
+The [previous 0.9.7 default config](analysis/improve_20261109/default_config.json), its [selection evidence](analysis/improve_20261109/default_config_distribution_evidence_20261113.json), and all original benchmark receipts remain historical records. Their source hashes are preserved; the previous public entrypoint is [archived byte for byte](analysis/default_empf_20261117/previous/microglia.py). The published report and the biological findings below still describe the original frozen 0.9.7 models; they were not recomputed using EMPF.
 
-The [interval/architecture audit](analysis/improve_20261109/INTERVAL_ARCHITECTURE_REVIEW_20261113.txt) found **82.5% coverage for PC means versus 51.1% for cellular-spread coordinates** across the original bias-calibrated reference fits. The ranges use only 32 synthetic donors, so sample-percentile estimation also affects coverage. They are marginal ranges for projected summaries. Feature-space generalization and network-generated cellular heterogeneity motivate the controlled architecture experiments.
-
-The [architecture improvement pass](analysis/improve_20261109/PROTOCOL_ARCHITECTURE_PASS_20261113.txt) is complete: **18 matched fits**, covering a random-projection critic, split donor/cell decoder and four-state hierarchical decoder. None meets the fixed variability-interval improvement rule, so the count-shape default remains selected. The [complete artifact audit](analysis/improve_20261109/architecture_screen_complete_audit_20261113.json) passes all 18 fits; [final comparisons](analysis/improve_20261109/RESULTS.md#8r-completed-architecture-screen-and-improvement-pass-2026-11-13) preserve the accuracy, coverage and stability tradeoffs.
-
-Across all 18 frozen reference fits, increasing predictive draws from 32 to 128 improves interval score **1.0183 → 1.0001**, coverage **66.8% → 69.4%**, and mean width **0.611 → 0.640**. The default retains matched M=32 generation; a combined count-shape/M128 recipe is untested. Neural encoders, direct generator inversion, and frozen critic features fail their patient-representation checks. The [completion evidence](analysis/improve_20261109/improvement_pass_completion_evidence_20261113.json) accounts for every experiment and conditional stopping rule. Patient distributions and biological feature vectors remain research questions.
-
-## What the model says
+## Frozen report findings (ParticleGAN 0.9.7)
 
 Training used 14,762 SEA-AD middle temporal gyrus cells from 33 donors, a 2,000-gene panel, and five independent 20,000-update fits. All five fits started from scratch using the released ParticleGAN 0.9.7 formulation, with generator EMA disabled. We sampled 12.8 million unique synthetic cells from the frozen models; this adds no biological donors.
 

@@ -18,9 +18,12 @@ def test_dry_run_routes_training_and_served_readout(capsys):
     cfg = M.load_config()
     assert train[train.index('--arm') + 1] == cfg['training']['arm']
     assert train[train.index('--updates') + 1] == '20000'
+    assert train[2].endswith('microglia_runtime.py') and train[3] == 'train'
+    assert generation[2].endswith('microglia_runtime.py') and generation[3] == 'generate'
     assert generation[generation.index('--mode') + 1] == cfg['generation']['mode']
     assert 'fold2/seed7' in generation[generation.index('--fit') + 1]
     assert generation[generation.index('--out') + 1].endswith('.npz')
+    assert generation[generation.index('--seed') + 1] == '7'
     assert float(train[train.index('--gpu-mem-fraction') + 1]) == .04
 
 
@@ -29,6 +32,7 @@ def test_dry_run_routes_training_and_served_readout(capsys):
     ('data', 'external_donors', True), ('runtime', 'gpu_memory_fraction', .5),
     ('generation', 'generated_donors_per_target', 64),
     ('generation', 'mode', 'snapema@5000:0.9995'),
+    ('training', 'lazy_k', 2), ('training', 'recipe', 'rhbi_optimized'),
 ])
 def test_config_rejects_unvalidated_changes(tmp_path, changes):
     cfg = copy.deepcopy(M.load_config())
@@ -42,8 +46,10 @@ def test_config_rejects_unvalidated_changes(tmp_path, changes):
 
 def test_fit_must_match_default_and_development_split(tmp_path):
     cfg = M.load_config()
-    saved = {'arm': cfg['training']['arm'], 'panel': 'hvg2000', 'updates': 20000,
-             'fold': 0, 'seed': 0, 'protocol_split': True}
+    completed = M.ROOT / 'analysis/empf_comparison_20261117/completion/fits/native/pbulk/hvg2000/fold0/seed0'
+    saved = json.loads((completed / 'config.json').read_text())
+    for name in ('fit_receipt.json', 'no_skip_audit.json'):
+        (tmp_path/name).write_text((completed/name).read_text())
     p = tmp_path / 'config.json'
     p.write_text(json.dumps(saved))
     M.check_fit(tmp_path, cfg, 0, 0)
@@ -76,7 +82,7 @@ def test_count_shape_is_explicit_and_does_not_mutate_defaults(capsys):
     plan = json.loads(capsys.readouterr().out)
     command = plan['commands'][0]
     assert command[command.index('--mode') + 1] == 'cellshape@0.5:biascal:stagehalf'
-    assert command[2].endswith('mode_cellshape.py')
+    assert command[2].endswith('microglia_runtime.py') and command[3] == 'generate'
     assert M.load_config() == original
 
 
@@ -86,10 +92,10 @@ def test_profile_rmse_reference_remains_available_after_distribution_promotion(m
     monkeypatch.setattr(M, 'load_config', lambda: copy.deepcopy(cfg))
     M.main(['generate', '--dry-run'])
     default = json.loads(capsys.readouterr().out)['commands'][0]
-    assert default[2].endswith('mode_cellshape.py')
+    assert default[2].endswith('microglia_runtime.py')
     M.main(['generate', '--profile', 'profile-rmse', '--dry-run'])
     reference = json.loads(capsys.readouterr().out)['commands'][0]
-    assert reference[2].endswith('generate.py')
+    assert reference[2].endswith('microglia_runtime.py')
     assert reference[reference.index('--mode') + 1] == 'biascal@stagehalf'
     assert M.load_config()['generation']['mode'] == 'cellshape@0.5:biascal:stagehalf'
 
@@ -104,3 +110,25 @@ def test_reference_configuration_reports_its_actual_calibration_and_evidence(mon
     assert cfg['generation']['calibration'] == 'training donors only; output bias'
     assert cfg['generation']['mode'] == 'biascal@stagehalf'
     assert cfg['evidence'] == expected_evidence
+
+
+def test_default_generation_selects_the_completed_native_model(capsys):
+    M.main(['generate', '--dry-run'])
+    command = json.loads(capsys.readouterr().out)['commands'][0]
+    assert command[command.index('--fit')+1] == str(M.ROOT/M.load_config()['runtime']['selected_fit'])
+    assert M.load_config()['training']['particlegan_version'] == '0.10.0'
+    assert M.load_config()['training']['particle_lr'] == .03
+    assert M.load_config()['selection']['population_qualified'] is False
+
+
+@pytest.mark.parametrize('damage', ['old_release', 'matched_variant', 'skipped_regularizer'])
+def test_generation_rejects_wrong_recipe_or_skipped_regularization(tmp_path, damage):
+    completed = M.ROOT / 'analysis/empf_comparison_20261117/completion/fits/native/pbulk/hvg2000/fold0/seed0'
+    values = {name:json.loads((completed/name).read_text()) for name in
+              ('config.json','fit_receipt.json','no_skip_audit.json')}
+    if damage == 'old_release':values['config.json']['particlegan_version'] = '0.9.7'
+    elif damage == 'matched_variant':
+        values['config.json']['recipe'] = json.loads(M.RECIPE.read_text())['matched']['recipe']
+    else:values['no_skip_audit.json']['penalty_calls'] = 10000
+    for name,value in values.items():(tmp_path/name).write_text(json.dumps(value))
+    with pytest.raises(ValueError):M.check_fit(tmp_path,M.load_config(),0,0)

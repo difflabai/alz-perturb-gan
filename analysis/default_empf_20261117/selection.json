@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "status": "owner_selected_experimental_default",
+  "owner_instruction": "lets set it as default and push",
+  "selected_config": "configs/microglia_default.json",
+  "model": "native released EMPF, ParticleGAN0.10.0",
+  "matched_variant_selected": false,
+  "training_completed_updates": 20000,
+  "selection_scope": "retained fold0/seed0 development fit, not a full-cohort refit",
+  "training_donors": 25,
+  "development_heldout_donors": 12,
+  "population_qualified": false,
+  "prospective_promotion_rule_passed": false,
+  "selection_reason": "Owner explicitly requested the native EMPF preset as the application default after seeing the fixed pilot comparison. This application decision does not change any numerical grades or claim new confirmation.",
+  "known_tradeoffs": {
+    "vs_previous_default_percent": {
+      "profile_RMSE": -1.5700650826774076,
+      "SD_interval_score": -2.362814181148676,
+      "combined_interval_score": -0.6689513958659021,
+      "gene_mean_error": 2.3944197311691173,
+      "detection_error": 1.5278352324907596,
+      "log_variance_error": 3.077165202631571
+    },
+    "coverage_regresses": true,
+    "empirical_resampling_wins_both_primary_scores": true
+  },
+  "evidence": "analysis/empf_comparison_20261117/completion/comparison.json",
+  "independent_pilot_audit": "analysis/empf_comparison_20261117/completion/independent_final_review.json",
+  "previous_source_commit": "77b2d7d",
+  "previous_config": {
+    "path": "analysis/improve_20261109/default_config.json",
+    "sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+    "archive": "analysis/default_empf_20261117/previous/default_config.json"
+  },
+  "previous_public_entrypoint": {
+    "original": "scripts/microglia.py",
+    "sha256": "40d6102e77fa6a4ece2c64cd431db3d907449d7bd69335cb597370d5f860b80e",
+    "archive": "analysis/default_empf_20261117/previous/microglia.py"
+  },
+  "historical_guard_scope": "Old source manifests retain original hashes. Their unchanged-default guard correctly rejects the new public entrypoint. Use the original source commit for exact historical reruns; the new runtime validates unchanged model code plus the archived previous entrypoint and its new application sources.",
+  "checkpoints": "Retained locally under runs/empf_comparison_20261117/fits/native; weights/raw data remain outsideGit as in the existing repository contract."
+}

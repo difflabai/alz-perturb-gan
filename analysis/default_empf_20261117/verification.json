@@ -1,0 +1,51 @@
+{
+  "status": "passed_final_application_CLI_and_exact_pilot_parity",
+  "command": "/mnt/nvme/ai/conda/anaconda3/bin/python3 -B scripts/microglia.py generate --out runs/microglia_empf/verification/final_generated.npz",
+  "exit_code": 0,
+  "device": "cpu",
+  "training_updates_in_this_verification": 0,
+  "runtime_source_manifest_sha256": "cd9e649966bf40febcba1b341bfffff28dc9e434eff6917015ea9429c8fd1d07",
+  "config_sha256": "ab6434b002bdefc2022573eea3c4118a46e41fd90fb52ad4d1f8c0ea4ec4108a",
+  "generation_receipt": {
+    "path": "analysis/default_empf_20261117/application_generation.receipt.json",
+    "sha256": "5d4ac4ce147c14a348ef5c85973749ff8544e6ad338e15c781eb1b76c14eb24b"
+  },
+  "generated_archive": {
+    "local_path": "runs/microglia_empf/verification/final_generated.npz",
+    "sha256": "04b8d82c25a5b018cc2b19a3b5065a2edd4bf4e908a568fd65c28736015cde0b",
+    "bytes": 25031087,
+    "exact_match_to_scored_native_pilot": true
+  },
+  "unchanged_score_fingerprint": {
+    "generated_sha256": "04b8d82c25a5b018cc2b19a3b5065a2edd4bf4e908a568fd65c28736015cde0b",
+    "cache_sha256": "65d5e2f405ceeeb14ac35f8660bc9c42272ac35c64aeda4f7c3bd9ee21dbd09c",
+    "score_code_sha256": "dfe86ab19e8e6aceeca4579df35036602a1c5b1aab90f1fd301be8bc5c4d8821",
+    "interval_code_sha256": "0be538e9fc2027d40baf752e1f85a3f90dd985193b15ecc2095f96c2921a545f"
+  },
+  "score_parity_basis": "Byte-identical generated archive and unchanged score/interval code fingerprints; no new score computation or revised metrics.",
+  "targets": 37,
+  "training_donors": 25,
+  "heldout_donors": 12,
+  "M": 32,
+  "K": 256,
+  "readout_and_calibration_metadata_exactly_match_pilot": true,
+  "cache_payloads_verified_before_and_after": true,
+  "checkpoint_native_recipe_version_and_20000_regularizer_calls_verified": true,
+  "source_manifest_digest_bound_from_start_to_finish": true,
+  "automated_tests": {
+    "command": "PYTHONPATH=src:/tmp/alz-legacy-test-deps-20261117 OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3 /mnt/nvme/ai/conda/anaconda3/bin/python3 -B -m pytest tests -o addopts='' -q",
+    "passed": 46,
+    "warnings": 2,
+    "seconds": 4.82,
+    "log_sha256": "5ce4e9281d1b79cbaba26598a42926015722653547e23cecf4e12ac503a1f1d8",
+    "environment": "Legacy package0.8.0 and missing/incompatible optional h5ad dependencies were supplied under an isolated /tmp test target. No installed model package or pinned native release was changed."
+  },
+  "stdlib_only_training_dry_run": {
+    "fold": 2,
+    "seed": 7,
+    "exit_code": 0,
+    "plan_sha256": "ba3bb9e376fb2ad704c084fb312603af03165e3ea748a1ae0c6876df30811171"
+  },
+  "independent_review": "analysis/default_empf_20261117/independent_application_review.json",
+  "scientific_status": "owner-selected experimental default; no population qualification or full-cohort refit"
+}

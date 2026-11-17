@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Train or generate with the committed development-selected microglia recipe.
+"""Train or generate with the owner-selected experimental EMPF default.
 
 The root package is the older synthetic smoke study. This entry point routes
 to the human-microglia runtime and its explicit configuration. --dry-run and
@@ -17,8 +17,9 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 STUDY = ROOT / 'analysis/improve_20261109'
-RUNTIME = STUDY / 'r5'
-CONFIG = STUDY / 'default_config.json'
+RUNTIME = ROOT / 'scripts/microglia_runtime.py'
+CONFIG = ROOT / 'configs/microglia_default.json'
+RECIPE = ROOT / 'analysis/empf_comparison_20261117/resolved_recipes.json'
 
 
 def load_config(path=CONFIG):
@@ -26,15 +27,20 @@ def load_config(path=CONFIG):
     t, g, runtime = (cfg[k] for k in ('training', 'generation', 'runtime'))
     if cfg['schema_version'] != 1 or t['arm'] != 'pbulk' or t['panel'] != 'hvg2000' or t['updates'] != 20000:
         raise ValueError('configuration is not the validated pbulk/hvg2000/20000 development recipe')
-    expected = {'particlegan_version': '0.9.7', 'recipe': 'bispf_optimized', 'particles': 512, 'z_dim': 8,
+    expected = {'particlegan_version': '0.10.0', 'recipe': 'empf', 'particles': 512, 'z_dim': 8,
                 'batch_donors': 32, 'cells_per_bag': 128, 'generator_lr': .012, 'critic_lr': .018,
-                'particle_lr': .06, 'reg_coeff': 1., 'reg_kappa': 1., 'prior_reg': .01, 'native_ema_decay': 0.}
+                'particle_lr': .03, 'reg_coeff': 1., 'reg_kappa': 1., 'prior_reg': .01, 'native_ema_decay': 0.,
+                'reg_every': 1, 'lazy_k': 1, 'ebi_beta': 6., 'optimizer_smoothing': .001,
+                'optimizer_dense_profile': 'newton_schulz_hybrid_v1', 'optimizer_svd_backend': 'batched',
+                'training_precision': 'bf16_channels_last'}
     if any(t.get(k) != v for k, v in expected.items()):
         raise ValueError('configuration metadata differs from the pinned trainer recipe')
     if g['generated_donors_per_target'] != 32 or g['cells_per_generated_donor'] != 256:
         raise ValueError('the evaluated generation contract is M=32, K=256')
     if g['mode'] not in ('biascal@stagehalf', 'cellshape@0.5:biascal:stagehalf'):
         raise ValueError('generation mode is outside the documented default-selection pass')
+    if g.get('generation_stream_namespace') != [20261114, 6]:
+        raise ValueError('generation streams differ from the evaluated EMPF pilot')
     if runtime['threads'] != 3 or not 0 < runtime['gpu_memory_fraction'] <= .04:
         raise ValueError('configuration exceeds the shared-machine resource limits')
     if cfg['data']['external_donors'] or cfg['data']['sealed_evaluation_donors']:
@@ -65,22 +71,36 @@ def resolve_profile(cfg, name):
     return resolved
 
 
-def generation_command(cfg, fit, cache, out, device, memory):
+def generation_command(cfg, fit, cache, out, device, memory, seed=0):
     mode = cfg['generation']['mode']
-    module = 'mode_cellshape.py' if mode.startswith('cellshape@') else 'generate.py'
-    cmd = [sys.executable, '-B', str(RUNTIME / module), '--fit', str(fit), '--cache', str(cache),
-           '--mode', mode, '--out', str(out), '--device', device]
+    cmd = [sys.executable, '-B', str(RUNTIME), 'generate', '--fit', str(fit), '--cache', str(cache),
+           '--mode', mode, '--out', str(out), '--device', device, '--threads', str(cfg['runtime']['threads']),
+           '--seed', str(seed)]
     if device == 'cuda':
         cmd += ['--gpu-mem-fraction', str(memory)]
     return cmd
 
 
 def check_fit(fit, cfg, fold, seed):
+    fit = Path(fit)
     saved = json.loads((fit / 'config.json').read_text())
     expected = {'arm': cfg['training']['arm'], 'panel': cfg['training']['panel'],
-                'updates': cfg['training']['updates'], 'fold': fold, 'seed': seed}
+                'updates': cfg['training']['updates'], 'fold': fold, 'seed': seed,
+                'particlegan_version': '0.10.0', 'native_recipe': 'empf', 'batch': [32, 128],
+                'flags': ['pbulk'], 'critic_features': 2150}
     if any(saved.get(k) != v for k, v in expected.items()) or not saved.get('protocol_split'):
         raise ValueError('fit does not match the default recipe, fold, seed and development split')
+    spec = json.loads(RECIPE.read_text())['native']
+    if saved.get('recipe') != spec['recipe'] or saved.get('hyperparameters') != spec['hyperparameters']:
+        raise ValueError('fit contains a different native EMPF recipe or hyperparameters')
+    receipt = json.loads((fit / 'fit_receipt.json').read_text())
+    audit = json.loads((fit / 'no_skip_audit.json').read_text())
+    if receipt.get('completed_updates') != 20000 or receipt.get('endpoint') != 20000 or receipt.get('snapshots_missing'):
+        raise ValueError('fit has not completed the full20000-update endpoint')
+    if any(audit.get(k) != 20000 for k in ('penalty_calls', 'observed_steps', 'completed_updates')) or audit.get('lazy_k') != 1:
+        raise ValueError('fit does not verify regularization at every update')
+    if audit.get('final_checkpoint_sha256') != receipt.get('final_SHA256'):
+        raise ValueError('regularizer audit is for a different final checkpoint')
 
 
 def main(argv=None):
@@ -109,22 +129,26 @@ def main(argv=None):
         p.error('--fit is for generate; train always uses the default fit output root')
     t = cfg['training']
     cache = cache_path(cfg, args.fold)
-    fit = (args.fit.resolve() if args.fit else ROOT / cfg['runtime']['fit_output_root'] /
-           t['arm'] / t['panel'] / f'fold{args.fold}/seed{args.seed}')
+    fit = (ROOT / cfg['runtime']['fit_output_root'] / t['arm'] / t['panel'] /
+           f'fold{args.fold}/seed{args.seed}')
+    if args.fit:
+        fit = args.fit.resolve()
+    elif args.command == 'generate' and (args.fold, args.seed) == (cfg['runtime']['selected_fold'], cfg['runtime']['selected_seed']):
+        fit = ROOT / cfg['runtime']['selected_fit']
     out = args.out.resolve() if args.out else ROOT / cfg['runtime']['generation_output_root'] / \
         f'fold{args.fold}/seed{args.seed}' / f"generated_{cfg['generation']['mode']}.npz"
     if out.parent == fit or fit in out.parents:
         p.error('--out must be outside the fit directory')
     commands = []
     if args.command == 'train':
-        cmd = [sys.executable, '-B', str(RUNTIME / 'trainer.py'), '--cache', str(cache), '--arm', t['arm'],
+        cmd = [sys.executable, '-B', str(RUNTIME), 'train', '--cache', str(cache), '--arm', t['arm'],
                '--seed', str(args.seed), '--updates', str(t['updates']), '--out-root',
                str(ROOT / cfg['runtime']['fit_output_root']), '--device', args.device,
                '--threads', str(cfg['runtime']['threads'])]
         if args.device == 'cuda':
             cmd += ['--gpu-mem-fraction', str(memory)]
         commands.append(cmd)
-    commands.append(generation_command(cfg, fit, cache, out, args.device, memory))
+    commands.append(generation_command(cfg, fit, cache, out, args.device, memory,args.seed))
     if args.dry_run:
         print(json.dumps({'config': str(CONFIG), 'recipe': cfg['name'], 'commands': commands}, indent=2))
         return 0

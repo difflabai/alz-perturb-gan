@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "name": "microglia-empf-countshape-v1",
+  "status": "owner-selected-experimental",
+  "training": {
+    "arm": "pbulk",
+    "panel": "hvg2000",
+    "updates": 20000,
+    "particlegan_version": "0.10.0",
+    "recipe": "empf",
+    "particles": 512,
+    "z_dim": 8,
+    "batch_donors": 32,
+    "cells_per_bag": 128,
+    "generator_lr": 0.012,
+    "critic_lr": 0.018,
+    "particle_lr": 0.03,
+    "reg_coeff": 1.0,
+    "reg_kappa": 1.0,
+    "prior_reg": 0.01,
+    "native_ema_decay": 0.0,
+    "reg_every": 1,
+    "lazy_k": 1,
+    "ebi_beta": 6.0,
+    "optimizer_smoothing": 0.001,
+    "optimizer_dense_profile": "newton_schulz_hybrid_v1",
+    "optimizer_svd_backend": "batched",
+    "training_precision": "bf16_channels_last"
+  },
+  "generation": {
+    "mode": "cellshape@0.5:biascal:stagehalf",
+    "generated_donors_per_target": 32,
+    "cells_per_generated_donor": 256,
+    "state_readout": "late snapshots at 15000 through 19000 plus final",
+    "stage_handling": "half own stage, half training-stage mixture",
+    "calibration": "train-only joint bias/dispersion calibration after fixed within-donor mean shrinkage",
+    "generation_stream_namespace": [
+      20261114,
+      6
+    ]
+  },
+  "data": {
+    "cohort": "SEA-AD middle temporal gyrus",
+    "development_donors": 37,
+    "external_donors": false,
+    "sealed_evaluation_donors": false,
+    "selected_training_donors": 25,
+    "selected_heldout_donors": 12
+  },
+  "runtime": {
+    "threads": 3,
+    "gpu_memory_fraction": 0.04,
+    "fit_output_root": "runs/microglia_empf/fits",
+    "generation_output_root": "runs/microglia_empf/generated",
+    "selected_fit": "runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0",
+    "selected_fold": 0,
+    "selected_seed": 0
+  },
+  "evidence": "analysis/default_empf_20261117/selection.json",
+  "experimental_profiles": {},
+  "reference_profiles": {
+    "profile-rmse": {
+      "mode": "biascal@stagehalf",
+      "calibration": "training donors only; output bias",
+      "status": "alternative readout of owner-selected EMPF; old BISPF evidence remains historical",
+      "evidence": "analysis/default_empf_20261117/selection.json"
+    },
+    "count-shape": {
+      "mode": "cellshape@0.5:biascal:stagehalf",
+      "calibration": "train-only joint bias/dispersion calibration after fixed within-donor mean shrinkage",
+      "status": "alternative readout of owner-selected EMPF; old BISPF evidence remains historical",
+      "evidence": "analysis/default_empf_20261117/selection.json"
+    }
+  },
+  "selection": {
+    "basis": "explicit owner instruction to set native EMPF as default and push",
+    "population_qualified": false,
+    "evidence_scope": "one development fold/seed, full20000 updates",
+    "tradeoffs": "profile and primary scores improve vs previous default; gene errors and coverage regress; empirical resampling still leads",
+    "previous_default_config": "analysis/improve_20261109/default_config.json",
+    "pilot_comparison": "analysis/empf_comparison_20261117/completion/comparison.json"
+  }
+}
