@@ -1,0 +1,109 @@
+{
+  "status": "passed_completed_fixed_release_pilot_artifact_audit",
+  "release": "0.10.0",
+  "fold": 0,
+  "seed": 0,
+  "training_updates_per_lane": 20000,
+  "native_full_fits": 2,
+  "original_source_files": 326,
+  "actual_readout_source_files": 330,
+  "training_source_manifest_sha256": "114f45f6439011adea630ec8f97e998122e5a9ae720ce88bf59d96db2627a8bf",
+  "additive_execution_manifest_sha256": "f24736824a3e012ff8572392d4be5235be770d5f2213d0fabc6cc272f3091b7c",
+  "six_prelaunch_proofs_revalidated": true,
+  "full_fit_and_score_links_revalidated": true,
+  "compatibility_generated_data_and_all_scores_exact": true,
+  "reg_every_to_lazy_k": {
+    "compat": 1,
+    "rhbi": 1
+  },
+  "regularizer_called_each_update": true,
+  "rhbi_percent_change_vs_current": {
+    "profile_RMSE": -0.7814049901604947,
+    "held_sd_interval_score": 2.3357098502146956,
+    "held_combined_interval_score": -0.06378180075107265
+  },
+  "rhbi_percent_change_vs_empirical": {
+    "profile_RMSE": 2.437876877102352,
+    "held_sd_interval_score": 36.61635613433391,
+    "held_combined_interval_score": 12.576115660377152
+  },
+  "result": "RHBI improves profile error but worsens SD proper interval score and both coverage distances; no qualification or promotion",
+  "default_changed": false,
+  "sealed_or_external_donors_used": false,
+  "limitations": [
+    "one development fold/seed",
+    "adapted no-simplex RHBI, not exact upstream default",
+    "generated arrays scored/hashed/pruned; metadata/hash audit is not an independent rescore",
+    "full20k compatibility compares generated data and metrics, not unavailable old full optimizer states"
+  ],
+  "retained_compact_artifacts": {
+    "pilot_comparison.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/pilot_comparison.json",
+      "sha256": "85f2a3e171d10a60af1a2f94998663748bfef6de091ff832176750742ab42968"
+    },
+    "readout_registration_completion.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/readout_registration_completion.json",
+      "sha256": "b72a54bda63f3fe81f9119a3baaeef1c967c667ac080b4cf38c3f03aa4673857"
+    },
+    "status.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/status.json",
+      "sha256": "b534d8eaa9479f8f5a58e00e110ead8439caf586d44cd3bc95c0811be4486a0b"
+    },
+    "results/compat.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/results/compat.json",
+      "sha256": "fefd16c0862d187515651d735be8fb5a4eedfccfccc84987bbfa99997a702e67"
+    },
+    "results/compat.readout_registration.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/results/compat.readout_registration.json",
+      "sha256": "07e13571941b9cbdece0448a4446f67dcbeee6a78b882cfd6fee9f7ba046ead1"
+    },
+    "generated/compat.receipt.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/generated/compat.receipt.json",
+      "sha256": "a8a01186999388729a017407ba5483eae99d0e526e4c981ca14a91fe83255d08"
+    },
+    "fits/compat/pbulk/hvg2000/fold0/seed0/release_test_receipt.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/fits/compat/pbulk/hvg2000/fold0/seed0/release_test_receipt.json",
+      "sha256": "5e8221296eeda9d1acd3cefcd0a067291b94f28f13ece988616a7472ba1d1611"
+    },
+    "fits/compat/pbulk/hvg2000/fold0/seed0/fit_receipt.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/fits/compat/pbulk/hvg2000/fold0/seed0/fit_receipt.json",
+      "sha256": "8c56ef5254a7746552915d66a2257c3bb4a8604c4649d320f47834cf397f7b86"
+    },
+    "fits/compat/pbulk/hvg2000/fold0/seed0/config.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/fits/compat/pbulk/hvg2000/fold0/seed0/config.json",
+      "sha256": "fad5ea224bb58109545de81719407fb46b45a935c8d492cc210c339684c6058d"
+    },
+    "fits/compat/pbulk/hvg2000/fold0/seed0/checkpoint_receipt.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/fits/compat/pbulk/hvg2000/fold0/seed0/checkpoint_receipt.json",
+      "sha256": "7c72f59b08253e9eb0ec79035f1439d0e97d0440db6d810685c1e8d8c7d35754"
+    },
+    "results/rhbi.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/results/rhbi.json",
+      "sha256": "6a30d694f82b3fbe477fc9444b25989e03af60ed8b75a024b994e7cc9797bb54"
+    },
+    "results/rhbi.readout_registration.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/results/rhbi.readout_registration.json",
+      "sha256": "c6b6d8bffabc57d64baf7d80d65ad46f6184a680e631ea8c13565da48fd80daa"
+    },
+    "generated/rhbi.receipt.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/generated/rhbi.receipt.json",
+      "sha256": "28aec4abbc86f809c266b45b49229f9fd3f6642c1905b3e778e3ec2bdfc6358e"
+    },
+    "fits/rhbi/pbulk/hvg2000/fold0/seed0/release_test_receipt.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/fits/rhbi/pbulk/hvg2000/fold0/seed0/release_test_receipt.json",
+      "sha256": "02515216018995ddf1189569a92d6f5522e2e68651aed7a316e362742021258f"
+    },
+    "fits/rhbi/pbulk/hvg2000/fold0/seed0/fit_receipt.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/fits/rhbi/pbulk/hvg2000/fold0/seed0/fit_receipt.json",
+      "sha256": "e6005f8158ad373bcdabf92632467c91390cfcf00691ce82d70f0615d30523af"
+    },
+    "fits/rhbi/pbulk/hvg2000/fold0/seed0/config.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/fits/rhbi/pbulk/hvg2000/fold0/seed0/config.json",
+      "sha256": "6f8b8905d949a65ee5fecfb282316ea86f2c15013a870440208c75670b10452d"
+    },
+    "fits/rhbi/pbulk/hvg2000/fold0/seed0/checkpoint_receipt.json": {
+      "runtime": "/ml2/alz/runs/particlegan_upgrade_20261117/fits/rhbi/pbulk/hvg2000/fold0/seed0/checkpoint_receipt.json",
+      "sha256": "5d909c9d1095c50f5d0f5bfc148eba33073a8b8f6c00fad95e37abc83adf0e78"
+    }
+  }
+}

@@ -49,3 +49,17 @@ postfit/source_manifest.json adds four execution pins; a supplemental receipt
 links each finalized score to the corrected launcher. The original launcher
 and failed log remain historical evidence. No arrays/scores existed when the
 registration failure was fixed, and the completed fit was retained.
+
+Completed: both fixed20k fits and matched CPU scoring passed. See completion/
+for retained scores, recipes/receipts, arithmetic and artifact audits, and the
+independent final review. New version plus the original recipe reproduced all
+generated data and scored metrics exactly. Adapted RHBI profile RMSE improved
+0.7814%, SD proper interval score worsened2.3357%, combined improved0.0638%,
+and both coverage distances worsened vs current. Empirical remains better on
+both primary scores. No promotion or default change. All326/330 pins,16 retained
+weights,17 compact copies and six verification links independently reviewed.
+The user next requested EMPF with lazy_k1 and matched hyperparameters; that
+prospective comparison is separate in analysis/empf_comparison_20261117.
+Actual no-skipping checkpoint audit: both completed20k fits contain exactly
+20,000 penalty calls,20,000 observed critic steps and20,000 completed updates,
+with reg_every1. See completion/lazy_regularizer_audit.json.

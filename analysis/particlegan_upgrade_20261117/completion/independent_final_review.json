@@ -1,0 +1,64 @@
+{
+  "status": "passed_independent_hash_metadata_and_arithmetic_review",
+  "reviewer": "/root/application_default_review",
+  "reviewed_utc": "2026-11-17T02:08:54.225481+00:00",
+  "final_audit_sha256": "d71b30966d9ec7d5d554b4dffa5c9d21d9dc9623393cb079d4d44a80d4e6d5b6",
+  "training_source_manifest_sha256": "114f45f6439011adea630ec8f97e998122e5a9ae720ce88bf59d96db2627a8bf",
+  "additive_execution_manifest_sha256": "f24736824a3e012ff8572392d4be5235be770d5f2213d0fabc6cc272f3091b7c",
+  "verified": {
+    "all_original_source_pins": 326,
+    "all_actual_readout_source_pins": 330,
+    "original_pins_preserved": true,
+    "retained_compact_copies_byte_identical_to_runtime": 17,
+    "prelaunch_proof_hash_status_source_derivation_and_checkpoint_links": 6,
+    "fit_weight_files_rehashed_without_deserialization": 16,
+    "fit_metadata_files_rehashed": 8,
+    "fixed20k_fit_config_recipe_version_snapshot_and_checkpoint_links": 2,
+    "five_report_rows_all_numeric_summary_values_recomputed": 280,
+    "all_compatibility_historical_and_interval_values_equal_current_control": true,
+    "compatibility_generated_archive_hash_equal_current_control": true,
+    "finalized_fit_score_generation_and_330_source_registration_links": 2,
+    "generation_layout_readout_train_calibration_and_pruning_metadata": true,
+    "both_four_TRAIN_file_read_scope_receipts_match": true,
+    "cache_hash_receipts_match_frozen_anchor_metadata": true,
+    "all_reported_relative_changes_recomputed": 6,
+    "both_coverage_distances_recomputed": true,
+    "default_config_and_pinned_CLI_source_unchanged": true
+  },
+  "rhbi_percent_change_vs_reference": {
+    "current32": {
+      "profile_RMSE": -0.7814049901604947,
+      "held_sd_interval_score": 2.3357098502146956,
+      "held_combined_interval_score": -0.06378180075107265
+    },
+    "empirical32": {
+      "profile_RMSE": 2.437876877102352,
+      "held_sd_interval_score": 36.61635613433391,
+      "held_combined_interval_score": 12.576115660377152
+    }
+  },
+  "coverage_distance_to_0_8": {
+    "sd": {
+      "current32": 0.20527777777777778,
+      "rhbi": 0.22430555555555565,
+      "empirical32": 0.08854166666666674
+    },
+    "combined": {
+      "current32": 0.09243055555555557,
+      "rhbi": 0.12732638888888892,
+      "empirical32": 0.013472222222222219
+    }
+  },
+  "default_sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+  "default_changed": false,
+  "findings": [],
+  "interpretation": "One fixed development fold/seed: adapted no-simplex RHBI improves profile RMSE versus current control, worsens SD proper interval score and both coverage distances, and remains worse than empirical on both primary proper scores. No qualification or promotion. Full20k compatibility concerns generated archive fingerprints and all scores, not equality of unavailable old full optimizer state.",
+  "limits": [
+    "No model construction, training, generation, checkpoint deserialization, array loading or independent rescoring; checkpoint archives were SHA256-hashed only.",
+    "No cache array payloads were opened; their recorded hashes were matched to frozen anchor metadata.",
+    "Tensor/replay equality and runtime read scope rely on linked retained proofs and pinned execution sources; they were not re-executed.",
+    "Generated arrays were already pruned. The equal archive hash was checked; old canonical and new raw-byte per-array fingerprint formats differ and were not compared as equivalent hashes.",
+    "Every-step regularization follows reg_every=1 plus previously reviewed native factory and caller-loop code; runtime checkpoint call counters were not deserialized.",
+    "One reused development fold/seed and an adapted recipe do not establish population, biological, clinical or default-adoption qualification."
+  ]
+}
