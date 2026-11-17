@@ -35,6 +35,8 @@ The [runtime instructions](analysis/default_empf_20261117/README.md) describe se
 
 The [previous 0.9.7 default config](analysis/improve_20261109/default_config.json), its [selection evidence](analysis/improve_20261109/default_config_distribution_evidence_20261113.json), and all original benchmark receipts remain historical records. Their source hashes are preserved; the previous public entrypoint is [archived byte for byte](analysis/default_empf_20261117/previous/microglia.py). The published report and the biological findings below still describe the original frozen 0.9.7 models; they were not recomputed using EMPF.
 
+A subsequent [coverage improvement pilot](analysis/coverage_empf_20261117/README.md) halves the inherited count-readout contraction. On the same native EMPF fold/seed, variability coverage rises **58.3% → 62.2%**, combined coverage **69.2% → 71.5%**, and their proper interval scores improve **17.2% and 7.4%**. Separate SD-only calibration with disjoint six-donor calibration/test halves gives **86.7% / 83.7%** coverage with wider ranges and better proper scores. This is an experimental count-readout and interval-calibration result; additional native folds/seeds are needed before changing the public default.
+
 ## Frozen report findings (ParticleGAN 0.9.7)
 
 Training used 14,762 SEA-AD middle temporal gyrus cells from 33 donors, a 2,000-gene panel, and five independent 20,000-update fits. All five fits started from scratch using the released ParticleGAN 0.9.7 formulation, with generator EMA disabled. We sampled 12.8 million unique synthetic cells from the frozen models; this adds no biological donors.
