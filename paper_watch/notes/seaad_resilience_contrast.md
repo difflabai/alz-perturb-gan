@@ -82,3 +82,19 @@ program effect concentrates in interneurons / ET / CT types, the
 IT-only compartment structurally misses it.
 
 ## Iteration 1 — running (3-seed gauntlet on the initial config)
+
+## Use in ALZ
+
+This is an opt-in cognition diagnostic for a neuronal cohort. The
+committed runner reproduces the iteration 3 ensemble configuration
+(recorded mean AUROC 0.557). The single-fit 0.580 is the historical
+iteration 1 result. A prospective comparison should fit and evaluate on
+separate donors and keep records from the same donor together across
+regions, including for the shuffled control.
+
+From `paper_watch/` with the two local SEA-AD region inputs and a
+`Cognitive Status` column in `data/disease.csv`:
+
+```sh
+python scripts/run_once.py test_seaad_resilience_contrast 0 300
+```

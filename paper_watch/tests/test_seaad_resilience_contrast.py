@@ -62,7 +62,7 @@ def _auroc(scores, labels):
 
 def _load_region(region):
     adata = load_seaad_obs(region)
-    ann = seaad_annotations(region)
+    ann = seaad_annotations(region, include_cognition=True)
     obs = adata.obs
     key = (obs["cell_barcode"].astype(str) + "-"
            + obs["barcoded_cell_sample_label"].astype(str))

@@ -75,9 +75,10 @@ def load_seaad_obs(region: str = "LEC"):
     return ad.read_h5ad(p, backed="r")
 
 
-def seaad_annotations(region: str = "LEC"):
+def seaad_annotations(region: str = "LEC", *, include_cognition: bool = False):
     """Per-cell annotations for a SEA-AD region, as a DataFrame indexed
-    by cell_label, with columns: donor_label, subclass, adnc.
+    by cell_label, with donor_label, subclass, and adnc columns.
+    Pass include_cognition to also require the Cognitive Status field.
 
     Assembled from the ABC metadata release (all verified present in the
     public bucket on 2026-11-17):
@@ -104,9 +105,10 @@ def seaad_annotations(region: str = "LEC"):
     clus = pd.read_csv(clus_p, usecols=["cell_label", "label"])
     clus = clus.rename(columns={"label": "cluster_label"})
     terms = pd.read_csv(terms_p)  # cluster_label (supertype) -> subclass
-    dis = pd.read_csv(dis_p, usecols=["donor_label",
-                                       "Overall AD neuropathological Change",
-                                       "Cognitive Status"])
+    disease_columns = ["donor_label", "Overall AD neuropathological Change"]
+    if include_cognition:
+        disease_columns.append("Cognitive Status")
+    dis = pd.read_csv(dis_p, usecols=disease_columns)
     df = (cells.merge(clus, on="cell_label", how="inner")
                .merge(terms, on="cluster_label", how="left")
                .merge(dis, on="donor_label", how="left"))
