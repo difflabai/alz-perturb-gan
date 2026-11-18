@@ -51,15 +51,13 @@ overrides such as `NEUROKO_H5AD`); see `alztest/data.py` for the exact
 expected files per loader. SEA-AD multiregion files come from the
 public `allen-brain-cell-atlas` bucket (Allen Brain Cell Atlas).
 
-## Finds converted so far
+## Integrated experiments
 
-| Find | Route | Status |
-|---|---|---|
-| NeuroKO CRISPR screen (Dominicus et al. 2026) | new distribution + target | blocked: printed Zenodo DOI does not resolve |
-| SEA-AD multiregional vulnerability ordering (Travaglini et al. 2026) | new distribution + readout | loop running (iteration 8 of 10) |
-| panAD atlas + MONET subtypes (Rahimzadeh et al. 2026) | new target | blocked: no open download of integrated object |
-| PsychAD cross-disorder atlas (Lee et al. 2026) | new target | blocked: Synapse DUA required |
-| GNPC longitudinal plasma proteomics (2026) | new distribution + target | blocked: consortium access |
-| LL microglial remodeling axis (Arif et al. 2026) | new target + readout | loop running (iteration 2 of 10) |
+| Experiment | Recorded finding |
+|---|---|
+| [SEA-AD cross-region ordering](notes/seaad_vulnerability_readout.md) | The Gaussian baseline leads at the tested CPU budget |
+| [Lipid–lysosome microglia readout](notes/seaad_ll_microglia_readout.md) | The centroid leads. The default gene panel lacks both complete modules |
+| [Cognition at matched pathology](notes/seaad_resilience_contrast.md) | Single-fit AUROC 0.580. A larger independent cohort is needed |
 
-Full briefs live in the watch ledger (kept outside this repo).
+The NeuroKO, panAD, PsychAD, and GNPC designs remain in their
+[closed pull requests](https://github.com/difflabai/alz-perturb-gan/pulls?q=is%3Apr+is%3Aclosed+%22Paper+watch%22).
