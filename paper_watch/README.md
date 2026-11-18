@@ -8,9 +8,8 @@ which distribution matters, or help us read what the model learned?
 
 Top-ranked finds are converted here into small CPU tests — one PR per
 find, research-note style, **nothing merged by the watch**. Each test
-uses the current company-standard ParticleGAN configuration
-**unmodified** (latest particlegan / EMPF public API); refinements
-inside a test's 10-iteration loop may touch data handling,
+uses the released ParticleGAN EMPF API with small CPU-specific network
+and optimizer settings. Refinements inside a 10-iteration loop may touch data handling,
 conditioning, splits, and readouts — never the GAN. Minimum control
 arms: a mean/linear baseline and a shuffled-label/condition arm.
 "Proven" means the effect holds across ≥3 seeds with a clear margin
@@ -27,6 +26,23 @@ PR ships as an honest negative/partial with the full log.
 - `notes/` — one iteration log per find (every round, with numbers).
 - `scripts/run_once.py` — run one seed of one test module and print
   JSON margins: `python3 scripts/run_once.py <test_module> <seed> <steps>`
+
+## Running locally
+
+Use an isolated Python 3.11 environment from the repository root. The
+paper-watch harness uses the same ParticleGAN release source as the
+experimental microglia CLI.
+
+```sh
+python -m pip install -r paper_watch/requirements.txt
+python -m pytest paper_watch/tests/test_harness.py
+```
+
+The regular repository suite discovers `tests/`. The data-dependent
+experiments under `paper_watch/tests/` are opt-in. Their scientific
+thresholds can fail when the model falls short of the research target.
+For a single-seed diagnostic, run `scripts/run_once.py` from
+`paper_watch/`, using the module name without the `.py` suffix.
 
 ## Data
 

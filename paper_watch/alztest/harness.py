@@ -90,15 +90,16 @@ class ConditionalPGAN:
         self.D.cond.copy_(v)
 
     def fit(self, X: np.ndarray, cond: np.ndarray, steps: int = 300) -> None:
-        by_cond = [np.where(cond == k)[0] for k in range(self.n_cond)]
-        by_cond = [ix for ix in by_cond if len(ix) >= 32]
-        order = list(range(len(by_cond)))
+        by_cond = [np.flatnonzero(cond == k) for k in range(self.n_cond)]
+        order = [k for k, indices in enumerate(by_cond) if len(indices) >= 32]
+        if not order:
+            raise ValueError("training needs at least 32 rows in one condition")
         for s in range(steps):
-            k = order[s % len(order)]
             if s % len(order) == 0:
                 self._rng.shuffle(order)
+            k = order[s % len(order)]
             ix = by_cond[k]
-            pick = self._rng.choice(ix, size=min(BATCH, len(ix)), replace=len(ix) < BATCH)
+            pick = self._rng.choice(ix, size=BATCH, replace=len(ix) < BATCH)
             self._set_cond(k)
             batch = torch.tensor(X[pick], dtype=torch.float32)
             self.trainer.step(batch)
