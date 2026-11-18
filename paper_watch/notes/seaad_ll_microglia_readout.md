@@ -34,6 +34,38 @@ weak and noisy at n=43. Next lever when the loop resumes: pool LEC
 donors with per-region burden/deviation (donor n is the wall), and run
 seeds 1–2 before any verdict.
 
+## Iteration 3 (one change — data handling: pool LEC donors)
+AnG-only iterations 1–2 were donor-starved (n=43 at any threshold).
+Iteration 3 pools LEC: burden, PCA and fits stay per-region; the
+Spearman unit is donor x region (both quantities are region-specific
+measurements). Expected pooled n ~80. If rho still wobbles at the
+larger n, iteration 4 imports the SEA-AD loop's fix (3-fit ensemble).
+RESULT — GAUNTLET (n=77 donor x region units; AnG 43 + LEC 34):
+model {+0.223, +0.142, +0.241} mean **+0.202**; Gaussian mean
+**+0.228**; linear centroid **+0.248** (deterministic — identical
+every seed); shuffled mean +0.038. The burden–deviation association
+is real and stable at the larger n (every real arm >> null, every
+seed) — and it is entirely a mean-shift phenomenon: the no-fit linear
+baseline matches or beats both fitted arms on all three seeds.
+
+## LOOP CLOSED at iteration 3 — honest partial/negative
+Not proven as a model readout (assertions require model > 0.3/seed
+and > linear mean; neither holds, assertions unloosened). Closing
+early rather than spending iterations 4–10: the remaining candidate
+levers don't survive scrutiny — ensembling attacks fit variance, but
+the arm to beat (linear) has no variance; a module-subspace deviation
+readout would be semi-circular (burden is computed from the same
+module genes). The non-circular version — burden from the lipid half
+of the module, deviation read on the lysosome half, and vice versa
+(cross-module split) — changes the claim under test and is queued as
+a possible future conversion, not an iteration of this one.
+Durable finding: donor LL burden is a real, cross-region, mean-level
+displacement of the microglial distribution (rho ~ +0.25 by centroid
+distance at n=77) — as a TARGET the axis is validated; as a
+ParticleGAN readout at toy scale, the model adds nothing over a
+centroid. Production-scale fits (20k steps, stage conditioning) are
+a different regime the toy cannot speak to.
+
 ## Iteration 1 — running
 Config: PGAN fit on CTRL microglia only (unmodified EMPF recipe,
 300 steps), PC space (top-1500 var genes + 16 module genes, 30 PCs).

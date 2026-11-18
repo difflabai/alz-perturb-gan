@@ -36,7 +36,7 @@ from scipy.stats import spearmanr
 from alztest.data import DataUnavailable, load_seaad_obs, seaad_annotations
 from alztest.harness import energy_distance, fit_unconditional, pca_fit_transform, standardize
 
-REGION = "AnG"
+REGIONS = ("AnG", "LEC")
 LIPID = ["APOE", "ABCA1", "SOAT1", "ACSL1", "ACSL3", "ACSL4", "PLIN2"]
 LYSO = ["NPC1", "NPC2", "LIPA", "GBA", "CTSD", "CTSB", "CTSS", "LAMP1", "LAMP2"]
 MODULE = LIPID + LYSO
@@ -44,9 +44,9 @@ N_COMP = 30
 MIN_CELLS_PER_DONOR = 25
 
 
-def _load_microglia(seed: int = 0):
-    adata = load_seaad_obs(REGION)
-    ann = seaad_annotations(REGION)
+def _load_microglia(seed: int = 0, region: str = "AnG"):
+    adata = load_seaad_obs(region)
+    ann = seaad_annotations(region)
     obs = adata.obs
     key = (obs["cell_barcode"].astype(str) + "-"
            + obs["barcoded_cell_sample_label"].astype(str))
@@ -110,38 +110,55 @@ def _ll_burden(X, group, donors, lip_pos, lys_pos):
 
 
 def run_once(seed: int = 0, steps: int = 300) -> dict:
-    X, group, donors, lip_pos, lys_pos = _load_microglia(seed)
-    burden = _ll_burden(X, group, donors, lip_pos, lys_pos)
-    Xp, _ = pca_fit_transform(X, n_comp=N_COMP)
-    Xp = standardize(Xp)
-    ctrl = group == "CTRL"
-    donor_ids = sorted(burden)
-    dev_cells = {d: Xp[donors == d] for d in donor_ids}
-    b = np.array([burden[d] for d in donor_ids])
+    # Iteration 3: pool LEC donors alongside AnG. Iterations 1-2 were
+    # AnG-only and donor-starved (n=43 at any threshold; fit noise
+    # ±0.06). Burden, PCA, and fits stay PER-REGION (representations
+    # are not comparable across regions); the pooled Spearman unit is
+    # donor x region — burden and deviation are both region-specific
+    # measurements of the same donor.
+    devs = {"model": [], "gauss": [], "lin": []}
+    b_all = []
+    n_per_region = {}
+    for region in REGIONS:
+        X, group, donors, lip_pos, lys_pos = _load_microglia(seed, region)
+        burden = _ll_burden(X, group, donors, lip_pos, lys_pos)
+        Xp, _ = pca_fit_transform(X, n_comp=N_COMP)
+        Xp = standardize(Xp)
+        ctrl = group == "CTRL"
+        donor_ids = sorted(burden)
+        n_per_region[region] = len(donor_ids)
+        dev_cells = {d: Xp[donors == d] for d in donor_ids}
+        b_all.extend(burden[d] for d in donor_ids)
+
+        model = fit_unconditional(Xp[ctrl], steps=steps, seed=seed)
+        samples = model.sample(0, 4096, seed=seed + 5)
+        devs["model"].extend(
+            energy_distance(samples, dev_cells[d], seed=seed)
+            for d in donor_ids)
+        mu, cov = Xp[ctrl].mean(0), np.cov(Xp[ctrl].T) + 1e-3 * np.eye(N_COMP)
+        gs = np.random.default_rng(seed + 23).multivariate_normal(mu, cov, 4096)
+        devs["gauss"].extend(
+            energy_distance(gs, dev_cells[d], seed=seed) for d in donor_ids)
+        centroid = Xp[ctrl].mean(0)
+        devs["lin"].extend(
+            float(np.linalg.norm(dev_cells[d].mean(0) - centroid))
+            for d in donor_ids)
+    b = np.array(b_all)
 
     def rho(dev):
-        return float(spearmanr(dev, b).statistic)
+        return float(spearmanr(np.array(dev), b).statistic)
 
-    model = fit_unconditional(Xp[ctrl], steps=steps, seed=seed)
-    samples = model.sample(0, 4096, seed=seed + 5)
-    dev_model = np.array([energy_distance(samples, dev_cells[d], seed=seed)
-                          for d in donor_ids])
-    mu, cov = Xp[ctrl].mean(0), np.cov(Xp[ctrl].T) + 1e-3 * np.eye(N_COMP)
-    gs = np.random.default_rng(seed + 23).multivariate_normal(mu, cov, 4096)
-    dev_gauss = np.array([energy_distance(gs, dev_cells[d], seed=seed)
-                          for d in donor_ids])
-    centroid = Xp[ctrl].mean(0)
-    dev_lin = np.array([float(np.linalg.norm(dev_cells[d].mean(0) - centroid))
-                        for d in donor_ids])
     rng = np.random.default_rng(seed + 31)
-    rho_shuf = float(spearmanr(dev_model, rng.permutation(b)).statistic)
+    rho_shuf = float(spearmanr(np.array(devs["model"]),
+                               rng.permutation(b)).statistic)
     return {
         "seed": seed,
-        "model_rho": rho(dev_model),
-        "gaussian_rho": rho(dev_gauss),
-        "linear_rho": rho(dev_lin),
+        "model_rho": rho(devs["model"]),
+        "gaussian_rho": rho(devs["gauss"]),
+        "linear_rho": rho(devs["lin"]),
         "shuffled_rho": rho_shuf,
-        "n_donors": len(donor_ids),
+        "n_donors": len(b),
+        "n_per_region": n_per_region,
     }
 
 
