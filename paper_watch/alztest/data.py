@@ -104,11 +104,14 @@ def seaad_annotations(region: str = "LEC"):
     clus = pd.read_csv(clus_p, usecols=["cell_label", "label"])
     clus = clus.rename(columns={"label": "cluster_label"})
     terms = pd.read_csv(terms_p)  # cluster_label (supertype) -> subclass
-    dis = pd.read_csv(dis_p, usecols=["donor_label", "Overall AD neuropathological Change"])
+    dis = pd.read_csv(dis_p, usecols=["donor_label",
+                                       "Overall AD neuropathological Change",
+                                       "Cognitive Status"])
     df = (cells.merge(clus, on="cell_label", how="inner")
                .merge(terms, on="cluster_label", how="left")
                .merge(dis, on="donor_label", how="left"))
-    df = df.rename(columns={"Overall AD neuropathological Change": "adnc"})
+    df = df.rename(columns={"Overall AD neuropathological Change": "adnc",
+                            "Cognitive Status": "cognition"})
     return df.set_index("cell_label")
 
 
