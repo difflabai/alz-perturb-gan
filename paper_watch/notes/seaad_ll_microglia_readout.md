@@ -72,3 +72,25 @@ Config: PGAN fit on CTRL microglia only (unmodified EMPF recipe,
 Readout: per-donor energy distance to model samples (donors with
 >= 40 microglia), Spearman vs donor LL burden. Arms: shuffled burden,
 Gaussian sampler, linear centroid distance.
+
+## Applicability to the default microglia model
+
+The default EMPF archive and all nine development `hvg2000` fold
+panels contain **PLIN2 only (1/7 lipid markers, 0/9 lysosome markers)**.
+This makes the cross-module analysis unavailable for the retained model.
+The exploratory centroid result above comes from a separate SEA-AD
+analysis with its own gene panel.
+
+From the repository root, check the marker coverage of any development
+cache or generated archive with the panel diagnostic:
+
+```sh
+python -m paper_watch.alztest.ll_panel \
+  runs/improve_20261109/caches/hvg2000/fold*/space.npz \
+  runs/microglia_empf/verification/final_generated.npz
+```
+
+A prospective test needs a panel with both modules, a training-only
+reference, donor-level holdouts, and the centroid control. Define burden
+with one module and measure deviation in the other to avoid scoring
+against the genes used to construct the target.

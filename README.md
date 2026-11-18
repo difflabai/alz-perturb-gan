@@ -33,6 +33,8 @@ CUDA_VISIBLE_DEVICES=1 $PY -B scripts/microglia.py train --fold 0 --seed 0 --dev
 
 The [runtime instructions](analysis/default_empf_20261117/README.md) describe setup, checkpoint paths and alternative readouts. `--fit` explicitly selects another compatible native EMPF fit. Training uses a separate output root and does not overwrite the retained pilot. GPU memory is capped at 4% and CPU use at three threads. The root package installation remains the earlier synthetic smoke project.
 
+The lipid–lysosome feature audit found one of seven lipid markers and zero of nine lysosome markers in the default EMPF panel. The [paper-watch readout and panel check](paper_watch/notes/seaad_ll_microglia_readout.md#applicability-to-the-default-microglia-model) document the centroid baseline and the gene coverage needed for a cross-module analysis.
+
 The [previous 0.9.7 default config](analysis/improve_20261109/default_config.json), its [selection evidence](analysis/improve_20261109/default_config_distribution_evidence_20261113.json), and all original benchmark receipts remain historical records. Their source hashes are preserved; the previous public entrypoint is [archived byte for byte](analysis/default_empf_20261117/previous/microglia.py). The published report and the biological findings below still describe the original frozen 0.9.7 models; they were not recomputed using EMPF.
 
 ## Frozen report findings (ParticleGAN 0.9.7)

@@ -33,12 +33,11 @@ import numpy as np
 import pytest
 from scipy.stats import spearmanr
 
+from alztest.ll_panel import LIPID, LYSO
 from alztest.data import DataUnavailable, load_seaad_obs, seaad_annotations
 from alztest.harness import energy_distance, fit_unconditional, pca_fit_transform, standardize
 
 REGIONS = ("AnG", "LEC")
-LIPID = ["APOE", "ABCA1", "SOAT1", "ACSL1", "ACSL3", "ACSL4", "PLIN2"]
-LYSO = ["NPC1", "NPC2", "LIPA", "GBA", "CTSD", "CTSB", "CTSS", "LAMP1", "LAMP2"]
 MODULE = LIPID + LYSO
 N_COMP = 30
 MIN_CELLS_PER_DONOR = 25
