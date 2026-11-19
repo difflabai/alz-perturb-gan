@@ -39,6 +39,15 @@ full donor distribution with energy distance and average across the
 three groups. The screen requires specificity above 0.2 and both
 metrics better than every baseline on each seed.
 
+To build the input from its pinned public release, install
+`cellxgene-census==1.18.0` in an isolated environment and run the
+[fetch script](../scripts/fetch_psychad.py). It writes the H5AD and a
+receipt with its source version, selection and SHA-256.
+
+```sh
+python paper_watch/scripts/fetch_psychad.py paper_watch/data
+```
+
 From the repository root, in the paper-watch environment:
 
 ```sh
