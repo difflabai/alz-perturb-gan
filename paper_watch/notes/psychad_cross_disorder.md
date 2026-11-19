@@ -62,3 +62,25 @@ This compares donor-level pseudobulk profiles in a shared representation
 within one public cohort. Evaluation uses known diagnosis labels and
 tests the generator's conditional distributions. The three seeds reuse
 parts of the cohort, so they measure split and fit sensitivity.
+
+## Public-cohort result
+
+The extract contains 64,816 nuclei from 619 donors. Each seed evaluates
+65 control, 82 Alzheimer, and 9 Lewy donors. The held-out Lewy group is
+the smallest, so cohort and donor sensitivity matter.
+
+| Arm | Mean specificity ↑ | Mean energy distance ↓ |
+|---|---:|---:|
+| EMPF (300 updates per fit) | 0.061 | 2.880 |
+| EMPF with shuffled donor labels | 0.108 | 3.056 |
+| Mean shift | **0.354** | 1.763 |
+| Empirical training-donor sampling | 0.349 | **1.728** |
+
+EMPF missed the predefined screen on all three splits. Both simple
+baselines outperformed EMPF on both metrics in every split. The
+fixed-budget test therefore gives us an application benchmark for
+future disease-specific models, with separate measures for contrast
+direction and distribution fit. The score uses known diagnostic labels
+and applies to this donor cohort and training budget.
+
+[Per-seed metrics and data receipt](psychad_cross_disorder_results.json)
