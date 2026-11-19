@@ -89,11 +89,15 @@ class ConditionalPGAN:
         self.G.cond.copy_(v)
         self.D.cond.copy_(v)
 
-    def fit(self, X: np.ndarray, cond: np.ndarray, steps: int = 300) -> None:
+    def fit(
+        self, X: np.ndarray, cond: np.ndarray, steps: int = 300, *, min_condition_rows: int = 32
+    ) -> None:
+        if min_condition_rows < 1:
+            raise ValueError("min_condition_rows must be positive")
         by_cond = [np.flatnonzero(cond == k) for k in range(self.n_cond)]
-        order = [k for k, indices in enumerate(by_cond) if len(indices) >= 32]
+        order = [k for k, indices in enumerate(by_cond) if len(indices) >= min_condition_rows]
         if not order:
-            raise ValueError("training needs at least 32 rows in one condition")
+            raise ValueError(f"training needs at least {min_condition_rows} rows in one condition")
         for s in range(steps):
             if s % len(order) == 0:
                 self._rng.shuffle(order)

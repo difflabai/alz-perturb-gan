@@ -137,21 +137,15 @@ def load_panad():
 
 
 def load_psychad():
-    """PsychAD DLPFC atlas (Lee et al., Nature 2026).
-
-    Controlled access: AD Knowledge Portal / Synapse syn60084804,
-    requires a data use agreement. No credentialed Synapse session is
-    configured in this environment (checked 2026-11-17).
-    """
-    p = DATA_DIR / "psychad.h5ad"
-    if not p.exists():
+    """Public PsychAD MSSM microglial raw counts and three diagnosis labels."""
+    path = Path(os.environ.get("PSYCHAD_H5AD", DATA_DIR / "psychad-mssm-microglia.h5ad"))
+    if not path.is_file():
         raise DataUnavailable(
-            "PsychAD is controlled-access (Synapse syn60084804, DUA "
-            "required); no approved download present. Place an approved "
-            "export at data/psychad.h5ad to enable."
+            f"PsychAD microglia export missing at {path}. Set PSYCHAD_H5AD "
+            "to the public CELLxGENE extract described in notes/psychad_cross_disorder.md."
         )
     import anndata as ad
-    return ad.read_h5ad(p)
+    return ad.read_h5ad(path)
 
 
 def load_gnpc():
