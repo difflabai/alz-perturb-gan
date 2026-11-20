@@ -213,7 +213,7 @@ def train(arm, seed, width, updates, log_every=250, device='cpu', memory=.04):
     assert policy.completed_steps == updates and pen.regularizer.record.calls == updates
     cond_calls = getattr(pen.regularizer, 'cond_calls', 0)
     assert (cond_calls == updates) if arm == 'adapter' else cond_calls == 0
-    return dict(arm=arm, seed=seed, width=width, updates=updates, device=device, seconds=time.monotonic() - t0,
+    return dict(arm=arm, seed=seed, width=width, updates=updates, device=device, threads=torch.get_num_threads(), seconds=time.monotonic() - t0,
                 regularizer_calls=pen.regularizer.record.calls, adapter_calls=cond_calls,
                 score=score(samples, width), curve=curve)
 

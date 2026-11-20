@@ -1,9 +1,15 @@
 # Condition-aware wide EMPF residual: results
 
-**Answer.** A condition-aware residual fixes the probe's blind spot, but it did
-not improve learned spread. On the synthetic task, per-group SD error got
-worse. On SEA-AD, held-out SD coverage fell on both folds. We found no
-evidence that the blind spot drives the default's SD under-coverage. In this
+Verdict: **negative.** Declared comparison: [PROTOCOL.md](PROTOCOL.md).
+
+**Answer.** A condition-aware residual fixes the probe's blind spot, but it
+did not improve learned spread. On the synthetic task (4 seeds), per-group SD
+error got worse. On SEA-AD, in a single-seed pair per fold, the adapter run
+had lower held-out SD coverage than the native run on both folds; with one
+training seed this is not an established adapter effect, but no fold showed a
+gain. We found no evidence that the blind spot drives the default's SD
+under-coverage, although this test had little power: the adapter can reach
+training only through a gauge-weight change of about 0.006-0.009. In this
 host the residual is only a scalar control signal. Gradients never see it, and
 on the wide path it can change only the gauge weight. The comparison was
 declared in [PROTOCOL.md](PROTOCOL.md) (commit `84d0372`) before any score
@@ -27,8 +33,12 @@ residual using only real/fake pairs that share a condition row. The scale
 | 2150 | native | 0 | **0** | 0.586 | 0 | 0 |
 | 2150 | adapter | 0 | **1.000** | 0.729 | 0 | 1.000 |
 
-In the reorder control, real, fake and condition rows are permuted together,
-and every value stays the same. At width 64 the adapter does not route the
+The "correct" case uses fake identical to real, so its residual of 0 is
+exact by construction. The 1.000-vs-0 separation is therefore a best case; it
+does not measure how well the statistic separates correct from swapped
+pairings at realistic finite sample sizes, where the correct residual is above
+zero. In the reorder control, real, fake and condition rows are permuted
+together, and every value stays the same (largest difference 6.4e-8). At width 64 the adapter does not route the
 call, so the output matches native. A single condition, an unconditioned call
 or width 64 gives output bit-identical to native. All 20 tests pass
 ([test_cond_residual.py](test_cond_residual.py)).
@@ -81,7 +91,7 @@ least 5% lower in at least 3 of 4 seeds. Instead, log-SD RMSE was 26.5% higher
 and only 1 of 4 seeds improved. The seed-to-seed spread within native
 (log-SD RMSE 0.11-0.18 at width 2150) is as large as the arm difference.
 
-## 3. SEA-AD matched fits: SD coverage fell on both folds
+## 3. SEA-AD matched fits: no SD coverage gain on either fold
 
 Both arms used the committed native EMPF host (`pbulk`, hvg2000, seed 0) with
 the 20k recipe truncated identically at **5,000 updates**. The readout was the
@@ -108,14 +118,23 @@ Relative changes in the historical errors (adapter vs native; positive means
 worse):
 
 - Fold 0: profile RMSE +1.0%, mean-log gene -4.2%, detection -2.9%, log-variance -4.1%, PC energy +2.2%, cell energy +2.6%.
-- Fold 1: profile RMSE +2.2%, mean-log gene +15.5%, detection +7.7%, log-variance +5.6%, PC energy +1.4%, cell energy +5.9%.
+- Fold 1: profile RMSE +2.2%, mean-log gene +15.5%, detection +7.6%, log-variance +5.6%, PC energy +1.4%, cell energy +5.9%.
 
 The declared support rule required a gain of at least 2 points in SD coverage,
-with an interval above zero, on every fold. **It failed on both folds.** The
-adapter narrowed the generated SD ranges, which lowered SD coverage. The
-under-coverage is mostly observed SDs falling above the interval (generator
-under-dispersion): 32-35% of fold-0 SD coordinates. The adapter did not reduce
-that.
+with an interval above zero, on every fold. **It failed on both folds.** In
+this single-seed pair, the adapter run had narrower generated SD ranges and
+lower SD coverage on both folds. The donor-bootstrap intervals cover donor
+sampling only, not training-seed variation, and the synthetic task shows
+seed-to-seed spread as large as the arm difference, so the drop is not
+attributed to the adapter. What holds is that SD coverage did not rise.
+
+Observed SDs mostly fall above the generated interval (readout-level
+under-dispersion): on fold 0, 31.9% of SD coordinates lie above and 9.2%
+below for native 5k, and 33.3% above and 8.4% below for the 20k pilot. This
+was not decomposed. Possible contributors include the generator itself, the
+readout's `cellshape@0.5` within-donor mean shrinkage (applied after
+generation, which directly reduces within-donor spread), and the PCA summary
+used for the bag statistics.
 
 For context, the frozen 20k native pilot on fold 0 had SD coverage 58.3% and
 SD interval score .8063. Native at 5k gave 58.9%, so the under-coverage
@@ -129,9 +148,11 @@ resampling on SD coverage and SD interval score, but not on fold 0.
 
 - The study used one training seed per fold, two development folds, and 5,000 rather than 20,000 updates.
 - The adapter perturbs a chaotic trajectory, and the donor-bootstrap intervals omit seed variation. The SEA-AD differences are therefore not a measured systematic effect of the adapter. Our conclusion is narrower: correcting the residual did not raise SD coverage on any fold or on the synthetic task.
-- Synthetic pairs ran on matched devices within each pair: seeds 0 and 2 on GPU at width 2150, all other runs on CPU. The CPU thread count differed only within GPU seed 2, for host-side work.
+- Synthetic devices differed from the protocol: it said width 2150 runs on GPU, but only seeds 0 and 2 did; seeds 1 and 3 at width 2150 and all width-128 runs ran on CPU. Device is recorded in each run JSON and matches within every pair. CPU thread counts were not recorded in these run JSONs, so thread matching within pairs cannot be audited; from the session log, seed 2 at width 2150 used 3 threads (native) and 1 thread (adapter), and two width-128 native runs were restarted single-threaded after stalling on an overloaded CPU. `synthetic.py` now records `threads` for any future run.
+- The SEA-AD and synthetic intervals are percentile bootstraps over 12-13 donors or 4 seed pairs, with no multiplicity control across metrics, folds and widths; they are likely anti-conservative, and the 4-seed intervals are crude.
+- The protocol header says "about 04:05 UTC"; the protocol commit is 04:02:34 UTC (see the erratum in PROTOCOL.md). After the protocol commit, `alz_run.py` gained a provenance-check normalisation for the output root and `synthetic.py` an `SYN_THREADS` variable and thread recording; neither changes training. `analyze.py` was written afterwards and implements the declared gates.
 - One planned GPU run failed with an out-of-memory error on shared GPU 0 and was rerun on GPU 1.
-- The development donors were already used in earlier selection, so these results are development evidence, not a final test.
+- Leakage check: fits and calibration use train donors only; scoring uses held-out donors only. The development donors were already used in earlier selection, so these results are development evidence, not a final test.
 - We did not test a stronger adapter that feeds the conditional discrepancy into the critic or generator objective. With the released kernel, the residual cannot reach gradients except through the gauge and EBI weights. The released restore path was not re-verified for the adapter. Its kernel holds no extra checkpointed state.
 
 ## Reproduce
@@ -153,3 +174,9 @@ Checkpoints, generated archives and logs are in
 writes its derived host files there. It checks them against the shared native
 derivation, apart from the output root, and never writes the shared runtime
 directory.
+
+## Next steps
+
+- Do not adopt the adapter as a quality fix. It is suitable only as a diagnostic or observer-correctness fix.
+- If the blind spot matters, it has to reach gradients: a per-condition discrepancy term in the critic or generator objective, or a gauge/EBI schedule driven by conditional fit, tested with several seeds per arm.
+- Decompose the SD under-coverage: generator spread before readout, the effect of the `cellshape@0.5` within-donor shrinkage, and PCA-summary shrinkage. Also check fit-ensemble spread from the 17 confirmation fits and a donor-level random-effect latent.

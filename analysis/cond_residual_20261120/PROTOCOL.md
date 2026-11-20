@@ -117,3 +117,9 @@ selection; this is development evidence, not a final test. Shared machine:
 at most 4 GPU processes, memory fraction 0.04, 3 threads, `taskset -c 3-23`.
 Nothing under the main `/ml2/alz` working tree is modified; outputs go to
 `/ml2/alz/runs/research_20261120/cond-residual/`.
+
+## Erratum (added after results, 2026-11-20)
+
+The header says "about 04:05 UTC". The protocol and code were committed in
+`84d0372` at 04:02:34 UTC; the earliest scored output (`probe.json`) is from
+04:05 UTC. No text of the declared comparison above was changed.
