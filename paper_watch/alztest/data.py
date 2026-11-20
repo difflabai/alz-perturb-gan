@@ -4,6 +4,10 @@ Each loader either returns real data or raises DataUnavailable with a
 precise, checkable reason (access terms, accession, what was tried).
 Tests convert DataUnavailable into a clean pytest skip — a gated dataset
 is a finding about access, never a silent pass and never a fake run.
+
+Loaders for the closed, access-blocked NeuroKO, panAD and GNPC finds
+were removed; their access facts and revival requirements are recorded
+in notes/blocked_finds.md.
 """
 from __future__ import annotations
 
@@ -15,36 +19,6 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 class DataUnavailable(RuntimeError):
     """Raised when a find's data cannot be obtained; carries the reason."""
-
-
-def neuroko_path() -> Path:
-    env = os.environ.get("NEUROKO_H5AD")
-    if env:
-        return Path(env)
-    return DATA_DIR / "neuroko_annotated.h5ad"
-
-
-def load_neuroko():
-    """NeuroKO Perturb-seq (Dominicus et al., bioRxiv 2026.10.13.758778).
-
-    Stated access in the preprint: annotated integrated scRNA-seq objects
-    on Zenodo (DOI as printed: 10.5281/zenodo.2326038861 — the identifier
-    does not resolve as printed; verified 2026-11-17 against the Zenodo
-    API, Europe PMC, and the authors' GitHub), raw sequencing at ENA
-    ERP134820, code at github.com/Lotfollahi-lab/NeuroID-reproducibility.
-    """
-    p = neuroko_path()
-    if not p.exists():
-        raise DataUnavailable(
-            "NeuroKO annotated objects not present locally and the Zenodo "
-            "DOI printed in the preprint (10.5281/zenodo.2326038861) does "
-            "not resolve via the Zenodo API (checked 2026-11-17); raw data "
-            "exists at ENA ERP134820 but is unprocessed FASTQ. Place the "
-            "annotated h5ad at data/neuroko_annotated.h5ad or set "
-            "NEUROKO_H5AD."
-        )
-    import anndata as ad
-    return ad.read_h5ad(p)
 
 
 def seaad_region_path(region: str = "LEC") -> Path:
@@ -117,25 +91,6 @@ def seaad_annotations(region: str = "LEC", *, include_cognition: bool = False):
     return df.set_index("cell_label")
 
 
-def load_panad():
-    """panAD integrated atlas (bioRxiv 2026.09.03.747935).
-
-    The preprint's full text is not PMC-archived (license) and no direct
-    download of the integrated object or the MONET donor subtype labels
-    was located on the preprint server / CELLxGENE as of 2026-11-17.
-    """
-    p = DATA_DIR / "panad.h5ad"
-    if not p.exists():
-        raise DataUnavailable(
-            "panAD integrated object + MONET subtype labels not openly "
-            "downloadable as of 2026-11-17 (preprint full text not "
-            "archived; no CELLxGENE collection found). Place at "
-            "data/panad.h5ad with donor subtype labels in obs to enable."
-        )
-    import anndata as ad
-    return ad.read_h5ad(p)
-
-
 def load_psychad(path: Path | None = None):
     """Public PsychAD MSSM microglial raw counts and three diagnosis labels."""
     if path is None:
@@ -147,21 +102,3 @@ def load_psychad(path: Path | None = None):
         )
     import anndata as ad
     return ad.read_h5ad(path)
-
-
-def load_gnpc():
-    """GNPC longitudinal plasma proteomics (medRxiv 2026.07.01.26356385).
-
-    The v4.1 SomaScan resource (17,269 samples / 13,449 participants) is
-    distributed by the Global Neurodegeneration Proteomics Consortium
-    under consortium access terms; no public download exists.
-    """
-    p = DATA_DIR / "gnpc_plasma.parquet"
-    if not p.exists():
-        raise DataUnavailable(
-            "GNPC plasma proteomics is consortium-access only; no public "
-            "download. Place an approved export at data/gnpc_plasma.parquet "
-            "to enable."
-        )
-    import pandas as pd
-    return pd.read_parquet(p)
