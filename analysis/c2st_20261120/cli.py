@@ -144,7 +144,7 @@ def cmd_score(a):
 def _context(a):
     torch = setup_torch(a.device, a.gpu_mem_fraction)
     E = evaluator(a.r5)
-    plan = json.loads(Path(a.plan).read_text())
+    plan = load_plan(a.plan)
     if sha(Path(a.cache) / 'manifest.json') != plan['cache_manifest_sha256']:
         raise SystemExit('cache manifest differs from the declared plan')
     real = E.load_real(a.cache)
@@ -152,6 +152,21 @@ def _context(a):
     if not set(levels) <= set(plan['levels']):
         raise SystemExit('levels outside the declared plan')
     return torch, E, plan, real, levels
+
+
+def load_plan(path):
+    """The declared plan plus recorded amendments (plan_amendments.json next
+    to it), which may only replace a generator's archive path/hash."""
+    plan = json.loads(Path(path).read_text())
+    amend = Path(path).with_name('plan_amendments.json')
+    if amend.exists():
+        A = json.loads(amend.read_text())
+        for name, spec in A['generators'].items():
+            if set(spec) - {'path', 'sha256'}:
+                raise SystemExit('amendments may only change archive path/hash')
+            plan['generators'][name].update(spec)
+        plan['amendments_sha256'] = sha(amend)
+    return plan
 
 
 def _checked_generated(E, plan, name, real):
@@ -249,7 +264,7 @@ def phase_null(a):
 
 
 def phase_merge(a):
-    plan = json.loads(Path(a.plan).read_text())
+    plan = load_plan(a.plan)
     work = Path(a.work); scores = work / 'scores'
     gens = {}
     for path in sorted(work.glob('generator_*.json')):
@@ -304,6 +319,7 @@ def phase_merge(a):
         pparg_univariate_rank=pparg and pparg.get('univariate_rank'),
         pparg_top1pct=bool(pparg and pparg.get('univariate_rank', 10**9) <= 20))
     out = dict(protocol='analysis/c2st_20261120/PROTOCOL.md', plan_sha256=sha(a.plan),
+               amendments_sha256=plan.get('amendments_sha256'),
                settings=dict(cell_mlp=CELL_MLP, bag_mlp=BAG_MLP, linear=LINEAR, n_boot=N_BOOT,
                              fold_seed=FOLD_SEED, n_folds=6),
                generators=gens, null=null, comparisons=comparisons, decisions=decisions, blind_spot_link=blind)

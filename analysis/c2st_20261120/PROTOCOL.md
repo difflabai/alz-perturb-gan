@@ -117,3 +117,14 @@ lipid/DAM neighbours present in the panel) with ranks and per-stage means.
 Shared RTX A6000s, ≤ 0.05 per-process memory fraction, 3 CPU threads,
 `taskset -c 3-23`, at most 4 concurrent GPU processes (levels split across
 processes). Large outputs under `runs/research_20261120/c2st/`.
+
+## Amendment 1 (recorded before any empirical-reference or prev097 score)
+
+The declared `results_r3/baselines/.../resample*.npz` files turned out to be
+score archives without generated cells, so the run failed when loading them.
+The two empirical references are regenerated with the unchanged repository
+baseline code (`make_empirical.py`, same names/M/K/streams) under
+`runs/research_20261120/c2st/empirical/`; `plan_amendments.json` replaces
+only their paths/hashes (bound by receipts). `empf05`/`empf025` and the null
+phase had already been scored under the unchanged plan; their numbers are
+not affected by this change.

@@ -25,23 +25,23 @@ except ImportError:  # pragma: no cover
 
 
 # ---------------------------------------------------------------- statistics
+def _rankdata(x):
+    """Average (mid) ranks, 1-based, vectorized."""
+    order = np.argsort(x, kind='mergesort'); s = x[order]
+    new = np.r_[True, s[1:] != s[:-1]]
+    start = np.flatnonzero(new); end = np.r_[start[1:], len(s)]
+    mid = (start + end - 1) / 2 + 1
+    r = np.empty(len(s)); r[order] = np.repeat(mid, end - start)
+    return r
+
+
 def auc(score, y):
     """ROC AUC via the Mann-Whitney U statistic with midranks for ties."""
     score = np.asarray(score, np.float64); y = np.asarray(y).astype(bool)
     n1 = int(y.sum()); n0 = len(y) - n1
     if n1 == 0 or n0 == 0:
         return float('nan')
-    order = np.argsort(score, kind='mergesort')
-    s = score[order]
-    ranks = np.empty(len(s))
-    i = 0
-    while i < len(s):
-        j = i
-        while j + 1 < len(s) and s[j + 1] == s[i]:
-            j += 1
-        ranks[i:j + 1] = (i + j) / 2 + 1
-        i = j + 1
-    r = np.empty(len(s)); r[order] = ranks
+    r = _rankdata(score)
     return float((r[y].sum() - n1 * (n1 + 1) / 2) / (n1 * n0))
 
 
