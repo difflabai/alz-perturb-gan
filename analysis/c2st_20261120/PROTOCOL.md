@@ -128,3 +128,41 @@ baseline code (`make_empirical.py`, same names/M/K/streams) under
 only their paths/hashes (bound by receipts). `empf05`/`empf025` and the null
 phase had already been scored under the unchanged plan; their numbers are
 not affected by this change.
+
+## Amendment 2: audit repairs (declared 2026-11-20 before any repair score)
+
+An independent audit of the fold-0 results asked for three extra analyses.
+They are declared here before they are run. They are post hoc relative to
+the primary scores, use the same real items, cache and classifier settings,
+and live in `repairs.py`; nothing in the declared study is rescored or
+replaced.
+
+1. **Classifier-refit sensitivity (`refit`).** For `cell_pc` and `bag_gene`,
+   both classifiers and all five generators, 4 extra replicates r = 1..4
+   change both the CV fold assignment (fold seed 20261120 + r) and the
+   network seeds (10r, 10r+1, 10r+2). Replicate 0 is the declared run (its
+   saved out-of-fold scores). Within a replicate every generator shares
+   folds and items. Reported per paired difference vs `empf05`: the five
+   replicate point estimates, and a refit-augmented 95% CI in which each
+   bootstrap draw resamples donors and picks one replicate at random for
+   both members of the pair. **A paired difference is called robust only if
+   the refit-augmented CI excludes 0 and all five replicate estimates share
+   its sign.**
+2. **Full second-order cell classifiers (`secondorder`).** On `cell_pc` with
+   the declared folds, for every generator: (a) logistic on [z, z²],
+   (b) logistic on [z, upper-triangular z zᵀ] (50 + 1275 features), both
+   with z standardized by training-fold statistics only, same batched
+   linear trainer; (c) Gaussian QDA, class means and Ledoit-Wolf-shrunk
+   covariances fit on the training fold, scored by the log-likelihood
+   ratio. **"Discrimination beyond second moments" is claimed only if the
+   MLP AUC exceeds both (b) and (c) with paired donor-bootstrap CIs
+   excluding 0.** Otherwise the gap is reported as possibly covariance.
+3. **PPARG permutation importance with repeats (`pparg`).** `bag_gene` MLP
+   for `empf05`, `empf025`, `prev097` and `resample_blind`, 5 refits (the
+   replicate settings of item 1, models kept). Per refit: PPARG AUC drop
+   from 50 permutation repeats, and every gene's drop from 2 repeats
+   (rank and the all-gene 95th percentile). **"The classifier relies on
+   PPARG" is claimed only if PPARG's mean drop is above the all-gene 95th
+   percentile in all 5 refits and the 2.5th percentile of its per-repeat
+   drops (pooled over refits) is above 0.** Otherwise the statement is
+   withdrawn.
