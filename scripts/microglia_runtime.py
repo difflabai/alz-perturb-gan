@@ -18,9 +18,11 @@ ROOT = Path(__file__).resolve().parents[1]
 SELECTION = ROOT / 'analysis/default_empf_20261117'
 SOURCE_MANIFEST = SELECTION / 'runtime_source_manifest.json'
 CACHE_ANCHORS = ROOT / 'analysis/empirical_challenge_20261114/cache_and_fit_anchors.json'
-STUDY = ROOT / 'analysis/empf_comparison_20261117'
-# host.activate rewrites the derived host files on every start; serialize it across processes.
-HOST_LOCK = ROOT / 'artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native.lock'
+# Derives the native EMPF host with checkout-relative import paths (vendored model sources);
+# analysis/empf_comparison_20261117/host.py itself stays unchanged with its concluded study.
+HOST = SELECTION / 'vendored_host.py'
+# Host activation derives or confirms the host files on every start; serialize it across processes.
+HOST_LOCK = ROOT / 'artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native-vendored.lock'
 # Machine-wide CPU slot locks, shared by every checkout of this repository on the host.
 CPU_LOCK_DIR = Path(os.environ.get('MICROGLIA_CPU_LOCK_DIR') or f'/tmp/microglia-cpu-slots-{os.getuid()}')
 THREADS = 3
@@ -163,17 +165,16 @@ def pin_cpus():
     return info
 
 
-def activate_host(study=None, lock=None):
-    """Run host.activate under an exclusive lock so concurrent starts never see half-written files."""
-    study = STUDY if study is None else Path(study)
+def activate_host(host=None, lock=None):
+    """Run the host's activate under an exclusive lock so concurrent starts never see half-written files."""
+    host = HOST if host is None else Path(host)
     lock = HOST_LOCK if lock is None else Path(lock)
-    if str(study) not in sys.path:
-        sys.path.insert(0, str(study))
+    if str(host.parent) not in sys.path:
+        sys.path.insert(0, str(host.parent))
     lock.parent.mkdir(parents=True, exist_ok=True)
     with open(lock, 'a+') as handle:
         fcntl.flock(handle, fcntl.LOCK_EX)
-        host = importlib.import_module('host')
-        return host.activate('native')
+        return importlib.import_module(host.stem).activate('native')
 
 
 def activate(device, memory):

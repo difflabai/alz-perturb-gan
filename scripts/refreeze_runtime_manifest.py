@@ -3,7 +3,9 @@
 
 --check verifies every pinned source against the checkout and changes nothing.
 Without --check, the tool recomputes the digests for exactly the pinned key set
-(it never drops a key; --add pins an extra path), archives the previous manifest
+(it never drops a key; --add pins an extra path; --relocate OLD=NEW renames a key
+only when the file at NEW has exactly the digest pinned for OLD, e.g. when an
+out-of-repo source is vendored byte for byte), archives the previous manifest
 byte for byte under analysis/default_empf_20261117/previous/, and records the
 archive, its digest, the reason and the changed keys in the new manifest.
 
@@ -60,10 +62,31 @@ def scan(manifest, root, artifact_root=None):
     return ok, missing, changed, borrowed, entry_ok
 
 
-def refreeze(manifest_path, root, reason, add=(), artifact_root=None, now=None):
+def relocate_keys(manifest, root, relocate):
+    """Return a copy of manifest with each OLD key renamed to NEW, refusing any digest change."""
+    sources = dict(manifest['sources'])
+    moved = {}
+    for old, new in relocate:
+        if old not in sources:
+            raise ValueError(f'cannot relocate an unpinned key: {old}')
+        if new in sources or new in moved.values():
+            raise ValueError(f'relocation target already pinned: {new}')
+        inside = (root / new).resolve().is_relative_to(Path(root).resolve())
+        if Path(new).is_absolute() or not inside or not (root / new).is_file():
+            raise ValueError(f'relocation target must be an existing repository-relative file: {new}')
+        if sha(root / new) != sources[old]:
+            raise ValueError(f'relocation target differs from the pinned digest of {old}: {new}')
+        # Keep the key order stable apart from the renamed key.
+        sources = {(new if k == old else k): v for k, v in sources.items()}
+        moved[old] = new
+    return dict(manifest, sources=sources), moved
+
+
+def refreeze(manifest_path, root, reason, add=(), artifact_root=None, now=None, relocate=()):
     manifest_path, root = Path(manifest_path), Path(root)
     raw = manifest_path.read_bytes()
-    manifest = json.loads(raw)
+    pinned = json.loads(raw)
+    manifest, relocated = relocate_keys(pinned, root, relocate)
     ok, missing, changed, borrowed, entry_ok = scan(manifest, root, artifact_root)
     if missing:
         raise ValueError(f'{len(missing)} pinned sources are missing; refusing to drop keys: {missing[:5]}')
@@ -80,7 +103,7 @@ def refreeze(manifest_path, root, reason, add=(), artifact_root=None, now=None):
         if path is None:
             raise ValueError(f'cannot pin missing path: {name}')
         added[name] = sha(path)
-    if not changed and not added:
+    if not changed and not added and not relocated:
         return None
     stamp = (now or datetime.datetime.now(datetime.timezone.utc)).strftime('%Y%m%dT%H%M%SZ')
     archive = manifest_path.parent / 'previous' / f'runtime_source_manifest.{stamp}.json'
@@ -97,13 +120,18 @@ def refreeze(manifest_path, root, reason, add=(), artifact_root=None, now=None):
         'archive': str(archive.relative_to(root)) if archive.is_relative_to(root) else str(archive),
         'sha256': hashlib.sha256(raw).hexdigest(), 'reason': reason, 'refrozen_utc': stamp,
         'changed': sorted(changed), 'added': sorted(added)}
+    if relocated:
+        new['previous_runtime_manifest']['relocated'] = relocated
     tmp = manifest_path.with_suffix('.json.tmp')
     tmp.write_text(json.dumps(new, indent=2) + '\n')
     if set(json.loads(tmp.read_text())['sources']) != set(manifest['sources']) | set(added):
         tmp.unlink()
         raise ValueError('refrozen key set differs from the pinned key set')
     tmp.replace(manifest_path)
-    return {'archive': str(archive), 'changed': sorted(changed), 'added': sorted(added)}
+    result = {'archive': str(archive), 'changed': sorted(changed), 'added': sorted(added)}
+    if relocated:
+        result['relocated'] = relocated
+    return result
 
 
 def main(argv=None):
@@ -111,6 +139,8 @@ def main(argv=None):
     p.add_argument('--check', action='store_true', help='verify the checkout against the manifest; write nothing')
     p.add_argument('--reason', help='why the sources changed (required to re-pin)')
     p.add_argument('--add', action='append', default=[], help='pin an additional repository-relative path')
+    p.add_argument('--relocate', action='append', default=[], metavar='OLD=NEW',
+                   help='rename pinned key OLD to repository-relative NEW; NEW must have the digest pinned for OLD')
     p.add_argument('--artifact-root', type=Path, help='checkout to read missing gitignored artifacts from')
     p.add_argument('--manifest', type=Path, default=MANIFEST)
     args = p.parse_args(argv)
@@ -129,7 +159,13 @@ def main(argv=None):
         return 0 if len(ok) == total and entry_ok else 1
     if not args.reason:
         p.error('--reason is required to re-pin the manifest')
-    result = refreeze(args.manifest, ROOT, args.reason, args.add, artifact_root)
+    relocate = []
+    for item in args.relocate:
+        old, sep, new = item.partition('=')
+        if not sep or not old or not new:
+            p.error(f'--relocate expects OLD=NEW, got {item!r}')
+        relocate.append((old, new))
+    result = refreeze(args.manifest, ROOT, args.reason, args.add, artifact_root, relocate=relocate)
     if result is None:
         print('manifest already matches the checkout; nothing written')
     else:

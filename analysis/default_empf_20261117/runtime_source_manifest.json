@@ -171,9 +171,9 @@
     "artifacts/native-releases/particlegan-0.9.7/site-packages/particlegan/tensorflow_adam.py": "37f1192e48b84907446d8f676c62631bf87ff450b2a2e6b63e7489adc33e24e9",
     "artifacts/native-releases/particlegan-0.9.7/site-packages/particlegan/training.py": "05272bd524b9c2c0812d4e9db912970fbdaa90eabba7763a1e251058dab007fe",
     "artifacts/native-releases/particlegan-0.9.7/site-packages/particlegan/vicreg_loss.py": "177a68b98036e4725cacf6bc0d95277111184c0dcb9566d3f7fc1527046cefda",
-    "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/pg_model.py": "47740d4039e680c48c9e5855753d7ebd797fe4f68109aaa75c3d56b57f13af85",
-    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/critic.py": "2921c0f7706cf3ac7bff0e3ebb09be2f2699a97e93d1faf1fb5376d6b9c11a5f",
-    "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/usage.py": "de5255a5f594967adf6fa4bd27d6c37b4f2dd83d9e1d4f0c75fd28d5897f7ae7",
+    "analysis/default_empf_20261117/vendored/pg_model.py": "47740d4039e680c48c9e5855753d7ebd797fe4f68109aaa75c3d56b57f13af85",
+    "analysis/default_empf_20261117/vendored/critic.py": "2921c0f7706cf3ac7bff0e3ebb09be2f2699a97e93d1faf1fb5376d6b9c11a5f",
+    "analysis/default_empf_20261117/vendored/usage.py": "de5255a5f594967adf6fa4bd27d6c37b4f2dd83d9e1d4f0c75fd28d5897f7ae7",
     "analysis/hybrid_challenge_20261114/generate_hybrid.py": "04c626d19d2250d6bf88e75b19e788697a824875452eaa9cd8fd157842834bb6",
     "analysis/hybrid_challenge_20261114/compare_hybrid.py": "61f5f660320e30b5da0e3cf2204fca0dafde33f4ddc0936fafd03646fd591b29",
     "analysis/hybrid_challenge_20261114/run_hybrid.py": "5e10f495c309ff4fd821064112761901b39ebd00d633d8aaabfccf2e0866c10d",
@@ -331,25 +331,38 @@
     "analysis/particlegan_upgrade_20261117/prelaunch.json": "5697092af84c7a6c82003ac04e38de143755b83af236eec07c0e759fd4016ab1",
     "analysis/particlegan_upgrade_20261117/verification/verification_0.10.0.json": "38b85e4b3ce1129077cf6443634d966fefd65974d394db103ad0a3dba52fef5f",
     "scripts/microglia.py": "5f710afe7af5db0adc57ca5953e196b8202fcd9379d1724f6de08bd266e57799",
-    "scripts/microglia_runtime.py": "4eda11f1c82b431a53d2a14c15adc6e3d232c49aa005294aa681c65ab50ac2f2",
+    "scripts/microglia_runtime.py": "1265725c2481ac38e1b8de8876ce7dc5fdbcccd575d4183dc02f803b2bd7afd0",
     "configs/microglia_default.json": "ab6434b002bdefc2022573eea3c4118a46e41fd90fb52ad4d1f8c0ea4ec4108a",
     "analysis/default_empf_20261117/selected_model.json": "79f43ae7186a5c244234e0340c8caa413a14ae6a047e8825dd3caa96928457ca",
     "analysis/default_empf_20261117/selection.json": "c4e6a2cbe31f14ef7614c7fa4ef23d6b5f531e06ad0307e976bee7e067dcdf5b",
-    "analysis/empf_comparison_20261117/source_manifest.json": "6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958"
+    "analysis/empf_comparison_20261117/source_manifest.json": "6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958",
+    "analysis/default_empf_20261117/vendored_host.py": "fc335535c3eb2c01d7f39199f7f9bbee3e7d7124759398e75197fbd2ce7eceb5",
+    "analysis/default_empf_20261117/vendored/contracts.py": "1ef929b020b87c5a1e7e4a1194a42ded2c0f61c7589f3e8bb49a6f437ae57131",
+    "analysis/default_empf_20261117/vendored/stage_law.py": "403b04bbaa285f5cc2ffbace9b67c133448c83c7304083da2aba9cc4daa6c5ae",
+    "analysis/default_empf_20261117/vendored/bench_core.py": "fd56394690123ec404fc5aad89d7b381c16aadc837bc9c534465efb53d053a46"
   },
   "archived_previous_entrypoint": {
     "archive": "analysis/default_empf_20261117/previous/microglia.py",
     "sha256": "40d6102e77fa6a4ece2c64cd431db3d907449d7bd69335cb597370d5f860b80e"
   },
   "previous_runtime_manifest": {
-    "archive": "analysis/default_empf_20261117/previous/runtime_source_manifest.20261120T040256Z.json",
-    "sha256": "cd9e649966bf40febcba1b341bfffff28dc9e434eff6917015ea9429c8fd1d07",
-    "reason": "runtime hardening: machine-wide CPU slot claims, locked host activation, separate selected/trained fit namespaces, preflight/--force/atomic generation outputs (generator staging files cleaned up), train_start.json provenance, profile-aware receipts",
-    "refrozen_utc": "20261120T040256Z",
+    "archive": "analysis/default_empf_20261117/previous/runtime_source_manifest.20261120T041537Z.json",
+    "sha256": "3f1c85a4058b5c68402f70ddce5c09ee4b1dee1b4466a258f9473ce3d48bcd32",
+    "reason": "vendor the out-of-repo EMPF model sources byte for byte: pg_model.py, critic.py and usage.py keep their pinned digests under repository-relative keys; contracts.py, stage_law.py and bench_core.py were imported at runtime but never pinned and are now added; the native host is derived with checkout-relative paths by analysis/default_empf_20261117/vendored_host.py into alz-host-empf-native-vendored, leaving the concluded study host.py unchanged",
+    "refrozen_utc": "20261120T041537Z",
     "changed": [
-      "scripts/microglia.py",
       "scripts/microglia_runtime.py"
     ],
-    "added": []
+    "added": [
+      "analysis/default_empf_20261117/vendored/bench_core.py",
+      "analysis/default_empf_20261117/vendored/contracts.py",
+      "analysis/default_empf_20261117/vendored/stage_law.py",
+      "analysis/default_empf_20261117/vendored_host.py"
+    ],
+    "relocated": {
+      "/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark/pg_model.py": "analysis/default_empf_20261117/vendored/pg_model.py",
+      "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/critic.py": "analysis/default_empf_20261117/vendored/critic.py",
+      "/ml2/codex-storage/future-workspaces/2026-11-03/task-2/alz-audit/core-comparison-20261103/usage.py": "analysis/default_empf_20261117/vendored/usage.py"
+    }
   }
 }
