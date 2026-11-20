@@ -70,6 +70,8 @@ def main(argv=None):
     p.add_argument('--gpu-mem-fraction', type=float, default=.06)
     p.add_argument('--mode', choices=MODES, default=MODE)
     p.add_argument('--max-targets', type=int, default=None, help='validation runs only')
+    p.add_argument('--self-check', action='store_true',
+                   help='also run the frozen generate.generate_arrays on the same models/plans and require bitwise equality')
     p.add_argument('--check-archive', type=Path, default=None,
                    help='require bitwise-equal mean_log/nonzero/lib to this archive (replicate 0, same device)')
     a = p.parse_args(argv)
@@ -180,6 +182,10 @@ def main(argv=None):
                state_names=np.array(used), replicate=np.array(a.replicate), mode=np.array(a.mode),
                conditions=np.stack([c for c, _ in plans]).astype(np.float32))
     check = None
+    if a.self_check:
+        ref, _ = G.generate_arrays(ctx, models, plans, T=targets)
+        check = {k: bool(np.array_equal(arr[k], ref[k])) for k in ('mean_log', 'nonzero', 'lib', 'sq_log', 'pb_counts', 'pcs')}
+        check['reference'] = 'frozen generate.generate_arrays, same process, models, plans and streams'
     if a.check_archive is not None:
         with np.load(a.check_archive, allow_pickle=False) as ref:
             check = {k: bool(np.array_equal(arr[k], ref[k][:n_t]))
@@ -201,7 +207,7 @@ def main(argv=None):
                    subtype_assignment='frozen fold0 TRAIN-only classifier on (z@W)/pc_sd; predictions, not observed labels')
     out.with_suffix('.receipt.json').write_text(json.dumps(receipt, indent=2, default=str) + '\n')
     print(json.dumps({k: receipt[k] for k in ('replicate', 'device', 'targets', 'seconds', 'archive_check')}), flush=True)
-    if check is not None and not all(v for k, v in check.items() if k != 'archive_sha256'):
+    if check is not None and not all(v for k, v in check.items() if k not in ('archive_sha256', 'reference')):
         raise SystemExit('archive check failed')
     return 0
 
