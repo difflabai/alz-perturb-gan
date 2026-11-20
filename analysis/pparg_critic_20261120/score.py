@@ -109,7 +109,7 @@ def main(argv=None):
                 rows[(readout, arm, s)] = dict(frozen=frozen, donors=per_donor(arc, real, held, block, pparg, AS, I, observed),
                                                archive_sha256=sha(arc))
     keys = ['pparg_sqerr', 'block_mse', 'block_nonpparg_mse', 'allgene_meanlog_mse',
-            'sd_interval_score', 'combined_interval_score', 'sd_coverage', 'combined_coverage', 'mean_coverage']
+            'sd_interval_score', 'combined_interval_score', 'mean_interval_score', 'sd_coverage', 'combined_coverage', 'mean_coverage']
     root = {'rmse': ('pparg_sqerr', 'block_mse', 'block_nonpparg_mse', 'allgene_meanlog_mse')}
     result = dict(protocol='analysis/pparg_critic_20261120/PROTOCOL.md', fold=0, seeds=a.seeds, updates=a.updates,
                   heldout_donors=[str(real.donors[i]) for i in held], heldout_stage=[int(real.stage[i]) for i in held],
@@ -125,6 +125,8 @@ def main(argv=None):
                            empirical_blind=float(fn(refs['resample_blind']['donors'][k])),
                            empirical_stage=float(fn(refs['resample']['donors'][k])),
                            diff_variant_minus_control=paired_bootstrap(pooled['variant'][k], pooled['control'][k], fn=fn),
+                           diff_arm_minus_empirical_blind={arm: paired_bootstrap(pooled[arm][k], refs['resample_blind']['donors'][k], fn=fn)
+                                                           for arm in ARMS},
                            per_seed={str(s): dict(variant=float(fn(rows[(readout, 'variant', s)]['donors'][k])),
                                                   control=float(fn(rows[(readout, 'control', s)]['donors'][k])))
                                      for s in a.seeds})
