@@ -6,41 +6,58 @@ donors' cells, and held-out cells lose variance when projected onto it. This
 CPU study asks how much of the SD under-coverage belongs to the generator and
 how much to that basis. It rescores the existing pilot archives. It does no
 training or generation by the network and changes no default. The
-[protocol](PROTOCOL.md) was committed before any score existed.
+[protocol](PROTOCOL.md) was committed (e300bb7, 03:53 UTC) before any score
+existed. Post-hoc corrections and an audit-driven repair of view (b1) are in
+the [addendum](PROTOCOL_ADDENDUM.md).
 
-**Short answer.** The basis matters for PCs 11-50, but most of the generator's
-SD under-coverage survives. That shortfall sits on PCs 1-10, where projection
-shrinkage is small.
+**Short answer (verdict: mixed).** The basis inflates in-sample variance on
+PCs 11-50, but most of the generator's SD under-coverage is not explained by
+it. G0's shortfall sits on PCs 1-10, where TRAIN-estimated projection
+shrinkage is small (factor .96).
 
-* A model-free check isolates the projection effect. Stage-blind resampling
-  from TRAIN cells (in-sample for the basis) is **over**-dispersed against
-  held-out donors: log SD ratio +.10 overall and +.15 on PCs 31-50. The same
-  resampling from the *other held-out donors' cells* (an out-of-sample
-  "oracle") is calibrated, at -.01 [-.03, .02]. On PCs 11-50, the difference
-  (+.12 to +.19 log SD) is pure projection inflation.
+* A model-free contrast estimates the projection effect. Stage-blind
+  resampling from TRAIN cells (in-sample for the basis) is **over**-dispersed
+  against held-out donors: log SD ratio +.101 overall. The same resampling
+  from the *other held-out donors' cells* (an out-of-sample "oracle") is
+  calibrated: -.008 [-.030, .016]. The paired difference is +.109
+  [.100, .117] overall, +.124 on PCs 11-30 and +.191 on PCs 31-50. On PCs
+  1-10 it is **-.086 [-.105, -.070]**: significant and opposite in sign, not
+  absent. This contrast mixes basis in-sample-ness with population
+  differences between the 25 TRAIN donors and the 11 other held-out donors
+  (stage mix, depth). The PC 1-10 sign is a reminder of that confound. The
+  independent TRAIN-only refit factors (b1) support an inflation of similar
+  size on PCs 11-50. The paired difference in SD *coverage* is not
+  significant (-6.7 points [-15.3, +3.0]), so the effect is established for
+  the log SD ratio only.
 * Against that oracle, in the same basis, the default generator G0 is
-  under-dispersed on PCs 1-10 (log ratio -.47 [-.50, -.45]) and PCs 11-30
-  (-.12). On PCs 31-50 it matches held-out SD. It does not reproduce TRAIN's
-  in-sample inflation there.
-* In an out-of-sample basis (rotation fit leave-one-donor-out on the *other*
-  held-out donors), 61% of G0's SD under-coverage survives: 66.7% coverage,
-  versus 58.3% originally. Its under-dispersion survives (log ratio -.090
-  [-.105, -.076]) and is concentrated on the top components (-.38).
-* In gene space (per-gene within-donor SD of log CP10k), G0 has **no**
-  under-coverage: 82.4% [80.4, 84.5]. Every expression decile has 76-86%
-  coverage. Per-gene SD is dominated by count-sampling noise, which the
-  calibrated count readout reproduces. The deficit is in *coordinated*
-  multi-gene variation, which the top PCs capture, not in marginal per-gene
-  spread.
-* The quarter readout G1 has an overall log ratio near 0 only because it
-  over-disperses PCs 31-50 (+.15 against the oracle). It still
-  under-disperses PCs 1-10 (-.32).
+  under-dispersed on PCs 1-10 (log ratio -.474 [-.504, -.446]) and PCs 11-30
+  (-.118). On PCs 31-50 it is slightly **over**-dispersed against the oracle
+  (+.071 [.052, .088]), while it looks close to held-out SD in the raw view
+  (+.030). This is consistent with G0 not reproducing TRAIN's in-sample
+  inflation there.
+* In the out-of-sample whitened basis (b2), 61% of G0's SD under-coverage
+  remains: 66.7% coverage and log ratio -.090 [-.105, -.076]. This is
+  **weak** evidence on its own, because b2 does not remove the projection
+  effect it was meant to control: E_train's log ratio is +.101 in (a) and
+  +.104 in (b2). The "not basis-explained" conclusion rests mainly on the
+  oracle contrast on PCs 1-10 and on the b1 factor there (.96, log -.04),
+  which is an order of magnitude smaller than G0's -.47 deficit.
+* In gene space (per-gene within-donor SD of log CP10k), G0 has no SD
+  under-coverage: 82.4% [80.4, 84.5], with every expression decile at
+  76-86%. The deficit is therefore in coordinated top-PC variation rather
+  than in marginal per-gene spread. We did not measure how much of per-gene
+  SD is count-sampling noise. Four held-out donors have fewer than 256 cells
+  (see Limits).
+* The quarter readout G1 has an overall log ratio near 0 only because errors
+  offset: -.319 [-.347, -.293] against the oracle on PCs 1-10 and +.152
+  [.130, .174] on PCs 31-50.
 
-Leave-one-donor-out conformal calibration over all 12 held-out donors brings
-G0 to 82.0% SD coverage. Its SD interval score improves from .806 to .586.
-Stage-conditional (Mondrian) calibration cannot be done honestly for 3 of the
-4 stages in this fold: with 1, 2 and 3 held-out donors, those intervals are
-unbounded.
+Global leave-one-donor-out conformal calibration over the 12 held-out donors
+brings G0 to 82.0% SD coverage, and its SD interval score improves from .806
+to .586. The matched comparison, calibrated E_train with the same procedure,
+scores .617: paired G0 minus E_train -.031 [-.062, +.006], indistinguishable
+(exploratory). Stage-conditional (Mondrian) calibration cannot be done for 3
+of the 4 stages in this fold, because their intervals are unbounded.
 
 ## Views and numbers (12 held-out donors; donor-bootstrap 95% CIs)
 
@@ -67,23 +84,38 @@ Paired G0 minus oracle: SD coverage -18.2 points [-22.4, -13.7], log ratio
 
 ### (b1) TRAIN-only shrinkage correction (one-sided)
 
-From 25 leave-one-TRAIN-donor-out refits of the cache recipe, the
-out-of-sample/in-sample within-donor SD factor averages **.95 / .86 / .82** on
-PCs 1-10 / 11-30 / 31-50. Multiplying generated SD coordinates by it fixes the
-in-sample reference: E_train goes from 69.8% to 86.5%, log ratio -.05. It makes
-G0 worse: 29.9%, log ratio -.27. G0 therefore does not carry TRAIN's in-sample
-inflation, so this correction does not apply to the generator. It bounds
-G0's under-dispersion from above; it does not estimate it. Rescaling real and
-generated coordinates by the same per-coordinate constant cannot change
-coverage (tested). A "rescaled basis" matters only through such a one-sided
-correction.
+The factors come from 25 leave-one-TRAIN-donor-out refits of the frozen
+`build_cache.fit_space` recipe. The first run (aa99dda) deviated from that
+recipe by sampling the SVD subsample with replacement; this was repaired
+and b1 recomputed (see [addendum](PROTOCOL_ADDENDUM.md)). With the repaired
+recipe, a refit on all 25 TRAIN donors reproduces the frozen `space.npz`:
+mean and SD are identical, pc_sd differs by at most 2.4e-6 relative, and
+every one of the 50 PCs has |cos| ≥ .9999994 with its frozen counterpart.
 
-The refit reproduces the frozen top PCs (the ten best principal cosines are
-at least .96). Late PCs are not reproducible: the smallest principal cosine is .02.
-The mean norm of each frozen PC's projection onto the refit span is .98, .77
-and .53 for PCs 1-10, 11-30 and 31-50. The PCs 31-50 directions are
-themselves unstable fitting noise, which is another reason not to read
-generator quality from them.
+The out-of-sample/in-sample within-donor SD factor averages **.957 / .849 /
+.764** on PCs 1-10 / 11-30 / 31-50 (log -.04 / -.16 / -.27). The first run
+gave .95 / .86 / .82.
+
+| Source after correction | SD coverage | below / above | SD IS ↓ | log SD ratio |
+| --- | ---: | ---: | ---: | ---: |
+| G0 | 20.9% [16.8, 25.8] | 0.2 / 79.0 | 1.332 | -.305 [-.326, -.283] |
+| G1 | 47.3% [41.2, 53.0] | 0.7 / 52.0 | .836 | -.202 [-.222, -.182] |
+| E_train | 82.9% [78.6, 86.7] | 3.2 / 13.9 | .483 | -.082 [-.103, -.062] |
+
+Multiplying generated SD coordinates by the factor fixes the in-sample
+reference: E_train goes from 69.8% to 82.9%. On PCs 31-50 the factor
+over-corrects E_train (-.12 log afterwards), so the late-PC factors are
+larger than the oracle contrast implies. The correction makes G0 much worse
+(20.9%). G0 therefore does not carry TRAIN's in-sample inflation, the
+correction does not apply to it, and for G0 this view is an upper bound on
+under-dispersion, not an estimate. Rescaling real and generated coordinates
+by the same per-coordinate constant cannot change coverage (tested).
+
+The first run reported that late PCs are unstable across refits of the
+recipe (mean alignment .53 on PCs 31-50). That came from the recipe
+mismatch: with the frozen recipe the full-TRAIN refit is identical. This
+study did not measure PC stability under leave-one-donor-out refits, so that
+claim is withdrawn.
 
 ### (b2) Out-of-sample basis: leave-one-held-out-donor-out whitening of the 50 PCs
 
@@ -94,8 +126,10 @@ generator quality from them.
 | E_train | 68.2% [60.6, 75.0] | 30.2 / 1.6 | .784 | +.104 | -.032 | +.151 | +.125 |
 | E_heldpool (in-sample for this rotation) | 74.6% | 8.6 / 16.8 | .576 | -.026 | +.062 | -.023 | -.074 |
 
-TRAIN cells stay over-dispersed after rotation. Any rotation inside the
-TRAIN-fit 50-dimensional subspace keeps the inflation of their total variance.
+TRAIN cells stay over-dispersed after rotation (+.104, against +.101 in the
+original basis). Any rotation inside the TRAIN-fit 50-dimensional subspace
+keeps the inflation of their total variance. So b2 does not control the
+projection effect, and G0's survival in b2 is weak evidence by itself.
 
 ### (c) Gene space (basis-free; 2,000 genes; deciles of TRAIN mean expression)
 
@@ -114,15 +148,16 @@ interval scores are in log CP10k units and are not comparable with PC units.
 
 | | (a) original | (b2) out-of-sample basis | (c) gene space | (b1) one-sided correction |
 | --- | ---: | ---: | ---: | ---: |
-| G0 U, share of (a) remaining | .217 (100%) | .133 (61%) | 0 (0%) | .501 (231%) |
+| G0 U, share of (a) remaining | .217 (100%) | .133 (61%) | 0 (0%) | .591 (273%) |
 | G0 under-dispersion survives (log-ratio CI < 0) | yes | yes | no | yes |
-| G1 U, share of (a) remaining | .178 (100%) | .118 (66%) | 0 (0%) | .241 (135%) |
+| G1 U, share of (a) remaining | .178 (100%) | .118 (66%) | 0 (0%) | .327 (184%) |
 
 The declared rule calls under-dispersion "basis-explained" only if it fails to
-survive in both (b2) and (c). For G0 it survives (b2), so it is **not**
-basis-explained. It is confined to coordinated top-PC variation. A deficit of
-that size on PCs 1-10 (25% coverage against the oracle's 74%) cannot come
-from projection, because the shrinkage factor there is .95.
+survive in both (b2) and (c). For G0 it survives in (b2), so by the rule it is
+**not** basis-explained. Because b2 leaves E_train's inflation unchanged, the
+stronger support is the oracle contrast. On PCs 1-10, G0 covers 25% of SD
+coordinates against the oracle's 74%, and its log ratio against the oracle
+is -.47. The TRAIN-estimated shrinkage there is only .96 (log -.04).
 
 ## Conformal calibration (SD coordinates, original basis)
 
@@ -139,14 +174,23 @@ score expands bounds symmetrically, and SD lower bounds are clipped at 0.
 | E_train | global LOO | 84.3% | .522 | .617 | 85.5% | .835 |
 
 Leave-one-donor-out calibration with 11 calibration donors has a finite-sample
-marginal guarantee of at least 10/12 = 83.3%. It is tighter than the earlier
-6/6 split, which took the maximum of six scores and guaranteed 6/7 = 85.7%;
-that split gave G0 85.55% coverage and an SD IS of .624. After calibration,
-G0's SD interval score is numerically below raw stage-blind resampling's. The
-exploratory, undeclared paired difference is -.026 [-.077, +.026], so the two
-are indistinguishable. G1 minus G0 after calibration is -.005 [-.019, +.007].
-Calibration's gain over raw G0 is -.220 [-.330, -.121]. The combined scores
-are also indistinguishable (.835 against .832). These are calibrated ranges around the
+marginal guarantee of at least 10/12 = 83.3% per coordinate. Calibration uses
+real repeat 0 and evaluation uses 24 overlapping subsample repeats.
+
+Paired donor-bootstrap differences in SD interval score (exploratory, not
+declared in the protocol):
+
+| Comparison | Difference [95% CI] |
+| --- | ---: |
+| G0 calibrated minus E_train calibrated (**matched**) | -.031 [-.062, +.006] |
+| G0 calibrated minus E_train raw (unmatched: only G0 uses held-out calibration data) | -.026 [-.077, +.026] |
+| G1 calibrated minus G0 calibrated | -.005 [-.019, +.007] |
+| G0 calibrated minus G0 raw | -.220 [-.330, -.121] |
+
+Calibrated G0 is indistinguishable from calibrated stage-blind resampling.
+The earlier 6/6 split calibration gave G0 85.55% coverage and an SD IS of
+.624. Next to .586 here, that is an unpaired point comparison without
+uncertainty and was not declared. These are calibrated ranges around the
 generator's output; they do not repair the top-PC under-dispersion.
 
 **Mondrian by stage.** Fold 0's held-out donors are Not AD 1, Low 2,
@@ -163,18 +207,30 @@ needs donors pooled across folds; one fold cannot support it.
 ## Limits
 
 * One fold and one seed (fold 0/seed 0). All 12 held-out donors were used in
-  earlier development selection; this is not an independent test. Bootstrap
-  CIs resample 12 donors and are optimistic about between-fold variation.
-* E_heldpool uses held-out cells. It is a diagnostic oracle, not a generator.
-  Its pool (11 donors) is smaller than TRAIN's (25), but the E_train11
-  control shows that pool size does not matter.
+  earlier development selection, so this is not an independent test.
+  Percentile donor-bootstrap CIs over 12 donors tend to under-cover. They
+  also exclude variation from generator seed, resampling replicate (E_train
+  replicate 0 only) and fold.
+* E_heldpool uses held-out cells. It is a diagnostic oracle, not a
+  generator, and is in-sample for the (b2) rotation. It differs from TRAIN
+  in population as well as basis status, so the E_train-minus-oracle contrast
+  is not a pure projection effect. The E_train11 control rules out pool size
+  only (+.002 [-.007, .012]).
 * Generated archives store cells only as 64-cell TRAIN-basis projections and
   256-cell gene moments. A full gene-space leave-donor-out PCA cannot be
-  applied to generated cells without regeneration. (b2) is therefore a
-  rotation inside the TRAIN 50-PC subspace.
-* Gene-space SD comes from float16 second moments in the archives. The real
-  side is rounded the same way. Low-expression ratios use epsilon .01; their
-  CIs are wide.
+  applied to generated cells without regeneration, so (b2) is a rotation
+  inside the TRAIN 50-PC subspace.
+* Gene space: SD comes from float16 second moments in the archives, and the
+  real side is rounded the same way. Low-expression ratios use epsilon .01;
+  their CIs are wide. Four of the 12 held-out donors have fewer than 256
+  kept cells (158, 184, 209 and 241). For them the real per-gene SD uses all
+  cells, the 24 repeats are identical, and the cell count does not match the
+  256-cell generated bags. The share of per-gene SD due to count noise was
+  not measured.
+* The b1 factors on PCs 31-50 over-correct the in-sample reference and are
+  approximate.
+* Paired conformal comparisons were added after the protocol and are
+  exploratory. The guarantee is marginal and per coordinate.
 * Frozen historical metrics (profile RMSE, gene errors, PC/cell energy) were
   recomputed for G0, G1 and E_train. They match the stored scores exactly,
   since no generated cells changed.
@@ -184,7 +240,7 @@ needs donors pooled across folds; one fold cannot support it.
 ```bash
 PY=/mnt/nvme/ai/conda/anaconda3/bin/python3
 taskset -c 3-23 $PY -B -m pytest -q -p no:cacheprovider analysis/pca_shrinkage_20261120/test_shrinkage.py
-taskset -c 3-23 $PY -B analysis/pca_shrinkage_20261120/run.py   # ~11 min, CPU, 3 threads
+taskset -c 3-23 $PY -B analysis/pca_shrinkage_20261120/run.py   # ~11-26 min, CPU, 3 threads
 ```
 
 `shrinkage.py` is the reusable NumPy API. It provides per-block interval

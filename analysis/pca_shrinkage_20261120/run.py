@@ -126,13 +126,21 @@ def real_gene_sd(E, real, rows, K=256, repeats=24):
     return sd, mean
 
 
+def log_hvg32(counts):
+    """bench_core.log_hvg (frozen cache recipe): float32 log1p CP10k of panel counts."""
+    X = counts.toarray() if hasattr(counts, 'toarray') else np.asarray(counts)
+    X = X.astype(np.float32)
+    return np.log1p(X * (1e4 / np.maximum(X.sum(-1, keepdims=True), 1)))
+
+
 def refit_space(L, seed_cells=20000):
-    """Frozen cache recipe on log1p CP10k cells L [n, G]: mean, sd, W, pc_sd."""
+    """Frozen build_cache.fit_space recipe on float32 log_hvg cells L [n, G] (kept cells, cache order):
+    mean, sd, W, pc_sd. Subsample WITHOUT replacement, as in the frozen recipe (audit repair)."""
     from sklearn.utils.extmath import randomized_svd
     X = L.astype(np.float32)
     m = X.mean(0); sd = X.std(0) + 1e-6; Z = (X - m) / sd
     n = len(Z)
-    sub = np.random.default_rng(0).choice(n, min(seed_cells, n))
+    sub = np.random.default_rng(0).choice(n, min(seed_cells, n), replace=False)
     _, _, Vt = randomized_svd(Z[sub], n_components=50, n_iter=5, random_state=0)
     W = Vt.T.copy(); ps = np.maximum((Z @ W).std(0), 1e-6)
     return m, sd, W, ps
@@ -141,13 +149,19 @@ def refit_space(L, seed_cells=20000):
 def shrinkage_factors(E, real):
     """Leave-one-TRAIN-donor-out out-of-sample/in-sample within-donor SD per PC rank."""
     train = np.flatnonzero(~real.is_heldout)
-    logs = {i: E.MX.log_cp10k(real.cells[i].toarray().astype(np.float64)).astype(np.float32) for i in train}
-    # recipe check on all TRAIN donors versus the frozen space
+    logs = {i: log_hvg32(real.cells[i]) for i in train}
+    # recipe check on all TRAIN donors (cache order) versus the frozen space
     Lall = np.concatenate([logs[i] for i in train])
-    _, _, Wall, _ = refit_space(Lall)
+    m0, sd0, Wall, ps0 = refit_space(Lall)
     overlap = real.W.T @ Wall.astype(np.float64)
     principal = np.linalg.svd(overlap, compute_uv=False)
     per_pc = np.linalg.norm(overlap, axis=1)   # |projection of frozen PC k onto the refit 50-PC span|
+    same_pc = np.abs(np.sum(real.W * Wall.astype(np.float64), 0))   # |cos| between frozen PC k and refit PC k
+    recipe = dict(mean_max_abs_diff=float(np.abs(m0 - real.mean).max()), sd_max_abs_diff=float(np.abs(sd0 - real.sd).max()),
+                  pc_sd_max_rel_diff=float(np.abs(ps0 / real.pc_sd - 1).max()),
+                  same_rank_abs_cosine=same_pc.tolist())
+    log('recipe check', {k: v for k, v in recipe.items() if k != 'same_rank_abs_cosine'},
+        'same-rank |cos| min', float(same_pc.min()), 'span min', float(per_pc.min()))
     out_sd, in_sd = [], []
     for d in train:
         log(f'LDO refit without {real.donors[d]}')
@@ -162,6 +176,7 @@ def shrinkage_factors(E, real):
                    recipe_check_principal_cosines_min=float(principal.min()),
                    recipe_check_best10_principal_cosines_min=float(principal[:10].min()),
                    recipe_check_frozen_pc_in_refit_span=per_pc.tolist(),
+                   recipe_check_full_train_refit=recipe,
                    per_donor_factor_sd=(out_sd/in_sd).std(0).tolist())
 
 
