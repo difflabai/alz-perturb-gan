@@ -136,9 +136,10 @@ def load_panad():
     return ad.read_h5ad(p)
 
 
-def load_psychad():
+def load_psychad(path: Path | None = None):
     """Public PsychAD MSSM microglial raw counts and three diagnosis labels."""
-    path = Path(os.environ.get("PSYCHAD_H5AD", DATA_DIR / "psychad-mssm-microglia.h5ad"))
+    if path is None:
+        path = Path(os.environ.get("PSYCHAD_H5AD", DATA_DIR / "psychad-mssm-microglia.h5ad"))
     if not path.is_file():
         raise DataUnavailable(
             f"PsychAD microglia export missing at {path}. Set PSYCHAD_H5AD "

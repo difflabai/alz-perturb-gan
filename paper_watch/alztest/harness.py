@@ -12,6 +12,8 @@ way the production ALZ adapter wraps the trainer.
 """
 from __future__ import annotations
 
+from collections.abc import Callable
+
 import numpy as np
 import torch
 from torch import nn
@@ -69,7 +71,9 @@ class ConditionalPGAN:
     networks by the wrappers above.
     """
 
-    def __init__(self, data_dim: int, n_cond: int, seed: int = 0):
+    def __init__(
+        self, data_dim: int, n_cond: int, seed: int = 0, *, learning_rate: float = 0.005
+    ):
         self.n_cond = n_cond
         self.G = _CondGenerator(Z_DIM, n_cond, data_dim)
         self.D = _CondCritic(data_dim, n_cond)
@@ -77,7 +81,7 @@ class ConditionalPGAN:
         deterministic_orthogonal_(self.D, seed=seed + 1)
         recipe = get_recipe(
             "empf", z_dim=Z_DIM, num_particles=NUM_PARTICLES,
-            batch_size=BATCH, lr=0.005,
+            batch_size=BATCH, lr=learning_rate,
         )
         self.prior = recipe.make_prior(sigma=0.025)
         self.trainer = GANTrainer(recipe, self.G, self.D, prior=self.prior,
@@ -90,7 +94,8 @@ class ConditionalPGAN:
         self.D.cond.copy_(v)
 
     def fit(
-        self, X: np.ndarray, cond: np.ndarray, steps: int = 300, *, min_condition_rows: int = 32
+        self, X: np.ndarray, cond: np.ndarray, steps: int = 300, *,
+        min_condition_rows: int = 32, after_step: Callable[[int], None] | None = None
     ) -> None:
         if min_condition_rows < 1:
             raise ValueError("min_condition_rows must be positive")
@@ -107,6 +112,8 @@ class ConditionalPGAN:
             self._set_cond(k)
             batch = torch.tensor(X[pick], dtype=torch.float32)
             self.trainer.step(batch)
+            if after_step is not None:
+                after_step(self.trainer.completed_steps)
 
     @torch.no_grad()
     def sample(self, cond_idx: int, n: int, seed: int = 999) -> np.ndarray:
