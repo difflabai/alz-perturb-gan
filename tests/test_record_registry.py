@@ -727,3 +727,13 @@ def test_branch_touches_no_pinned_path_while_under_confirmation():
     pins = pinned_paths()
     touched = sorted(p for p in changed if is_pinned(p, pins))
     assert not touched, touched
+
+
+def test_orphan_temp_files_are_gitignored(tmp_path):
+    """Adversary (low): an orphan temp file showed up in git status."""
+    if not in_git():
+        pytest.skip('not a git checkout')
+    for rel in (REG.REGISTRY, REG.CAL_INDEX):
+        d, name = rel.rsplit('/', 1)
+        probe = f'{d}/.{name}.k3j2_x.tmp'
+        assert subprocess.run(['git', '-C', str(ROOT), 'check-ignore', '-q', '--no-index', probe]).returncode == 0
