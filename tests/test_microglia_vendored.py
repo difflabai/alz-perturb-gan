@@ -39,6 +39,7 @@ ORIGINALS = {
 HOST_INPUTS = ['analysis/empf_comparison_20261117/host.py', 'analysis/empf_comparison_20261117/adapter.py',
                'analysis/default_empf_20261117/vendored_host.py', 'analysis/improve_20261109/r5/trainer.py',
                'analysis/improve_20261109/r5/generate.py', 'analysis/faithful097/model/release_env.py',
+               'src/alz_perturb_gan/__init__.py', 'src/alz_perturb_gan/durable_state.py',
                *(f'analysis/default_empf_20261117/vendored/{n}' for n in ORIGINALS)]
 # Assignments in the derived files that name a location.
 LOCATION = re.compile(r"^(HERE|MODEL|SCIENCE|BENCH|RUNS|DEFAULT_OUT_ROOT) = Path\((.*)\)$|^(SITE|B)=Path\((.*)\)$", re.M)
@@ -119,7 +120,13 @@ def test_vendored_host_differs_from_the_study_host_only_in_locations(copied):
             'try:\n    host.activate("native")\n'
             'except Exception as exc:\n    err = type(exc).__name__\n'  # stops at the particlegan import
             'else:\n    err = None\n'
-            'print(json.dumps([err, V.derive_bodies("native")[0]]))')
+            'bodies = V.derive_bodies("native")[0]\n'
+            # Undo the fit-lifecycle patches (each `after` occurs once) to compare the location rewrites alone.
+            'for name, patches in V.FIT_LIFECYCLE_PATCHES.items():\n'
+            '    for before, after in reversed(patches):\n'
+            '        assert bodies[name].count(after) == 1, after[:60]\n'
+            '        bodies[name] = bodies[name].replace(after, before)\n'
+            'print(json.dumps([err, bodies]))')
     err, bodies = json.loads(run_in_copy(copied, code))
     assert err is not None  # no native release in the copy, so the study host stops after writing its files
     study = copied/'artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native'
@@ -147,25 +154,28 @@ def test_vendored_host_differs_from_the_study_host_only_in_locations(copied):
         "B=Path('/ml2/codex-storage/future-workspaces/2026-10-27/task-2/benchmark')": f'B=Path({vendored})'}
 
 
-def test_write_host_uses_a_new_directory_and_refuses_a_changed_file(copied):
+def test_write_host_uses_a_versioned_directory_and_repairs_a_corrupt_file(copied):
     old = copied/'artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native'
     old.mkdir(parents=True)
     (old/'trainer.py').write_text('previous derived host\n')
     code = ('d, p = V.write_host("native"); d2, p2 = V.write_host("native")\n'
-            'print(json.dumps([str(d), str(d2), p == p2, sorted(p["files"]), sorted(p["vendored"])]))')
-    d, d2, same, files, vendored = json.loads(run_in_copy(copied, code))
-    assert d == d2 == str(copied/'artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native-vendored')
+            'print(json.dumps([str(d), str(d2), p == p2, sorted(p["files"]), sorted(p["vendored"]), p["derivation_sha256"]]))')
+    d, d2, same, files, vendored, digest = json.loads(run_in_copy(copied, code))
+    assert d == d2 == str(copied/f'artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native-vendored-{digest[:12]}')
     assert same and files == ['contracts.py', 'generate.py', 'release_env.py', 'trainer.py']
     assert vendored == sorted(ORIGINALS)
     assert (old/'trainer.py').read_text() == 'previous derived host\n'
     assert not list(Path(d).glob('.*.tmp'))
+    marker = json.loads((Path(d)/'derivation.json').read_text())
+    for name, record in marker['files'].items():
+        assert sha(Path(d)/name) == record['derived_sha256']
+    good = (Path(d)/'trainer.py').read_bytes()
     with open(Path(d)/'trainer.py', 'a') as handle:
         handle.write('# drift\n')
-    prelude = ('import json, sys\n'
-               f'sys.path.insert(0, {str(copied/"analysis/default_empf_20261117")!r})\n'
-               'import vendored_host as V\nV.write_host("native")\n')
-    out = subprocess.run([sys.executable, '-B', '-c', prelude], capture_output=True, text=True, cwd=copied)
-    assert out.returncode != 0 and 'existing derived EMPF host differs' in out.stderr
+    state = run_in_copy(copied, 'r, _ = V.derivation_record("native"); print(V.inspect(V.runtime_dir("native"), r)[0].name)')
+    assert state.strip() == 'CORRUPT'
+    run_in_copy(copied, 'V.write_host("native")')  # rederives under the lock
+    assert (Path(d)/'trainer.py').read_bytes() == good
 
 
 def test_manifest_check_passes_from_a_checkout_at_another_path(tmp_path):

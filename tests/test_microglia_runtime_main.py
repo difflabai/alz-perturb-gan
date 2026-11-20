@@ -47,10 +47,20 @@ class Stub:
             return None, stats
 
         def run(args):
+            # Emits the derived trainer's FIT_EVENTS (see vendored_host.FIT_LIFECYCLE_PATCHES).
             fit = Path(args.out_root)/'pbulk/hvg2000/fold0'/f'seed{args.seed}'
             fit.mkdir(parents=True, exist_ok=True)
-            for name in ('final.pt', 'config.json', 'fit_receipt.json'):
-                (fit/name).write_text('{}')
+            hook = getattr(T, 'FIT_EVENTS', None) or (lambda *a: None)
+            if not (fit/'config.json').exists():
+                (fit/'config.json').write_text('{}')
+                hook('configure', fit, {})
+            if not (fit/'final.pt').exists():
+                hook('begin', fit, {'recovery': (fit/'recovery.pt').exists()})
+                (fit/'final.pt').write_text('{}')
+                hook('final_written', fit, {'step': 20000})
+            if not (fit/'fit_receipt.json').exists():
+                (fit/'fit_receipt.json').write_text(json.dumps({'status': 'training_completed'}))
+                hook('receipt_written', fit, {'step': 20000})
             return fit
 
         record = {'calls': 20000, 'observed_steps': 20000}
@@ -241,14 +251,20 @@ def test_resume_under_a_different_manifest_is_refused(stub, tmp_path):
     assert stub.activated == 0
 
 
-def test_fit_that_predates_train_start_is_audited_with_an_explicit_gap(stub, tmp_path):
+def test_fit_that_predates_train_start_resumes_only_with_an_explicit_epoch_adoption(stub, tmp_path):
     fit = tmp_path/'fits/pbulk/hvg2000/fold0/seed0'
     fit.mkdir(parents=True)
     (fit/'recovery.pt').write_text('')
-    assert train(stub, tmp_path/'fits') == 0
+    with pytest.raises(ValueError, match='--adopt-epoch'):
+        train(stub, tmp_path/'fits')
+    assert stub.activated == 0
+    assert R.main(['train', '--cache', str(stub.cache), '--out-root', str(tmp_path/'fits'), '--adopt-epoch']) == 0
     audit = json.loads((fit/'no_skip_audit.json').read_text())
     assert audit['training_start_source_manifest_sha256'] is None and 'training_start_note' in audit
+    assert [a['digest'] for a in audit['epoch_adoptions']] == [stub.digest]
     assert not (fit/'train_start.json').exists()
+    events = [e['event'] for e in R.fit_state_file(fit).journal()]
+    assert events[:2] == ['__adopt__', 'adopt_epoch'] and events[-1] == 'audit_passed'
 
 
 # --- public CLI (scripts/microglia.py) ---
