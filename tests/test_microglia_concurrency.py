@@ -59,7 +59,7 @@ CHILD = textwrap.dedent('''
     work = Path(os.environ['STUB_WORK'])
     spec = importlib.util.spec_from_file_location('microglia_runtime', sys.argv[3])
     R = importlib.util.module_from_spec(spec); spec.loader.exec_module(R)
-    R.STUDY = work / 'study'
+    R.HOST = work / 'study' / 'host.py'
     R.HOST_LOCK = work / 'host.lock'
     while not (work / 'go').exists():
         time.sleep(.005)
@@ -67,7 +67,7 @@ CHILD = textwrap.dedent('''
     result = {'index': index}
     try:
         if mode == 'unlocked':
-            sys.path.insert(0, str(R.STUDY))
+            sys.path.insert(0, str(R.HOST.parent))
             import host
             host.activate('native')
         else:

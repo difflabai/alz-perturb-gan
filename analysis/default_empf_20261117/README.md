@@ -42,7 +42,26 @@ $PY -m pip install --no-deps --no-compile \
   'particlegan @ git+https://github.com/HyperGAN/ParticleGAN.git@952c3b62ba434f7da194067923351ff5748ef8dd'
 ```
 
-This command is for an empty target on a fresh setup; this workspace already contains the verified release. The loader checks the imported version/origin and pinned native source hashes. Research caches, the recorded external model helpers and checkpoints remain local artifacts, as in the repository's existing contract. Git contains the config, source, metadata hashes and evidence, rather than patient cells or binary weights. `config` and `--dry-run` remain available without Torch, data or checkpoints.
+This command is for an empty target on a fresh setup; this workspace already contains the verified release. The loader checks the imported version/origin and pinned native source hashes. Research caches and checkpoints remain local artifacts, as in the repository's existing contract. Git contains the config, source, metadata hashes and evidence, rather than patient cells or binary weights. `config` and `--dry-run` remain available without Torch, data or checkpoints.
+
+### Model sources in the repository
+
+The generator, critic and data helpers that the runtime imports used to be read from two absolute directories under `/ml2/codex-storage`. Six of them are now [vendored](vendored/) byte for byte: `pg_model.py`, `critic.py`, `usage.py`, `contracts.py`, `stage_law.py` and `bench_core.py`. [`vendored/SOURCES.json`](vendored/SOURCES.json) records each original path, size, modification time and sha256. The first three keep the digests they were pinned with. The last three were imported at runtime but had never been pinned, and they are now added to the manifest. An import trace of a CPU generation showed only these six files being loaded from `/ml2/codex-storage`. None of the six carries a license header; they are assumed to be covered by the repository license, which the owner should confirm.
+
+[`vendored_host.py`](vendored_host.py) derives the native host the same way as the concluded study's [`host.py`](../empf_comparison_20261117/host.py), which stays unchanged because its study manifest pins it. It reuses that host's rewrites and adds five location rewrites, so that every location the derived files name is in the current checkout: `MODEL`, `SCIENCE`, `BENCH` and `RUNS` in the trainer, `SITE` in `release_env.py`, and `B` in a derived `contracts.py` (the released model adapter puts `contracts.B` first on `sys.path`). The derived files go to `artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native-vendored/`, beside the earlier `alz-host-empf-native/`, which is no longer written. A derived file that already exists and differs is an error and is never overwritten. The model code does not change; only where it is imported from.
+
+### Local artifacts the runtime still needs
+
+These are gitignored and are not fetched by any script:
+
+| Path | Needed for | Checked by |
+| --- | --- | --- |
+| `artifacts/native-releases/particlegan-0.10.0/site-packages/` | every run (imported) | release pin and runtime manifest |
+| `artifacts/native-releases/particlegan-0.9.7/site-packages/` | the manifest check only (pinned, not imported) | runtime manifest |
+| `runs/improve_20261109/caches/hvg2000/fold{f}/` | `train` and `generate` | `analysis/empirical_challenge_20261114/cache_and_fit_anchors.json` |
+| `runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0/` | `generate` from the selected model | [`selected_model.json`](selected_model.json) and the fit receipts |
+
+The derived host directory is created on first use. In a checkout without these artifacts the manifest check reports the native releases as missing, and `train`/`generate` stop before any work starts.
 
 ## Historical source preservation
 

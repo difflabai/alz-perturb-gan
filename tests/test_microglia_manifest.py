@@ -34,7 +34,7 @@ def test_tracked_pinned_sources_match_the_manifest():
     ok, missing, changed, borrowed, entry_ok = F.scan(manifest, ROOT)
     assert not changed, f'pinned sources changed without a re-pin: {sorted(changed)}'
     assert entry_ok
-    assert all(n.startswith('artifacts/') or Path(n).is_absolute() for n in missing), missing
+    assert all(n.startswith('artifacts/') for n in missing), missing
 
 
 def make_tree(tmp_path):
@@ -101,3 +101,34 @@ def test_add_pins_a_new_path(tmp_path):
     result = F.refreeze(manifest, root, 'add c', add=['pkg/c.py'], now=NOW)
     assert result['added'] == ['pkg/c.py']
     assert 'pkg/c.py' in json.loads(manifest.read_text())['sources']
+
+
+def test_relocate_renames_a_key_only_for_a_byte_identical_file(tmp_path):
+    root, manifest = make_tree(tmp_path)
+    outside = tmp_path/'outside/ext.py'
+    outside.parent.mkdir()
+    outside.write_text('external = 1\n')
+    pinned = json.loads(manifest.read_text())
+    pinned['sources'][str(outside)] = F.sha(outside)
+    manifest.write_text(json.dumps(pinned, indent=2))
+    before = manifest.read_bytes()
+    (root/'vendored').mkdir()
+    (root/'vendored/ext.py').write_text('external = 2\n')  # not the pinned bytes
+    with pytest.raises(ValueError, match='differs from the pinned digest'):
+        F.refreeze(manifest, root, 'vendor', relocate=[(str(outside), 'vendored/ext.py')], now=NOW)
+    with pytest.raises(ValueError, match='unpinned key'):
+        F.refreeze(manifest, root, 'vendor', relocate=[('pkg/zzz.py', 'vendored/ext.py')], now=NOW)
+    with pytest.raises(ValueError, match='repository-relative'):
+        F.refreeze(manifest, root, 'vendor', relocate=[(str(outside), 'vendored/missing.py')], now=NOW)
+    with pytest.raises(ValueError, match='already pinned'):
+        F.refreeze(manifest, root, 'vendor', relocate=[(str(outside), 'pkg/a.py')], now=NOW)
+    assert manifest.read_bytes() == before and not (root/'m/previous').exists()
+    (root/'vendored/ext.py').write_bytes(outside.read_bytes())
+    outside.unlink()  # the old absolute location may disappear once vendored
+    result = F.refreeze(manifest, root, 'vendor', relocate=[(str(outside), 'vendored/ext.py')], now=NOW)
+    assert result['relocated'] == {str(outside): 'vendored/ext.py'} and result['changed'] == []
+    new = json.loads(manifest.read_text())
+    assert list(new['sources']) == ['pkg/a.py', 'pkg/b.py', 'vendored/ext.py']
+    assert new['sources']['vendored/ext.py'] == pinned['sources'][str(outside)]
+    assert new['previous_runtime_manifest']['relocated'] == {str(outside): 'vendored/ext.py'}
+    assert (root/new['previous_runtime_manifest']['archive']).read_bytes() == before
