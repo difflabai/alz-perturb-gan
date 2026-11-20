@@ -77,6 +77,7 @@ EXPECTED_TABLE = {
     ('RECEIPTED', 'adopt_epoch'): 'RECEIPTED',
     ('STRANDED', 'adopt_epoch'): 'FAILED_RESUMABLE',
     ('STRANDED', 'adopt_epoch_trained'): 'TRAINED',
+    ('STRANDED', 'audit_under_epoch'): 'AUDITED',  # guarded: the live digest is the fit's own epoch
     **{(s, 'damaged'): 'DAMAGED' for s in ('ABSENT', 'CONFIGURED', 'TRAINED', 'RECEIPTED', 'AUDITED')},
     **{('DAMAGED', f'repair_to_{s.lower()}'): s
        for s in ('ABSENT', 'CONFIGURED', 'FAILED_RESUMABLE', 'TRAINED', 'RECEIPTED')},
@@ -342,6 +343,9 @@ def child_main():
     extra = json.loads(os.environ.get('FIT_ARGS', '[]'))
     try:
         rc = R.main(['train', '--cache', str(work/'cache'), '--out-root', str(work/'fits'), *extra])
+    except R.Stranded as exc:  # as in the CLI's __main__
+        print(f'microglia runtime: Stranded: {exc}', file=sys.stderr, flush=True)
+        rc = R.EX_STRANDED
     except (ValueError, OSError, RuntimeError, KeyError, ds.DurableStateError) as exc:
         print(f'microglia runtime: {type(exc).__name__}: {exc}', file=sys.stderr, flush=True)
         rc = 1
@@ -498,7 +502,7 @@ def test_epoch_change_mid_fit_strands_until_explicit_adoption(tmp_path):
     (work/'manifest.json').write_text('{"sources": {"epoch": 2}}')  # a refreeze between runs
     for _ in range(2):
         rc, out, err = run_child(work)
-        assert rc == 1 and ('refusing to resume' in err or 'STRANDED' in err), err
+        assert rc == R.EX_STRANDED and ('refusing to resume' in err or 'STRANDED' in err), err
         assert state_of(work).state is Fit.STRANDED
     rc, out, err = run_child(work, args=['--adopt-epoch'])
     assert rc == 0, err
@@ -725,12 +729,19 @@ def test_refrozen_manifest_in_a_tmp_checkout_passes_check_unchanged_sources(tmp_
     else:
         (root/'artifacts').symlink_to(artifact_root/'artifacts')
     copy = _load('microglia_runtime_tmp_checkout', root/'scripts/microglia_runtime.py')
-    started, digest = copy.check_sources(), copy.sha(copy.SOURCE_MANIFEST)
-    copy.check_unchanged_sources(started, digest)
+    # check_sources() takes the shared source-epoch lease (held to process exit when taken lazily); scope it
+    # to each block so this same process can re-pin in between.
+    with copy.source_epoch_lease(['test']):
+        started, digest = copy.check_sources(), copy.sha(copy.SOURCE_MANIFEST)
+        copy.check_unchanged_sources(started, digest)
     with open(root/'scripts/microglia_runtime.py', 'a') as handle:  # an edit to a pinned source
         handle.write('# edited\n')
-    with pytest.raises(ValueError):
-        copy.check_sources()
+    with copy.source_epoch_lease(['test']):
+        with pytest.raises(ValueError):
+            copy.check_sources()
+        with pytest.raises(F.EpochBusy):  # the lease keeps a re-pin out while the sources are in use
+            F.refreeze(pinned, root, 'test refreeze')
     assert F.refreeze(pinned, root, 'test refreeze')['changed'] == ['scripts/microglia_runtime.py']
-    started, digest = copy.check_sources(), copy.sha(copy.SOURCE_MANIFEST)
-    copy.check_unchanged_sources(started, digest)
+    with copy.source_epoch_lease(['test']):
+        started, digest = copy.check_sources(), copy.sha(copy.SOURCE_MANIFEST)
+        copy.check_unchanged_sources(started, digest)

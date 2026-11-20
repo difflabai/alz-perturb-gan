@@ -19,9 +19,65 @@ $PY -B scripts/microglia.py generate --dry-run
 $PY -B scripts/microglia.py generate
 ```
 
-The default generation command selects the retained native EMPF model and writes to `runs/microglia_empf/generated/selected/fold0/seed0/`. Newly trained fits generate into `runs/microglia_empf/generated/fold{f}/seed{s}/`, so a fold0/seed0 retrain never shares an output with the retained model. `--fit-source trained` generates from the newly trained fit at the selected fold/seed, and `--fit` explicitly selects another compatible, complete native EMPF fit, with matching `--fold` and `--seed`. Dry runs and real runs print the chosen fit and output. An existing output or receipt is refused before any work starts; `--force` replaces both, and only after the new output passes its checks: the receipt and then the NPZ are each replaced atomically, so the previous pair stays in place until then. The NPZ appears only after its receipt is written. If a run is interrupted between those two steps, a receipt without an NPZ remains; a rerun refuses it, and `--force` recovers. Hidden staging files (`.<stem>.pending.npz` and the generator's sidecars) are removed whether the run succeeds or fails. Supply `--out /path/outside/the/fit/generated.npz` for another output. Frozen cache payloads, recipe/version/regularizer audits and all checkpoint hashes are checked before inference. Receipts bind the starting source manifest, and changes during execution are rejected. The separately tested RHBI-matched EMPF variant is rejected.
+The default generation command selects the retained native EMPF model and writes to `runs/microglia_empf/generated/selected/fold0/seed0/`. Newly trained fits generate into `runs/microglia_empf/generated/fold{f}/seed{s}/`, so a fold0/seed0 retrain never shares an output with the retained model. At the selected fold/seed, when a trained fit (`final.pt`) exists beside the retained model, `--fit-source auto` refuses to guess (exit 2): choose `--fit-source selected` or `--fit-source trained`. `--fit` explicitly selects another compatible, complete native EMPF fit, with matching `--fold` and `--seed`; without `--out` it generates into its own namespace, `runs/microglia_empf/generated/explicit/<sha12 of the absolute fit path>/fold{f}/seed{s}/`, so two explicit fits (or an explicit and a trained fit) never share an output. A lone output that an earlier explicit run left at the trained path is reported in the plan, not moved. Dry runs and real runs print the chosen fit and output. Supply `--out /path/outside/the/fit/generated.npz` for another output. How an output is written, replaced and recovered is described under *Generation output states* below. Frozen cache payloads, recipe/version/regularizer audits and all checkpoint hashes are checked before inference. Receipts bind the starting source manifest, and changes during execution are rejected. The separately tested RHBI-matched EMPF variant is rejected.
 
 The six late states, `cellshape@0.5:biascal:stagehalf` readout, training-only calibration, 32 generated donors per target, 256 cells per donor and named generation streams match the completed native EMPF pilot. `--profile count-shape` explicitly selects that same readout. `--profile profile-rmse` selects the bias-only alternative on EMPF; old BISPF results do not qualify this alternative.
+
+### Generation output states
+
+Each output has an explicit state in `<stem>.state.json` beside `<stem>.npz` and `<stem>.receipt.json` (format `durable_state/1`, every transition journaled in `<stem>.state.json.journal.jsonl`). `microglia_runtime.py generate` holds an exclusive lock on `<stem>.npz.lock` from the moment it opens the output until it exits, so one process at a time stages, promotes or recovers an output; a second one exits **75**. Staging names carry the run id (`.<stem>.<run_id>.pending.npz` and `.<stem>.<run_id>.pending.receipt.json`, with the generator's own sidecars derived from them), so two runs never share a staging file.
+
+| State | Files | Leaves by |
+| --- | --- | --- |
+| `NONE` | no NPZ, no receipt | `stage` |
+| `STAGING` | the run writes its pending NPZ (and the generator its receipt) | `post_checks_passed`; on failure `abort_to_<previous>` after its pending files are removed |
+| `STAGED` | pending NPZ and pending receipt, both shas recorded | `begin_promote` (journaled before any replace); `abort_to_<previous>` |
+| `PROMOTING` | pending files kept until the commit | NPZ replaced, then receipt replaced, then `commit`; `lost` only if the pending files vanished outside the runtime |
+| `COMMITTED` | NPZ and receipt match each other and the recorded shas | `stage` with `--force`; `observed_<state>` if the files change outside the runtime |
+| `INCONSISTENT` | the receipt does not describe the NPZ (e.g. a pre-state interrupted `--force`), or a consistent pair this machine did not commit (a receipt edited in place, a pair copied in) | `stage` with `--force`; `observed_<state>` (never `observed_committed` for a pair it did not commit) |
+| `ORPHAN_RECEIPT` | receipt without NPZ | `stage` with `--force`; `observed_<state>` |
+| `UNRECEIPTED_NPZ` | NPZ without receipt (pre-#19 outputs) | `stage` with `--force`; `observed_<state>` |
+
+```mermaid
+stateDiagram-v2
+    [*] --> NONE: adopt (no files)
+    [*] --> COMMITTED: adopt (receipt names the NPZ sha)
+    [*] --> INCONSISTENT: adopt (mismatched pair)
+    NONE --> STAGING: stage
+    COMMITTED --> STAGING: stage [--force]
+    INCONSISTENT --> STAGING: stage [--force]
+    STAGING --> STAGED: post_checks_passed
+    STAGING --> NONE: abort_to_previous
+    STAGED --> COMMITTED: abort_to_previous
+    STAGED --> PROMOTING: begin_promote (journaled)
+    PROMOTING --> COMMITTED: NPZ replaced, receipt replaced, commit
+    PROMOTING --> INCONSISTENT: lost
+    COMMITTED --> INCONSISTENT: observed_inconsistent (foreign pair)
+    NONE --> INCONSISTENT: observed_inconsistent (pair copied in)
+```
+
+(`ORPHAN_RECEIPT` and `UNRECEIPTED_NPZ` behave like `INCONSISTENT`; `abort_to_previous` returns to whichever stable state the run started from.)
+
+The NPZ is always replaced before the receipt, so a crash never leaves a new receipt beside an old NPZ. A run that stopped while `PROMOTING` is rolled forward by the next process that opens the output (from the pending files it kept, or by confirming that both finals already have the recorded shas); one that stopped while `STAGING` or `STAGED` is rolled back to the state it started from, so with `--force` the previous pair stays in place. `scripts/microglia.py` hands an output left `STAGING`, `STAGED` or `PROMOTING` to the runtime without `--force` (which would discard a complete roll-forward): the runtime rolls it back and generates (exit 0), or rolls it forward (exit 3). `generate` without `--force` on a `COMMITTED` output exits **3** (already done) without loading the host; on `INCONSISTENT`, `ORPHAN_RECEIPT` or `UNRECEIPTED_NPZ` it refuses (the runtime exits 1, `scripts/microglia.py` exits 2 and names only the files that exist), and only `--force` replaces them. When files change outside the runtime, the recorded state follows them, except that a consistent pair this machine did not commit (a `COMMITTED` receipt edited with its `generated_SHA256` kept, or a pair copied over the output) becomes `INCONSISTENT` and stays so until `--force`: a routine rerun never turns bytes the runtime did not produce into `COMMITTED`. A receipt that is not a JSON object reads as unreadable (`INCONSISTENT` beside an NPZ). A reader can use `microglia_runtime.is_committed(out)`: valid only when `<stem>.state.json` is a valid `microglia_output` state file (schema, machine, version, journal not ahead) recording `COMMITTED` and both files still have the recorded shas, or, for a legacy output without a state file or journal, when the receipt's `generated_SHA256` equals the NPZ's sha256; any parse or type error reads as `False`. `PROMOTING`, `STAGING` and `INCONSISTENT` are never reported as done.
+
+**Damaged output state.** A state file that is not a valid `microglia_output` document (bad JSON, schema, machine, version or state), a journal ahead of it, or a journal whose state file was deleted, fails closed: `generate` exits **4** (with or without `--force`) and `scripts/microglia.py` reports `UNREADABLE` (exit 2). After inspecting it, `microglia_runtime.py generate ... --readopt` moves both to `<stem>.state.json.superseded.<utc>` and `<stem>.state.json.journal.jsonl.superseded.<utc>` under the output lock and adopts the output again from its files by the legacy rule (so a receipt naming the NPZ's sha is `COMMITTED` again; add `--force` to regenerate instead). A `STAGING`/`STAGED` record whose `previous` state is missing or not a stable state rolls back to the state its files support, a consistent pair as `INCONSISTENT`; a `PROMOTING` record whose pending entry is missing or does not name this run's own staging files (an absolute path, `..`, another run id) is journaled `lost` and nothing is moved. Under the output lock, `durable_state` temp files of dead writers (the state file's, the lock-owner records', this output's staging receipts) are swept as well. The derived `generate.py` also refuses to overwrite an existing `generated.npz` with `mode=None` unless forced, as mode generation already did.
+
+**Migration.** Existing outputs have no state file. The first `generate` adopts them read-only under the output lock: a matching pair is `COMMITTED`, a mismatched pair `INCONSISTENT`, a receipt alone `ORPHAN_RECEIPT`, an NPZ alone `UNRECEIPTED_NPZ`. No existing NPZ or receipt is rewritten unless `--force` regenerates it. Run-specific staging files of dead runs are removed under the lock; the fixed-name sidecars written by #19 (`.<stem>.pending.npz` and its receipt, temp and partial files) are recognized and removed under the lock once they are six hours old, because a runtime from before the lock may still be writing a younger one.
+
+### Exit codes
+
+`scripts/microglia.py` and `scripts/microglia_runtime.py` document these in `--help`:
+
+| Code | Meaning |
+| --- | --- |
+| 0 | done |
+| 1 | error, reason printed |
+| 2 | usage error (bad arguments; `microglia.py` without `--force`: an existing output that is `INCONSISTENT`, `ORPHAN_RECEIPT`, `UNRECEIPTED_NPZ` or `UNREADABLE`, or selected and trained fits both present under `--fit-source auto`) |
+| 3 | already done: `train` on an `AUDITED` fit that verifies; a complete fit whose output is `COMMITTED`, without `--force`; an interrupted `PROMOTING` output the runtime rolled forward |
+| 4 | the fit is `STRANDED` (see *Source epochs*) or `DAMAGED` (`--repair`), or the output's state file is damaged (`generate --readopt`); the runtime prints the recovery commands |
+| 75 | busy: another process holds the fit or the output, or a refreeze holds the source-epoch lease |
+
+`scripts/microglia.py` checks the fit first and the output second, so a complete, already generated fit exits 3 and a stable non-`COMMITTED` output exits 2, both before any subprocess starts; an interrupted output (`STAGING`, `STAGED`, `PROMOTING`) goes to the runtime to be recovered.
 
 ## Train or resume
 
@@ -45,7 +101,7 @@ Each fit directory has an explicit state in `fit_state.json` (format `durable_st
 | `TRAINED` | final.pt, no fit_receipt.json | `receipt_written`, or `reconstruct_receipt` |
 | `RECEIPTED` | + fit_receipt.json | `audit_passed` / `audit_failed` (stays, reason journaled) |
 | `AUDITED` | + no_skip_audit.json, check_fit and check_weights pass | only `damaged` (no terminal state) |
-| `STRANDED` | epoch mismatch | only an explicit `--adopt-epoch` (`adopt_epoch` / `adopt_epoch_trained`) |
+| `STRANDED` | epoch mismatch | an explicit `--adopt-epoch` (`adopt_epoch` / `adopt_epoch_trained`), or `--audit-under-epoch` from a checkout of its own epoch (`audit_under_epoch` → `AUDITED`) |
 | `DAMAGED` | the files no longer support the recorded state | only an explicit `--repair` (`repair_to_<state>`, the state the files support) |
 
 ```mermaid
@@ -71,6 +127,7 @@ stateDiagram-v2
     RECEIPTED --> STRANDED: epoch_mismatch
     STRANDED --> FAILED_RESUMABLE: adopt_epoch
     STRANDED --> TRAINED: adopt_epoch_trained
+    STRANDED --> AUDITED: audit_under_epoch [live digest == its epoch]
     ABSENT --> DAMAGED: damaged
     CONFIGURED --> DAMAGED: damaged
     TRAINED --> DAMAGED: damaged
@@ -87,7 +144,7 @@ Any state before `AUDITED` moves to `STRANDED` when its start epoch, or the dige
 
 The audit runs in this order: `check_fit` passes on a staged copy that includes the new audit; `no_skip_audit.json` is written (an earlier, different audit is kept as `no_skip_audit.superseded.<sha12>.json`); `check_fit` passes on the fit itself; then the state becomes `AUDITED`. A process that died while `TRAINING` is recorded as `error` by the next run, which holds the lock. Files written after the last state write are caught up (`final_written`, `receipt_written`) before anything else happens. A run that died between writing `no_skip_audit.json` and the `AUDITED` state is caught up as `audit_passed` (journaled with `reconciled: true`) when that audit records this fit's own epoch and the live one, and `check_fit` and every checkpoint digest still pass; the same applies after an `audit_failed` that followed an earlier passing audit. Every event the trainer reports after a file lands (`checkpoint`, `final_written`, `receipt_written`, `reconstruct_receipt`, `error`) is best-effort: if recording it fails (ENOSPC, EIO), the trainer goes on and the runtime reconciles the state from the files. Under the lock, temp files of dead writers are swept, and a `recovery.pt` left beside a `final.pt` that a receipt verifies is removed.
 
-**Exit codes of `microglia_runtime.py train`:** 0 trained/receipted/audited now; 1 error (reason printed); 3 already `AUDITED` and verified; 4 `DAMAGED` (rerun with `--repair` after inspecting); 75 another process holds the fit.
+**Exit codes of `microglia_runtime.py train`:** 0 trained/receipted/audited now; 1 error (reason printed); 3 already `AUDITED` and verified; 4 `DAMAGED` (rerun with `--repair` after inspecting) or `STRANDED` (see *Source epochs*); 75 another process holds the fit.
 
 **Repair and reset.** `DAMAGED` is recorded when the state is ahead of the files: an `AUDITED` fit that no longer passes `check_fit`/`check_weights` (a deleted `no_skip_audit.json`, `fit_receipt.json` or `final.pt`, a changed snapshot), a `TRAINED`/`RECEIPTED` fit missing `final.pt` or its receipt, or an `ABSENT`/`CONFIGURED` fit that already has `final.pt`. `generate` refuses it. `train --repair` moves it, journaled, to the state its files support (`RECEIPTED` → re-audit, `TRAINED` → receipt reconstruction, `FAILED_RESUMABLE` → resume, `CONFIGURED`/`ABSENT` → fresh training) and continues; epoch checks still apply. A damaged `fit_state.json` or journal (truncated, unknown state, journal ahead of the state, or a deleted state file with its journal kept) fails closed with `CorruptState`. After inspecting the fit, `train --readopt` moves both to `fit_state.json.superseded.<utc>` and `fit_state.json.journal.jsonl.superseded.<utc>` and adopts the directory again from its files under the lock; doing the same by hand (move both files aside, never only the state file) is equivalent.
 
@@ -140,4 +197,16 @@ Those historical manifests included a nonexecuted guard requiring the public CLI
 
 ## Re-pinning the runtime sources
 
-After an intended change to a pinned source, re-pin with `scripts/refreeze_runtime_manifest.py --reason '...'`. The tool keeps the pinned key set (missing files are an error, never dropped), archives the previous manifest under `previous/`, and records the reason and changed keys. `--check` verifies the checkout without writing. In a worktree without the gitignored native releases, `--artifact-root /path/to/main/checkout` reads those files from there; they must keep their pinned digests.
+After an intended change to a pinned source, re-pin with `scripts/refreeze_runtime_manifest.py --reason '...'`. The tool keeps the pinned key set (missing files are an error, never dropped), archives the previous manifest under `previous/runtime_source_manifest.<UTC>-<sha12>.json` (the sha12 of the archived bytes, so two re-pins in one second never collide; the older `<UTC>.json` archives stay readable and digest lookups scan both forms), and records the reason and changed keys. `--check` verifies the checkout without writing. In a worktree without the gitignored native releases, `--artifact-root /path/to/main/checkout` reads those files from there; they must keep their pinned digests.
+
+### Source epochs
+
+The digest of `runtime_source_manifest.json` is the source epoch. Every `microglia_runtime.py` process takes a shared lock on `runs/.source-epoch/lease` of its checkout before it reads the manifest and holds it until it exits; it records itself in `runs/.source-epoch/holders/<pid>-<starttime>-<token>.json` (`digest`, `cmd`, `fit`). The directory is created lazily; its absence means no holders. Records of dead processes are pruned whenever a runtime takes the lease. The directory is `$MICROGLIA_EPOCH_DIR` when set, else `runs/.source-epoch` of the checkout, and `scripts/refreeze_runtime_manifest.py` resolves it by the same rule (an explicit `--epoch-dir` wins; a `--manifest` outside the checkout requires one), so a re-pin always locks the file the runtimes hold. A re-pin takes the lock exclusively without waiting: while any runtime process holds it, the re-pin refuses, lists the live holders and exits 75; `--wait` blocks until they finish, and while it waits it holds the intent gate (`gate.lock`) exclusively: every runtime passes that gate (shared, briefly) before taking the lease, so runtimes that start during the wait queue behind the re-pin instead of starving it. A runtime process that cannot get through the gate and its shared lock within 60 s (`MICROGLIA_EPOCH_WAIT_S`) because a re-pin holds them exits 75. A re-pin therefore never lands while a fit trains or an output generates in the same checkout.
+
+In-process consumers that import `microglia_runtime` (for example `analysis/coverage_empf_confirm_20261120/score.py`, which calls `R.activate`, `R.check_cache` and `R.check_weights`) take the same shared lease on their first `check_sources()` or `activate()` and hold it until they exit; to cover reads before that, wrap them in `with R.source_epoch_lease(['score.py']):` (reentrant). Real `train` and `generate` runs need write access to the epoch directory (or `MICROGLIA_EPOCH_DIR`): without it they exit 1 with that message. `train --dry-run` continues without a lease (warning), and when the directory is read-only but its lease file exists, the shared lock is taken read-only without a holder record.
+
+A change can still reach a fit from outside the lease (a merge or checkout that rewrites the manifest, or a re-pin in another checkout that shares the fit root). A fit whose audit finds the manifest changed during execution is moved to `STRANDED` with the reason `manifest changed during execution` and its own epoch recorded, instead of a failed audit. Any later `train` on it exits 4 and prints the exact recovery: the commit whose manifest has that digest (found by scanning `git log -- runtime_source_manifest.json`), a `git worktree add <tmp> <commit>` command and the `microglia_runtime.py train ... --audit-under-epoch` command to run there (the worktree needs its own `artifacts/`). `STRANDED -audit_under_epoch-> AUDITED` is guarded by the live manifest digest of the running checkout being the fit's epoch; anywhere else it is refused. The audit records `audited_under_epoch`. When no commit has the digest, the hint points to `--adopt-epoch`.
+
+### Review records
+
+[`independent_application_review.json`](independent_application_review.json) and [`verification.json`](verification.json) bind the digests of the files they reviewed. `scripts/check_review_records.py` compares them with the live files and reports each as `OK`, `STALE` (changed since the review) or `ABSENT` (a local artifact not in this checkout). It never rewrites a record; a new review writes a new record. `scripts/microglia.py --dry-run` includes its summary under `preflight.review_records` as a warning, and `--strict` exits 1 when anything is stale. The application sources and the runtime manifest have changed since the 2026-11-17 review, so those entries are `STALE`: the review covers the sources it names, not the current ones.

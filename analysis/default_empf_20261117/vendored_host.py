@@ -36,7 +36,9 @@ generate.py stay byte-identical; see FIT_LIFECYCLE_PATCHES):
                   temp names carry the pid.
   generate.py     stops rewriting fit_receipt.status to 'completed' (adds
                   generated: true instead), so 'training_completed' holds on
-                  every path.
+                  every path; mode=None generation refuses to overwrite an
+                  existing output (generated.npz) without force, as a mode
+                  generation already did.
 
 Host activation is a small explicit state machine (HOST_MACHINE). The derived
 files go to a versioned directory alz-host-empf-<lane>-vendored-<sha12>, where
@@ -198,6 +200,8 @@ FIT_LIFECYCLE_PATCHES = {
     ),
     'generate.py': (
         ("        receipt['status'] = 'completed'\n", "        receipt['generated'] = True\n"),
+        # mode=None used to overwrite an existing generated.npz silently; refuse it without force like a mode.
+        ("    if out.exists() and not force and mode is not None:\n", "    if out.exists() and not force:\n"),
     ),
 }
 

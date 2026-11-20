@@ -18,14 +18,32 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+EXIT_CODES = """exit codes:
+  0   done
+  1   error (reason printed)
+  2   usage error (bad arguments; without --force an existing output that is INCONSISTENT, ORPHAN_RECEIPT,
+      UNRECEIPTED_NPZ or UNREADABLE; selected and trained fits both present under --fit-source auto)
+  3   already done: the fit is complete and its output is COMMITTED (use --force to regenerate), or the
+      runtime rolled an interrupted PROMOTING output forward to COMMITTED
+  4   the fit is STRANDED (another source epoch) or DAMAGED, or the output's state file is damaged;
+      the runtime prints how to recover
+  An output left STAGING, STAGED or PROMOTING by an interrupted run is handed to the runtime without
+  --force: it rolls STAGING/STAGED back (and generates) and PROMOTING forward (exit 3).
+  75  busy: another process holds the fit or the output, or a refreeze holds the source-epoch lease"""
 STUDY = ROOT / 'analysis/improve_20261109'
 RUNTIME = ROOT / 'scripts/microglia_runtime.py'
+REVIEW_CHECK = ROOT / 'scripts/check_review_records.py'
 CONFIG = ROOT / 'configs/microglia_default.json'
 RECIPE = ROOT / 'analysis/empf_comparison_20261117/resolved_recipes.json'
 SOURCE_MANIFEST = ROOT / 'analysis/default_empf_20261117/runtime_source_manifest.json'
 NATIVE_RELEASE = ROOT / 'artifacts/native-releases/particlegan-0.10.0/site-packages/particlegan'
-# Exit codes of `microglia_runtime.py train` (scripts/microglia_runtime.py).
-TRAIN_ALREADY_DONE, TRAIN_DAMAGED, TRAIN_BUSY = 3, 4, 75
+# Exit codes of scripts/microglia_runtime.py (train and generate) and of this CLI (see EXIT_CODES).
+EX_OK, EX_USAGE, ALREADY_DONE, EX_STRANDED, EX_BUSY = 0, 2, 3, 4, 75
+# Output states (microglia_runtime.Out) left by an interrupted run: the runtime recovers them without --force.
+RECOVERABLE_OUTPUT = ('STAGING', 'STAGED', 'PROMOTING')
+STABLE_OUTPUT = ('NONE', 'COMMITTED', 'INCONSISTENT', 'ORPHAN_RECEIPT', 'UNRECEIPTED_NPZ')
+OUTPUT_MACHINE, STATE_SCHEMA = 'microglia_output', 'durable_state/1'
+TRAIN_ALREADY_DONE, TRAIN_DAMAGED, TRAIN_BUSY = ALREADY_DONE, EX_STRANDED, EX_BUSY
 
 
 def recorded_fit_state(fit):
@@ -103,8 +121,81 @@ def receipt_path(out):
     return Path(out).with_name(Path(out).stem + '.receipt.json')
 
 
+def output_state(out):
+    """Read-only state of a generation output (see microglia_runtime.Out): never writes or locks.
+
+    Mirrors what microglia_runtime would act on. STAGING, STAGED and PROMOTING (an interrupted run) are
+    returned as recorded. A stable recorded state reads as the state of the files, where a consistent pair
+    the machine did not commit (recorded state other than COMMITTED, or COMMITTED with other shas) is
+    INCONSISTENT. Without a state file (legacy outputs): the state the runtime would adopt, COMMITTED
+    (receipt generated_SHA256 == sha(npz)), INCONSISTENT, ORPHAN_RECEIPT, UNRECEIPTED_NPZ or NONE.
+    UNREADABLE: the state file is not a valid microglia_output state (bad JSON, schema, machine, version or
+    state), its journal is ahead of it or exists without it (microglia_runtime generate --readopt).
+    """
+    out = Path(out)
+    receipt = receipt_path(out)
+    state_path = out.with_name(out.stem + '.state.json')
+    journal = Path(str(state_path) + '.journal.jsonl')
+
+    def digest(path):
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+
+    def from_files():
+        if out.exists() and receipt.exists():
+            try:
+                recorded = json.loads(receipt.read_text()).get('generated_SHA256')
+            except (OSError, ValueError, AttributeError):
+                recorded = None
+            return 'COMMITTED' if recorded == digest(out) else 'INCONSISTENT'
+        return 'ORPHAN_RECEIPT' if receipt.exists() else 'UNRECEIPTED_NPZ' if out.exists() else 'NONE'
+
+    def journal_seq():
+        try:
+            lines = journal.read_bytes().split(b'\n')
+        except FileNotFoundError:
+            return 0
+        if lines and lines[-1] != b'':
+            lines = lines[:-1]  # a torn final line is skipped, as durable_state does
+        seq = 0
+        for line in lines:
+            if line.strip():
+                entry = json.loads(line)
+                if not isinstance(entry, dict) or not isinstance(entry.get('seq'), int):
+                    raise ValueError('bad journal line')
+                seq = max(seq, entry['seq'])
+        return seq
+    try:
+        doc = json.loads(state_path.read_text())
+    except FileNotFoundError:
+        return 'UNREADABLE' if journal.exists() else from_files()
+    except (OSError, ValueError):
+        return 'UNREADABLE'
+    if not isinstance(doc, dict) or doc.get('schema') != STATE_SCHEMA or doc.get('machine') != OUTPUT_MACHINE:
+        return 'UNREADABLE'
+    state, version, data = doc.get('state'), doc.get('version'), doc.get('data', {})
+    if state not in STABLE_OUTPUT + RECOVERABLE_OUTPUT or not isinstance(data, dict) or \
+            not isinstance(version, int) or isinstance(version, bool) or version < 1:
+        return 'UNREADABLE'
+    try:
+        if journal_seq() > version:
+            return 'UNREADABLE'
+    except (OSError, ValueError):
+        return 'UNREADABLE'
+    if state in RECOVERABLE_OUTPUT:
+        return state
+    observed = from_files()
+    if observed == 'COMMITTED' and not (state == 'COMMITTED' and digest(out) == data.get('npz_sha')
+                                        and digest(receipt) == data.get('receipt_sha')):
+        return 'INCONSISTENT'
+    return observed
+
+
 def choose_fit(cfg, command, fold, seed, explicit=None, source='auto'):
-    """Return (fit, source). The retained selected fit and newly trained fits never share a path."""
+    """Return (fit, source). The retained selected fit and newly trained fits never share a path.
+
+    Under auto at the selected fold/seed, generate refuses to guess when a trained fit (final.pt) exists
+    beside the retained selected fit: --fit-source selected or trained is then required.
+    """
     t, runtime = cfg['training'], cfg['runtime']
     trained = ROOT / runtime['fit_output_root'] / t['arm'] / t['panel'] / f'fold{fold}/seed{seed}'
     if explicit is not None:
@@ -112,16 +203,41 @@ def choose_fit(cfg, command, fold, seed, explicit=None, source='auto'):
     is_selected = (fold, seed) == (runtime['selected_fold'], runtime['selected_seed'])
     if source == 'selected' and not is_selected:
         raise ValueError(f"the selected fit is fold{runtime['selected_fold']}/seed{runtime['selected_seed']}")
+    if command == 'generate' and is_selected and source == 'auto' and (trained / 'final.pt').exists():
+        raise ValueError(f'both the retained selected fit and a trained fit ({trained}) exist for '
+                         f'fold{fold}/seed{seed}; choose one with --fit-source selected or --fit-source trained')
     if command == 'generate' and is_selected and source in ('auto', 'selected'):
         return ROOT / runtime['selected_fit'], 'selected'
     return trained, 'trained'
 
 
-def default_out(cfg, fold, seed, fit_source):
+def explicit_namespace(fit):
+    """sha12 of the absolute fit path: explicit fits never share an output directory."""
+    return hashlib.sha256(str(Path(fit).resolve()).encode()).hexdigest()[:12]
+
+
+def default_out(cfg, fold, seed, fit_source, fit=None):
+    """Default output path. Selected and trained fits keep their #19 paths; an explicit --fit without --out
+    goes to generated/explicit/<sha12(abs fit path)>/fold{f}/seed{s}/."""
     root = ROOT / cfg['runtime']['generation_output_root']
     if fit_source == 'selected':
         root = root / 'selected'
+    elif fit_source == 'explicit':
+        if fit is None:
+            raise ValueError('an explicit fit needs its path to name its output namespace')
+        root = root / 'explicit' / explicit_namespace(fit)
     return root / f'fold{fold}/seed{seed}' / f"generated_{cfg['generation']['mode']}.npz"
+
+
+def review_status():
+    """check_review_records.py as a non-fatal warning (it never mutates the records)."""
+    try:
+        spec = importlib.util.spec_from_file_location('check_review_records', REVIEW_CHECK)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module.summary(module.check(ROOT))
+    except (OSError, ValueError, KeyError, AttributeError) as exc:
+        return {'ok': False, 'error': f'{type(exc).__name__}: {exc}'}
 
 
 def source_status():
@@ -149,8 +265,9 @@ def preflight(cfg, cache, fit, fold, seed, out):
         fit_state = f'not usable: {exc}'
     return {'cache': (cache / 'manifest.json').exists(), 'fit': fit_state, 'fit_state': recorded_fit_state(fit),
             'output_exists': [str(x) for x in (out, receipt_path(out)) if x.exists()],
+            'output_state': output_state(out),
             'native_release': NATIVE_RELEASE.is_dir(), 'torch': importlib.util.find_spec('torch') is not None,
-            'sources': source_status()}
+            'sources': source_status(), 'review_records': review_status()}
 
 
 def check_fit(fit, cfg, fold, seed):
@@ -176,17 +293,20 @@ def check_fit(fit, cfg, fold, seed):
 
 
 def main(argv=None):
-    p = argparse.ArgumentParser(description=__doc__)
+    p = argparse.ArgumentParser(description=__doc__, epilog=EXIT_CODES,
+                                formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument('command', choices=['config', 'train', 'generate'], nargs='?', default='config')
     p.add_argument('--fold', type=int, choices=range(9), default=0)
     p.add_argument('--seed', type=int, default=0)
-    p.add_argument('--fit', type=Path, help='existing compatible fit; otherwise use the default fit output root')
+    p.add_argument('--fit', type=Path, help='existing compatible fit; otherwise use the default fit output root. '
+                   'Without --out it generates into generated/explicit/<sha12 of the fit path>/fold{f}/seed{s}/')
     p.add_argument('--out', type=Path, help='generation NPZ output; original fit folders are never modified')
     p.add_argument('--device', choices=['cpu', 'cuda'], default='cpu')
     p.add_argument('--profile', choices=['default', 'count-shape', 'profile-rmse'], default='default',
                    help='choose the committed default or an explicit distribution/profile-RMSE read-out')
     p.add_argument('--fit-source', choices=['auto', 'selected', 'trained'], default='auto',
-                   help='generate: auto uses the retained selected fit at its fold/seed and a trained fit elsewhere')
+                   help='generate: auto uses the retained selected fit at its fold/seed and a trained fit elsewhere; '
+                        'when both exist at the selected fold/seed, choose one explicitly')
     p.add_argument('--gpu-mem-fraction', type=float, default=None)
     p.add_argument('--force', action='store_true', help='replace an existing generation output and its receipt')
     p.add_argument('--dry-run', action='store_true')
@@ -210,11 +330,16 @@ def main(argv=None):
         fit, fit_source = choose_fit(cfg, args.command, args.fold, args.seed, args.fit, args.fit_source)
     except ValueError as exc:
         p.error(str(exc))
-    out = args.out.resolve() if args.out else default_out(cfg, args.fold, args.seed, fit_source)
+    out = args.out.resolve() if args.out else default_out(cfg, args.fold, args.seed, fit_source, fit)
     if out.parent == fit or fit in out.parents:
         p.error('--out must be outside the fit directory')
     plan = {'config': str(CONFIG), 'recipe': cfg['name'], 'profile': args.profile,
             'fit': str(fit), 'fit_source': fit_source, 'out': str(out)}
+    if fit_source == 'explicit' and not args.out:
+        legacy = default_out(cfg, args.fold, args.seed, 'trained')  # where #19 wrote explicit fits' output
+        if output_state(legacy) != 'NONE':
+            plan['legacy_output'] = (f'{legacy} exists from an earlier explicit --fit run that shared the trained '
+                                     f'path; it is not moved (pass --out {legacy} to use it)')
     trained, _ = choose_fit(cfg, 'train', args.fold, args.seed)
     if fit_source == 'selected' and (trained / 'final.pt').exists():
         plan['notice'] = f'using the retained selected fit; a trained fit also exists at {trained} (--fit-source trained)'
@@ -246,14 +371,32 @@ def main(argv=None):
         plan['preflight'] = preflight(cfg, cache, fit, args.fold, args.seed, out)
         print(json.dumps(plan, indent=2))
         return 0
-    existing = [str(x) for x in (out, receipt_path(out)) if x.exists()]
-    if existing and not args.force:
-        p.error(f'generation output exists: {", ".join(existing)}; use --force to replace it or choose --out')
+    # The output check follows the fit check: a complete fit whose output is a COMMITTED pair is done (3);
+    # any other existing output is a usage error (2) before any subprocess starts.
+    # An output an interrupted run left STAGING/STAGED/PROMOTING goes to the runtime without --force, which
+    # rolls it back (and generates) or forward (exit 3); --force would discard a complete roll-forward.
+    state = output_state(out)
+    if state != 'NONE' and state not in RECOVERABLE_OUTPUT and not args.force:
+        if state == 'COMMITTED' and not train_needed:
+            check_fit(fit, cfg, args.fold, args.seed)
+            print(f'microglia: {out} is already generated (COMMITTED) from the complete fit {fit}; '
+                  f'use --force to regenerate (exit {ALREADY_DONE})', flush=True)
+            return ALREADY_DONE
+        existing = [str(x) for x in (out, receipt_path(out)) if x.exists()]
+        what = ', '.join(existing) if existing else f'no output files; {out.stem}.state.json records it'
+        if state == 'UNREADABLE':
+            p.error(f'the state file of generation output {out} is damaged ({what}); inspect it, then run '
+                    f'scripts/microglia_runtime.py generate --readopt (or --force) for this output')
+        p.error(f'generation output exists ({state}): {what}; use --force to replace it or choose --out')
+    if state in RECOVERABLE_OUTPUT:
+        plan['recovery'] = (f'output {out} was {state} when its run stopped; the runtime rolls it '
+                            + ('forward' if state == 'PROMOTING' else 'back'))
     if not (cache / 'manifest.json').exists():
         p.error(f'missing development cache {cache}; see analysis/improve_20261109/README.md')
     print(f'microglia: fit {fit} ({fit_source}); output {out}', flush=True)
-    if 'notice' in plan:
-        print(f"microglia: {plan['notice']}", flush=True)
+    for key in ('notice', 'legacy_output', 'recovery'):
+        if key in plan:
+            print(f'microglia: {plan[key]}', flush=True)
     if args.command == 'train' and not train_needed:
         print('microglia: fit is complete and audited; generating only', flush=True)
     env = dict(os.environ)
@@ -265,18 +408,25 @@ def main(argv=None):
     if train_needed:
         cmd = commands.pop(0)
         rc = subprocess.run(cmd, env=env).returncode
-        if rc == TRAIN_BUSY:
-            print(f'microglia: fit {fit} is busy: another process is training it; rerun when it has finished',
-                  file=sys.stderr, flush=True)
-            return TRAIN_BUSY
-        if rc == TRAIN_DAMAGED:
-            raise ValueError(f'fit {fit} is DAMAGED (see the runtime message above); inspect it and run '
-                             f'scripts/microglia_runtime.py train ... --repair')
-        if rc not in (0, TRAIN_ALREADY_DONE):
+        if rc == EX_BUSY:
+            print(f'microglia: fit {fit} is busy (another process is training it, or a refreeze holds the '
+                  'source epoch); rerun when it has finished', file=sys.stderr, flush=True)
+            return EX_BUSY
+        if rc == EX_STRANDED:
+            print(f'microglia: fit {fit} is STRANDED or DAMAGED (see the runtime message above for the recovery '
+                  'commands: --audit-under-epoch from its epoch, --adopt-epoch, or --repair)', file=sys.stderr, flush=True)
+            return EX_STRANDED
+        if rc not in (0, ALREADY_DONE):
             raise subprocess.CalledProcessError(rc, cmd)
     check_fit(fit, cfg, args.fold, args.seed)
-    subprocess.run(commands[0], check=True, env=env)
-    return 0
+    rc = subprocess.run(commands[0], env=env).returncode
+    if rc == EX_BUSY:
+        print(f'microglia: output {out} is busy: another process is generating it', file=sys.stderr, flush=True)
+    elif rc == ALREADY_DONE:
+        print(f'microglia: {out} is COMMITTED (already generated, or an interrupted run rolled forward)', flush=True)
+    elif rc not in (0, ALREADY_DONE, EX_STRANDED):
+        raise subprocess.CalledProcessError(rc, commands[0])
+    return rc
 
 
 if __name__ == '__main__':
