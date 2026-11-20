@@ -71,7 +71,8 @@ def relocate_keys(manifest, root, relocate):
             raise ValueError(f'cannot relocate an unpinned key: {old}')
         if new in sources or new in moved.values():
             raise ValueError(f'relocation target already pinned: {new}')
-        if Path(new).is_absolute() or not (root / new).is_file():
+        inside = (root / new).resolve().is_relative_to(Path(root).resolve())
+        if Path(new).is_absolute() or not inside or not (root / new).is_file():
             raise ValueError(f'relocation target must be an existing repository-relative file: {new}')
         if sha(root / new) != sources[old]:
             raise ValueError(f'relocation target differs from the pinned digest of {old}: {new}')

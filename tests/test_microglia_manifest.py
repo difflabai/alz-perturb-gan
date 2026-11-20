@@ -122,6 +122,9 @@ def test_relocate_renames_a_key_only_for_a_byte_identical_file(tmp_path):
         F.refreeze(manifest, root, 'vendor', relocate=[(str(outside), 'vendored/missing.py')], now=NOW)
     with pytest.raises(ValueError, match='already pinned'):
         F.refreeze(manifest, root, 'vendor', relocate=[(str(outside), 'pkg/a.py')], now=NOW)
+    # A byte-identical file reached through '..' is still outside the repository.
+    with pytest.raises(ValueError, match='repository-relative'):
+        F.refreeze(manifest, root, 'vendor', relocate=[(str(outside), '../outside/ext.py')], now=NOW)
     assert manifest.read_bytes() == before and not (root/'m/previous').exists()
     (root/'vendored/ext.py').write_bytes(outside.read_bytes())
     outside.unlink()  # the old absolute location may disappear once vendored

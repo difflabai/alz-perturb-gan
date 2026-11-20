@@ -61,6 +61,8 @@ These are gitignored and are not fetched by any script:
 | `runs/improve_20261109/caches/hvg2000/fold{f}/` | `train` and `generate` | `analysis/empirical_challenge_20261114/cache_and_fit_anchors.json` |
 | `runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0/` | `generate` from the selected model | [`selected_model.json`](selected_model.json) and the fit receipts |
 
+`artifacts/` must be a real directory that belongs to this checkout. Do not share it between checkouts or reach it through a symlink: the derived host files name this checkout's absolute paths, so a second checkout writing into a shared `artifacts/` is refused with "existing derived EMPF host differs", and `release_env` compares the resolved `particlegan` path with the unresolved `SITE` path, so a symlinked `artifacts/` fails its import-origin check.
+
 The derived host directory is created on first use. In a checkout without these artifacts the manifest check reports the native releases as missing, and `train`/`generate` stop before any work starts.
 
 ## Historical source preservation
