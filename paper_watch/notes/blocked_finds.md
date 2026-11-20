@@ -71,8 +71,9 @@ revival should add a new loader with its own access check.
   on the branch).
   - Line 53 drops any (subtype, diagnosis) condition with fewer than 300
     cells. Line 79 then assumes control is index `2i` and AD is index
-    `2i+1`. If one arm of a subtype is dropped, every later pair
-    contrasts AD against another subtype's controls.
+    `2i+1`. If one arm of a subtype is dropped, the pairing shifts.
+    Later pairs can then mix subtypes or swap the AD and control
+    roles, and a trailing unpaired condition is silently ignored.
   - Line 47 labels diagnosis with
     `str.contains("AD|Alzheimer", case=False)`. That pattern also
     matches labels such as "non-AD" and "Head trauma".
