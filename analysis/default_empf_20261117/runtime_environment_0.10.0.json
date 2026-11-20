@@ -1,0 +1,31 @@
+{
+  "schema": "alz-runtime-environment/v1",
+  "status": "OBSERVED_RESEARCH_INTERPRETER_NOT_A_REBUILD_TEST",
+  "observed_utc_date": "2026-11-20",
+  "interpreter": "/mnt/nvme/ai/conda/anaconda3/bin/python3",
+  "python": "3.11.17",
+  "torch": "2.14.1+cu130",
+  "cuda_build": "13.0",
+  "numpy": "1.26.4",
+  "scipy": "1.16.0",
+  "scikit_learn": "1.4.2",
+  "pandas": "1.5.3",
+  "h5py": "3.15.1",
+  "matplotlib": "3.10.9",
+  "pytest": "9.1.1",
+  "anndata": null,
+  "particlegan": {
+    "version": "0.10.0",
+    "install": "isolated target, not the interpreter's site-packages",
+    "target": "artifacts/native-releases/particlegan-0.10.0/site-packages",
+    "source_commit": "952c3b62ba434f7da194067923351ff5748ef8dd",
+    "source_commit_origin": "artifacts/native-releases/particlegan-0.10.0/source git HEAD",
+    "wheel": "artifacts/native-releases/particlegan-0.10.0/dist/particlegan-0.10.0-py3-none-any.whl",
+    "wheel_SHA256": "05eb18714e41890467fb29c66721d5c44db63363b48bc33bdc82cfeeb9cc0c0c"
+  },
+  "recipe": "envs/microglia-research-py311.txt",
+  "recipe_check": "scripts/check_env.py envs/microglia-research-py311.txt reported 0 mismatches in this interpreter for the /ml2/alz checkout",
+  "supersedes": null,
+  "previous_record": "analysis/improve_20261109/runtime_environment.json (ParticleGAN 0.9.7; unchanged)",
+  "note": "Versions read from the live interpreter with importlib.metadata; ParticleGAN read from the native target's dist-info. This records what the selected EMPF default was run with. A fresh environment built from the recipe was not used to retrain or regenerate the model, so byte-identical results from a rebuilt environment are not claimed. Caches, checkpoints and the external model helpers named in runtime_source_manifest.json remain machine-local."
+}

@@ -1,5 +1,13 @@
 import json
 
+import pytest
+
+from alz_legacy import TORCH_REASON, require_legacy_particlegan
+
+pytestmark = pytest.mark.legacy_pg080
+pytest.importorskip("torch", reason=TORCH_REASON)
+require_legacy_particlegan()
+
 from alz_perturb_gan.smoke import main
 
 

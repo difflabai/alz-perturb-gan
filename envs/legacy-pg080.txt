@@ -1,0 +1,20 @@
+# Legacy synthetic smoke study in src/alz_perturb_gan (tests marked legacy_pg080).
+#
+# This is the root pyproject.toml dependency set, not the microglia research
+# environment. ParticleGAN 0.8.0 is a PyPI release; the native 0.10.0 release
+# is not a substitute and the legacy tests skip with a reason under it.
+# The exact versions behind the recorded 46-test run were not kept, so these
+# are ranges. On 2026-11-20 the 18 legacy tests passed with particlegan 0.8.0
+# installed into a separate target alongside the research interpreter's
+# torch 2.14.1+cu130 and numpy 1.26.4 (anndata absent, 1 test skipped).
+#
+#   python3.11 -m venv .venv-legacy
+#   .venv-legacy/bin/pip install -r envs/legacy-pg080.txt
+#   .venv-legacy/bin/python -m pytest -m legacy_pg080
+#
+# check_env: python==3.11
+particlegan==0.8.0
+torch>=2.6,<3
+numpy>=1.26,<3
+anndata>=0.10,<0.13
+pytest>=8,<10

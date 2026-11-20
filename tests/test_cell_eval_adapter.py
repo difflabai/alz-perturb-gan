@@ -1,3 +1,7 @@
+import pytest
+
+pytestmark = pytest.mark.legacy_pg080
+
 from alz_perturb_gan.cell_eval_adapter import cell_eval_status, score_anndata
 
 

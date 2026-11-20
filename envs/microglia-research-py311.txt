@@ -1,0 +1,32 @@
+# Human-microglia native EMPF research environment (Python 3.11).
+#
+# Exact versions observed in the research interpreter that trained and scored
+# the owner-selected EMPF default (2026-11-20; record:
+# analysis/default_empf_20261117/runtime_environment_0.10.0.json).
+# This file pins packages only. Research caches, checkpoints and the external
+# model helpers listed in the runtime source manifest stay machine-local.
+#
+#   python3.11 -m venv .venv-microglia
+#   .venv-microglia/bin/pip install -r envs/microglia-research-py311.txt
+#   .venv-microglia/bin/python -B scripts/check_env.py envs/microglia-research-py311.txt
+#
+# ParticleGAN is deliberately NOT installed into the environment. The runtime
+# loads the native release from its isolated target and checks its version,
+# origin and pinned source hashes. Install it once per checkout (envs/README.md):
+#
+#   python -m pip install --no-deps --no-compile \
+#     --target artifacts/native-releases/particlegan-0.10.0/site-packages \
+#     'particlegan @ git+https://github.com/HyperGAN/ParticleGAN.git@952c3b62ba434f7da194067923351ff5748ef8dd'
+#
+# Lines starting with "# check_env:" are read by scripts/check_env.py only.
+# check_env: python==3.11
+# check_env: native particlegan==0.10.0 target=artifacts/native-releases/particlegan-0.10.0/site-packages commit=952c3b62ba434f7da194067923351ff5748ef8dd
+--extra-index-url https://download.pytorch.org/whl/cu130
+torch==2.14.1+cu130
+numpy==1.26.4
+scipy==1.16.0
+scikit-learn==1.4.2
+pandas==1.5.3
+h5py==3.15.1
+matplotlib==3.10.9
+pytest==9.1.1

@@ -113,11 +113,13 @@ The screen retains 614 stable exploratory signals, 107 with primary ROSMAP suppo
 | `docs/` | Static report, downloadable aggregate evidence, figures, and earlier project archive |
 | `scripts/report/` | Portable report builder, original stage-profile exporter, and explorer verification |
 | `scripts/hygiene/` | Repository maintenance scripts, such as the `analysis/INDEX.md` generator |
+| `envs/`, `scripts/check_env.py` | Environment recipes (pinned microglia research interpreter, legacy and paper-watch) and a checker ([README](envs/README.md)) |
+| `.github/workflows/`, `scripts/ci/` | CPU-only CI checks without data, checkpoints or GPU ([how to run tests](tests/README.md)) |
 | Root `*_runtime/`, `*model/`, `prepare_*.py`, `test_*.py`, `*.json` | Nov 3-8 experiment snapshots and records, not maintained ([legacy layout](docs/LEGACY_LAYOUT.md)) |
 | `src/alz_perturb_gan/`, `results/smoke_results.json`, `pyproject.toml` | Earlier synthetic perturbation/decision-model experiment, preserved as legacy work |
 | `runs/`, `artifacts/`, `data/` | Local only and git-ignored: fits and outputs, isolated ParticleGAN releases, raw cells |
 
-The original perturbation smoke experiment used PG 0.8.0, synthetic data, and a different objective. Its [archived README](docs/archive/early-perturbation-smoke.md) explains that experiment. **The root `pyproject.toml` still installs that legacy package; it is not the environment recipe for the current human-microglia model.** The [earlier literature-only suggestions](docs/archive/early-literature-suggestions.md) are also archived rather than presented as outputs of the current model.
+The original perturbation smoke experiment used PG 0.8.0, synthetic data, and a different objective. Its [archived README](docs/archive/early-perturbation-smoke.md) explains that experiment. **The root `pyproject.toml` still installs that legacy package; it is not the environment recipe for the current human-microglia model** (see [envs/README.md](envs/README.md)). The [earlier literature-only suggestions](docs/archive/early-literature-suggestions.md) are also archived rather than presented as outputs of the current model.
 
 All versioned research history is preserved. Raw cell data, local environments, model checkpoints, and machine credentials are not included. Original research runners require their recorded data/environment setup; not every historical script is a portable command-line tool. The report itself is portable.
 
