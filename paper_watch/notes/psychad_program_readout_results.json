@@ -26,67 +26,241 @@
     ]
   },
   "draws_per_group": 256,
+  "selected_on": "inner_train_split",
+  "selection_metric": "mean_absolute_correlation_error",
+  "grid": {
+    "learning_rates": [
+      0.0025,
+      0.005,
+      0.012
+    ],
+    "checkpoints": [
+      300,
+      1200,
+      2400
+    ]
+  },
   "summary": {
-    "0.0025": {
-      "300": {
-        "mean_energy_distance": 0.07628082749731097,
-        "mean_absolute_correlation_error": 0.5365054896674668,
-        "correlation_comparisons": 9
-      },
-      "1200": {
-        "mean_energy_distance": 0.07048852786814958,
-        "mean_absolute_correlation_error": 0.3842528921891542,
-        "correlation_comparisons": 9
-      },
-      "2400": {
-        "mean_energy_distance": 0.07325029300604838,
-        "mean_absolute_correlation_error": 0.26235695246089313,
-        "correlation_comparisons": 9
+    "empf": {
+      "mean_energy_distance": 0.08109448136368065,
+      "mean_absolute_correlation_error": 0.29311066337024605,
+      "correlation_comparisons": 9,
+      "bootstrap": {
+        "mean_energy_distance": {
+          "bootstrap_mean": 0.1185763402335816,
+          "bootstrap_se": 0.02261154263841058
+        },
+        "mean_absolute_correlation_error": {
+          "bootstrap_mean": 0.3551546871800704,
+          "bootstrap_se": 0.06186644519739425
+        }
       }
     },
-    "0.005": {
-      "300": {
-        "mean_energy_distance": 0.15851544982270474,
-        "mean_absolute_correlation_error": 0.4962915386287037,
-        "correlation_comparisons": 9
-      },
-      "1200": {
-        "mean_energy_distance": 0.07434903790590225,
-        "mean_absolute_correlation_error": 0.19588399059997066,
-        "correlation_comparisons": 9
-      },
-      "2400": {
-        "mean_energy_distance": 0.06682817787711152,
-        "mean_absolute_correlation_error": 0.25093192014706006,
-        "correlation_comparisons": 9
+    "shuffled": {
+      "mean_energy_distance": 0.08559814257545845,
+      "mean_absolute_correlation_error": 0.2294970322826507,
+      "correlation_comparisons": 9,
+      "bootstrap": {
+        "mean_energy_distance": {
+          "bootstrap_mean": 0.12356648969458317,
+          "bootstrap_se": 0.025407303366839308
+        },
+        "mean_absolute_correlation_error": {
+          "bootstrap_mean": 0.29779220648887245,
+          "bootstrap_se": 0.05670720931572061
+        }
       }
     },
-    "0.012": {
-      "300": {
-        "mean_energy_distance": 0.09130837865338594,
-        "mean_absolute_correlation_error": 0.38943993269962984,
-        "correlation_comparisons": 9
-      },
-      "1200": {
-        "mean_energy_distance": 0.07768125761793715,
-        "mean_absolute_correlation_error": 0.2818532948577745,
-        "correlation_comparisons": 9
-      },
-      "2400": {
-        "mean_energy_distance": 0.07711822647133912,
-        "mean_absolute_correlation_error": 0.28745791102417145,
-        "correlation_comparisons": 9
+    "mean_shift": {
+      "mean_energy_distance": 0.059123959667920695,
+      "mean_absolute_correlation_error": 0.1771639058941132,
+      "correlation_comparisons": 9,
+      "bootstrap": {
+        "mean_energy_distance": {
+          "bootstrap_mean": 0.096075501399047,
+          "bootstrap_se": 0.022978801096301463
+        },
+        "mean_absolute_correlation_error": {
+          "bootstrap_mean": 0.2411984137993204,
+          "bootstrap_se": 0.05664813202773627
+        }
+      }
+    },
+    "empirical": {
+      "mean_energy_distance": 0.07316676425359186,
+      "mean_absolute_correlation_error": 0.20658215215737116,
+      "correlation_comparisons": 9,
+      "bootstrap": {
+        "mean_energy_distance": {
+          "bootstrap_mean": 0.11028807527543286,
+          "bootstrap_se": 0.01919237331092165
+        },
+        "mean_absolute_correlation_error": {
+          "bootstrap_mean": 0.2672295065106075,
+          "bootstrap_se": 0.05860773401147538
+        }
       }
     }
   },
-  "empirical_reference": {
-    "mean_energy_distance": 0.07316676425359186,
-    "mean_absolute_correlation_error": 0.20658215215737116,
-    "correlation_comparisons": 9
+  "paired_differences": {
+    "empf_minus_shuffled": {
+      "mean_energy_distance": {
+        "estimate": -0.004503661211777796,
+        "bootstrap_mean": -0.004990149461001564,
+        "bootstrap_se": 0.013191441257672461,
+        "ci95": [
+          -0.03036098709740481,
+          0.01975927790695444
+        ]
+      },
+      "mean_absolute_correlation_error": {
+        "estimate": 0.06361363108759535,
+        "bootstrap_mean": 0.05736248069119798,
+        "bootstrap_se": 0.050430533807235264,
+        "ci95": [
+          -0.06776271613985597,
+          0.1395472462080593
+        ]
+      }
+    },
+    "empf_minus_mean_shift": {
+      "mean_energy_distance": {
+        "estimate": 0.021970521695759956,
+        "bootstrap_mean": 0.022500838834534603,
+        "bootstrap_se": 0.02002818361962962,
+        "ci95": [
+          -0.016187934094901088,
+          0.06272590446762545
+        ]
+      },
+      "mean_absolute_correlation_error": {
+        "estimate": 0.11594675747613284,
+        "bootstrap_mean": 0.11395627338075003,
+        "bootstrap_se": 0.04384991248004626,
+        "ci95": [
+          0.02662567250747311,
+          0.2001469634845498
+        ]
+      }
+    },
+    "empf_minus_empirical": {
+      "mean_energy_distance": {
+        "estimate": 0.007927717110088786,
+        "bootstrap_mean": 0.00828826495814874,
+        "bootstrap_se": 0.010661026933375783,
+        "ci95": [
+          -0.012293207665704275,
+          0.029170571631444542
+        ]
+      },
+      "mean_absolute_correlation_error": {
+        "estimate": 0.08652851121287489,
+        "bootstrap_mean": 0.0879251806694629,
+        "bootstrap_se": 0.02411257362414377,
+        "ci95": [
+          0.039312751167697606,
+          0.13663187025600287
+        ]
+      }
+    }
+  },
+  "bootstrap": {
+    "replicates": 2000,
+    "used": 1983,
+    "seed": 0,
+    "level": 0.95,
+    "unit": "held-out donor, stratified by diagnosis, multiplicities shared across splits",
+    "conditional_on": "fitted samples, training donors, and splits"
+  },
+  "noise_floor": {
+    "kind": "observed_split_half",
+    "mean_energy_distance": 0.15634215646073799,
+    "mean_absolute_correlation_error": 0.322883077597441,
+    "correlation_comparisons": 1800,
+    "energy_comparisons": 1800,
+    "repeats_per_group": 200
   },
   "splits": [
     {
       "seed": 0,
+      "selection": {
+        "fit_donors": {
+          "control": 147,
+          "Alzheimer": 183,
+          "Lewy": 20
+        },
+        "validation": {
+          "control": {
+            "donors": 48,
+            "spearman": 0.15881458966565348
+          },
+          "Alzheimer": {
+            "donors": 60,
+            "spearman": 0.20155598777438183
+          },
+          "Lewy": {
+            "donors": 5,
+            "spearman": 0.8999999999999998
+          }
+        },
+        "validation_summary": {
+          "0.0025": {
+            "300": {
+              "mean_energy_distance": 0.07287375119725337,
+              "mean_absolute_correlation_error": 0.33521355551724147,
+              "correlation_comparisons": 3
+            },
+            "1200": {
+              "mean_energy_distance": 0.048904298052631745,
+              "mean_absolute_correlation_error": 0.2620429691893251,
+              "correlation_comparisons": 3
+            },
+            "2400": {
+              "mean_energy_distance": 0.07023011618260773,
+              "mean_absolute_correlation_error": 0.17884863673326964,
+              "correlation_comparisons": 3
+            }
+          },
+          "0.005": {
+            "300": {
+              "mean_energy_distance": 0.0803253117443103,
+              "mean_absolute_correlation_error": 0.2746283243430598,
+              "correlation_comparisons": 3
+            },
+            "1200": {
+              "mean_energy_distance": 0.03815514503158194,
+              "mean_absolute_correlation_error": 0.24936200745120662,
+              "correlation_comparisons": 3
+            },
+            "2400": {
+              "mean_energy_distance": 0.05808111251893666,
+              "mean_absolute_correlation_error": 0.24065172859258144,
+              "correlation_comparisons": 3
+            }
+          },
+          "0.012": {
+            "300": {
+              "mean_energy_distance": 0.04001132625619108,
+              "mean_absolute_correlation_error": 0.23184155010028878,
+              "correlation_comparisons": 3
+            },
+            "1200": {
+              "mean_energy_distance": 0.0500661006398857,
+              "mean_absolute_correlation_error": 0.1447065752394114,
+              "correlation_comparisons": 3
+            },
+            "2400": {
+              "mean_energy_distance": 0.12100453892103924,
+              "mean_absolute_correlation_error": 0.35045660312538984,
+              "correlation_comparisons": 3
+            }
+          }
+        },
+        "selected": {
+          "learning_rate": 0.012,
+          "updates": 1200
+        }
+      },
       "observed": {
         "control": {
           "donors": 65,
@@ -101,179 +275,78 @@
           "spearman": -0.16666666666666669
         }
       },
-      "empirical": {
-        "control": {
-          "energy_distance": 0.016164008423238396,
-          "spearman": 0.10712157575280683,
-          "spread_ratio": 0.9052688533841018
+      "arms": {
+        "empf": {
+          "control": {
+            "energy_distance": 0.03972420989814285,
+            "spearman": 0.022206168459601737,
+            "spread_ratio": 0.8399117033043549
+          },
+          "Alzheimer": {
+            "energy_distance": 0.06511633113946658,
+            "spearman": 0.23540426871137554,
+            "spread_ratio": 0.833815870690763
+          },
+          "Lewy": {
+            "energy_distance": 0.30042928463333674,
+            "spearman": 0.691367446784161,
+            "spread_ratio": 0.7452672899286767
+          }
         },
-        "Alzheimer": {
-          "energy_distance": 0.013836373299666582,
-          "spearman": 0.26481430548258333,
-          "spread_ratio": 0.9044496547608352
+        "shuffled": {
+          "control": {
+            "energy_distance": 0.03919517524204019,
+            "spearman": 0.5133268482490272,
+            "spread_ratio": 0.9736607496052994
+          },
+          "Alzheimer": {
+            "energy_distance": 0.03260865828442949,
+            "spearman": 0.11384970817120622,
+            "spread_ratio": 1.0353033171764454
+          },
+          "Lewy": {
+            "energy_distance": 0.13664073471169247,
+            "spearman": 0.04445096131837949,
+            "spread_ratio": 0.6518597987176995
+          }
         },
-        "Lewy": {
-          "energy_distance": 0.2639577129530555,
-          "spearman": 0.5863937952403512,
-          "spread_ratio": 1.661414936984974
+        "mean_shift": {
+          "control": {
+            "energy_distance": 0.009975421941980311,
+            "spearman": 0.15674223370558898,
+            "spread_ratio": 0.9463734255227365
+          },
+          "Alzheimer": {
+            "energy_distance": 0.03308330712178875,
+            "spearman": 0.2581895489520232,
+            "spread_ratio": 0.977427547213668
+          },
+          "Lewy": {
+            "energy_distance": 0.20118281352803713,
+            "spearman": 0.2900824572208905,
+            "spread_ratio": 0.6727002519451803
+          }
+        },
+        "empirical": {
+          "control": {
+            "energy_distance": 0.016164008423238396,
+            "spearman": 0.10712157575280683,
+            "spread_ratio": 0.9052688533841018
+          },
+          "Alzheimer": {
+            "energy_distance": 0.013836373299666582,
+            "spearman": 0.26481430548258333,
+            "spread_ratio": 0.9044496547608352
+          },
+          "Lewy": {
+            "energy_distance": 0.2639577129530555,
+            "spearman": 0.5863937952403512,
+            "spread_ratio": 1.661414936984974
+          }
         }
       },
       "fits": {
-        "0.0025": {
-          "seed": 0,
-          "peak_rates": {
-            "generator": 0.0025,
-            "critic": 0.00375,
-            "prior": 0.00625
-          },
-          "schedule": {
-            "kind": "cosine",
-            "updates": 7000
-          },
-          "checkpoints": [
-            {
-              "updates": 300,
-              "regularizer_calls": 300,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.039595370623199955,
-                  "spearman": 0.4977883955138474,
-                  "spread_ratio": 0.9490172701980897
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.0349727602647395,
-                  "spearman": 0.5552879663538567,
-                  "spread_ratio": 0.9850312325941956
-                },
-                "Lewy": {
-                  "energy_distance": 0.17327367244724923,
-                  "spearman": 0.6048158903639276,
-                  "spread_ratio": 0.7543612299879766
-                }
-              }
-            },
-            {
-              "updates": 1200,
-              "regularizer_calls": 1200,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.03299108559672126,
-                  "spearman": 0.6567778667887388,
-                  "spread_ratio": 1.1068998453900656
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.05589370652714987,
-                  "spearman": 0.7883361467154953,
-                  "spread_ratio": 1.3159186113399113
-                },
-                "Lewy": {
-                  "energy_distance": 0.2311890918229096,
-                  "spearman": 0.7763046463721675,
-                  "spread_ratio": 0.891137610442081
-                }
-              }
-            },
-            {
-              "updates": 2400,
-              "regularizer_calls": 2400,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.018918339354819236,
-                  "spearman": -0.12940461203936826,
-                  "spread_ratio": 0.9746459138643122
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.0307465464528216,
-                  "spearman": 0.16288052185854884,
-                  "spread_ratio": 1.1034035416626649
-                },
-                "Lewy": {
-                  "energy_distance": 0.2676838524048335,
-                  "spearman": 0.4111588750286106,
-                  "spread_ratio": 0.8424755753714125
-                }
-              }
-            }
-          ]
-        },
-        "0.005": {
-          "seed": 0,
-          "peak_rates": {
-            "generator": 0.005,
-            "critic": 0.0075,
-            "prior": 0.0125
-          },
-          "schedule": {
-            "kind": "cosine",
-            "updates": 7000
-          },
-          "checkpoints": [
-            {
-              "updates": 300,
-              "regularizer_calls": 300,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.06993952852971796,
-                  "spearman": 0.7757131208514533,
-                  "spread_ratio": 1.3730482501346108
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.14157401426779403,
-                  "spearman": 0.7290755893797206,
-                  "spread_ratio": 1.5421281236026076
-                },
-                "Lewy": {
-                  "energy_distance": 0.3426691039494236,
-                  "spearman": 0.8175597962920574,
-                  "spread_ratio": 1.1276765241330662
-                }
-              }
-            },
-            {
-              "updates": 1200,
-              "regularizer_calls": 1200,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.022673719582426255,
-                  "spearman": 0.08299739642938887,
-                  "spread_ratio": 0.840847726955348
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.025078965443182777,
-                  "spearman": 0.26226682307164106,
-                  "spread_ratio": 0.978305980699099
-                },
-                "Lewy": {
-                  "energy_distance": 0.23724099652860242,
-                  "spearman": 0.6246480888075073,
-                  "spread_ratio": 0.655324136028837
-                }
-              }
-            },
-            {
-              "updates": 2400,
-              "regularizer_calls": 2400,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.021646092509878256,
-                  "spearman": -0.010889219501029983,
-                  "spread_ratio": 0.8893213788773968
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.04905996969443005,
-                  "spearman": 0.31050869764248107,
-                  "spread_ratio": 1.0375176543794669
-                },
-                "Lewy": {
-                  "energy_distance": 0.23998400813933762,
-                  "spearman": 0.45524218928816657,
-                  "spread_ratio": 1.0633123593083416
-                }
-              }
-            }
-          ]
-        },
-        "0.012": {
+        "empf": {
           "seed": 0,
           "peak_rates": {
             "generator": 0.012,
@@ -286,65 +359,58 @@
           },
           "checkpoints": [
             {
-              "updates": 300,
-              "regularizer_calls": 300,
+              "updates": 1200,
+              "regularizer_calls": 1200,
               "scores": {
                 "control": {
-                  "energy_distance": 0.0350503583748496,
-                  "spearman": 0.15344043259327075,
-                  "spread_ratio": 0.7538179881170535
+                  "energy_distance": 0.03972420989814285,
+                  "spearman": 0.022206168459601737,
+                  "spread_ratio": 0.8399117033043549
                 },
                 "Alzheimer": {
-                  "energy_distance": 0.05531255605185792,
-                  "spearman": 0.08620536736095215,
-                  "spread_ratio": 0.8738851898240428
+                  "energy_distance": 0.06511633113946658,
+                  "spearman": 0.23540426871137554,
+                  "spread_ratio": 0.833815870690763
                 },
                 "Lewy": {
-                  "energy_distance": 0.2663418454814319,
-                  "spearman": 0.31897530899519333,
-                  "spread_ratio": 0.6060847678859259
+                  "energy_distance": 0.30042928463333674,
+                  "spearman": 0.691367446784161,
+                  "spread_ratio": 0.7452672899286767
                 }
               }
-            },
+            }
+          ]
+        },
+        "shuffled": {
+          "seed": 0,
+          "peak_rates": {
+            "generator": 0.012,
+            "critic": 0.018000000000000002,
+            "prior": 0.03
+          },
+          "schedule": {
+            "kind": "cosine",
+            "updates": 7000
+          },
+          "checkpoints": [
             {
               "updates": 1200,
               "regularizer_calls": 1200,
               "scores": {
                 "control": {
-                  "energy_distance": 0.017483779272425615,
-                  "spearman": 0.05941934653238726,
-                  "spread_ratio": 0.9185596711138306
+                  "energy_distance": 0.03919517524204019,
+                  "spearman": 0.5133268482490272,
+                  "spread_ratio": 0.9736607496052994
                 },
                 "Alzheimer": {
-                  "energy_distance": 0.033817706940251546,
-                  "spearman": 0.1953815232318608,
-                  "spread_ratio": 1.157585519902781
+                  "energy_distance": 0.03260865828442949,
+                  "spearman": 0.11384970817120622,
+                  "spread_ratio": 1.0353033171764454
                 },
                 "Lewy": {
-                  "energy_distance": 0.25321845049106106,
-                  "spearman": 0.5986095216296634,
-                  "spread_ratio": 0.8280944336537484
-                }
-              }
-            },
-            {
-              "updates": 2400,
-              "regularizer_calls": 2400,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.01732338594498195,
-                  "spearman": 0.038708085374227506,
-                  "spread_ratio": 0.9808434896479772
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.01206344544593041,
-                  "spearman": 0.33760585946440824,
-                  "spread_ratio": 1.1293085603318944
-                },
-                "Lewy": {
-                  "energy_distance": 0.23562582744086114,
-                  "spearman": 0.4630514705882352,
-                  "spread_ratio": 1.320512226074472
+                  "energy_distance": 0.13664073471169247,
+                  "spearman": 0.04445096131837949,
+                  "spread_ratio": 0.6518597987176995
                 }
               }
             }
@@ -354,6 +420,84 @@
     },
     {
       "seed": 1,
+      "selection": {
+        "fit_donors": {
+          "control": 147,
+          "Alzheimer": 183,
+          "Lewy": 20
+        },
+        "validation": {
+          "control": {
+            "donors": 48,
+            "spearman": 0.37016934433347803
+          },
+          "Alzheimer": {
+            "donors": 60,
+            "spearman": 0.1681578216171159
+          },
+          "Lewy": {
+            "donors": 5,
+            "spearman": 0.3
+          }
+        },
+        "validation_summary": {
+          "0.0025": {
+            "300": {
+              "mean_energy_distance": 0.20882563224497228,
+              "mean_absolute_correlation_error": 0.46579820043016285,
+              "correlation_comparisons": 3
+            },
+            "1200": {
+              "mean_energy_distance": 0.18588375686213468,
+              "mean_absolute_correlation_error": 0.10132569182481009,
+              "correlation_comparisons": 3
+            },
+            "2400": {
+              "mean_energy_distance": 0.18207067797714652,
+              "mean_absolute_correlation_error": 0.2179098644043477,
+              "correlation_comparisons": 3
+            }
+          },
+          "0.005": {
+            "300": {
+              "mean_energy_distance": 0.24461032942074853,
+              "mean_absolute_correlation_error": 0.5533461499169797,
+              "correlation_comparisons": 3
+            },
+            "1200": {
+              "mean_energy_distance": 0.19782013445543703,
+              "mean_absolute_correlation_error": 0.13667798449285007,
+              "correlation_comparisons": 3
+            },
+            "2400": {
+              "mean_energy_distance": 0.1905550167581559,
+              "mean_absolute_correlation_error": 0.17171246034544793,
+              "correlation_comparisons": 3
+            }
+          },
+          "0.012": {
+            "300": {
+              "mean_energy_distance": 0.22979480052752407,
+              "mean_absolute_correlation_error": 0.2917690823195128,
+              "correlation_comparisons": 3
+            },
+            "1200": {
+              "mean_energy_distance": 0.20237242946629438,
+              "mean_absolute_correlation_error": 0.17484842776743617,
+              "correlation_comparisons": 3
+            },
+            "2400": {
+              "mean_energy_distance": 0.20199568682568195,
+              "mean_absolute_correlation_error": 0.4387060720959681,
+              "correlation_comparisons": 3
+            }
+          }
+        },
+        "selected": {
+          "learning_rate": 0.0025,
+          "updates": 1200
+        }
+      },
       "observed": {
         "control": {
           "donors": 65,
@@ -368,25 +512,78 @@
           "spearman": 0.5166666666666667
         }
       },
-      "empirical": {
-        "control": {
-          "energy_distance": 0.05190582128619914,
-          "spearman": 0.15104559351398675,
-          "spread_ratio": 1.0892229395205615
+      "arms": {
+        "empf": {
+          "control": {
+            "energy_distance": 0.06643178285108109,
+            "spearman": 0.45543674181734944,
+            "spread_ratio": 1.1930120752071918
+          },
+          "Alzheimer": {
+            "energy_distance": 0.04006288300700811,
+            "spearman": 0.6006859407186999,
+            "spread_ratio": 1.2804632870313952
+          },
+          "Lewy": {
+            "energy_distance": 0.040474640252624594,
+            "spearman": 0.532562514305333,
+            "spread_ratio": 1.3652349408475162
+          }
         },
-        "Alzheimer": {
-          "energy_distance": 0.009045188761567347,
-          "spearman": 0.36894338672480786,
-          "spread_ratio": 1.065170327862426
+        "shuffled": {
+          "control": {
+            "energy_distance": 0.026056600398712937,
+            "spearman": 0.35128390363927664,
+            "spread_ratio": 0.6628123925735394
+          },
+          "Alzheimer": {
+            "energy_distance": 0.11055971418751676,
+            "spearman": 0.45350909819180585,
+            "spread_ratio": 0.6478162461691676
+          },
+          "Lewy": {
+            "energy_distance": 0.0255243631265486,
+            "spearman": 0.446394340810254,
+            "spread_ratio": 0.7734199919608155
+          }
         },
-        "Lewy": {
-          "energy_distance": 0.1437468908503473,
-          "spearman": 0.3650437999536402,
-          "spread_ratio": 2.679900175245972
+        "mean_shift": {
+          "control": {
+            "energy_distance": 0.05050640268734463,
+            "spearman": 0.1708512878618803,
+            "spread_ratio": 1.0162966693751854
+          },
+          "Alzheimer": {
+            "energy_distance": 0.01268640175673963,
+            "spearman": 0.298316544559994,
+            "spread_ratio": 1.0351988592477595
+          },
+          "Lewy": {
+            "energy_distance": 0.10443911107503812,
+            "spearman": 0.278549539470484,
+            "spread_ratio": 1.467755599043182
+          }
+        },
+        "empirical": {
+          "control": {
+            "energy_distance": 0.05190582128619914,
+            "spearman": 0.15104559351398675,
+            "spread_ratio": 1.0892229395205615
+          },
+          "Alzheimer": {
+            "energy_distance": 0.009045188761567347,
+            "spearman": 0.36894338672480786,
+            "spread_ratio": 1.065170327862426
+          },
+          "Lewy": {
+            "energy_distance": 0.1437468908503473,
+            "spearman": 0.3650437999536402,
+            "spread_ratio": 2.679900175245972
+          }
         }
       },
       "fits": {
-        "0.0025": {
+        "empf": {
           "seed": 1,
           "peak_rates": {
             "generator": 0.0025,
@@ -399,76 +596,34 @@
           },
           "checkpoints": [
             {
-              "updates": 300,
-              "regularizer_calls": 300,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.06483600307775816,
-                  "spearman": -0.19389877546349274,
-                  "spread_ratio": 1.277457114402127
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.0509945743179544,
-                  "spearman": -0.14992418173495076,
-                  "spread_ratio": 1.2880322422181272
-                },
-                "Lewy": {
-                  "energy_distance": 0.10500499981345646,
-                  "spearman": -0.10638947699702446,
-                  "spread_ratio": 1.5039164095603361
-                }
-              }
-            },
-            {
               "updates": 1200,
               "regularizer_calls": 1200,
               "scores": {
                 "control": {
-                  "energy_distance": 0.06643176425877284,
+                  "energy_distance": 0.06643178285108109,
                   "spearman": 0.45543674181734944,
-                  "spread_ratio": 1.1930088807302752
+                  "spread_ratio": 1.1930120752071918
                 },
                 "Alzheimer": {
-                  "energy_distance": 0.040062534687901,
+                  "energy_distance": 0.04006288300700811,
                   "spearman": 0.6006859407186999,
-                  "spread_ratio": 1.2804584637445897
+                  "spread_ratio": 1.2804632870313952
                 },
                 "Lewy": {
-                  "energy_distance": 0.040474303924822874,
+                  "energy_distance": 0.040474640252624594,
                   "spearman": 0.532562514305333,
-                  "spread_ratio": 1.3652312734145158
-                }
-              }
-            },
-            {
-              "updates": 2400,
-              "regularizer_calls": 2400,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.06556749298000208,
-                  "spearman": 0.3275470645456625,
-                  "spread_ratio": 1.1481464419912593
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.029037508429250458,
-                  "spearman": 0.47651708056763553,
-                  "spread_ratio": 1.2349664513635707
-                },
-                "Lewy": {
-                  "energy_distance": 0.06969612083183863,
-                  "spearman": 0.4689445525291828,
-                  "spread_ratio": 1.2785971108890049
+                  "spread_ratio": 1.3652349408475162
                 }
               }
             }
           ]
         },
-        "0.005": {
+        "shuffled": {
           "seed": 1,
           "peak_rates": {
-            "generator": 0.005,
-            "critic": 0.0075,
-            "prior": 0.0125
+            "generator": 0.0025,
+            "critic": 0.00375,
+            "prior": 0.00625
           },
           "schedule": {
             "kind": "cosine",
@@ -476,142 +631,23 @@
           },
           "checkpoints": [
             {
-              "updates": 300,
-              "regularizer_calls": 300,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.20363760169778455,
-                  "spearman": 0.8563022144655527,
-                  "spread_ratio": 1.7683495791448667
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.29255683265282784,
-                  "spearman": 0.8481295777065688,
-                  "spread_ratio": 1.9262504062956622
-                },
-                "Lewy": {
-                  "energy_distance": 0.2369972056522468,
-                  "spearman": 0.8530327306019683,
-                  "spread_ratio": 2.168501652349439
-                }
-              }
-            },
-            {
               "updates": 1200,
               "regularizer_calls": 1200,
               "scores": {
                 "control": {
-                  "energy_distance": 0.09734015239334759,
-                  "spearman": -0.10192192149233231,
-                  "spread_ratio": 1.093923616289623
+                  "energy_distance": 0.026056600398712937,
+                  "spearman": 0.35128390363927664,
+                  "spread_ratio": 0.6628123925735394
                 },
                 "Alzheimer": {
-                  "energy_distance": 0.039013079556667996,
-                  "spearman": 0.19445882925154498,
-                  "spread_ratio": 1.2433867718398548
+                  "energy_distance": 0.11055971418751676,
+                  "spearman": 0.45350909819180585,
+                  "spread_ratio": 0.6478162461691676
                 },
                 "Lewy": {
-                  "energy_distance": 0.11109731178441751,
-                  "spearman": 0.016663567177843897,
-                  "spread_ratio": 1.4646731294320652
-                }
-              }
-            },
-            {
-              "updates": 2400,
-              "regularizer_calls": 2400,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.06679475586849692,
-                  "spearman": 0.2140120737010757,
-                  "spread_ratio": 0.8963042031733136
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.01917944310587827,
-                  "spearman": 0.35151994163424116,
-                  "spread_ratio": 0.9956426443721088
-                },
-                "Lewy": {
-                  "energy_distance": 0.09621449383622782,
-                  "spearman": 0.12208671892881665,
-                  "spread_ratio": 1.4011696464666827
-                }
-              }
-            }
-          ]
-        },
-        "0.012": {
-          "seed": 1,
-          "peak_rates": {
-            "generator": 0.012,
-            "critic": 0.018000000000000002,
-            "prior": 0.03
-          },
-          "schedule": {
-            "kind": "cosine",
-            "updates": 7000
-          },
-          "checkpoints": [
-            {
-              "updates": 300,
-              "regularizer_calls": 300,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.09170794966136198,
-                  "spearman": 0.48908789196612495,
-                  "spread_ratio": 1.1657062104452451
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.04805677269093733,
-                  "spearman": 0.5597705424582283,
-                  "spread_ratio": 1.2494670843580926
-                },
-                "Lewy": {
-                  "energy_distance": 0.05661074613550132,
-                  "spearman": 0.5036242561226825,
-                  "spread_ratio": 1.3658024835130549
-                }
-              }
-            },
-            {
-              "updates": 1200,
-              "regularizer_calls": 1200,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.08875656126177955,
-                  "spearman": 0.3256122682536049,
-                  "spread_ratio": 1.0797661378983785
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.014137328386402359,
-                  "spearman": 0.27064116502632174,
-                  "spread_ratio": 0.9866720868636865
-                },
-                "Lewy": {
-                  "energy_distance": 0.10506646920030871,
-                  "spearman": 0.11120465209430075,
-                  "spread_ratio": 1.6448605305003132
-                }
-              }
-            },
-            {
-              "updates": 2400,
-              "regularizer_calls": 2400,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.053710374268218786,
-                  "spearman": 0.4049002918287937,
-                  "spread_ratio": 1.2230370719860577
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.04182741370304299,
-                  "spearman": 0.5065411135271228,
-                  "spread_ratio": 1.2355562068098336
-                },
-                "Lewy": {
-                  "energy_distance": 0.0967400230556189,
-                  "spearman": 0.40031829365987637,
-                  "spread_ratio": 2.2601452262583375
+                  "energy_distance": 0.0255243631265486,
+                  "spearman": 0.446394340810254,
+                  "spread_ratio": 0.7734199919608155
                 }
               }
             }
@@ -621,6 +657,84 @@
     },
     {
       "seed": 2,
+      "selection": {
+        "fit_donors": {
+          "control": 147,
+          "Alzheimer": 183,
+          "Lewy": 20
+        },
+        "validation": {
+          "control": {
+            "donors": 48,
+            "spearman": 0.13200173686495872
+          },
+          "Alzheimer": {
+            "donors": 60,
+            "spearman": 0.3596554598499584
+          },
+          "Lewy": {
+            "donors": 5,
+            "spearman": -0.09999999999999999
+          }
+        },
+        "validation_summary": {
+          "0.0025": {
+            "300": {
+              "mean_energy_distance": 0.11744015262140557,
+              "mean_absolute_correlation_error": 0.7001492746202389,
+              "correlation_comparisons": 3
+            },
+            "1200": {
+              "mean_energy_distance": 0.07762329483320829,
+              "mean_absolute_correlation_error": 0.2294423050619877,
+              "correlation_comparisons": 3
+            },
+            "2400": {
+              "mean_energy_distance": 0.08010464783074389,
+              "mean_absolute_correlation_error": 0.2021166845409732,
+              "correlation_comparisons": 3
+            }
+          },
+          "0.005": {
+            "300": {
+              "mean_energy_distance": 0.10852034919068099,
+              "mean_absolute_correlation_error": 0.5579690464978616,
+              "correlation_comparisons": 3
+            },
+            "1200": {
+              "mean_energy_distance": 0.0840885233004232,
+              "mean_absolute_correlation_error": 0.29315658941386075,
+              "correlation_comparisons": 3
+            },
+            "2400": {
+              "mean_energy_distance": 0.087646366535864,
+              "mean_absolute_correlation_error": 0.22886193517040782,
+              "correlation_comparisons": 3
+            }
+          },
+          "0.012": {
+            "300": {
+              "mean_energy_distance": 0.10221673091172771,
+              "mean_absolute_correlation_error": 0.30673898165503366,
+              "correlation_comparisons": 3
+            },
+            "1200": {
+              "mean_energy_distance": 0.07197554480383246,
+              "mean_absolute_correlation_error": 0.21649193108426512,
+              "correlation_comparisons": 3
+            },
+            "2400": {
+              "mean_energy_distance": 0.12430976301632173,
+              "mean_absolute_correlation_error": 0.3380722356334381,
+              "correlation_comparisons": 3
+            }
+          }
+        },
+        "selected": {
+          "learning_rate": 0.0025,
+          "updates": 2400
+        }
+      },
       "observed": {
         "control": {
           "donors": 65,
@@ -635,25 +749,78 @@
           "spearman": 0.2833333333333333
         }
       },
-      "empirical": {
-        "control": {
-          "energy_distance": 0.021050027135744442,
-          "spearman": 0.049490140814844756,
-          "spread_ratio": 1.0619857508317234
+      "arms": {
+        "empf": {
+          "control": {
+            "energy_distance": 0.06048930585474832,
+            "spearman": -0.08459387159533073,
+            "spread_ratio": 0.808631717794758
+          },
+          "Alzheimer": {
+            "energy_distance": 0.016136092252651557,
+            "spearman": 0.14971532387273973,
+            "spread_ratio": 0.8471052928034476
+          },
+          "Lewy": {
+            "energy_distance": 0.10098580238406607,
+            "spearman": 0.31202220187685964,
+            "spread_ratio": 0.8390785827463874
+          }
         },
-        "Alzheimer": {
-          "energy_distance": 0.014154299657022418,
-          "spearman": 0.25181943949675173,
-          "spread_ratio": 0.8693631119210807
+        "shuffled": {
+          "control": {
+            "energy_distance": 0.12689943327628517,
+            "spearman": 0.15708042458228424,
+            "spread_ratio": 0.9877133785463046
+          },
+          "Alzheimer": {
+            "energy_distance": 0.05022672008526263,
+            "spearman": 0.1670862897688258,
+            "spread_ratio": 1.0442821719640398
+          },
+          "Lewy": {
+            "energy_distance": 0.22267188386663783,
+            "spearman": 0.39415555619134807,
+            "spread_ratio": 0.954525797618755
+          }
         },
-        "Lewy": {
-          "energy_distance": 0.12464055591548562,
-          "spearman": 0.3891595078262902,
-          "spread_ratio": 2.191377583582738
+        "mean_shift": {
+          "control": {
+            "energy_distance": 0.030987095314215618,
+            "spearman": 0.13012439465796832,
+            "spread_ratio": 1.012764858269847
+          },
+          "Alzheimer": {
+            "energy_distance": 0.008269176814609036,
+            "spearman": 0.2154300539556895,
+            "spread_ratio": 0.9839063176943241
+          },
+          "Lewy": {
+            "energy_distance": 0.08098590677153306,
+            "spearman": 0.14513612636979414,
+            "spread_ratio": 0.9822316778547059
+          }
+        },
+        "empirical": {
+          "control": {
+            "energy_distance": 0.021050027135744442,
+            "spearman": 0.049490140814844756,
+            "spread_ratio": 1.0619857508317234
+          },
+          "Alzheimer": {
+            "energy_distance": 0.014154299657022418,
+            "spearman": 0.25181943949675173,
+            "spread_ratio": 0.8693631119210807
+          },
+          "Lewy": {
+            "energy_distance": 0.12464055591548562,
+            "spearman": 0.3891595078262902,
+            "spread_ratio": 2.191377583582738
+          }
         }
       },
       "fits": {
-        "0.0025": {
+        "empf": {
           "seed": 2,
           "peak_rates": {
             "generator": 0.0025,
@@ -666,76 +833,34 @@
           },
           "checkpoints": [
             {
-              "updates": 300,
-              "regularizer_calls": 300,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.05003440992178254,
-                  "spearman": -0.5845430876630807,
-                  "spread_ratio": 0.9405600959043997
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.06699598663241368,
-                  "spearman": -0.5692192149233234,
-                  "spread_ratio": 0.9550996133954226
-                },
-                "Lewy": {
-                  "energy_distance": 0.10081967037724471,
-                  "spearman": -0.6553981174181733,
-                  "spread_ratio": 1.0566997814821464
-                }
-              }
-            },
-            {
-              "updates": 1200,
-              "regularizer_calls": 1200,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.04048472543702153,
-                  "spearman": 0.3078078507667658,
-                  "spread_ratio": 0.9192572342159633
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.026324371779103073,
-                  "spearman": 0.3636558709086747,
-                  "spread_ratio": 0.9357040830323525
-                },
-                "Lewy": {
-                  "energy_distance": 0.1005451667789442,
-                  "spearman": 0.45310282673380625,
-                  "spread_ratio": 0.9962727430335268
-                }
-              }
-            },
-            {
               "updates": 2400,
               "regularizer_calls": 2400,
               "scores": {
                 "control": {
-                  "energy_distance": 0.06048926803149246,
-                  "spearman": -0.08434281300068665,
-                  "spread_ratio": 0.8086229785878789
+                  "energy_distance": 0.06048930585474832,
+                  "spearman": -0.08459387159533073,
+                  "spread_ratio": 0.808631717794758
                 },
                 "Alzheimer": {
-                  "energy_distance": 0.016137968695010607,
-                  "spearman": 0.14971890020599676,
-                  "spread_ratio": 0.8471116765104884
+                  "energy_distance": 0.016136092252651557,
+                  "spearman": 0.14971532387273973,
+                  "spread_ratio": 0.8471052928034476
                 },
                 "Lewy": {
-                  "energy_distance": 0.1009755398743668,
-                  "spearman": 0.31179975394827186,
-                  "spread_ratio": 0.8390748658660843
+                  "energy_distance": 0.10098580238406607,
+                  "spearman": 0.31202220187685964,
+                  "spread_ratio": 0.8390785827463874
                 }
               }
             }
           ]
         },
-        "0.005": {
+        "shuffled": {
           "seed": 2,
           "peak_rates": {
-            "generator": 0.005,
-            "critic": 0.0075,
-            "prior": 0.0125
+            "generator": 0.0025,
+            "critic": 0.00375,
+            "prior": 0.00625
           },
           "schedule": {
             "kind": "cosine",
@@ -743,142 +868,23 @@
           },
           "checkpoints": [
             {
-              "updates": 300,
-              "regularizer_calls": 300,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.03081429995104079,
-                  "spearman": 0.21959544518196383,
-                  "spread_ratio": 0.9920802299391569
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.037708964035574555,
-                  "spearman": 0.2142502574959945,
-                  "spread_ratio": 1.0310162683674868
-                },
-                "Lewy": {
-                  "energy_distance": 0.07074149766793258,
-                  "spearman": 0.12257882238498509,
-                  "spread_ratio": 1.046572099744717
-                }
-              }
-            },
-            {
-              "updates": 1200,
-              "regularizer_calls": 1200,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.04915207730913562,
-                  "spearman": 0.06206225680933851,
-                  "spread_ratio": 0.8951511767341106
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.0189431014542083,
-                  "spearman": 0.23187442778667883,
-                  "spread_ratio": 0.9883448374085969
-                },
-                "Lewy": {
-                  "energy_distance": 0.06860193710113172,
-                  "spearman": 0.2670176241702907,
-                  "spread_ratio": 1.0228287006477426
-                }
-              }
-            },
-            {
               "updates": 2400,
               "regularizer_calls": 2400,
               "scores": {
                 "control": {
-                  "energy_distance": 0.019229430139182102,
-                  "spearman": 0.34487439917601276,
-                  "spread_ratio": 0.9265221624140699
+                  "energy_distance": 0.12689943327628517,
+                  "spearman": 0.15708042458228424,
+                  "spread_ratio": 0.9877133785463046
                 },
                 "Alzheimer": {
-                  "energy_distance": 0.02463452783560105,
-                  "spearman": 0.34104915312428463,
-                  "spread_ratio": 1.1334880157019624
+                  "energy_distance": 0.05022672008526263,
+                  "spearman": 0.1670862897688258,
+                  "spread_ratio": 1.0442821719640398
                 },
                 "Lewy": {
-                  "energy_distance": 0.06471087976497159,
-                  "spearman": 0.406597619592584,
-                  "spread_ratio": 1.4455568097373837
-                }
-              }
-            }
-          ]
-        },
-        "0.012": {
-          "seed": 2,
-          "peak_rates": {
-            "generator": 0.012,
-            "critic": 0.018000000000000002,
-            "prior": 0.03
-          },
-          "schedule": {
-            "kind": "cosine",
-            "updates": 7000
-          },
-          "checkpoints": [
-            {
-              "updates": 300,
-              "regularizer_calls": 300,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.0621662311763006,
-                  "spearman": -0.33084086747539476,
-                  "spread_ratio": 1.1686230381641203
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.06733558890059999,
-                  "spearman": -0.2826676585030899,
-                  "spread_ratio": 1.236555326815638
-                },
-                "Lewy": {
-                  "energy_distance": 0.13919335940763278,
-                  "spearman": -0.29292672808422976,
-                  "spread_ratio": 1.2172841613512904
-                }
-              }
-            },
-            {
-              "updates": 1200,
-              "regularizer_calls": 1200,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.04273183161976257,
-                  "spearman": 0.26172393568322266,
-                  "spread_ratio": 1.0853900092912574
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.03304893874350712,
-                  "spearman": 0.5207513160906385,
-                  "spread_ratio": 1.079254180498738
-                },
-                "Lewy": {
-                  "energy_distance": 0.11087025264593575,
-                  "spearman": 0.3585488670176241,
-                  "spread_ratio": 1.1602452525025106
-                }
-              }
-            },
-            {
-              "updates": 2400,
-              "regularizer_calls": 2400,
-              "scores": {
-                "control": {
-                  "energy_distance": 0.11452143928446556,
-                  "spearman": -0.16160734721904324,
-                  "spread_ratio": 0.9496274841423643
-                },
-                "Alzheimer": {
-                  "energy_distance": 0.009480811143175893,
-                  "spearman": 0.18088306820782785,
-                  "spread_ratio": 0.9066908603593347
-                },
-                "Lewy": {
-                  "energy_distance": 0.11277131795575646,
-                  "spearman": -0.03988326848249026,
-                  "spread_ratio": 1.6053444814947473
+                  "energy_distance": 0.22267188386663783,
+                  "spearman": 0.39415555619134807,
+                  "spread_ratio": 0.954525797618755
                 }
               }
             }

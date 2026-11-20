@@ -59,7 +59,7 @@ public `allen-brain-cell-atlas` bucket (Allen Brain Cell Atlas).
 | [Lipid–lysosome microglia readout](notes/seaad_ll_microglia_readout.md) | The centroid leads. The default gene panel lacks both complete modules |
 | [Cognition at matched pathology](notes/seaad_resilience_contrast.md) | Single-fit AUROC 0.580. A larger independent cohort is needed |
 | [PsychAD cross-disorder specificity](notes/psychad_cross_disorder.md) | Mean shift and empirical donor sampling beat the 300-step EMPF fit on held-out disease specificity and distribution fit |
-| [PsychAD lipid and lysosome programs](notes/psychad_program_readout.md) | Longer EMPF fits reduced spurious program correlation. The two diagnostics favored different checkpoints |
+| [PsychAD lipid and lysosome programs](notes/psychad_program_readout.md) | With the configuration chosen on training donors, mean shift and empirical sampling matched the held-out program correlation better than EMPF. Energy distance differences were within donor uncertainty |
 
 ## Blocked finds
 
