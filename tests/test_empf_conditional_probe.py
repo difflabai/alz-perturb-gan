@@ -3,10 +3,12 @@
 The probe in analysis/particlegan_review_20261117 records the reported
 ``ema_residual`` for a correct batch, a batch whose two groups exchange their
 spreads, and a batch with both spreads halved. Passing cases pin the observed
-v0.10.0 values. The strict xfail cases encode the upstream requirement that the
-spread swap score worse than the correct pairing at widths 65 and 2,150, so an
-upstream change that fixes or alters the wide path turns them into failures that
-must be reviewed.
+v0.10.0 values. The strict xfail cases record, for this pinned artifact only, the
+upstream requirement that the spread swap score worse than the correct pairing
+at widths 65 and 2,150. The fixture refuses any version other than 0.10.0 loaded
+from SITE, so a newer release gives setup errors here, not unexpected passes.
+To check a candidate release, run probe_conditional_spread.py against it or copy
+this test with a new pin; the xfails flip only if the pinned copy itself changes.
 
 This characterizes one deterministic batch through the reported residual. It
 says nothing about trained samples.
