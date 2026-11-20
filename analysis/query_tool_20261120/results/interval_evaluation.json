@@ -491,6 +491,28 @@
   "gene_flags": {
     "poorly_fit": 201,
     "pc_blind_spot": 398,
+    "pc_blind_spot_definition": "Amendment 2 bounded share out^2/(out^2+in^2)",
+    "pc_blind_spot_superseded_signed_ratio": 398,
+    "pc_blind_spot_both": 398,
+    "poorly_fit_by_quantile_only": 200,
+    "poorly_fit_by_empirical_ratio": 1,
+    "CLEC5A": {
+      "outside_share_by_stage": [
+        0.001968912086960751,
+        0.051064979133394466,
+        0.11365853820870918,
+        0.837520417614195
+      ],
+      "gap_by_stage": [
+        -0.11504612744413222,
+        0.145154802398787,
+        -0.007738650340824439,
+        -0.013824081107589085
+      ],
+      "pc_captured": 0.08284470362873482,
+      "flag_pc_blind_spot": false,
+      "flag_poorly_fit": true
+    },
     "low_expression": 63,
     "rmse_cut": 0.3177274775639286,
     "model_rmse_median": 0.07710410844155721,
@@ -498,10 +520,10 @@
     "genes_model_rmse_below_empirical": 817,
     "PPARG": {
       "outside_share_by_stage": [
-        -0.009709997160307668,
-        0.11866404269176097,
-        -0.9776308033905662,
-        0.18268278905998742
+        9.247082491176666e-05,
+        0.017805444666719437,
+        0.19638465093314933,
+        0.04758188315874069
       ],
       "gap_by_stage": [
         -0.09511722071723999,
@@ -517,7 +539,7 @@
     }
   },
   "bundle": "/ml2/alz/runs/research_20261120/query-tool/bundle_fold0_seed0.npz",
-  "bundle_sha256": "12d0cdb682cb1dc33b5b6139391abd520911deb48a9b6e6f0b925fdb4b939eb8",
+  "bundle_sha256": "5dd5121ef62613eadb60607cbd847fe3f3dedb33fbca53e91307313e4bf7a3a7",
   "inputs": {
     "/ml2/alz/runs/research_20261120/query-tool/rep1.npz": "b7ba82761f53d937435fdb9afa3ddb67416a61a870d1882d49cb0a8641b3d213",
     "/ml2/alz/runs/research_20261120/query-tool/rep2.npz": "421d9b413945397502575faf72db37a1dcdc14ef8d8c400c430af3118cf01b59",
@@ -528,5 +550,5 @@
     "/ml2/alz/runs/research_20261120/query-tool/rep7.npz": "339f635325f54c80d8ab770393335ef488df9fd147aaf1594b495082ecace377",
     "/ml2/alz/runs/research_20261120/query-tool/rep8.npz": "be53b77ef732a486893131c06fcd536e86e532cb94b734adcc51371dbde59998"
   },
-  "source_sha256": "3b1963aa97d2ecb7f92507bec6745a46890624435547fbe7888e85f5c83cd0e8"
+  "source_sha256": "efa5f023d3931715911c92344d765793b362e5c778d8575d98392a4a144b3e1b"
 }

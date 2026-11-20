@@ -152,3 +152,28 @@ def test_generated_sd_matches_bag_sd():
     L = rng.gamma(2., 1., size=(256, 5))
     m, s = C.bag_summary(L)
     np.testing.assert_allclose(C.generated_sd(L.mean(0), (L ** 2).mean(0)), s, rtol=1e-10)
+
+
+def test_mc_interval_uses_student_t(tmp_path):
+    B = Q.Bundle(make_bundle(tmp_path))
+    c = Q.query([B], ['AAA'], 0, 3, n_boot=20)[0]['generated']['contrast']
+    assert 'approx_ci95' not in c
+    n = c['replicates']
+    assert c['mc_interval95_t_df'] == n - 1
+    half = (c['mc_interval95'][1] - c['mc_interval95'][0]) / 2
+    assert half == pytest.approx(Q.t975(n - 1) * c['standard_error_total'])
+    assert Q.t975(7) == pytest.approx(2.365) and Q.t975(100) == 1.96 and Q.t975(0) is None
+    assert 'not an inferential CI' in c['mc_interval95_note']
+
+
+def test_stagehalf_readout_note(tmp_path, capsys):
+    path = make_bundle(tmp_path)
+    meta = json.loads(path.with_suffix('.json').read_text())
+    meta['readout'] = 'cellshape@0.5:biascal:stagehalf'
+    path.with_suffix('.json').write_text(json.dumps(meta))
+    out = tmp_path / 'q.json'
+    assert Q.main(['--genes', 'AAA', '--stages', '0', '3', '--bundle', str(path), '--n-boot', '20', '--out', str(out)]) == 0
+    value = json.loads(out.read_text())
+    assert 'halved' in value['model']['fits'][0]['readout_note']
+    assert any('halved' in s for s in value['scope'])
+    assert 'halved' in capsys.readouterr().err

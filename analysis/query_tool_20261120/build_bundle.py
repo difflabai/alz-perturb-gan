@@ -170,19 +170,24 @@ def main(argv=None):
     rmse_cut = float(np.quantile(rmse, RMSE_QUANTILE))
     W = obs['W']
     trn = ~obs['is_heldout']
-    gap = np.zeros((4, G)); share = np.full((4, G), np.nan)
+    gap = np.zeros((4, G)); share = np.full((4, G), np.nan); share_signed = np.full((4, G), np.nan)
     for s in range(4):
         o = obs['mean_log'][trn & (obs['stage'] == s)].mean(0)
         g_ = gen_target_mean[(~held_t) & (stage_t == s)].mean(0)
         z = (o - g_) / obs['space_sd']
-        outside = z - W @ (W.T @ z)
+        inside = W @ (W.T @ z)
+        outside = z - inside
         gap[s] = z
+        # Amendment 2: bounded per-gene share of the gap outside the PC span, in [0, 1]
+        denom = outside ** 2 + inside ** 2
         with np.errstate(divide='ignore', invalid='ignore'):
-            share[s] = np.where(np.abs(z) > 0, outside / z, np.nan)
+            share[s] = np.where(denom > 0, outside ** 2 / denom, np.nan)
+            share_signed[s] = np.where(np.abs(z) > 0, outside / z, np.nan)   # superseded signed ratio (pre-amendment)
     pc_captured = (W ** 2).sum(1)
     detection = obs['detection'].mean(0)
     flags_poor = (rmse > rmse_cut) | (rmse > RMSE_EMPIRICAL_RATIO * emp_rmse)
     flags_blind = ((share > BLIND_SHARE) & (np.abs(gap) > BLIND_MIN_GAP)).any(0)
+    flags_blind_superseded = ((share_signed > BLIND_SHARE) & (np.abs(gap) > BLIND_MIN_GAP)).any(0)
 
     # replicate stage means for the tool
     stage_mean_rep = np.zeros((len(reps), 4, G)); within_rep = np.zeros((len(reps), 4, G)); within_cells = []
@@ -209,7 +214,7 @@ def main(argv=None):
                                  crossfit_halves=[dict(calibration=list(c), evaluation=list(t)) for c, t in halves]),
                 flags=dict(poorly_fit=f'held-out donor mean-log RMSE > panel {RMSE_QUANTILE:.0%} quantile ({rmse_cut:.4f}) '
                                       f'or > {RMSE_EMPIRICAL_RATIO} x stage-blind empirical RMSE',
-                           pc_blind_spot=f'share of standardized TRAIN stage gap outside the 50-PC span > {BLIND_SHARE} '
+                           pc_blind_spot=f'bounded share out^2/(out^2+in^2) of the standardized TRAIN stage gap outside the 50-PC span > {BLIND_SHARE} '
                                          f'in any stage with |gap| > {BLIND_MIN_GAP}',
                            low_expression=f'observed mean detection < {LOW_DETECTION:.0%}'),
                 observed_donors=dict(train=train_donors, heldout=hdonors),
@@ -252,6 +257,15 @@ def main(argv=None):
                                  median_mean_correction=float(np.median(deployed['mean']['correction'])),
                                  median_sd_correction=float(np.median(deployed['sd']['correction']))),
         gene_flags=dict(poorly_fit=int(flags_poor.sum()), pc_blind_spot=int(flags_blind.sum()),
+                        pc_blind_spot_definition='Amendment 2 bounded share out^2/(out^2+in^2)',
+                        pc_blind_spot_superseded_signed_ratio=int(flags_blind_superseded.sum()),
+                        pc_blind_spot_both=int((flags_blind & flags_blind_superseded).sum()),
+                        poorly_fit_by_quantile_only=int(((rmse > rmse_cut) & ~(rmse > RMSE_EMPIRICAL_RATIO * emp_rmse)).sum()),
+                        poorly_fit_by_empirical_ratio=int((rmse > RMSE_EMPIRICAL_RATIO * emp_rmse).sum()),
+                        CLEC5A=(dict(outside_share_by_stage=[None if not np.isfinite(v) else float(v) for v in share[:, k]],
+                                     gap_by_stage=gap[:, k].tolist(), pc_captured=float(pc_captured[k]),
+                                     flag_pc_blind_spot=bool(flags_blind[k]), flag_poorly_fit=bool(flags_poor[k]))
+                                if (k := (list(genes).index('CLEC5A') if 'CLEC5A' in genes else None)) is not None else None),
                         low_expression=int((detection < LOW_DETECTION).sum()), rmse_cut=rmse_cut,
                         model_rmse_median=float(np.median(rmse)), empirical_rmse_median=float(np.median(emp_rmse)),
                         genes_model_rmse_below_empirical=int((rmse < emp_rmse).sum()),

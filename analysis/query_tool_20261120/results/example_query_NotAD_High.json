@@ -20,6 +20,7 @@
         "fit": "/ml2/alz/runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0",
         "readout": "cellshape@0.5:biascal:stagehalf",
         "fold": 0,
+        "readout_note": "readout uses the stagehalf plan: half of each target's generated donors get the TRAIN stage mixture, so generated stage contrasts are about halved by construction (protocol Amendment 1)",
         "final_weights_sha256": "4f42d9250224c7ed5cbab7d6e973d49ca7ec596f0540187102040e3f9334cb25",
         "replicates": [
           1,
@@ -35,7 +36,7 @@
           "cuda"
         ],
         "panel_genes": 2000,
-        "bundle_sha256": "12d0cdb682cb1dc33b5b6139391abd520911deb48a9b6e6f0b925fdb4b939eb8"
+        "bundle_sha256": "5dd5121ef62613eadb60607cbd847fe3f3dedb33fbca53e91307313e4bf7a3a7"
       }
     ],
     "units": "mean per-cell log1p(panel CP10k); donor SD of the same over a K=256-cell bag",
@@ -137,7 +138,7 @@
     },
     "flag_definitions": {
       "poorly_fit": "held-out donor mean-log RMSE > panel 90% quantile (0.3177) or > 1.5 x stage-blind empirical RMSE",
-      "pc_blind_spot": "share of standardized TRAIN stage gap outside the 50-PC span > 0.5 in any stage with |gap| > 0.05",
+      "pc_blind_spot": "bounded share out^2/(out^2+in^2) of the standardized TRAIN stage gap outside the 50-PC span > 0.5 in any stage with |gap| > 0.05",
       "low_expression": "observed mean detection < 1%"
     },
     "status": "owner-selected experimental EMPF default; not population qualified"
@@ -146,7 +147,9 @@
     "Stage-conditioned observational generator; no gene, drug or dose inputs.",
     "Calibrated lower bounds are clipped at 0 (both coordinates are nonnegative); see model.calibration.heldout_crossfit_evaluation before preferring calibrated over raw intervals.",
     "Intervals are for one donor bag (K=256 cells) at the queried stage, nominal 80%.",
-    "Uncertainty excludes biological donor variability of the effect unless stated (observed reference)."
+    "Uncertainty excludes biological donor variability of the effect unless stated (observed reference).",
+    "mc_interval95 covers generator noise (and between-fit spread when several bundles); with one fit it is far narrower than the scientific uncertainty.",
+    "readout uses the stagehalf plan: half of each target's generated donors get the TRAIN stage mixture, so generated stage contrasts are about halved by construction (protocol Amendment 1)"
   ],
   "genes": [
     {
@@ -176,10 +179,12 @@
             "mc_standard_error": 0.01346905282188233,
             "between_fit_sd": null,
             "standard_error_total": 0.01346905282188233,
-            "approx_ci95": [
-              0.45040554100490593,
-              0.5032042280666846
+            "mc_interval95": [
+              0.44495057461204357,
+              0.508659194459547
             ],
+            "mc_interval95_t_df": 7,
+            "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
             "replicate_range": [
               0.4339843336783815,
               0.5426314157302841
@@ -199,10 +204,12 @@
             "mc_standard_error": 0.0050952662863003985,
             "between_fit_sd": null,
             "standard_error_total": 0.0050952662863003985,
-            "approx_ci95": [
-              0.6540071805713282,
-              0.6739806244136258
+            "mc_interval95": [
+              0.6519435977253766,
+              0.6760442072595775
             ],
+            "mc_interval95_t_df": 7,
+            "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
             "replicate_range": [
               0.6470920282950637,
               0.6833389098350093
@@ -223,10 +230,12 @@
           "mc_standard_error": 0.016940323847595706,
           "between_fit_sd": null,
           "standard_error_total": 0.016940323847595706,
-          "approx_ci95": [
-            0.15398598321539422,
-            0.22039205269796938
+          "mc_interval95": [
+            0.14712515205711796,
+            0.22725288385624565
           ],
+          "mc_interval95_t_df": 7,
+          "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
           "replicate_range": [
             0.11193516045942054,
             0.24741130349598517
@@ -248,10 +257,12 @@
               "mc_standard_error": 0.011796235262262401,
               "between_fit_sd": null,
               "standard_error_total": 0.011796235262262401,
-              "approx_ci95": [
-                0.4710221586379792,
-                0.5172634008660478
+              "mc_interval95": [
+                0.4662446833567629,
+                0.522040876147264
               ],
+              "mc_interval95_t_df": 7,
+              "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
               "replicate_range": [
                 0.44924558164218087,
                 0.5426669153260442
@@ -271,10 +282,12 @@
               "mc_standard_error": 0.0064167714780859276,
               "between_fit_sd": null,
               "standard_error_total": 0.0064167714780859276,
-              "approx_ci95": [
-                0.7165768110851019,
-                0.7417305552791986
+              "mc_interval95": [
+                0.713978018636477,
+                0.7443293477278234
               ],
+              "mc_interval95_t_df": 7,
+              "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
               "replicate_range": [
                 0.711210091205718,
                 0.7620199851389439
@@ -295,10 +308,12 @@
             "mc_standard_error": 0.015602059698614173,
             "between_fit_sd": null,
             "standard_error_total": 0.015602059698614173,
-            "approx_ci95": [
-              0.20443086642085292,
-              0.2655909404394205
+            "mc_interval95": [
+              0.19811203224291418,
+              0.2719097746173592
             ],
+            "mc_interval95_t_df": 7,
+            "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
             "replicate_range": [
               0.16854317587967382,
               0.29348409067619197
@@ -321,10 +336,10 @@
           "stage_blind_empirical_rmse": 0.5341031677246003,
           "poorly_fit_rmse_cut": 0.3177274775639286,
           "pc_outside_share_by_stage": {
-            "Not AD": -0.0464806653987193,
-            "Low": 0.18829597670612935,
-            "Intermediate": -0.5578674126913268,
-            "High": 1.787166847457233
+            "Not AD": 0.001968912086960751,
+            "Low": 0.051064979133394466,
+            "Intermediate": 0.11365853820870918,
+            "High": 0.837520417614195
           },
           "pc_standardized_gap_by_stage": {
             "Not AD": -0.11504612744413222,
@@ -461,10 +476,12 @@
             "mc_standard_error": 0.010344968351861506,
             "between_fit_sd": null,
             "standard_error_total": 0.010344968351861506,
-            "approx_ci95": [
-              1.0394920896055564,
-              1.0800443655448535
+            "mc_interval95": [
+              1.0353023774230525,
+              1.0842340777273574
             ],
+            "mc_interval95_t_df": 7,
+            "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
             "replicate_range": [
               1.0306240380705276,
               1.1184566676820396
@@ -484,10 +501,12 @@
             "mc_standard_error": 0.0028745923890844682,
             "between_fit_sd": null,
             "standard_error_total": 0.0028745923890844682,
-            "approx_ci95": [
-              1.0325412222731707,
-              1.0438096244383819
+            "mc_interval95": [
+              1.0313770123555914,
+              1.0449738343559611
             ],
+            "mc_interval95_t_df": 7,
+            "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
             "replicate_range": [
               1.021642898628335,
               1.0493458071846122
@@ -508,10 +527,12 @@
           "mc_standard_error": 0.011058956282442215,
           "between_fit_sd": null,
           "standard_error_total": 0.011058956282442215,
-          "approx_ci95": [
-            -0.04326835853301554,
-            8.275009415794135e-05
+          "mc_interval95": [
+            -0.047747235827404644,
+            0.00456162738854704
           ],
+          "mc_interval95_t_df": 7,
+          "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
           "replicate_range": [
             -0.0775125646315773,
             0.018379528917169985
@@ -533,10 +554,12 @@
               "mc_standard_error": 0.011436731352848424,
               "between_fit_sd": null,
               "standard_error_total": 0.011436731352848424,
-              "approx_ci95": [
-                1.082225061712231,
-                1.1270570486153968
+              "mc_interval95": [
+                1.0775931855143275,
+                1.1316889248133004
               ],
+              "mc_interval95_t_df": 7,
+              "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
               "replicate_range": [
                 1.0750209716461936,
                 1.1655483371133033
@@ -556,10 +579,12 @@
               "mc_standard_error": 0.005151115242382976,
               "between_fit_sd": null,
               "standard_error_total": 0.005151115242382976,
-              "approx_ci95": [
-                1.1385633233874224,
-                1.1587556951375635
+              "mc_interval95": [
+                1.1364771217142573,
+                1.1608418968107286
               ],
+              "mc_interval95_t_df": 7,
+              "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
               "replicate_range": [
                 1.1309342740065922,
                 1.172845166658674
@@ -580,10 +605,12 @@
             "mc_standard_error": 0.01436225566447745,
             "between_fit_sd": null,
             "standard_error_total": 0.01436225566447745,
-            "approx_ci95": [
-              0.01586843299630311,
-              0.07216847520105471
+            "mc_interval95": [
+              0.010051719452189738,
+              0.07798518874516808
             ],
+            "mc_interval95_t_df": 7,
+            "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
             "replicate_range": [
               -0.019081548820018446,
               0.09409369301000492
@@ -606,10 +633,10 @@
           "stage_blind_empirical_rmse": 0.4253720176439068,
           "poorly_fit_rmse_cut": 0.3177274775639286,
           "pc_outside_share_by_stage": {
-            "Not AD": -0.009709997160307668,
-            "Low": 0.11866404269176097,
-            "Intermediate": -0.9776308033905662,
-            "High": 0.18268278905998742
+            "Not AD": 9.247082491176666e-05,
+            "Low": 0.017805444666719437,
+            "Intermediate": 0.19638465093314933,
+            "High": 0.04758188315874069
           },
           "pc_standardized_gap_by_stage": {
             "Not AD": -0.09511722071723999,
@@ -746,10 +773,12 @@
             "mc_standard_error": 0.009387604350308585,
             "between_fit_sd": null,
             "standard_error_total": 0.009387604350308585,
-            "approx_ci95": [
-              0.42083109806877045,
-              0.4576305071219801
+            "mc_interval95": [
+              0.4170291183068955,
+              0.4614324868838551
             ],
+            "mc_interval95_t_df": 7,
+            "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
             "replicate_range": [
               0.41324294115111115,
               0.48653667798498645
@@ -769,10 +798,12 @@
             "mc_standard_error": 0.005330283352188014,
             "between_fit_sd": null,
             "standard_error_total": 0.005330283352188014,
-            "approx_ci95": [
-              0.5911928213358248,
-              0.6120875320764019
+            "mc_interval95": [
+              0.5890340565781887,
+              0.614246296834038
             ],
+            "mc_interval95_t_df": 7,
+            "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
             "replicate_range": [
               0.5821891394574011,
               0.6227723284169578
@@ -793,10 +824,12 @@
           "mc_standard_error": 0.014190704623561095,
           "between_fit_sd": null,
           "standard_error_total": 0.014190704623561095,
-          "approx_ci95": [
-            0.1345955930485583,
-            0.1902231551729178
+          "mc_interval95": [
+            0.12884835767601605,
+            0.19597039054546006
           ],
+          "mc_interval95_t_df": 7,
+          "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
           "replicate_range": [
             0.10055158124075536,
             0.2095293872658467
@@ -818,10 +851,12 @@
               "mc_standard_error": 0.0061969988367381315,
               "between_fit_sd": null,
               "standard_error_total": 0.0061969988367381315,
-              "approx_ci95": [
-                0.3587808001458228,
-                0.3830730355858363
+              "mc_interval95": [
+                0.35627101561694385,
+                0.38558282011471523
               ],
+              "mc_interval95_t_df": 7,
+              "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
               "replicate_range": [
                 0.34772242001532894,
                 0.4019834992474643
@@ -841,10 +876,12 @@
               "mc_standard_error": 0.00441889687866316,
               "between_fit_sd": null,
               "standard_error_total": 0.00441889687866316,
-              "approx_ci95": [
-                0.5019330969901298,
-                0.5192551727544893
+              "mc_interval95": [
+                0.5001434437542711,
+                0.521044825990348
               ],
+              "mc_interval95_t_df": 7,
+              "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
               "replicate_range": [
                 0.49627181912802143,
                 0.529439735398189
@@ -865,10 +902,12 @@
             "mc_standard_error": 0.009904532468912708,
             "between_fit_sd": null,
             "standard_error_total": 0.009904532468912708,
-            "approx_ci95": [
-              0.12025433336741118,
-              0.15908010064554898
+            "mc_interval95": [
+              0.11624299771750152,
+              0.16309143629545864
             ],
+            "mc_interval95_t_df": 7,
+            "mc_interval95_note": "Student-t interval for the generator mean from generation Monte Carlo; not an inferential CI for the biological effect",
             "replicate_range": [
               0.09428831988055714,
               0.17612053518034487
@@ -891,10 +930,10 @@
           "stage_blind_empirical_rmse": 0.2878571201958618,
           "poorly_fit_rmse_cut": 0.3177274775639286,
           "pc_outside_share_by_stage": {
-            "Not AD": -0.23794016831508089,
-            "Low": -0.697157899447002,
-            "Intermediate": -2.405887189720651,
-            "High": -0.9279956746835821
+            "Not AD": 0.035627158842938954,
+            "Low": 0.1443776378697084,
+            "Intermediate": 0.3328832006236978,
+            "High": 0.18809772814371364
           },
           "pc_standardized_gap_by_stage": {
             "Not AD": -0.1923686517087288,

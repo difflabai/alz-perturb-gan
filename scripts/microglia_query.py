@@ -36,6 +36,19 @@ MIN_REAL_CELLS, MIN_REAL_DONORS = 20, 3
 SUBTYPE_COLUMNS = [2, 4]
 
 
+# Two-sided 97.5% Student t quantiles (df 1..30); NumPy-only, so tabulated. df > 30 uses 1.96.
+T975 = [12.706, 4.303, 3.182, 2.776, 2.571, 2.447, 2.365, 2.306, 2.262, 2.228, 2.201, 2.179, 2.160, 2.145,
+        2.131, 2.120, 2.110, 2.101, 2.093, 2.086, 2.080, 2.074, 2.069, 2.064, 2.060, 2.056, 2.052, 2.048, 2.045, 2.042]
+STAGEHALF_NOTE = ('readout uses the stagehalf plan: half of each target\'s generated donors get the TRAIN stage mixture, '
+                  'so generated stage contrasts are about halved by construction (protocol Amendment 1)')
+
+
+def t975(df):
+    if df is None or df < 1:
+        return None
+    return T975[df - 1] if df <= len(T975) else 1.96
+
+
 def stage_index(text):
     key = str(text).strip().lower()
     if key not in ALIASES:
@@ -69,6 +82,7 @@ class Bundle:
     def describe(self):
         m = self.meta
         return dict(bundle=str(self.path), fit=m['fit'], readout=m['readout'], fold=m.get('fold'),
+                    readout_note=(STAGEHALF_NOTE if 'stagehalf' in str(m['readout']) else None),
                     final_weights_sha256=m['weights_sha256'].get('final.pt'), replicates=m['replicates'],
                     generation_devices=m.get('generation_devices'), panel_genes=len(self.genes),
                     bundle_sha256=m.get('bundle_npz_sha256'))
@@ -122,10 +136,16 @@ def summarize_contrast(per_fit_reps):
     mc_part = np.sqrt(np.nanmean(np.square(mc_se)) / len(fit_means)) if np.isfinite(mc_se).any() else None
     total = np.sqrt((between ** 2 / len(fit_means) if between is not None else 0) + (mc_part or 0) ** 2)
     allv = np.concatenate(reps_all)
+    df = (len(fit_means) - 1) if between is not None else (min(len(v) for v in reps_all) - 1)
+    q = t975(df)
     return dict(estimate=num(est), per_fit=[num(x) for x in fit_means],
                 mc_replicate_sd=[num(x) for x in mc_sd], mc_standard_error=num(mc_part),
                 between_fit_sd=num(between), standard_error_total=num(total),
-                approx_ci95=pair(est - 1.96 * total, est + 1.96 * total),
+                mc_interval95=(pair(est - q * total, est + q * total) if q is not None else [None, None]),
+                mc_interval95_t_df=df,
+                mc_interval95_note=('Student-t interval for the generator mean from generation Monte Carlo'
+                                    + (' and between-fit spread' if between is not None else '')
+                                    + '; not an inferential CI for the biological effect'),
                 replicate_range=pair(allv.min(), allv.max()),
                 fraction_replicates_positive=num((allv > 0).mean()), replicates=int(len(allv)),
                 uncertainty_scope=('generation Monte Carlo and between-fit' if between is not None else
@@ -221,6 +241,9 @@ def main(argv=None):
         rows = query(bundles, list(dict.fromkeys(args.genes)), a, b, n_boot=args.n_boot)
     except (ValueError, FileNotFoundError, KeyError) as exc:
         raise SystemExit(f'microglia_query: {exc}')
+    readout_notes = sorted({STAGEHALF_NOTE for B in bundles if 'stagehalf' in str(B.meta['readout'])})
+    for note in readout_notes:
+        print(f'microglia_query: note: {note}', file=sys.stderr)
     result = dict(
         schema=SCHEMA, query=dict(genes=list(dict.fromkeys(args.genes)), stage_a=STAGES[a], stage_b=STAGES[b],
                                   contrast='stage_b minus stage_a'),
@@ -234,7 +257,9 @@ def main(argv=None):
                'Calibrated lower bounds are clipped at 0 (both coordinates are nonnegative); see '
                'model.calibration.heldout_crossfit_evaluation before preferring calibrated over raw intervals.',
                'Intervals are for one donor bag (K=256 cells) at the queried stage, nominal 80%.',
-               'Uncertainty excludes biological donor variability of the effect unless stated (observed reference).'],
+               'Uncertainty excludes biological donor variability of the effect unless stated (observed reference).',
+               'mc_interval95 covers generator noise (and between-fit spread when several bundles); with one fit it is '
+               'far narrower than the scientific uncertainty.'] + readout_notes,
         genes=rows)
     text = json.dumps(result, indent=2, allow_nan=False)
     if args.out:
