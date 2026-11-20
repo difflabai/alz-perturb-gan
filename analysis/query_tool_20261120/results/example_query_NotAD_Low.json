@@ -1,0 +1,434 @@
+{
+  "schema": "microglia-query/1",
+  "query": {
+    "genes": [
+      "CLEC5A"
+    ],
+    "stage_a": "Not AD",
+    "stage_b": "Low",
+    "contrast": "stage_b minus stage_a"
+  },
+  "model": {
+    "ensemble_size": 1,
+    "fits": [
+      {
+        "bundle": "/ml2/alz/runs/research_20261120/query-tool/bundle_fold0_seed0.npz",
+        "fit": "/ml2/alz/runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0",
+        "readout": "cellshape@0.5:biascal:stagehalf",
+        "fold": 0,
+        "final_weights_sha256": "4f42d9250224c7ed5cbab7d6e973d49ca7ec596f0540187102040e3f9334cb25",
+        "replicates": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "generation_devices": [
+          "cuda"
+        ],
+        "panel_genes": 2000,
+        "bundle_sha256": "12d0cdb682cb1dc33b5b6139391abd520911deb48a9b6e6f0b925fdb4b939eb8"
+      }
+    ],
+    "units": "mean per-cell log1p(panel CP10k); donor SD of the same over a K=256-cell bag",
+    "stage_mean_definition": "equal weight over generated target donors of the stage (37 development-donor conditions)",
+    "within_subtype_definition": "equal weight over the two fixed subtypes; generated cells pooled within stage; >=100 cells",
+    "interval_definition": "10%/90% percentiles of generated donor bags pooled over targets of the stage and replicates",
+    "calibration": {
+      "rule": "coverage pilot nonnegative split-CQR, rank ceil((n+1)*0.8)",
+      "alpha": 0.2,
+      "deployed_calibration_donors": [
+        "H20.33.008",
+        "H20.33.012",
+        "H20.33.013",
+        "H20.33.029",
+        "H20.33.033",
+        "H20.33.043",
+        "H21.33.002",
+        "H21.33.021",
+        "H21.33.027",
+        "H21.33.034",
+        "H21.33.041",
+        "H21.33.043"
+      ],
+      "deployed_rank": 11,
+      "deployed_note": "fit on all 12 held-out donors; its own coverage is not evaluable on them; cross-fitted 6/6 evaluation is in the evaluation JSON",
+      "crossfit_halves": [
+        {
+          "calibration": [
+            "H21.33.043",
+            "H20.33.013",
+            "H20.33.029",
+            "H21.33.002",
+            "H20.33.043",
+            "H21.33.034"
+          ],
+          "evaluation": [
+            "H20.33.012",
+            "H20.33.008",
+            "H21.33.041",
+            "H20.33.033",
+            "H21.33.027",
+            "H21.33.021"
+          ]
+        },
+        {
+          "calibration": [
+            "H20.33.012",
+            "H20.33.008",
+            "H21.33.041",
+            "H20.33.033",
+            "H21.33.027",
+            "H21.33.021"
+          ],
+          "evaluation": [
+            "H21.33.043",
+            "H20.33.013",
+            "H20.33.029",
+            "H21.33.002",
+            "H20.33.043",
+            "H21.33.034"
+          ]
+        }
+      ],
+      "heldout_crossfit_evaluation": {
+        "raw": {
+          "mean": {
+            "coverage": 0.86775,
+            "interval_score": 0.5251145473233367
+          },
+          "sd": {
+            "coverage": 0.8702204861111111,
+            "interval_score": 0.9125287120917067
+          },
+          "combined": {
+            "coverage": 0.8689852430555556,
+            "interval_score": 0.7188216297075216
+          }
+        },
+        "calibrated": {
+          "mean": {
+            "coverage": 0.9122604166666667,
+            "interval_score": 0.5953790618447058
+          },
+          "sd": {
+            "coverage": 0.912953125,
+            "interval_score": 0.9884197919728136
+          },
+          "combined": {
+            "coverage": 0.9126067708333333,
+            "interval_score": 0.7918994269087599
+          }
+        },
+        "calibration_useful": {
+          "sd_only_pilot_rule": false,
+          "mean_and_sd": false
+        },
+        "note": "raw stage-level gene intervals over-cover on held-out donors; the nonnegative pilot rule can only widen them, so prefer raw unless the evaluation says calibration is useful"
+      }
+    },
+    "flag_definitions": {
+      "poorly_fit": "held-out donor mean-log RMSE > panel 90% quantile (0.3177) or > 1.5 x stage-blind empirical RMSE",
+      "pc_blind_spot": "share of standardized TRAIN stage gap outside the 50-PC span > 0.5 in any stage with |gap| > 0.05",
+      "low_expression": "observed mean detection < 1%"
+    },
+    "status": "owner-selected experimental EMPF default; not population qualified"
+  },
+  "scope": [
+    "Stage-conditioned observational generator; no gene, drug or dose inputs.",
+    "Calibrated lower bounds are clipped at 0 (both coordinates are nonnegative); see model.calibration.heldout_crossfit_evaluation before preferring calibrated over raw intervals.",
+    "Intervals are for one donor bag (K=256 cells) at the queried stage, nominal 80%.",
+    "Uncertainty excludes biological donor variability of the effect unless stated (observed reference)."
+  ],
+  "genes": [
+    {
+      "gene": "CLEC5A",
+      "in_panel": true,
+      "in_panel_by_fit": [
+        true
+      ],
+      "flags": {
+        "not_in_panel": false,
+        "not_in_panel_of_some_fits": false,
+        "poorly_fit": true,
+        "pc_blind_spot": false,
+        "low_expression": false,
+        "single_fit": true
+      },
+      "generated": {
+        "stage_means": {
+          "Not AD": {
+            "estimate": 0.4768048845357953,
+            "per_fit": [
+              0.4768048845357953
+            ],
+            "mc_replicate_sd": [
+              0.0380962343460512
+            ],
+            "mc_standard_error": 0.01346905282188233,
+            "between_fit_sd": null,
+            "standard_error_total": 0.01346905282188233,
+            "approx_ci95": [
+              0.45040554100490593,
+              0.5032042280666846
+            ],
+            "replicate_range": [
+              0.4339843336783815,
+              0.5426314157302841
+            ],
+            "fraction_replicates_positive": 1.0,
+            "replicates": 8,
+            "uncertainty_scope": "generation Monte Carlo only; fit-to-fit variability unmeasured (one fit)"
+          },
+          "Low": {
+            "estimate": 0.7244140797181899,
+            "per_fit": [
+              0.7244140797181899
+            ],
+            "mc_replicate_sd": [
+              0.01506569568120812
+            ],
+            "mc_standard_error": 0.0053265277897375715,
+            "between_fit_sd": null,
+            "standard_error_total": 0.0053265277897375715,
+            "approx_ci95": [
+              0.7139740852503043,
+              0.7348540741860756
+            ],
+            "replicate_range": [
+              0.704511692878441,
+              0.7424348308471963
+            ],
+            "fraction_replicates_positive": 1.0,
+            "replicates": 8,
+            "uncertainty_scope": "generation Monte Carlo only; fit-to-fit variability unmeasured (one fit)"
+          }
+        },
+        "contrast": {
+          "estimate": 0.24760919518239463,
+          "per_fit": [
+            0.24760919518239463
+          ],
+          "mc_replicate_sd": [
+            0.04418960277484454
+          ],
+          "mc_standard_error": 0.015623383890016223,
+          "between_fit_sd": null,
+          "standard_error_total": 0.015623383890016223,
+          "approx_ci95": [
+            0.21698736275796282,
+            0.27823102760682644
+          ],
+          "replicate_range": [
+            0.18596206207148502,
+            0.30402150652662385
+          ],
+          "fraction_replicates_positive": 1.0,
+          "replicates": 8,
+          "uncertainty_scope": "generation Monte Carlo only; fit-to-fit variability unmeasured (one fit)"
+        },
+        "within_subtype": {
+          "stage_means": {
+            "Not AD": {
+              "estimate": 0.4941427797520135,
+              "per_fit": [
+                0.4941427797520135
+              ],
+              "mc_replicate_sd": [
+                0.033364791785670464
+              ],
+              "mc_standard_error": 0.011796235262262401,
+              "between_fit_sd": null,
+              "standard_error_total": 0.011796235262262401,
+              "approx_ci95": [
+                0.4710221586379792,
+                0.5172634008660478
+              ],
+              "replicate_range": [
+                0.44924558164218087,
+                0.5426669153260442
+              ],
+              "fraction_replicates_positive": 1.0,
+              "replicates": 8,
+              "uncertainty_scope": "generation Monte Carlo only; fit-to-fit variability unmeasured (one fit)"
+            },
+            "Low": {
+              "estimate": 0.791636136511326,
+              "per_fit": [
+                0.791636136511326
+              ],
+              "mc_replicate_sd": [
+                0.01909960173245648
+              ],
+              "mc_standard_error": 0.0067527289514911545,
+              "between_fit_sd": null,
+              "standard_error_total": 0.0067527289514911545,
+              "approx_ci95": [
+                0.7784007877664033,
+                0.8048714852562487
+              ],
+              "replicate_range": [
+                0.7629835715553283,
+                0.8205929627937274
+              ],
+              "fraction_replicates_positive": 1.0,
+              "replicates": 8,
+              "uncertainty_scope": "generation Monte Carlo only; fit-to-fit variability unmeasured (one fit)"
+            }
+          },
+          "contrast": {
+            "estimate": 0.2974933567593126,
+            "per_fit": [
+              0.2974933567593126
+            ],
+            "mc_replicate_sd": [
+              0.038791198706357444
+            ],
+            "mc_standard_error": 0.013714759827810088,
+            "between_fit_sd": null,
+            "standard_error_total": 0.013714759827810088,
+            "approx_ci95": [
+              0.2706124274968048,
+              0.3243742860218204
+            ],
+            "replicate_range": [
+              0.24934146474130847,
+              0.36207255799114846
+            ],
+            "fraction_replicates_positive": 1.0,
+            "replicates": 8,
+            "uncertainty_scope": "generation Monte Carlo only; fit-to-fit variability unmeasured (one fit)"
+          }
+        }
+      },
+      "per_fit": [
+        {
+          "fit": "/ml2/alz/runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0",
+          "flags": {
+            "poorly_fit": true,
+            "pc_blind_spot": false,
+            "low_expression": false
+          },
+          "heldout_mean_log_rmse": 0.5247247492471367,
+          "stage_blind_empirical_rmse": 0.5341031677246003,
+          "poorly_fit_rmse_cut": 0.3177274775639286,
+          "pc_outside_share_by_stage": {
+            "Not AD": -0.0464806653987193,
+            "Low": 0.18829597670612935,
+            "Intermediate": -0.5578674126913268,
+            "High": 1.787166847457233
+          },
+          "pc_standardized_gap_by_stage": {
+            "Not AD": -0.11504612744413222,
+            "Low": 0.145154802398787,
+            "Intermediate": -0.007738650340824439,
+            "High": -0.013824081107589085
+          },
+          "pc_captured_fraction": 0.08284470362873482,
+          "observed_detection": 0.17392816916442175,
+          "crossfit_heldout_coverage": {
+            "mean": {
+              "raw": 0.6354166666666666,
+              "calibrated": 0.9166666666666666
+            },
+            "sd": {
+              "raw": 0.8333333333333334,
+              "calibrated": 0.84375
+            }
+          },
+          "donor_intervals_80": {
+            "Not AD": {
+              "mean": {
+                "raw": [
+                  0.0,
+                  1.0865815520286561
+                ],
+                "calibrated": [
+                  0.0,
+                  1.189824832903266
+                ]
+              },
+              "sd": {
+                "raw": [
+                  0.0,
+                  1.862641936345761
+                ],
+                "calibrated": [
+                  0.0,
+                  1.891950135996531
+                ]
+              }
+            },
+            "Low": {
+              "mean": {
+                "raw": [
+                  0.21676366478204728,
+                  1.1701423168182374
+                ],
+                "calibrated": [
+                  0.11352038390743752,
+                  1.2733855976928472
+                ]
+              },
+              "sd": {
+                "raw": [
+                  0.8644287657048063,
+                  1.8807655465073734
+                ],
+                "calibrated": [
+                  0.8351205660540364,
+                  1.9100737461581434
+                ]
+              }
+            }
+          },
+          "observed_reference": {
+            "donors": {
+              "Not AD": 4,
+              "Low": 5
+            },
+            "pooled": {
+              "stage_a_mean": 0.2879669575897891,
+              "stage_b_mean": 1.0139683679404337,
+              "contrast": 0.7260014103506446,
+              "ci95_donor_bootstrap": [
+                0.49856472765846865,
+                0.9870396180342409
+              ],
+              "bootstrap_valid_draws": 2000
+            },
+            "within_subtype": {
+              "stage_a_mean": 0.27961686798148844,
+              "stage_b_mean": 1.0349927719635827,
+              "contrast": 0.7553759039820943,
+              "ci95_donor_bootstrap": [
+                0.5397353360072332,
+                0.9912285908606769
+              ],
+              "bootstrap_valid_draws": 2000
+            },
+            "note": "SEA-AD development donors of this fold cache (GAN TRAIN and held-out); data, not model output"
+          },
+          "stage_blind_empirical_reference": {
+            "stage_mean": 0.6687613508506945,
+            "contrast": 0.0,
+            "donor_interval_80": {
+              "mean": [
+                0.11544075529459921,
+                1.1452364751648765
+              ],
+              "sd": [
+                0.6493078468975,
+                1.878342911828766
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

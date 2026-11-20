@@ -1,0 +1,821 @@
+{
+  "status": "completed_side_by_side_recomputation_frozen_report_untouched",
+  "protocol": "analysis/query_tool_20261120/PROTOCOL.md",
+  "units": "High minus Not AD difference in mean per-cell log1p(panel CP10k); not a log fold-change",
+  "caveats": [
+    "EMPF: one fit (fold0/seed0, 25 GAN TRAIN donors); fit-to-fit variability unmeasured. 0.9.7: five fits on 33 donors.",
+    "Panels differ (EMPF fold0 HVG panel vs 0.9.7 panel; 1613 shared genes); CP10k uses each panel total.",
+    "Generated subtypes are classifier predictions; observed subtypes are atlas labels.",
+    "Across-gene agreement uses correlated genes; descriptive only, not held-out prediction accuracy.",
+    "Stage-blind empirical resampling predicts zero stage contrast for every gene (reference)."
+  ],
+  "reproduction_097": {
+    "clec5a_model": 0.45410841148237047,
+    "clec5a_real": 0.48856018775822085,
+    "max_abs_model_diff_vs_frozen_ranking": 0.0,
+    "max_abs_real_diff_vs_frozen_ranking": 0.0,
+    "within_genes": 2000,
+    "within_descriptive_spearman": 0.5020237240059309,
+    "within_direction_agreement": 0.659,
+    "within_model_to_real_effect_L2_ratio": 0.6887717605225974,
+    "clec5a_profile_real_matches_report": true,
+    "clec5a_profile_model_matches_report": true,
+    "reproduces_published_values": true
+  },
+  "model_097": {
+    "models": 5,
+    "replicates_per_model": 8,
+    "panel_genes": 2000,
+    "CLEC5A_within": {
+      "model_effect": 0.45410841148237047,
+      "seed_effects": [
+        0.6065569822190976,
+        0.598025998612209,
+        0.355865955747123,
+        0.5373381444344452,
+        0.17275497639897733
+      ],
+      "replicate_sign_agreement": 1.0,
+      "observed_effect": 0.48856018775822085
+    },
+    "CLEC5A_pooled": {
+      "model_effect": 0.38772478056270626,
+      "observed_effect": 0.47838445837818466
+    },
+    "CLEC5A_model_stage_profile": [
+      0.37408686341101793,
+      0.7720220569206614,
+      0.8713192960535266,
+      0.8281952748933884
+    ],
+    "CLEC5A_model_peak": "Intermediate",
+    "CLEC5A_observed_stage_profile": [
+      0.2460722113620129,
+      1.0748239799742474,
+      0.7136705539062808,
+      0.7346323991202337
+    ],
+    "CLEC5A_observed_peak": "Low",
+    "within_agreement_all_panel_genes": {
+      "genes": 2000,
+      "descriptive_spearman": 0.5020237240059309,
+      "direction_agreement": 0.659,
+      "model_to_real_effect_L2_ratio": 0.6887717605225974
+    },
+    "within_agreement_single_model_by_seed_posthoc": [
+      {
+        "genes": 2000,
+        "descriptive_spearman": 0.2409065267266317,
+        "direction_agreement": 0.5725,
+        "model_to_real_effect_L2_ratio": 0.9585498329495367
+      },
+      {
+        "genes": 2000,
+        "descriptive_spearman": 0.3641738020434505,
+        "direction_agreement": 0.6315,
+        "model_to_real_effect_L2_ratio": 0.8787513569837991
+      },
+      {
+        "genes": 2000,
+        "descriptive_spearman": 0.4017036029259008,
+        "direction_agreement": 0.625,
+        "model_to_real_effect_L2_ratio": 0.9243493838205049
+      },
+      {
+        "genes": 2000,
+        "descriptive_spearman": 0.5211084027771007,
+        "direction_agreement": 0.676,
+        "model_to_real_effect_L2_ratio": 0.8684908074384249
+      },
+      {
+        "genes": 2000,
+        "descriptive_spearman": 0.4450858112714528,
+        "direction_agreement": 0.645,
+        "model_to_real_effect_L2_ratio": 0.8395731317917048
+      }
+    ],
+    "within_agreement_shared_genes": {
+      "genes": 1613,
+      "descriptive_spearman": 0.5384058512108375,
+      "direction_agreement": 0.6782393056416615,
+      "model_to_real_effect_L2_ratio": 0.6618439892731679
+    },
+    "pooled_agreement_all_panel_genes": {
+      "genes": 2000,
+      "descriptive_spearman": 0.546573936143484,
+      "direction_agreement": 0.675,
+      "model_to_real_effect_L2_ratio": 0.6640669005736454
+    }
+  },
+  "model_empf": {
+    "fit": "runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0",
+    "readout": "cellshape@0.5:biascal:snapens",
+    "models": 1,
+    "replicates": 8,
+    "replicate_ids": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "panel_genes": 2000,
+    "shared_genes_with_097": 1613,
+    "synthetic_cells_per_stage_group_min": 5435,
+    "generated_classifier_mean_confidence": 0.6081602839437646,
+    "CLEC5A_model_stage_profile": [
+      0.24736020964204894,
+      0.8403267449671202,
+      0.8844795365097902,
+      0.7394961501758324
+    ],
+    "CLEC5A_model_profile_by_replicate": [
+      [
+        0.23551323905124133,
+        0.8621435473641483,
+        0.9064641390998294,
+        0.7340896276283995
+      ],
+      [
+        0.23370680560988022,
+        0.8154346754818528,
+        0.8917136001213726,
+        0.7492265747889502
+      ],
+      [
+        0.22907675538711697,
+        0.8190862770625609,
+        0.8819578051703909,
+        0.7334337140144799
+      ],
+      [
+        0.2515885283450817,
+        0.8683979884649845,
+        0.8868633432158535,
+        0.7420901356808778
+      ],
+      [
+        0.24225698646485816,
+        0.8240541523266017,
+        0.9194058019222686,
+        0.7448427547840684
+      ],
+      [
+        0.2440013465646606,
+        0.853135818164531,
+        0.8590934800182699,
+        0.722319147287711
+      ],
+      [
+        0.3310999879857889,
+        0.8172530747552644,
+        0.8540817145139958,
+        0.7337091492085587
+      ],
+      [
+        0.21163802772776363,
+        0.8631084261170187,
+        0.8762564080163404,
+        0.7562580980136143
+      ]
+    ],
+    "CLEC5A_model_peak": "Intermediate",
+    "references": {
+      "same_33_donors_as_frozen_report": {
+        "estimable": true,
+        "groups": [
+          "Micro-PVM_2",
+          "Micro-PVM_2_3-SEAAD"
+        ],
+        "donors_by_stage": [
+          3,
+          4,
+          8,
+          18
+        ],
+        "eligible_donors_by_stage_group": [
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            8,
+            8
+          ],
+          [
+            18,
+            18
+          ]
+        ],
+        "model_groups": [
+          "Micro-PVM_2",
+          "Micro-PVM_2_3-SEAAD"
+        ],
+        "CLEC5A_within": {
+          "model_effect": 0.49213594053378346,
+          "mc_replicates": 8,
+          "mc_sd": 0.041074975210089,
+          "mc_min": 0.4026091612227698,
+          "mc_max": 0.5446200702858507,
+          "mc_sign_agreement_with_observed": 1.0,
+          "observed_effect": 0.47025560203975136,
+          "observed_donor_bootstrap_ci95": [
+            0.20190531052678845,
+            0.7585127531759416
+          ],
+          "observed_bootstrap_valid_draws": 2000
+        },
+        "CLEC5A_pooled": {
+          "model_effect": 0.39237947194920997,
+          "mc_replicates": 8,
+          "mc_sd": 0.03904837094449105,
+          "mc_min": 0.31131072997385145,
+          "mc_max": 0.42497681220074335,
+          "mc_sign_agreement_with_observed": 1.0,
+          "observed_effect": 0.460016261198528,
+          "observed_donor_bootstrap_ci95": [
+            0.18398074049217844,
+            0.759953577642958
+          ],
+          "observed_bootstrap_valid_draws": 2000
+        },
+        "CLEC5A_observed_stage_profile": [
+          0.23669091263093472,
+          1.0383736156988184,
+          0.6850479205992509,
+          0.7069465146706861
+        ],
+        "CLEC5A_observed_peak": "Low",
+        "within_agreement_all_panel_genes": {
+          "genes": 2000,
+          "descriptive_spearman": 0.22366104191526046,
+          "direction_agreement": 0.588,
+          "model_to_real_effect_L2_ratio": 0.8868718466966228
+        },
+        "within_agreement_shared_genes": {
+          "genes": 1613,
+          "descriptive_spearman": 0.19959235388398858,
+          "direction_agreement": 0.5802851828890266,
+          "model_to_real_effect_L2_ratio": 0.8763522401623216
+        },
+        "pooled_agreement_all_panel_genes": {
+          "genes": 2000,
+          "descriptive_spearman": 0.2690873217718304,
+          "direction_agreement": 0.608,
+          "model_to_real_effect_L2_ratio": 0.8948412010669221
+        },
+        "focus_genes": {
+          "CLEC5A": {
+            "model_effect": 0.49213594053378346,
+            "mc_replicates": 8,
+            "mc_sd": 0.041074975210089,
+            "mc_min": 0.4026091612227698,
+            "mc_max": 0.5446200702858507,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.47025560203975136,
+            "observed_donor_bootstrap_ci95": [
+              0.20190531052678845,
+              0.7585127531759416
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "PPARG": {
+            "model_effect": 0.05443817696472575,
+            "mc_replicates": 8,
+            "mc_sd": 0.03028987449204267,
+            "mc_min": 0.012113414989753268,
+            "mc_max": 0.09861525234161417,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.2817105684091395,
+            "observed_donor_bootstrap_ci95": [
+              0.11225660572844619,
+              0.4666158907778831
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "CDKN1A": {
+            "model_effect": -0.38229279396133004,
+            "mc_replicates": 8,
+            "mc_sd": 0.05228898409081299,
+            "mc_min": -0.45374350583905354,
+            "mc_max": -0.30232329776925027,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": -0.6802156621092286,
+            "observed_donor_bootstrap_ci95": [
+              -1.1751034768756632,
+              -0.06825999534750929
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "SPP1": {
+            "model_effect": -0.07183834197026784,
+            "mc_replicates": 8,
+            "mc_sd": 0.04285232900432755,
+            "mc_min": -0.14538814222639207,
+            "mc_max": 0.0040988467385414395,
+            "mc_sign_agreement_with_observed": 0.875,
+            "observed_effect": -0.6833991269540278,
+            "observed_donor_bootstrap_ci95": [
+              -1.7678842355376054,
+              0.2674075728681771
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "GPNMB": {
+            "model_effect": 0.29731149466761997,
+            "mc_replicates": 8,
+            "mc_sd": 0.027668738455452167,
+            "mc_min": 0.23922085785342834,
+            "mc_max": 0.3251559658505179,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.3195322083793206,
+            "observed_donor_bootstrap_ci95": [
+              0.20093549700651814,
+              0.45419555174745385
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "LPL": {
+            "model_effect": 0.06873401191007757,
+            "mc_replicates": 8,
+            "mc_sd": 0.010986839624741765,
+            "mc_min": 0.047931981238879984,
+            "mc_max": 0.08154451390168252,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.09085329108607842,
+            "observed_donor_bootstrap_ci95": [
+              0.007008802228294512,
+              0.1582315535137856
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "PLIN2": {
+            "model_effect": 0.23185001548244166,
+            "mc_replicates": 8,
+            "mc_sd": 0.033322021678723286,
+            "mc_min": 0.1729562954269095,
+            "mc_max": 0.267861586550507,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.17117445373706044,
+            "observed_donor_bootstrap_ci95": [
+              0.088712129662082,
+              0.2616251227998988
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          }
+        }
+      },
+      "fold0_GAN_TRAIN_25_donors": {
+        "estimable": true,
+        "groups": [
+          "Micro-PVM_2",
+          "Micro-PVM_2_3-SEAAD"
+        ],
+        "donors_by_stage": [
+          3,
+          3,
+          6,
+          13
+        ],
+        "eligible_donors_by_stage_group": [
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            6,
+            6
+          ],
+          [
+            13,
+            13
+          ]
+        ],
+        "model_groups": [
+          "Micro-PVM_2",
+          "Micro-PVM_2_3-SEAAD"
+        ],
+        "CLEC5A_within": {
+          "model_effect": 0.49213594053378346,
+          "mc_replicates": 8,
+          "mc_sd": 0.041074975210089,
+          "mc_min": 0.4026091612227698,
+          "mc_max": 0.5446200702858507,
+          "mc_sign_agreement_with_observed": 1.0,
+          "observed_effect": 0.31747126812287396,
+          "observed_donor_bootstrap_ci95": [
+            0.054562527169609014,
+            0.6192802855792748
+          ],
+          "observed_bootstrap_valid_draws": 2000
+        },
+        "CLEC5A_pooled": {
+          "model_effect": 0.39237947194920997,
+          "mc_replicates": 8,
+          "mc_sd": 0.03904837094449105,
+          "mc_min": 0.31131072997385145,
+          "mc_max": 0.42497681220074335,
+          "mc_sign_agreement_with_observed": 1.0,
+          "observed_effect": 0.34770959965326237,
+          "observed_donor_bootstrap_ci95": [
+            0.06627294672481107,
+            0.647773125493113
+          ],
+          "observed_bootstrap_valid_draws": 2000
+        },
+        "CLEC5A_observed_stage_profile": [
+          0.2953435906103651,
+          0.9955580974346152,
+          0.7194356108027458,
+          0.612814858733239
+        ],
+        "CLEC5A_observed_peak": "Low",
+        "within_agreement_all_panel_genes": {
+          "genes": 2000,
+          "descriptive_spearman": 0.28324248781062195,
+          "direction_agreement": 0.624,
+          "model_to_real_effect_L2_ratio": 0.7716935599116401
+        },
+        "within_agreement_shared_genes": {
+          "genes": 1613,
+          "descriptive_spearman": 0.26281700192641,
+          "direction_agreement": 0.6174829510229386,
+          "model_to_real_effect_L2_ratio": 0.7578398663847852
+        },
+        "pooled_agreement_all_panel_genes": {
+          "genes": 2000,
+          "descriptive_spearman": 0.44261526565381637,
+          "direction_agreement": 0.682,
+          "model_to_real_effect_L2_ratio": 0.7749884711305185
+        },
+        "focus_genes": {
+          "CLEC5A": {
+            "model_effect": 0.49213594053378346,
+            "mc_replicates": 8,
+            "mc_sd": 0.041074975210089,
+            "mc_min": 0.4026091612227698,
+            "mc_max": 0.5446200702858507,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.31747126812287396,
+            "observed_donor_bootstrap_ci95": [
+              0.054562527169609014,
+              0.6192802855792748
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "PPARG": {
+            "model_effect": 0.05443817696472575,
+            "mc_replicates": 8,
+            "mc_sd": 0.03028987449204267,
+            "mc_min": 0.012113414989753268,
+            "mc_max": 0.09861525234161417,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.19583472814743813,
+            "observed_donor_bootstrap_ci95": [
+              -0.008390246403251065,
+              0.39646403485797954
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "CDKN1A": {
+            "model_effect": -0.38229279396133004,
+            "mc_replicates": 8,
+            "mc_sd": 0.05228898409081299,
+            "mc_min": -0.45374350583905354,
+            "mc_max": -0.30232329776925027,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": -0.5740681244626467,
+            "observed_donor_bootstrap_ci95": [
+              -1.198118254543991,
+              0.2448686624536379
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "SPP1": {
+            "model_effect": -0.07183834197026784,
+            "mc_replicates": 8,
+            "mc_sd": 0.04285232900432755,
+            "mc_min": -0.14538814222639207,
+            "mc_max": 0.0040988467385414395,
+            "mc_sign_agreement_with_observed": 0.875,
+            "observed_effect": -0.8380938376097316,
+            "observed_donor_bootstrap_ci95": [
+              -2.0238204330109197,
+              0.31625514053206005
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "GPNMB": {
+            "model_effect": 0.29731149466761997,
+            "mc_replicates": 8,
+            "mc_sd": 0.027668738455452167,
+            "mc_min": 0.23922085785342834,
+            "mc_max": 0.3251559658505179,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.32205269534779424,
+            "observed_donor_bootstrap_ci95": [
+              0.17687091480605668,
+              0.4742694173750181
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "LPL": {
+            "model_effect": 0.06873401191007757,
+            "mc_replicates": 8,
+            "mc_sd": 0.010986839624741765,
+            "mc_min": 0.047931981238879984,
+            "mc_max": 0.08154451390168252,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.11462808267855942,
+            "observed_donor_bootstrap_ci95": [
+              0.058307165807365204,
+              0.17406911716007867
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          },
+          "PLIN2": {
+            "model_effect": 0.23185001548244166,
+            "mc_replicates": 8,
+            "mc_sd": 0.033322021678723286,
+            "mc_min": 0.1729562954269095,
+            "mc_max": 0.267861586550507,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.12971367163997244,
+            "observed_donor_bootstrap_ci95": [
+              0.00254529352072092,
+              0.25915328477062527
+            ],
+            "observed_bootstrap_valid_draws": 2000
+          }
+        }
+      },
+      "all_37_development_donors": {
+        "estimable": true,
+        "groups": [
+          "Micro-PVM_2",
+          "Micro-PVM_2_3-SEAAD",
+          "Micro-PVM_3-SEAAD"
+        ],
+        "donors_by_stage": [
+          4,
+          5,
+          9,
+          19
+        ],
+        "eligible_donors_by_stage_group": [
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            5
+          ],
+          [
+            9,
+            9
+          ],
+          [
+            19,
+            19
+          ]
+        ],
+        "model_groups": [
+          "Micro-PVM_2",
+          "Micro-PVM_2_3-SEAAD",
+          "Micro-PVM_3-SEAAD"
+        ],
+        "CLEC5A_within": {
+          "model_effect": 0.4629983262772255,
+          "mc_replicates": 8,
+          "mc_sd": 0.04499244826469803,
+          "mc_min": 0.3573769620278324,
+          "mc_max": 0.5016426875133264,
+          "mc_sign_agreement_with_observed": 1.0,
+          "observed_effect": 0.43025882186215575,
+          "observed_donor_bootstrap_ci95": [
+            0.13693323673851543,
+            0.7263795605739524
+          ],
+          "observed_bootstrap_valid_draws": 1989
+        },
+        "CLEC5A_pooled": {
+          "model_effect": 0.39237947194920997,
+          "mc_replicates": 8,
+          "mc_sd": 0.03904837094449105,
+          "mc_min": 0.31131072997385145,
+          "mc_max": 0.42497681220074335,
+          "mc_sign_agreement_with_observed": 1.0,
+          "observed_effect": 0.40215979289540293,
+          "observed_donor_bootstrap_ci95": [
+            0.15314723321029147,
+            0.656655467046582
+          ],
+          "observed_bootstrap_valid_draws": 2000
+        },
+        "CLEC5A_observed_stage_profile": [
+          0.279616861560152,
+          1.0349927527312832,
+          0.6880878444400281,
+          0.6772435760446969
+        ],
+        "CLEC5A_observed_peak": "Low",
+        "within_agreement_all_panel_genes": {
+          "genes": 2000,
+          "descriptive_spearman": 0.14059420714855178,
+          "direction_agreement": 0.545,
+          "model_to_real_effect_L2_ratio": 0.9491829640795643
+        },
+        "within_agreement_shared_genes": {
+          "genes": 1613,
+          "descriptive_spearman": 0.11022723251989495,
+          "direction_agreement": 0.532548047117173,
+          "model_to_real_effect_L2_ratio": 0.9423128319075122
+        },
+        "pooled_agreement_all_panel_genes": {
+          "genes": 2000,
+          "descriptive_spearman": 0.29589968747492185,
+          "direction_agreement": 0.6135,
+          "model_to_real_effect_L2_ratio": 1.0285906765373334
+        },
+        "focus_genes": {
+          "CLEC5A": {
+            "model_effect": 0.4629983262772255,
+            "mc_replicates": 8,
+            "mc_sd": 0.04499244826469803,
+            "mc_min": 0.3573769620278324,
+            "mc_max": 0.5016426875133264,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.43025882186215575,
+            "observed_donor_bootstrap_ci95": [
+              0.13693323673851543,
+              0.7263795605739524
+            ],
+            "observed_bootstrap_valid_draws": 1989
+          },
+          "PPARG": {
+            "model_effect": 0.062425554471876865,
+            "mc_replicates": 8,
+            "mc_sd": 0.041730067823173324,
+            "mc_min": 0.019745795562820856,
+            "mc_max": 0.1260746969469979,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.3623725331947294,
+            "observed_donor_bootstrap_ci95": [
+              0.06111941908461343,
+              0.7060101715112391
+            ],
+            "observed_bootstrap_valid_draws": 1989
+          },
+          "CDKN1A": {
+            "model_effect": -0.34436296596409266,
+            "mc_replicates": 8,
+            "mc_sd": 0.05029442875020917,
+            "mc_min": -0.40702683300670967,
+            "mc_max": -0.27252437591977074,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": -0.36100793702254785,
+            "observed_donor_bootstrap_ci95": [
+              -0.8867852732818685,
+              0.1150309255181419
+            ],
+            "observed_bootstrap_valid_draws": 1989
+          },
+          "SPP1": {
+            "model_effect": -0.07732026077976495,
+            "mc_replicates": 8,
+            "mc_sd": 0.05548019872429179,
+            "mc_min": -0.15344798887465672,
+            "mc_max": 0.011518726319253325,
+            "mc_sign_agreement_with_observed": 0.875,
+            "observed_effect": -0.7157574424626573,
+            "observed_donor_bootstrap_ci95": [
+              -1.7679809774379471,
+              0.2748975526784669
+            ],
+            "observed_bootstrap_valid_draws": 1989
+          },
+          "GPNMB": {
+            "model_effect": 0.3044159508309071,
+            "mc_replicates": 8,
+            "mc_sd": 0.03678161508499178,
+            "mc_min": 0.22156210700950763,
+            "mc_max": 0.33947853735950406,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.2952765204062818,
+            "observed_donor_bootstrap_ci95": [
+              0.030593564525334026,
+              0.543147578017707
+            ],
+            "observed_bootstrap_valid_draws": 1989
+          },
+          "LPL": {
+            "model_effect": 0.061913216345375395,
+            "mc_replicates": 8,
+            "mc_sd": 0.011026624210931138,
+            "mc_min": 0.04371554958281046,
+            "mc_max": 0.07930082045925654,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.15123806561517966,
+            "observed_donor_bootstrap_ci95": [
+              0.055205012927263826,
+              0.2360812940322875
+            ],
+            "observed_bootstrap_valid_draws": 1989
+          },
+          "PLIN2": {
+            "model_effect": 0.13159566288792676,
+            "mc_replicates": 8,
+            "mc_sd": 0.041588324625885936,
+            "mc_min": 0.05956810101039606,
+            "mc_max": 0.17564242903650767,
+            "mc_sign_agreement_with_observed": 1.0,
+            "observed_effect": 0.20669852074633954,
+            "observed_donor_bootstrap_ci95": [
+              0.09561612688511661,
+              0.32860648852636115
+            ],
+            "observed_bootstrap_valid_draws": 1989
+          }
+        }
+      },
+      "fold0_heldout_12_donors": {
+        "estimable": false,
+        "reason": "fewer than 3 eligible donors in Not AD or High for every subtype",
+        "donors_by_stage": [
+          1,
+          2,
+          3,
+          6
+        ],
+        "eligible_donors_by_stage_group": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            6,
+            6
+          ]
+        ]
+      }
+    }
+  },
+  "headline": {
+    "CLEC5A_within_097": {
+      "model": 0.45410841148237047,
+      "observed": 0.48856018775822085
+    },
+    "CLEC5A_within_empf": {
+      "model": 0.49213594053378346,
+      "observed_same_33_donors": 0.47025560203975136,
+      "observed_ci95": [
+        0.20190531052678845,
+        0.7585127531759416
+      ],
+      "mc_sd": 0.041074975210089,
+      "mc_sign_agreement": 1.0
+    },
+    "low_stage_peak_recovered_097": false,
+    "low_stage_peak_recovered_empf": false,
+    "within_spearman_097": 0.5020237240059309,
+    "within_direction_097": 0.659,
+    "within_spearman_empf_same33": 0.22366104191526046,
+    "within_direction_empf_same33": 0.588
+  },
+  "inputs": {
+    "replicates": {
+      "/ml2/alz/runs/research_20261120/query-tool/snapens_rep1.npz": "e68023a82b20476d1b59449372d19e557fbf0c4892a3e2d0eb636057e6925c64",
+      "/ml2/alz/runs/research_20261120/query-tool/snapens_rep2.npz": "c88ed18007d68e79aeb597351d5f012e8ea8d281131bcf1965df0686e04056de",
+      "/ml2/alz/runs/research_20261120/query-tool/snapens_rep3.npz": "54b38b98fe6e7a3f70e7fe526e2e7e4b18eef2edfb037ce31bdaa93e5d79b6e3",
+      "/ml2/alz/runs/research_20261120/query-tool/snapens_rep4.npz": "44e8db98566922bd8e6add4153b935463c3efea42982fdef1b4ffbeb54f1848a",
+      "/ml2/alz/runs/research_20261120/query-tool/snapens_rep5.npz": "503e44416c8bb28ac29b6e74c1282fab043f3f6da9a95691018ba78e45ffa6e6",
+      "/ml2/alz/runs/research_20261120/query-tool/snapens_rep6.npz": "c693efa5d04aa9efd18bead63145e8b238b419b685bcf033f6aff90fb295aed1",
+      "/ml2/alz/runs/research_20261120/query-tool/snapens_rep7.npz": "d72a37b9dbe8b54944c4252167f098f6bc40eae33aa32bbaf93d60026184897a",
+      "/ml2/alz/runs/research_20261120/query-tool/snapens_rep8.npz": "f1707216757a272e7744c51305bd35af217c4e7f589f1fc148aa223df0dbd2a2"
+    },
+    "state097_completion": "26c02c3cdc3cda441e46fc30220e6a01ac0383adc721323801c10a668b3011d3",
+    "cache_manifest": "65d5e2f405ceeeb14ac35f8660bc9c42272ac35c64aeda4f7c3bd9ee21dbd09c"
+  },
+  "source_sha256": "1f7a02c3c6856035c69209b66aacafeb00bbf4a83bfbfd62d455a4caffa0ba75",
+  "common_sha256": "89e4a951ea5ccc08e7110bd1951f394d1658ef0cceb828c5077de3878df74e5d"
+}

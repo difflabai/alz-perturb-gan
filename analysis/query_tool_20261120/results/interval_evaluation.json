@@ -1,0 +1,532 @@
+{
+  "status": "completed_gene_level_interval_evaluation",
+  "protocol": "analysis/query_tool_20261120/PROTOCOL.md",
+  "scope": "one native EMPF fit (fold0/seed0); 12 held-out development donors x 24 bags x 2000 genes; cross-fitted with the coverage pilot halves; reused cohort, no independent coverage guarantee",
+  "replicates": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "model": {
+    "swaps": [
+      {
+        "calibration_donors": [
+          "H21.33.043",
+          "H20.33.013",
+          "H20.33.029",
+          "H21.33.002",
+          "H20.33.043",
+          "H21.33.034"
+        ],
+        "evaluation_donors": [
+          "H20.33.012",
+          "H20.33.008",
+          "H21.33.041",
+          "H20.33.033",
+          "H21.33.027",
+          "H21.33.021"
+        ],
+        "fits": {
+          "mean": {
+            "rank": 6,
+            "n": 6,
+            "median_correction": 0.0
+          },
+          "sd": {
+            "rank": 6,
+            "n": 6,
+            "median_correction": 0.0
+          }
+        }
+      },
+      {
+        "calibration_donors": [
+          "H20.33.012",
+          "H20.33.008",
+          "H21.33.041",
+          "H20.33.033",
+          "H21.33.027",
+          "H21.33.021"
+        ],
+        "evaluation_donors": [
+          "H21.33.043",
+          "H20.33.013",
+          "H20.33.029",
+          "H21.33.002",
+          "H20.33.043",
+          "H21.33.034"
+        ],
+        "fits": {
+          "mean": {
+            "rank": 6,
+            "n": 6,
+            "median_correction": 0.01013048249420693
+          },
+          "sd": {
+            "rank": 6,
+            "n": 6,
+            "median_correction": 0.028873853995274534
+          }
+        }
+      }
+    ],
+    "raw": {
+      "mean": {
+        "coverage": 0.86775,
+        "below": 0.042868055555555555,
+        "above": 0.08938194444444444,
+        "width": 0.381157581733433,
+        "interval_score": 0.5251145473233367
+      },
+      "sd": {
+        "coverage": 0.8702204861111111,
+        "below": 0.04104861111111111,
+        "above": 0.08873090277777777,
+        "width": 0.7405030164054469,
+        "interval_score": 0.9125287120917067
+      },
+      "combined": {
+        "coverage": 0.8689852430555556,
+        "below": 0.041958333333333334,
+        "above": 0.08905642361111112,
+        "width": 0.5608302990694399,
+        "interval_score": 0.7188216297075216
+      }
+    },
+    "sd_calibrated_pilot_rule": {
+      "mean": {
+        "coverage": 0.86775,
+        "below": 0.042868055555555555,
+        "above": 0.08938194444444444,
+        "width": 0.381157581733433,
+        "interval_score": 0.5251145473233367
+      },
+      "sd": {
+        "coverage": 0.912953125,
+        "below": 0.028072916666666666,
+        "above": 0.05897395833333333,
+        "width": 0.8802797057564291,
+        "interval_score": 0.9884197919728136
+      },
+      "combined": {
+        "coverage": 0.8903515625,
+        "below": 0.03547048611111111,
+        "above": 0.07417795138888889,
+        "width": 0.630718643744931,
+        "interval_score": 0.7567671696480752
+      },
+      "useful": false
+    },
+    "mean_and_sd_calibrated": {
+      "mean": {
+        "coverage": 0.9122604166666667,
+        "below": 0.024505208333333334,
+        "above": 0.063234375,
+        "width": 0.5090173207115085,
+        "interval_score": 0.5953790618447058
+      },
+      "sd": {
+        "coverage": 0.912953125,
+        "below": 0.028072916666666666,
+        "above": 0.05897395833333333,
+        "width": 0.8802797057564291,
+        "interval_score": 0.9884197919728136
+      },
+      "combined": {
+        "coverage": 0.9126067708333333,
+        "below": 0.0262890625,
+        "above": 0.06110416666666667,
+        "width": 0.6946485132339688,
+        "interval_score": 0.7918994269087599
+      },
+      "useful": false
+    },
+    "bootstrap_vs_raw": {
+      "sd_calibrated_pilot_rule": {
+        "mean": {
+          "relative_change": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        },
+        "sd": {
+          "relative_change": 0.08316568988514232,
+          "ci95": [
+            0.060581443746196756,
+            0.10653117578391195
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        },
+        "combined": {
+          "relative_change": 0.05278853386199994,
+          "ci95": [
+            0.038649906173349256,
+            0.06725504245576493
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        }
+      },
+      "mean_and_sd_calibrated": {
+        "mean": {
+          "relative_change": 0.13380797557319293,
+          "ci95": [
+            0.11405974183494047,
+            0.15395746759428455
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        },
+        "sd": {
+          "relative_change": 0.08316568988514232,
+          "ci95": [
+            0.060581443746196756,
+            0.10653117578391195
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        },
+        "combined": {
+          "relative_change": 0.10166332533840473,
+          "ci95": [
+            0.08290610917104398,
+            0.12032719085931022
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        }
+      }
+    }
+  },
+  "stage_blind_empirical": {
+    "swaps": [
+      {
+        "calibration_donors": [
+          "H21.33.043",
+          "H20.33.013",
+          "H20.33.029",
+          "H21.33.002",
+          "H20.33.043",
+          "H21.33.034"
+        ],
+        "evaluation_donors": [
+          "H20.33.012",
+          "H20.33.008",
+          "H21.33.041",
+          "H20.33.033",
+          "H21.33.027",
+          "H21.33.021"
+        ],
+        "fits": {
+          "mean": {
+            "rank": 6,
+            "n": 6,
+            "median_correction": 0.0030752168949449363
+          },
+          "sd": {
+            "rank": 6,
+            "n": 6,
+            "median_correction": 0.00657923955636186
+          }
+        }
+      },
+      {
+        "calibration_donors": [
+          "H20.33.012",
+          "H20.33.008",
+          "H21.33.041",
+          "H20.33.033",
+          "H21.33.027",
+          "H21.33.021"
+        ],
+        "evaluation_donors": [
+          "H21.33.043",
+          "H20.33.013",
+          "H20.33.029",
+          "H21.33.002",
+          "H20.33.043",
+          "H21.33.034"
+        ],
+        "fits": {
+          "mean": {
+            "rank": 6,
+            "n": 6,
+            "median_correction": 0.014330502852613503
+          },
+          "sd": {
+            "rank": 6,
+            "n": 6,
+            "median_correction": 0.05477257480284414
+          }
+        }
+      }
+    ],
+    "raw": {
+      "mean": {
+        "coverage": 0.8476076388888889,
+        "below": 0.06002604166666667,
+        "above": 0.09236631944444444,
+        "width": 0.37880384068125067,
+        "interval_score": 0.5022976215698945
+      },
+      "sd": {
+        "coverage": 0.8447204861111111,
+        "below": 0.057345486111111114,
+        "above": 0.09793402777777778,
+        "width": 0.6702985861987788,
+        "interval_score": 0.863920951669828
+      },
+      "combined": {
+        "coverage": 0.8461640625,
+        "below": 0.05868576388888889,
+        "above": 0.09515017361111111,
+        "width": 0.5245512134400147,
+        "interval_score": 0.6831092866198606
+      }
+    },
+    "sd_calibrated_pilot_rule": {
+      "mean": {
+        "coverage": 0.8476076388888889,
+        "below": 0.06002604166666667,
+        "above": 0.09236631944444444,
+        "width": 0.37880384068125067,
+        "interval_score": 0.5022976215698945
+      },
+      "sd": {
+        "coverage": 0.9053819444444444,
+        "below": 0.03588541666666667,
+        "above": 0.05873263888888889,
+        "width": 0.835676216524977,
+        "interval_score": 0.9495474240778625
+      },
+      "combined": {
+        "coverage": 0.8764947916666667,
+        "below": 0.04795572916666667,
+        "above": 0.07554947916666667,
+        "width": 0.6072400286031139,
+        "interval_score": 0.7259225228238787
+      },
+      "useful": false
+    },
+    "mean_and_sd_calibrated": {
+      "mean": {
+        "coverage": 0.9056302083333333,
+        "below": 0.03287673611111111,
+        "above": 0.06149305555555556,
+        "width": 0.4961834298064882,
+        "interval_score": 0.5712603595321735
+      },
+      "sd": {
+        "coverage": 0.9053819444444444,
+        "below": 0.03588541666666667,
+        "above": 0.05873263888888889,
+        "width": 0.835676216524977,
+        "interval_score": 0.9495474240778625
+      },
+      "combined": {
+        "coverage": 0.9055060763888889,
+        "below": 0.03438107638888889,
+        "above": 0.060112847222222224,
+        "width": 0.6659298231657326,
+        "interval_score": 0.7604038918050177
+      },
+      "useful": false
+    },
+    "bootstrap_vs_raw": {
+      "sd_calibrated_pilot_rule": {
+        "mean": {
+          "relative_change": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        },
+        "sd": {
+          "relative_change": 0.0991137814663854,
+          "ci95": [
+            0.0666600012390598,
+            0.1299016205011678
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        },
+        "combined": {
+          "relative_change": 0.0626740655450089,
+          "ci95": [
+            0.042423177264260294,
+            0.08151358469286327
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        }
+      },
+      "mean_and_sd_calibrated": {
+        "mean": {
+          "relative_change": 0.13729457397536773,
+          "ci95": [
+            0.10866509307111527,
+            0.16588986446510803
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        },
+        "sd": {
+          "relative_change": 0.0991137814663854,
+          "ci95": [
+            0.0666600012390598,
+            0.1299016205011678
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        },
+        "combined": {
+          "relative_change": 0.11315115560443276,
+          "ci95": [
+            0.08586604816534055,
+            0.13905537407797772
+          ],
+          "donors_improved": 0,
+          "donors": 12
+        }
+      }
+    }
+  },
+  "model_minus_empirical_interval_score": {
+    "raw": {
+      "mean": {
+        "relative_difference": 0.04542511207225996,
+        "ci95": [
+          0.019456306022727462,
+          0.07120250036702301
+        ],
+        "donors_model_better": 2
+      },
+      "sd": {
+        "relative_difference": 0.056264129638166314,
+        "ci95": [
+          0.03468633521040604,
+          0.07864937334509063
+        ],
+        "donors_model_better": 1
+      },
+      "combined": {
+        "relative_difference": 0.05227910641410135,
+        "ci95": [
+          0.032705544561067015,
+          0.07238121963916254
+        ],
+        "donors_model_better": 1
+      }
+    },
+    "sd_calibrated_pilot_rule": {
+      "mean": {
+        "relative_difference": 0.04542511207225996,
+        "ci95": [
+          0.019456306022727462,
+          0.07120250036702301
+        ],
+        "donors_model_better": 2
+      },
+      "sd": {
+        "relative_difference": 0.040937784579534474,
+        "ci95": [
+          0.02683622558917625,
+          0.05534539293729774
+        ],
+        "donors_model_better": 0
+      },
+      "combined": {
+        "relative_difference": 0.042490273898940695,
+        "ci95": [
+          0.02932914577494932,
+          0.05573282204345437
+        ],
+        "donors_model_better": 0
+      }
+    },
+    "mean_and_sd_calibrated": {
+      "mean": {
+        "relative_difference": 0.042220157429239305,
+        "ci95": [
+          0.029509901555399082,
+          0.05439218843815848
+        ],
+        "donors_model_better": 0
+      },
+      "sd": {
+        "relative_difference": 0.040937784579534474,
+        "ci95": [
+          0.02683622558917625,
+          0.05534539293729774
+        ],
+        "donors_model_better": 0
+      },
+      "combined": {
+        "relative_difference": 0.04141948172960923,
+        "ci95": [
+          0.029931834880625802,
+          0.05271033065046072
+        ],
+        "donors_model_better": 0
+      }
+    }
+  },
+  "deployed_correction": {
+    "rank": 11,
+    "n": 12,
+    "median_mean_correction": 0.0,
+    "median_sd_correction": 0.0
+  },
+  "gene_flags": {
+    "poorly_fit": 201,
+    "pc_blind_spot": 398,
+    "low_expression": 63,
+    "rmse_cut": 0.3177274775639286,
+    "model_rmse_median": 0.07710410844155721,
+    "empirical_rmse_median": 0.07623604655567975,
+    "genes_model_rmse_below_empirical": 817,
+    "PPARG": {
+      "outside_share_by_stage": [
+        -0.009709997160307668,
+        0.11866404269176097,
+        -0.9776308033905662,
+        0.18268278905998742
+      ],
+      "gap_by_stage": [
+        -0.09511722071723999,
+        0.08461275512816051,
+        -0.03508743755370073,
+        0.031106806429817727
+      ],
+      "pc_captured": 0.04333713057057319,
+      "heldout_rmse": 0.4434054943138641,
+      "empirical_rmse": 0.4253720176439068,
+      "flag_pc_blind_spot": false,
+      "flag_poorly_fit": true
+    }
+  },
+  "bundle": "/ml2/alz/runs/research_20261120/query-tool/bundle_fold0_seed0.npz",
+  "bundle_sha256": "12d0cdb682cb1dc33b5b6139391abd520911deb48a9b6e6f0b925fdb4b939eb8",
+  "inputs": {
+    "/ml2/alz/runs/research_20261120/query-tool/rep1.npz": "b7ba82761f53d937435fdb9afa3ddb67416a61a870d1882d49cb0a8641b3d213",
+    "/ml2/alz/runs/research_20261120/query-tool/rep2.npz": "421d9b413945397502575faf72db37a1dcdc14ef8d8c400c430af3118cf01b59",
+    "/ml2/alz/runs/research_20261120/query-tool/rep3.npz": "73fbd3602c91009b20fa5db2d14f0eb49e375d164f3e17eced6d4321991f96cf",
+    "/ml2/alz/runs/research_20261120/query-tool/rep4.npz": "b0ad9e1e224202308194da3747e7d76c153c2b6eecd635cf1fb6979420cab3b1",
+    "/ml2/alz/runs/research_20261120/query-tool/rep5.npz": "018cf0a8b8e74620dcfcb85c4f1d659bbc6a7b86b9ea06b076ac5c63f2621825",
+    "/ml2/alz/runs/research_20261120/query-tool/rep6.npz": "21f5cb02c89c03361d8925105ad7983d360e93822b417df51e4e50204bb19040",
+    "/ml2/alz/runs/research_20261120/query-tool/rep7.npz": "339f635325f54c80d8ab770393335ef488df9fd147aaf1594b495082ecace377",
+    "/ml2/alz/runs/research_20261120/query-tool/rep8.npz": "be53b77ef732a486893131c06fcd536e86e532cb94b734adcc51371dbde59998"
+  },
+  "source_sha256": "3b1963aa97d2ecb7f92507bec6745a46890624435547fbe7888e85f5c83cd0e8"
+}
