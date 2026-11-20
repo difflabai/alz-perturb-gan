@@ -330,8 +330,8 @@
     "analysis/particlegan_upgrade_20261117/completion/lazy_regularizer_audit.json": "9e6db52b9414bb0a87ddf4a751fd38e1f3f84f9a0063bd973d78335ff4ac0379",
     "analysis/particlegan_upgrade_20261117/prelaunch.json": "5697092af84c7a6c82003ac04e38de143755b83af236eec07c0e759fd4016ab1",
     "analysis/particlegan_upgrade_20261117/verification/verification_0.10.0.json": "38b85e4b3ce1129077cf6443634d966fefd65974d394db103ad0a3dba52fef5f",
-    "scripts/microglia.py": "b1c6b4bd2e34bddb19350ae48285435dbee41c690d0e5e3775b340cb0a11fc25",
-    "scripts/microglia_runtime.py": "4b0d7024b20b7d9d83151ace7de076a66e68b79c5f1cf7e72dcd50468546e9da",
+    "scripts/microglia.py": "de52f191522babe2f627bfac4903a79782573cc32701db3ed7ace952a5d15af0",
+    "scripts/microglia_runtime.py": "052d5126cf832baeb696e7da63d8c94265997bac8172019241b3b63a40be50a2",
     "configs/microglia_default.json": "ab6434b002bdefc2022573eea3c4118a46e41fd90fb52ad4d1f8c0ea4ec4108a",
     "analysis/default_empf_20261117/selected_model.json": "79f43ae7186a5c244234e0340c8caa413a14ae6a047e8825dd3caa96928457ca",
     "analysis/default_empf_20261117/selection.json": "c4e6a2cbe31f14ef7614c7fa4ef23d6b5f531e06ad0307e976bee7e067dcdf5b",
@@ -349,17 +349,14 @@
     "sha256": "40d6102e77fa6a4ece2c64cd431db3d907449d7bd69335cb597370d5f860b80e"
   },
   "previous_runtime_manifest": {
-    "archive": "analysis/default_empf_20261117/previous/runtime_source_manifest.20261120T075956Z-a83d3f5a9035.json",
-    "sha256": "a83d3f5a9035d950bae47b0bbcb44d62a7221ad1aebc47374a7bd797628da300",
-    "reason": "generation output promotion state (<stem>.state.json: NONE/STAGING/STAGED/PROMOTING/COMMITTED/INCONSISTENT/ORPHAN_RECEIPT/UNRECEIPTED_NPZ, output lock, run-specific pending names, roll-forward/roll-back on open), shared source-epoch lease held by every runtime process, STRANDED -audit_under_epoch-> AUDITED with printed worktree recovery, documented exit codes (0/2/3/4/75), explicit-fit output namespaces and --fit-source required when selected and trained fits both exist: microglia_runtime.py, microglia.py and vendored_host.py (derived generate.py refuses to overwrite with mode=None) changed; microglia.py --dry-run loads scripts/check_review_records.py, which is added",
-    "refrozen_utc": "20261120T075956Z",
+    "archive": "analysis/default_empf_20261117/previous/runtime_source_manifest.20261120T083207Z-71ca01085bb7.json",
+    "sha256": "71ca01085bb7646ea64413b695f93509699489fd99142daae405446db46159c2",
+    "reason": "adversarial review fixes for output promotion and the source-epoch lease: CLI recovery of interrupted outputs, foreign-pair observation, damaged-state readopt, pending-path confinement, temp sweeping, library lease, intent gate, read-only epoch dir",
+    "refrozen_utc": "20261120T083207Z",
     "changed": [
-      "analysis/default_empf_20261117/vendored_host.py",
       "scripts/microglia.py",
       "scripts/microglia_runtime.py"
     ],
-    "added": [
-      "scripts/check_review_records.py"
-    ]
+    "added": []
   }
 }

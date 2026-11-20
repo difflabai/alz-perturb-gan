@@ -14,12 +14,18 @@ worktree. --artifact-root names another checkout to read those missing files
 from; a file read that way must keep its pinned digest, so this path can only
 confirm artifacts, never re-pin them.
 
-Source-epoch lease: every scripts/microglia_runtime.py process holds a shared
-lock on runs/.source-epoch/lease of its checkout for its lifetime and records
-itself under runs/.source-epoch/holders/. A re-pin takes that lock exclusively
-and without waiting; while a runtime process holds it the re-pin refuses and
-lists the live holders (pid, command, digest, fit). --wait blocks until they
-have finished instead. The previous manifest is archived as
+Source-epoch lease: every scripts/microglia_runtime.py process (and every
+in-process consumer from its first check_sources()/activate()) holds a shared
+lock on the source-epoch lease for its lifetime and records itself under
+holders/. The lease directory is --epoch-dir, else $MICROGLIA_EPOCH_DIR, else
+runs/.source-epoch of this checkout -- the same rule the runtime uses, so both
+always lock the same file; a --manifest outside this checkout needs an explicit
+--epoch-dir. A re-pin takes that lock exclusively and without waiting; while a
+runtime process holds it the re-pin refuses and lists the live holders (pid,
+command, digest, fit). --wait blocks until they have finished instead; while it
+waits it holds the intent gate (gate.lock) exclusively, so runtimes that start
+meanwhile queue behind it (and exit 75 after MICROGLIA_EPOCH_WAIT_S) instead
+of starving it. The previous manifest is archived as
 previous/runtime_source_manifest.<UTC>-<sha12 of its bytes>.json, so two re-pins
 within one second never collide; older <UTC>.json archives stay readable.
 
@@ -32,6 +38,7 @@ import argparse
 import datetime
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -42,6 +49,7 @@ from alz_perturb_gan import durable_state as ds  # noqa: E402
 
 MANIFEST = ROOT / 'analysis/default_empf_20261117/runtime_source_manifest.json'
 EX_BUSY = 75
+EPOCH_DIR_ENV = 'MICROGLIA_EPOCH_DIR'
 
 
 class EpochBusy(RuntimeError):
@@ -56,8 +64,12 @@ class EpochBusy(RuntimeError):
                          f'refusing to re-pin while they use the pinned sources (rerun with --wait to block): {listed}')
 
 
-def epoch_dir_of(root):
-    return Path(root) / 'runs/.source-epoch'
+def epoch_dir(root=ROOT):
+    """$MICROGLIA_EPOCH_DIR, else <root>/runs/.source-epoch: microglia_runtime.epoch_dir resolves it the same way."""
+    return Path(os.environ.get(EPOCH_DIR_ENV) or Path(root) / 'runs/.source-epoch')
+
+
+epoch_dir_of = epoch_dir  # earlier name; also used where a parameter shadows epoch_dir
 
 
 def live_holders(directory):
@@ -82,11 +94,21 @@ def exclusive_epoch(directory, wait=False):
     """
     directory = Path(directory)
     (directory / 'holders').mkdir(parents=True, exist_ok=True)
-    lock = ds.FileLock(directory / 'lease', exclusive=True, blocking=wait, purpose='refreeze runtime manifest')
+    # The intent gate first: runtimes pass it shared before taking the lease, so while this (possibly waiting)
+    # refreeze holds it no new runtime can join the shared holders, and the existing ones drain.
+    gate = ds.FileLock(directory / 'gate', exclusive=True, blocking=wait, purpose='refreeze runtime manifest (intent)')
     try:
-        lock.acquire()
+        gate.acquire()
     except ds.Busy:
         raise EpochBusy(directory, live_holders(directory)) from None
+    try:
+        lock = ds.FileLock(directory / 'lease', exclusive=True, blocking=wait, purpose='refreeze runtime manifest')
+        try:
+            lock.acquire()
+        except ds.Busy:
+            raise EpochBusy(directory, live_holders(directory)) from None
+    finally:
+        gate.release()  # new runtimes now block on the lease itself until this refreeze releases it
     for path in (directory / 'holders').glob('*.json'):
         path.unlink(missing_ok=True)
     return lock
@@ -232,7 +254,9 @@ def main(argv=None):
     p.add_argument('--manifest', type=Path, default=MANIFEST)
     p.add_argument('--wait', action='store_true',
                    help='block until no runtime process holds the source-epoch lease (default: refuse and list them)')
-    p.add_argument('--epoch-dir', type=Path, help='source-epoch lease directory (default: runs/.source-epoch)')
+    p.add_argument('--epoch-dir', type=Path,
+                   help=f'source-epoch lease directory (default: ${EPOCH_DIR_ENV}, else runs/.source-epoch of this '
+                        'checkout; required with a --manifest outside this checkout)')
     args = p.parse_args(argv)
     artifact_root = args.artifact_root.resolve() if args.artifact_root else None
     if args.check:
@@ -249,6 +273,10 @@ def main(argv=None):
         return 0 if len(ok) == total and entry_ok else 1
     if not args.reason:
         p.error('--reason is required to re-pin the manifest')
+    if args.epoch_dir is None and not args.manifest.resolve().is_relative_to(ROOT.resolve()):
+        p.error(f'--manifest {args.manifest} is outside this checkout ({ROOT}); pass --epoch-dir naming the '
+                'source-epoch lease directory of the runtimes that use it')
+    lease_dir = args.epoch_dir if args.epoch_dir is not None else epoch_dir(ROOT)
     relocate = []
     for item in args.relocate:
         old, sep, new = item.partition('=')
@@ -257,7 +285,7 @@ def main(argv=None):
         relocate.append((old, new))
     try:
         result = refreeze(args.manifest, ROOT, args.reason, args.add, artifact_root, relocate=relocate,
-                          epoch_dir=args.epoch_dir, wait=args.wait)
+                          epoch_dir=lease_dir, wait=args.wait)
     except EpochBusy as busy:
         print(f'refreeze: {busy}', file=sys.stderr)
         return EX_BUSY

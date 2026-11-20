@@ -4,7 +4,10 @@ import os
 os.environ.update(OMP_NUM_THREADS='3', OPENBLAS_NUM_THREADS='3', MKL_NUM_THREADS='3',
                   CUBLAS_WORKSPACE_CONFIG=':4096:8', PYTHONDONTWRITEBYTECODE='1')
 import argparse
+import atexit
+import contextlib
 import datetime
+import errno
 import enum
 import fcntl
 import hashlib
@@ -44,6 +47,9 @@ def sha(path):
 
 
 def check_sources():
+    # In-process consumers (e.g. a scorer that imports this module) read the pinned sources too: they hold
+    # the shared source-epoch lease from here until exit, so a refreeze cannot land under them.
+    hold_source_epoch()
     manifest = json.loads(SOURCE_MANIFEST.read_text())
     for name, digest in manifest['sources'].items():
         path = Path(name) if Path(name).is_absolute() else ROOT / name
@@ -207,6 +213,7 @@ def activate_host(host=None, lock=None):
 
 
 def activate(device, memory):
+    hold_source_epoch()  # library callers (score.py) activate without main(): take the lease here
     if device == 'cpu':
         os.environ['CUDA_VISIBLE_DEVICES'] = ''
     elif not os.environ.get('CUDA_VISIBLE_DEVICES'):
@@ -845,8 +852,11 @@ OUT_TRANSITIONS={
     (Out.STAGED,'begin_promote'):Out.PROMOTING,
     (Out.PROMOTING,'commit'):Out.COMMITTED,
     (Out.PROMOTING,'lost'):Out.INCONSISTENT,  # pending files gone and the finals do not match (outside interference)
-    # files changed outside the runtime: the recorded stable state follows what is on disk
-    **{(a,'observed_'+b.value):b for a in _OUT_STABLE for b in _OUT_STABLE if a is not b or a is Out.COMMITTED},
+    # files changed outside the runtime: the recorded stable state follows what is on disk, except that a
+    # consistent pair this machine did not commit is observed as INCONSISTENT (only --force replaces it);
+    # COMMITTED and INCONSISTENT self-loops record new shas
+    **{(a,'observed_'+b.value):b for a in _OUT_STABLE for b in _OUT_STABLE
+       if a is not b or a in (Out.COMMITTED,Out.INCONSISTENT)},
 }
 OUT_MACHINE=ds.Machine('microglia_output',Out,Out.NONE,(),OUT_TRANSITIONS,
                        adopt_entries=(Out.COMMITTED,Out.INCONSISTENT,Out.ORPHAN_RECEIPT,Out.UNRECEIPTED_NPZ))
@@ -889,9 +899,11 @@ def _pending_names(out):
 
 
 def _read_receipt(path):
-    try:return json.loads(Path(path).read_text())
+    """The receipt as a dict; None when absent; {} when unreadable or not a JSON object (a list, string...)."""
+    try:doc=json.loads(Path(path).read_text())
     except FileNotFoundError:return None
     except (OSError,ValueError):return {}
+    return doc if isinstance(doc,dict) else {}
 
 
 def infer_output(out):
@@ -910,25 +922,49 @@ def infer_output(out):
     return Out.NONE,evidence
 
 
+def observe_files(out,recorded=None,data=None):
+    """(Out, evidence): the stable state a recorded state `recorded` must follow, from the files. Read-only.
+
+    Like infer_output, except that a consistent pair this machine did not commit (recorded is not COMMITTED,
+    or COMMITTED with other shas: a receipt edited in place, a pair copied in) is INCONSISTENT, so a routine
+    run can never turn bytes the runtime never produced into COMMITTED. recorded=None is legacy adoption.
+    """
+    observed,evidence=infer_output(out)
+    if observed is Out.COMMITTED and recorded is not None:
+        data=data if isinstance(data,dict) else {}
+        if not (recorded is Out.COMMITTED and (data.get('npz_sha'),data.get('receipt_sha'))==
+                (evidence.get('npz_sha'),evidence.get('receipt_sha'))):
+            return Out.INCONSISTENT,{**evidence,'foreign_pair':True}
+    return observed,evidence
+
+
+def _journal_ahead(state_path,version):
+    """True when <state>.journal.jsonl records a seq beyond `version` (the runtime refuses that file)."""
+    return ds.replay_journal(str(state_path)+ds.JOURNAL_SUFFIX)[1]>version
+
+
 def is_committed(out):
     """score.py-compatible check that out.npz is a complete, receipted generation output. Read-only.
 
-    With <stem>.state.json the state must be COMMITTED and both files must still have the recorded shas;
-    a legacy output without a state file is valid only when its receipt's generated_SHA256 == sha(out.npz).
+    With <stem>.state.json it must be a valid microglia_output state file (schema, machine, version, journal
+    not ahead) recording COMMITTED, and both files must still have the recorded shas; a legacy output
+    without a state file (and without an orphaned journal) is valid only when its receipt's
+    generated_SHA256 == sha(out.npz). Any parse or type error reads as False, never as an exception.
     """
     out=Path(out);receipt=receipt_path(out);state=output_state_path(out)
     try:
         if state.exists():
-            doc=json.loads(state.read_text())
-            data=doc.get('data') or {}
-            if doc.get('state')!='COMMITTED':
+            snap=ds.StateFile(state,OUT_MACHINE,recover=False).read()
+            if snap is None or snap.state is not Out.COMMITTED or _journal_ahead(state,snap.version):
                 return False
             if not (out.exists() and receipt.exists()):
                 return False
-            if sha(out)!=data.get('npz_sha') or sha(receipt)!=data.get('receipt_sha'):
+            if sha(out)!=snap.data.get('npz_sha') or sha(receipt)!=snap.data.get('receipt_sha'):
                 return False
+        elif Path(str(state)+ds.JOURNAL_SUFFIX).exists():
+            return False  # a journal without its state file is damaged, not legacy (generate --readopt)
         return infer_output(out)[0] is Out.COMMITTED
-    except (OSError,ValueError):
+    except (OSError,ValueError,TypeError,AttributeError,KeyError,ds.DurableStateError):
         return False
 
 
@@ -951,12 +987,13 @@ def _committed_shas(evidence):
 
 def _observe(sf,out,snap):
     """Bring a stable recorded state level with the files on disk (journaled as observed_<state>)."""
-    observed,evidence=infer_output(out)
+    observed,evidence=observe_files(out,snap.state,snap.data)
     data=snap.data
-    if observed is snap.state and (observed is not Out.COMMITTED or (
+    if observed is snap.state and (observed not in (Out.COMMITTED,Out.INCONSISTENT) or (
             data.get('npz_sha'),data.get('receipt_sha'))==(evidence.get('npz_sha'),evidence.get('receipt_sha'))):
         return snap
-    print(f'microglia runtime: output {out} recorded {snap.state.name} but its files are {observed.name}; '
+    foreign=' (a consistent pair this runtime did not commit; --force replaces it)' if evidence.get('foreign_pair') else ''
+    print(f'microglia runtime: output {out} recorded {snap.state.name} but its files are {observed.name}{foreign}; '
           f'journaled as observed_{observed.value}',file=sys.stderr,flush=True)
     return sf.transition('observed_'+observed.value,expect_version=snap.version,
                          update=lambda d:{**d,**_committed_shas(evidence),'observed':evidence,'pending':None})
@@ -969,8 +1006,16 @@ def _promote(sf,out,snap):
     moved, never deleted, until the commit is written; a pending file that no longer has its recorded
     sha, or finals that match neither the pending files nor the recorded shas, are journaled as 'lost'.
     """
-    data=snap.data;pending=data['pending']
-    npz,receipt=out.parent/pending['npz'],out.parent/pending['receipt']
+    data=snap.data;pending=data.get('pending');run_id=data.get('run_id')
+    # Only this run's own staging names in this directory: never a path from elsewhere (absolute, '..').
+    expected=(tuple(p.name for p in run_pending(out,run_id))
+              if isinstance(run_id,str) and _RUN_ID.fullmatch(run_id) else None)
+    if not isinstance(pending,dict) or expected is None or (pending.get('npz'),pending.get('receipt'))!=expected \
+            or not all(isinstance(data.get(k),str) for k in ('npz_sha','receipt_sha')):
+        return sf.transition('lost',expect_version=snap.version,
+                             update=_noted('lost',reason='the PROMOTING record does not name this run\'s own staging '
+                                                         f'files and shas (pending {pending!r}, run {run_id!r})'))
+    npz,receipt=out.parent/expected[0],out.parent/expected[1]
     final_receipt=receipt_path(out)
     for source,target,key,fault in ((npz,out,'npz_sha','out_after_npz_replace'),
                                     (receipt,final_receipt,'receipt_sha','out_after_receipt_replace')):
@@ -994,12 +1039,25 @@ def _promote(sf,out,snap):
 
 
 def _abort(sf,out,snap,reason):
-    """STAGING/STAGED -> the state the run started from; its pending files are unlinked first."""
-    _drop(_run_sidecars(out,snap.data.get('run_id','')))
-    previous=Out[(snap.data.get('previous') or {}).get('state','NONE')]
-    return sf.transition('abort_to_'+previous.value,expect_version=snap.version,
-                         update=lambda d:{**_noted('abort',reason=reason)(d),'pending':None,
-                                          **{k:(d.get('previous') or {}).get(k) for k in ('npz_sha','receipt_sha')}})
+    """STAGING/STAGED -> the state the run started from; its pending files are unlinked first.
+
+    A previous record that is missing, unknown or not a stable state cannot be trusted: the run then
+    returns to the state its files support (a consistent pair as INCONSISTENT, since its origin is unknown).
+    """
+    run_id=snap.data.get('run_id')
+    if isinstance(run_id,str) and _RUN_ID.fullmatch(run_id):
+        _drop(_run_sidecars(out,run_id))
+    previous=snap.data.get('previous')
+    previous=previous if isinstance(previous,dict) else {}
+    target=Out.__members__.get(previous.get('state')) if isinstance(previous.get('state'),str) else None
+    if target in _OUT_STABLE:
+        shas={k:previous.get(k) for k in ('npz_sha','receipt_sha')}
+    else:
+        target,evidence=observe_files(out,Out.NONE)
+        shas=_committed_shas(evidence)
+        reason+=f'; previous state {previous.get("state")!r} is not a stable state, so the files decide'
+    return sf.transition('abort_to_'+target.value,expect_version=snap.version,
+                         update=lambda d:{**_noted('abort',reason=reason)(d),'pending':None,**shas})
 
 
 def sweep_output(out):
@@ -1019,11 +1077,75 @@ def sweep_output(out):
         print(f'microglia runtime: removed staging files of dead runs beside {out}: {removed}',flush=True)
     if kept:
         print(f'microglia runtime: kept young legacy (#19) staging files beside {out}: {kept}',file=sys.stderr,flush=True)
+    temps=sweep_output_temps(out)
+    if temps:
+        print(f'microglia runtime: removed temp files of dead writers beside {out}: {temps}',flush=True)
     return removed,kept
 
 
-def open_output(out):
-    """Under the output lock: adopt (read-only for the files), roll forward or back, observe, sweep."""
+def sweep_output_temps(out):
+    """Remove durable_state temps (.<target>.<rand>.<pid>.tmp) of this output whose writer is dead.
+
+    Targets: <stem>.state.json, its and <out>'s lock-owner records, and this output's run staging files.
+    A temp whose writer pid is alive (this process included) is kept.
+    """
+    out=Path(out)
+    state=output_state_path(out).name
+    targets={state,state+ds.OWNER_SUFFIX,out.name+ds.OWNER_SUFFIX}
+    run=re.compile(rf'\.{re.escape(out.stem)}\.{_RUN_ID.pattern}\.pending[.]')
+    removed=[]
+    if not out.parent.is_dir():
+        return removed
+    for entry in os.scandir(out.parent):
+        own=ds._own_temp(entry.name)
+        if own is None or not (own[0] in targets or run.match(own[0])):
+            continue
+        try:mtime=entry.stat(follow_symlinks=False).st_mtime
+        except FileNotFoundError:continue
+        if ds._writer_alive(own[1],mtime):
+            continue
+        Path(entry.path).unlink(missing_ok=True);removed.append(entry.name)
+    return sorted(removed)
+
+
+class OutputDamaged(ValueError):
+    """<stem>.state.json (or its journal) cannot be used; `generate --readopt` archives both and adopts again."""
+
+
+def readopt_output(out):
+    """Under the output lock: archive <stem>.state.json and its journal beside the output, so the next open
+    adopts the output again from its files (legacy rules: a receipt naming the NPZ's sha is COMMITTED)."""
+    out=Path(out)
+    stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    state=output_state_path(out)
+    archived={}
+    for path in (state,Path(str(state)+ds.JOURNAL_SUFFIX)):
+        if path.exists():
+            target=path.with_name(f'{path.name}.superseded.{stamp}')
+            os.replace(path,target)
+            archived[path.name]=target.name
+    if out.parent.is_dir():
+        ds._fsync_dir(str(out.parent))
+    print(f'microglia runtime: --readopt archived {archived or "nothing"} beside {out}',flush=True)
+    return archived
+
+
+def open_output(out,readopt=False):
+    """Under the output lock: adopt (read-only for the files), roll forward or back, observe, sweep.
+
+    An unusable state file (bad schema/machine/version/state, a journal ahead of it or without it) raises
+    OutputDamaged; readopt=True archives it first and adopts the output again from its files.
+    """
+    if readopt:
+        readopt_output(out)
+    try:
+        return _open_output(out)
+    except (ds.CorruptState,ds.InvalidMachine) as exc:
+        raise OutputDamaged(f'{exc}; inspect {output_state_path(out).name} and its journal, then rerun generate with '
+                            '--readopt to archive them and adopt the output again from its files') from None
+
+
+def _open_output(out):
     sf=output_state_file(out)
     inferred,evidence=infer_output(out)  # under the output lock, so the files cannot change in between
     snap=sf.adopt(lambda _dir:(inferred,evidence),data={'pending':None,**_committed_shas(evidence)})
@@ -1086,37 +1208,92 @@ def output_failed(sf,out,run_id,exc):
 # Every runtime process holds a shared FileLock on <epoch dir>/lease for its lifetime and records itself in
 # holders/. scripts/refreeze_runtime_manifest.py takes the exclusive lock, so a refreeze never lands while
 # a runtime process is using the pinned sources; it refuses and lists the live holders (or --wait).
+# <epoch dir>/gate is the intent gate: a runtime passes it (shared, briefly) before taking the lease, and a
+# refreeze holds it exclusively while it waits for the lease, so new runtimes queue behind a pending
+# refreeze instead of starving it (flock gives a waiting exclusive locker no preference).
+# In-process consumers that import this module (score.py) take the lease through check_sources()/activate()
+# (held until exit), or explicitly with `with source_epoch_lease(cmd):`.
 
 EPOCH_DIR_ENV='MICROGLIA_EPOCH_DIR'
 EPOCH_WAIT_ENV='MICROGLIA_EPOCH_WAIT_S'
+_READ_ONLY_ERRNOS=(errno.EACCES,errno.EPERM,errno.EROFS)
 
 
-def epoch_dir():
-    return Path(os.environ.get(EPOCH_DIR_ENV) or ROOT/'runs/.source-epoch')
+def epoch_dir(root=None):
+    """The source-epoch lease directory: $MICROGLIA_EPOCH_DIR, else <checkout>/runs/.source-epoch.
+
+    scripts/refreeze_runtime_manifest.epoch_dir resolves it the same way (tests/test_microglia_epoch_lease.py
+    checks that both agree), so a refreeze always locks the directory the runtimes hold.
+    """
+    return Path(os.environ.get(EPOCH_DIR_ENV) or Path(ROOT if root is None else root)/'runs/.source-epoch')
 
 
 class EpochLease:
-    """The shared source-epoch lease of one runtime process (created lazily; absence means no holders)."""
+    """The shared source-epoch lease of one runtime process (created lazily; absence means no holders).
 
-    def __init__(self,cmd,directory=None,timeout=None):
+    optional=True (read-only commands such as train --dry-run): when the epoch directory cannot be written
+    and has no lease file yet, warn and continue without a lease. A directory that cannot be written but has
+    a lease file is locked read-only (shared flock) without a holder record.
+    """
+
+    def __init__(self,cmd,directory=None,timeout=None,optional=False):
         self.directory=Path(directory) if directory is not None else epoch_dir()
         self.cmd=cmd
         self.timeout=float(os.environ.get(EPOCH_WAIT_ENV,'60')) if timeout is None else timeout
+        self.optional=optional
         self.lock=None
         self.record=None
+        self.degraded=None
         self.info={}
 
+    @property
+    def held(self):
+        return self.lock is not None or self.degraded=='no lease'
+
     def acquire(self):
-        (self.directory/'holders').mkdir(parents=True,exist_ok=True)
-        self.lock=ds.FileLock(self.directory/'lease',exclusive=False,timeout=self.timeout)
-        self.lock.acquire()
-        pid=os.getpid()
-        self.record=self.directory/'holders'/f'{pid}-{ds.pid_starttime(pid)}-{secrets.token_hex(4)}.json'
+        writable=True
+        try:
+            (self.directory/'holders').mkdir(parents=True,exist_ok=True)
+            if not os.access(self.directory/'holders',os.W_OK|os.X_OK):
+                raise PermissionError(errno.EACCES,os.strerror(errno.EACCES),str(self.directory/'holders'))
+        except OSError as exc:
+            if exc.errno not in _READ_ONLY_ERRNOS:raise
+            writable=False
+            if not (self.directory/('lease'+ds.LOCK_SUFFIX)).exists():
+                if self.optional:
+                    self.degraded='no lease'
+                    print(f'microglia runtime: cannot create the source-epoch lease in {self.directory} '
+                          f'({exc.strerror}); continuing without it (read-only command)',file=sys.stderr,flush=True)
+                    return self
+                raise PermissionError(exc.errno,f'cannot create the source-epoch lease in {self.directory} '
+                                      f'({exc.strerror}); train and generate need write access to it (or set '
+                                      f'{EPOCH_DIR_ENV}); --dry-run works without it') from None
+            self.degraded='read-only'
+            print(f'microglia runtime: {self.directory} is not writable; holding its source-epoch lease read-only '
+                  'without a holder record',file=sys.stderr,flush=True)
+        deadline=time.monotonic()+self.timeout
+        gate=ds.FileLock(self.directory/'gate',exclusive=False,timeout=self.timeout)
+        try:
+            gate.acquire()
+        except PermissionError:
+            gate=None  # no gate file and no write access: the gate only orders waiters, the lease still excludes
+        try:
+            lock=ds.FileLock(self.directory/'lease',exclusive=False,timeout=max(0.,deadline-time.monotonic()))
+            lock.acquire()
+            self.lock=lock
+        finally:
+            if gate is not None:gate.release()
+        if writable:
+            prune_holders(self.directory)
+            pid=os.getpid()
+            self.record=self.directory/'holders'/f'{pid}-{ds.pid_starttime(pid)}-{secrets.token_hex(4)}.json'
         self.update(cmd=self.cmd)
         return self
 
     def update(self,**info):
         self.info.update(info)
+        if self.record is None:
+            return
         pid=os.getpid()
         ds.atomic_write_json(self.record,{'pid':pid,'pid_starttime':ds.pid_starttime(pid),'host':socket.gethostname(),
                                           'acquired_utc':self.info.setdefault('acquired_utc',utc_now()),**self.info})
@@ -1126,6 +1303,55 @@ class EpochLease:
             self.record.unlink(missing_ok=True);self.record=None
         if self.lock is not None:
             self.lock.release();self.lock=None
+        self.degraded=None
+
+
+_PROCESS_LEASE=None  # the lease this process holds (main(), or taken lazily by a library consumer)
+
+
+def hold_source_epoch(cmd=None):
+    """Hold this process's shared source-epoch lease (taken now if not held yet; released at exit).
+
+    check_sources() and activate() call it, so a library consumer that imports this module holds the lease
+    from its first source check or activation until it exits. Raises ds.Busy while a refreeze holds it.
+    """
+    global _PROCESS_LEASE
+    lease=_PROCESS_LEASE
+    if lease is not None and lease.held and lease.directory==epoch_dir():
+        return lease
+    lease=EpochLease(cmd or ['library',*sys.argv]).acquire()
+    atexit.register(lease.release)
+    _PROCESS_LEASE=lease
+    return lease
+
+
+@contextlib.contextmanager
+def source_epoch_lease(cmd=None):
+    """`with source_epoch_lease(cmd):` holds the shared source-epoch lease for the block (reentrant: an
+    already held process lease is reused and kept)."""
+    global _PROCESS_LEASE
+    if _PROCESS_LEASE is not None and _PROCESS_LEASE.held and _PROCESS_LEASE.directory==epoch_dir():
+        yield _PROCESS_LEASE
+        return
+    lease=EpochLease(cmd or ['library',*sys.argv]).acquire()
+    _PROCESS_LEASE=lease
+    try:
+        yield lease
+    finally:
+        lease.release()
+        if _PROCESS_LEASE is lease:_PROCESS_LEASE=None
+
+
+def prune_holders(directory=None):
+    """Remove holder records whose process is gone (pid and start time no longer match). Returns them."""
+    directory=Path(directory) if directory is not None else epoch_dir()
+    pruned=[]
+    for path in sorted((directory/'holders').glob('*.json')):
+        info=_read_json_quiet(path)
+        if isinstance(info,dict) and info.get('pid') is not None and \
+                ds.pid_starttime(info['pid'])!=info.get('pid_starttime'):
+            path.unlink(missing_ok=True);pruned.append(path.name)
+    return pruned
 
 
 def live_holders(directory=None):
@@ -1134,7 +1360,8 @@ def live_holders(directory=None):
     live=[]
     for path in sorted((directory/'holders').glob('*.json')):
         info=_read_json_quiet(path)
-        if info and info.get('pid') is not None and ds.pid_starttime(info['pid'])==info.get('pid_starttime'):
+        if isinstance(info,dict) and info.get('pid') is not None and \
+                ds.pid_starttime(info['pid'])==info.get('pid_starttime'):
             live.append({**info,'record':path.name})
     return live
 
@@ -1202,7 +1429,9 @@ EXIT_CODES='''exit codes:
   1   error (reason printed)
   2   usage error
   3   already done: train on an AUDITED fit that verifies; generate onto a COMMITTED output without --force
-  4   the fit is DAMAGED (--repair) or STRANDED (--audit-under-epoch from its epoch, or --adopt-epoch)
+      (including an interrupted PROMOTING run that this invocation rolled forward)
+  4   the fit is DAMAGED (--repair) or STRANDED (--audit-under-epoch from its epoch, or --adopt-epoch);
+      generate: the output's state file is damaged (generate --readopt)
   75  busy: another process holds the fit or the output, or a refreeze holds the source-epoch lease'''
 
 
@@ -1233,13 +1462,13 @@ def main(argv=None):
                         'its files support, journaled, and continue from there')
     p.add_argument('--readopt',action='store_true',
                    help='train: archive a damaged fit_state.json and its journal beside the fit and adopt the '
-                        'directory again from its files')
+                        'directory again from its files; generate: the same for <out stem>.state.json (the '
+                        'output is adopted by the legacy rule: a receipt naming the NPZ sha is COMMITTED)')
     args=p.parse_args(argv)
     if args.threads!=3 or not 0<args.gpu_mem_fraction<=.04 or args.arm!='pbulk' or args.updates!=20000 or args.seed<0:
         p.error('the default requires pbulk/20000,three threads and at most.04 GPU fraction')
-    if args.command=='generate' and (args.adopt_epoch or args.dry_run or args.repair or args.readopt or
-                                     args.audit_under_epoch):
-        p.error('--adopt-epoch, --audit-under-epoch, --dry-run, --repair and --readopt are for train')
+    if args.command=='generate' and (args.adopt_epoch or args.dry_run or args.repair or args.audit_under_epoch):
+        p.error('--adopt-epoch, --audit-under-epoch, --dry-run and --repair are for train')
     if args.audit_under_epoch and (args.adopt_epoch or args.repair or args.readopt):
         p.error('--audit-under-epoch excludes --adopt-epoch, --repair and --readopt')
     if args.command=='generate' and (args.fit is None or args.out is None):
@@ -1248,17 +1477,21 @@ def main(argv=None):
         p.error('train requires --out-root')
     # The shared source-epoch lease is taken before the manifest is read and held until exit, so a refreeze
     # (exclusive) can never land between the digest read here and the last source check.
-    lease=EpochLease(['microglia_runtime.py',*(sys.argv[1:] if argv is None else argv)])
+    global _PROCESS_LEASE
+    lease=EpochLease(['microglia_runtime.py',*(sys.argv[1:] if argv is None else argv)],
+                     optional=args.command=='train' and args.dry_run)
     try:
         lease.acquire()
     except ds.Busy:
         print(f'microglia runtime: the source-epoch lease {lease.directory/"lease"} is held exclusively (a refreeze '
-              f'is running); exit {EX_TEMPFAIL}',file=sys.stderr,flush=True)
+              f'is running or pending); exit {EX_TEMPFAIL}',file=sys.stderr,flush=True)
         return EX_TEMPFAIL
+    outer,_PROCESS_LEASE=_PROCESS_LEASE,lease
     try:
         return _main(p,args,lease)
     finally:
         lease.release()
+        _PROCESS_LEASE=outer
 
 
 def _main(p,args,lease):
@@ -1313,7 +1546,7 @@ def _main(p,args,lease):
 
 def generate(args,M,fit,saved,out,cache,fold,cache_anchor,manifest,manifest_digest,profile,resolved,mode,inferred):
     """Generate under the output lock: open (adopt/recover), stage, post-check, promote; return the exit code."""
-    sf,snap=open_output(out)
+    sf,snap=open_output(out,readopt=args.readopt)
     if snap.state is Out.COMMITTED and not args.force:
         print(f'microglia runtime: output {out} is already COMMITTED (npz {snap.data.get("npz_sha")}); nothing to '
               f'generate without --force (exit {ALREADY_DONE})',flush=True)
@@ -1369,6 +1602,9 @@ def cli(argv=None):
         return main(argv)
     except Stranded as exc:
         print(f'microglia runtime: Stranded: {exc}',file=sys.stderr,flush=True)
+        return EX_STRANDED
+    except OutputDamaged as exc:
+        print(f'microglia runtime: OutputDamaged: {exc}',file=sys.stderr,flush=True)
         return EX_STRANDED
     except (ValueError,OSError,RuntimeError,KeyError,ds.DurableStateError) as exc:
         print(f'microglia runtime: {type(exc).__name__}: {exc}',file=sys.stderr,flush=True)

@@ -729,12 +729,19 @@ def test_refrozen_manifest_in_a_tmp_checkout_passes_check_unchanged_sources(tmp_
     else:
         (root/'artifacts').symlink_to(artifact_root/'artifacts')
     copy = _load('microglia_runtime_tmp_checkout', root/'scripts/microglia_runtime.py')
-    started, digest = copy.check_sources(), copy.sha(copy.SOURCE_MANIFEST)
-    copy.check_unchanged_sources(started, digest)
+    # check_sources() takes the shared source-epoch lease (held to process exit when taken lazily); scope it
+    # to each block so this same process can re-pin in between.
+    with copy.source_epoch_lease(['test']):
+        started, digest = copy.check_sources(), copy.sha(copy.SOURCE_MANIFEST)
+        copy.check_unchanged_sources(started, digest)
     with open(root/'scripts/microglia_runtime.py', 'a') as handle:  # an edit to a pinned source
         handle.write('# edited\n')
-    with pytest.raises(ValueError):
-        copy.check_sources()
+    with copy.source_epoch_lease(['test']):
+        with pytest.raises(ValueError):
+            copy.check_sources()
+        with pytest.raises(F.EpochBusy):  # the lease keeps a re-pin out while the sources are in use
+            F.refreeze(pinned, root, 'test refreeze')
     assert F.refreeze(pinned, root, 'test refreeze')['changed'] == ['scripts/microglia_runtime.py']
-    started, digest = copy.check_sources(), copy.sha(copy.SOURCE_MANIFEST)
-    copy.check_unchanged_sources(started, digest)
+    with copy.source_epoch_lease(['test']):
+        started, digest = copy.check_sources(), copy.sha(copy.SOURCE_MANIFEST)
+        copy.check_unchanged_sources(started, digest)

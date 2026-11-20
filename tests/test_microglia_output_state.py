@@ -219,7 +219,7 @@ EXPECTED_TABLE = {
     ('STAGED', 'begin_promote'): 'PROMOTING',
     ('PROMOTING', 'commit'): 'COMMITTED',
     ('PROMOTING', 'lost'): 'INCONSISTENT',
-    **{(a, f'observed_{b.lower()}'): b for a in STABLE for b in STABLE if a != b or a == 'COMMITTED'},
+    **{(a, f'observed_{b.lower()}'): b for a in STABLE for b in STABLE if a != b or a in ('COMMITTED', 'INCONSISTENT')},
 }
 
 

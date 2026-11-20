@@ -21,10 +21,14 @@ ROOT = Path(__file__).resolve().parents[1]
 EXIT_CODES = """exit codes:
   0   done
   1   error (reason printed)
-  2   usage error (bad arguments, an existing output that is not a COMMITTED pair without --force,
-      selected and trained fits both present under --fit-source auto)
-  3   already done: the fit is complete and its output is COMMITTED (use --force to regenerate)
-  4   the fit is STRANDED (another source epoch) or DAMAGED; the runtime prints how to recover
+  2   usage error (bad arguments; without --force an existing output that is INCONSISTENT, ORPHAN_RECEIPT,
+      UNRECEIPTED_NPZ or UNREADABLE; selected and trained fits both present under --fit-source auto)
+  3   already done: the fit is complete and its output is COMMITTED (use --force to regenerate), or the
+      runtime rolled an interrupted PROMOTING output forward to COMMITTED
+  4   the fit is STRANDED (another source epoch) or DAMAGED, or the output's state file is damaged;
+      the runtime prints how to recover
+  An output left STAGING, STAGED or PROMOTING by an interrupted run is handed to the runtime without
+  --force: it rolls STAGING/STAGED back (and generates) and PROMOTING forward (exit 3).
   75  busy: another process holds the fit or the output, or a refreeze holds the source-epoch lease"""
 STUDY = ROOT / 'analysis/improve_20261109'
 RUNTIME = ROOT / 'scripts/microglia_runtime.py'
@@ -35,6 +39,10 @@ SOURCE_MANIFEST = ROOT / 'analysis/default_empf_20261117/runtime_source_manifest
 NATIVE_RELEASE = ROOT / 'artifacts/native-releases/particlegan-0.10.0/site-packages/particlegan'
 # Exit codes of scripts/microglia_runtime.py (train and generate) and of this CLI (see EXIT_CODES).
 EX_OK, EX_USAGE, ALREADY_DONE, EX_STRANDED, EX_BUSY = 0, 2, 3, 4, 75
+# Output states (microglia_runtime.Out) left by an interrupted run: the runtime recovers them without --force.
+RECOVERABLE_OUTPUT = ('STAGING', 'STAGED', 'PROMOTING')
+STABLE_OUTPUT = ('NONE', 'COMMITTED', 'INCONSISTENT', 'ORPHAN_RECEIPT', 'UNRECEIPTED_NPZ')
+OUTPUT_MACHINE, STATE_SCHEMA = 'microglia_output', 'durable_state/1'
 TRAIN_ALREADY_DONE, TRAIN_DAMAGED, TRAIN_BUSY = ALREADY_DONE, EX_STRANDED, EX_BUSY
 
 
@@ -116,13 +124,18 @@ def receipt_path(out):
 def output_state(out):
     """Read-only state of a generation output (see microglia_runtime.Out): never writes or locks.
 
-    With <stem>.state.json its recorded state, except that a COMMITTED record whose files no longer have the
-    recorded shas reads as the state of the files. Without one (legacy outputs) the state the runtime would
-    adopt: COMMITTED (receipt generated_SHA256 == sha(npz)), INCONSISTENT, ORPHAN_RECEIPT, UNRECEIPTED_NPZ or
-    NONE.
+    Mirrors what microglia_runtime would act on. STAGING, STAGED and PROMOTING (an interrupted run) are
+    returned as recorded. A stable recorded state reads as the state of the files, where a consistent pair
+    the machine did not commit (recorded state other than COMMITTED, or COMMITTED with other shas) is
+    INCONSISTENT. Without a state file (legacy outputs): the state the runtime would adopt, COMMITTED
+    (receipt generated_SHA256 == sha(npz)), INCONSISTENT, ORPHAN_RECEIPT, UNRECEIPTED_NPZ or NONE.
+    UNREADABLE: the state file is not a valid microglia_output state (bad JSON, schema, machine, version or
+    state), its journal is ahead of it or exists without it (microglia_runtime generate --readopt).
     """
     out = Path(out)
     receipt = receipt_path(out)
+    state_path = out.with_name(out.stem + '.state.json')
+    journal = Path(str(state_path) + '.journal.jsonl')
 
     def digest(path):
         return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -135,20 +148,46 @@ def output_state(out):
                 recorded = None
             return 'COMMITTED' if recorded == digest(out) else 'INCONSISTENT'
         return 'ORPHAN_RECEIPT' if receipt.exists() else 'UNRECEIPTED_NPZ' if out.exists() else 'NONE'
+
+    def journal_seq():
+        try:
+            lines = journal.read_bytes().split(b'\n')
+        except FileNotFoundError:
+            return 0
+        if lines and lines[-1] != b'':
+            lines = lines[:-1]  # a torn final line is skipped, as durable_state does
+        seq = 0
+        for line in lines:
+            if line.strip():
+                entry = json.loads(line)
+                if not isinstance(entry, dict) or not isinstance(entry.get('seq'), int):
+                    raise ValueError('bad journal line')
+                seq = max(seq, entry['seq'])
+        return seq
     try:
-        doc = json.loads(out.with_name(out.stem + '.state.json').read_text())
+        doc = json.loads(state_path.read_text())
     except FileNotFoundError:
-        return from_files()
+        return 'UNREADABLE' if journal.exists() else from_files()
     except (OSError, ValueError):
         return 'UNREADABLE'
-    state = doc.get('state') if isinstance(doc, dict) else None
-    if state == 'COMMITTED':
-        data = doc.get('data') or {}
-        if not (out.exists() and receipt.exists() and digest(out) == data.get('npz_sha')
-                and digest(receipt) == data.get('receipt_sha')):
-            observed = from_files()
-            return 'INCONSISTENT' if observed == 'COMMITTED' else observed
-    return state if isinstance(state, str) else 'UNREADABLE'
+    if not isinstance(doc, dict) or doc.get('schema') != STATE_SCHEMA or doc.get('machine') != OUTPUT_MACHINE:
+        return 'UNREADABLE'
+    state, version, data = doc.get('state'), doc.get('version'), doc.get('data', {})
+    if state not in STABLE_OUTPUT + RECOVERABLE_OUTPUT or not isinstance(data, dict) or \
+            not isinstance(version, int) or isinstance(version, bool) or version < 1:
+        return 'UNREADABLE'
+    try:
+        if journal_seq() > version:
+            return 'UNREADABLE'
+    except (OSError, ValueError):
+        return 'UNREADABLE'
+    if state in RECOVERABLE_OUTPUT:
+        return state
+    observed = from_files()
+    if observed == 'COMMITTED' and not (state == 'COMMITTED' and digest(out) == data.get('npz_sha')
+                                        and digest(receipt) == data.get('receipt_sha')):
+        return 'INCONSISTENT'
+    return observed
 
 
 def choose_fit(cfg, command, fold, seed, explicit=None, source='auto'):
@@ -334,19 +373,28 @@ def main(argv=None):
         return 0
     # The output check follows the fit check: a complete fit whose output is a COMMITTED pair is done (3);
     # any other existing output is a usage error (2) before any subprocess starts.
+    # An output an interrupted run left STAGING/STAGED/PROMOTING goes to the runtime without --force, which
+    # rolls it back (and generates) or forward (exit 3); --force would discard a complete roll-forward.
     state = output_state(out)
-    if state != 'NONE' and not args.force:
+    if state != 'NONE' and state not in RECOVERABLE_OUTPUT and not args.force:
         if state == 'COMMITTED' and not train_needed:
             check_fit(fit, cfg, args.fold, args.seed)
             print(f'microglia: {out} is already generated (COMMITTED) from the complete fit {fit}; '
                   f'use --force to regenerate (exit {ALREADY_DONE})', flush=True)
             return ALREADY_DONE
-        existing = [str(x) for x in (out, receipt_path(out)) if x.exists()] or [str(out)]
-        p.error(f'generation output exists ({state}): {", ".join(existing)}; use --force to replace it or choose --out')
+        existing = [str(x) for x in (out, receipt_path(out)) if x.exists()]
+        what = ', '.join(existing) if existing else f'no output files; {out.stem}.state.json records it'
+        if state == 'UNREADABLE':
+            p.error(f'the state file of generation output {out} is damaged ({what}); inspect it, then run '
+                    f'scripts/microglia_runtime.py generate --readopt (or --force) for this output')
+        p.error(f'generation output exists ({state}): {what}; use --force to replace it or choose --out')
+    if state in RECOVERABLE_OUTPUT:
+        plan['recovery'] = (f'output {out} was {state} when its run stopped; the runtime rolls it '
+                            + ('forward' if state == 'PROMOTING' else 'back'))
     if not (cache / 'manifest.json').exists():
         p.error(f'missing development cache {cache}; see analysis/improve_20261109/README.md')
     print(f'microglia: fit {fit} ({fit_source}); output {out}', flush=True)
-    for key in ('notice', 'legacy_output'):
+    for key in ('notice', 'legacy_output', 'recovery'):
         if key in plan:
             print(f'microglia: {plan[key]}', flush=True)
     if args.command == 'train' and not train_needed:
@@ -374,6 +422,8 @@ def main(argv=None):
     rc = subprocess.run(commands[0], env=env).returncode
     if rc == EX_BUSY:
         print(f'microglia: output {out} is busy: another process is generating it', file=sys.stderr, flush=True)
+    elif rc == ALREADY_DONE:
+        print(f'microglia: {out} is COMMITTED (already generated, or an interrupted run rolled forward)', flush=True)
     elif rc not in (0, ALREADY_DONE, EX_STRANDED):
         raise subprocess.CalledProcessError(rc, commands[0])
     return rc
