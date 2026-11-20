@@ -35,13 +35,20 @@ gene programs as a readable check on a generative model.
    Both summaries weight the three diagnoses and three splits equally.
 4. Bootstrap the held-out donors 2,000 times, stratified by diagnosis.
    Each replicate draws donor multiplicities once for the cohort, so a
-   donor held out in two splits is resampled consistently. Generated
-   draws stay fixed. The intervals describe held-out donor sampling
+   donor held out in two splits is resampled consistently. Because
+   the draw covers the whole cohort, the resampled held-out group size
+   varies between replicates. For Lewy body disease, 9 of 34 donors are
+   held out per split, and a replicate's resampled count ranges from 4
+   to 14 rows in 95% of draws, from about 5.7 distinct donors on
+   average. Replicates where any group has fewer than 3 rows or an
+   undefined correlation are dropped; 17 of 2,000 were dropped in this
+   run. Generated draws stay fixed. The intervals describe held-out donor sampling
    only, not refitting or training-donor variation. Each arm gets a
    bootstrap SE. Each EMPF-minus-control difference also gets a 95%
    percentile interval. Repeated donors shrink within-sample
-   distances and inflate both metrics within a replicate, so marginal
-   percentile intervals would sit above the point estimates. Paired
+   distances and the smaller effective group size adds noise. Both
+   inflate the metrics within a replicate, so marginal percentile
+   intervals would sit above the point estimates. Paired
    differences share the observed side, so that bias largely cancels.
 5. As an observed-versus-observed reference, split each held-out group
    into random halves 200 times and score one half against the other.
@@ -97,8 +104,11 @@ split. It chose generator rate 0.012 at 1,200 updates for split 0,
 With the configuration chosen on training donors, EMPF did not match
 the observed relationship between the two programs better than any
 control. Its correlation error was larger than the mean-shift and
-empirical arms, and those intervals exclude zero. The intervals
-cover only held-out donor resampling. They leave out refitting, and
+empirical arms, and those intervals exclude zero. They are
+unadjusted 95% intervals across the six paired comparisons in the
+table. The intervals cover only held-out donor resampling. They
+leave out refitting and fit-seed variation (the fit seed is tied to
+the split seed), and
 nine Lewy body disease donors per split dominate the correlation
 term. The shuffled-label and energy distance differences are within
 donor uncertainty. The split-half reference compares half-size

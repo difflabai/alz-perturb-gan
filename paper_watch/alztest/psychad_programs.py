@@ -209,10 +209,21 @@ def donor_bootstrap(groups, splits, *, replicates=BOOTSTRAP_REPLICATES, seed=BOO
     therefore describe held-out donor sampling only, not training-donor or
     fit variation.
 
+    Because multiplicities are drawn over the whole diagnosis cohort, the
+    resampled size of a split's held-out group varies across replicates.
+    For Lewy body disease (34 donors, 9 held out per split) the resampled
+    held-out count is Binomial(34, 9/34): its central 95% range is 4 to 14
+    rows from about 5.7 distinct donors on average, and it can be zero.
+    Replicates in which any split's group has fewer than
+    MIN_VALIDATION_DONORS rows or an undefined correlation are dropped and
+    counted in the returned record, so the bootstrap is conditioned on
+    group size.
+
     A resampled donor can appear more than once. Repeated rows shrink the
-    within-sample distances, so energy distance and absolute correlation
-    error are biased upward in the replicates, and marginal percentile
-    intervals can sit above the point estimate. Each arm therefore gets a
+    within-sample distances, and the smaller effective group size adds
+    noise, so energy distance and absolute correlation error are biased
+    upward in the replicates, and marginal percentile intervals can sit
+    above the point estimate. Each arm therefore gets a
     bootstrap mean and SE only. Paired EMPF-minus-control differences, where
     the observed side is shared, also get 95% percentile intervals.
     """
