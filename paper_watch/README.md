@@ -47,7 +47,7 @@ For a single-seed diagnostic, run `scripts/run_once.py` from
 ## Data
 
 Datasets are NOT in git. Tests look in `paper_watch/data/` (or env
-overrides such as `NEUROKO_H5AD`); see `alztest/data.py` for the exact
+overrides such as `PSYCHAD_H5AD`); see `alztest/data.py` for the exact
 expected files per loader. SEA-AD multiregion files come from the
 public `allen-brain-cell-atlas` bucket (Allen Brain Cell Atlas).
 
@@ -61,5 +61,10 @@ public `allen-brain-cell-atlas` bucket (Allen Brain Cell Atlas).
 | [PsychAD cross-disorder specificity](notes/psychad_cross_disorder.md) | Mean shift and empirical donor sampling beat the 300-step EMPF fit on held-out disease specificity and distribution fit |
 | [PsychAD lipid and lysosome programs](notes/psychad_program_readout.md) | Longer EMPF fits reduced spurious program correlation. The two diagnostics favored different checkpoints |
 
-The NeuroKO, panAD, GNPC, and HypoAD experiments are tracked in
-[pull requests waiting for data access](https://github.com/difflabai/alz-perturb-gan/pulls?q=is%3Apr+is%3Aopen+label%3A%22waiting+for+data+access%22).
+## Blocked finds
+
+The NeuroKO, panAD, and GNPC conversions were closed without a fit
+because their data is not accessible. [Blocked finds](notes/blocked_finds.md)
+records each access blocker, the defects in the closed designs, and what
+a revival would need. HypoAD is tracked in an
+[open pull request waiting for data access](https://github.com/difflabai/alz-perturb-gan/pulls?q=is%3Apr+is%3Aopen+label%3A%22waiting+for+data+access%22).
