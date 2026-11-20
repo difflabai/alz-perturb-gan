@@ -13,6 +13,18 @@ Gitignored artifacts (the native ParticleGAN releases) are absent from a fresh
 worktree. --artifact-root names another checkout to read those missing files
 from; a file read that way must keep its pinned digest, so this path can only
 confirm artifacts, never re-pin them.
+
+Source-epoch lease: every scripts/microglia_runtime.py process holds a shared
+lock on runs/.source-epoch/lease of its checkout for its lifetime and records
+itself under runs/.source-epoch/holders/. A re-pin takes that lock exclusively
+and without waiting; while a runtime process holds it the re-pin refuses and
+lists the live holders (pid, command, digest, fit). --wait blocks until they
+have finished instead. The previous manifest is archived as
+previous/runtime_source_manifest.<UTC>-<sha12 of its bytes>.json, so two re-pins
+within one second never collide; older <UTC>.json archives stay readable.
+
+Exit codes: 0 done (or nothing to do), 1 error / --check found differences,
+2 usage, 75 runtime processes hold the source-epoch lease.
 """
 from __future__ import annotations
 
@@ -21,9 +33,76 @@ import datetime
 import hashlib
 import json
 from pathlib import Path
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT/'src') not in sys.path:
+    sys.path.insert(0, str(ROOT/'src'))
+from alz_perturb_gan import durable_state as ds  # noqa: E402
+
 MANIFEST = ROOT / 'analysis/default_empf_20261117/runtime_source_manifest.json'
+EX_BUSY = 75
+
+
+class EpochBusy(RuntimeError):
+    """Runtime processes hold the shared source-epoch lease; `holders` are the live holder records."""
+
+    def __init__(self, directory, holders):
+        self.directory, self.holders = Path(directory), holders
+        listed = '; '.join(f"pid {h.get('pid')} ({' '.join(map(str, h.get('cmd') or []))}; digest "
+                           f"{str(h.get('digest'))[:12]}; fit {h.get('fit')})" for h in holders) or \
+            'no live holder record yet (a process is starting)'
+        super().__init__(f'{len(holders)} runtime process(es) hold the source-epoch lease {self.directory/"lease"}; '
+                         f'refusing to re-pin while they use the pinned sources (rerun with --wait to block): {listed}')
+
+
+def epoch_dir_of(root):
+    return Path(root) / 'runs/.source-epoch'
+
+
+def live_holders(directory):
+    """Holder records whose process is still alive (same pid and start time)."""
+    live = []
+    for path in sorted((Path(directory) / 'holders').glob('*.json')):
+        try:
+            info = json.loads(path.read_text())
+        except (OSError, ValueError):
+            continue
+        if isinstance(info, dict) and info.get('pid') is not None and \
+                ds.pid_starttime(info['pid']) == info.get('pid_starttime'):
+            live.append({**info, 'record': path.name})
+    return live
+
+
+def exclusive_epoch(directory, wait=False):
+    """The exclusive source-epoch lease (a FileLock to release), or EpochBusy listing the live holders.
+
+    With the exclusive lock held no runtime process holds the shared one, so every holder record left
+    behind belongs to a dead process and is removed.
+    """
+    directory = Path(directory)
+    (directory / 'holders').mkdir(parents=True, exist_ok=True)
+    lock = ds.FileLock(directory / 'lease', exclusive=True, blocking=wait, purpose='refreeze runtime manifest')
+    try:
+        lock.acquire()
+    except ds.Busy:
+        raise EpochBusy(directory, live_holders(directory)) from None
+    for path in (directory / 'holders').glob('*.json'):
+        path.unlink(missing_ok=True)
+    return lock
+
+
+def archive_name(raw, stamp):
+    """previous/ name of an archived manifest: <UTC>-<sha12 of its bytes>, unique even within one second."""
+    return f'runtime_source_manifest.{stamp}-{hashlib.sha256(raw).hexdigest()[:12]}.json'
+
+
+def find_archive(directory, digest):
+    """The archived manifest with sha256 `digest`, under either name form (<UTC>.json or <UTC>-<sha12>.json)."""
+    for path in sorted(Path(directory).glob('runtime_source_manifest.*.json')):
+        if sha(path) == digest:
+            return path
+    return None
 
 
 def sha(path):
@@ -82,7 +161,17 @@ def relocate_keys(manifest, root, relocate):
     return dict(manifest, sources=sources), moved
 
 
-def refreeze(manifest_path, root, reason, add=(), artifact_root=None, now=None, relocate=()):
+def refreeze(manifest_path, root, reason, add=(), artifact_root=None, now=None, relocate=(), epoch_dir=None,
+             wait=False):
+    """Re-pin under the exclusive source-epoch lease (EpochBusy while runtime processes hold it)."""
+    lock = exclusive_epoch(epoch_dir if epoch_dir is not None else epoch_dir_of(root), wait)
+    try:
+        return _refreeze(manifest_path, root, reason, add, artifact_root, now, relocate)
+    finally:
+        lock.release()
+
+
+def _refreeze(manifest_path, root, reason, add, artifact_root, now, relocate):
     manifest_path, root = Path(manifest_path), Path(root)
     raw = manifest_path.read_bytes()
     pinned = json.loads(raw)
@@ -106,11 +195,11 @@ def refreeze(manifest_path, root, reason, add=(), artifact_root=None, now=None, 
     if not changed and not added and not relocated:
         return None
     stamp = (now or datetime.datetime.now(datetime.timezone.utc)).strftime('%Y%m%dT%H%M%SZ')
-    archive = manifest_path.parent / 'previous' / f'runtime_source_manifest.{stamp}.json'
-    if archive.exists():
+    archive = manifest_path.parent / 'previous' / archive_name(raw, stamp)
+    if archive.exists() and archive.read_bytes() != raw:
         raise FileExistsError(archive)
     archive.parent.mkdir(parents=True, exist_ok=True)
-    archive.write_bytes(raw)
+    ds.atomic_write_bytes(archive, raw)
     new = dict(manifest)
     sources = dict(manifest['sources'])
     sources.update(changed)
@@ -122,12 +211,10 @@ def refreeze(manifest_path, root, reason, add=(), artifact_root=None, now=None, 
         'changed': sorted(changed), 'added': sorted(added)}
     if relocated:
         new['previous_runtime_manifest']['relocated'] = relocated
-    tmp = manifest_path.with_suffix('.json.tmp')
-    tmp.write_text(json.dumps(new, indent=2) + '\n')
-    if set(json.loads(tmp.read_text())['sources']) != set(manifest['sources']) | set(added):
-        tmp.unlink()
+    data = (json.dumps(new, indent=2) + '\n').encode()
+    if set(json.loads(data)['sources']) != set(manifest['sources']) | set(added):
         raise ValueError('refrozen key set differs from the pinned key set')
-    tmp.replace(manifest_path)
+    ds.atomic_write_bytes(manifest_path, data)
     result = {'archive': str(archive), 'changed': sorted(changed), 'added': sorted(added)}
     if relocated:
         result['relocated'] = relocated
@@ -143,6 +230,9 @@ def main(argv=None):
                    help='rename pinned key OLD to repository-relative NEW; NEW must have the digest pinned for OLD')
     p.add_argument('--artifact-root', type=Path, help='checkout to read missing gitignored artifacts from')
     p.add_argument('--manifest', type=Path, default=MANIFEST)
+    p.add_argument('--wait', action='store_true',
+                   help='block until no runtime process holds the source-epoch lease (default: refuse and list them)')
+    p.add_argument('--epoch-dir', type=Path, help='source-epoch lease directory (default: runs/.source-epoch)')
     args = p.parse_args(argv)
     artifact_root = args.artifact_root.resolve() if args.artifact_root else None
     if args.check:
@@ -165,7 +255,12 @@ def main(argv=None):
         if not sep or not old or not new:
             p.error(f'--relocate expects OLD=NEW, got {item!r}')
         relocate.append((old, new))
-    result = refreeze(args.manifest, ROOT, args.reason, args.add, artifact_root, relocate=relocate)
+    try:
+        result = refreeze(args.manifest, ROOT, args.reason, args.add, artifact_root, relocate=relocate,
+                          epoch_dir=args.epoch_dir, wait=args.wait)
+    except EpochBusy as busy:
+        print(f'refreeze: {busy}', file=sys.stderr)
+        return EX_BUSY
     if result is None:
         print('manifest already matches the checkout; nothing written')
     else:

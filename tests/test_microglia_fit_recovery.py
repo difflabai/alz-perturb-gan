@@ -39,6 +39,9 @@ def runtime(work, *extra):
     """microglia_runtime main() in-process, with the CLI's error handling: the exit code."""
     try:
         return R.main(train_argv(work, *extra))
+    except R.Stranded as exc:
+        print(f'microglia runtime: Stranded: {exc}', file=sys.stderr, flush=True)
+        return R.EX_STRANDED
     except (ValueError, OSError, RuntimeError, KeyError, ds.DurableStateError) as exc:
         print(f'microglia runtime: {type(exc).__name__}: {exc}', file=sys.stderr, flush=True)
         return 1
@@ -81,11 +84,7 @@ def microglia(work, monkeypatch, argv, calls=None):
     def run(cmd, env=None, check=False, **kw):
         if calls is not None:
             calls.append(cmd[3])
-        try:
-            rc = R.main(cmd[3:])
-        except (ValueError, OSError, RuntimeError, KeyError, ds.DurableStateError) as exc:
-            print(f'microglia runtime: {type(exc).__name__}: {exc}', file=sys.stderr, flush=True)
-            rc = 1
+        rc = R.cli(cmd[3:])  # the runtime's __main__ path, with its documented exit codes
         if check and rc:
             raise subprocess.CalledProcessError(rc, cmd)
         return subprocess.CompletedProcess(cmd, rc)
@@ -129,7 +128,7 @@ def test_reconcile_does_not_promote_an_audit_that_no_longer_verifies(work):
 def test_reconcile_does_not_promote_an_audit_from_another_epoch(work, capsys):
     assert H.run_child(work, crash='replace:no_skip_audit.json')[0] == 137
     (work/'manifest.json').write_text('{"sources": {"epoch": 2}}')
-    assert runtime(work) == 1
+    assert runtime(work) == R.EX_STRANDED
     assert R.fit_state_file(H.fit_path(work)).read().state is Fit.STRANDED
     assert 'refusing to relabel' in capsys.readouterr().err
 
@@ -215,8 +214,9 @@ def test_damaged_audited_fit_is_reported_and_repaired_explicitly(damage, work, m
     assert '--repair' in capsys.readouterr().err
     with pytest.raises(ValueError, match='records DAMAGED'):
         generate(work, fit)
-    with pytest.raises(ValueError, match='DAMAGED'):  # scripts/microglia.py reports it, no CalledProcessError
-        microglia(work, monkeypatch, ['train', '--fold', '0', '--seed', '0'])
+    # scripts/microglia.py reports it and exits 4 (documented), no CalledProcessError
+    assert microglia(work, monkeypatch, ['train', '--fold', '0', '--seed', '0']) == M.EX_STRANDED
+    assert 'DAMAGED' in capsys.readouterr().err
     assert runtime(work, '--repair') == 0
     snap = R.fit_state_file(fit).read()
     expected = {'no_skip_audit.json': 'RECEIPTED', 'fit_receipt.json': 'TRAINED', 'final.pt': 'CONFIGURED'}[damage]

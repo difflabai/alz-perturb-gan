@@ -129,7 +129,11 @@ def test_generation_receipt_names_the_resolved_default_profile(stub):
     assert receipt(stub)['generated_SHA256'] == R.sha(stub.out)
     assert not R.pending_path(stub.out).exists()
     assert leftovers(stub) == []
-    assert sorted(p.name for p in stub.out.parent.iterdir()) == ['out.npz', 'out.receipt.json']
+    # Beside the pair: the explicit output state (out.state.json, journal) and the never-deleted lock files.
+    assert sorted(p.name for p in stub.out.parent.iterdir()) == [
+        'out.npz', 'out.npz.lock', 'out.receipt.json', 'out.state.json', 'out.state.json.journal.jsonl',
+        'out.state.json.lock']
+    assert R.is_committed(stub.out)
 
 
 @pytest.mark.parametrize('argv', [['--profile', 'profile-rmse'], ['--mode', 'biascal@stagehalf'],
@@ -202,7 +206,7 @@ def test_force_keeps_the_previous_output_if_the_receipt_write_fails(stub, monkey
     real_write = R.write
 
     def failing_write(path, value):
-        if Path(path) == R.receipt_path(stub.out):
+        if Path(path).name.endswith('.pending.receipt.json'):  # the run's pending receipt
             raise OSError('simulated failure writing the receipt')
         return real_write(path, value)
     monkeypatch.setattr(R, 'write', failing_write)
