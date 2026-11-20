@@ -1,0 +1,43 @@
+{
+  "schema": "confirm_gate_freeze/1",
+  "purpose": "PROTOCOL.md: no read-out, threshold, fold or metric may be added after the first new score exists. These values are frozen as of that score; tests/test_confirm_gate_freeze.py checks them.",
+  "analysis_sources": {
+    "analysis/coverage_empf_confirm_20261120/analyze.py": "5564ef77309e04825450f3526db40b577e85ade9dff6c75dab27dc8dbd14248f",
+    "analysis/coverage_empf_confirm_20261120/test_confirm.py": "e06f94c6d2d349b1bfca42736688d263fda856649e3a9a318962c6a19ce121ac"
+  },
+  "score_py_sha256": "7bcfc9aa929203b6d436563c382d966fcc3f17d0891bf355851119ed5426d45f",
+  "guards": {
+    "score.py": {
+      "pb_rmse": 0.005,
+      "meanlog_rmse_gene": 0.02,
+      "nonzero_rmse_gene": 0.02,
+      "logvar_rmse_gene": 0.02,
+      "pc_energy_rep": 0.02,
+      "cell_energy_rep": 0.02
+    },
+    "analyze.py": {
+      "pb_rmse": 0.005,
+      "meanlog_rmse_gene": 0.02,
+      "nonzero_rmse_gene": 0.02,
+      "logvar_rmse_gene": 0.02,
+      "pc_energy_rep": 0.02,
+      "cell_energy_rep": 0.02
+    }
+  },
+  "guards_source": {
+    "score.py": "GUARDS = {'pb_rmse': .005, **{k: .02 for k in ('meanlog_rmse_gene', 'nonzero_rmse_gene',\n          'logvar_rmse_gene', 'pc_energy_rep', 'cell_energy_rep')}}",
+    "analyze.py": "GUARDS = {'pb_rmse': .005, 'meanlog_rmse_gene': .02, 'nonzero_rmse_gene': .02, 'logvar_rmse_gene': .02,\n          'pc_energy_rep': .02, 'cell_energy_rep': .02}"
+  },
+  "first_score_cutoff": {
+    "utc": "2026-11-20T06:41:10.237+00:00",
+    "source": "mtime of runs/coverage_empf_confirm_20261120/scores/fold0/seed0/A_raw_score.json (the pilot raw score under the current scoring pins; the first raw score score.py wrote under them)",
+    "superseded_first_raw_score_utc": "2026-11-20T04:02:16.849+00:00",
+    "superseded_note": "runs/coverage_empf_confirm_20261120/superseded/pilot_fold0_seed0_before_review_repair/scores/A_raw_score.json: the pilot raw score before the review repair re-pin; kept by the scoring session as superseded evidence",
+    "analysis_sources_mtime_utc": {
+      "analyze.py": "2026-11-20T06:26:01.101+00:00",
+      "test_confirm.py": "2026-11-20T06:27:04.471+00:00"
+    },
+    "analysis_pinned_at_utc": "2026-11-20T06:41:31.659+00:00",
+    "note": "analyze.py and test_confirm.py were last modified before the cutoff; pin_analysis() recorded their hashes shortly after it. Any later change to them, to GUARDS or to analysis_sources fails tests/test_confirm_gate_freeze.py."
+  }
+}
