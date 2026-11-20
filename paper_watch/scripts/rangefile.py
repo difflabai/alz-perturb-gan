@@ -7,11 +7,15 @@ honours the proxy env where aiohttp/fsspec did not connect. On
 so a local download plus scripts/extract_hypoad_microglia.py is the
 working route. Block-cached, LRU.
 
-Every block request sends If-Range with the ETag recorded at open (or the
-``etag`` the caller expects, for example the one in a parallel_download
-receipt). A 200 instead of 206, or a 206 with a different ETag, means the
-object changed under the reader; that raises RemoteChanged and is never
-retried, so blocks of two versions are never mixed.
+Every block request sends If-Range with the validator recorded at open: a
+strong ETag (the served one, or the ``etag`` the caller expects, for
+example the one in a parallel_download receipt), else Last-Modified. A
+weak ETag (W/...) is never sent as If-Range, because RFC 9110 compares
+If-Range strongly and a compliant server would answer every block with
+200; NCBI sends no ETag at all, only Last-Modified. A 200 instead of 206,
+or a 206 with a different ETag or Last-Modified, means the object changed
+under the reader; that raises RemoteChanged and is never retried, so
+blocks of two versions are never mixed.
 """
 from __future__ import annotations
 import requests
@@ -42,6 +46,11 @@ class RangeFile:
         if etag is not None and served != etag:
             raise RemoteChanged(f"{url}: ETag is {served!r}, expected {etag!r}")
         self.etag = etag if etag is not None else served
+        self.last_modified = r.headers.get("Last-Modified")
+        if self.etag and not self.etag.startswith("W/"):
+            self.if_range = self.etag
+        else:
+            self.if_range = self.last_modified
         self._sess = requests.Session()
 
     def _block(self, i: int) -> bytes:
@@ -55,15 +64,18 @@ class RangeFile:
         for attempt in range(6):
             try:
                 headers = {"Range": f"bytes={lo}-{hi}"}
-                if self.etag:
-                    headers["If-Range"] = self.etag
+                if self.if_range:
+                    headers["If-Range"] = self.if_range
                 r = self._sess.get(self.url, headers=headers, timeout=120)
                 r.raise_for_status()
                 served = r.headers.get("ETag")
-                if r.status_code != 206 or (self.etag and served and served != self.etag):
+                served_lm = r.headers.get("Last-Modified")
+                if r.status_code != 206 or (self.etag and served and served != self.etag) or (
+                        self.last_modified and served_lm and served_lm != self.last_modified):
                     raise RemoteChanged(
-                        f"{self.url}: block {i} got HTTP {r.status_code} with ETag {served!r} "
-                        f"(opened at {self.etag!r})")
+                        f"{self.url}: block {i} got HTTP {r.status_code} with ETag {served!r}, "
+                        f"Last-Modified {served_lm!r} (opened at {self.etag!r}, "
+                        f"{self.last_modified!r})")
                 data = r.content
                 if len(data) != hi - lo + 1:
                     raise IOError(f"short block {len(data)} != {hi - lo + 1}")

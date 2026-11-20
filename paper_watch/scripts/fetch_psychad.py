@@ -7,7 +7,9 @@ uns['psychad_receipt'] of a hidden partial h5ad; then the sidecar
 stamp) is written atomically; then the partial replaces the h5ad; then the
 pending receipt replaces ``<stem>.receipt.json``. After a crash at any step
 either the receipt or the pending receipt matches the h5ad, which is what
-alztest.data.load_psychad(verify=True) checks.
+alztest.data.load_psychad(verify=True) checks. The whole sequence holds an
+exclusive lock on the h5ad (``<h5ad>.lock``), so two concurrent fetches
+cannot interleave into an h5ad from one and a receipt from the other.
 
 Fault injection for tests: FETCH_PSYCHAD_FAULT=<point> exits with 137 at
 after_partial, after_pending or after_h5ad_replace.
@@ -51,8 +53,14 @@ def _fault(point: str) -> None:
 
 
 def write_with_receipt(matrix, path: Path, receipt: dict) -> dict:
-    """Write ``matrix`` to ``path`` with its receipt in uns and beside it, crash-safely."""
+    """Write ``matrix`` to ``path`` with its receipt in uns and beside it,
+    crash-safely and under an exclusive lock on ``path`` (a second writer waits)."""
     path = Path(path)
+    with ds.FileLock(path, purpose="fetch_psychad.write_with_receipt"):
+        return _write_with_receipt_locked(matrix, path, receipt)
+
+
+def _write_with_receipt_locked(matrix, path: Path, receipt: dict) -> dict:
     receipt = dict(receipt, shape=list(matrix.shape),
                    content_sha256=psychad_content_sha256(matrix))
     # Nested mappings go into uns as JSON text (their keys are not HDF5-safe).

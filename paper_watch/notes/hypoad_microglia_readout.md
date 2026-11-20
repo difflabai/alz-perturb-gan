@@ -130,3 +130,18 @@ hypothalamic cohort, which does not exist yet.
   healthy and normal are now read as controls, and the readout stops
   with the donor counts per raw condition label when fewer than 3
   control or 2 AD donors remain. Still no fit has been run.
+- Acquisition state machines (2026-11-20, before any fit). (1)
+  parallel_download.py keeps its state in OUT.state.json (journaled)
+  and assembles into OUT.assembling, which is renamed to OUT only
+  after verification; OUT.receipt.json records sha256, verified_by
+  ('sha256', 'validator' or 'size-only'), the bytes not tied to one
+  remote version ('unvalidated') and a size+mtime stamp. (2) GEO
+  sends Last-Modified and no ETag, so If-Range uses the date; pass
+  --sha256 when a checksum is known. (3) A download started by the old
+  tool (OUT.plan, OUT.partNN or an OUT prefix) is adopted only with
+  --sha256 or --allow-unverified, because the old tool fetched without
+  If-Range. (4) The extractor needs the DONE receipt (or
+  --input-unverified REASON), records input_sha256 and
+  input_verified_by, and skips an extract that is current for the
+  requested parameters; the loader warns about non-default parameters
+  (HYPOAD_STRICT=1 refuses them). Still no fit has been run.

@@ -296,8 +296,10 @@ CURL_FAST = ["curl", "--fail", "--silent", "--show-error", "--location"]
 def test_parallel_download_assembles_ranges(tmp_path, server):
     dl = _script("parallel_download")
     out = tmp_path / "f.bin"
-    out.write_bytes(PAYLOAD[:100])  # resume from an existing prefix
-    rc = dl.main([f"{server}/f", str(out), str(len(PAYLOAD)), "5"], curl=CURL_FAST)
+    out.write_bytes(PAYLOAD[:100])  # resume from an existing prefix (old-tool layout)
+    argv = [f"{server}/f", str(out), str(len(PAYLOAD)), "5"]
+    assert dl.main(argv, curl=CURL_FAST) == 1  # legacy bytes need --sha256 or --allow-unverified
+    rc = dl.main(argv + ["--sha256", hashlib.sha256(PAYLOAD).hexdigest()], curl=CURL_FAST)
     assert rc == 0 and out.read_bytes() == PAYLOAD
     assert not list(tmp_path.glob("f.bin.part*"))
 

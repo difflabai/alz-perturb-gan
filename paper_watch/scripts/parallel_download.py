@@ -1,7 +1,8 @@
 """Parallel ranged download as an explicit, journaled state machine.
 
 Usage: python parallel_download.py URL OUT TOTAL_BYTES [NPARTS]
-                                   [--sha256 HEX] [--attempts N] [--no-space-check]
+                                   [--sha256 HEX] [--allow-unverified]
+                                   [--attempts N] [--no-space-check]
 
 For GSE342635_HypoAD.h5ad, TOTAL_BYTES is 51,107,823,722; write OUT to a
 gitignored directory with more than 60 GB free.
@@ -11,9 +12,14 @@ written through ``alztest._durable_state``. It replaces the old
 ``OUT.plan``, which is still read once for migration. Files:
 
     OUT.partNN       bytes of part NN, always a prefix of that part's range
-    OUT.partial      the assembled prefix; never written at OUT's final name
-    OUT              appears only by renaming a verified OUT.partial
-    OUT.receipt.json {url, etag, size, sha256, finished_at}, written at DONE
+    OUT.assembling   the assembled prefix; never written at OUT's final name.
+                     Deliberately NOT named *.partial: durable_state.sweep_temps
+                     deletes aged *.partial* files, and during assembly this
+                     file is the only copy of the parts already appended
+    OUT              appears only by renaming a verified OUT.assembling
+    OUT.receipt.json {url, etag, size, sha256, expected_sha256, verified_by,
+                     unvalidated, stamp {size, mtime_ns}, finished_at},
+                     written at DONE
 
 States and transitions (``MACHINE`` below is the authoritative table):
 
@@ -21,6 +27,8 @@ States and transitions (``MACHINE`` below is the authoritative table):
                                       free-space preflight before anything
                                       is written
     PLANNED -fetch-> FETCHING         every range request sends If-Range
+                                      (a strong ETag, else Last-Modified; a
+                                      weak ETag can never match If-Range)
     FETCHING -part_done-> FETCHING    a part reached its exact size
     FETCHING -parts_complete-> PARTS_COMPLETE
     FETCHING -stall-> STALLED         a part saw `attempts` CONSECUTIVE
@@ -29,32 +37,54 @@ States and transitions (``MACHINE`` below is the authoritative table):
     STALLED -resume-> FETCHING        the next run
     PLANNED|FETCHING|STALLED -remote_changed-> REMOTE_CHANGED
                                       a 200 instead of 206, or a changed
-                                      ETag (HEAD or response); terminal, no
-                                      bytes of two versions are ever mixed
+                                      ETag (HEAD or response); terminal
     PARTS_COMPLETE -assemble-> ASSEMBLING(next_part, out_size_at_part_start)
-    ASSEMBLING -append-> ASSEMBLING   truncate OUT.partial to
+    ASSEMBLING -append-> ASSEMBLING   truncate OUT.assembling to
                                       out_size_at_part_start, append part k,
                                       fsync, record next_part=k+1, and only
                                       then unlink part k; so a kill or ENOSPC
                                       at any point is resumed by redoing part
                                       k and no part is ever lost
     ASSEMBLING -assembled-> ASSEMBLED
-    ASSEMBLED -verify-> VERIFIED {sha256}     (--sha256 must match if given)
-    ASSEMBLED -verify_failed-> VERIFY_FAILED  terminal
-    VERIFIED -finish-> DONE           rename OUT.partial -> OUT, write receipt
+    ASSEMBLED -verify-> VERIFIED {sha256, verified_by}
+                                      the recorded expected_sha256 must match
+    ASSEMBLED -verify_failed-> VERIFY_FAILED  the bytes stay at OUT.assembling
+    VERIFY_FAILED -reverify-> ASSEMBLED       only when a DIFFERENT --sha256 is
+                                      given (a typo in the first one)
+    VERIFIED -finish-> DONE           rename OUT.assembling -> OUT, write receipt
     *-adopt_prefix-> same state       journaled rename of a legacy OUT prefix
-                                      to OUT.partial (migration only)
+                                      to OUT.assembling (migration only)
+    *-expect-> same state             record a --sha256 first given on a
+                                      resumed run (before VERIFIED)
 
-A rerun of a DONE download prints 'already complete' and exits 0. The whole
-run holds an exclusive lock on OUT (``OUT.lock``); a second instance exits
-75 (EX_TEMPFAIL) at once instead of interleaving with the first.
+The expected sha256 is part of the state: it is recorded by the run that
+first passes --sha256, a later run that passes a different one is refused
+(except from VERIFY_FAILED, see reverify), and a resume without the flag
+still verifies against the recorded one.
+
+Every byte must be tied to ONE remote version. Bytes fetched with If-Range
+against a recorded validator are; two cases are not, and both need either
+--sha256 (verified_by='sha256') or an explicit --allow-unverified
+(verified_by='size-only', recorded in the state and the receipt as
+``unvalidated``): the server sends neither ETag nor Last-Modified
+('no_validator'), or bytes were adopted from the old tool, which fetched
+without If-Range ('legacy_bytes'). Without one of the two flags such a run
+is refused before anything is written.
+
+A rerun of a DONE download prints 'already complete' and exits 0 when OUT
+still matches the receipt's size+mtime stamp (and --sha256, if given,
+matches the recorded sha256); otherwise it exits 1. The whole run holds an
+exclusive lock on OUT (``OUT.lock``); a second instance exits 75
+(EX_TEMPFAIL) at once instead of interleaving with the first.
 
 Migration (no state file yet): an ``OUT.plan`` written by the old tool is
 adopted read-only: its part layout is reused, a prefix at OUT is renamed
-once to OUT.partial (journaled ``adopt_prefix``; it is never deleted), and
-a legacy assembly that crashed half-way is resumed at the part it reached.
-An OUT of exactly TOTAL_BYTES with no plan is adopted as ASSEMBLED and
-verified. The old plan is renamed to ``OUT.plan.legacy`` afterwards.
+once to OUT.assembling (journaled ``adopt_prefix``; it is never deleted),
+and a legacy assembly that crashed half-way is resumed at the part it
+reached. An OUT of exactly TOTAL_BYTES with no plan is adopted as ASSEMBLED
+and verified. The old plan is renamed to ``OUT.plan.legacy`` afterwards.
+Part files whose layout is unknown (no state file and no plan, or indices
+the plan does not have) are refused, never reinterpreted.
 
 Exit codes: 0 done, 1 failed or refused (the message says which state and
 what to do), 75 another instance holds the lock.
@@ -91,7 +121,7 @@ CURL = ["curl", "--fail", "--silent", "--show-error", "--location",
 
 STATE_SUFFIX = ".state.json"
 RECEIPT_SUFFIX = ".receipt.json"
-PARTIAL_SUFFIX = ".partial"
+PARTIAL_SUFFIX = ".assembling"  # not *.partial*: see the module docstring
 LEGACY_PLAN_SUFFIX = ".plan"
 EX_BUSY = 75
 COPY_BLOCK = 8 * 1024 * 1024
@@ -128,15 +158,18 @@ TRANSITIONS = {
     (S.ASSEMBLED, "verify"): S.VERIFIED,
     (S.ASSEMBLED, "verify_failed"): S.VERIFY_FAILED,
     (S.VERIFIED, "finish"): S.DONE,
+    (S.VERIFY_FAILED, "reverify"): S.ASSEMBLED,
     # migration only: the journaled rename of a legacy prefix
     (S.PLANNED, "adopt_prefix"): S.PLANNED,
     (S.FETCHING, "adopt_prefix"): S.FETCHING,
     (S.ASSEMBLING, "adopt_prefix"): S.ASSEMBLING,
     (S.ASSEMBLED, "adopt_prefix"): S.ASSEMBLED,
 }
+# A --sha256 first given on a resumed run is recorded before verification.
+for _s in (S.PLANNED, S.FETCHING, S.STALLED, S.PARTS_COMPLETE, S.ASSEMBLING, S.ASSEMBLED):
+    TRANSITIONS[(_s, "expect")] = _s
 
-MACHINE = ds.Machine("parallel_download", S, S.PLANNED,
-                     {S.DONE, S.REMOTE_CHANGED, S.VERIFY_FAILED}, TRANSITIONS)
+MACHINE = ds.Machine("parallel_download", S, S.PLANNED, {S.DONE, S.REMOTE_CHANGED}, TRANSITIONS)
 
 
 class Refused(Exception):
@@ -195,6 +228,44 @@ def _fsync_dir(path: str) -> None:
         os.fsync(fd)
     finally:
         os.close(fd)
+
+
+def file_stamp(path: str) -> dict:
+    """Size and mtime in ns; os.replace keeps both, so a stamp taken at DONE
+    tells a later reader whether OUT is still the file that was verified."""
+    st = os.stat(path)
+    return {"size": st.st_size, "mtime_ns": st.st_mtime_ns}
+
+
+def if_range_validator(etag: str | None, last_modified: str | None) -> str | None:
+    """The If-Range value: a strong ETag, else Last-Modified, else None.
+
+    RFC 9110 compares If-Range entity tags strongly, so a weak ETag (W/...)
+    never matches and a compliant server would answer every range with 200.
+    """
+    if etag and not etag.startswith("W/"):
+        return etag
+    return last_modified or None
+
+
+_PART_RX = re.compile(r"\.part(\d+)(\.chunk|\.hdr)?$")
+
+
+def part_files(out: str) -> dict[str, int]:
+    """Every OUT.partNN[.chunk|.hdr] on disk, mapped to its part index."""
+    d = os.path.dirname(os.path.abspath(out))
+    base = os.path.basename(out)
+    found = {}
+    try:
+        names = os.listdir(d)
+    except FileNotFoundError:
+        return found
+    for name in names:
+        if name.startswith(base):
+            m = _PART_RX.fullmatch(name[len(base):])
+            if m:
+                found[os.path.join(d, name)] = int(m.group(1))
+    return found
 
 
 def plan(have: int, total: int, nparts: int) -> list[tuple[int, int, int]]:
@@ -374,6 +445,7 @@ class Args(NamedTuple):
     sha256: str | None = None
     attempts: int = 3
     space_check: bool = True
+    allow_unverified: bool = False
 
 
 class Download:
@@ -453,22 +525,54 @@ class Download:
             self._check_layout(snap.data)
             self._retire_legacy_plan(snap)
             return snap
+        if os.path.exists(self.partial):
+            raise Refused(f"{self.partial} exists without {self.sf.path}; its origin is "
+                          "unknown. Move it away to start over")
         legacy = os.path.exists(self.legacy_plan) or os.path.exists(self.out)
         if legacy:
             return self._adopt()
-        orphans = [part_path(self.out, k) for k in range(100) if os.path.exists(part_path(self.out, k))]
-        if orphans or os.path.exists(self.partial):
-            raise Refused(f"{orphans or self.partial} exist without {self.sf.path} or "
-                          f"{self.legacy_plan}; their layout is unknown. Move them away to start over")
+        self._refuse_orphans(set())
         pr = self._probe()
         if pr.total != self.a.total:
             raise Refused(f"server reports {pr.total} bytes, expected {self.a.total}")
+        unvalidated = [] if (pr.etag or pr.last_modified) else ["no_validator"]
+        self._require_consent(unvalidated)
         jobs = plan(0, self.a.total, self.a.nparts)
         self._check_space(jobs)
         data = {"url": self.a.url, "total": self.a.total, "nparts": self.a.nparts,
                 "parts": [list(j) for j in jobs], "prefix": 0, "etag": pr.etag,
-                "last_modified": pr.last_modified, "parts_done": []}
+                "last_modified": pr.last_modified, "parts_done": [],
+                **self._consent_data(unvalidated)}
         return self.sf.create(data)
+
+    def _given_sha(self) -> str | None:
+        return self.a.sha256.lower() if self.a.sha256 else None
+
+    def _require_consent(self, unvalidated: list[str]) -> None:
+        """Bytes not tied to one remote version need --sha256 or --allow-unverified."""
+        if unvalidated and not self.a.sha256 and not self.a.allow_unverified:
+            why = {"no_validator": "the server sends neither ETag nor Last-Modified, so a "
+                                   "change of the remote object between requests cannot be seen",
+                   "legacy_bytes": "bytes on disk were fetched by the old tool without "
+                                   "If-Range, possibly from an earlier version of the object"}
+            raise Refused("; ".join(why[u] for u in unvalidated) + ". Pass --sha256 HEX to "
+                          "verify the result, or --allow-unverified to accept a size-only "
+                          "check (recorded as verified_by='size-only' in the receipt). "
+                          "Nothing was written")
+
+    def _consent_data(self, unvalidated: list[str]) -> dict:
+        return {"expected_sha256": self._given_sha(), "unvalidated": list(unvalidated),
+                "allow_unverified": bool(self.a.allow_unverified)}
+
+    def _refuse_orphans(self, known: set[int]) -> None:
+        """Part files (and their .chunk/.hdr) whose index is not in ``known``
+        have an unknown layout; with a plan, those of a planned part are fine."""
+        orphans = sorted(p for p, k in part_files(self.out).items() if k not in known)
+        if orphans:
+            raise Refused(f"{orphans} exist without {self.sf.path}"
+                          f"{' and are not in ' + self.legacy_plan if known else ''}; their "
+                          "layout is unknown and they are never reinterpreted. Move them away "
+                          "to start over")
 
     def infer_legacy(self) -> tuple[S, dict, dict]:
         """Read-only: (state, data, evidence) for a pre-state-machine layout."""
@@ -480,20 +584,32 @@ class Download:
             raise Refused(f"{self.partial} and a legacy {self.out} layout both exist; resolve by hand")
         evidence = {"out_size": out_size, "legacy_plan": None}
         if os.path.exists(self.legacy_plan):
-            with open(self.legacy_plan) as fh:
-                layout = json.load(fh)
+            try:
+                with open(self.legacy_plan) as fh:
+                    layout = json.load(fh)
+                if not isinstance(layout, dict):
+                    raise ValueError("not a JSON object")
+                url, ltotal = layout.get("url"), layout.get("total")
+                jobs = [(int(k), int(lo), int(hi)) for k, lo, hi in layout.get("jobs") or []]
+            except (ValueError, TypeError) as e:
+                raise Refused(f"{self.legacy_plan} is not a readable plan ({e}); move it "
+                              "away and resolve by hand") from e
             evidence["legacy_plan"] = layout
-            if layout.get("url") != self.a.url or layout.get("total") != total:
+            if url != self.a.url or ltotal != total:
                 raise Refused(
                     f"{self.legacy_plan} records a different part layout (url "
-                    f"{layout.get('url')!r}, total {layout.get('total')!r}); remove it and "
+                    f"{url!r}, total {ltotal!r}); remove it and "
                     f"{self.out}.part* to start over")
-            jobs = [tuple(j) for j in layout["jobs"]]
             if not jobs or any(jobs[i + 1][1] != jobs[i][2] + 1 for i in range(len(jobs) - 1)) \
-                    or jobs[-1][2] != total - 1:
+                    or jobs[-1][2] != total - 1 or jobs[0][1] < 0 \
+                    or any(lo > hi for _, lo, hi in jobs) \
+                    or len({k for k, _, _ in jobs}) != len(jobs):
                 raise Refused(f"{self.legacy_plan}: parts do not tile [prefix, {total})")
+            self._refuse_orphans({k for k, _, _ in jobs})
             have = jobs[0][1]
             s = out_size or 0
+            if s > total:
+                raise Refused(f"{self.out} has {s} bytes, more than {total}; resolve by hand")
             parts = {k: _size(part_path(self.out, k)) for k, _, _ in jobs
                      if os.path.exists(part_path(self.out, k))}
             evidence["part_sizes"] = {str(k): v for k, v in parts.items()}
@@ -523,6 +639,9 @@ class Download:
                 return S.ASSEMBLED, data, evidence
             return S.ASSEMBLING, data, evidence
         # No plan: OUT is a prefix (the old tool resumed from it) or the whole object.
+        # Part files here would come from a layout nobody recorded; refuse them
+        # rather than read them as prefixes of a freshly planned layout.
+        self._refuse_orphans(set())
         if out_size > total:
             raise Refused(f"{self.out} has {out_size} bytes, more than {total}")
         data = {"url": self.a.url, "total": total, "nparts": self.a.nparts,
@@ -536,13 +655,19 @@ class Download:
 
     def _adopt(self):
         state, data, evidence = self.infer_legacy()
+        # Everything the old tool fetched was fetched without If-Range.
+        unvalidated = ["legacy_bytes"]
+        self._require_consent(unvalidated)  # before any network access
         if state in (S.PLANNED, S.FETCHING):
             pr = self._probe()
             if pr.total != self.a.total:
                 raise Refused(f"server reports {pr.total} bytes, expected {self.a.total}")
             data["etag"], data["last_modified"] = pr.etag, pr.last_modified
-            if state is S.FETCHING:
-                data["legacy_parts_unvalidated"] = True  # fetched without If-Range
+            if not (pr.etag or pr.last_modified):
+                unvalidated.append("no_validator")
+        self._require_consent(unvalidated)
+        data.update(self._consent_data(unvalidated))
+        if state in (S.PLANNED, S.FETCHING):
             self._check_space(self._jobs(data))
         snap = self.sf.adopt(lambda _dir: (state, evidence), data=data)
         self.log(f"adopted legacy layout as {snap.state.name}")
@@ -554,7 +679,7 @@ class Download:
             os.replace(self.legacy_plan, self.legacy_plan + ".legacy")
 
     def adopt_prefix(self, snap):
-        """Journaled, idempotent rename of a legacy OUT prefix to OUT.partial."""
+        """Journaled, idempotent rename of a legacy OUT prefix to OUT.assembling."""
         if not snap.data.get("prefix_pending"):
             return snap
         if os.path.exists(self.out):
@@ -589,7 +714,7 @@ class Download:
         elif snap.state is S.STALLED:
             snap = self._t("resume", lambda d: {k: v for k, v in d.items() if k != "stalled_parts"})
         etag = data.get("etag")
-        if_range = etag or data.get("last_modified")
+        if_range = if_range_validator(etag, data.get("last_modified"))
         stop = threading.Event()
         done = set(data.get("parts_done", []))
 
@@ -664,8 +789,12 @@ class Download:
         return self._t("assembled", lambda d: d.update(assembled_size=size))
 
     def verify(self, snap):
+        if (snap.data.get("unvalidated") and not snap.data.get("expected_sha256")
+                and not snap.data.get("allow_unverified") and not self.a.allow_unverified):
+            raise Refused(f"{self.out}: unvalidated bytes ({snap.data['unvalidated']}) and no "
+                          "expected sha256; pass --sha256 HEX or --allow-unverified")
         for k, _, _ in self._jobs(snap.data):
-            _remove(part_path(self.out, k))  # every part is in OUT.partial by now
+            _remove(part_path(self.out, k))  # every part is in OUT.assembling by now
         if _size(self.partial) != self.a.total:
             raise Refused(f"{self.partial} has {_size(self.partial)} bytes, expected {self.a.total}")
         h = hashlib.sha256()
@@ -673,10 +802,20 @@ class Download:
             for b in iter(lambda: fh.read(COPY_BLOCK), b""):
                 h.update(b)
         sha = h.hexdigest()
-        if self.a.sha256 and sha != self.a.sha256.lower():
-            self.log(f"VERIFY_FAILED: sha256 {sha} != expected {self.a.sha256}")
-            return self._t("verify_failed", lambda d: d.update(sha256=sha, expected_sha256=self.a.sha256))
-        return self._t("verify", lambda d: d.update(sha256=sha, expected_sha256=self.a.sha256))
+        expected = snap.data.get("expected_sha256")
+        if expected and sha != expected:
+            self.log(f"VERIFY_FAILED: sha256 {sha} != expected {expected}")
+            return self._t("verify_failed", lambda d: d.update(sha256=sha))
+        unvalidated = snap.data.get("unvalidated") or []
+        if expected:
+            verified_by = "sha256"
+        elif unvalidated:
+            verified_by = "size-only"
+            self.log(f"WARNING: {self.out} is verified by size only ({', '.join(unvalidated)}); "
+                     "the receipt records verified_by='size-only'")
+        else:
+            verified_by = "validator"  # every byte was fetched under If-Range
+        return self._t("verify", lambda d: d.update(sha256=sha, verified_by=verified_by))
 
     def finish(self, snap):
         d = snap.data
@@ -689,23 +828,72 @@ class Download:
             raise Refused(f"VERIFIED but neither {self.partial} nor a complete {self.out} exists")
         _fault("after_rename")
         finished_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-        receipt = {"url": self.a.url, "etag": d.get("etag"), "size": self.a.total,
-                   "sha256": d["sha256"], "finished_at": finished_at,
+        receipt = {"url": self.a.url, "etag": d.get("etag"),
+                   "last_modified": d.get("last_modified"), "size": self.a.total,
+                   "sha256": d["sha256"], "expected_sha256": d.get("expected_sha256"),
+                   "verified_by": d.get("verified_by"), "unvalidated": d.get("unvalidated") or [],
+                   "stamp": file_stamp(self.out), "finished_at": finished_at,
                    "state_file": os.path.basename(self.sf.path)}
         ds.atomic_write_json(self.receipt, receipt)
         _fault("after_receipt")
         return self._t("finish", lambda dd: dd.update(finished_at=finished_at))
 
+    def apply_sha_arg(self, snap):
+        """Reconcile --sha256 with the expected sha256 recorded in the state."""
+        given = self._given_sha()
+        if given is None:
+            return snap
+        st, recorded = snap.state, snap.data.get("expected_sha256")
+        if st in (S.DONE, S.REMOTE_CHANGED):
+            return snap  # DONE compares in run(); REMOTE_CHANGED has nothing to verify
+        if st is S.VERIFY_FAILED:
+            if given != recorded:
+                self.log(f"re-verifying {self.partial} against the new --sha256 {given}")
+                return self._t("reverify", lambda d: d.update(expected_sha256=given))
+            return snap
+        if st is S.VERIFIED:
+            if given != snap.data.get("sha256"):
+                raise Refused(f"{self.out} was verified with sha256 {snap.data.get('sha256')}, "
+                              f"not the given {given}; nothing was promoted")
+            return snap
+        if recorded is not None and recorded != given:
+            raise Refused(f"{self.sf.path} records expected sha256 {recorded}; this run "
+                          f"passes {given}. Rerun with the recorded one (or none)")
+        if recorded is None:
+            return self._t("expect", lambda d: d.update(expected_sha256=given))
+        return snap
+
+    def _check_done(self, snap) -> int:
+        try:
+            with open(self.receipt) as fh:
+                receipt = json.load(fh)
+        except (FileNotFoundError, ValueError):
+            receipt = None
+        if not isinstance(receipt, dict) or _size(self.out) != self.a.total or not os.path.isfile(self.out):
+            self.log(f"{self.sf.path} says DONE but {self.out} or its receipt is missing")
+            return 1
+        stamp = receipt.get("stamp")
+        if receipt.get("sha256") != snap.data.get("sha256") or (
+                stamp is not None and stamp != file_stamp(self.out)):
+            self.log(f"{self.out} is not the file recorded at DONE (its size/mtime stamp or "
+                     f"the receipt's sha256 differs from {self.receipt}); it was replaced or "
+                     "modified afterwards. Move it away with its receipt, state and journal "
+                     "to download again")
+            return 1
+        given = self._given_sha()
+        if given is not None and given != snap.data.get("sha256"):
+            self.log(f"{self.out}: DONE with sha256 {snap.data.get('sha256')}, which is not "
+                     f"the given --sha256 {given}")
+            return 1
+        print(f"{self.out}: already complete (sha256 {snap.data.get('sha256')})", flush=True)
+        return 0
+
     def run(self) -> int:
-        snap = self.start()
+        snap = self.apply_sha_arg(self.start())
         while True:
             st = snap.state
             if st is S.DONE:
-                if _size(self.out) != self.a.total or not os.path.exists(self.receipt):
-                    self.log(f"{self.sf.path} says DONE but {self.out} or its receipt is missing")
-                    return 1
-                print(f"{self.out}: already complete (sha256 {snap.data.get('sha256')})", flush=True)
-                return 0
+                return self._check_done(snap)
             if st is S.REMOTE_CHANGED:
                 self.log(f"{self.out}: REMOTE_CHANGED ({snap.data.get('reason')}); the parts on "
                          f"disk belong to the old version. Remove {self.sf.path}, its journal, "
@@ -714,7 +902,9 @@ class Download:
             if st is S.VERIFY_FAILED:
                 self.log(f"{self.out}: VERIFY_FAILED (sha256 {snap.data.get('sha256')} != "
                          f"{snap.data.get('expected_sha256')}); the bytes are kept at "
-                         f"{self.partial}")
+                         f"{self.partial}. If the expected sha256 was wrong, rerun with the "
+                         f"right --sha256 to verify again; otherwise remove {self.sf.path}, its "
+                         f"journal and {self.partial} to start over")
                 return 1
             if snap.data.get("prefix_pending"):
                 snap = self.adopt_prefix(snap)
@@ -743,12 +933,24 @@ def parse_args(argv) -> Args:
     ap.add_argument("out")
     ap.add_argument("total", type=int)
     ap.add_argument("nparts", type=int, nargs="?", default=16)
-    ap.add_argument("--sha256", help="expected sha256 of the whole object")
+    ap.add_argument("--sha256", help="expected sha256 of the whole object (recorded in the state)")
+    ap.add_argument("--allow-unverified", action="store_true",
+                    help="accept a size-only check when bytes cannot be tied to one remote "
+                         "version (no ETag/Last-Modified, or adopted from the old tool)")
     ap.add_argument("--attempts", type=int, default=3,
                     help="consecutive zero-byte requests before a part stalls")
     ap.add_argument("--no-space-check", action="store_true")
     a = ap.parse_args(argv)
-    return Args(a.url, a.out, a.total, a.nparts, a.sha256, a.attempts, not a.no_space_check)
+    if a.total <= 0:
+        ap.error(f"TOTAL_BYTES must be positive, got {a.total}")
+    if a.nparts < 1:
+        ap.error(f"NPARTS must be at least 1, got {a.nparts}")
+    if a.attempts < 1:
+        ap.error(f"--attempts must be at least 1, got {a.attempts}")
+    if a.sha256 is not None and not re.fullmatch(r"[0-9a-fA-F]{64}", a.sha256):
+        ap.error("--sha256 must be 64 hex digits")
+    return Args(a.url, a.out, a.total, a.nparts, a.sha256, a.attempts, not a.no_space_check,
+                a.allow_unverified)
 
 
 def main(argv=None, curl=CURL, workers: int = 8, transport=None) -> int:
@@ -763,6 +965,10 @@ def main(argv=None, curl=CURL, workers: int = 8, transport=None) -> int:
         return EX_BUSY
     except Refused as why:
         print(f"refused: {why}", file=sys.stderr, flush=True)
+        return 1
+    except ds.DurableStateError as err:
+        print(f"refused: {args.out}{STATE_SUFFIX}: {type(err).__name__}: {err}; nothing was "
+              "deleted. Inspect the state file and its journal", file=sys.stderr, flush=True)
         return 1
     except OSError as err:
         print(f"error: {err}; nothing recorded is lost, rerun to resume",

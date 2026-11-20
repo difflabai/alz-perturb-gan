@@ -217,7 +217,8 @@ def load_psychad(path: Path | None = None, *, verify: bool = False, full_sha: bo
 HYPOAD_SOURCE_NAME = "GSE342635_HypoAD.h5ad"
 HYPOAD_EXTRACT_SCHEMA = 2
 # Extraction parameters that change which cells or values the readout sees.
-# The extractor's defaults come from here; an extract made with others is STALE.
+# The extractor's defaults come from here. An extract made with others is
+# EXTRACTED_NONDEFAULT: the loader warns (HYPOAD_STRICT=1 refuses it).
 HYPOAD_MICROGLIA = r"(?i)^(microglia|micro|mg)([^a-z].*)?$"
 HYPOAD_NOT_MICROGLIA = r"(?i)(?:macro|pvm|perivascular|border|mono|(?:^|[^a-z])bam(?:[^a-z]|$))"
 HYPOAD_EXPECTED_PARAMS = {"pattern": HYPOAD_MICROGLIA, "exclude_pattern": HYPOAD_NOT_MICROGLIA,
@@ -225,6 +226,7 @@ HYPOAD_EXPECTED_PARAMS = {"pattern": HYPOAD_MICROGLIA, "exclude_pattern": HYPOAD
 # Suffixes written by scripts/parallel_download.py next to the source.
 DOWNLOAD_STATE_SUFFIX = ".state.json"
 DOWNLOAD_RECEIPT_SUFFIX = ".receipt.json"
+DOWNLOAD_ASSEMBLY_SUFFIX = ".assembling"
 
 
 def hypoad_microglia_path() -> Path:
@@ -241,11 +243,14 @@ def hypoad_source_path() -> Path:
     return DATA_DIR / HYPOAD_SOURCE_NAME
 
 
-def download_receipt(source: Path) -> dict | None:
-    """The DONE receipt of a parallel_download.py download, or None.
+def download_receipt_state(source: Path) -> tuple[str, dict | None]:
+    """("DONE", receipt), ("CHANGED", receipt) or ("NONE", None).
 
-    Valid only when the state file (if present) says DONE and the receipt's
-    size equals the file's size.
+    DONE: the receipt exists, the state file (if present) says DONE, and the
+    file still has the receipt's size and size+mtime ``stamp`` (receipts
+    without a stamp are checked by size only). CHANGED: a DONE receipt whose
+    file was replaced or modified afterwards, so its sha256 no longer
+    describes the bytes.
     """
     import json
     source = Path(source)
@@ -254,54 +259,88 @@ def download_receipt(source: Path) -> dict | None:
     try:
         receipt = json.loads(receipt_p.read_text())
     except (FileNotFoundError, ValueError):
-        return None
+        return "NONE", None
+    if not isinstance(receipt, dict):
+        return "NONE", None
     if state_p.exists():
         try:
             if json.loads(state_p.read_text()).get("state") != "DONE":
-                return None
+                return "NONE", None
         except ValueError:
-            return None
-    if not source.is_file() or source.stat().st_size != receipt.get("size"):
-        return None
-    return receipt
+            return "NONE", None
+    if not source.is_file():
+        return "NONE", None
+    stamp = receipt.get("stamp")
+    if source.stat().st_size != receipt.get("size") or (
+            stamp is not None and stamp != file_stamp(source)):
+        return "CHANGED", receipt
+    return "DONE", receipt
+
+
+def download_receipt(source: Path) -> dict | None:
+    """The DONE receipt of a parallel_download.py download, or None
+    (see download_receipt_state)."""
+    state, receipt = download_receipt_state(source)
+    return receipt if state == "DONE" else None
 
 
 def hypoad_source_state(source: Path) -> tuple[str, dict | None]:
-    """NO_SOURCE, SOURCE_INCOMPLETE or SOURCE_DONE, with the DONE receipt."""
+    """NO_SOURCE, SOURCE_INCOMPLETE, SOURCE_CHANGED or SOURCE_DONE, with the
+    DONE receipt (SOURCE_CHANGED: finished, then modified; not usable)."""
     source = Path(source)
-    receipt = download_receipt(source)
-    if receipt is not None:
+    rstate, receipt = download_receipt_state(source)
+    if rstate == "DONE":
         return "SOURCE_DONE", receipt
-    traces = [source, Path(str(source) + DOWNLOAD_STATE_SUFFIX), Path(str(source) + ".partial"),
+    if rstate == "CHANGED":
+        return "SOURCE_CHANGED", None
+    traces = [source, Path(str(source) + DOWNLOAD_STATE_SUFFIX),
+              Path(str(source) + DOWNLOAD_ASSEMBLY_SUFFIX),
               Path(str(source) + ".plan"), Path(str(source) + ".part00")]
     if any(t.exists() for t in traces):
         return "SOURCE_INCOMPLETE", None
     return "NO_SOURCE", None
 
 
-def hypoad_extract_state(info, source_receipt: dict | None = None) -> tuple[str, list[str]]:
-    """EXTRACTED, STALE or STALE_UNKNOWN for an extract's uns['hypoad_extract'].
+def hypoad_extract_provenance(info, source_receipt: dict | None = None) -> tuple[str, list[str]]:
+    """EXTRACTED, STALE or STALE_UNKNOWN from provenance alone (no parameter policy).
 
     STALE_UNKNOWN: no schema-2 provenance (an extract from before the
-    acquisition state machine). STALE: made with other extraction
-    parameters than HYPOAD_EXPECTED_PARAMS, or from an input whose sha256
-    differs from the source's DONE receipt.
+    acquisition state machine). STALE: made from an input whose sha256
+    differs from the source's DONE receipt. The extractor compares the
+    recorded parameters with the REQUESTED ones on top of this.
     """
     if not info or int(info.get("schema", 0) or 0) != HYPOAD_EXTRACT_SCHEMA:
         return "STALE_UNKNOWN", ["no schema-2 provenance in uns['hypoad_extract']"]
+    have = str(info.get("input_sha256") or "")
+    if source_receipt and have and have != source_receipt.get("sha256"):
+        return "STALE", [f"input_sha256 {have[:12]}… differs from the source receipt "
+                         f"{str(source_receipt.get('sha256'))[:12]}…"]
+    return "EXTRACTED", []
+
+
+def hypoad_nondefault_params(info) -> list[str]:
+    """The HYPOAD_EXPECTED_PARAMS an extract was NOT made with."""
     why = []
-    params = dict(info.get("params") or {})
+    params = dict((info or {}).get("params") or {})
     for key, want in HYPOAD_EXPECTED_PARAMS.items():
         got = params.get(key)
         if isinstance(want, bool):
             got = bool(got)
         if got != want:
-            why.append(f"{key}={got!r}, expected {want!r}")
-    have = str(info.get("input_sha256") or "")
-    if source_receipt and have and have != source_receipt.get("sha256"):
-        why.append(f"input_sha256 {have[:12]}… differs from the source receipt "
-                   f"{str(source_receipt.get('sha256'))[:12]}…")
-    return ("STALE", why) if why else ("EXTRACTED", [])
+            why.append(f"{key}={got!r}, default {want!r}")
+    return why
+
+
+def hypoad_extract_state(info, source_receipt: dict | None = None) -> tuple[str, list[str]]:
+    """The loader's view: hypoad_extract_provenance, and EXTRACTED_NONDEFAULT
+    for a current extract made with documented non-default parameters
+    (--allow-noninteger, --exclude-pattern '', another --pattern)."""
+    state, why = hypoad_extract_provenance(info, source_receipt)
+    if state == "EXTRACTED":
+        nondefault = hypoad_nondefault_params(info)
+        if nondefault:
+            return "EXTRACTED_NONDEFAULT", nondefault
+    return state, why
 
 
 def load_hypoad_microglia():
@@ -322,9 +361,11 @@ def load_hypoad_microglia():
     Raises DataUnavailable only when no extract exists (the source may be
     absent, downloading, or downloaded and not yet extracted; the message
     says which). Raises DataMalformed when something is at the path but is
-    not a readable extract (CORRUPT) or was made from other parameters or
-    another input (STALE). An extract without schema-2 provenance loads
-    with a warning, or raises DataMalformed when HYPOAD_STRICT=1.
+    not a readable extract (CORRUPT) or was made from another input
+    (STALE). An extract without schema-2 provenance (STALE_UNKNOWN), or one
+    made with non-default extraction parameters (EXTRACTED_NONDEFAULT, for
+    example --allow-noninteger), loads with a warning, or raises
+    DataMalformed when HYPOAD_STRICT=1.
     """
     p = hypoad_microglia_path()
     source = hypoad_source_path()
@@ -349,10 +390,13 @@ def load_hypoad_microglia():
     if state == "STALE":
         raise DataMalformed(f"HypoAD extract {p} is STALE: {'; '.join(why)}; rerun "
                             "scripts/extract_hypoad_microglia.py")
-    if state == "STALE_UNKNOWN":
+    if state in ("STALE_UNKNOWN", "EXTRACTED_NONDEFAULT"):
         if os.environ.get("HYPOAD_STRICT") == "1":
-            raise DataMalformed(f"HypoAD extract {p} is STALE_UNKNOWN: {why[0]} (HYPOAD_STRICT=1)")
+            raise DataMalformed(f"HypoAD extract {p} is {state}: {'; '.join(why)} "
+                                "(HYPOAD_STRICT=1)")
         import warnings
-        warnings.warn(f"HypoAD extract {p}: {why[0]}; re-extract to record it "
+        hint = ("re-extract to record it" if state == "STALE_UNKNOWN"
+                else "made with non-default extraction parameters")
+        warnings.warn(f"HypoAD extract {p} is {state}: {'; '.join(why)}; {hint} "
                       "(HYPOAD_STRICT=1 makes this an error)", stacklevel=2)
     return adata

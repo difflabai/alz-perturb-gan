@@ -31,15 +31,20 @@ counts; a scaled or log-transformed matrix is refused unless
 
 States. The input must be a finished download: SOURCE_DONE means
 parallel_download.py left INPUT.receipt.json (and INPUT.state.json says
-DONE) with the input's size. NO_SOURCE (no input) refuses; SOURCE_INCOMPLETE
-(a partial, a plan or parts, or a file without a receipt) refuses unless
---input-unverified REASON is given, and the reason is recorded. The output
+DONE) and the input still has the receipt's size and size+mtime stamp.
+NO_SOURCE (no input) refuses; SOURCE_INCOMPLETE (an assembly, a plan or
+parts, or a file without a receipt) and SOURCE_CHANGED (finished, then
+replaced or modified) refuse unless --input-unverified REASON is given,
+and the reason is recorded. The receipt's verified_by ('sha256',
+'validator' or 'size-only') is recorded as input_verified_by. The output
 is written to a hidden ``.<name>.<pid>.partial`` beside it and moved into
 place with os.replace, so a killed extract leaves no file at --output.
 uns['hypoad_extract'] records schema 2, the parameters and the input's
-sha256 from its receipt. An existing output is EXTRACTED (same parameters
-and input: nothing to do, unless --force), STALE (other parameters or
-input: re-extracted) or CORRUPT (unreadable: re-extracted).
+sha256 from its receipt. An existing output is EXTRACTED (the parameters
+recorded equal the ones REQUESTED now, and the same input: nothing to do,
+unless --force), STALE (other parameters or input: re-extracted) or CORRUPT
+(unreadable: re-extracted). Non-default parameters are allowed and
+idempotent here; the loader warns about them (HYPOAD_STRICT=1 refuses).
 """
 from __future__ import annotations
 
@@ -59,8 +64,8 @@ if str(PW) not in sys.path:
     sys.path.insert(0, str(PW))
 
 from alztest.data import (  # noqa: E402
-    HYPOAD_EXTRACT_SCHEMA, HYPOAD_MICROGLIA, HYPOAD_NOT_MICROGLIA, hypoad_extract_state,
-    hypoad_source_state,
+    HYPOAD_EXTRACT_SCHEMA, HYPOAD_MICROGLIA, HYPOAD_NOT_MICROGLIA, hypoad_extract_provenance,
+    hypoad_nondefault_params, hypoad_source_state,
 )
 
 DATA_DIR = PW / "data"
@@ -183,7 +188,7 @@ def extract(src: Path, dst: Path, *, pattern: str = MICROGLIA,
             exclude_pattern: str = NOT_MICROGLIA, celltype_col=None,
             donor_col=None, condition_col=None, gene_col=None,
             allow_noninteger: bool = False, input_sha256: str = "",
-            input_unverified: str = "") -> dict:
+            input_unverified: str = "", input_verified_by: str = "") -> dict:
     import anndata as ad
 
     with h5py.File(src, "r") as f:
@@ -226,6 +231,7 @@ def extract(src: Path, dst: Path, *, pattern: str = MICROGLIA,
                                  gene_col=gene_col),
         "input_sha256": input_sha256 or "",
         "input_unverified": input_unverified or "",
+        "input_verified_by": input_verified_by or "",
         "input_size": int(st.st_size),
         "source": str(src), "matrix": key, "n_cells_total": int(len(obs)),
         "n_cells_kept": int(rows.size), "celltype_col": ct, "donor_col": dcol,
@@ -282,7 +288,10 @@ def output_state(dst: Path, params: dict, source_receipt: dict | None) -> tuple[
             backed.file.close()
     except Exception as e:  # noqa: BLE001
         return "CORRUPT", [repr(e)]
-    state, why = hypoad_extract_state(info, source_receipt)
+    # Provenance only: the parameter check below is against the REQUESTED
+    # parameters, so an extract made with --allow-noninteger is current for
+    # a rerun with --allow-noninteger.
+    state, why = hypoad_extract_provenance(info, source_receipt)
     if state != "EXTRACTED":
         return state, why
     recorded = {k: (bool(v) if isinstance(params[k], bool) else str(v))
@@ -328,6 +337,14 @@ def main(argv=None) -> int:
                             allow_noninteger=a.allow_noninteger, celltype_col=a.celltype_col,
                             donor_col=a.donor_col, condition_col=a.condition_col,
                             gene_col=a.gene_col)
+    nondefault = hypoad_nondefault_params({"params": params})
+    if nondefault:
+        print(f"note: non-default extraction parameters ({'; '.join(nondefault)}); "
+              "load_hypoad_microglia() will warn about this extract, and refuse it "
+              "under HYPOAD_STRICT=1", flush=True)
+    if receipt is not None and receipt.get("verified_by") == "size-only":
+        print(f"warning: {a.input} was verified by size only ({receipt.get('unvalidated')}); "
+              "input_verified_by='size-only' is recorded", flush=True)
     out_state, why = output_state(a.output, params, receipt)
     if out_state == "EXTRACTED" and not a.force and receipt is not None:
         print(f"{a.output}: already EXTRACTED from this input with these parameters", flush=True)
@@ -339,7 +356,8 @@ def main(argv=None) -> int:
                    donor_col=a.donor_col, condition_col=a.condition_col,
                    gene_col=a.gene_col, allow_noninteger=a.allow_noninteger,
                    input_sha256=(receipt or {}).get("sha256", ""),
-                   input_unverified=a.input_unverified if receipt is None else "")
+                   input_unverified=a.input_unverified if receipt is None else "",
+                   input_verified_by=str((receipt or {}).get("verified_by") or ""))
     for k, v in info.items():
         print(f"{k}: {v}", flush=True)
     print(f"wrote {a.output}", flush=True)

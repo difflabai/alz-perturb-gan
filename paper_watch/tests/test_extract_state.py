@@ -3,8 +3,8 @@
 (g) extract: source states, a kill mid-write leaves nothing at --output,
     CORRUPT / STALE / STALE_UNKNOWN extracts, and a malformed extract that
     makes the readout FAIL instead of skipping
-(h) PsychAD receipt ordering under crash injection, and the
-    psychad_programs TOCTOU guard
+(h) PsychAD receipt ordering under crash injection, the write lock, and
+    the psychad_programs TOCTOU guard
 
 The pure-state tests need neither anndata nor h5py; the rest importorskip.
 """
@@ -74,9 +74,9 @@ def test_download_suffixes_match_the_downloader():
 def test_source_states(tmp_path):
     src = tmp_path / "obj.h5ad"
     assert data.hypoad_source_state(src) == ("NO_SOURCE", None)
-    Path(f"{src}.partial").write_bytes(b"abc")
+    Path(f"{src}.assembling").write_bytes(b"abc")
     assert data.hypoad_source_state(src)[0] == "SOURCE_INCOMPLETE"
-    os.remove(f"{src}.partial")
+    os.remove(f"{src}.assembling")
     src.write_bytes(b"0123456789")
     assert data.hypoad_source_state(src)[0] == "SOURCE_INCOMPLETE"  # no receipt
     sha = _receipt(src)
@@ -88,7 +88,7 @@ def test_source_states(tmp_path):
     Path(f"{src}.state.json").write_text(json.dumps({"state": "DONE"}))
     assert data.hypoad_source_state(src)[0] == "SOURCE_DONE"
     src.write_bytes(b"01234")  # truncated after the receipt
-    assert data.hypoad_source_state(src)[0] == "SOURCE_INCOMPLETE"
+    assert data.hypoad_source_state(src) == ("SOURCE_CHANGED", None)
 
 
 def test_extract_provenance_states():
@@ -98,17 +98,20 @@ def test_extract_provenance_states():
     assert data.hypoad_extract_state(good) == ("EXTRACTED", [])
     assert data.hypoad_extract_state(good, {"sha256": "ab"}) == ("EXTRACTED", [])
     assert data.hypoad_extract_state(good, {"sha256": "cd"})[0] == "STALE"
+    # Documented non-default parameters are not STALE: the loader warns.
     other = dict(good, params=dict(good["params"], pattern="(?i)^micro"))
-    assert data.hypoad_extract_state(other)[0] == "STALE"
+    assert data.hypoad_extract_state(other)[0] == "EXTRACTED_NONDEFAULT"
     loose = dict(good, params=dict(good["params"], allow_noninteger=np.bool_(True)))
-    assert data.hypoad_extract_state(loose)[0] == "STALE"
+    assert data.hypoad_extract_state(loose)[0] == "EXTRACTED_NONDEFAULT"
+    assert data.hypoad_extract_provenance(loose) == ("EXTRACTED", [])
+    assert data.hypoad_extract_state(loose, {"sha256": "cd"})[0] == "STALE"  # input wins
 
 
 def test_loader_missing_skips_directory_fails(hypoad_env):
     src, dst = hypoad_env
     with pytest.raises(DataUnavailable, match="NO_SOURCE"):
         data.load_hypoad_microglia()
-    Path(f"{src}.partial").write_bytes(b"x")
+    Path(f"{src}.assembling").write_bytes(b"x")
     with pytest.raises(DataUnavailable, match="SOURCE_INCOMPLETE"):
         data.load_hypoad_microglia()
     dst.mkdir()
@@ -236,10 +239,27 @@ def test_extract_records_provenance_and_is_idempotent(hypoad_env, capsys):
         data.load_hypoad_microglia()
     assert ext.main(args) == 0  # re-extracts
     assert data.load_hypoad_microglia().n_obs > 0
-    # Non-default parameters are recorded and the loader calls them STALE.
-    assert ext.main(args + ["--pattern", r"(?i)^microglia$"]) == 0
-    with pytest.raises(DataMalformed, match="STALE.*pattern"):
-        data.load_hypoad_microglia()
+    # Non-default parameters are recorded, a rerun with the SAME flags is a
+    # no-op, and the loader warns (HYPOAD_STRICT=1 refuses).
+    nondefault = args + ["--pattern", r"(?i)^microglia$", "--exclude-pattern", ""]
+    capsys.readouterr()
+    assert ext.main(nondefault) == 0
+    assert "non-default extraction parameters" in capsys.readouterr().out
+    stamp = dst.stat().st_mtime_ns
+    assert ext.main(nondefault) == 0
+    assert "already EXTRACTED" in capsys.readouterr().out and dst.stat().st_mtime_ns == stamp
+    with pytest.warns(UserWarning, match="EXTRACTED_NONDEFAULT.*pattern"):
+        assert data.load_hypoad_microglia().n_obs > 0
+    os.environ["HYPOAD_STRICT"] = "1"
+    try:
+        with pytest.raises(DataMalformed, match="EXTRACTED_NONDEFAULT"):
+            data.load_hypoad_microglia()
+    finally:
+        del os.environ["HYPOAD_STRICT"]
+    assert ext.main(args) == 0  # back to the defaults: re-extracted
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        assert data.load_hypoad_microglia().n_obs > 0
 
 
 def test_extract_unverified_input_records_the_reason(hypoad_env):
@@ -394,3 +414,116 @@ def test_psychad_programs_refuses_an_input_that_changes_while_loading(tmp_path, 
     monkeypatch.setattr(pp, "load_psychad", swapping_load)
     with pytest.raises(SystemExit, match="changed while it was being loaded"):
         pp.load_pinned(path)
+
+
+# ------------------------------------------------------------------ review regressions
+
+@pytest.mark.parametrize("flags", [{}, {"allow_noninteger": True}, {"exclude_pattern": ""},
+                                   {"pattern": r"(?i)^microglia$"}])
+def test_output_state_compares_with_the_requested_parameters(tmp_path, monkeypatch, flags):
+    """Review: an extract made with --allow-noninteger / --exclude-pattern '' was STALE
+    for a rerun with the SAME flags, so the 51 GB input was re-read on every run."""
+    pytest.importorskip("h5py")
+    pytest.importorskip("pandas")
+    import types
+    uns = {}
+    fake = types.ModuleType("anndata")
+    fake.read_h5ad = lambda p, backed=None: types.SimpleNamespace(
+        uns=uns, file=types.SimpleNamespace(close=lambda: None))
+    monkeypatch.setitem(sys.modules, "anndata", fake)
+    ext = _script("extract_hypoad_microglia")
+    dst = tmp_path / "out.h5ad"
+    dst.write_bytes(b"x")
+    receipt = {"sha256": "ab" * 32, "size": 1}
+    params = ext.extract_params(pattern=flags.get("pattern", ext.MICROGLIA),
+                                exclude_pattern=flags.get("exclude_pattern", ext.NOT_MICROGLIA),
+                                allow_noninteger=flags.get("allow_noninteger", False))
+    uns["hypoad_extract"] = {"schema": 2, "params": params, "input_sha256": receipt["sha256"]}
+    assert ext.output_state(dst, params, receipt) == ("EXTRACTED", [])
+    defaults = ext.extract_params(pattern=ext.MICROGLIA, exclude_pattern=ext.NOT_MICROGLIA,
+                                  allow_noninteger=False)
+    assert ext.output_state(dst, defaults, receipt)[0] == ("EXTRACTED" if not flags else "STALE")
+    assert ext.output_state(dst, params, {"sha256": "cd" * 32})[0] == "STALE"
+
+
+def test_source_changed_after_done_is_refused_by_the_extractor(tmp_path):
+    pytest.importorskip("h5py")
+    pytest.importorskip("pandas")
+    ext = _script("extract_hypoad_microglia")
+    src = tmp_path / "src.h5ad"
+    src.write_bytes(b"0123456789")
+    sha = _receipt(src)
+    r = json.loads(Path(f"{src}.receipt.json").read_text())
+    r["stamp"] = data.file_stamp(src)
+    Path(f"{src}.receipt.json").write_text(json.dumps(r))
+    Path(f"{src}.state.json").write_text(json.dumps({"state": "DONE"}))
+    assert data.hypoad_source_state(src)[0] == "SOURCE_DONE"
+    assert data.download_receipt(src)["sha256"] == sha
+    mtime = src.stat().st_mtime_ns
+    src.write_bytes(b"9876543210")  # same size, other bytes
+    os.utime(src, ns=(mtime, mtime + 1_000_000_000))
+    assert data.hypoad_source_state(src) == ("SOURCE_CHANGED", None)
+    with pytest.raises(SystemExit, match="SOURCE_CHANGED"):
+        ext.main(["--input", str(src), "--output", str(tmp_path / "o.h5ad")])
+
+
+class _FakePsychAD:
+    """Enough of an AnnData for write_with_receipt, without anndata."""
+
+    def __init__(self, tag: bytes, check=None, delay=0.0):
+        from scipy import sparse
+        self.X = sparse.csr_matrix(np.arange(4, dtype=np.float32).reshape(2, 2))
+        self.shape = self.X.shape
+        self.obs_names, self.var_names = ["a", "b"], ["g", "h"]
+        self.uns = {}
+        self.tag, self.check, self.delay = tag, check, delay
+
+    def write_h5ad(self, path, **kw):
+        import time
+        if self.check:
+            self.check()
+        with open(path, "wb") as fh:
+            fh.write(self.tag[:4])
+            time.sleep(self.delay)
+            fh.write(self.tag[4:])
+
+
+def test_psychad_write_holds_the_h5ad_lock(tmp_path):
+    """Review: two concurrent fetch_psychad runs could pair one h5ad with the other's receipt."""
+    fp = _script("fetch_psychad")
+    from alztest import _durable_state as ds
+    path = tmp_path / "psychad-mssm-microglia.h5ad"
+
+    def lock_is_held():
+        with pytest.raises(ds.Busy):
+            with ds.FileLock(path, blocking=False):
+                pass
+    full = fp.write_with_receipt(_FakePsychAD(b"first-file", check=lock_is_held), path, {"q": 1})
+    assert full["sha256"] == data.file_sha256(path)
+    with ds.FileLock(path, blocking=False):  # released afterwards
+        pass
+
+
+def test_concurrent_psychad_writes_never_mismatch(tmp_path):
+    import threading
+    fp = _script("fetch_psychad")
+    path = tmp_path / "psychad-mssm-microglia.h5ad"
+    errors = []
+
+    def write(tag, delay):
+        try:
+            fp.write_with_receipt(_FakePsychAD(tag, delay=delay), path, {"tag": tag.decode()})
+        except BaseException as e:  # noqa: BLE001
+            errors.append(e)
+    for _ in range(5):
+        threads = [threading.Thread(target=write, args=(b"AAAA-slow-writer", 0.2)),
+                   threading.Thread(target=write, args=(b"BBBB-fast-writer", 0.0))]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        assert errors == []
+        receipt, pending = data.psychad_receipt_paths(path)
+        r = json.loads(receipt.read_text())
+        assert r["sha256"] == data.file_sha256(path) and r["stamp"] == data.file_stamp(path)
+        assert path.read_bytes().decode() == r["tag"] and not pending.exists()

@@ -16,6 +16,10 @@ ETag/If-Range and fault modes.
     mixed bytes; RangeFile raises RemoteChanged
 (f) a rerun of a DONE download exits 0 without touching the network
 (i) the vendored durable_state library is byte-identical to src/
+(r) regressions from the adversarial review: orphan parts, legacy bytes and
+    servers without validators need --sha256 or --allow-unverified, the
+    expected sha256 is persisted, weak ETags, corrupt inputs, VERIFY_FAILED
+    recovery, OUT replaced after DONE, sweep_temps and the assembly file
 """
 from __future__ import annotations
 
@@ -211,7 +215,7 @@ def _check_invariants(out, payload):
         if p.exists():
             b = p.read_bytes()
             assert len(b) <= hi - lo + 1 and b == payload[lo:lo + len(b)], (k, len(b))
-    partial = Path(f"{out}.partial")
+    partial = Path(f"{out}.assembling")
     if partial.exists():
         b = partial.read_bytes()
         assert b == payload[:len(b)]
@@ -244,11 +248,17 @@ def test_vendored_durable_state_is_byte_identical_to_src():
 # ------------------------------------------------------------------ the table
 
 def test_machine_matches_the_documented_table():
-    assert dl.MACHINE.terminal == {S.DONE, S.REMOTE_CHANGED, S.VERIFY_FAILED}
+    assert dl.MACHINE.terminal == {S.DONE, S.REMOTE_CHANGED}
     assert dl.MACHINE.allowed_events(S.FETCHING) == [
-        "adopt_prefix", "part_done", "parts_complete", "remote_changed", "stall"]
-    assert dl.MACHINE.allowed_events(S.STALLED) == ["remote_changed", "resume"]
-    assert dl.MACHINE.allowed_events(S.ASSEMBLING) == ["adopt_prefix", "append", "assembled"]
+        "adopt_prefix", "expect", "part_done", "parts_complete", "remote_changed", "stall"]
+    assert dl.MACHINE.allowed_events(S.STALLED) == ["expect", "remote_changed", "resume"]
+    assert dl.MACHINE.allowed_events(S.ASSEMBLING) == [
+        "adopt_prefix", "append", "assembled", "expect"]
+    # a wrong --sha256 is recoverable: VERIFY_FAILED -reverify-> ASSEMBLED
+    assert dl.MACHINE.allowed_events(S.VERIFY_FAILED) == ["reverify"]
+    assert dl.MACHINE.next_state(S.VERIFY_FAILED, "reverify") is S.ASSEMBLED
+    # nothing records a new expected sha256 once the bytes are verified
+    assert dl.MACHINE.next_state(S.VERIFIED, "expect") is None
     assert dl.MACHINE.next_state(S.VERIFIED, "finish") is S.DONE
     # no way back from assembly to fetching, and nothing leaves DONE
     assert dl.MACHINE.next_state(S.ASSEMBLING, "fetch") is None
@@ -290,7 +300,7 @@ def _one_walk(seed: int, root: Path, monkeypatch) -> None:
         real_write = dl._write
 
         def write(fd, data, limit=enospc_after):
-            if limit is not None and os.readlink(f"/proc/self/fd/{fd}").endswith(".partial"):
+            if limit is not None and os.readlink(f"/proc/self/fd/{fd}").endswith(".assembling"):
                 room = limit - written[0]
                 if len(data) > room:
                     real_write(fd, bytes(data)[:max(room, 0)])
@@ -371,7 +381,7 @@ def test_enospc_mid_append_resumes_without_losing_parts(tmp_path, monkeypatch):
     state = {"written": 0}
 
     def short_write(fd, data):
-        if os.readlink(f"/proc/self/fd/{fd}").endswith(".partial"):
+        if os.readlink(f"/proc/self/fd/{fd}").endswith(".assembling"):
             if state["written"] + len(data) > 15_000:  # inside part 01
                 real_write(fd, bytes(data)[:15_000 - state["written"]])
                 state["written"] = 15_000
@@ -384,7 +394,7 @@ def test_enospc_mid_append_resumes_without_losing_parts(tmp_path, monkeypatch):
     assert dl.main(argv, transport=t) == 1
     snap = _check_invariants(out, payload)
     assert snap.state is S.ASSEMBLING and snap.data["next_part"] == 1
-    assert Path(f"{out}.partial").stat().st_size == 15_000  # ends inside part 01
+    assert Path(f"{out}.assembling").stat().st_size == 15_000  # ends inside part 01
     assert all(Path(dl.part_path(str(out), k)).exists() for k in (1, 2, 3))
     monkeypatch.setattr(dl, "_write", real_write)
     assert dl.main(argv, transport=t) == 0
@@ -443,8 +453,15 @@ def test_legacy_plan_is_adopted_and_finished(tmp_path, case):
         os.remove(dl.part_path(str(out), 3))
         expect = S.FETCHING
     t = FakeTransport(payload)
-    assert dl.main(["u", str(out), str(len(payload)), "4"], transport=t) == 0
+    argv = ["u", str(out), str(len(payload)), "4"]
+    # Legacy bytes were fetched without If-Range: refused without --sha256
+    # (or --allow-unverified), before anything is written.
+    assert dl.main(argv, transport=NoNetwork()) == 1
+    assert not Path(f"{out}.state.json").exists() and Path(f"{out}.plan").exists()
+    assert dl.main(argv + ["--sha256", _sha(payload)], transport=t) == 0
     assert out.read_bytes() == payload
+    receipt = json.loads(Path(f"{out}.receipt.json").read_text())
+    assert receipt["verified_by"] == "sha256" and receipt["unvalidated"] == ["legacy_bytes"]
     entries = _check_journal(out)
     assert entries[0]["event"] == ds.ADOPT_EVENT and entries[0]["to"] == expect.name
     assert entries[1]["event"] == "adopt_prefix"
@@ -472,8 +489,13 @@ def test_full_size_out_with_the_wrong_sha_is_kept_not_promoted(tmp_path):
     out.write_bytes(payload)
     assert dl.main(["u", str(out), "5000", "--sha256", "0" * 64], transport=NoNetwork()) == 1
     assert _state(out).state is S.VERIFY_FAILED
-    assert Path(f"{out}.partial").read_bytes() == payload  # renamed once, never deleted
-    assert dl.main(["u", str(out), "5000"], transport=NoNetwork()) == 1  # terminal
+    assert Path(f"{out}.assembling").read_bytes() == payload  # renamed once, never deleted
+    assert dl.main(["u", str(out), "5000"], transport=NoNetwork()) == 1  # stays VERIFY_FAILED
+    assert _state(out).state is S.VERIFY_FAILED
+    # review probe 9: the right sha256 re-verifies the kept bytes and finishes
+    assert dl.main(["u", str(out), "5000", "--sha256", _sha(payload)], transport=NoNetwork()) == 0
+    assert out.read_bytes() == payload
+    assert [e["event"] for e in _check_journal(out)][-3:] == ["reverify", "verify", "finish"]
 
 
 def test_changed_layout_and_orphan_parts_are_refused(tmp_path):
@@ -541,6 +563,9 @@ def test_stall_after_exactly_attempts_consecutive_zero_responses(tmp_path, attem
 class _Remote:
     payload = b""
     etag = '"v1"'
+    weak = False  # serve the ETag as W/"..." (never matches If-Range)
+    send_etag = True
+    lm = None  # Last-Modified, when set
     head_etag = None  # a stale HEAD (CDN) still reporting the old ETag
     flip_after = None  # flip to payload2/etag2 after this many GETs
     payload2 = b""
@@ -552,10 +577,20 @@ class _Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
 
+    @staticmethod
+    def _served_etag(etag):
+        return ("W/" + etag) if _Remote.weak else etag
+
+    def _validators(self, etag):
+        if _Remote.send_etag:
+            self.send_header("ETag", self._served_etag(etag))
+        if _Remote.lm:
+            self.send_header("Last-Modified", _Remote.lm)
+
     def do_HEAD(self):
         self.send_response(200)
         self.send_header("Content-Length", str(len(_Remote.payload)))
-        self.send_header("ETag", _Remote.head_etag or _Remote.etag)
+        self._validators(_Remote.head_etag or _Remote.etag)
         self.end_headers()
 
     def do_GET(self):
@@ -565,7 +600,9 @@ class _Handler(BaseHTTPRequestHandler):
         body, etag = _Remote.payload, _Remote.etag
         rng = self.headers.get("Range")
         if_range = self.headers.get("If-Range")
-        if rng and (if_range is None or if_range == etag):
+        matches = if_range is None or (if_range == etag and not _Remote.weak) or (
+            _Remote.lm is not None and if_range == _Remote.lm)
+        if rng and matches:
             lo, hi = map(int, rng.split("=")[1].split("-"))
             hi = min(hi, len(body) - 1)
             self.send_response(206)
@@ -573,7 +610,7 @@ class _Handler(BaseHTTPRequestHandler):
             body = body[lo:hi + 1]
         else:
             self.send_response(200)
-        self.send_header("ETag", etag)
+        self._validators(etag)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
@@ -587,6 +624,7 @@ def remote(monkeypatch):
     monkeypatch.setenv("no_proxy", "127.0.0.1,localhost")
     _Remote.payload, _Remote.payload2 = os.urandom(20_000), os.urandom(20_000)
     _Remote.etag, _Remote.head_etag, _Remote.flip_after, _Remote.gets = '"v1"', None, None, 0
+    _Remote.weak, _Remote.send_etag, _Remote.lm = False, True, None
     srv = ThreadingHTTPServer(("127.0.0.1", 0), _Handler)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     yield f"http://127.0.0.1:{srv.server_address[1]}/obj"
@@ -634,7 +672,7 @@ def test_remote_change_stops_without_mixing(tmp_path, remote, monkeypatch, how):
     snap = _state(out)
     assert snap.state is S.REMOTE_CHANGED, snap
     _no_new_bytes(out, old, _Remote.payload2)
-    assert not out.exists() and not Path(f"{out}.partial").exists()
+    assert not out.exists() and not Path(f"{out}.assembling").exists()
     assert dl.main(argv, curl=CURL_FAST) == 1  # terminal until the user starts over
     _check_journal(out)
 
@@ -669,3 +707,297 @@ def test_rangefile_raises_remote_changed(remote):
     with pytest.raises(rf_mod.RemoteChanged):
         rf.read(10)
     rf.close()
+
+
+def test_rangefile_without_a_strong_etag_uses_last_modified(remote):
+    """Review: weak ETags broke every block; NCBI sends Last-Modified only."""
+    pytest.importorskip("requests")
+    rf_mod = _script("rangefile")
+    _Remote.weak, _Remote.lm = True, "Fri, 20 Nov 2026 00:00:00 GMT"
+    rf = rf_mod.RangeFile(remote, block=1000)
+    assert rf.etag == 'W/"v1"' and rf.if_range == _Remote.lm
+    assert rf.read(2500) == _Remote.payload[:2500]  # used to raise RemoteChanged
+    rf.close()
+    _Remote.send_etag = False  # the real NCBI URL: no ETag at all
+    rf = rf_mod.RangeFile(remote, block=1000)
+    assert rf.etag is None and rf.if_range == _Remote.lm
+    assert rf.read(1500) == _Remote.payload[:1500]
+    _Remote.payload, _Remote.lm = _Remote.payload2, "Sat, 21 Nov 2026 00:00:00 GMT"
+    rf.seek(5000)
+    with pytest.raises(rf_mod.RemoteChanged):
+        rf.read(10)
+    rf.close()
+
+
+# ------------------------------------------------------------------ (r) review regressions
+
+LM = "Fri, 20 Nov 2026 00:00:00 GMT"
+
+
+class ValidatorTransport(FakeTransport):
+    """Honours If-Range like RFC 9110: a STRONG ETag or Last-Modified must match.
+
+    ``flip_after``: requests after this many are served from ``payload2``
+    (with ``etag2``/``lm2``), i.e. the remote object changes mid-download.
+    """
+
+    def __init__(self, payload, etag='"v1"', lm=LM, *, payload2=None, flip_after=None,
+                 etag2='"v2"', lm2="Sat, 21 Nov 2026 00:00:00 GMT", **kw):
+        super().__init__(payload, etag, **kw)
+        self.lm, self.if_ranges = lm, []
+        self.payload2, self.flip_after, self.etag2, self.lm2 = payload2, flip_after, etag2, lm2
+
+    def _maybe_flip(self):
+        if self.flip_after is not None and self.requests >= self.flip_after:
+            self.payload = self.payload2
+            self.etag = self.etag2 if self.etag is not None else None
+            self.lm = self.lm2 if self.lm is not None else None
+            self.flip_after = None
+
+    def probe(self, url, hdr):
+        self.probes += 1
+        return dl.Probe(200, len(self.payload), self.etag, self.lm)
+
+    def get_range(self, url, start, hi, if_range, chunk, hdr):
+        with self._lock:
+            self._maybe_flip()
+            self.if_ranges.append(if_range)
+        strong = bool(self.etag) and not self.etag.startswith("W/")
+        if if_range is not None and not ((strong and if_range == self.etag)
+                                         or (self.lm and if_range == self.lm)):
+            with self._lock:
+                self.requests += 1
+            Path(chunk).write_bytes(b"")
+            return dl.Response(63, 200, None, self.etag)
+        return FakeTransport.get_range(self, url, start, hi, None, chunk, hdr)
+
+
+def _argv(out, payload, nparts=4, *extra):
+    return ["u", str(out), str(len(payload)), str(nparts), *extra]
+
+
+def test_weak_etag_falls_back_to_last_modified(tmp_path):
+    """Probe 1: If-Range: W/"..." never matches, so it used to go REMOTE_CHANGED at once."""
+    assert dl.if_range_validator('W/"x"', None) is None
+    assert dl.if_range_validator('W/"x"', LM) == LM
+    assert dl.if_range_validator('"x"', LM) == '"x"'
+    payload = os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    t = ValidatorTransport(payload, etag='W/"abc"')
+    assert dl.main(_argv(out, payload), transport=t) == 0
+    assert out.read_bytes() == payload and set(t.if_ranges) == {LM}
+    receipt = json.loads(Path(f"{out}.receipt.json").read_text())
+    assert receipt["verified_by"] == "validator" and receipt["unvalidated"] == []
+
+
+def test_done_rerun_with_a_different_sha256_fails(tmp_path, capsys):
+    """Probe 2: a DONE rerun with another --sha256 used to print 'already complete', rc 0."""
+    payload = os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    assert dl.main(_argv(out, payload), transport=FakeTransport(payload)) == 0
+    capsys.readouterr()
+    assert dl.main(_argv(out, payload, 4, "--sha256", "0" * 64), transport=NoNetwork()) == 1
+    assert "not the given --sha256" in capsys.readouterr().err
+    assert dl.main(_argv(out, payload, 4, "--sha256", _sha(payload).upper()),
+                   transport=NoNetwork()) == 0
+
+
+def _killed_first_session(out, payload, monkeypatch, *extra):
+    _kill_after_first_part(monkeypatch)
+    with pytest.raises(Killed):
+        dl.main(_argv(out, payload, 4, *extra), transport=FakeTransport(payload), workers=1)
+    monkeypatch.setattr(dl, "_fault", lambda point: None)
+    assert _state(out).state is S.FETCHING
+
+
+def test_expected_sha256_survives_a_resume_without_the_flag(tmp_path, monkeypatch):
+    """Probe 3: --sha256 on the killed first run, dropped on resume, used to verify nothing."""
+    payload = os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    _killed_first_session(out, payload, monkeypatch, "--sha256", "0" * 64)
+    assert _state(out).data["expected_sha256"] == "0" * 64
+    assert dl.main(_argv(out, payload), transport=FakeTransport(payload)) == 1
+    assert _state(out).state is S.VERIFY_FAILED and not out.exists()
+    # The right one re-verifies the kept bytes without fetching anything.
+    assert dl.main(_argv(out, payload, 4, "--sha256", _sha(payload)), transport=NoNetwork()) == 0
+    assert out.read_bytes() == payload
+    assert json.loads(Path(f"{out}.receipt.json").read_text())["verified_by"] == "sha256"
+
+
+def test_a_different_sha256_on_resume_is_refused(tmp_path, monkeypatch, capsys):
+    payload = os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    _killed_first_session(out, payload, monkeypatch, "--sha256", _sha(payload))
+    capsys.readouterr()
+    assert dl.main(_argv(out, payload, 4, "--sha256", "1" * 64), transport=NoNetwork()) == 1
+    assert "records expected sha256" in capsys.readouterr().err
+    assert _state(out).state is S.FETCHING
+    assert dl.main(_argv(out, payload), transport=FakeTransport(payload)) == 0
+    assert out.read_bytes() == payload
+
+
+def test_sha256_first_given_on_resume_is_recorded(tmp_path, monkeypatch):
+    payload = os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    _killed_first_session(out, payload, monkeypatch)
+    assert dl.main(_argv(out, payload, 4, "--sha256", _sha(payload)),
+                   transport=FakeTransport(payload)) == 0
+    events = [e["event"] for e in _check_journal(out)]
+    assert "expect" in events and events.index("expect") < events.index("verify")
+    assert _state(out).data["expected_sha256"] == _sha(payload)
+
+
+@pytest.mark.parametrize("orphan", ["part00", "part03.chunk", "part17"])
+def test_orphan_parts_next_to_a_legacy_out_are_refused(tmp_path, orphan, capsys):
+    """Probe 4: junk OUT.part00 + legacy OUT prefix, no plan, used to be promoted (rc 0)."""
+    payload = os.urandom(50_000)
+    out = tmp_path / "obj.bin"
+    out.write_bytes(payload[:1000])
+    Path(f"{out}.{orphan}").write_bytes(b"X" * 500)
+    t = FakeTransport(payload)
+    assert dl.main(_argv(out, payload, 4, "--allow-unverified"), transport=t) == 1
+    assert "never reinterpreted" in capsys.readouterr().err
+    assert out.read_bytes() == payload[:1000] and Path(f"{out}.{orphan}").read_bytes() == b"X" * 500
+    assert not Path(f"{out}.state.json").exists() and t.requests == 0
+
+
+def test_parts_outside_the_legacy_plan_are_refused(tmp_path):
+    payload = os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    _legacy_layout(out, payload, 0, 2)
+    Path(dl.part_path(str(out), 5)).write_bytes(b"x")
+    assert dl.main(_argv(out, payload, 2, "--sha256", _sha(payload)),
+                   transport=FakeTransport(payload)) == 1
+    assert not Path(f"{out}.state.json").exists() and Path(f"{out}.plan").exists()
+
+
+def test_legacy_parts_from_an_older_remote_version_are_never_promoted(tmp_path, capsys):
+    """Probe 11: old-tool parts of version B + a server now serving A used to mix (rc 0)."""
+    new, old = os.urandom(20_000), os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    jobs = dl.plan(0, len(new), 4)
+    Path(f"{out}.plan").write_text(json.dumps(
+        {"url": "u", "total": len(new), "jobs": [list(j) for j in jobs]}))
+    k, lo, hi = jobs[0]
+    Path(dl.part_path(str(out), k)).write_bytes(old[lo:hi + 1])
+    t = FakeTransport(new, etag='"v2"')
+    assert dl.main(_argv(out, new), transport=t) == 1  # refused before anything is written
+    assert "--allow-unverified" in capsys.readouterr().err
+    assert t.probes == t.requests == 0 and not Path(f"{out}.state.json").exists()
+    assert dl.main(_argv(out, new, 4, "--sha256", _sha(new)), transport=t) == 1
+    assert _state(out).state is S.VERIFY_FAILED and not out.exists()
+
+
+def test_allow_unverified_is_recorded_as_size_only(tmp_path):
+    payload = os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    _legacy_layout(out, payload, 0, 4)
+    assert dl.main(_argv(out, payload, 4, "--allow-unverified"),
+                   transport=FakeTransport(payload)) == 0
+    receipt = json.loads(Path(f"{out}.receipt.json").read_text())
+    assert receipt["verified_by"] == "size-only" and receipt["unvalidated"] == ["legacy_bytes"]
+    assert receipt["expected_sha256"] is None and _state(out).data["allow_unverified"] is True
+
+
+def test_server_without_validators_needs_sha256_or_allow_unverified(tmp_path, capsys):
+    """Probe 10: no ETag and no Last-Modified + a change mid-download used to promote mixed bytes."""
+    a, b = os.urandom(20_000), os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    t = ValidatorTransport(a, etag=None, lm=None, payload2=b, flip_after=2)
+    assert dl.main(_argv(out, a), transport=t, workers=1) == 1
+    assert "neither ETag nor Last-Modified" in capsys.readouterr().err
+    assert t.requests == 0 and not Path(f"{out}.state.json").exists()
+    assert dl.main(_argv(out, a, 4, "--sha256", _sha(a)), transport=t, workers=1) == 1
+    assert _state(out).state is S.VERIFY_FAILED and not out.exists()
+    out2 = tmp_path / "steady.bin"
+    t2 = ValidatorTransport(a, etag=None, lm=None)
+    assert dl.main(_argv(out2, a, 4, "--allow-unverified"), transport=t2) == 0
+    receipt = json.loads(Path(f"{out2}.receipt.json").read_text())
+    assert receipt["verified_by"] == "size-only" and receipt["unvalidated"] == ["no_validator"]
+
+
+def test_last_modified_change_mid_download_is_remote_changed(tmp_path):
+    a, b = os.urandom(20_000), os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    t = ValidatorTransport(a, etag=None, payload2=b, flip_after=2)
+    assert dl.main(_argv(out, a), transport=t, workers=1) == 1
+    assert _state(out).state is S.REMOTE_CHANGED and not out.exists()
+    _check_invariants(out, a)
+
+
+@pytest.mark.parametrize("case", ["plan_out_too_big", "plan_garbage", "plan_not_object",
+                                  "plan_bad_jobs", "state_truncated"])
+def test_corrupt_inputs_are_refused_not_tracebacks(tmp_path, capsys, case):
+    """Probes 5-7: StopIteration, JSONDecodeError and CorruptState used to escape main()."""
+    payload = os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    argv = _argv(out, payload, 4, "--sha256", _sha(payload))
+    if case == "state_truncated":
+        assert dl.main(argv, transport=FakeTransport(payload)) == 0
+        Path(f"{out}.state.json").write_text('{"schema": 1')
+    else:
+        plan = {"plan_out_too_big": json.dumps({"url": "u", "total": len(payload),
+                                                "jobs": [list(j) for j in dl.plan(0, len(payload), 4)]}),
+                "plan_garbage": "{not json",
+                "plan_not_object": "[1, 2]",
+                "plan_bad_jobs": json.dumps({"url": "u", "total": len(payload), "jobs": [[0, 1]]})}[case]
+        Path(f"{out}.plan").write_text(plan)
+        out.write_bytes(payload + b"extra" if case == "plan_out_too_big" else payload[:10])
+    before = sorted(p.name for p in tmp_path.iterdir())
+    assert dl.main(argv, transport=FakeTransport(payload)) == 1
+    assert "refused:" in capsys.readouterr().err
+    assert sorted(p.name for p in tmp_path.iterdir() if not p.name.endswith(".lock")) == \
+        [n for n in before if not n.endswith(".lock")]  # nothing deleted or created
+
+
+@pytest.mark.parametrize("bad", [["0"], ["-5"], ["10", "0"], ["10", "--attempts", "0"],
+                                 ["10", "--sha256", "abc"]])
+def test_bad_arguments_are_usage_errors(tmp_path, bad):
+    with pytest.raises(SystemExit) as e:
+        dl.main(["u", str(tmp_path / "x"), *bad], transport=NoNetwork())
+    assert e.value.code == 2
+
+
+def test_out_replaced_after_done_is_detected(tmp_path, capsys):
+    """Probe 12: same-size bytes swapped in after DONE used to stay SOURCE_DONE and rc 0."""
+    from alztest import data as adata
+    payload = os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+    assert dl.main(_argv(out, payload), transport=FakeTransport(payload)) == 0
+    assert adata.hypoad_source_state(out)[0] == "SOURCE_DONE"
+    receipt = json.loads(Path(f"{out}.receipt.json").read_text())
+    assert receipt["stamp"] == dl.file_stamp(str(out))
+    mtime = out.stat().st_mtime_ns
+    out.write_bytes(os.urandom(len(payload)))
+    os.utime(out, ns=(mtime, mtime + 1_000_000_000))
+    capsys.readouterr()
+    assert dl.main(_argv(out, payload), transport=NoNetwork()) == 1
+    assert "not the file recorded at DONE" in capsys.readouterr().err
+    assert adata.hypoad_source_state(out) == ("SOURCE_CHANGED", None)
+    assert adata.download_receipt(out) is None
+
+
+def test_sweep_temps_never_touches_a_resumable_assembly(tmp_path, monkeypatch):
+    """Review: the assembly used to be OUT.partial, which sweep_temps deletes when aged."""
+    payload = os.urandom(20_000)
+    out = tmp_path / "obj.bin"
+
+    def fault(point, n={"k": 0}):
+        if point == "after_state":
+            n["k"] += 1
+            if n["k"] == 2:
+                raise Killed(point)
+    monkeypatch.setattr(dl, "_fault", fault)
+    with pytest.raises(Killed):
+        dl.main(_argv(out, payload, 4, "--sha256", _sha(payload)),
+                transport=FakeTransport(payload), workers=1)
+    monkeypatch.setattr(dl, "_fault", lambda point: None)
+    assert _state(out).state is S.ASSEMBLING and Path(f"{out}{dl.PARTIAL_SUFFIX}").exists()
+    old = os.path.getmtime(out.parent) - 7200
+    for p in tmp_path.iterdir():
+        os.utime(p, (old, old))
+    assert ds.sweep_temps(tmp_path, dry_run=True) == []
+    assert ds.sweep_temps(tmp_path) == []
+    t = FakeTransport(payload)
+    assert dl.main(_argv(out, payload), transport=t) == 0
+    assert out.read_bytes() == payload and t.requests == 0
