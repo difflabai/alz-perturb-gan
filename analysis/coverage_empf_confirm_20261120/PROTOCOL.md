@@ -1,6 +1,8 @@
 # Native EMPF across folds and seeds: confirmation of the default and the coverage readout
 
-Written 2026-11-20 03:55 UTC, before any fit named below exists. Owner request
+Written 2026-11-20 at about 03:30 UTC (committed in d578e83; the first fit
+started at 03:31:39, see the queue log), before any fit named below exists.
+An earlier version of this line said 03:55 in error. Owner request
 the same day: "continue but pull and fix anything you need to". The README and
 `../coverage_empf_20261117/README.md` both state the outstanding step: the
 owner-selected native EMPF default and the quarter-contraction readout rest on
@@ -76,6 +78,16 @@ exists; anything else is labelled exploratory. A pass is development evidence
 on reused donors, not an independent final test; that needs the sealed donors.
 
 ## Rules
+
+Known runtime race (found at launch, 2026-11-20 03:31): the EMPF host
+(`analysis/empf_comparison_20261117/host.py::activate`) rewrites its derived
+host files non-atomically on every process start, so two processes activating
+within the same second can see a half-written file and stop with "existing
+derived EMPF host differs" (fold 8 seed 0 did, before training). The failure
+is loud; the file content is deterministic. `host.py` is a hash-pinned source
+and stays unchanged; this pass staggers process starts and reruns any fit or
+generation step that stopped this way. The CLI resumes a complete fit straight
+to generation.
 
 New code only under `analysis/coverage_empf_confirm_20261120/`; new outputs
 only under `runs/coverage_empf_confirm_20261120/` and the CLI's own fit root.
