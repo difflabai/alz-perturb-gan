@@ -41,10 +41,13 @@ same 12 held-out development donors.
 - **Coverage pilot** ([README](analysis/coverage_empf_20261117/README.md)): a
   quarter-contraction readout raises SD coverage 58.3% to 62.2% and combined
   coverage 69.2% to 71.5% on the same weights. SD-only calibration on disjoint
-  six-donor halves reaches 86.7% and 83.7% by widening the SD bounds. With six
-  calibration donors and a nominal 80% level, the conformal rank is 6 (the
-  largest score), so the procedure's guarantee is at least 6/7 (85.7%), not
-  80%. The default readout is unchanged.
+  six-donor halves widens the SD bounds: SD and combined coverage reach 86.7%
+  and 83.7% on top of the quarter readout, and 85.6% and 82.8% on the default
+  readout. With six calibration donors and a nominal 80% level, the conformal
+  rank is 6 (the largest score), so the nominal split-conformal level is 6/7
+  (85.7%), not 80%. That level is marginal and per coordinate, and assumes
+  exchangeable donors; these donors were also reused during development. The
+  default readout is unchanged.
 - **Conditional-residual probe**
   ([README](analysis/particlegan_review_20261117/README.md)): in a controlled
   two-group CPU example, EMPF's transport residual reports a perfect match after
@@ -70,7 +73,9 @@ statement above rests on one fold and one seed. While it runs, do not edit
 `configs/microglia_default.json`, `scripts/microglia*.py`, or any file listed
 in [analysis/default_empf_20261117/runtime_source_manifest.json](analysis/default_empf_20261117/runtime_source_manifest.json)
 or the confirmation's own source manifest: the CLI and the scorer check them by
-hash. The protocol also records a start-up race in the EMPF host, handled by
+hash. That manifest is not yet committed; it will land at
+`analysis/coverage_empf_confirm_20261120/source_manifest.json`, and this list
+should be rechecked against it then. The protocol also records a start-up race in the EMPF host, handled by
 staggering process starts and rerunning any step that stops on it.
 
 ## Open experiments (not started)
@@ -88,15 +93,15 @@ staggering process starts and rerunning any step that stops on it.
 As of 2026-11-20:
 
 - #18, the coverage pilot, wide-width probe and confirmation protocol, is open
-  against `main`.
+  as a draft against `main`.
 - Paper-watch conversions merged: #9 (scaffolding), #11 (SEA-AD vulnerability
   ordering), #13 (PsychAD specificity), #15 (lipid-lysosome microglia), #16
   (SEA-AD resilience). Their findings are listed in
   [paper_watch/README.md](paper_watch/README.md).
-- Paper-watch conversions open and blocked on data: #10 NeuroKO, #12 panAD and
-  #14 GNPC (each has an owner comment from 2026-11-18 closing it as data- or
-  access-blocked, but is still open, and targets the already-merged
-  `paper-watch/scaffolding` branch), and #17 HypoAD (access/format).
+- Paper-watch conversions closed unmerged on 2026-11-20 as data- or
+  access-blocked, following owner comments from 2026-11-18: #10 NeuroKO, #12
+  panAD and #14 GNPC.
+- Still open and blocked: #17 HypoAD (access/format), against `main`.
 
 ## Run the checks
 
