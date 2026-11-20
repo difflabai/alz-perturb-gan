@@ -73,10 +73,23 @@ def test_historical_handoffs_point_to_status(name):
     if entry['state'] == 'CURRENT':
         return
     first = (ROOT/name).read_text(encoding='utf-8').splitlines()[0]
-    assert first.startswith(BANNER)
+    banner = REG.read_banner(ROOT/name)
+    assert banner and banner['by'] == 'STATUS.md' and first.startswith('SUPERSEDED by STATUS.md (')
+    # Later supersessions carry their own date; none predates the registry.
+    assert banner['date'] >= REG.BANNER_EARLIEST
     # The banner must say that CURRENT/AUTHORITATIVE/ACTIVE text below is history.
     assert REG.BANNER_HISTORICAL in first and 'out of date' in first
-    assert entry == {'state': 'SUPERSEDED', 'by': 'STATUS.md', 'date': '2026-11-20'}
+    assert entry == {'state': 'SUPERSEDED', 'by': 'STATUS.md', 'date': banner['date']}
+
+
+def test_banner_dates_are_checked(tmp_path):
+    rest = REG.BANNER_TEXT.split(').', 1)[1]
+    for date, ok in (('2026-11-20', True), ('2027-01-05', True), ('2026-11-19', False),
+                     ('2026-13-40', False)):
+        (tmp_path/'T.txt').write_text(f'SUPERSEDED by STATUS.md ({date}).{rest}\nx\n')
+        assert (REG.read_banner(tmp_path/'T.txt') is not None) == ok, date
+    (tmp_path/'T.txt').write_bytes(('\ufeff' + REG.BANNER_TEXT + '\r\nx\n').encode())
+    assert REG.read_banner(tmp_path/'T.txt')  # BOM and CRLF are tolerated
 
 
 def test_exactly_one_document_is_current():
@@ -120,6 +133,24 @@ def test_handoff_name_variants_are_globbed(tmp_path):
     found = REG.handoff_files(root)
     assert {'analysis/X_HANDOFF.md', 'analysis/study/TAKEOVER_20261201.txt',
             'analysis/LIVE_CONTINUATION_V2.txt', 'CONTINUATION.txt'} == set(found)
+
+
+@pytest.mark.parametrize('rel', ['analysis/x/TAKEOVER.md', 'analysis/takeover.txt',
+                                 'analysis/Continuation.md', 'analysis/x/HANDOFF'])
+def test_unbannered_handoff_name_variants_fail(tmp_path, rel):
+    """Adversary (low): TAKEOVER.md and lowercase takeover.txt were not matched."""
+    root = _fixture(tmp_path)
+    (root/rel).parent.mkdir(parents=True, exist_ok=True)
+    (root/rel).write_text('CURRENT AUTHORITATIVE: do X\n')
+    assert rel in REG.handoff_files(root)
+    with pytest.raises(ValueError, match=rel):
+        REG.build_doc_registry(root)
+
+
+def test_code_and_data_named_like_handoffs_are_not_handoffs():
+    for name in ('test_continuation.py', 'handoff_completed.json', 'turnover_continuation_delta.diff',
+                 'CAL_GPU0_V1_x_f0_pg_s0-incomplete-GPU-handoff-stop.json'):
+        assert not REG.is_handoff_name(name), name
 
 
 def test_second_current_document_fails():

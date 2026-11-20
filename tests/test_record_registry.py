@@ -51,9 +51,9 @@ def in_git():
         return False
 
 
-def chain(entries):
-    """Renumber and re-chain entries, as an honest appender would."""
-    out, prev = [], None
+def chain(entries, log=None):
+    """Renumber and re-chain entries from the header digest, as an honest appender would."""
+    out, prev = [], REG.header_digest(LOG if log is None else log)
     for i, e in enumerate(entries):
         e = dict(e, seq=i, prev=prev)
         prev = REG.entry_digest(e)
@@ -61,17 +61,22 @@ def chain(entries):
     return out
 
 
-def with_entries(entries):
-    log = copy.deepcopy(LOG)
-    log['entries'] = chain(entries)
+def with_entries(entries, log=None):
+    log = copy.deepcopy(LOG if log is None else log)
+    log['entries'] = chain(entries, log)
+    log['head'] = REG.entry_digest(log['entries'][-1])
     return log
 
 
 def step(subject, frm, event, to, at='2026-11-21T00:00:00Z', **extra):
     e = {'subject': subject, 'from': frm, 'event': event, 'to': to, 'at': at, 'actor': 'test',
-         'evidence': [{'path': 'x', 'sha256': '0' * 64}]}
+         'evidence': [{'path': 'x', 'sha256': '0' * 64, 'commit': '0' * 40}]}
     e.update(extra)
     return e
+
+
+def is_shallow():
+    return git('rev-parse', '--is-shallow-repository').decode().strip() == 'true'
 
 
 # ---------------------------------------------------------------- (a) log validation
@@ -100,26 +105,64 @@ def test_initial_reconstruction_cites_committed_evidence():
 def test_evidence_hashes_match_their_commits():
     if not in_git():
         pytest.skip('not a git checkout')
-    checked = 0
+    shallow, checked, missing = is_shallow(), 0, []
     for e in LOG['entries']:
         for ev in e['evidence']:
             try:
                 blob = git('show', f'{ev["commit"]}:{ev["path"]}')
             except subprocess.CalledProcessError:
-                continue  # shallow clone without that commit
+                missing.append((e['seq'], ev['commit'], ev['path']))
+                continue
             assert hashlib.sha256(blob).hexdigest() == ev['sha256'], (e['seq'], ev['path'])
             checked += 1
+    # An unresolvable commit is fabricated evidence, unless the clone is shallow.
+    assert shallow or not missing, missing
     if not checked:
-        pytest.skip('evidence commits not in this clone')
+        pytest.skip('shallow clone: evidence commits not available')
 
 
 def test_log_is_append_only_across_history():
     if not in_git():
         pytest.skip('not a git checkout')
+    if is_shallow():
+        pytest.skip('shallow clone: history cannot show the log is append-only (use fetch-depth: 0)')
     revs = git('log', '--format=%H', '--', REG.LIFECYCLE).decode().split()
     for rev in revs:
         old = json.loads(git('show', f'{rev}:{REG.LIFECYCLE}'))
+        if 'head' not in old:
+            continue  # before the header digest was introduced (never pushed)
         assert LOG['entries'][:len(old['entries'])] == old['entries'], rev
+        assert {k: LOG[k] for k in REG.HEADER_KEYS} == {k: old[k] for k in REG.HEADER_KEYS}, rev
+        notes = old.get('superseded_records', [])
+        assert LOG['superseded_records'][:len(notes)] == notes, rev
+
+
+def test_header_and_head_are_anchored():
+    """Header fields and the last entry are covered by the chain (adversary: edit in place)."""
+    assert LOG['entries'][0]['prev'] == REG.header_digest(LOG)
+    assert LOG['head'] == REG.entry_digest(LOG['entries'][-1])
+    log = copy.deepcopy(LOG)
+    log['entries'][-1]['actor'] = 'forged'
+    assert any('head' in e for e in REG.validate_lifecycle(log))
+    for key, value in (('state_mapping', {}), ('selection', 'elsewhere.json'),
+                       ('config', 'configs/other.json'), ('transitions', LOG['transitions'][:-1])):
+        log = copy.deepcopy(LOG)
+        log[key] = value
+        errs = REG.validate_lifecycle(log)
+        assert any('header' in e for e in errs) and len(errs) >= 2, (key, errs)
+    log = copy.deepcopy(LOG)
+    log['transitions'] = LOG['transitions'] + [['X']]
+    assert REG.validate_lifecycle(log)  # malformed row is an error, not a crash
+
+
+def test_rechained_rewrite_still_needs_new_head():
+    """Re-chaining a rewritten history needs head rewritten too; only git history can
+    catch a full forgery, which test_log_is_append_only_across_history does."""
+    entries = copy.deepcopy(LOG['entries'])
+    entries[7]['actor'] = 'agent, not owner'
+    log = copy.deepcopy(LOG)
+    log['entries'] = chain(entries)
+    assert any('head' in e for e in REG.validate_lifecycle(log))
 
 
 def test_tampering_with_history_breaks_the_chain():
@@ -138,14 +181,106 @@ def test_tampering_with_history_breaks_the_chain():
     lambda e: e.update(at='2026-11-01T00:00:00Z'),          # time goes backwards
     lambda e: e.update(evidence=[]),                         # no evidence
     lambda e: e.update(evidence=[{'path': 'x'}]),             # evidence without sha256
+    lambda e: e.update(evidence=[{'path': 'x', 'sha256': '0' * 64}]),  # without commit
+    lambda e: e.update(evidence=[{'path': 'x', 'sha256': '0' * 64, 'commit': 'HEAD'}]),
     lambda e: e.update(actor=''),
     lambda e: e.update(to='PROMOTED_ANYWAY'),
     lambda e: e.update(extra_field=1),
+    lambda e: e.update(at='2026-13-99T99:99:99Z'),            # impossible date
+    lambda e: e.update(subject=['x']),                        # crashed the validator
+    lambda e: e.update(subject=''),
+    lambda e: e.update(replaced_by='someone'),                # only valid on replace
 ])
 def test_malformed_appended_entry_is_rejected(mutate):
     e = step('microglia-empf-countshape-v1', 'UNDER_CONFIRMATION', 'pass', 'CONFIRMED_QUALIFIED')
     mutate(e)
     assert REG.validate_lifecycle(with_entries(LOG['entries'] + [e]))
+
+
+def test_float_seq_is_rejected():
+    log = with_entries(LOG['entries'] + [step('microglia-empf-countshape-v1', 'UNDER_CONFIRMATION',
+                                              'pass', 'CONFIRMED_QUALIFIED')])
+    log['entries'][-1]['seq'] = float(log['entries'][-1]['seq'])
+    log['head'] = REG.entry_digest(log['entries'][-1])
+    assert any('integer' in e for e in REG.validate_lifecycle(log))
+
+
+EMPF, OLD = 'microglia-empf-countshape-v1', 'microglia-pbulk-countshape-v2'
+FAIL_REVERT = [step(EMPF, 'UNDER_CONFIRMATION', 'fail', 'CONFIRMATION_FAILED'),
+               step(EMPF, 'CONFIRMATION_FAILED', 'revert', 'REVERTED', at='2026-11-21T00:00:01Z')]
+
+
+def legacy_config():
+    c = copy.deepcopy(CONFIG)
+    c['name'], c['status'] = OLD, 'development-selected'
+    return c
+
+
+def test_failed_confirmation_can_reinstate_the_previous_default():
+    """Adversary (high): REPLACED was a dead end, so restoring 0.9.7 could not be recorded."""
+    log = with_entries(LOG['entries'] + FAIL_REVERT + [
+        step(OLD, 'REPLACED', 'reinstate', 'PROMOTED', at='2026-11-21T00:00:02Z')])
+    assert REG.validate_lifecycle(log) == []
+    assert REG.latest_states(log)[OLD] == 'PROMOTED'
+    assert REG.check_default_consistency(log, legacy_config(), SELECTION, RECORDS) == []
+    # The config must follow the reinstatement.
+    assert REG.check_default_consistency(log, CONFIG, SELECTION, RECORDS)
+    # Without the reinstate entry nobody holds the default.
+    log = with_entries(LOG['entries'] + FAIL_REVERT)
+    assert REG.validate_lifecycle(log) == []
+    assert REG.check_default_consistency(log, legacy_config(), SELECTION, RECORDS)
+
+
+@pytest.mark.parametrize('tail', [
+    [step(OLD, 'REPLACED', 'reinstate', 'PROMOTED')],                      # replacer still holds
+    [step(EMPF, 'UNDER_CONFIRMATION', 'fail', 'CONFIRMATION_FAILED'),
+     step(OLD, 'REPLACED', 'reinstate', 'PROMOTED', at='2026-11-21T00:00:01Z')],  # not reverted
+    FAIL_REVERT + [step(OLD, 'REPLACED', 'reinstate', 'OWNER_SELECTED_EXPERIMENTAL',
+                        at='2026-11-21T00:00:02Z')],                        # wrong restored state
+])
+def test_reinstate_is_guarded(tail):
+    assert REG.validate_lifecycle(with_entries(LOG['entries'] + tail))
+
+
+def test_late_legacy_import_cannot_promote_an_untested_model():
+    """Adversary (medium): import_legacy_default after the log started skipped confirmation."""
+    tail = FAIL_REVERT + [step('microglia-untested', None, 'import_legacy_default', 'PROMOTED',
+                               at='2026-11-21T00:00:02Z')]
+    errs = REG.validate_lifecycle(with_entries(LOG['entries'] + tail))
+    assert any('import_legacy_default is only allowed' in e for e in errs)
+    # Dropping the superseded_records note is reported too.
+    log = copy.deepcopy(LOG)
+    log['superseded_records'] = []
+    assert any('required superseded_records' in e
+               for e in REG.check_default_consistency(log, CONFIG, SELECTION, RECORDS))
+
+
+def test_replace_must_name_and_hand_over_to_its_replacer():
+    entries = copy.deepcopy(LOG['entries'])
+    del entries[6]['replaced_by']
+    assert any('replaced_by' in e for e in REG.validate_lifecycle(with_entries(entries)))
+    entries = copy.deepcopy(LOG['entries'])
+    entries[6]['replaced_by'] = 'microglia-someone-else'
+    assert any('next entry' in e for e in REG.validate_lifecycle(with_entries(entries)))
+
+
+def test_new_promotion_requires_a_qualified_selection():
+    """Adversary (low): PROMOTED left selection.json unchecked."""
+    log = with_entries(LOG['entries'] + [
+        step(EMPF, 'UNDER_CONFIRMATION', 'pass', 'CONFIRMED_QUALIFIED'),
+        step(EMPF, 'CONFIRMED_QUALIFIED', 'promote', 'PROMOTED', at='2026-11-21T00:00:01Z')])
+    assert REG.validate_lifecycle(log) == []
+    config = copy.deepcopy(CONFIG)
+    config['status'] = 'qualified-default'
+    config['selection']['population_qualified'] = True
+    errs = REG.check_default_consistency(log, config, SELECTION, RECORDS)
+    assert any('selection status' in e for e in errs)
+    assert any('population_qualified' in e for e in errs)
+    selection = dict(SELECTION, status='qualified_default', population_qualified=True,
+                     prospective_promotion_rule_passed=True)
+    assert REG.check_default_consistency(log, config, selection, RECORDS) == []
+    config['status'] = 'development-selected'  # legacy vocabulary is not a new promotion
+    assert REG.check_default_consistency(log, config, selection, RECORDS)
 
 
 def test_declared_future_paths():
@@ -165,7 +300,7 @@ def test_declared_future_paths():
         [step(s, 'UNDER_CONFIRMATION', 'promote', 'PROMOTED')],          # skips confirmation
         [step(s, 'UNDER_CONFIRMATION', 'fail', 'CONFIRMATION_FAILED'),
          step(s, 'CONFIRMATION_FAILED', 'owner_keep', 'OWNER_SELECTED_EXPERIMENTAL')],  # unflagged
-        [step('microglia-pbulk-countshape-v2', 'REPLACED', 'promote', 'PROMOTED')],    # terminal
+        [step('microglia-pbulk-countshape-v2', 'REPLACED', 'promote', 'PROMOTED')],    # not reinstate
         [step(s, 'AUDITED', 'owner_override', 'OWNER_SELECTED_EXPERIMENTAL')],  # stale `from`
     ]
     for tail in bad:
@@ -188,11 +323,15 @@ def _random_sequence(rnd):
 
 
 def _check_sequence(seq):
+    """Single-subject sequences; replace/reinstate need a second subject, so a
+    sequence containing them must be rejected (their cross-subject rules fail)."""
     declared = {(t[0], t[1], t[2]) for t in LOG['transitions']}
     entries = [step('s', f, ev, to, at=f'2026-12-01T00:00:{i:02d}Z',
                     **({'flags': ['confirmation_failed']} if ev == 'owner_keep' else {}))
                for i, (f, ev, to) in enumerate(seq)]
-    legal = all(t in declared for t in seq)
+    legal = all(t in declared for t in seq) \
+        and not any(ev in ('replace', 'reinstate') for _, ev, _ in seq) \
+        and not any(ev == 'import_legacy_default' for _, ev, _ in seq[1:])
     assert (REG.validate_lifecycle(with_entries(entries)) == []) == legal, seq
     return legal
 
@@ -215,6 +354,7 @@ except ImportError:  # seeded fallback
 def test_latest_state_matches_config_and_selection():
     assert REG.check_default_consistency(LOG, CONFIG, SELECTION, RECORDS) == []
     assert LOG['state_mapping'] == REG.DEFAULT_HOLDING
+    assert REG.check_all(ROOT) == []
 
 
 @pytest.mark.parametrize('target,mutate', [
@@ -310,6 +450,76 @@ def test_classify_priority():
     assert REG.classify(['resources-live']) == ('ABANDONED_UNKNOWN', [])
 
 
+def test_live_status_matches_whole_words_only():
+    """Adversary (low): INACTIVE and DELIVERED were flagged live."""
+    for status in ('INACTIVE_DELIVERED_RESULT', 'DELIVERED', 'inactive'):
+        assert not REG.LIVE_STATUS.search(status), status
+    for status in ('NATIVE_CUDA_TRAINING_LIVE', 'ACTIVE', 'live-run', 'GPU_ACTIVE_STAGE'):
+        assert REG.LIVE_STATUS.search(status), status
+
+
+def test_live_only_attempt_fails_check(tmp_path):
+    """Adversary (low): a new attempt with only a -live record passed as ABANDONED_UNKNOWN."""
+    root = _fixture_tree(tmp_path)
+    (root/'analysis/CAL_GPU0_V1_newjob_v1_f0_pg_s0-native-training-live.json').write_text(
+        '{"status": "NATIVE_CUDA_TRAINING_LIVE"}')
+    assert REG.main(['--root', str(root)]) == 1
+    errs = REG.check_all(root)
+    assert any('newjob_v1_f0_pg_s0: live/active record' in e for e in errs)
+    (root/'analysis/CAL_GPU0_V1_quiet_v1_f0_pg_s0-result.json').write_text(
+        '{"status": "INACTIVE_DELIVERED_RESULT"}')
+    REG.main(['--root', str(root)])
+    index = json.loads((root/REG.CAL_INDEX).read_text())
+    assert index['attempts']['quiet_v1_f0_pg_s0']['live_records'] == []
+
+
+def test_unmatched_cal_name_is_reported(tmp_path):
+    root = _fixture_tree(tmp_path)
+    assert REG.main(['--root', str(root)]) == 0
+    (root/'analysis/CAL_GPU0_V1_weird-name-result.json').write_text('{}')
+    assert REG.main(['--root', str(root), '--check']) == 1
+    assert any('CAL_GPU0_V1_weird-name-result.json' in e for e in REG.check_all(root))
+    assert REG.cal_unmatched_paths(ROOT) == []
+
+
+# ---------------------------------------------------------------- bad inputs
+@pytest.mark.parametrize('mode', [[], ['--check']])
+@pytest.mark.parametrize('damage', ['truncated', 'missing'])
+def test_damaged_lifecycle_is_reported_not_raised(tmp_path, capsys, mode, damage):
+    root = _fixture_tree(tmp_path)
+    path = root/REG.LIFECYCLE
+    if damage == 'missing':
+        path.unlink()
+    else:
+        path.write_text(path.read_text()[:500])
+    assert REG.main(['--root', str(root)] + mode) == 1
+    assert REG.LIFECYCLE in capsys.readouterr().err
+
+
+def test_registry_with_wrong_current_can_be_regenerated(tmp_path):
+    root = _fixture_tree(tmp_path)
+    (root/REG.REGISTRY).parent.mkdir(parents=True, exist_ok=True)
+    (root/REG.REGISTRY).write_text(json.dumps({'current': 'CONTINUATION.txt'}))
+    assert REG.main(['--root', str(root)]) == 0
+    assert json.loads((root/REG.REGISTRY).read_text())['current'] == 'STATUS.md'
+
+
+def test_unbannered_handoff_in_write_mode_reports_the_file(tmp_path, capsys):
+    root = _fixture_tree(tmp_path)
+    (root/'analysis/x').mkdir(parents=True)
+    (root/'analysis/x/TAKEOVER.txt').write_text('CURRENT AUTHORITATIVE: do X\n')
+    assert REG.main(['--root', str(root)]) == 1
+    assert 'analysis/x/TAKEOVER.txt' in capsys.readouterr().err
+
+
+def test_binary_handoff_names_the_file(tmp_path, capsys):
+    root = _fixture_tree(tmp_path)
+    (root/'analysis/HANDOFF').write_bytes(b'\x89PNG\r\n\x1a\n\xff\xfe')
+    assert REG.main(['--root', str(root), '--check']) == 1
+    err = capsys.readouterr().err
+    assert 'analysis/HANDOFF' in err and 'not UTF-8' in err and 'Traceback' not in err
+
+
 # ---------------------------------------------------------------- atomic writes
 def _fixture_tree(tmp_path):
     """A small offline copy: lifecycle inputs plus a few CAL records and handoffs."""
@@ -372,6 +582,28 @@ def test_killed_writer_leaves_target_intact(tmp_path):
     assert not any(r['path'].endswith('.tmp') for a in index['attempts'].values() for r in a['records'])
 
 
+def test_outputs_follow_the_umask(tmp_path):
+    """Adversary (low): mkstemp made every generated file 0600."""
+    target = tmp_path/'out.json'
+    old = os.umask(0o022)
+    try:
+        REG.atomic_write(target, 'x\n')
+    finally:
+        os.umask(old)
+    assert target.stat().st_mode & 0o777 == 0o644
+
+
+def test_stale_temp_files_are_removed(tmp_path):
+    target = tmp_path/'out.json'
+    stale, fresh = tmp_path/'.out.json.abc.tmp', tmp_path/'.out.json.def.tmp'
+    stale.write_text('partial')
+    fresh.write_text('partial')
+    old = os.stat(stale).st_mtime - REG.STALE_TMP_SECONDS - 60
+    os.utime(stale, (old, old))
+    assert REG.remove_stale_temps(target) == [stale.name]
+    assert fresh.exists() and not stale.exists()  # a concurrent writer's temp survives
+
+
 def test_concurrent_builders_agree(tmp_path):
     root = _fixture_tree(tmp_path)
     code = ('import importlib.util, sys\n'
@@ -387,6 +619,46 @@ def test_concurrent_builders_agree(tmp_path):
 
 
 # ---------------------------------------------------------------- (e) pins
+# Directories the running confirmation queue reads. Its source_manifest.json is
+# untracked until the queue finishes, so these are pinned by prefix.
+PINNED_PREFIXES = ('analysis/coverage_empf_20261117/', 'analysis/coverage_empf_confirm_20261120/',
+                   'analysis/improve_20261109/r5/', 'runs/coverage_empf_20261117/',
+                   'runs/microglia_empf/')
+# Every key of the queue's analysis/coverage_empf_confirm_20261120/source_manifest.json
+# (2026-11-20). The adversary found 16 of them outside the old guard.
+CONFIRM_QUEUE_INPUTS = (
+    'analysis/coverage_empf_20261117/calibration.py', 'analysis/coverage_empf_20261117/run.py',
+    'analysis/coverage_empf_confirm_20261120/PROTOCOL.md',
+    'analysis/coverage_empf_confirm_20261120/score.py',
+    'analysis/coverage_empf_confirm_20261120/analyze.py',
+    'analysis/coverage_empf_confirm_20261120/test_confirm.py',
+    'analysis/coverage_empf_confirm_20261120/source_manifest.json',
+    'analysis/improve_20261109/r5/architecture_score.py', 'analysis/improve_20261109/r5/evaluate.py',
+    'analysis/improve_20261109/r5/generate.py', 'analysis/improve_20261109/r5/interval_metrics.py',
+    'analysis/improve_20261109/r5/metrics.py', 'analysis/improve_20261109/r5/mode_cellshape.py',
+    'configs/microglia_default.json', 'scripts/microglia.py', 'scripts/microglia_runtime.py',
+    'analysis/coverage_empf_20261117/completion/audit.json',
+    'analysis/coverage_empf_20261117/completion/baseline_raw_score.json',
+    'analysis/coverage_empf_20261117/completion/calibration/baseline_half0.json',
+    'analysis/coverage_empf_20261117/completion/calibration/baseline_half1.json',
+    'analysis/coverage_empf_20261117/completion/calibration/quarter_half0.json',
+    'analysis/coverage_empf_20261117/completion/calibration/quarter_half1.json',
+    'analysis/coverage_empf_20261117/completion/comparison.json',
+    'analysis/coverage_empf_20261117/completion/diagnosis.json',
+    'analysis/coverage_empf_20261117/completion/quarter_generated.receipt.json',
+    'analysis/coverage_empf_20261117/completion/quarter_raw_score.json',
+    'analysis/default_empf_20261117/selected_model.json',
+    'runs/coverage_empf_20261117/quarter_generated.npz',
+    'runs/coverage_empf_20261117/quarter_generated.receipt.json',
+    'runs/microglia_empf/verification/final_generated.npz',
+    'runs/microglia_empf/verification/final_generated.receipt.json',
+)
+
+
+def is_pinned(path, pins):
+    return path in pins or path.startswith(PINNED_PREFIXES)
+
+
 def pinned_paths(root=ROOT):
     """Paths pinned by the live runtime and confirmation manifests, plus explicit pins."""
     pins = {'configs/microglia_default.json', 'analysis/default_empf_20261117/selection.json',
@@ -406,7 +678,21 @@ def pinned_paths(root=ROOT):
             pins.add(rel)
     pins |= {p.relative_to(root).as_posix() for p in (root/'analysis/empf_comparison_20261117').rglob('*')
              if p.is_file()}
+    pins |= set(CONFIRM_QUEUE_INPUTS)
     return pins
+
+
+def test_pin_guard_covers_the_confirmation_queue_inputs():
+    """Adversary (low): 16 queue inputs were outside the guard because the queue's
+    manifest is untracked at the base."""
+    pins = pinned_paths()
+    assert all(is_pinned(p, pins) for p in CONFIRM_QUEUE_INPUTS)
+    manifest = ROOT/'analysis/coverage_empf_confirm_20261120/source_manifest.json'
+    if manifest.exists():
+        m = json.loads(manifest.read_text())
+        keys = {k for key in ('execution_sources', 'inputs', 'analysis_sources') for k in m.get(key, {})}
+        assert {k for k in keys if not is_pinned(k, pins)} == set()
+    assert is_pinned('analysis/coverage_empf_confirm_20261120/new_helper.py', pins)
 
 
 def test_live_runtime_manifest_pins_hold():
@@ -419,7 +705,8 @@ def test_live_runtime_manifest_pins_hold():
 def test_registry_files_are_not_pinned():
     ours = {REG.REGISTRY, REG.CAL_INDEX, REG.LIFECYCLE, 'scripts/hygiene/build_record_registry.py',
             'tests/test_repo_docs.py', 'tests/test_record_registry.py'} | set(BANNERED_HERE)
-    assert not ours & pinned_paths()
+    pins = pinned_paths()
+    assert not {p for p in ours if is_pinned(p, pins)}
 
 
 def test_branch_touches_no_pinned_path_while_under_confirmation():
@@ -437,4 +724,6 @@ def test_branch_touches_no_pinned_path_while_under_confirmation():
         pytest.skip(f'base {base} not available')
     changed = set(git('diff', '--name-only', merge_base, 'HEAD').decode().split())
     changed |= set(git('diff', '--name-only', 'HEAD').decode().split())
-    assert not changed & pinned_paths(), sorted(changed & pinned_paths())
+    pins = pinned_paths()
+    touched = sorted(p for p in changed if is_pinned(p, pins))
+    assert not touched, touched
