@@ -1,12 +1,34 @@
-"""Fetch an analysis-ready slice of the public PsychAD MSSM cohort."""
+"""Fetch an analysis-ready slice of the public PsychAD MSSM cohort.
+
+Receipt ordering (so a crash never leaves an h5ad whose receipt describes
+another file): the receipt (query, shape, content sha256) is written into
+uns['psychad_receipt'] of a hidden partial h5ad; then the sidecar
+``<stem>.receipt.pending.json`` (whole-file sha256 plus a size+mtime
+stamp) is written atomically; then the partial replaces the h5ad; then the
+pending receipt replaces ``<stem>.receipt.json``. After a crash at any step
+either the receipt or the pending receipt matches the h5ad, which is what
+alztest.data.load_psychad(verify=True) checks.
+
+Fault injection for tests: FETCH_PSYCHAD_FAULT=<point> exits with 137 at
+after_partial, after_pending or after_h5ad_replace.
+"""
 import argparse
-import hashlib
 import json
+import os
+import sys
 from pathlib import Path
 
-import cellxgene_census as census_api
 import numpy as np
 from scipy.sparse import csr_matrix
+
+PW = Path(__file__).resolve().parent.parent
+if str(PW) not in sys.path:
+    sys.path.insert(0, str(PW))
+
+from alztest import _durable_state as ds  # noqa: E402
+from alztest.data import (  # noqa: E402
+    PSYCHAD_RECEIPT_KEY, file_sha256, file_stamp, psychad_content_sha256, psychad_receipt_paths,
+)
 
 DATASET = "37a17b78-4864-4a42-b67b-31c00962795a"
 RELEASE = "2025-11-17"
@@ -23,7 +45,46 @@ query = (
     f"dataset_id == '{DATASET}' and cell_type_ontology_term_id == 'CL:0000129' "
     f"and disease in {list(GROUPS)!r}"
 )
+def _fault(point: str) -> None:
+    if os.environ.get("FETCH_PSYCHAD_FAULT") == point:
+        os._exit(137)
+
+
+def write_with_receipt(matrix, path: Path, receipt: dict) -> dict:
+    """Write ``matrix`` to ``path`` with its receipt in uns and beside it, crash-safely."""
+    path = Path(path)
+    receipt = dict(receipt, shape=list(matrix.shape),
+                   content_sha256=psychad_content_sha256(matrix))
+    # Nested mappings go into uns as JSON text (their keys are not HDF5-safe).
+    matrix.uns[PSYCHAD_RECEIPT_KEY] = {
+        k: json.dumps(v, sort_keys=True) if isinstance(v, dict) else v for k, v in receipt.items()}
+    partial = path.with_name(f".{path.name}.{os.getpid()}.partial")
+    try:
+        matrix.write_h5ad(partial, compression="gzip", compression_opts=1)
+        with open(partial, "rb") as fh:
+            os.fsync(fh.fileno())
+        _fault("after_partial")
+        full = dict(receipt, sha256=file_sha256(partial), stamp=file_stamp(partial))
+        final_receipt, pending = psychad_receipt_paths(path)
+        ds.atomic_write_bytes(pending, (json.dumps(full, indent=2) + "\n").encode())
+        _fault("after_pending")
+        os.replace(partial, path)
+        _fault("after_h5ad_replace")
+        os.replace(pending, final_receipt)
+        dirfd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(dirfd)
+        finally:
+            os.close(dirfd)
+    finally:
+        if partial.exists():
+            partial.unlink()
+    return full
+
+
 def fetch(out: Path):
+    import cellxgene_census as census_api
+
     out.mkdir(parents=True, exist_ok=True)
     with census_api.open_soma(census_version=RELEASE) as census:
         dataset = census["census_info"]["datasets"].read(
@@ -60,21 +121,15 @@ def fetch(out: Path):
         raise ValueError("the downloaded expression axes differ from the query")
     by_group = matrix.obs.groupby("diagnosis", observed=True)["donor_id"].agg(["size", "nunique"])
     path = out / "psychad-mssm-microglia.h5ad"
-    partial = out / "psychad-mssm-microglia.partial.h5ad"
-    matrix.write_h5ad(partial, compression="gzip", compression_opts=1)
-    partial.replace(path)
-    with path.open("rb") as f:
-        sha = hashlib.file_digest(f, "sha256").hexdigest()
     receipt = {
         "source": str(dataset["citation"]), "census_release": RELEASE,
         "dataset_id": DATASET, "dataset_version_id": str(dataset["dataset_version_id"]),
         "query": query, "source_to_analysis_labels": GROUPS,
         "cap_per_donor": LIMIT, "sampling_seed": 0,
-        "shape": list(matrix.shape), "sha256": sha,
-        "diagnosis_counts": by_group.rename(columns={"size": "nuclei", "nunique": "donors"}).to_dict(orient="index"),
+        "diagnosis_counts": by_group.rename(
+            columns={"size": "nuclei", "nunique": "donors"}).to_dict(orient="index"),
     }
-    (out / "psychad-mssm-microglia.receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
-    print(json.dumps(receipt, indent=2))
+    print(json.dumps(write_with_receipt(matrix, path, receipt), indent=2))
 
 
 def main():

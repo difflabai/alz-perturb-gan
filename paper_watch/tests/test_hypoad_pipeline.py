@@ -1,7 +1,9 @@
 """Data-free checks for the HypoAD readout pipeline (synthetic fixtures only)."""
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
 import os
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -118,6 +120,15 @@ def test_exact_permutation_p_and_bootstrap_ci():
 
 # ------------------------------------------------------------ extractor
 
+def _receipt(path):
+    """The DONE receipt parallel_download.py leaves beside a finished download."""
+    data = Path(path).read_bytes()
+    Path(f"{path}.receipt.json").write_text(json.dumps({
+        "url": "file://fixture", "etag": None, "size": len(data),
+        "sha256": hashlib.sha256(data).hexdigest(), "finished_at": "2026-11-20T00:00:00Z"}))
+    return hashlib.sha256(data).hexdigest()
+
+
 def _write_source(path, *, source="counts"):
     ad = pytest.importorskip("anndata")
     rng = np.random.default_rng(0)
@@ -148,6 +159,7 @@ def test_extractor_writes_only_microglia_rows(tmp_path, source):
     ad = pytest.importorskip("anndata")
     ext = _script("extract_hypoad_microglia")
     labels, counts = _write_source(tmp_path / "src.h5ad", source=source)
+    sha = _receipt(tmp_path / "src.h5ad")
     dst = tmp_path / "out" / "hypoad_microglia.h5ad"
     args = ["--input", str(tmp_path / "src.h5ad"), "--output", str(dst)]
     if source == "X":  # X holds log1p values, not counts
@@ -172,6 +184,9 @@ def test_extractor_writes_only_microglia_rows(tmp_path, source):
     assert list(info["labels_excluded"]) == ["Micro-PVM"]
     assert bool(info["integer_counts"]) == (source != "X")
     assert sum(info["condition_cells"]) == len(want)
+    assert info["schema"] == 2 and info["input_sha256"] == sha and info["input_unverified"] == ""
+    assert bool(info["params"]["allow_noninteger"]) == (source == "X")
+    assert not list(dst.parent.glob(".*partial"))
 
 
 def test_microglia_label_guard():
@@ -212,9 +227,21 @@ def test_row_window_reader_matches_scipy(tmp_path):
 PAYLOAD = bytes(range(256)) * 8
 
 
+ETAG = '"v1"'
+
+
 class _Handler(BaseHTTPRequestHandler):
     def log_message(self, *a):
         pass
+
+    def end_headers(self):
+        self.send_header("ETag", ETAG)
+        super().end_headers()
+
+    def do_HEAD(self):
+        self.send_response(200)
+        self.send_header("Content-Length", str(len(PAYLOAD)))
+        self.end_headers()
 
     def do_GET(self):
         if self.path.startswith("/error"):
@@ -302,7 +329,14 @@ def test_parallel_download_resumes_a_truncated_part(tmp_path, server):
     rc = dl.main([f"{server}/truncate", str(out), str(len(PAYLOAD)), "3"], curl=CURL_FAST)
     assert rc == 0 and out.read_bytes() == PAYLOAD
     assert len(_TRUNCATED) == 3  # each part was cut once and then resumed
-    assert not list(tmp_path.glob("f.bin.*"))
+    left = sorted(p.name for p in tmp_path.glob("f.bin.*"))
+    assert left == ["f.bin.lock", "f.bin.receipt.json", "f.bin.state.json",
+                    "f.bin.state.json.journal.jsonl", "f.bin.state.json.lock"]
+    receipt = json.loads((tmp_path / "f.bin.receipt.json").read_text())
+    assert receipt["sha256"] == hashlib.sha256(PAYLOAD).hexdigest()
+    assert receipt["etag"] == ETAG and receipt["size"] == len(PAYLOAD)
+    # A rerun of a finished download is a no-op that succeeds.
+    assert dl.main([f"{server}/truncate", str(out), str(len(PAYLOAD)), "3"], curl=CURL_FAST) == 0
 
 
 def test_parallel_download_refuses_a_changed_layout(tmp_path, server):

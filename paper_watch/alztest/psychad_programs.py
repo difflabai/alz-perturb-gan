@@ -177,6 +177,27 @@ def run(adata, *, seeds=SEEDS, rates=LEARNING_RATES, checkpoints=CHECKPOINTS):
     }
 
 
+def _sha256(path: Path) -> str:
+    with Path(path).open("rb") as source:
+        return hashlib.file_digest(source, "sha256").hexdigest()
+
+
+def load_pinned(path: Path):
+    """(adata, sha256) of ``path``, hashed before AND after loading.
+
+    The recorded hash must describe the bytes that were analysed; a file
+    replaced while it was being read would otherwise be recorded under the
+    hash of whatever was there at the end.
+    """
+    before = _sha256(path)
+    data = load_psychad(path)
+    after = _sha256(path)
+    if before != after:
+        raise SystemExit(f"{path} changed while it was being loaded "
+                         f"(sha256 {before} before, {after} after); refusing to record a result")
+    return data, before
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, required=True, help="public PsychAD microglia H5AD extract")
@@ -193,10 +214,9 @@ def main():
     if len(set(args.learning_rates)) != len(args.learning_rates):
         parser.error("learning rates must be distinct")
 
-    data = load_psychad(args.input)
+    data, input_sha256 = load_pinned(args.input)
     result = run(data, seeds=args.seeds, rates=args.learning_rates, checkpoints=args.checkpoints)
-    with args.input.open("rb") as source:
-        result["input_sha256"] = hashlib.file_digest(source, "sha256").hexdigest()
+    result["input_sha256"] = input_sha256
     print(json.dumps(result, indent=2, allow_nan=False))
 
 

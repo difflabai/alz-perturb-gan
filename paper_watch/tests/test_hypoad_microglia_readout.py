@@ -50,7 +50,7 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
-from alztest.data import DataUnavailable, load_hypoad_microglia
+from alztest.data import DataMalformed, DataUnavailable, load_hypoad_microglia
 from alztest.harness import energy_distance, fit_unconditional
 from alztest.hypoad import (
     COND_COLS, DAM, DONOR_COLS, HOMEO, N_COMP, apply_feature_transform, auroc,
@@ -63,14 +63,20 @@ ALPHA = 0.05
 
 
 def _prepare():
-    """Load, exclude donors, log-normalize. Nothing here is fitted to cells."""
+    """Load, exclude donors, log-normalize. Nothing here is fitted to cells.
+
+    A missing extract raises DataUnavailable (the test skips). An extract
+    that is present but unusable (missing donor or condition column, too
+    few module genes) raises DataMalformed, which is not a DataUnavailable,
+    so the test fails instead of skipping.
+    """
     adata = load_hypoad_microglia()
     obs = adata.obs
     try:
         donor_col = find_column(obs.columns, DONOR_COLS, "donor")
         cond_col = find_column(obs.columns, COND_COLS, "condition")
     except KeyError as e:
-        raise DataUnavailable(f"HypoAD extract: {e}") from e
+        raise DataMalformed(f"HypoAD extract: {e}") from e
     donors = obs[donor_col].astype(str).to_numpy()
     cond_raw = obs[cond_col].astype(str).to_numpy()
     keep, group = select_donors(donors, cond_raw)
@@ -81,7 +87,8 @@ def _prepare():
     var_names = np.array(adata.var_names.astype(str))
     mod_idx = [i for i, g in enumerate(var_names) if g in HOMEO | DAM]
     if len(mod_idx) < 15:
-        raise DataUnavailable(f"only {len(mod_idx)} DAM/homeostatic genes found")
+        raise DataMalformed(f"only {len(mod_idx)} DAM/homeostatic genes found "
+                            "(wrong gene column? var_names should be gene symbols)")
     homeo_idx = [i for i in mod_idx if var_names[i] in HOMEO]
     dam_idx = [i for i in mod_idx if var_names[i] in DAM]
     return X, group[rows], donors[rows], mod_idx, homeo_idx, dam_idx

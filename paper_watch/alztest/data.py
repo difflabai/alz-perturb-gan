@@ -91,18 +91,140 @@ def seaad_annotations(region: str = "LEC", *, include_cognition: bool = False):
     return df.set_index("cell_label")
 
 
-def load_psychad(path: Path | None = None):
-    """Public PsychAD MSSM microglial raw counts and three diagnosis labels."""
+class DataMalformed(Exception):
+    """Data is present but wrong: corrupt, stale, or missing what a test needs.
+
+    Deliberately NOT a subclass of DataUnavailable: tests skip on
+    DataUnavailable (the data is absent) and must FAIL on DataMalformed
+    (the data is there and broken), so a bad file never reads as a skip.
+    """
+
+
+# ------------------------------------------------------------------ PsychAD
+
+PSYCHAD_RECEIPT_KEY = "psychad_receipt"
+
+
+def psychad_receipt_paths(path: Path) -> tuple[Path, Path]:
+    """(receipt, pending receipt) sidecars of a PsychAD h5ad."""
+    path = Path(path)
+    return (path.with_name(path.stem + ".receipt.json"),
+            path.with_name(path.stem + ".receipt.pending.json"))
+
+
+def file_stamp(path: Path) -> dict:
+    """Cheap identity of a file: size and mtime in ns (os.replace keeps both)."""
+    st = Path(path).stat()
+    return {"size": st.st_size, "mtime_ns": st.st_mtime_ns}
+
+
+def file_sha256(path: Path) -> str:
+    import hashlib
+    with Path(path).open("rb") as fh:
+        return hashlib.file_digest(fh, "sha256").hexdigest()
+
+
+def psychad_content_sha256(adata) -> str:
+    """sha256 over X (as CSR, float64/int64) and the obs and var names.
+
+    Stored inside the file (uns), where a whole-file hash cannot live.
+    """
+    import hashlib
+    import numpy as np
+    from scipy import sparse
+    X = sparse.csr_matrix(adata.X)
+    h = hashlib.sha256()
+    h.update(repr(tuple(X.shape)).encode())
+    for arr, dtype in ((X.data, np.float64), (X.indices, np.int64), (X.indptr, np.int64)):
+        h.update(np.ascontiguousarray(arr, dtype=dtype).tobytes())
+    for names in (adata.obs_names, adata.var_names):
+        h.update("\0".join(map(str, names)).encode())
+    return h.hexdigest()
+
+
+def _psychad_sidecar(path: Path, full_sha: bool):
+    """The sidecar receipt that describes the h5ad at ``path``, or None if none exists.
+
+    A receipt carries a size+mtime ``stamp`` (new fetches) or only a
+    ``sha256`` (fetches before the stamp). fetch_psychad writes the pending
+    receipt, then replaces the h5ad, then replaces the receipt, so after a
+    crash either the receipt or the pending receipt matches the h5ad.
+    """
+    import json
+    import warnings
+    found = []
+    for candidate in psychad_receipt_paths(path):
+        if not candidate.is_file():
+            continue
+        receipt = json.loads(candidate.read_text())
+        found.append(candidate.name)
+        stamp = receipt.get("stamp")
+        if stamp is not None:
+            if stamp != file_stamp(path):
+                continue
+            if full_sha and receipt.get("sha256") != file_sha256(path):
+                raise DataMalformed(f"{path}: sha256 differs from {candidate.name} "
+                                    "although size and mtime match")
+            return receipt
+        if full_sha:  # legacy receipt: only a full hash can tie it to the file
+            if receipt.get("sha256") == file_sha256(path):
+                return receipt
+            continue
+        warnings.warn(f"{candidate.name} has no size/mtime stamp (written before "
+                      "receipts were stamped); pass full_sha=True to check it", stacklevel=3)
+        return receipt
+    if found:
+        raise DataMalformed(f"{path} does not match its receipt(s) {found}: the h5ad "
+                            "changed after it was fetched, or a fetch was interrupted")
+    return None
+
+
+def load_psychad(path: Path | None = None, *, verify: bool = False, full_sha: bool = False):
+    """Public PsychAD MSSM microglial raw counts and three diagnosis labels.
+
+    ``verify=True`` checks the receipt before returning: the sidecar's
+    size+mtime stamp (``full_sha=True`` adds the whole-file sha256), then
+    the shape (and with ``full_sha`` the content hash) in
+    ``uns['psychad_receipt']``. Files fetched before receipts moved into
+    uns fall back to the sidecar's shape. A mismatch raises DataMalformed.
+    """
     if path is None:
         path = Path(os.environ.get("PSYCHAD_H5AD", DATA_DIR / "psychad-mssm-microglia.h5ad"))
+    path = Path(path)
     if not path.is_file():
         raise DataUnavailable(
             f"PsychAD microglia export missing at {path}. Set PSYCHAD_H5AD "
             "to the public CELLxGENE extract described in notes/psychad_cross_disorder.md."
         )
+    sidecar = _psychad_sidecar(path, full_sha) if verify else None
     import anndata as ad
-    return ad.read_h5ad(path)
+    adata = ad.read_h5ad(path)
+    if verify:
+        inner = adata.uns.get(PSYCHAD_RECEIPT_KEY)
+        ref = dict(inner) if inner is not None else sidecar
+        if ref is None:
+            raise DataMalformed(f"{path} has no receipt in uns or beside it")
+        if [int(n) for n in ref["shape"]] != list(adata.shape):
+            raise DataMalformed(f"{path}: shape {adata.shape} != receipt {list(ref['shape'])}")
+        if full_sha and inner is not None and \
+                str(inner.get("content_sha256")) != psychad_content_sha256(adata):
+            raise DataMalformed(f"{path}: content hash differs from uns['{PSYCHAD_RECEIPT_KEY}']")
+    return adata
 
+
+# ------------------------------------------------------------------ HypoAD
+
+HYPOAD_SOURCE_NAME = "GSE342635_HypoAD.h5ad"
+HYPOAD_EXTRACT_SCHEMA = 2
+# Extraction parameters that change which cells or values the readout sees.
+# The extractor's defaults come from here; an extract made with others is STALE.
+HYPOAD_MICROGLIA = r"(?i)^(microglia|micro|mg)([^a-z].*)?$"
+HYPOAD_NOT_MICROGLIA = r"(?i)(?:macro|pvm|perivascular|border|mono|(?:^|[^a-z])bam(?:[^a-z]|$))"
+HYPOAD_EXPECTED_PARAMS = {"pattern": HYPOAD_MICROGLIA, "exclude_pattern": HYPOAD_NOT_MICROGLIA,
+                          "allow_noninteger": False}
+# Suffixes written by scripts/parallel_download.py next to the source.
+DOWNLOAD_STATE_SUFFIX = ".state.json"
+DOWNLOAD_RECEIPT_SUFFIX = ".receipt.json"
 
 
 def hypoad_microglia_path() -> Path:
@@ -110,6 +232,76 @@ def hypoad_microglia_path() -> Path:
     if env:
         return Path(env)
     return DATA_DIR / "hypoad_microglia.h5ad"
+
+
+def hypoad_source_path() -> Path:
+    env = os.environ.get("HYPOAD_SOURCE")
+    if env:
+        return Path(env)
+    return DATA_DIR / HYPOAD_SOURCE_NAME
+
+
+def download_receipt(source: Path) -> dict | None:
+    """The DONE receipt of a parallel_download.py download, or None.
+
+    Valid only when the state file (if present) says DONE and the receipt's
+    size equals the file's size.
+    """
+    import json
+    source = Path(source)
+    receipt_p = Path(str(source) + DOWNLOAD_RECEIPT_SUFFIX)
+    state_p = Path(str(source) + DOWNLOAD_STATE_SUFFIX)
+    try:
+        receipt = json.loads(receipt_p.read_text())
+    except (FileNotFoundError, ValueError):
+        return None
+    if state_p.exists():
+        try:
+            if json.loads(state_p.read_text()).get("state") != "DONE":
+                return None
+        except ValueError:
+            return None
+    if not source.is_file() or source.stat().st_size != receipt.get("size"):
+        return None
+    return receipt
+
+
+def hypoad_source_state(source: Path) -> tuple[str, dict | None]:
+    """NO_SOURCE, SOURCE_INCOMPLETE or SOURCE_DONE, with the DONE receipt."""
+    source = Path(source)
+    receipt = download_receipt(source)
+    if receipt is not None:
+        return "SOURCE_DONE", receipt
+    traces = [source, Path(str(source) + DOWNLOAD_STATE_SUFFIX), Path(str(source) + ".partial"),
+              Path(str(source) + ".plan"), Path(str(source) + ".part00")]
+    if any(t.exists() for t in traces):
+        return "SOURCE_INCOMPLETE", None
+    return "NO_SOURCE", None
+
+
+def hypoad_extract_state(info, source_receipt: dict | None = None) -> tuple[str, list[str]]:
+    """EXTRACTED, STALE or STALE_UNKNOWN for an extract's uns['hypoad_extract'].
+
+    STALE_UNKNOWN: no schema-2 provenance (an extract from before the
+    acquisition state machine). STALE: made with other extraction
+    parameters than HYPOAD_EXPECTED_PARAMS, or from an input whose sha256
+    differs from the source's DONE receipt.
+    """
+    if not info or int(info.get("schema", 0) or 0) != HYPOAD_EXTRACT_SCHEMA:
+        return "STALE_UNKNOWN", ["no schema-2 provenance in uns['hypoad_extract']"]
+    why = []
+    params = dict(info.get("params") or {})
+    for key, want in HYPOAD_EXPECTED_PARAMS.items():
+        got = params.get(key)
+        if isinstance(want, bool):
+            got = bool(got)
+        if got != want:
+            why.append(f"{key}={got!r}, expected {want!r}")
+    have = str(info.get("input_sha256") or "")
+    if source_receipt and have and have != source_receipt.get("sha256"):
+        why.append(f"input_sha256 {have[:12]}… differs from the source receipt "
+                   f"{str(source_receipt.get('sha256'))[:12]}…")
+    return ("STALE", why) if why else ("EXTRACTED", [])
 
 
 def load_hypoad_microglia():
@@ -126,14 +318,41 @@ def load_hypoad_microglia():
     scripts/extract_hypoad_microglia.py, which writes
     data/hypoad_microglia.h5ad with raw counts and obs columns donor,
     condition and cell_type. Or set HYPOAD_H5AD.
+
+    Raises DataUnavailable only when no extract exists (the source may be
+    absent, downloading, or downloaded and not yet extracted; the message
+    says which). Raises DataMalformed when something is at the path but is
+    not a readable extract (CORRUPT) or was made from other parameters or
+    another input (STALE). An extract without schema-2 provenance loads
+    with a warning, or raises DataMalformed when HYPOAD_STRICT=1.
     """
     p = hypoad_microglia_path()
-    if not p.exists():
+    source = hypoad_source_path()
+    if not p.exists() and not p.is_symlink():
+        src_state, _ = hypoad_source_state(source)
         raise DataUnavailable(
-            f"HypoAD microglia extract not present at {p}. GEO GSE342635 "
-            "is open but ships one 51 GB object with no per-sample files; "
+            f"HypoAD microglia extract not present at {p} (source {source}: {src_state}). "
+            "GEO GSE342635 is open but ships one 51 GB object with no per-sample files; "
             "download GSE342635_HypoAD.h5ad with scripts/parallel_download.py, "
             "run scripts/extract_hypoad_microglia.py, or set HYPOAD_H5AD."
         )
+    if not p.is_file():
+        raise DataMalformed(f"HypoAD extract path {p} exists but is not a regular file (CORRUPT)")
     import anndata as ad
-    return ad.read_h5ad(p)
+    try:
+        adata = ad.read_h5ad(p)
+    except Exception as e:  # noqa: BLE001 - any read failure means the file is unusable
+        raise DataMalformed(f"HypoAD extract {p} is unreadable (CORRUPT): {e!r}") from e
+    info = adata.uns.get("hypoad_extract")
+    state, why = hypoad_extract_state(dict(info) if info is not None else None,
+                                      download_receipt(source))
+    if state == "STALE":
+        raise DataMalformed(f"HypoAD extract {p} is STALE: {'; '.join(why)}; rerun "
+                            "scripts/extract_hypoad_microglia.py")
+    if state == "STALE_UNKNOWN":
+        if os.environ.get("HYPOAD_STRICT") == "1":
+            raise DataMalformed(f"HypoAD extract {p} is STALE_UNKNOWN: {why[0]} (HYPOAD_STRICT=1)")
+        import warnings
+        warnings.warn(f"HypoAD extract {p}: {why[0]}; re-extract to record it "
+                      "(HYPOAD_STRICT=1 makes this an error)", stacklevel=2)
+    return adata

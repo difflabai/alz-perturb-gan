@@ -28,10 +28,23 @@ example 'Micro-PVM' or 'Microglia/Macrophage') are excluded by
 --exclude-pattern ('' disables this). The chosen matrix must hold integer
 counts; a scaled or log-transformed matrix is refused unless
 --allow-noninteger is passed, because the readout normalizes raw counts.
+
+States. The input must be a finished download: SOURCE_DONE means
+parallel_download.py left INPUT.receipt.json (and INPUT.state.json says
+DONE) with the input's size. NO_SOURCE (no input) refuses; SOURCE_INCOMPLETE
+(a partial, a plan or parts, or a file without a receipt) refuses unless
+--input-unverified REASON is given, and the reason is recorded. The output
+is written to a hidden ``.<name>.<pid>.partial`` beside it and moved into
+place with os.replace, so a killed extract leaves no file at --output.
+uns['hypoad_extract'] records schema 2, the parameters and the input's
+sha256 from its receipt. An existing output is EXTRACTED (same parameters
+and input: nothing to do, unless --force), STALE (other parameters or
+input: re-extracted) or CORRUPT (unreadable: re-extracted).
 """
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import sys
 from pathlib import Path
@@ -42,6 +55,14 @@ import pandas as pd
 from scipy import sparse
 
 PW = Path(__file__).resolve().parent.parent
+if str(PW) not in sys.path:
+    sys.path.insert(0, str(PW))
+
+from alztest.data import (  # noqa: E402
+    HYPOAD_EXTRACT_SCHEMA, HYPOAD_MICROGLIA, HYPOAD_NOT_MICROGLIA, hypoad_extract_state,
+    hypoad_source_state,
+)
+
 DATA_DIR = PW / "data"
 DEFAULT_INPUT = DATA_DIR / "GSE342635_HypoAD.h5ad"
 DEFAULT_OUTPUT = DATA_DIR / "hypoad_microglia.h5ad"
@@ -52,8 +73,8 @@ DONOR_COLS = ("donor", "donor_id", "sample", "Sample", "individual", "Donor")
 COND_COLS = ("condition", "diagnosis", "group", "Group", "disease", "status")
 GENE_COLS = ("feature_name", "gene_symbols", "gene_symbol", "gene_name", "gene_names",
              "symbol", "gene_ids")
-MICROGLIA = r"(?i)^(microglia|micro|mg)([^a-z].*)?$"
-NOT_MICROGLIA = r"(?i)(?:macro|pvm|perivascular|border|mono|(?:^|[^a-z])bam(?:[^a-z]|$))"
+MICROGLIA = HYPOAD_MICROGLIA
+NOT_MICROGLIA = HYPOAD_NOT_MICROGLIA
 
 
 def _read_elem(obj):
@@ -161,7 +182,8 @@ def gene_names(var: pd.DataFrame, given: str | None = None) -> pd.Index:
 def extract(src: Path, dst: Path, *, pattern: str = MICROGLIA,
             exclude_pattern: str = NOT_MICROGLIA, celltype_col=None,
             donor_col=None, condition_col=None, gene_col=None,
-            allow_noninteger: bool = False) -> dict:
+            allow_noninteger: bool = False, input_sha256: str = "",
+            input_unverified: str = "") -> dict:
     import anndata as ad
 
     with h5py.File(src, "r") as f:
@@ -195,7 +217,16 @@ def extract(src: Path, dst: Path, *, pattern: str = MICROGLIA,
     adata = ad.AnnData(X=counts.astype(np.float32), obs=out_obs,
                        var=pd.DataFrame(index=names))
     adata.var_names_make_unique()
+    st = Path(src).stat()
     info = {
+        "schema": HYPOAD_EXTRACT_SCHEMA,
+        "params": extract_params(pattern=pattern, exclude_pattern=exclude_pattern,
+                                 allow_noninteger=allow_noninteger, celltype_col=celltype_col,
+                                 donor_col=donor_col, condition_col=condition_col,
+                                 gene_col=gene_col),
+        "input_sha256": input_sha256 or "",
+        "input_unverified": input_unverified or "",
+        "input_size": int(st.st_size),
         "source": str(src), "matrix": key, "n_cells_total": int(len(obs)),
         "n_cells_kept": int(rows.size), "celltype_col": ct, "donor_col": dcol,
         "condition_col": ccol, "pattern": pattern,
@@ -209,8 +240,59 @@ def extract(src: Path, dst: Path, *, pattern: str = MICROGLIA,
     }
     adata.uns["hypoad_extract"] = info
     dst.parent.mkdir(parents=True, exist_ok=True)
-    adata.write_h5ad(dst)
+    tmp = dst.with_name(f".{dst.name}.{os.getpid()}.partial")
+    try:
+        adata.write_h5ad(tmp)
+        with open(tmp, "rb") as fh:
+            os.fsync(fh.fileno())
+        os.replace(tmp, dst)
+    finally:
+        if tmp.exists():
+            tmp.unlink()
+    dirfd = os.open(dst.parent, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(dirfd)
+    finally:
+        os.close(dirfd)
     return info
+
+
+def extract_params(*, pattern, exclude_pattern, allow_noninteger, celltype_col=None,
+                   donor_col=None, condition_col=None, gene_col=None) -> dict:
+    """The parameters recorded in uns (h5ad cannot store None, so '' stands for unset)."""
+    return {"pattern": pattern, "exclude_pattern": exclude_pattern,
+            "allow_noninteger": bool(allow_noninteger), "celltype_col": celltype_col or "",
+            "donor_col": donor_col or "", "condition_col": condition_col or "",
+            "gene_col": gene_col or ""}
+
+
+def output_state(dst: Path, params: dict, source_receipt: dict | None) -> tuple[str, list[str]]:
+    """NO_OUTPUT, CORRUPT, STALE, STALE_UNKNOWN or EXTRACTED for --output."""
+    if not dst.exists() and not dst.is_symlink():
+        return "NO_OUTPUT", []
+    if not dst.is_file():
+        return "CORRUPT", [f"{dst} is not a regular file"]
+    try:
+        import anndata as ad
+        backed = ad.read_h5ad(dst, backed="r")
+        try:
+            info = backed.uns.get("hypoad_extract")
+            info = dict(info) if info is not None else None
+        finally:
+            backed.file.close()
+    except Exception as e:  # noqa: BLE001
+        return "CORRUPT", [repr(e)]
+    state, why = hypoad_extract_state(info, source_receipt)
+    if state != "EXTRACTED":
+        return state, why
+    recorded = {k: (bool(v) if isinstance(params[k], bool) else str(v))
+                for k, v in dict(info.get("params") or {}).items() if k in params}
+    if recorded != params:
+        return "STALE", [f"recorded parameters {recorded} != requested {params}"]
+    want = (source_receipt or {}).get("sha256", "")
+    if str(info.get("input_sha256") or "") != want:
+        return "STALE", ["the input differs from the one recorded"]
+    return "EXTRACTED", []
 
 
 def main(argv=None) -> int:
@@ -226,13 +308,38 @@ def main(argv=None) -> int:
     ap.add_argument("--donor-col")
     ap.add_argument("--condition-col")
     ap.add_argument("--gene-col")
+    ap.add_argument("--input-unverified", metavar="REASON", default="",
+                    help="extract from an input without a DONE download receipt; "
+                         "the reason is recorded in uns")
+    ap.add_argument("--force", action="store_true",
+                    help="re-extract even when --output is already EXTRACTED")
     a = ap.parse_args(argv)
-    if not a.input.exists():
-        raise SystemExit(f"{a.input} not found; download GSE342635_HypoAD.h5ad first")
+    src_state, receipt = hypoad_source_state(a.input)
+    if src_state == "NO_SOURCE" or not a.input.is_file():
+        raise SystemExit(f"{a.input} not found ({src_state}); download GSE342635_HypoAD.h5ad first")
+    if src_state != "SOURCE_DONE":
+        if not a.input_unverified:
+            raise SystemExit(
+                f"{a.input} is {src_state}: no DONE receipt from parallel_download.py "
+                f"({a.input}.receipt.json with its size). Finish the download, or pass "
+                "--input-unverified REASON to extract it anyway")
+        print(f"warning: extracting an unverified input ({a.input_unverified})", flush=True)
+    params = extract_params(pattern=a.pattern, exclude_pattern=a.exclude_pattern,
+                            allow_noninteger=a.allow_noninteger, celltype_col=a.celltype_col,
+                            donor_col=a.donor_col, condition_col=a.condition_col,
+                            gene_col=a.gene_col)
+    out_state, why = output_state(a.output, params, receipt)
+    if out_state == "EXTRACTED" and not a.force and receipt is not None:
+        print(f"{a.output}: already EXTRACTED from this input with these parameters", flush=True)
+        return 0
+    if out_state not in ("NO_OUTPUT", "EXTRACTED"):
+        print(f"{a.output} is {out_state} ({'; '.join(why)}); re-extracting", flush=True)
     info = extract(a.input, a.output, pattern=a.pattern,
                    exclude_pattern=a.exclude_pattern, celltype_col=a.celltype_col,
                    donor_col=a.donor_col, condition_col=a.condition_col,
-                   gene_col=a.gene_col, allow_noninteger=a.allow_noninteger)
+                   gene_col=a.gene_col, allow_noninteger=a.allow_noninteger,
+                   input_sha256=(receipt or {}).get("sha256", ""),
+                   input_unverified=a.input_unverified if receipt is None else "")
     for k, v in info.items():
         print(f"{k}: {v}", flush=True)
     print(f"wrote {a.output}", flush=True)
