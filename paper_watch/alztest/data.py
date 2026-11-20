@@ -25,6 +25,32 @@ def seaad_region_path(region: str = "LEC") -> Path:
     return DATA_DIR / f"{region}-10X-log2.h5ad"
 
 
+# SEA-AD 'Overall AD neuropathological Change' -> analysis group. The
+# mapping is explicit so that a missing or unexpected value raises instead
+# of joining a catch-all pool.
+ADNC_GROUPS = {"Not AD": "CTRL", "Low": "CTRL", "Intermediate": "EARLY", "High": "AD"}
+
+
+def adnc_group(adnc):
+    """Map SEA-AD ADNC categories to CTRL / EARLY / AD.
+
+    {Not AD, Low} -> CTRL, Intermediate -> EARLY, High -> AD. Raises
+    ValueError on a missing value (for example a donor absent from
+    disease.csv after the left merge) or on any other category.
+    """
+    import numpy as np
+    import pandas as pd
+    values = pd.Series(np.asarray(adnc, dtype=object))
+    missing = values.isna()
+    if missing.any():
+        raise ValueError(f"ADNC is missing for {int(missing.sum())} rows")
+    stripped = values.astype(str).str.strip()
+    unknown = sorted(set(stripped) - set(ADNC_GROUPS))
+    if unknown:
+        raise ValueError(f"unexpected ADNC values: {unknown}")
+    return stripped.map(ADNC_GROUPS).to_numpy(dtype=object)
+
+
 ABC_BASE = "https://allen-brain-cell-atlas.s3.us-west-2.amazonaws.com"
 
 

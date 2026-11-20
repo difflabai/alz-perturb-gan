@@ -38,6 +38,12 @@ python -m pip install -r paper_watch/requirements.txt
 python -m pytest paper_watch/tests/test_harness.py
 ```
 
+The harness tests also check the statistics helpers: the unbiased energy
+distance, train-only PCA, donor-grouped permutation p-values and donor
+bootstrap intervals. The SEA-AD readouts score depth-matched donors and
+report these p-values and intervals. Their recorded notes predate that
+change.
+
 The regular repository suite discovers `tests/`. The data-dependent
 experiments under `paper_watch/tests/` are opt-in. Their scientific
 thresholds can fail when the model falls short of the research target.
@@ -57,7 +63,7 @@ public `allen-brain-cell-atlas` bucket (Allen Brain Cell Atlas).
 |---|---|
 | [SEA-AD cross-region ordering](notes/seaad_vulnerability_readout.md) | The Gaussian baseline leads at the tested CPU budget |
 | [Lipid–lysosome microglia readout](notes/seaad_ll_microglia_readout.md) | The centroid leads. The default gene panel lacks both complete modules |
-| [Cognition at matched pathology](notes/seaad_resilience_contrast.md) | Single-fit AUROC 0.580. A larger independent cohort is needed |
+| [Cognition at matched pathology](notes/seaad_resilience_contrast.md) | Exploratory. The committed 3-fit ensemble recorded mean AUROC 0.557 (the iteration 1 single fit recorded 0.580), within about one null SD of 0.5. Not rerun with donor-grouped inference. A larger independent cohort is needed |
 | [PsychAD cross-disorder specificity](notes/psychad_cross_disorder.md) | Mean shift and empirical donor sampling beat the 300-step EMPF fit on held-out disease specificity and distribution fit |
 | [PsychAD lipid and lysosome programs](notes/psychad_program_readout.md) | Longer EMPF fits reduced spurious program correlation. The two diagnostics favored different checkpoints |
 

@@ -82,7 +82,11 @@ def score(predicted, real):
         cosine("Alzheimer", "Alzheimer") - cosine("Alzheimer", "Lewy")
         + cosine("Lewy", "Lewy") - cosine("Lewy", "Alzheimer")
     )
-    distances = {group: energy_distance(predicted[group], real[group]) for group in GROUPS}
+    # Pinned to the V-statistic so the recorded results JSON reproduces.
+    distances = {
+        group: energy_distance(predicted[group], real[group], unbiased=False)
+        for group in GROUPS
+    }
     return {
         "specificity": specificity,
         "mean_energy_distance": float(np.mean(list(distances.values()))),

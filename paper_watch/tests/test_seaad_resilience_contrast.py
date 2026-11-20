@@ -27,22 +27,46 @@ Program genes: nuclear-encoded mitochondrial (NDUF*, SDH*, UQCR*,
 COX4-8*, ATP5*) + biogenesis regulators (PPARGC1A/B, NRF1, TFAM,
 ESRRA); MT-* excluded (the claim is about nuclear-encoded genes).
 
+Inference (revision after the iteration-3 close; not yet rerun):
+each scored donor is subsampled to MIN_CELLS_PER_DONOR IT cells before
+the energy-distance and centroid arms, the energy distance is the
+unbiased U-statistic averaged over the three fits, the shuffled arm is
+a donor-grouped permutation p-value (a donor's AnG and LEC units keep
+one cognition label), and arm comparisons use donor-bootstrap CIs of
+the AUROC difference. The AUROC of raw cell count is reported as a
+depth confound check.
+
 Iteration log: notes/seaad_resilience_contrast.md
 """
 from __future__ import annotations
+
+import zlib
 
 import numpy as np
 import pytest
 from scipy.stats import rankdata
 
-from alztest.data import DataUnavailable, load_seaad_obs, seaad_annotations
-from alztest.harness import energy_distance, fit_unconditional, pca_fit_transform, standardize
+from alztest.data import DataUnavailable, adnc_group, load_seaad_obs, seaad_annotations
+from alztest.harness import (
+    donor_bootstrap_ci,
+    energy_distance,
+    fit_unconditional,
+    pca_fit_transform,
+    permutation_pvalue,
+    standardize,
+)
 
 REGIONS = ("AnG", "LEC")
 NON_NEURONAL = {"Astrocyte", "Endothelial", "Ependymal", "Immune",
                 "OPC", "Oligodendrocyte", "VLMC & Perivascular"}
 N_COMP = 30
 MIN_CELLS_PER_DONOR = 40
+N_FITS = 3
+MODEL_DRAWS = 4096
+# Preregistered inference settings for the next run.
+ALPHA = 0.05
+N_PERM = 2000
+N_BOOT = 2000
 BIOGENESIS = {"PPARGC1A", "PPARGC1B", "NRF1", "TFAM", "ESRRA"}
 PREFIXES = ("NDUF", "SDHA", "SDHB", "SDHC", "SDHD", "UQCR", "COX4",
             "COX5", "COX6", "COX7", "COX8", "ATP5")
@@ -75,10 +99,7 @@ def _load_region(region):
     keep = ann["subclass"].astype(str).str.contains("IT").to_numpy()
     ann = ann[keep]
     rows = rows_all[keep]
-    adnc = ann["adnc"].astype(str)
-    group = np.where(adnc.str.contains("High"), "AD",
-                     np.where(adnc.str.contains("Not AD|Low"), "CTRL",
-                              "OTHER")).astype(object)
+    group = adnc_group(ann["adnc"])
     cog = ann["cognition"].astype(str).to_numpy()
     donors = ann["donor_label"].astype(str).to_numpy()
     # Memory seam (iteration 1, attempt 0): IT neurons are ~10x the
@@ -121,8 +142,10 @@ def _load_region(region):
     return X, group, cog, donors, prog_pos
 
 
-def run_once(seed: int = 0, steps: int = 300) -> dict:
+def run_once(seed: int = 0, steps: int = 300, *, n_perm: int = N_PERM,
+             n_boot: int = N_BOOT) -> dict:
     dev_m, dev_g, dev_l, prog, labels = [], [], [], [], []
+    unit_donor, n_cells = [], []
     n_arm = {"demented": 0, "resilient": 0}
     for region in REGIONS:
         X, group, cog, donors, prog_pos = _load_region(region)
@@ -132,17 +155,19 @@ def run_once(seed: int = 0, steps: int = 300) -> dict:
         pscore = ((X[:, prog_pos] - mu) / sd).mean(1)
         Xp, _ = pca_fit_transform(X, n_comp=N_COMP)
         Xp = standardize(Xp)
-        # Iteration 3: ensemble of 3 independent fits, deviations
-        # averaged (the SEA-AD loop's variance fix).
+        # Iteration 3: ensemble of 3 independent fits. Revision: each
+        # fit's energy distance is computed on all of its draws and the
+        # per-fit distances are averaged (iteration 3 pooled the draws
+        # and then subsampled 512 rows, so it used about 170 per fit).
         ens_samples = []
-        for k in range(3):
+        for k in range(N_FITS):
             m_k = fit_unconditional(Xp[ctrl], steps=steps,
                                     seed=seed + 100 * k)
-            ens_samples.append(m_k.sample(0, 4096, seed=seed + 5 + 100 * k))
-        samples = np.concatenate(ens_samples)
+            ens_samples.append(m_k.sample(0, MODEL_DRAWS, seed=seed + 5 + 100 * k))
         gmu, gcov = Xp[ctrl].mean(0), np.cov(Xp[ctrl].T) + 1e-3 * np.eye(N_COMP)
-        gs = np.random.default_rng(seed + 23).multivariate_normal(gmu, gcov, 4096)
+        gs = np.random.default_rng(seed + 23).multivariate_normal(gmu, gcov, MODEL_DRAWS)
         centroid = Xp[ctrl].mean(0)
+        depth_rng = np.random.default_rng(seed + 7)
         for d in np.unique(donors):
             m = donors == d
             if group[m][0] != "AD" or m.sum() < MIN_CELLS_PER_DONOR:
@@ -152,26 +177,56 @@ def run_once(seed: int = 0, steps: int = 300) -> dict:
                 continue
             labels.append(1 if c == "Dementia" else 0)
             n_arm["demented" if c == "Dementia" else "resilient"] += 1
+            unit_donor.append(d)
+            n_cells.append(int(m.sum()))
             prog.append(float(pscore[m].mean()))
-            cells = Xp[m]
-            dev_m.append(energy_distance(samples, cells, seed=seed))
-            dev_g.append(energy_distance(gs, cells, seed=seed))
+            # Depth matching: the same number of cells for every donor.
+            cells = Xp[depth_rng.choice(np.flatnonzero(m), MIN_CELLS_PER_DONOR,
+                                        replace=False)]
+            dev_m.append(float(np.mean([
+                energy_distance(s_k, cells, max_n=None) for s_k in ens_samples])))
+            dev_g.append(energy_distance(gs, cells, max_n=None))
             dev_l.append(float(np.linalg.norm(cells.mean(0) - centroid)))
     labels = np.array(labels)
-    rng = np.random.default_rng(seed + 31)
-    out = {
-        "seed": seed,
-        "model_auroc": _auroc(dev_m, labels),
-        "gaussian_auroc": _auroc(dev_g, labels),
-        "linear_auroc": _auroc(dev_l, labels),
+    unit_donor = np.array(unit_donor)
+    scores = {
+        "model": np.array(dev_m),
+        "gaussian": np.array(dev_g),
+        "linear": np.array(dev_l),
         # paper's direction: demented = SUPPRESSED program, so the
         # program score predicts dementia when negated
-        "program_auroc": _auroc(-np.array(prog), labels),
-        "shuffled_auroc": _auroc(dev_m, rng.permutation(labels)),
+        "program": -np.array(prog),
+    }
+    out = {"seed": seed}
+    for key, value in scores.items():
+        out[f"{key}_auroc"] = _auroc(value, labels)
+    # Shuffled arm: cognition is a donor label, so whole donors are permuted.
+    perm = permutation_pvalue(lambda lab: _auroc(scores["model"], lab), labels,
+                              unit_donor, n_perm=n_perm, seed=seed + 31)
+    out["model_p"] = perm["p"]
+    out["shuffled_auroc_mean"] = perm["null_mean"]
+    out["shuffled_auroc_q95"] = perm["null_q95"]
+
+    def auroc_on(idx, key):
+        return _auroc(scores[key][idx], labels[idx])
+
+    out["model_auroc_ci"] = donor_bootstrap_ci(
+        lambda idx: auroc_on(idx, "model"), unit_donor, n_boot=n_boot, seed=seed + 37)
+    for key in ("gaussian", "linear", "program"):
+        def diff(idx, key=key):
+            m, a = auroc_on(idx, "model"), auroc_on(idx, key)
+            return None if m is None or a is None else m - a
+        out[f"model_minus_{key}_ci"] = donor_bootstrap_ci(
+            diff, unit_donor, n_boot=n_boot, seed=seed + 37)
+    out.update({
         "n_units": int(labels.size),
+        "n_donors": int(len(np.unique(unit_donor))),
         "n_demented": int(labels.sum()),
         "n_resilient": int((labels == 0).sum()),
-    }
+        "cells_per_donor_scored": MIN_CELLS_PER_DONOR,
+        # Confound check: does raw IT-cell count alone separate the groups?
+        "n_cells_auroc": _auroc(np.array(n_cells, dtype=float), labels),
+    })
     return out
 
 
@@ -181,13 +236,40 @@ def test_resilience_contrast():
     except DataUnavailable as e:
         pytest.skip(str(e))
     m = np.array([r["model_auroc"] for r in results])
-    g = np.array([r["gaussian_auroc"] for r in results])
-    p = np.array([r["program_auroc"] for r in results])
-    sh = np.array([r["shuffled_auroc"] for r in results])
+    p = np.array([r["model_p"] for r in results])
     assert (m > 0.65).all(), f"model AUROCs not all > 0.65: {m}"
-    assert m.mean() > sh.mean() + 0.15, \
-        f"model {m.mean():.3f} vs shuffled {sh.mean():.3f}"
-    assert m.mean() > p.mean(), \
-        f"model {m.mean():.3f} vs program-only {p.mean():.3f}"
-    assert m.mean() > g.mean(), \
-        f"model {m.mean():.3f} vs gaussian {g.mean():.3f}"
+    assert (p < ALPHA).all(), f"donor-grouped permutation p not all < {ALPHA}: {p}"
+    for arm in ("program", "gaussian"):
+        lo = np.array([r[f"model_minus_{arm}_ci"]["lo"] for r in results])
+        assert (lo > 0).all(), f"model - {arm} AUROC CI lower bounds not all > 0: {lo}"
+
+
+def _synthetic_region(region):
+    """Data-free stand-in for _load_region (plumbing check only)."""
+    rng = np.random.default_rng(zlib.crc32(region.encode()))
+    rows = []
+    for i in range(20):
+        g = "CTRL" if i < 6 else "AD"
+        c = "Dementia" if i % 2 and g == "AD" else "No dementia"
+        n = int(rng.integers(45, 120))
+        rows += [(g, c, f"D{i}")] * n
+    group = np.array([r[0] for r in rows], dtype=object)
+    cog = np.array([r[1] for r in rows])
+    donors = np.array([r[2] for r in rows])
+    X = rng.normal(size=(len(rows), 50))
+    X[cog == "Dementia", :10] += 0.8
+    return X, group, cog, donors, list(range(30, 50))
+
+
+def test_resilience_runs_on_synthetic_donors(monkeypatch):
+    import sys
+    module = sys.modules[__name__]
+    monkeypatch.setattr(module, "_load_region", _synthetic_region)
+    monkeypatch.setattr(module, "MODEL_DRAWS", 256)
+    monkeypatch.setattr(module, "N_FITS", 2)
+    out = run_once(seed=0, steps=2, n_perm=50, n_boot=50)
+    assert out["n_donors"] == 14 and out["n_units"] == 28
+    assert out["n_demented"] == 14
+    assert 0 < out["model_p"] <= 1
+    assert out["linear_auroc"] > 0.8  # the synthetic shift is a mean shift
+    assert out["model_minus_program_ci"]["n_valid"] == 50

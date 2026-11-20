@@ -58,7 +58,8 @@ def correlation(values):
 def metrics(samples, observed):
     spread = np.var(observed, axis=0).sum()
     return {
-        "energy_distance": energy_distance(samples, observed),
+        # Pinned to the V-statistic so the recorded results JSON reproduces.
+        "energy_distance": energy_distance(samples, observed, unbiased=False),
         "spearman": correlation(samples),
         "spread_ratio": float(np.sqrt(np.var(samples, axis=0).sum() / spread)) if spread > 0 else None,
     }

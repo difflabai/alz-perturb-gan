@@ -31,15 +31,16 @@ def components(g, seed):
     samples = rng.multivariate_normal(mu, cov, size=1024)
     rng2 = np.random.default_rng(seed + 41)
     out = {}
+    # V-statistic pinned: this diagnostic reproduces the recorded iteration-3 numbers.
     for t in TARGETS:
         ad_t = Xp[(types == t) & (g == "AD")]
         ct_t = Xp[(types == t) & (g == "CTRL")]
         half = rng2.permutation(len(ct_t))
         self_ed = energy_distance(ct_t[half[:len(ct_t) // 2]],
-                                  ct_t[half[len(ct_t) // 2:]], seed=seed)
-        num = (energy_distance(samples, ad_t, seed=seed)
-               - energy_distance(samples, ct_t, seed=seed))
-        direct = energy_distance(ad_t, ct_t, seed=seed)
+                                  ct_t[half[len(ct_t) // 2:]], seed=seed, unbiased=False)
+        num = (energy_distance(samples, ad_t, seed=seed, unbiased=False)
+               - energy_distance(samples, ct_t, seed=seed, unbiased=False))
+        direct = energy_distance(ad_t, ct_t, seed=seed, unbiased=False)
         out[t] = dict(n_ad=len(ad_t), n_ctrl=len(ct_t), num=num,
                       self_ed=self_ed, score=num / self_ed,
                       direct=direct, direct_norm=direct / self_ed)
