@@ -181,22 +181,21 @@ def load_hypoad_microglia():
     GSE342635_HypoAD.h5ad — 51,107,823,722 bytes for 614,403 nuclei,
     with NO per-sample supplementary files and no per-cell-type
     subset except a neuron-only object (9.3 GB). The microglia
-    compartment (~52k nuclei, 14 post-mortem donors: 7 mostly
-    early-stage AD + 7 age-matched controls, familial AD_44 excluded
-    from the paper's differential analyses) is extracted by streaming
-    only the needed CSR row-slices over HTTP range requests
-    (scripts/extract_hypoad_microglia.py in the local watch repo).
-    Place the extracted slim object at data/hypoad_microglia.h5ad
-    or set HYPOAD_H5AD.
+    compartment (~52k nuclei; 7 mostly early-stage AD + 7 age-matched
+    controls among the post-mortem donors, with the familial donor AD_44
+    excluded downstream by alztest.hypoad.EXCLUDE_DONORS) is produced by
+    downloading the object (scripts/parallel_download.py) and running
+    scripts/extract_hypoad_microglia.py, which writes
+    data/hypoad_microglia.h5ad with raw counts and obs columns donor,
+    condition and cell_type. Or set HYPOAD_H5AD.
     """
     p = hypoad_microglia_path()
     if not p.exists():
         raise DataUnavailable(
-            "HypoAD microglia extract not present locally. The GEO "
-            "GSE342635 processed object is open but 51 GB with no "
-            "per-sample files; run the range-streaming extraction "
-            "(see loader docstring) or place the slim extract at "
-            "data/hypoad_microglia.h5ad / set HYPOAD_H5AD."
+            f"HypoAD microglia extract not present at {p}. GEO GSE342635 "
+            "is open but ships one 51 GB object with no per-sample files; "
+            "download GSE342635_HypoAD.h5ad with scripts/parallel_download.py, "
+            "run scripts/extract_hypoad_microglia.py, or set HYPOAD_H5AD."
         )
     import anndata as ad
     return ad.read_h5ad(p)

@@ -1,8 +1,11 @@
 """Read-only seekable file over HTTP Range requests (proxy-friendly).
 
-Plain GETs to ftp.ncbi.nlm.nih.gov 403 through this environment's
-proxy, but Range requests succeed; requests honours the proxy env
-where aiohttp/fsspec do not connect. Block-cached, LRU.
+Written on 2026-11-18, when plain GETs to ftp.ncbi.nlm.nih.gov returned
+403 through that run's proxy while Range requests succeeded; requests
+honours the proxy env where aiohttp/fsspec did not connect. On
+2026-11-20 from pop-os, HEAD returns 200 and a range read returns 206,
+so a local download plus scripts/extract_hypoad_microglia.py is the
+working route. Block-cached, LRU.
 """
 from __future__ import annotations
 import requests
@@ -17,7 +20,13 @@ class RangeFile:
         self.pos = 0
         r = requests.get(url, headers={"Range": "bytes=0-0"}, timeout=60)
         cr = r.headers.get("Content-Range", "")
-        self.size = int(cr.rsplit("/", 1)[1])
+        total = cr.rsplit("/", 1)[-1] if "/" in cr else ""
+        if r.status_code != 206 or not total.isdigit():
+            raise IOError(
+                f"{url}: range probe got HTTP {r.status_code} with Content-Range "
+                f"{cr!r}; the server must answer a Range request with 206 and a "
+                "known total size")
+        self.size = int(total)
         self._sess = requests.Session()
 
     def _block(self, i: int) -> bytes:
