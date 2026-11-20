@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "declared": "2026-11-20, before any real-data C2ST score",
+  "cache_manifest_sha256": "65d5e2f405ceeeb14ac35f8660bc9c42272ac35c64aeda4f7c3bd9ee21dbd09c",
+  "primary": "empf05",
+  "generators": {
+    "empf05": {"role": "primary: default native EMPF fold0/seed0, cellshape@0.5:biascal:stagehalf",
+               "path": "/ml2/alz/runs/microglia_empf/verification/final_generated.npz",
+               "sha256": "04b8d82c25a5b018cc2b19a3b5065a2edd4bf4e908a568fd65c28736015cde0b"},
+    "empf025": {"role": "quarter-contraction readout cellshape@0.25:biascal:stagehalf, same fit",
+                "path": "/ml2/alz/runs/coverage_empf_20261117/quarter_generated.npz",
+                "sha256": "241ce3efd5b0e6fac327b0d37baa364ff888134f85a87c47fea2b08e17c48eed"},
+    "prev097": {"role": "previous 0.9.7 BISPF default (fits_r3 pbulk fold0/seed0), cellshape@0.5:biascal:stagehalf, fresh generation",
+                "path": "/ml2/alz/runs/research_20261120/c2st/prev097_cellshape05.npz",
+                "sha256": "receipt"},
+    "resample_blind": {"role": "reference: stage-blind empirical resampling",
+                       "path": "/ml2/alz/runs/improve_20261109/results_r3/baselines/hvg2000/fold0/resample_blind.npz",
+                       "sha256": "9f4a1f85d836093f5f927f730c97860314f9664d8f8e7f8962889b69315052c2"},
+    "resample_stage": {"role": "reference: stage-matched empirical resampling",
+                       "path": "/ml2/alz/runs/improve_20261109/results_r3/baselines/hvg2000/fold0/resample.npz",
+                       "sha256": "aaddf4e4ae138eccfbb34b7ef1f19302fc5cd58d9ee604780a919e784a0488d7"}
+  },
+  "levels": ["cell_pc", "bag_gene", "bag_pcsum", "bag_inspan", "bag_offspan"],
+  "classifiers": ["mlp", "linear"],
+  "null_splits": 20,
+  "permutations": 20,
+  "null_tolerance": 0.05,
+  "focus_features": {
+    "bag_gene": ["PPARG", "CLEC5A", "CD36", "LPL", "SPP1", "GPNMB", "CD9", "PLIN2"],
+    "cell_pc": []
+  }
+}
