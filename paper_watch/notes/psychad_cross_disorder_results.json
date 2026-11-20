@@ -1,0 +1,202 @@
+{
+  "input_shape": [
+    64816,
+    34176
+  ],
+  "regularizer_schedule": "released EMPF default (every step)",
+  "updates_per_fit": 300,
+  "runs": [
+    {
+      "seed": 0,
+      "train_donors": {
+        "control": 195,
+        "Alzheimer": 243,
+        "Lewy": 25
+      },
+      "test_donors": {
+        "control": 65,
+        "Alzheimer": 82,
+        "Lewy": 9
+      },
+      "scores": {
+        "mean_shift": {
+          "specificity": 0.21997053857271875,
+          "mean_energy_distance": 2.2602234223456037,
+          "energy_distance_by_diagnosis": {
+            "control": 0.7008182671948049,
+            "Alzheimer": 0.6456057121656364,
+            "Lewy": 5.43424628767637
+          }
+        },
+        "empirical": {
+          "specificity": 0.22777111476133782,
+          "mean_energy_distance": 2.2991793207976152,
+          "energy_distance_by_diagnosis": {
+            "control": 0.5825751299639563,
+            "Alzheimer": 0.4834019127296223,
+            "Lewy": 5.8315609196992675
+          }
+        },
+        "empf": {
+          "specificity": -0.08277726478760844,
+          "mean_energy_distance": 3.213573077526964,
+          "energy_distance_by_diagnosis": {
+            "control": 2.927398523928481,
+            "Alzheimer": 1.489572621337853,
+            "Lewy": 5.223748087314558
+          }
+        },
+        "shuffled": {
+          "specificity": -0.13585691233534158,
+          "mean_energy_distance": 3.2171405100722588,
+          "energy_distance_by_diagnosis": {
+            "control": 3.518739279431422,
+            "Alzheimer": 1.1809033021074349,
+            "Lewy": 4.951778948677919
+          }
+        }
+      },
+      "passes_screen": false
+    },
+    {
+      "seed": 1,
+      "train_donors": {
+        "control": 195,
+        "Alzheimer": 243,
+        "Lewy": 25
+      },
+      "test_donors": {
+        "control": 65,
+        "Alzheimer": 82,
+        "Lewy": 9
+      },
+      "scores": {
+        "mean_shift": {
+          "specificity": 0.6143240099057224,
+          "mean_energy_distance": 1.5261031413504849,
+          "energy_distance_by_diagnosis": {
+            "control": 1.0611827706208494,
+            "Alzheimer": 0.6882540590695356,
+            "Lewy": 2.8288725943610693
+          }
+        },
+        "empirical": {
+          "specificity": 0.4739677917833711,
+          "mean_energy_distance": 1.5014937691540642,
+          "energy_distance_by_diagnosis": {
+            "control": 1.2279436479470363,
+            "Alzheimer": 0.43852307408723235,
+            "Lewy": 2.838014585427924
+          }
+        },
+        "empf": {
+          "specificity": 0.33918716083455125,
+          "mean_energy_distance": 2.405321293542091,
+          "energy_distance_by_diagnosis": {
+            "control": 2.5304196745746417,
+            "Alzheimer": 1.6085032263670094,
+            "Lewy": 3.0770409796846216
+          }
+        },
+        "shuffled": {
+          "specificity": 0.35588212234128364,
+          "mean_energy_distance": 2.359985666104965,
+          "energy_distance_by_diagnosis": {
+            "control": 2.528833706734293,
+            "Alzheimer": 1.3920194256070992,
+            "Lewy": 3.1591038659735027
+          }
+        }
+      },
+      "passes_screen": false
+    },
+    {
+      "seed": 2,
+      "train_donors": {
+        "control": 195,
+        "Alzheimer": 243,
+        "Lewy": 25
+      },
+      "test_donors": {
+        "control": 65,
+        "Alzheimer": 82,
+        "Lewy": 9
+      },
+      "scores": {
+        "mean_shift": {
+          "specificity": 0.22861841140772943,
+          "mean_energy_distance": 1.501810436041622,
+          "energy_distance_by_diagnosis": {
+            "control": 0.7494591904696293,
+            "Alzheimer": 0.5144623725409687,
+            "Lewy": 3.241509745114268
+          }
+        },
+        "empirical": {
+          "specificity": 0.34662027026484066,
+          "mean_energy_distance": 1.3838403724995096,
+          "energy_distance_by_diagnosis": {
+            "control": 0.6613080706497243,
+            "Alzheimer": 0.4073622223421296,
+            "Lewy": 3.082850824506675
+          }
+        },
+        "empf": {
+          "specificity": -0.07348926434605607,
+          "mean_energy_distance": 3.0211766483421107,
+          "energy_distance_by_diagnosis": {
+            "control": 3.3054061389431517,
+            "Alzheimer": 1.4744399899089657,
+            "Lewy": 4.283683816174214
+          }
+        },
+        "shuffled": {
+          "specificity": 0.102771359217947,
+          "mean_energy_distance": 3.590070611053355,
+          "energy_distance_by_diagnosis": {
+            "control": 3.8865114696231267,
+            "Alzheimer": 1.613604629222536,
+            "Lewy": 5.270095734314403
+          }
+        }
+      },
+      "passes_screen": false
+    }
+  ],
+  "passes_screen": false,
+  "input_provenance": {
+    "source": "Publication: https://doi.org/10.1101/2024.10.31.24316513 Dataset Version: https://datasets.cellxgene.cziscience.com/83bb53d2-7eb5-44e1-997e-4875050e104a.h5ad curated and distributed by CZ CELLxGENE Discover in Collection: https://cellxgene.cziscience.com/collections/84ce6837-548d-4a1f-919f-0bc0d9a3952f",
+    "census_release": "2025-11-17",
+    "dataset_id": "37a17b78-4864-4a42-b67b-31c00962795a",
+    "dataset_version_id": "83bb53d2-7eb5-44e1-997e-4875050e104a",
+    "query": "dataset_id == '37a17b78-4864-4a42-b67b-31c00962795a' and cell_type_ontology_term_id == 'CL:0000129' and disease in ['normal', 'dementia || Alzheimer disease', 'Lewy body dementia', 'dementia || Lewy body dementia']",
+    "source_to_analysis_labels": {
+      "normal": "control",
+      "dementia || Alzheimer disease": "Alzheimer",
+      "Lewy body dementia": "Lewy",
+      "dementia || Lewy body dementia": "Lewy"
+    },
+    "cap_per_donor": 128,
+    "sampling_seed": 0,
+    "shape": [
+      64816,
+      34176
+    ],
+    "sha256": "9f0089cca6d2d9a824004e78108c57ea1d9ab9d9e6c165c49cb636c595cf01d7",
+    "diagnosis_counts": {
+      "Alzheimer": {
+        "nuclei": 34547,
+        "donors": 325
+      },
+      "Lewy": {
+        "nuclei": 3560,
+        "donors": 34
+      },
+      "control": {
+        "nuclei": 26709,
+        "donors": 260
+      }
+    }
+  },
+  "particlegan_version": "0.10.0"
+}

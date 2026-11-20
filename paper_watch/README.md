@@ -58,6 +58,8 @@ public `allen-brain-cell-atlas` bucket (Allen Brain Cell Atlas).
 | [SEA-AD cross-region ordering](notes/seaad_vulnerability_readout.md) | The Gaussian baseline leads at the tested CPU budget |
 | [Lipid–lysosome microglia readout](notes/seaad_ll_microglia_readout.md) | The centroid leads. The default gene panel lacks both complete modules |
 | [Cognition at matched pathology](notes/seaad_resilience_contrast.md) | Single-fit AUROC 0.580. A larger independent cohort is needed |
+| [PsychAD cross-disorder specificity](notes/psychad_cross_disorder.md) | Mean shift and empirical donor sampling beat the 300-step EMPF fit on held-out disease specificity and distribution fit |
+| [PsychAD lipid and lysosome programs](notes/psychad_program_readout.md) | Longer EMPF fits reduced spurious program correlation. The two diagnostics favored different checkpoints |
 
-The NeuroKO, panAD, PsychAD, and GNPC designs remain in their
-[closed pull requests](https://github.com/difflabai/alz-perturb-gan/pulls?q=is%3Apr+is%3Aclosed+%22Paper+watch%22).
+The NeuroKO, panAD, GNPC, and HypoAD experiments are tracked in
+[pull requests waiting for data access](https://github.com/difflabai/alz-perturb-gan/pulls?q=is%3Apr+is%3Aopen+label%3A%22waiting+for+data+access%22).
