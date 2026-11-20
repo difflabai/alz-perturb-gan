@@ -27,8 +27,9 @@ generator/critic/prior learning rates 0.012/0.018/0.03. The readout is
 
 ## Latest results
 
-All of these come from the same single fold and seed (fold 0, seed 0) and the
-same 12 held-out development donors.
+The items below come from the single pilot fold and seed (fold 0, seed 0) and
+its 12 held-out development donors; see the fold/seed confirmation section for
+the 17-fit results.
 
 - **EMPF against the previous 0.9.7 default**
   ([comparison](analysis/empf_comparison_20261117/completion/comparison.json)):
@@ -58,25 +59,34 @@ same 12 held-out development donors.
   against the frozen 0.10.0 release, with two strict expected failures for the
   wide widths.
 
-## In progress: fold/seed confirmation
+## Fold/seed confirmation (completed 2026-11-20)
 
-[analysis/coverage_empf_confirm_20261120](analysis/coverage_empf_confirm_20261120/PROTOCOL.md)
-was declared in commit `d578e83` before any of its fits existed and started on
-2026-11-20. It trains 17 new native EMPF fits (folds 0-8, seeds 0-1, without the
-fold 0/seed 0 pilot) through the committed CLI, then scores the default readout,
-the quarter-contraction readout and SD calibration for each fit against gates
-fixed in the protocol. It runs on the shared GPUs with outputs under the
-git-ignored `runs/coverage_empf_confirm_20261120/` and the CLI fit root.
+[analysis/coverage_empf_confirm_20261120](analysis/coverage_empf_confirm_20261120/README.md),
+declared in commit `d578e83` before any of its fits existed: 17 new native EMPF
+fits (folds 0-8, seeds 0-1, without the pilot), all trained and scored, no
+failures. The scorer reproduces the pilot exactly.
 
-As of this update, no confirmation result exists. Until it finishes, every
-statement above rests on one fold and one seed. While it runs, do not edit
-`configs/microglia_default.json`, `scripts/microglia*.py`, or any file listed
-in [analysis/default_empf_20261117/runtime_source_manifest.json](analysis/default_empf_20261117/runtime_source_manifest.json)
-or the confirmation's own source manifest: the CLI and the scorer check them by
-hash. That manifest is not yet committed; it will land at
-`analysis/coverage_empf_confirm_20261120/source_manifest.json`, and this list
-should be rechecked against it then. The protocol also records a start-up race in the EMPF host, handled by
-staggering process starts and rerunning any step that stops on it.
+- **Quarter-contraction readout: PASS.** All ten pre-declared gates pass on the
+  mean and both interval scores improve in every repeat. SD interval score
+  .720 to .640 (15/17 fits), combined .937 to .898 (16/17), SD coverage 60.2%
+  to 63.5%, combined 70.5% to 72.5%, profile RMSE unchanged. Costs inside the
+  limits: slightly more PC-space over-dispersion and cell energy +.009.
+- **SD calibration: CONFIRMED** on both readouts. On the default readout SD
+  score .720 to .605 and combined .937 to .879 (17/17 each), coverage 87.5% SD
+  and 84.1% combined (nominal level about 86-88% with six or seven
+  calibration donors).
+- **EMPF against the previous 0.9.7 default does not hold up across folds**
+  (descriptive): profile RMSE .4895 against .4853 (EMPF better in 6/17), SD
+  score .720 against .710 (6/17), combined .937 against .923 (7/17), all within
+  the previous default's own stream-to-stream spread. The pilot's advantage
+  was specific to fold 0/seed 0.
+- Against stage-blind empirical resampling: raw readouts still lose the
+  combined score (.898 for the quarter readout against .876); the calibrated
+  default readout beats it on SD (.605 against .665) and ties on combined
+  (.879 against .876).
+
+No default was changed. Whether to adopt the quarter readout and/or the SD
+calibration, and whether to keep EMPF as the default, are owner decisions.
 
 ## Open experiments (not started)
 
@@ -131,6 +141,6 @@ has no CI.
 1. This page.
 2. [README.md](README.md): the project, the default and the frozen report findings.
 3. [analysis/default_empf_20261117/README.md](analysis/default_empf_20261117/README.md): runtime setup and checkpoint paths.
-4. [analysis/coverage_empf_20261117/README.md](analysis/coverage_empf_20261117/README.md) and [analysis/coverage_empf_confirm_20261120/PROTOCOL.md](analysis/coverage_empf_confirm_20261120/PROTOCOL.md).
+4. [analysis/coverage_empf_20261117/README.md](analysis/coverage_empf_20261117/README.md) and [analysis/coverage_empf_confirm_20261120/README.md](analysis/coverage_empf_confirm_20261120/README.md).
 5. [analysis/particlegan_review_20261117/README.md](analysis/particlegan_review_20261117/README.md).
 6. [analysis/INDEX.md](analysis/INDEX.md) and [docs/LEGACY_LAYOUT.md](docs/LEGACY_LAYOUT.md) to find older records.
