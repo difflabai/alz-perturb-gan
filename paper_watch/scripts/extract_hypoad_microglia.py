@@ -16,9 +16,18 @@ microglia rows are pulled from the count matrix in row windows with h5py.
 This keeps memory to the microglia rows. anndata's backed='r' mode backs
 only X and would load every layer of the 51 GB object into memory.
 
-The output keeps raw counts (layers/counts when the source has it, else X),
-gene symbols as var_names, and obs columns donor, condition and cell_type
-under those standard names. uns['hypoad_extract'] records the provenance.
+The output keeps raw counts (layers/counts when the source has it, then
+raw/X, then X), gene symbols as var_names, and obs columns donor, condition and cell_type
+under those standard names. uns['hypoad_extract'] records the provenance,
+including the cell-type labels kept and excluded and the cells per raw
+condition label; check these on the first real run.
+
+Two guards apply. Labels that match the microglia pattern but also name
+macrophages, perivascular or border-associated cells, or monocytes (for
+example 'Micro-PVM' or 'Microglia/Macrophage') are excluded by
+--exclude-pattern ('' disables this). The chosen matrix must hold integer
+counts; a scaled or log-transformed matrix is refused unless
+--allow-noninteger is passed, because the readout normalizes raw counts.
 """
 from __future__ import annotations
 
@@ -44,6 +53,7 @@ COND_COLS = ("condition", "diagnosis", "group", "Group", "disease", "status")
 GENE_COLS = ("feature_name", "gene_symbols", "gene_symbol", "gene_name", "gene_names",
              "symbol", "gene_ids")
 MICROGLIA = r"(?i)^(microglia|micro|mg)([^a-z].*)?$"
+NOT_MICROGLIA = r"(?i)(?:macro|pvm|perivascular|border|mono|(?:^|[^a-z])bam(?:[^a-z]|$))"
 
 
 def _read_elem(obj):
@@ -90,7 +100,21 @@ def celltype_column(obs: pd.DataFrame, pattern: str, given: str | None = None) -
 def matrix_key(f: h5py.File) -> str:
     if "layers" in f and "counts" in f["layers"]:
         return "layers/counts"
+    if "raw" in f and "X" in f["raw"]:
+        return "raw/X"
     return "X"
+
+
+def microglia_mask(labels: pd.Series, pattern: str, exclude: str) -> np.ndarray:
+    mask = labels.str.match(pattern).to_numpy()
+    if exclude:
+        mask &= ~labels.str.contains(exclude, regex=True).to_numpy()
+    return mask
+
+
+def is_integer_valued(m) -> bool:
+    data = m.data if sparse.issparse(m) else np.asarray(m)
+    return bool(np.all(np.isfinite(data)) and np.all(data == np.round(data)))
 
 
 def read_rows(obj, rows: np.ndarray, window: int = 10_000) -> sparse.csr_matrix:
@@ -134,8 +158,10 @@ def gene_names(var: pd.DataFrame, given: str | None = None) -> pd.Index:
     return pd.Index(index)
 
 
-def extract(src: Path, dst: Path, *, pattern: str = MICROGLIA, celltype_col=None,
-            donor_col=None, condition_col=None, gene_col=None) -> dict:
+def extract(src: Path, dst: Path, *, pattern: str = MICROGLIA,
+            exclude_pattern: str = NOT_MICROGLIA, celltype_col=None,
+            donor_col=None, condition_col=None, gene_col=None,
+            allow_noninteger: bool = False) -> dict:
     import anndata as ad
 
     with h5py.File(src, "r") as f:
@@ -145,12 +171,20 @@ def extract(src: Path, dst: Path, *, pattern: str = MICROGLIA, celltype_col=None
         dcol = _pick(obs.columns, DONOR_COLS, "donor", donor_col)
         ccol = _pick(obs.columns, COND_COLS, "condition", condition_col)
         labels = obs[ct].astype(str)
-        mask = labels.str.match(pattern).to_numpy()
+        matched = labels.str.match(pattern).to_numpy()
+        mask = microglia_mask(labels, pattern, exclude_pattern)
         rows = np.flatnonzero(mask)
         if rows.size == 0:
             raise SystemExit(f"no cells match {pattern!r} in obs[{ct!r}]")
         key = matrix_key(f)
+        if key == "raw/X":
+            var = _read_elem(f["raw/var"])
         counts = read_rows(f[key], rows)
+    integer = is_integer_valued(counts)
+    if not integer and not allow_noninteger:
+        raise SystemExit(
+            f"{key} is not integer-valued, so it is not raw counts; the readout "
+            "normalizes raw counts. Pass --allow-noninteger to write it anyway.")
     sub = obs.iloc[rows]
     out_obs = pd.DataFrame({
         "donor": sub[dcol].astype(str).to_numpy(),
@@ -166,6 +200,12 @@ def extract(src: Path, dst: Path, *, pattern: str = MICROGLIA, celltype_col=None
         "n_cells_kept": int(rows.size), "celltype_col": ct, "donor_col": dcol,
         "condition_col": ccol, "pattern": pattern,
         "labels_kept": sorted(set(labels.iloc[rows])),
+        "labels_excluded": sorted(set(labels[matched & ~mask])),
+        "integer_counts": integer,
+        # parallel lists, because uns keys become HDF5 names
+        "condition_labels": sorted(set(out_obs["condition"])),
+        "condition_cells": [int((out_obs["condition"] == c).sum())
+                            for c in sorted(set(out_obs["condition"]))],
     }
     adata.uns["hypoad_extract"] = info
     dst.parent.mkdir(parents=True, exist_ok=True)
@@ -178,6 +218,10 @@ def main(argv=None) -> int:
     ap.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     ap.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     ap.add_argument("--pattern", default=MICROGLIA, help="regex on the cell-type label")
+    ap.add_argument("--exclude-pattern", default=NOT_MICROGLIA,
+                    help="regex; matching labels are dropped ('' disables)")
+    ap.add_argument("--allow-noninteger", action="store_true",
+                    help="write a matrix that is not integer counts")
     ap.add_argument("--celltype-col")
     ap.add_argument("--donor-col")
     ap.add_argument("--condition-col")
@@ -185,8 +229,10 @@ def main(argv=None) -> int:
     a = ap.parse_args(argv)
     if not a.input.exists():
         raise SystemExit(f"{a.input} not found; download GSE342635_HypoAD.h5ad first")
-    info = extract(a.input, a.output, pattern=a.pattern, celltype_col=a.celltype_col,
-                   donor_col=a.donor_col, condition_col=a.condition_col, gene_col=a.gene_col)
+    info = extract(a.input, a.output, pattern=a.pattern,
+                   exclude_pattern=a.exclude_pattern, celltype_col=a.celltype_col,
+                   donor_col=a.donor_col, condition_col=a.condition_col,
+                   gene_col=a.gene_col, allow_noninteger=a.allow_noninteger)
     for k, v in info.items():
         print(f"{k}: {v}", flush=True)
     print(f"wrote {a.output}", flush=True)

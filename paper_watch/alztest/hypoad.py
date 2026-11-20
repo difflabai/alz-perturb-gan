@@ -56,7 +56,8 @@ def classify_condition(cond_raw) -> np.ndarray:
             out.append("CTRL")
         elif re.search(r"(^|[^a-z])ad([^a-z]|$)", low) or "alzheimer" in low:
             out.append("AD")
-        elif "control" in low or re.search(r"(^|[^a-z])(ctl|ctrl)([^a-z]|$)", low):
+        elif ("control" in low or "healthy" in low or "normal" in low
+              or re.search(r"(^|[^a-z])(ctl|ctrl|hc|nc)([^a-z]|$)", low)):
             out.append("CTRL")
         else:
             out.append("OTHER")
@@ -82,6 +83,30 @@ def select_donors(donors, cond_raw, exclude=EXCLUDE_DONORS):
     group = classify_condition(cond_raw)
     group[excluded] = "OTHER"
     return group != "OTHER", group
+
+
+def check_groups(donors, group, cond_raw, min_ctrl: int = 3, min_ad: int = 2) -> None:
+    """Fail clearly when grouping left too few donors for the readout.
+
+    The readout fits on at least two control donors and scores the rest, so
+    it needs at least three CTRL donors and two AD donors. When the
+    condition labels are spelled in a way classify_condition does not
+    recognize, this lists the raw labels per donor instead of letting a
+    later sampling call fail with an opaque error.
+    """
+    donors = np.asarray(donors, dtype=str)
+    group = np.asarray(group, dtype=object)
+    cond_raw = np.asarray(cond_raw, dtype=str)
+    n_ctrl = len(np.unique(donors[group == "CTRL"]))
+    n_ad = len(np.unique(donors[group == "AD"]))
+    if n_ctrl >= min_ctrl and n_ad >= min_ad:
+        return
+    pairs = sorted(set(zip(cond_raw.tolist(), group.tolist())))
+    per_label = {f"{c!r}->{g}": len(np.unique(donors[(cond_raw == c) & (group == g)]))
+                 for c, g in pairs}
+    raise ValueError(
+        f"too few donors after grouping: {n_ctrl} CTRL (need {min_ctrl}), "
+        f"{n_ad} AD (need {min_ad}). Donors per raw condition label: {per_label}")
 
 
 def find_column(columns, candidates, what: str) -> str:

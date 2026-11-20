@@ -55,7 +55,7 @@ from alztest.harness import energy_distance, fit_unconditional
 from alztest.hypoad import (
     COND_COLS, DAM, DONOR_COLS, HOMEO, N_COMP, apply_feature_transform, auroc,
     donor_bootstrap_ci, find_column, fit_feature_transform, log_normalize,
-    permutation_p, select_donors,
+    check_groups, permutation_p, select_donors,
 )
 
 MIN_CELLS_PER_DONOR = 40
@@ -74,6 +74,7 @@ def _prepare():
     donors = obs[donor_col].astype(str).to_numpy()
     cond_raw = obs[cond_col].astype(str).to_numpy()
     keep, group = select_donors(donors, cond_raw)
+    check_groups(donors[keep], group[keep], cond_raw[keep])
     rows = np.flatnonzero(keep)
     X = adata.layers["counts"] if "counts" in adata.layers else adata.X
     X = log_normalize(X[rows])

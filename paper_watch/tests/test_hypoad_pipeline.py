@@ -45,6 +45,18 @@ def test_condition_labels():
     got = hypoad.classify_condition(["AD", "sporadic_AD", "Control", "CTL", "non-AD",
                                      "Young", "ADNC_high"])
     assert got.tolist() == ["AD", "AD", "CTRL", "CTRL", "CTRL", "OTHER", "OTHER"]
+    got = hypoad.classify_condition(["HC", "NC", "Healthy", "normal", "Cognitively normal"])
+    assert got.tolist() == ["CTRL"] * 5
+
+
+def test_too_few_donors_fails_with_the_raw_labels():
+    donors = ["A1", "A2", "C1", "C2", "C3"]
+    cond = ["AD", "AD", "Unaffected", "Unaffected", "Unaffected"]
+    group = hypoad.classify_condition(cond)
+    with pytest.raises(ValueError, match=r"0 CTRL.*'Unaffected'->OTHER.: 3"):
+        hypoad.check_groups(donors, group, cond)
+    hypoad.check_groups(donors, hypoad.classify_condition(["AD", "AD", "Control", "HC", "NC"]),
+                        cond)
 
 
 # ------------------------------------------------------------ fit-only basis
@@ -106,12 +118,12 @@ def test_exact_permutation_p_and_bootstrap_ci():
 
 # ------------------------------------------------------------ extractor
 
-def _write_source(path, *, with_counts=True):
+def _write_source(path, *, source="counts"):
     ad = pytest.importorskip("anndata")
     rng = np.random.default_rng(0)
     n, genes = 200, 25
     labels = np.array(["Microglia", "Astrocyte", "Oligodendrocyte", "Micro_2",
-                       "Microvascular"])[rng.integers(0, 5, n)]
+                       "Microvascular", "Micro-PVM"])[rng.integers(0, 6, n)]
     counts = sparse.random(n, genes, density=0.3, random_state=1, format="csr") * 10
     counts.data = np.ceil(counts.data)
     obs = pd.DataFrame({
@@ -123,19 +135,27 @@ def _write_source(path, *, with_counts=True):
     var = pd.DataFrame({"feature_name": [f"G{i}" for i in range(genes)]},
                        index=[f"ENSG{i:011d}" for i in range(genes)])
     src = ad.AnnData(X=sparse.csr_matrix(np.log1p(counts.toarray())), obs=obs, var=var)
-    if with_counts:
+    if source == "counts":
         src.layers["counts"] = counts
+    elif source == "raw":
+        src.raw = ad.AnnData(X=counts, obs=obs, var=var)
     src.write_h5ad(path)
     return labels, counts
 
 
-@pytest.mark.parametrize("with_counts", [True, False])
-def test_extractor_writes_only_microglia_rows(tmp_path, with_counts):
+@pytest.mark.parametrize("source", ["counts", "raw", "X"])
+def test_extractor_writes_only_microglia_rows(tmp_path, source):
     ad = pytest.importorskip("anndata")
     ext = _script("extract_hypoad_microglia")
-    labels, counts = _write_source(tmp_path / "src.h5ad", with_counts=with_counts)
+    labels, counts = _write_source(tmp_path / "src.h5ad", source=source)
     dst = tmp_path / "out" / "hypoad_microglia.h5ad"
-    rc = ext.main(["--input", str(tmp_path / "src.h5ad"), "--output", str(dst)])
+    args = ["--input", str(tmp_path / "src.h5ad"), "--output", str(dst)]
+    if source == "X":  # X holds log1p values, not counts
+        with pytest.raises(SystemExit, match="not integer-valued"):
+            ext.main(args)
+        assert not dst.exists()
+        args.append("--allow-noninteger")
+    rc = ext.main(args)
     assert rc == 0
     out = ad.read_h5ad(dst)
     want = np.flatnonzero(np.isin(labels, ["Microglia", "Micro_2"]))
@@ -144,10 +164,22 @@ def test_extractor_writes_only_microglia_rows(tmp_path, with_counts):
     assert list(out.obs.columns) == ["donor", "condition", "cell_type"]
     assert out.obs_names.tolist() == [f"c{i}" for i in want]
     assert out.var_names.tolist()[:2] == ["G0", "G1"]
-    expected = counts[want] if with_counts else np.log1p(counts[want].toarray())
+    expected = counts[want] if source != "X" else np.log1p(counts[want].toarray())
     np.testing.assert_allclose(out.X.toarray(), np.asarray(
         expected.toarray() if sparse.issparse(expected) else expected), rtol=1e-6)
-    assert out.uns["hypoad_extract"]["matrix"] == ("layers/counts" if with_counts else "X")
+    info = out.uns["hypoad_extract"]
+    assert info["matrix"] == {"counts": "layers/counts", "raw": "raw/X", "X": "X"}[source]
+    assert list(info["labels_excluded"]) == ["Micro-PVM"]
+    assert bool(info["integer_counts"]) == (source != "X")
+    assert sum(info["condition_cells"]) == len(want)
+
+
+def test_microglia_label_guard():
+    ext = _script("extract_hypoad_microglia")
+    labels = pd.Series(["Microglia", "Micro_2", "MG", "Micro-PVM", "Microglia/Macrophage",
+                        "Micro/Macro", "Micro_BAM", "Microvascular", "Monocyte", "Astro"])
+    keep = ext.microglia_mask(labels, ext.MICROGLIA, ext.NOT_MICROGLIA)
+    assert labels[keep].tolist() == ["Microglia", "Micro_2", "MG"]
 
 
 def test_extractor_defaults_resolve_from_file_not_cwd(tmp_path, monkeypatch):
@@ -194,19 +226,29 @@ class _Handler(BaseHTTPRequestHandler):
             self.wfile.write(body)
             return
         rng = self.headers.get("Range")
-        if self.path.startswith("/norange") or not rng:
+        if self.path.startswith("/norange") or self.path.startswith("/ignorerange") or not rng:
             self.send_response(200)
             self.send_header("Content-Length", str(len(PAYLOAD)))
             self.end_headers()
             self.wfile.write(PAYLOAD)
             return
         lo, hi = map(int, rng.split("=")[1].split("-"))
+        if self.path.startswith("/wrongstart"):
+            lo = lo + 1  # a shifted range: right length class, wrong offset
         body = PAYLOAD[lo:hi + 1]
         self.send_response(206)
         self.send_header("Content-Range", f"bytes {lo}-{hi}/{len(PAYLOAD)}")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
+        if self.path.startswith("/truncate") and hi not in _TRUNCATED and len(body) > 1:
+            _TRUNCATED.add(hi)  # the first request for each part drops half-way
+            self.wfile.write(body[:len(body) // 2])
+            self.close_connection = True
+            return
         self.wfile.write(body)
+
+
+_TRUNCATED: set = set()
 
 
 @pytest.fixture
@@ -241,6 +283,34 @@ def test_parallel_download_refuses_http_error_body(tmp_path, server):
     assert rc == 1
     assert not out.exists()
     assert not list(tmp_path.glob("f.bin.part*"))
+
+
+@pytest.mark.parametrize("path", ["ignorerange", "wrongstart"])
+def test_parallel_download_refuses_responses_that_ignore_the_range(tmp_path, server, path):
+    dl = _script("parallel_download")
+    out = tmp_path / "f.bin"
+    rc = dl.main([f"{server}/{path}", str(out), str(len(PAYLOAD)), "4"], curl=CURL_FAST)
+    assert rc == 1
+    assert not out.exists()
+    assert not list(tmp_path.glob("f.bin.part*"))
+
+
+def test_parallel_download_resumes_a_truncated_part(tmp_path, server):
+    dl = _script("parallel_download")
+    _TRUNCATED.clear()
+    out = tmp_path / "f.bin"
+    rc = dl.main([f"{server}/truncate", str(out), str(len(PAYLOAD)), "3"], curl=CURL_FAST)
+    assert rc == 0 and out.read_bytes() == PAYLOAD
+    assert len(_TRUNCATED) == 3  # each part was cut once and then resumed
+    assert not list(tmp_path.glob("f.bin.*"))
+
+
+def test_parallel_download_refuses_a_changed_layout(tmp_path, server):
+    dl = _script("parallel_download")
+    out = tmp_path / "f.bin"
+    (tmp_path / "f.bin.plan").write_text('{"url": "x", "total": 1, "jobs": []}')
+    rc = dl.main([f"{server}/f", str(out), str(len(PAYLOAD)), "4"], curl=CURL_FAST)
+    assert rc == 1 and not out.exists()
 
 
 def test_rangefile_reads_and_rejects_missing_content_range(server):

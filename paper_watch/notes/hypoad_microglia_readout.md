@@ -43,7 +43,12 @@ mean > Gaussian. With 3 fit controls, 4 held-out controls and 6 AD
 donors there are C(10,6) = 210 label assignments, so AUROC moves in
 steps of 1/24 and the smallest attainable p is 1/210. The earlier
 "AUROC > 0.65 every seed" rule was dropped: at this donor count it
-is not a calibrated bar.
+is not a calibrated bar. The permutation p is the calibrated quantity
+(exact, conditional on the fit split). The percentile bootstrap
+interval over 4 and 6 donors is coarse and is reported as
+descriptive only; requiring its lower bound above 0.5 at every seed
+is close to requiring near-perfect separation, so it is a strict
+gate, not a calibrated one.
 
 Known structural limit, stated before any run: 13 usable donors is
 the whole cohort. Every prior closed loop in this watch (SEA-AD
@@ -106,3 +111,22 @@ hypothalamic cohort, which does not exist yet.
   change: download GSE342635_HypoAD.h5ad into a gitignored data
   directory with more than 60 GB free, extract microglia, run
   iteration 1 and record the numbers here.
+- Second review pass (2026-11-20, before any fit). (1)
+  parallel_download.py keeps a request's bytes only when the final
+  response is 206 with a Content-Range that starts at the requested
+  offset and names the expected total, and caps each request with
+  --max-filesize, so a server that answers a range request with the
+  full 51 GB body is cut off instead of filling the disk. (2) The
+  per-part 3600 s wall-clock timeout, which would have killed every
+  attempt below about 0.9 MB/s per connection, is replaced by curl
+  stall detection (below 10 kB/s for 5 min); a stopped part resumes
+  from the bytes it holds instead of restarting. (3) The extractor
+  drops microglia-pattern labels that also name macrophages,
+  perivascular or border-associated cells or monocytes (for example
+  'Micro-PVM'), reads raw/X when there is no counts layer, and refuses
+  a matrix that is not integer counts. uns['hypoad_extract'] records
+  the labels kept and excluded and the cells per raw condition label;
+  copy these into this log on the first real extraction. (4) HC, NC,
+  healthy and normal are now read as controls, and the readout stops
+  with the donor counts per raw condition label when fewer than 3
+  control or 2 AD donors remain. Still no fit has been run.
