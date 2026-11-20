@@ -30,6 +30,9 @@ import native_host  # noqa: E402
 
 ROOT = native_host.ROOT
 MODE = 'cellshape@0.5:biascal:stagehalf'
+# Post-hoc sensitivity (PROTOCOL amendment 1): same states and calibration family without the
+# stage-half condition mixing, i.e. every generated donor keeps its target's own stage.
+MODES = (MODE, 'cellshape@0.5:biascal:snapens')
 SELECTION = ROOT / 'analysis/default_empf_20261117/selected_model.json'
 FIT = ROOT / 'runs/empf_comparison_20261117/fits/native/pbulk/hvg2000/fold0/seed0'
 CACHE = ROOT / 'runs/improve_20261109/caches/hvg2000/fold0'
@@ -65,6 +68,7 @@ def main(argv=None):
     p.add_argument('--out', type=Path, required=True)
     p.add_argument('--device', choices=('cpu', 'cuda'), default='cpu')
     p.add_argument('--gpu-mem-fraction', type=float, default=.06)
+    p.add_argument('--mode', choices=MODES, default=MODE)
     p.add_argument('--max-targets', type=int, default=None, help='validation runs only')
     p.add_argument('--check-archive', type=Path, default=None,
                    help='require bitwise-equal mean_log/nonzero/lib to this archive (replicate 0, same device)')
@@ -100,7 +104,7 @@ def main(argv=None):
     ctx = T.Context(CACHE, a.device, tuple(config['flags']), allow_nonprotocol_split=not config['protocol_split'])
     targets = G.targets(ctx)
     states = G.available_states(FIT, config)
-    plans, spec, value = G.mode_plans(ctx, MODE, targets, states, updates=config.get('updates'))
+    plans, spec, value = G.mode_plans(ctx, a.mode, targets, states, updates=config.get('updates'))
     used = [s for s in states if any(s in names for _, names in plans)]
     started = time.monotonic()
     models = G.load_models(ctx, FIT, config, used)
@@ -173,7 +177,8 @@ def main(argv=None):
     arr.update(targets=np.array([t[0] for t in targets]), is_heldout=np.array([t[1] for t in targets], dtype=bool),
                stage=G.stage_of(raws).astype(np.int64), genes=np.asarray(ctx.genes).astype(str),
                state_index=np.array([[used.index(s) for s in names] for _, names in plans], dtype=np.int8),
-               state_names=np.array(used), replicate=np.array(a.replicate), mode=np.array(MODE))
+               state_names=np.array(used), replicate=np.array(a.replicate), mode=np.array(a.mode),
+               conditions=np.stack([c for c, _ in plans]).astype(np.float32))
     check = None
     if a.check_archive is not None:
         with np.load(a.check_archive, allow_pickle=False) as ref:
@@ -186,7 +191,7 @@ def main(argv=None):
     tmp.replace(out)
     if check_selected(FIT) != weights or sha(CACHE / 'manifest.json') != cache_manifest:
         raise ValueError('fit or cache changed during generation')
-    receipt = dict(replicate=a.replicate, mode=MODE, device=a.device, targets=n_t, M=M, K=K,
+    receipt = dict(replicate=a.replicate, mode=a.mode, device=a.device, targets=n_t, M=M, K=K,
                    generation_streams=[20261114, 6, ctx.fold, 'development donor index', a.replicate],
                    states_used=used, seconds=time.monotonic() - started, output_sha256=sha(out),
                    fit=str(FIT), weights_sha256=weights, cache_manifest_sha256=cache_manifest,

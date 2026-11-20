@@ -129,3 +129,17 @@ equally certain; fit-level uncertainty is stated as unmeasured.
 * `low_expression`: observed mean detection < 1%.
 
 Thresholds are fixed here. Results are reported whatever their direction.
+
+## Amendment 1 (post hoc, declared before its generation; 2026-11-20)
+
+Observed after part C: the default readout's `stagehalf` plan gives 16 of each
+target's 32 generated donors the TRAIN stage mixture instead of the target's
+stage, so stage contrasts of the default readout are shrunk by about one half
+by construction. The 0.9.7 stage replicates conditioned every cell on its
+stage. Sensitivity, labelled post hoc: the same weights, the same six late
+states and the same cellshape@0.5 + joint biascal calibration family, but the
+`snapens` plan (every generated donor keeps its target's own stage):
+`cellshape@0.5:biascal:snapens`, replicates r = 1..8, same streams, GPU. Part C
+is recomputed on it with the identical code and reported beside, not instead
+of, the declared default-readout result. Part A frozen metrics are also scored
+for it (descriptive only; no default change is proposed from it).
