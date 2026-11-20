@@ -9,16 +9,16 @@ dated subdirectory, as the 2026-11 studies do. The current project state is in
 [STATUS.md](../STATUS.md); root-level legacy files are described in
 [docs/LEGACY_LAYOUT.md](../docs/LEGACY_LAYOUT.md).
 
-Tracked files: 2644 (1477 at the top level of `analysis/`, 1167 in 57 subdirectories).
+Tracked files: 2646 (1477 at the top level of `analysis/`, 1169 in 57 subdirectories).
 
 ## Studies behind the current default
 
 | Directory | Files | Start here | What it is |
 | --- | ---: | --- | --- |
-| `default_empf_20261117/` | 9 | [README.md](default_empf_20261117/README.md) | Owner selection of native EMPF as the CLI default; runtime setup |
+| `default_empf_20261117/` | 10 | [README.md](default_empf_20261117/README.md) | Owner selection of native EMPF as the CLI default; runtime setup |
 | `empf_comparison_20261117/` | 36 | [README.txt](empf_comparison_20261117/README.txt) | Fixed fold 0/seed 0 comparison of EMPF against the 0.9.7 default |
 | `coverage_empf_20261117/` | 18 | [README.md](coverage_empf_20261117/README.md) | Coverage pilot: quarter-contraction readout and SD-only calibration |
-| `coverage_empf_confirm_20261120/` | 2 | [PROTOCOL.md](coverage_empf_confirm_20261120/PROTOCOL.md) | In progress: 17-fit fold/seed confirmation of the default and readout |
+| `coverage_empf_confirm_20261120/` | 3 | [PROTOCOL.md](coverage_empf_confirm_20261120/PROTOCOL.md) | In progress: 17-fit fold/seed confirmation of the default and readout |
 | `particlegan_review_20261117/` | 2 | [README.md](particlegan_review_20261117/README.md) | CPU probe of EMPF conditional residual at wide input widths |
 | `particlegan_upgrade_20261117/` | 46 | [README.txt](particlegan_upgrade_20261117/README.txt) | Isolated ParticleGAN 0.10.0 release test |
 
@@ -43,8 +43,8 @@ Dates come from the directory name or, failing that, from file names inside it.
 | `count_dependence_20261114/` | 14 | 20261114 | [PROTOCOL.txt](count_dependence_20261114/PROTOCOL.txt) |
 | `covariance_challenge_20261114/` | 45 | 20261114 | [PROTOCOL.txt](covariance_challenge_20261114/PROTOCOL.txt) |
 | `coverage_empf_20261117/` (current) | 18 | 20261117 | [README.md](coverage_empf_20261117/README.md) |
-| `coverage_empf_confirm_20261120/` (current) | 2 | 20261120 | [PROTOCOL.md](coverage_empf_confirm_20261120/PROTOCOL.md) |
-| `default_empf_20261117/` (current) | 9 | 20261117 | [README.md](default_empf_20261117/README.md) |
+| `coverage_empf_confirm_20261120/` (current) | 3 | 20261120 | [PROTOCOL.md](coverage_empf_confirm_20261120/PROTOCOL.md) |
+| `default_empf_20261117/` (current) | 10 | 20261117 | [README.md](default_empf_20261117/README.md) |
 | `dispersion097/` | 22 | 20261108 |  |
 | `dispersion_challenge_20261114/` | 19 | 20261114 | [PROTOCOL.txt](dispersion_challenge_20261114/PROTOCOL.txt) |
 | `distribution097/` | 14 |  |  |

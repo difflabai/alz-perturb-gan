@@ -1,0 +1,14 @@
+# Paper-watch tests (paper_watch/) as a SEPARATE environment.
+#
+# paper_watch/requirements.txt asks for pandas>=2.2 and anndata>=0.10. The
+# microglia research interpreter has pandas 1.5.3 and no anndata, so the two
+# are not one environment; do not install this file into the research env.
+# paper_watch/requirements.txt stays the source of truth for these ranges.
+#
+#   python3.11 -m venv .venv-paper-watch
+#   .venv-paper-watch/bin/pip install -r envs/paper-watch.txt
+#   .venv-paper-watch/bin/python -m pytest paper_watch/tests
+#
+# CI installs the CPU torch wheel first (see .github/workflows/checks.yml).
+# check_env: python==3.11
+-r ../paper_watch/requirements.txt

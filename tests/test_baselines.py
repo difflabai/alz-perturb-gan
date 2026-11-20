@@ -1,4 +1,9 @@
-import torch
+import pytest
+
+from alz_legacy import TORCH_REASON
+
+pytestmark = pytest.mark.legacy_pg080
+torch = pytest.importorskip("torch", reason=TORCH_REASON)
 
 from alz_perturb_gan.baselines import Additive, LinearModel, MeanEffect, NoChange, fit_baselines
 from alz_perturb_gan.data import make_synthetic

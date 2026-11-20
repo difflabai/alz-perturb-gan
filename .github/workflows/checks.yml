@@ -1,0 +1,86 @@
+# CPU-only checks that need no patient data, checkpoints, caches or GPU.
+# They protect what a clean clone can verify: the data-free pytest selection,
+# the published report hashes, the microglia CLI dry-runs, the report explorer
+# and the Markdown links. See tests/README.md and envs/README.md.
+name: checks
+
+on:
+  push:
+    # research/calibration-optimization receives most direct pushes.
+    branches: [main, research/calibration-optimization]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  python:
+    name: pytest, report hashes, CLI dry-runs, links
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: Install numpy and pytest only
+        run: python -m pip install numpy==1.26.4 pytest==9.1.1
+      - name: pytest (default data-free selection)
+        run: python -B -m pytest
+      - name: Microglia CLI config and dry-runs
+        run: |
+          python -B scripts/microglia.py config
+          python -B scripts/microglia.py generate --dry-run
+          python -B scripts/microglia.py train --fold 0 --seed 0 --dry-run
+      - name: Install the report builder's pinned requirements
+        run: python -m pip install -r scripts/report/requirements.txt
+      - name: Report data hashes
+        run: python -B scripts/report/build_report.py --check
+      - name: Relative Markdown links
+        run: python -B scripts/ci/check_md_links.py
+      - name: analysis/INDEX.md is current
+        run: python -B scripts/hygiene/index_analysis.py --check
+      - name: Checks left the tree unchanged
+        run: git status --porcelain --untracked-files=all && test -z "$(git status --porcelain --untracked-files=all)"
+
+  report-js:
+    name: report explorer
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: scripts/report/package-lock.json
+      - run: npm ci --prefix scripts/report
+      - run: npm test --prefix scripts/report
+      - run: node --check docs/report.js
+
+  paper-watch:
+    name: paper-watch tests (CPU torch, no data)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: Install CPU torch, then the paper-watch recipe
+        run: |
+          python -m pip install 'torch>=2.6,<3' --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install -r envs/paper-watch.txt
+      - name: Environment matches envs/paper-watch.txt
+        run: python -B scripts/check_env.py envs/paper-watch.txt
+      - name: pytest paper_watch/tests (data tests skip with their reason)
+        run: python -B -m pytest paper_watch/tests

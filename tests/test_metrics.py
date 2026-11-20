@@ -1,6 +1,11 @@
 import math
 
-import torch
+import pytest
+
+from alz_legacy import TORCH_REASON
+
+pytestmark = pytest.mark.legacy_pg080
+torch = pytest.importorskip("torch", reason=TORCH_REASON)
 
 from alz_perturb_gan.metrics import (
     des_overlap,

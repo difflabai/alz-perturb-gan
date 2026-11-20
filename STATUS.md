@@ -109,22 +109,28 @@ From the repository root, with the research interpreter:
 
 ```bash
 PY=/mnt/nvme/ai/conda/anaconda3/bin/python3
-# Current application and repository documentation (CPU, no data):
-$PY -B -m pytest -p no:cacheprovider -q tests/test_microglia_*.py tests/test_repo_docs.py
-# EMPF wide-width probe (frozen 0.10.0 release; 2 expected failures are by design):
-$PY -B -m pytest -p no:cacheprovider -q tests/test_empf_conditional_probe.py
-# Paper-watch harness (needs the isolated ParticleGAN 0.10.0 release; data tests skip):
-PYTHONPATH=artifacts/native-releases/particlegan-0.10.0/site-packages \
-  $PY -B -m pytest -p no:cacheprovider -q paper_watch/tests
+# Default data-free selection: tests/ and paper_watch/tests, legacy tests deselected.
+# Missing optional packages, data and workspace paths are skips with reasons
+# (tests/README.md). The isolated ParticleGAN 0.10.0 release is found automatically.
+$PY -B -m pytest -p no:cacheprovider
+# EMPF wide-width probe alone (frozen 0.10.0 release; 2 expected failures are by design):
+$PY -B -m pytest -p no:cacheprovider tests/test_empf_conditional_probe.py
+# Read-only GPU0 calibration binding tests (this workspace only):
+$PY -B -m pytest -p no:cacheprovider runtime
 # Published report consistency:
 $PY -B scripts/report/build_report.py --check
 # Analysis index freshness:
 $PY -B scripts/hygiene/index_analysis.py --check
+# Interpreter against the pinned research recipe:
+$PY -B scripts/check_env.py envs/microglia-research-py311.txt
 ```
 
-Plain `pytest tests` does not work in this environment: the legacy smoke tests
-in `tests/` need the root `src/` package and ParticleGAN 0.8.0. The repository
-has no CI.
+The legacy smoke tests run with `pytest -m legacy_pg080` and need ParticleGAN
+0.8.x ([envs/legacy-pg080.txt](envs/legacy-pg080.txt)). CPU-only GitHub
+Actions checks are defined in
+[.github/workflows/checks.yml](.github/workflows/checks.yml); they use no data,
+checkpoints or GPU. They run on pull requests, on pushes to `main` and
+`research/calibration-optimization`, and on manual dispatch.
 
 ## Reading order
 

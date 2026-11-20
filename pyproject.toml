@@ -11,6 +11,9 @@ requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE"]
 authors = [{name = "Differential AI Lab"}]
+# These dependencies install the older synthetic smoke package in src/ only.
+# The human-microglia EMPF research environment is pinned separately in
+# envs/microglia-research-py311.txt (see envs/README.md).
 dependencies = [
     "numpy>=1.26,<3",
     "particlegan==0.8.0",
@@ -29,7 +32,7 @@ vcc = [
     "anndata>=0.10",
 ]
 dev = [
-    "pytest>=8",
+    "pytest>=8.4",
     "anndata>=0.10",
 ]
 
@@ -43,8 +46,21 @@ Repository = "https://github.com/difflabai/alz-perturb-gan"
 where = ["src"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-addopts = ["-q"]
+# pytest 8.4 is the first release that applies `pythonpath` before loading the
+# `-p alz_pytest_plugin` plugin below; 8.3 stops at startup with an ImportError.
+minversion = "8.4"
+# `pytest` from the repository root runs the data-free default selection.
+# See tests/README.md for the commands, markers and skip rules.
+testpaths = ["tests", "paper_watch/tests"]
+# src: legacy alz_perturb_gan package. ".": `paper_watch.alztest` imports when
+# pytest is launched as a console script rather than `python -m pytest`.
+# tests/support: the repository plugin (path setup and explicit skip rules).
+pythonpath = ["src", ".", "tests/support"]
+addopts = ["-q", "-rs", "-p", "alz_pytest_plugin", "-m", "not legacy_pg080"]
 markers = [
+    "legacy_pg080: older synthetic smoke study in src/alz_perturb_gan; needs torch and particlegan 0.8.x (envs/legacy-pg080.txt). Deselected by default; select with -m legacy_pg080.",
+    "needs_local_workspace: needs ignored machine-local inventories, artifacts or absolute workspace paths; skipped with a reason when they are absent.",
+    "needs_data: needs a local dataset under data/ or a downloaded public file; skipped with a reason when it is absent.",
     "needs_particlegan: needs the frozen ParticleGAN 0.10.0 site-packages (skipped when absent)",
+    "gpu: needs CUDA; never run in CI.",
 ]

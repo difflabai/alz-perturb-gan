@@ -1,4 +1,9 @@
-import torch
+import pytest
+
+from alz_legacy import TORCH_REASON
+
+pytestmark = pytest.mark.legacy_pg080
+torch = pytest.importorskip("torch", reason=TORCH_REASON)
 
 from alz_perturb_gan.data import load_virtual_cell_h5ad, make_synthetic, perturbation_set_from_groups
 
@@ -32,7 +37,7 @@ def test_second_dataset_is_the_same_interface():
 
 
 def test_h5ad_loader_excludes_controls(tmp_path):
-    anndata = __import__("anndata")
+    anndata = pytest.importorskip("anndata", reason="h5ad loader test needs anndata (envs/legacy-pg080.txt)")
     import numpy as np
     import pandas as pd
 

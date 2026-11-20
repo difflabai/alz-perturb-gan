@@ -42,7 +42,9 @@ $PY -m pip install --no-deps --no-compile \
   'particlegan @ git+https://github.com/HyperGAN/ParticleGAN.git@952c3b62ba434f7da194067923351ff5748ef8dd'
 ```
 
-This command is for an empty target on a fresh setup; this workspace already contains the verified release. The loader checks the imported version/origin and pinned native source hashes. Research caches, the recorded external model helpers and checkpoints remain local artifacts, as in the repository's existing contract. Git contains the config, source, metadata hashes and evidence, rather than patient cells or binary weights. `config` and `--dry-run` remain available without Torch, data or checkpoints.
+This command is for an empty target on a fresh setup; this workspace already contains the verified release.
+
+The interpreter this default was run with (ParticleGAN 0.10.0 from the target above) is recorded separately in [`runtime_environment_0.10.0.json`](runtime_environment_0.10.0.json); the 0.9.7 record linked above is unchanged. Its package versions are pinned in [`envs/microglia-research-py311.txt`](../../envs/microglia-research-py311.txt), and `$PY -B scripts/check_env.py envs/microglia-research-py311.txt` compares an interpreter and the native target with it. The recipe records what was observed; a rebuilt environment has not been used to retrain or regenerate the model. The loader checks the imported version/origin and pinned native source hashes. Research caches, the recorded external model helpers and checkpoints remain local artifacts, as in the repository's existing contract. Git contains the config, source, metadata hashes and evidence, rather than patient cells or binary weights. `config` and `--dry-run` remain available without Torch, data or checkpoints.
 
 ## Historical source preservation
 
