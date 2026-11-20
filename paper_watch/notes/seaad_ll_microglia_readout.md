@@ -43,10 +43,12 @@ larger n, iteration 4 imports the SEA-AD loop's fix (3-fit ensemble).
 RESULT — GAUNTLET (n=77 donor x region units; AnG 43 + LEC 34):
 model {+0.223, +0.142, +0.241} mean **+0.202**; Gaussian mean
 **+0.228**; linear centroid **+0.248** (deterministic — identical
-every seed); shuffled mean +0.038. The burden–deviation association
-is real and stable at the larger n (every real arm >> null, every
-seed) — and it is entirely a mean-shift phenomenon: the no-fit linear
-baseline matches or beats both fitted arms on all three seeds.
+every seed); shuffled mean +0.038. Every real arm was above the single
+shuffled draw on every seed, and the no-fit linear baseline matched or
+beat both fitted arms on all three seeds. See the inference revision
+below: the scored donors included the CTRL fit donors, deviations were
+not depth-matched, and the shuffled arm was one unit-level draw, so
+these numbers do not establish an association.
 
 ## LOOP CLOSED at iteration 3 — honest partial/negative
 Not proven as a model readout (assertions require model > 0.3/seed
@@ -59,12 +61,37 @@ module genes). The non-circular version — burden from the lipid half
 of the module, deviation read on the lysosome half, and vice versa
 (cross-module split) — changes the claim under test and is queued as
 a possible future conversion, not an iteration of this one.
-Durable finding: donor LL burden is a real, cross-region, mean-level
-displacement of the microglial distribution (rho ~ +0.25 by centroid
-distance at n=77) — as a TARGET the axis is validated; as a
-ParticleGAN readout at toy scale, the model adds nothing over a
-centroid. Production-scale fits (20k steps, stage conditioning) are
+Exploratory observation, pending a rerun: donor LL burden tracked
+centroid distance at rho ~ +0.25 over n=77 donor x region units
+(43 + 34, so many donors are counted twice). That value was computed
+with in-sample CTRL donors and without depth matching, so it does not
+validate the axis as a target. As a ParticleGAN readout at toy scale,
+the model added nothing over a centroid. Production-scale fits (20k steps, stage conditioning) are
 a different regime the toy cannot speak to.
+
+## Inference revision (2026-11-20, code only, not yet rerun)
+The SEA-AD inputs are not on the current machine, so the recorded
+numbers above have not been rerun under these changes.
+- Held-out CTRL donors: iterations 1-3 fit the PCA, burden thresholds,
+  ParticleGAN, Gaussian and centroid on all CTRL cells and then scored
+  those same CTRL donors, whose burden and deviation are both low by
+  construction. Half of the CTRL donors (a seeded hash of the donor
+  label, the same side in both regions) are now fit donors. Gene
+  selection, PCA, standardization, burden thresholds and every arm use
+  fit donors only. Scored units are held-out CTRL plus all non-CTRL
+  donors, and rho over non-CTRL donors only is also reported.
+- Depth bias: the harness energy distance was a V-statistic that grows
+  as a donor's cell count falls. It now defaults to the unbiased
+  U-statistic, and every scored donor is subsampled to
+  MIN_CELLS_PER_DONOR (25) cells for the energy-distance and centroid
+  arms. The Spearman of raw cell count with burden is reported.
+- Shuffled arm: one permutation per seed is replaced by a donor-grouped
+  permutation p-value (2000 permutations; a donor is exchanged only
+  with donors present in the same regions, and its AnG and LEC burdens
+  move together). Arm comparisons use donor-bootstrap CIs of the rho
+  difference.
+- ADNC is mapped explicitly ({Not AD, Low} -> CTRL, Intermediate ->
+  EARLY, High -> AD) and a missing or unknown value raises.
 
 ## Iteration 1 — running
 Config: PGAN fit on CTRL microglia only (unmodified EMPF recipe,

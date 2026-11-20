@@ -132,19 +132,40 @@ def fit_unconditional(X: np.ndarray, steps: int = 300, seed: int = 0) -> Conditi
 
 # ---------------------------------------------------------------- metrics
 
-def energy_distance(a: np.ndarray, b: np.ndarray, max_n: int = 512,
-                    seed: int = 0) -> float:
-    """Energy distance between two samples (subsampled for speed)."""
+def energy_distance(a: np.ndarray, b: np.ndarray, max_n: int | None = 512,
+                    seed: int = 0, *, unbiased: bool = True) -> float:
+    """Energy distance between two samples (subsampled for speed).
+
+    ``unbiased=True`` (the default) uses the U-statistic: the within-sample
+    mean distances exclude the zero diagonal, ``sum / (n (n - 1))``. Its
+    expectation is 0 when both samples come from one distribution, whatever
+    the two sample sizes are. ``unbiased=False`` reproduces the earlier
+    V-statistic, whose within-sample means include the diagonal. That
+    estimator carries an extra ``E|X - X'| / n`` term per sample, so a
+    donor with fewer cells reads as farther away. Recorded results that
+    used the V-statistic pin ``unbiased=False``.
+
+    ``max_n=None`` disables subsampling. Subsampling uses one generator
+    seeded by ``seed``, so repeated calls draw the same rows.
+    """
     rng = np.random.default_rng(seed)
-    if len(a) > max_n:
-        a = a[rng.choice(len(a), max_n, replace=False)]
-    if len(b) > max_n:
-        b = b[rng.choice(len(b), max_n, replace=False)]
+    if max_n is not None:
+        if len(a) > max_n:
+            a = a[rng.choice(len(a), max_n, replace=False)]
+        if len(b) > max_n:
+            b = b[rng.choice(len(b), max_n, replace=False)]
+    if unbiased and (len(a) < 2 or len(b) < 2):
+        raise ValueError("the unbiased energy distance needs at least 2 rows per sample")
     a = torch.tensor(a, dtype=torch.float64)
     b = torch.tensor(b, dtype=torch.float64)
     dab = torch.cdist(a, b).mean()
-    daa = torch.cdist(a, a).mean()
-    dbb = torch.cdist(b, b).mean()
+    if unbiased:
+        n, m = len(a), len(b)
+        daa = torch.cdist(a, a).sum() / (n * (n - 1))
+        dbb = torch.cdist(b, b).sum() / (m * (m - 1))
+    else:
+        daa = torch.cdist(a, a).mean()
+        dbb = torch.cdist(b, b).mean()
     return float(2 * dab - daa - dbb)
 
 
@@ -173,14 +194,157 @@ def mean_shift_prediction(ctrl: np.ndarray, train_cond: np.ndarray) -> np.ndarra
 
 
 def pca_fit_transform(X: np.ndarray, n_comp: int = 30, seed: int = 0):
-    """Deterministic PCA via SVD on centered data. Returns (projected, parts)."""
-    mean = X.mean(0)
-    Xc = X - mean
-    _, _, vt = np.linalg.svd(Xc, full_matrices=False)
-    comps = vt[:n_comp]
-    return Xc @ comps.T, (mean, comps)
+    """Deterministic PCA via SVD on centered data. Returns (projected, parts).
+
+    This fits the basis on every row of ``X``. When some rows are scored
+    as held-out donors, use ``pca_fit`` on the training rows and
+    ``pca_apply`` on all rows instead.
+    """
+    parts = pca_fit(X, n_comp)
+    return pca_apply(X, parts), parts
+
+
+def pca_fit(X_train: np.ndarray, n_comp: int = 30) -> tuple[np.ndarray, np.ndarray]:
+    """Deterministic PCA basis from training rows only. Returns (mean, comps).
+
+    Mirrors the training-donor projection in ``psychad.project_profiles``:
+    the centering mean and the SVD come from ``X_train`` alone.
+    """
+    mean = X_train.mean(0)
+    _, _, vt = np.linalg.svd(X_train - mean, full_matrices=False)
+    return mean, vt[:n_comp]
+
+
+def pca_apply(X: np.ndarray, parts: tuple[np.ndarray, np.ndarray]) -> np.ndarray:
+    """Project any rows onto a basis from ``pca_fit``."""
+    mean, comps = parts
+    return (X - mean) @ comps.T
 
 
 def standardize(X: np.ndarray) -> np.ndarray:
-    mu, sd = X.mean(0), X.std(0) + 1e-8
+    return standardize_apply(X, standardize_fit(X))
+
+
+def standardize_fit(X_train: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Per-column (mean, sd) from training rows only."""
+    return X_train.mean(0), X_train.std(0) + 1e-8
+
+
+def standardize_apply(X: np.ndarray, parts: tuple[np.ndarray, np.ndarray]) -> np.ndarray:
+    mu, sd = parts
     return (X - mu) / sd
+
+
+# ---------------------------------------------------------------- inference
+
+def _group_codes(groups: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    names, codes = np.unique(np.asarray(groups).astype(str), return_inverse=True)
+    return names, codes
+
+
+def grouped_permutations(labels, groups=None, *, within=None, n_perm: int = 2000,
+                         seed: int = 0):
+    """Yield label vectors permuted at the level of whole groups (donors).
+
+    With ``groups=None`` each unit is permuted on its own. With ``groups``
+    every unit of one donor receives the labels of one other donor, so the
+    records of a donor (for example its AnG and LEC rows) stay together.
+
+    If ``labels`` are constant within each group, donors are exchanged
+    freely. If they differ within a group (for example a per-region
+    target), pass ``within`` (for example the region of each unit): a donor
+    is then exchanged only with donors that have the same set of ``within``
+    keys, and unit (d, k) receives the label of unit (pi(d), k). Each
+    (group, within) pair must identify one unit.
+    """
+    labels = np.asarray(labels)
+    rng = np.random.default_rng(seed)
+    if groups is None:
+        for _ in range(n_perm):
+            yield labels[rng.permutation(len(labels))]
+        return
+    _, codes = _group_codes(groups)
+    n_groups = codes.max() + 1
+    if within is None:
+        _, first = np.unique(codes, return_index=True)
+        group_label = labels[first]
+        if not np.array_equal(group_label[codes], labels):
+            raise ValueError(
+                "labels differ within a group; pass `within` to permute per-key blocks")
+        for _ in range(n_perm):
+            yield group_label[rng.permutation(n_groups)][codes]
+        return
+    within = np.asarray(within).astype(str)
+    lookup = {}
+    for i, (g, k) in enumerate(zip(codes, within)):
+        if (g, k) in lookup:
+            raise ValueError("each (group, within) pair must identify one unit")
+        lookup[g, k] = i
+    pattern = {}
+    for g in range(n_groups):
+        pattern.setdefault(tuple(sorted(k for (h, k) in lookup if h == g)), []).append(g)
+    strata = [np.array(members) for members in pattern.values()]
+    for _ in range(n_perm):
+        target = np.arange(n_groups)
+        for members in strata:
+            target[members] = members[rng.permutation(len(members))]
+        source = np.array([lookup[target[g], k] for g, k in zip(codes, within)])
+        yield labels[source]
+
+
+def permutation_pvalue(stat_fn: Callable[[np.ndarray], float], labels, groups=None, *,
+                       within=None, n_perm: int = 2000, seed: int = 0,
+                       alternative: str = "greater") -> dict:
+    """Monte Carlo permutation p-value for ``stat_fn(labels)``.
+
+    Labels are permuted by ``grouped_permutations`` (whole donors when
+    ``groups`` is given). The p-value counts the observed statistic as one
+    of the permutations, ``(1 + #{null >= observed}) / (n_perm + 1)``, so it
+    is never 0 and is valid at any ``n_perm``. ``alternative`` is
+    "greater", "less" or "two-sided" (absolute values about 0).
+    """
+    if alternative not in ("greater", "less", "two-sided"):
+        raise ValueError(f"unknown alternative {alternative!r}")
+    observed = float(stat_fn(np.asarray(labels)))
+    null = np.array([float(stat_fn(perm)) for perm in grouped_permutations(
+        labels, groups, within=within, n_perm=n_perm, seed=seed)])
+    if alternative == "greater":
+        hits = np.sum(null >= observed - 1e-12)
+    elif alternative == "less":
+        hits = np.sum(null <= observed + 1e-12)
+    else:
+        hits = np.sum(np.abs(null) >= abs(observed) - 1e-12)
+    return {
+        "observed": observed,
+        "p": float((1 + hits) / (n_perm + 1)),
+        "null_mean": float(null.mean()),
+        "null_q95": float(np.quantile(null, 0.95)),
+        "n_perm": int(n_perm),
+    }
+
+
+def donor_bootstrap_ci(stat_fn: Callable[[np.ndarray], float], groups, *,
+                       n_boot: int = 2000, alpha: float = 0.05, seed: int = 0) -> dict:
+    """Percentile bootstrap CI that resamples whole donors.
+
+    Each replicate draws donors with replacement and passes ``stat_fn`` the
+    unit indices of every drawn donor (a donor drawn twice contributes its
+    units twice), so all records of a donor move together. Replicates where
+    ``stat_fn`` returns None or a non-finite value (for example an AUROC
+    with only one class drawn) are dropped and counted.
+    """
+    _, codes = _group_codes(groups)
+    members = [np.flatnonzero(codes == g) for g in range(codes.max() + 1)]
+    rng = np.random.default_rng(seed)
+    values = []
+    for _ in range(n_boot):
+        pick = rng.integers(len(members), size=len(members))
+        value = stat_fn(np.concatenate([members[g] for g in pick]))
+        if value is not None and np.isfinite(value):
+            values.append(float(value))
+    values = np.array(values)
+    if not len(values):
+        raise ValueError("no bootstrap replicate produced a finite statistic")
+    lo, hi = np.quantile(values, [alpha / 2, 1 - alpha / 2])
+    return {"lo": float(lo), "hi": float(hi), "n_valid": int(len(values)),
+            "n_boot": int(n_boot), "n_donors": len(members)}
