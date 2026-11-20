@@ -70,6 +70,9 @@ def activate(lane, fold):
     shared = ROOT / 'artifacts/native-releases/particlegan-0.10.0/alz-host-empf-native'
     for name in files:
         a = (runtime/name).read_text().split('\n', 1)[1]; b = (shared/name).read_text().split('\n', 1)[1]
+        if name == 'trainer.py':  # only the default output root may differ (we always pass --out-root)
+            b = b.replace(f"DEFAULT_OUT_ROOT = Path({str(ROOT/'runs/empf_comparison_20261117/fits/native')!r})",
+                          f'DEFAULT_OUT_ROOT = Path({str(OUT/"fits"/lane)!r})')
         if a != b:
             raise RuntimeError(f'private derivation differs from the native pilot host: {name}')
     load('release_env', runtime/'release_env.py')

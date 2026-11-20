@@ -193,7 +193,7 @@ def train(arm, seed, width, updates, log_every=250, device='cpu', memory=.04):
     DEVICE = torch.device(device)
     if DEVICE.type == 'cuda':
         torch.cuda.set_per_process_memory_fraction(memory)
-    torch.set_num_threads(3)
+    torch.set_num_threads(int(os.environ.get('SYN_THREADS', '3')))
     torch.use_deterministic_algorithms(True)
     mean, sd = truth(width)
     data_rng = np.random.default_rng(5000 + seed)
