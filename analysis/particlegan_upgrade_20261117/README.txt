@@ -1,3 +1,5 @@
+SUPERSEDED by STATUS.md (2026-11-20). Historical record, kept unchanged below; its statements about the current default, live jobs and next steps are out of date.
+
 ParticleGAN0.10.0 isolated ALZ release test
 
 Official v0.10.0 (Nov16), commit952c3b62ba434f7da194067923351ff5748ef8dd.

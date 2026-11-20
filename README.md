@@ -2,7 +2,7 @@
 
 [**Read the evidence report →**](https://difflabai.github.io/alz-perturb-gan/)
 
-The published report examines five frozen ParticleGAN 0.9.7 models of human microglial gene-expression distributions at four Alzheimer’s neuropathology stages. The current experimental CLI default uses native EMPF on ParticleGAN 0.10.0. This repository contains the research code, experiment history, aggregate results, and a shareable report examining what the trained models actually support.
+The published report examines five frozen ParticleGAN 0.9.7 models of human microglial gene-expression distributions at four Alzheimer’s neuropathology stages. The current experimental CLI default uses native EMPF on ParticleGAN 0.10.0. This repository contains the research code, experiment history, aggregate results, and a shareable report examining what the trained models actually support. [STATUS.md](STATUS.md) gives the current state, work in progress and a reading order.
 
 **Dataset: SEA-AD middle temporal gyrus.** This is an independent proof of concept. Prima Mente’s challenge atlas is planned for Spring 2027 and was not used for training or analysis here. These are not challenge benchmark results.
 
@@ -38,6 +38,10 @@ The lipid–lysosome feature audit found one of seven lipid markers and zero of 
 The public PsychAD diagnostic uses a broader gene panel to show how training duration changes the generated relationship between lipid and lysosome expression. [Diagnostic and results](paper_watch/notes/psychad_program_readout.md)
 
 The [previous 0.9.7 default config](analysis/improve_20261109/default_config.json), its [selection evidence](analysis/improve_20261109/default_config_distribution_evidence_20261113.json), and all original benchmark receipts remain historical records. Their source hashes are preserved; the previous public entrypoint is [archived byte for byte](analysis/default_empf_20261117/previous/microglia.py). The published report and the biological findings below still describe the original frozen 0.9.7 models; they were not recomputed using EMPF.
+
+A subsequent [coverage improvement pilot](analysis/coverage_empf_20261117/README.md) halves the inherited count-readout contraction. On the same native EMPF fold/seed, variability coverage rises **58.3% → 62.2%**, combined coverage **69.2% → 71.5%**, and their proper interval scores improve **17.2% and 7.4%**. Separate SD-only calibration with disjoint six-donor calibration/test halves gives **86.7% / 83.7%** coverage with wider ranges and better proper scores. This is an experimental count-readout and interval-calibration result; additional native folds/seeds are needed before changing the public default. A [pre-declared 17-fit fold/seed confirmation](analysis/coverage_empf_confirm_20261120/PROTOCOL.md) of the default and this readout started on 2026-11-20; [STATUS.md](STATUS.md) records whether it has finished.
+
+A separate [CPU probe of ParticleGAN 0.10.0](analysis/particlegan_review_20261117/README.md) found that, in a controlled two-group example, EMPF's transport residual reports a perfect match after two conditions swap their spreads when inputs are wider than 64 features (tested at 65 and 2,150); the default trains with 2,150. Whether this affects trained samples, including the undercoverage above, is untested.
 
 ## Frozen report findings (ParticleGAN 0.9.7)
 
@@ -99,11 +103,19 @@ The screen retains 614 stable exploratory signals, 107 with primary ROSMAP suppo
 
 | Path | Contents |
 | --- | --- |
+| `STATUS.md` | Current state, in-progress work and reading order |
+| `configs/`, `scripts/microglia.py`, `scripts/microglia_runtime.py` | Current experimental EMPF application: default config and CLI |
+| `tests/` | Current application tests (`test_microglia_*.py`), repository documentation checks, and the legacy smoke-project tests |
+| `paper_watch/` | CPU harness, tests and notes converting new papers into small checks ([README](paper_watch/README.md)) |
+| `analysis/<study>_<date>/` | Dated, frozen studies; the newest describe the current default ([index](analysis/INDEX.md)) |
+| `analysis/` (top level) | Versioned research scripts, plans, audits and results from the 0.9.x lineage, kept in place because records pin their paths |
+| `analysis/faithful097/model/` | Released ParticleGAN 0.9.7 integration used in the research lineage |
 | `docs/` | Static report, downloadable aggregate evidence, figures, and earlier project archive |
 | `scripts/report/` | Portable report builder, original stage-profile exporter, and explorer verification |
-| `analysis/` | Versioned research scripts, plans, audits, results, and experiment/runtime snapshots |
-| `analysis/faithful097/model/` | Released ParticleGAN 0.9.7 integration used in the research lineage |
-| `src/alz_perturb_gan/`, `tests/`, `results/smoke_results.json` | Earlier synthetic perturbation/decision-model experiment, preserved as legacy work |
+| `scripts/hygiene/` | Repository maintenance scripts, such as the `analysis/INDEX.md` generator |
+| Root `*_runtime/`, `*model/`, `prepare_*.py`, `test_*.py`, `*.json` | Nov 3-8 experiment snapshots and records, not maintained ([legacy layout](docs/LEGACY_LAYOUT.md)) |
+| `src/alz_perturb_gan/`, `results/smoke_results.json`, `pyproject.toml` | Earlier synthetic perturbation/decision-model experiment, preserved as legacy work |
+| `runs/`, `artifacts/`, `data/` | Local only and git-ignored: fits and outputs, isolated ParticleGAN releases, raw cells |
 
 The original perturbation smoke experiment used PG 0.8.0, synthetic data, and a different objective. Its [archived README](docs/archive/early-perturbation-smoke.md) explains that experiment. **The root `pyproject.toml` still installs that legacy package; it is not the environment recipe for the current human-microglia model.** The [earlier literature-only suggestions](docs/archive/early-literature-suggestions.md) are also archived rather than presented as outputs of the current model.
 
