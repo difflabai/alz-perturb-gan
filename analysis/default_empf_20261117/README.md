@@ -34,28 +34,68 @@ Training uses fresh weights or its own compatible resume state under `runs/micro
 
 ### Fit states
 
-Each fit directory has an explicit state in `fit_state.json` (format `durable_state/1`), with every transition appended to `fit_state.json.journal.jsonl`. The state file is always written last, after the files it describes. `scripts/microglia_runtime.py train` holds an exclusive lock on `<fit>/fit.lock` across training, receipt and audit. A second process on the same fold/seed exits **75** (`EX_TEMPFAIL`) and names the owner pid, so two trainers can never write one fit. `train` on an `AUDITED` fit does nothing and exits **3**.
+Each fit directory has an explicit state in `fit_state.json` (format `durable_state/1`), with every transition appended to `fit_state.json.journal.jsonl`. The state file is always written last, after the files it describes. `scripts/microglia_runtime.py train` holds an exclusive lock on `<fit>/fit.lock` across training, receipt and audit. A second process on the same fold/seed exits **75** (`EX_TEMPFAIL`) and names the owner pid, so two trainers can never write one fit. `train` on an `AUDITED` fit re-verifies it (`check_fit` and every checkpoint digest), does nothing else and exits **3**; if the files no longer verify it records `DAMAGED` and exits **4**. `scripts/microglia.py` treats 3 as success, reports 75 as busy (and exits 75) and reports 4 as a damaged fit. It skips the training step only when the fit has no `fit_state.json` or records `AUDITED`.
 
 | State | Files | Leaves by |
 | --- | --- | --- |
 | `ABSENT` | none | `configure` (config.json written) |
 | `CONFIGURED` | config.json | `start`, guarded: train_start.json absent or recording the live source-manifest digest (the epoch); train_start.json is written first when absent |
 | `TRAINING` | + checkpoints | `checkpoint` (stays), `error`, `final_written` |
-| `FAILED_RESUMABLE` | recovery.pt and/or failure.json | `resume`, guarded: the start epoch equals the live epoch |
+| `FAILED_RESUMABLE` | recovery.pt and/or failure.json | `resume`, guarded: the start epoch equals the live epoch; `final_written` when final.pt already landed |
 | `TRAINED` | final.pt, no fit_receipt.json | `receipt_written`, or `reconstruct_receipt` |
 | `RECEIPTED` | + fit_receipt.json | `audit_passed` / `audit_failed` (stays, reason journaled) |
-| `AUDITED` | + no_skip_audit.json, check_fit passes | terminal |
+| `AUDITED` | + no_skip_audit.json, check_fit and check_weights pass | only `damaged` (no terminal state) |
 | `STRANDED` | epoch mismatch | only an explicit `--adopt-epoch` (`adopt_epoch` / `adopt_epoch_trained`) |
+| `DAMAGED` | the files no longer support the recorded state | only an explicit `--repair` (`repair_to_<state>`, the state the files support) |
 
-Any state before `AUDITED` moves to `STRANDED` when its start epoch, or the digest in an existing no_skip_audit.json, differs from the live manifest. A refreeze during a fit therefore strands it with a printed reason instead of resuming or relabelling it. `--adopt-epoch` journals an explicit adoption of the live epoch, and the audit lists it under `epoch_adoptions`. A pre-pinning fit with `recovery.pt` and no `train_start.json` has an unknown epoch, so its resume is refused unless `--adopt-epoch` is given.
+```mermaid
+stateDiagram-v2
+    [*] --> ABSENT
+    ABSENT --> CONFIGURED: configure
+    CONFIGURED --> TRAINING: start [epoch]
+    TRAINING --> TRAINING: checkpoint
+    TRAINING --> FAILED_RESUMABLE: error
+    FAILED_RESUMABLE --> TRAINING: resume [epoch]
+    FAILED_RESUMABLE --> FAILED_RESUMABLE: adopt_epoch
+    TRAINING --> TRAINED: final_written
+    FAILED_RESUMABLE --> TRAINED: final_written (reconciled)
+    TRAINED --> RECEIPTED: receipt_written / reconstruct_receipt
+    TRAINED --> TRAINED: adopt_epoch
+    RECEIPTED --> RECEIPTED: audit_failed / adopt_epoch
+    RECEIPTED --> AUDITED: audit_passed
+    ABSENT --> STRANDED: epoch_mismatch
+    CONFIGURED --> STRANDED: epoch_mismatch
+    TRAINING --> STRANDED: epoch_mismatch
+    FAILED_RESUMABLE --> STRANDED: epoch_mismatch
+    TRAINED --> STRANDED: epoch_mismatch
+    RECEIPTED --> STRANDED: epoch_mismatch
+    STRANDED --> FAILED_RESUMABLE: adopt_epoch
+    STRANDED --> TRAINED: adopt_epoch_trained
+    ABSENT --> DAMAGED: damaged
+    CONFIGURED --> DAMAGED: damaged
+    TRAINED --> DAMAGED: damaged
+    RECEIPTED --> DAMAGED: damaged
+    AUDITED --> DAMAGED: damaged
+    DAMAGED --> ABSENT: repair_to_absent
+    DAMAGED --> CONFIGURED: repair_to_configured
+    DAMAGED --> FAILED_RESUMABLE: repair_to_failed_resumable
+    DAMAGED --> TRAINED: repair_to_trained
+    DAMAGED --> RECEIPTED: repair_to_receipted
+```
 
-The audit runs in this order: `check_fit` passes on a staged copy that includes the new audit; `no_skip_audit.json` is written (an earlier, different audit is kept as `no_skip_audit.superseded.<sha12>.json`); `check_fit` passes on the fit itself; then the state becomes `AUDITED`. A process that died while `TRAINING` is recorded as `error` by the next run, which holds the lock. Files written after the last state write are caught up (`final_written`, `receipt_written`) before anything else happens.
+Any state before `AUDITED` moves to `STRANDED` when its start epoch, or the digest in an existing no_skip_audit.json, differs from the live manifest. A refreeze during a fit therefore strands it with a printed reason instead of resuming or relabelling it. `--adopt-epoch` journals an explicit adoption of the live epoch, and the audit lists it under `epoch_adoptions`. A pre-pinning fit with no `train_start.json` and either `recovery.pt` (`FAILED_RESUMABLE`) or `final.pt` (`TRAINED`, `RECEIPTED`) has an unknown epoch, so its resume or audit is refused unless `--adopt-epoch` is given; the audit then carries `training_start_note` and `epoch_adoptions`.
 
-The trainer-side changes are derivation patches in [`vendored_host.py`](vendored_host.py) (`FIT_LIFECYCLE_PATCHES`), so the pinned round-5 `trainer.py` and `generate.py` stay byte-identical. The derived trainer reports its events to the runtime through a `FIT_EVENTS` hook. `checkpoint_receipt.json` is written before a checkpoint is renamed into place, and temp names carry the pid. When `final.pt` exists without `fit_receipt.json` (a crash before the receipt), the generation-only branch now rebuilds the receipt instead of returning silently. It does so only when `checkpoint_receipt.json` names `final.pt` with its sha256 and the full update count; the rebuilt receipt is stamped `reconstructed: true`, and `failure.json` is renamed to `failure.resolved.json`. The derived generator adds `generated: true` and no longer rewrites a fit receipt's status to `completed`, so `training_completed` holds on every path.
+The audit runs in this order: `check_fit` passes on a staged copy that includes the new audit; `no_skip_audit.json` is written (an earlier, different audit is kept as `no_skip_audit.superseded.<sha12>.json`); `check_fit` passes on the fit itself; then the state becomes `AUDITED`. A process that died while `TRAINING` is recorded as `error` by the next run, which holds the lock. Files written after the last state write are caught up (`final_written`, `receipt_written`) before anything else happens. A run that died between writing `no_skip_audit.json` and the `AUDITED` state is caught up as `audit_passed` (journaled with `reconciled: true`) when that audit records this fit's own epoch and the live one, and `check_fit` and every checkpoint digest still pass; the same applies after an `audit_failed` that followed an earlier passing audit. Every event the trainer reports after a file lands (`checkpoint`, `final_written`, `receipt_written`, `reconstruct_receipt`, `error`) is best-effort: if recording it fails (ENOSPC, EIO), the trainer goes on and the runtime reconciles the state from the files. Under the lock, temp files of dead writers are swept, and a `recovery.pt` left beside a `final.pt` that a receipt verifies is removed.
 
-`train --dry-run` takes the lock, adopts the fit and prints its state, its epochs and the allowed events. `generate` refuses a fit whose `fit_state.json` records anything but `AUDITED`; fits without a state file rely on `check_fit` as before.
+**Exit codes of `microglia_runtime.py train`:** 0 trained/receipted/audited now; 1 error (reason printed); 3 already `AUDITED` and verified; 4 `DAMAGED` (rerun with `--repair` after inspecting); 75 another process holds the fit.
 
-**Migration.** Existing fit directories have no `fit_state.json`. The first runtime touch, including `--dry-run`, takes the lock and adopts the directory with a read-only reader: no files → `ABSENT`; config.json only → `CONFIGURED`; recovery.pt → `FAILED_RESUMABLE` at the step of a matching checkpoint receipt (start epoch from train_start.json, or none); final.pt without a receipt → `TRAINED`; a receipt with status `training_completed` or `completed` (written by the native generator) → `RECEIPTED`; and a passed no_skip_audit.json → `AUDITED` if `check_fit` passes, otherwise `RECEIPTED` with the reason recorded. Adoption writes only `fit_state.json`, its journal and lock files. No existing `config.json`, `final.pt`, `recovery.pt`, `fit_receipt.json` or `no_skip_audit.json` byte changes, except through two journaled transitions: `reconstruct_receipt` creates a `fit_receipt.json` where none existed, and `failure.json` is renamed to `failure.resolved.json`.
+**Repair and reset.** `DAMAGED` is recorded when the state is ahead of the files: an `AUDITED` fit that no longer passes `check_fit`/`check_weights` (a deleted `no_skip_audit.json`, `fit_receipt.json` or `final.pt`, a changed snapshot), a `TRAINED`/`RECEIPTED` fit missing `final.pt` or its receipt, or an `ABSENT`/`CONFIGURED` fit that already has `final.pt`. `generate` refuses it. `train --repair` moves it, journaled, to the state its files support (`RECEIPTED` → re-audit, `TRAINED` → receipt reconstruction, `FAILED_RESUMABLE` → resume, `CONFIGURED`/`ABSENT` → fresh training) and continues; epoch checks still apply. A damaged `fit_state.json` or journal (truncated, unknown state, journal ahead of the state, or a deleted state file with its journal kept) fails closed with `CorruptState`. After inspecting the fit, `train --readopt` moves both to `fit_state.json.superseded.<utc>` and `fit_state.json.journal.jsonl.superseded.<utc>` and adopts the directory again from its files under the lock; doing the same by hand (move both files aside, never only the state file) is equivalent.
+
+The trainer-side changes are derivation patches in [`vendored_host.py`](vendored_host.py) (`FIT_LIFECYCLE_PATCHES`), so the pinned round-5 `trainer.py` and `generate.py` stay byte-identical. The derived trainer reports its events to the runtime through a `FIT_EVENTS` hook. `checkpoint_receipt.json` is written before a checkpoint is renamed into place, and temp names carry the pid. When `final.pt` exists without `fit_receipt.json` (a crash before the receipt), the generation-only branch now rebuilds the receipt instead of returning silently. When `checkpoint_receipt.json` names `final.pt` it must carry its sha256 and the full update count; when it names another checkpoint (a later `recovery.pt` superseded it) or is missing, `final.pt`'s own header must be a completed checkpoint at the full update count. The rebuilt receipt is stamped `reconstructed: true` with its `basis`, `failure.json` is renamed to `failure.resolved.json`, and a `recovery.pt` beside the verified `final.pt` is removed. A failure after `final.pt` was renamed into place no longer writes `recovery.pt` over its checkpoint receipt. The derived generator adds `generated: true` and no longer rewrites a fit receipt's status to `completed`, so `training_completed` holds on every path.
+
+`train --dry-run` on an existing fit directory takes the lock, adopts the fit and prints its state, its epochs and the allowed events; on a fit directory that does not exist it creates nothing and prints the state it would be adopted as. `generate` reads `fit_state.json` without locking or reconciling it (nothing is written into the fit) and refuses a fit that records anything but `AUDITED`; fits without a state file rely on `check_fit` as before.
+
+**Migration.** Existing fit directories have no `fit_state.json`. The first runtime touch, including `--dry-run`, takes the lock and adopts the directory with a read-only reader: no files → `ABSENT`; config.json only → `CONFIGURED`; recovery.pt → `FAILED_RESUMABLE` at the step of a matching checkpoint receipt (start epoch from train_start.json, or none); final.pt without a receipt → `TRAINED`; a receipt with status `training_completed` or `completed` (written by the native generator) → `RECEIPTED`; and a passed no_skip_audit.json → `AUDITED` if `check_fit` passes, otherwise `RECEIPTED` with the reason recorded. Adoption writes only `fit_state.json`, its journal and lock files. No existing `config.json`, `final.pt`, `recovery.pt`, `fit_receipt.json` or `no_skip_audit.json` byte changes, except through journaled transitions in a non-dry run: `reconstruct_receipt` creates a `fit_receipt.json` where none existed, `failure.json` is renamed to `failure.resolved.json`, a superseded `recovery.pt` beside a verified `final.pt` is removed, and an audit writes `no_skip_audit.json` (keeping a different earlier one as `no_skip_audit.superseded.<sha12>.json`). Fits audited before this change are adopted as `AUDITED` and are never relabelled; `train` on them exits 3 as long as they verify.
 
 ## Runtime setup
 

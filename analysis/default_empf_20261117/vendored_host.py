@@ -24,12 +24,16 @@ generate.py stay byte-identical; see FIT_LIFECYCLE_PATCHES):
 
   trainer.py      FIT_EVENTS hook (set by scripts/microglia_runtime.py) called at
                   configure, begin, checkpoint, final_written, error and
-                  receipt_written; checkpoint_receipt.json is written before the
-                  checkpoint is renamed into place, so a crash right after the
-                  rename leaves a receipt that matches it; the generation-only
+                  receipt_written (all but begin/configure are quiet: the runtime
+                  reconciles fit_state.json from the files); checkpoint_receipt.json
+                  is written before the checkpoint is renamed into place, so a crash
+                  right after the rename leaves a receipt that matches it; a failure
+                  after final.pt exists never writes recovery.pt; the generation-only
                   branch (final.pt present, no fit_receipt.json) rebuilds the
-                  receipt instead of returning silently (reconstructed: true,
-                  failure.json -> failure.resolved.json); temp names carry the pid.
+                  receipt instead of returning silently (reconstructed: true, from
+                  checkpoint_receipt.json or else final.pt's own header;
+                  failure.json -> failure.resolved.json; recovery.pt removed);
+                  temp names carry the pid.
   generate.py     stops rewriting fit_receipt.status to 'completed' (adds
                   generated: true instead), so 'training_completed' holds on
                   every path.
@@ -99,40 +103,51 @@ def _fit_event(event, out, quiet=False, **info):
 def _reconstruct_receipt(out, args, ctx):
     """Rebuild a missing fit_receipt.json from config.json, final.pt and checkpoint_receipt.json (derived patch).
 
-    Guard: checkpoint_receipt.json names final.pt with final.pt's sha256 and status 'completed', and its
-    step equals the requested number of updates (run() has already compared config.json). The receipt is
-    stamped reconstructed: true, and failure.json is renamed to failure.resolved.json.
+    Guard: when checkpoint_receipt.json names final.pt, it must carry final.pt's sha256, status 'completed'
+    and the requested number of updates. When it names another checkpoint (a later save('incomplete')
+    superseded it) or is missing, final.pt's own header must say status 'completed' with the requested
+    updates (run() has already compared config.json, the endpoint, seed and flags). The receipt is stamped
+    reconstructed: true, failure.json is renamed to failure.resolved.json and a recovery.pt beside the
+    verified final.pt is removed.
     """
     out = Path(out)
     record = out / 'checkpoint_receipt.json'
-    if not record.exists():
-        raise ValueError(f'cannot reconstruct fit_receipt.json in {out}: checkpoint_receipt.json is missing')
-    cr = json.loads(record.read_text())
+    cr = json.loads(record.read_text()) if record.exists() else None
     final_sha = sha(out / 'final.pt')
-    if cr.get('path') != 'final.pt' or cr.get('SHA256') != final_sha or cr.get('status') != 'completed':
-        raise ValueError(f'cannot reconstruct fit_receipt.json in {out}: checkpoint_receipt.json does not describe final.pt')
-    if cr.get('completed_updates') != args.updates:
-        raise ValueError(f'cannot reconstruct fit_receipt.json in {out}: checkpoint step '
-                         f'{cr.get("completed_updates")} is not the requested {args.updates} updates')
     q = torch.load(out / 'final.pt', map_location='cpu', weights_only=False)
+    header = {'status': q.get('status'), 'completed_updates': q.get('completed_updates')}
     wall_seconds = q.get('wall_seconds')
     del q
+    if cr is not None and cr.get('path') == 'final.pt':
+        if cr.get('SHA256') != final_sha or cr.get('status') != 'completed':
+            raise ValueError(f'cannot reconstruct fit_receipt.json in {out}: checkpoint_receipt.json does not describe final.pt')
+        if cr.get('completed_updates') != args.updates:
+            raise ValueError(f'cannot reconstruct fit_receipt.json in {out}: checkpoint step '
+                             f'{cr.get("completed_updates")} is not the requested {args.updates} updates')
+        basis, steps = 'checkpoint_receipt', cr['completed_updates']
+    else:
+        if header != {'status': 'completed', 'completed_updates': args.updates}:
+            raise ValueError(f'cannot reconstruct fit_receipt.json in {out}: checkpoint_receipt.json does not describe '
+                             f'final.pt and its header {header} is not a completed {args.updates}-update checkpoint')
+        basis, steps = 'final_header', header['completed_updates']
     snaps = sorted(set(snapshot_updates(args.updates)))
     snap_files = {u_: (sha(out / f'snap_{u_}.pt') if (out / f'snap_{u_}.pt').exists() else None) for u_ in snaps}
-    receipt = {'status': 'training_completed', 'completed_updates': cr['completed_updates'], 'endpoint': args.updates,
+    receipt = {'status': 'training_completed', 'completed_updates': steps, 'endpoint': args.updates,
                'full_20k_endpoint': args.updates == RECIPE_STEPS, 'full_horizon_endpoint': args.updates == ctx.topt.steps,
                'wall_seconds': wall_seconds, 'seconds_per_update_this_session': None, 'updates_this_session': 0,
                'resumed_from': None, 'device': args.device, 'threads': args.threads, 'peak_memory': None,
                'final_SHA256': final_sha, 'snapshots_SHA256': {str(k): v for k, v in snap_files.items()},
                'snapshots_missing': [k for k, v in snap_files.items() if v is None],
                'reconstructed': True,
-               'reconstructed_from': {'config_SHA256': sha(out / 'config.json'), 'final_SHA256': final_sha,
-                                      'checkpoint_receipt_SHA256': sha(record)}}
+               'reconstructed_from': {'basis': basis, 'config_SHA256': sha(out / 'config.json'), 'final_SHA256': final_sha,
+                                      'checkpoint_receipt_SHA256': sha(record) if cr is not None else None}}
     dump(out / 'fit_receipt.json', receipt)
     if (out / 'failure.json').exists():
         (out / 'failure.json').replace(out / 'failure.resolved.json')
-    print(f'[trainer] reconstructed fit_receipt.json from final.pt and checkpoint_receipt.json: {out}', flush=True)
-    _fit_event('reconstruct_receipt', out, step=cr['completed_updates'])
+    if (out / 'recovery.pt').exists():  # superseded by the verified final.pt
+        (out / 'recovery.pt').unlink()
+    print(f'[trainer] reconstructed fit_receipt.json from final.pt ({basis}): {out}', flush=True)
+    _fit_event('reconstruct_receipt', out, quiet=True, step=steps)
     return receipt
 
 
@@ -149,7 +164,9 @@ SAVE_AFTER = """        tmp = p.with_name(f'.{p.stem}.partial.{os.getpid()}.pt')
         # Receipt first: after the rename below, checkpoint_receipt.json already matches the checkpoint.
         dump(out / 'checkpoint_receipt.json', {'path': p.name, 'SHA256': sha(tmp), 'status': status, 'completed_updates': policy.completed_steps})
         tmp.replace(p)
-        _fit_event('final_written' if status == 'completed' else 'checkpoint', out, step=policy.completed_steps)
+        # quiet: fit_state.json is written last and reconciled from the files, so a failure to record the
+        # event must never turn a renamed final.pt into a failed run (see the except branch below).
+        _fit_event('final_written' if status == 'completed' else 'checkpoint', out, quiet=True, step=policy.completed_steps)
         return p"""
 
 GENERATION_ONLY_BEFORE = """        print(f'[trainer] final.pt present without generated.npz; generation only: {out}', flush=True)"""
@@ -169,7 +186,12 @@ FIT_LIFECYCLE_PATCHES = {
         ("'phase': policy._phase})\n        raise",
          "'phase': policy._phase})\n        _fit_event('error', out, quiet=True, error=repr(exc), step=policy.completed_steps)\n        raise"),
         ("    dump(out / 'fit_receipt.json', receipt)\n",
-         "    dump(out / 'fit_receipt.json', receipt)\n    _fit_event('receipt_written', out, step=policy.completed_steps)\n"),
+         "    dump(out / 'fit_receipt.json', receipt)\n    _fit_event('receipt_written', out, quiet=True, step=policy.completed_steps)\n"),
+        # A failure after final.pt was renamed into place must not write recovery.pt over the receipt of a
+        # completed checkpoint; final.pt is then the fit's only checkpoint (the runtime reconciles to TRAINED).
+        ("        if policy._phase == 'ready' and policy.completed_steps > 0:\n            save('incomplete')",
+         "        if policy._phase == 'ready' and policy.completed_steps > 0 and not (out / 'final.pt').exists():\n"
+         "            save('incomplete')"),
         (GENERATION_ONLY_BEFORE, GENERATION_ONLY_AFTER),
         # Last, so the helpers' own text never matches an earlier patch.
         ('def run(args):\n    check_out_root(args.out_root)', TRAINER_HOOKS),

@@ -65,6 +65,7 @@ EXPECTED_TABLE = {
     ('TRAINING', 'error'): 'FAILED_RESUMABLE',
     ('FAILED_RESUMABLE', 'resume'): 'TRAINING',
     ('TRAINING', 'final_written'): 'TRAINED',
+    ('FAILED_RESUMABLE', 'final_written'): 'TRAINED',  # reconcile: error recorded after final.pt landed
     ('TRAINED', 'receipt_written'): 'RECEIPTED',
     ('TRAINED', 'reconstruct_receipt'): 'RECEIPTED',
     ('RECEIPTED', 'audit_passed'): 'AUDITED',
@@ -72,16 +73,23 @@ EXPECTED_TABLE = {
     **{(s, 'epoch_mismatch'): 'STRANDED'
        for s in ('ABSENT', 'CONFIGURED', 'TRAINING', 'FAILED_RESUMABLE', 'TRAINED', 'RECEIPTED')},
     ('FAILED_RESUMABLE', 'adopt_epoch'): 'FAILED_RESUMABLE',
+    ('TRAINED', 'adopt_epoch'): 'TRAINED',
+    ('RECEIPTED', 'adopt_epoch'): 'RECEIPTED',
     ('STRANDED', 'adopt_epoch'): 'FAILED_RESUMABLE',
     ('STRANDED', 'adopt_epoch_trained'): 'TRAINED',
+    **{(s, 'damaged'): 'DAMAGED' for s in ('ABSENT', 'CONFIGURED', 'TRAINED', 'RECEIPTED', 'AUDITED')},
+    **{('DAMAGED', f'repair_to_{s.lower()}'): s
+       for s in ('ABSENT', 'CONFIGURED', 'FAILED_RESUMABLE', 'TRAINED', 'RECEIPTED')},
 }
 
 
 def test_fit_machine_is_the_specified_table():
     table = {(s.name, e): t.name for (s, e), t in R.FIT_MACHINE.transitions.items()}
     assert table == EXPECTED_TABLE
-    assert R.FIT_MACHINE.terminal == {Fit.AUDITED}
+    # No terminal state: AUDITED leaves only through 'damaged' (its files no longer verify), never relabelled.
+    assert R.FIT_MACHINE.terminal == frozenset()
     assert R.FIT_MACHINE.initial is Fit.ABSENT
+    assert R.FIT_MACHINE.allowed_events(Fit.AUDITED) == ['damaged']
     assert ('AUDITED', 'epoch_mismatch') not in table  # an audited fit is never stranded
 
 
@@ -302,11 +310,33 @@ def _install_crash(spec, scope):
     os.replace = replace
 
 
+def _install_event_failure(spec):
+    """Fail the first FIT_EVENTS call for <event>: OSError(ENOSPC) by default, KeyboardInterrupt with ':interrupt'."""
+    event, _, kind = spec.partition(':')
+    real = R.fit_events
+
+    def fit_events(*a, **kw):
+        on = real(*a, **kw)
+        fired = []
+
+        def hook(name, out, info):
+            if name == event and not fired:
+                fired.append(1)
+                if kind == 'interrupt':
+                    raise KeyboardInterrupt('injected')
+                raise OSError(28, 'No space left on device (injected)')
+            return on(name, out, info)
+        return hook
+    R.fit_events = fit_events
+
+
 def child_main():
     """Entry point of the subprocess that runs microglia_runtime.main(['train', ...])."""
     work = Path(os.environ['FIT_WORK'])
     if os.environ.get('FIT_CRASH'):
         _install_crash(os.environ['FIT_CRASH'], work/'fits')
+    if os.environ.get('FIT_FAIL_EVENT'):
+        _install_event_failure(os.environ['FIT_FAIL_EVENT'])
     install(lambda obj, name, value: setattr(obj, name, value), work,
             sleep_at_first_step=float(os.environ.get('FIT_SLEEP', '0')))
     extra = json.loads(os.environ.get('FIT_ARGS', '[]'))
@@ -320,13 +350,15 @@ def child_main():
     os._exit(rc)
 
 
-def run_child(work, crash=None, args=(), sleep=0.0, timeout=120, start=False):
+def run_child(work, crash=None, args=(), sleep=0.0, timeout=120, start=False, fail_event=None):
     env = dict(os.environ, FIT_WORK=str(work), FIT_ARGS=json.dumps(list(args)), FIT_SLEEP=str(sleep),
                PYTHONDONTWRITEBYTECODE='1')
-    env.pop('FIT_CRASH', None)
-    env.pop(ds.FAULT_ENV, None)
+    for key in ('FIT_CRASH', 'FIT_FAIL_EVENT', ds.FAULT_ENV):
+        env.pop(key, None)
     if crash:
         env['FIT_CRASH'] = crash
+    if fail_event:
+        env['FIT_FAIL_EVENT'] = fail_event
     code = f'import sys; sys.path.insert(0, {str(TESTS)!r}); import test_microglia_fit_state as H; H.child_main()'
     proc = subprocess.Popen([sys.executable, '-B', '-c', code], env=env, stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE, text=True)
@@ -407,11 +439,15 @@ def test_crash_then_rerun_converges(crash, tmp_path):
         rc, out, err = run_child(work)
         if rc != 1 or 'OSError' not in err:
             break
-    assert rc == 0, (crash, out, err)
+    # After the audit landed, the rerun only reconciles (RECEIPTED -audit_passed-> AUDITED) and exits 3.
+    assert rc == (R.ALREADY_DONE if crash == 'replace:no_skip_audit.json' else 0), (crash, out, err)
     assert attempt == 0, f'needed {attempt+1} reruns'
     fit = fit_path(work)
     assert state_of(work).state is Fit.AUDITED
     M.check_fit(fit, CFG, 0, 0)
+    # No crash debris survives the rerun: recovery.pt beside final.pt, staged checkpoints, state temps.
+    assert not (fit/'recovery.pt').exists(), crash
+    assert not [p.name for p in fit.iterdir() if '.tmp' in p.name or '.partial' in p.name], crash
     receipt = json.loads((fit/'fit_receipt.json').read_text())
     assert receipt['snapshots_missing'] == [] and receipt['final_SHA256'] == R.sha(fit/'final.pt')
     if crash == 'before:fit_receipt.json':

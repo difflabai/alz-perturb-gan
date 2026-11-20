@@ -330,13 +330,13 @@
     "analysis/particlegan_upgrade_20261117/completion/lazy_regularizer_audit.json": "9e6db52b9414bb0a87ddf4a751fd38e1f3f84f9a0063bd973d78335ff4ac0379",
     "analysis/particlegan_upgrade_20261117/prelaunch.json": "5697092af84c7a6c82003ac04e38de143755b83af236eec07c0e759fd4016ab1",
     "analysis/particlegan_upgrade_20261117/verification/verification_0.10.0.json": "38b85e4b3ce1129077cf6443634d966fefd65974d394db103ad0a3dba52fef5f",
-    "scripts/microglia.py": "5f710afe7af5db0adc57ca5953e196b8202fcd9379d1724f6de08bd266e57799",
-    "scripts/microglia_runtime.py": "d73fc7a035094130479cd9608d7e155bde94204080b641057b3e08ed942e826b",
+    "scripts/microglia.py": "96f878bd487557c0db15ebbb7ffa3442d2c43464654990e9187c26f4f0a369e3",
+    "scripts/microglia_runtime.py": "edcadebe79554b3c6682c59c67a930470f2b18fd2c71429afa3f91d68b3b315f",
     "configs/microglia_default.json": "ab6434b002bdefc2022573eea3c4118a46e41fd90fb52ad4d1f8c0ea4ec4108a",
     "analysis/default_empf_20261117/selected_model.json": "79f43ae7186a5c244234e0340c8caa413a14ae6a047e8825dd3caa96928457ca",
     "analysis/default_empf_20261117/selection.json": "c4e6a2cbe31f14ef7614c7fa4ef23d6b5f531e06ad0307e976bee7e067dcdf5b",
     "analysis/empf_comparison_20261117/source_manifest.json": "6e09a80b60b49d53be13f9e50b0bcd34c90cfcdce0313d93c25e92e9981c2958",
-    "analysis/default_empf_20261117/vendored_host.py": "c41bf8310e2602044b58ab5fabc2589da2c84429a25a8edbcbeece8dd27e70df",
+    "analysis/default_empf_20261117/vendored_host.py": "88b0e9bb63c2258b4bb90ce9b8eb896b6d5d726a2ccbdeb9a88c4e602c997eea",
     "analysis/default_empf_20261117/vendored/contracts.py": "1ef929b020b87c5a1e7e4a1194a42ded2c0f61c7589f3e8bb49a6f437ae57131",
     "analysis/default_empf_20261117/vendored/stage_law.py": "403b04bbaa285f5cc2ffbace9b67c133448c83c7304083da2aba9cc4daa6c5ae",
     "analysis/default_empf_20261117/vendored/bench_core.py": "fd56394690123ec404fc5aad89d7b381c16aadc837bc9c534465efb53d053a46",
@@ -348,12 +348,13 @@
     "sha256": "40d6102e77fa6a4ece2c64cd431db3d907449d7bd69335cb597370d5f860b80e"
   },
   "previous_runtime_manifest": {
-    "archive": "analysis/default_empf_20261117/previous/runtime_source_manifest.20261120T064637Z.json",
+    "archive": "analysis/default_empf_20261117/previous/runtime_source_manifest.20261120T071322Z.json",
     "sha256": "864780699e470278d82bc3157ce1dd38f340ba88c875f1ca089325d390dcdd67",
-    "reason": "explicit fit lifecycle (fit_state.json, fit lock, receipt reconstruction) and versioned derived-host activation: microglia_runtime.py and vendored_host.py changed; the runtime and the host now import src/alz_perturb_gan/durable_state.py (and its package __init__.py), which are added",
-    "refrozen_utc": "20261120T064637Z",
+    "reason": "explicit fit lifecycle (fit_state.json with DAMAGED/STRANDED, fit lock, receipt reconstruction, audit reconciliation, --repair/--readopt) and versioned derived-host activation: microglia_runtime.py, microglia.py (runtime exit codes 3/4/75, state-aware train skip) and vendored_host.py changed; the runtime and the host now import src/alz_perturb_gan/durable_state.py (and its package __init__.py), which are added",
+    "refrozen_utc": "20261120T071322Z",
     "changed": [
       "analysis/default_empf_20261117/vendored_host.py",
+      "scripts/microglia.py",
       "scripts/microglia_runtime.py"
     ],
     "added": [
