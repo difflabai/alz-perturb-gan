@@ -22,7 +22,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / 'analysis/default_empf_20261117/runtime_source_manifest.json'
-ARCHIVE = ROOT / 'analysis/default_empf_20261117/previous'
 
 
 def sha(path):

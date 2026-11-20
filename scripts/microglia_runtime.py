@@ -128,9 +128,10 @@ def choose_cpus(allowed, threads=THREADS, env=None, lock_dir=None, load=cpu_busy
     slot = env.get('MICROGLIA_CPU_SLOT')
     if slot not in (None, ''):
         k = int(slot)
-        if k < 0:
-            raise ValueError('MICROGLIA_CPU_SLOT must be nonnegative')
-        return blocks[k % len(blocks)], {'source': 'MICROGLIA_CPU_SLOT', 'slot': k}
+        if not 0 <= k < len(blocks):
+            raise ValueError(f'MICROGLIA_CPU_SLOT must be in 0..{len(blocks)-1} '
+                             f'({len(blocks)} blocks of {threads} allowed CPUs), got {k}')
+        return blocks[k], {'source': 'MICROGLIA_CPU_SLOT', 'slot': k}
     try:
         lock_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
         with open(lock_dir/'select.lock', 'a+') as select:
@@ -220,6 +221,17 @@ def receipt_path(out):
 
 def pending_path(out):
     return out.with_name('.'+out.stem+'.pending.npz')
+
+
+def pending_sidecars(pending):
+    """The pending NPZ plus the files the generator writes beside it.
+
+    The generator dumps its own receipt next to its `out` and stages np.savez through a
+    hidden `.partial.npz`; both would otherwise survive next to the final output.
+    """
+    receipt=receipt_path(pending)
+    return (pending,receipt,receipt.with_name('.'+receipt.name+'.tmp'),
+            pending.with_name('.'+pending.stem+'.partial.npz'))
 
 
 def resolve_profile(M,cfg,profile,mode):
@@ -369,15 +381,16 @@ def main(argv=None):
                     population_qualified=False,
                     config_sha256=sha(M.CONFIG),source_manifest_sha256=manifest_digest,
                     native_recipe='empf',particlegan_version='0.10.0',provenance=provenance))
-            if args.force:
-                out.unlink(missing_ok=True);receipt_path(out).unlink(missing_ok=True)
-            elif out.exists() or receipt_path(out).exists():
+            if not args.force and (out.exists() or receipt_path(out).exists()):
                 raise FileExistsError(f'generation output appeared during the run: {out}')
-            # The receipt is written first; the NPZ only appears once it is receipted.
+            # The receipt is written first; the NPZ only appears once it is receipted. Both
+            # steps are atomic replacements, so with --force the previous output and receipt
+            # stay in place until each is overwritten.
             write(receipt_path(out),receipt)
             pending.replace(out)
         finally:
-            pending.unlink(missing_ok=True)
+            for leftover in pending_sidecars(pending):
+                leftover.unlink(missing_ok=True)
     check_unchanged_sources(manifest,manifest_digest)
     return 0
 

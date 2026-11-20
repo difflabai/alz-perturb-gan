@@ -22,17 +22,29 @@ class Stub:
         self.activated = 0
         self.generated = []
         self.post_check_failure = False
+        self.crash_in_savez = False
 
     def activate(self, device, memory):
         self.activated += 1
         stub = self
 
         def generate_fit(fit, cache, *, mode=None, out=None, device='cpu', **kw):
+            # Mirrors analysis/improve_20261109/r5/generate.py: np.savez is staged through a
+            # hidden `.partial.npz`, and with a mode the generator dumps its own receipt
+            # next to `out`.
             out = Path(out)
             out.parent.mkdir(parents=True, exist_ok=True)
-            np.savez_compressed(out, x=np.arange(3))
+            tmp = out.with_name('.' + out.stem + '.partial.npz')
+            with open(tmp, 'wb') as fh:
+                np.savez_compressed(fh, x=np.arange(3))
+            if stub.crash_in_savez:
+                raise OSError('simulated crash while writing the partial NPZ')
+            tmp.replace(out)
             stub.generated.append(out)
-            return None, {'generated_SHA256': R.sha(out), 'fit': str(fit)}
+            stats = {'generated_SHA256': R.sha(out), 'fit': str(fit), 'mode': mode}
+            if mode is not None:
+                out.with_name(out.stem + '.receipt.json').write_text(json.dumps(stats))
+            return None, stats
 
         def run(args):
             fit = Path(args.out_root)/'pbulk/hvg2000/fold0'/f'seed{args.seed}'
@@ -93,6 +105,11 @@ def receipt(s):
     return json.loads(R.receipt_path(s.out).read_text())
 
 
+def leftovers(s):
+    """Hidden staging files the runtime or generator could leave beside the output."""
+    return sorted(p.name for p in s.out.parent.glob('.*')) if s.out.parent.exists() else []
+
+
 def test_generation_receipt_names_the_resolved_default_profile(stub):
     assert generate(stub, '--mode', DEFAULT_MODE) == 0
     app = receipt(stub)['application_default']
@@ -101,6 +118,8 @@ def test_generation_receipt_names_the_resolved_default_profile(stub):
     assert receipt(stub)['cpu_affinity']['cpus'] == [3, 4, 5]
     assert receipt(stub)['generated_SHA256'] == R.sha(stub.out)
     assert not R.pending_path(stub.out).exists()
+    assert leftovers(stub) == []
+    assert sorted(p.name for p in stub.out.parent.iterdir()) == ['out.npz', 'out.receipt.json']
 
 
 @pytest.mark.parametrize('argv', [['--profile', 'profile-rmse'], ['--mode', 'biascal@stagehalf'],
@@ -143,8 +162,18 @@ def test_failed_post_check_leaves_no_output_or_receipt(stub):
         generate(stub)
     assert stub.generated and not stub.out.exists() and not R.receipt_path(stub.out).exists()
     assert not R.pending_path(stub.out).exists()
+    assert leftovers(stub) == []
     stub.post_check_failure = False
     assert generate(stub) == 0  # nothing left behind blocks the rerun
+    assert leftovers(stub) == []
+
+
+def test_crash_inside_the_generator_leaves_no_staging_files(stub):
+    stub.crash_in_savez = True
+    with pytest.raises(OSError, match='simulated crash'):
+        generate(stub)
+    assert not stub.out.exists() and not R.receipt_path(stub.out).exists()
+    assert leftovers(stub) == []
 
 
 def test_failed_post_check_with_force_keeps_the_previous_output(stub):
@@ -154,6 +183,24 @@ def test_failed_post_check_with_force_keeps_the_previous_output(stub):
     with pytest.raises(ValueError):
         generate(stub, '--force')
     assert (stub.out.read_bytes(), R.receipt_path(stub.out).read_text()) == before
+    assert leftovers(stub) == []
+
+
+def test_force_keeps_the_previous_output_if_the_receipt_write_fails(stub, monkeypatch):
+    assert generate(stub) == 0
+    before = stub.out.read_bytes(), R.receipt_path(stub.out).read_text()
+    real_write = R.write
+
+    def failing_write(path, value):
+        if Path(path) == R.receipt_path(stub.out):
+            raise OSError('simulated failure writing the receipt')
+        return real_write(path, value)
+    monkeypatch.setattr(R, 'write', failing_write)
+    with pytest.raises(OSError, match='simulated failure'):
+        generate(stub, '--force')
+    # No unlink happens before the atomic replacements, so the old pair survives intact.
+    assert (stub.out.read_bytes(), R.receipt_path(stub.out).read_text()) == before
+    assert leftovers(stub) == []
 
 
 def train(s, root):

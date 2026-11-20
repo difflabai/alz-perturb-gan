@@ -150,7 +150,8 @@ def test_inherited_small_mask_is_respected(tmp_path):
 def test_explicit_cpu_slot_selects_a_block():
     allowed = set(range(24))
     assert R.choose_cpus(allowed, env={'MICROGLIA_CPU_SLOT': '2'})[0] == [6, 7, 8]
-    assert R.choose_cpus(allowed, env={'MICROGLIA_CPU_SLOT': '9'})[0] == [3, 4, 5]  # wraps over 8 blocks
+    with pytest.raises(ValueError, match='0..7'):  # 8 blocks; an out-of-range slot must not wrap
+        R.choose_cpus(allowed, env={'MICROGLIA_CPU_SLOT': '9'})
     with pytest.raises(ValueError):
         R.choose_cpus(allowed, env={'MICROGLIA_CPU_SLOT': '-1'})
 
