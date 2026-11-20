@@ -143,3 +143,29 @@ states and the same cellshape@0.5 + joint biascal calibration family, but the
 is recomputed on it with the identical code and reported beside, not instead
 of, the declared default-readout result. Part A frozen metrics are also scored
 for it (descriptive only; no default change is proposed from it).
+
+## Amendment 2 (post hoc, after audit; declared before the recount; 2026-11-20)
+
+An audit found that the implemented `pc_blind_spot` share was the signed
+per-gene ratio `outside_j / z_j` (with `outside = z - W W^T z`). That ratio is
+unbounded and can be negative (CLEC5A High 1.79, PPARG Intermediate -0.98), so
+it does not measure "the share of the gap outside the PC span" as declared in
+part D. Replacement, fixed before recounting: per gene j and stage, with
+`inside_j = (W W^T z)_j` and `outside_j = z_j - inside_j`, the bounded share
+`outside_j^2 / (outside_j^2 + inside_j^2)` in [0, 1]. The flag keeps the
+declared thresholds (> 0.5 in any stage with |z_j| > 0.05). The static
+PC-captured fraction `||W_j||^2` stays reported beside it. The original count
+(398) is reported as superseded, not deleted. The interval evaluation and every
+other bundle array are rebuilt by the same deterministic code and must be
+unchanged; that is checked.
+
+The query tool's `approx_ci95` (normal z = 1.96 on 8 replicates) is renamed
+`mc_interval95` and uses a Student t quantile (df = replicates - 1 for one
+fit; df = fits - 1 for several fits). It is a generation-noise interval, not an
+inferential CI. The tool prints a note when a bundle's readout is
+`stagehalf`, whose stage contrasts are about halved by construction.
+
+Part A donor-bootstrap CIs: the frozen `architecture_score` returns only
+pooled held-out metrics, with no per-donor decomposition. Reimplementing the
+frozen metrics per donor is out of scope here, so Part A reports generation
+Monte Carlo spread only and states that donor-bootstrap CIs are absent.
