@@ -17,3 +17,10 @@ artifacts/
 dist/
 build/
 node_modules/
+# Temp files from atomic writers (src/alz_perturb_gan/durable_state.py and
+# older ad-hoc writers) and lock-owner records. Lock files stay visible.
+.*.tmp
+*.partial
+*.partial.*
+*.tmp.*
+*.lock.owner

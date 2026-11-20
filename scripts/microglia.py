@@ -24,6 +24,18 @@ CONFIG = ROOT / 'configs/microglia_default.json'
 RECIPE = ROOT / 'analysis/empf_comparison_20261117/resolved_recipes.json'
 SOURCE_MANIFEST = ROOT / 'analysis/default_empf_20261117/runtime_source_manifest.json'
 NATIVE_RELEASE = ROOT / 'artifacts/native-releases/particlegan-0.10.0/site-packages/particlegan'
+# Exit codes of `microglia_runtime.py train` (scripts/microglia_runtime.py).
+TRAIN_ALREADY_DONE, TRAIN_DAMAGED, TRAIN_BUSY = 3, 4, 75
+
+
+def recorded_fit_state(fit):
+    """The state recorded in <fit>/fit_state.json (read-only): None when absent, 'UNREADABLE' when damaged."""
+    try:
+        return json.loads((Path(fit) / 'fit_state.json').read_text())['state']
+    except FileNotFoundError:
+        return None
+    except (OSError, ValueError, KeyError, TypeError):
+        return 'UNREADABLE'
 
 
 def load_config(path=CONFIG):
@@ -135,7 +147,7 @@ def preflight(cfg, cache, fit, fold, seed, out):
         fit_state = 'absent or incomplete'
     except (ValueError, KeyError, OSError) as exc:
         fit_state = f'not usable: {exc}'
-    return {'cache': (cache / 'manifest.json').exists(), 'fit': fit_state,
+    return {'cache': (cache / 'manifest.json').exists(), 'fit': fit_state, 'fit_state': recorded_fit_state(fit),
             'output_exists': [str(x) for x in (out, receipt_path(out)) if x.exists()],
             'native_release': NATIVE_RELEASE.is_dir(), 'torch': importlib.util.find_spec('torch') is not None,
             'sources': source_status()}
@@ -208,7 +220,10 @@ def main(argv=None):
         plan['notice'] = f'using the retained selected fit; a trained fit also exists at {trained} (--fit-source trained)'
     commands = []
     train_needed = args.command == 'train'
-    if train_needed and (fit / 'no_skip_audit.json').exists():
+    # Skip only a fit whose recorded state (if any) is AUDITED: a RECEIPTED fit with a passing
+    # no_skip_audit.json (the audit landed, its state write did not) goes to the runtime, which
+    # reconciles it to AUDITED and exits 3; generate would refuse it.
+    if train_needed and (fit / 'no_skip_audit.json').exists() and recorded_fit_state(fit) in (None, 'AUDITED'):
         try:
             check_fit(fit, cfg, args.fold, args.seed)
             train_needed = False  # complete and audited: never re-audit it under different sources
@@ -248,7 +263,17 @@ def main(argv=None):
     elif not env.get('CUDA_VISIBLE_DEVICES'):
         p.error('set CUDA_VISIBLE_DEVICES explicitly to a shared GPU before using --device cuda')
     if train_needed:
-        subprocess.run(commands.pop(0), check=True, env=env)
+        cmd = commands.pop(0)
+        rc = subprocess.run(cmd, env=env).returncode
+        if rc == TRAIN_BUSY:
+            print(f'microglia: fit {fit} is busy: another process is training it; rerun when it has finished',
+                  file=sys.stderr, flush=True)
+            return TRAIN_BUSY
+        if rc == TRAIN_DAMAGED:
+            raise ValueError(f'fit {fit} is DAMAGED (see the runtime message above); inspect it and run '
+                             f'scripts/microglia_runtime.py train ... --repair')
+        if rc not in (0, TRAIN_ALREADY_DONE):
+            raise subprocess.CalledProcessError(rc, cmd)
     check_fit(fit, cfg, args.fold, args.seed)
     subprocess.run(commands[0], check=True, env=env)
     return 0
