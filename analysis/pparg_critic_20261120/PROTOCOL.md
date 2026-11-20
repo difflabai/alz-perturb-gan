@@ -98,3 +98,25 @@ These donors were already used in earlier development selection, and no sealed
 or external donors are used. The 10k budget is not the 20k default, so the result
 does not qualify a default change. The gene selection used a 20k default fit
 trained on the same training donors.
+
+## Amendment 1 (2026-11-20 04:27, before any score; budget only)
+
+Host CPU load was about 165 on 24 cores. Observed throughput was about
+1.1 s/update for the control and about 1.6 s/update for the variant. At that
+rate, the declared 10,000 updates would not finish within the roughly 5-hour
+project wall budget. All four 10k runs were stopped by SIGTERM. Controls had
+reached about 1,500 updates and variants 500 to 750. No generation or scoring
+had happened. The partial runs are kept, untouched, under
+`runs/research_20261120/pparg-critic/aborted_10k/`.
+
+The **matched budget is now 5,000 updates for both arms and both seeds**.
+Everything else in this protocol is unchanged: arms, genes, readouts, outcomes,
+decision rule and references. The trainer's snapshot rule for U=5,000 gives
+1,250, 2,500, 3,750 and 4,000 to 4,750 every 250. Both readouts therefore
+ensemble the snapshots from 3,750 onward plus the final weights.
+
+Harness check, from the aborted runs' learning curves only: control seed 0
+reproduced the retained default fit's per-update losses exactly at every logged
+step through update 1,001. Its 5k final weights are therefore expected to equal
+the retained fit's `snap_5000.pt`. `check_harness.py` verifies this after
+training.
