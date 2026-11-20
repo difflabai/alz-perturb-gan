@@ -32,7 +32,7 @@ vcc = [
     "anndata>=0.10",
 ]
 dev = [
-    "pytest>=8",
+    "pytest>=8.4",
     "anndata>=0.10",
 ]
 
@@ -46,6 +46,9 @@ Repository = "https://github.com/difflabai/alz-perturb-gan"
 where = ["src"]
 
 [tool.pytest.ini_options]
+# pytest 8.4 is the first release that applies `pythonpath` before loading the
+# `-p alz_pytest_plugin` plugin below; 8.3 stops at startup with an ImportError.
+minversion = "8.4"
 # `pytest` from the repository root runs the data-free default selection.
 # See tests/README.md for the commands, markers and skip rules.
 testpaths = ["tests", "paper_watch/tests"]

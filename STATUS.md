@@ -129,7 +129,8 @@ The legacy smoke tests run with `pytest -m legacy_pg080` and need ParticleGAN
 0.8.x ([envs/legacy-pg080.txt](envs/legacy-pg080.txt)). CPU-only GitHub
 Actions checks are defined in
 [.github/workflows/checks.yml](.github/workflows/checks.yml); they use no data,
-checkpoints or GPU.
+checkpoints or GPU. They run on pull requests, on pushes to `main` and
+`research/calibration-optimization`, and on manual dispatch.
 
 ## Reading order
 

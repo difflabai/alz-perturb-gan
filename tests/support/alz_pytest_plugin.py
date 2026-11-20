@@ -12,10 +12,15 @@ The plugin does three things, all reported in the test output:
    0.10.0 release target (``artifacts/native-releases/particlegan-0.10.0/
    site-packages``, or ``$ALZ_PARTICLEGAN_0_10_SITE_PACKAGES``) to ``sys.path`` if that
    directory exists. It never shadows an installed ParticleGAN.
-2. A test module whose import fails only because an optional third-party
-   package is not installed at all is reported as skipped with that reason,
-   instead of a collection error; so is a test whose body raises that
-   ModuleNotFoundError. Any other import failure still errors or fails.
+2. In the test files that are known to need optional third-party packages
+   (``OPTIONAL_DEPENDENCY_SCOPE``: ``paper_watch/tests``, the seven
+   ``legacy_pg080`` modules and the ParticleGAN probe), a module whose import
+   fails only because such a package is not installed at all is reported as
+   skipped with that reason, instead of a collection error; so is a test whose
+   body raises that ModuleNotFoundError. Every other test file (the core
+   microglia and repository tests, and any new file) stays strict: a missing
+   package there is an error, so a stray import cannot become a silent skip.
+   Any other import failure always errors or fails.
 3. ``runtime/`` binding tests need the local GPU0 workspace (absolute
    ``/ml2/codex-storage`` paths and the deployed calibration authorization)
    and, for seven of them, the ignored ``data/calibration_fold0`` inventory at
@@ -48,6 +53,24 @@ OPTIONAL_PACKAGES = {
     "sklearn": "scikit-learn",
     "torch": "torch",
 }
+
+# Only these test files may turn a missing optional package into a skip. The
+# core tests (tests/test_microglia_*.py, tests/test_repo_*.py) need numpy and
+# pytest only and are deliberately left out, so a new torch/scipy/pandas import
+# reached from them fails CI instead of being reported as skipped.
+OPTIONAL_DEPENDENCY_SCOPE = (
+    "paper_watch/tests/",
+    # legacy_pg080 modules (see tests/support/alz_legacy.py)
+    "tests/test_baselines.py",
+    "tests/test_cell_eval_adapter.py",
+    "tests/test_data.py",
+    "tests/test_gan.py",
+    "tests/test_hypergan_bridge.py",
+    "tests/test_metrics.py",
+    "tests/test_smoke.py",
+    # needs_particlegan probe (runs torch and ParticleGAN in a subprocess)
+    "tests/test_empf_conditional_probe.py",
+)
 
 RUNTIME_DIR = ROOT / "runtime"
 # These runtime tests build a full calibration source closure, which reads the
@@ -170,6 +193,20 @@ class _OptionalDependencyModule(pytest.Module):
             )
 
 
+def optional_dependency_allowed(path, root: Path = ROOT) -> bool:
+    """Whether a missing optional package may skip tests in this file.
+
+    ``root`` is the pytest rootdir (the repository root in normal use), and the
+    file must match ``OPTIONAL_DEPENDENCY_SCOPE`` relative to it.
+    """
+    try:
+        relative = Path(path).resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        return False
+    return any(relative == scope or (scope.endswith("/") and relative.startswith(scope))
+               for scope in OPTIONAL_DEPENDENCY_SCOPE)
+
+
 def _relative(path) -> str:
     try:
         return str(Path(path).resolve().relative_to(ROOT))
@@ -204,7 +241,9 @@ def pytest_pycollect_makemodule(module_path, parent):
                 "runtime binding tests need the local GPU0 workspace; missing: " + ", ".join(missing)
             )
             return module
-    return _OptionalDependencyModule.from_parent(parent, path=path)
+    if optional_dependency_allowed(path, parent.config.rootpath):
+        return _OptionalDependencyModule.from_parent(parent, path=path)
+    return None
 
 
 @pytest.hookimpl(wrapper=True)
@@ -214,7 +253,7 @@ def pytest_runtest_call(item):
         return (yield)
     except ModuleNotFoundError as error:
         name = missing_optional_package(error)
-        if name is None:
+        if name is None or not optional_dependency_allowed(item.path, item.config.rootpath):
             raise
         pytest.skip(f"{item.nodeid}: optional dependency {OPTIONAL_PACKAGES[name]} is not installed "
                     "(imported inside the test); see tests/README.md and envs/README.md")

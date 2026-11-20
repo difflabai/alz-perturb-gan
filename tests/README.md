@@ -6,11 +6,15 @@ From the repository root:
 python -m pytest            # or plain `pytest`
 ```
 
+pytest 8.4 or newer is required (`minversion` in `pyproject.toml`). Older
+versions load the `-p alz_pytest_plugin` plugin before applying `pythonpath`
+and stop at startup with an ImportError.
+
 The default selection needs only `numpy` and `pytest` (CI installs `numpy==1.26.4 pytest==9.1.1`; the report hash check, `scripts/report/build_report.py --check`, additionally needs `scripts/report/requirements.txt`). It collects `tests/` and `paper_watch/tests/`, as configured in `pyproject.toml`. What it does:
 
 - runs the microglia default/runtime/interval tests in `tests/test_microglia_*.py`;
-- deselects the legacy synthetic smoke tests (`-m "not legacy_pg080"`);
-- reports any test module, or test body, that needs a missing optional package as **skipped, with the package named**. The packages are torch, ParticleGAN, scipy, pandas, anndata, h5py and scikit-learn. Any other import failure is still a collection error;
+- deselects the legacy synthetic smoke tests (`-m "not legacy_pg080"`). Their modules are still imported during collection, so when torch or ParticleGAN 0.8.x is missing they also appear in the `-rs` summary as skipped with that reason;
+- in the files that are known to need optional packages, reports a test module, or test body, that needs a missing optional package as **skipped, with the package named**. Those files are `paper_watch/tests/`, the seven `legacy_pg080` modules and `test_empf_conditional_probe.py` (`OPTIONAL_DEPENDENCY_SCOPE` in the plugin). The packages are torch, ParticleGAN, scipy, pandas, anndata, h5py and scikit-learn. Every other test file, including the core `test_microglia_*.py` and `test_repo_*.py` tests and any new file, stays strict: a missing package there is an error, not a skip. Any other import failure is always an error;
 - skips paper-watch data tests with their own `DataUnavailable` reason when the public file is not downloaded.
 
 When ParticleGAN is not installed, the repository plugin ([`support/alz_pytest_plugin.py`](support/alz_pytest_plugin.py)) appends the native release target `artifacts/native-releases/particlegan-0.10.0/site-packages` to `sys.path` if it exists. Set `ALZ_PARTICLEGAN_0_10_SITE_PACKAGES` to use another target. The session header prints which ParticleGAN was used.

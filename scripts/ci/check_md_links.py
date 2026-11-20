@@ -24,7 +24,8 @@ ROOT = Path(__file__).resolve().parents[2]
 # artifacts and cannot resolve in a clean clone or CI.
 LOCAL_ONLY = ("runs/", "data/", "artifacts/")
 
-INLINE = re.compile(r"!?\[(?:[^\[\]]|\[[^\]]*\])*\]\(\s*<?([^)\s>]+)>?(?:\s+\"[^\"]*\")?\s*\)")
+# The destination is either <...> (which may contain spaces) or a bare run without spaces.
+INLINE = re.compile(r"!?\[(?:[^\[\]]|\[[^\]]*\])*\]\(\s*(?:<([^>\n]+)>|([^)\s]+))(?:\s+\"[^\"]*\")?\s*\)")
 REFERENCE = re.compile(r"^\s{0,3}\[[^\]]+\]:\s*<?(\S+?)>?(?:\s+.*)?$")
 FENCE = re.compile(r"^\s{0,3}(`{3,}|~{3,})")
 CODE_SPAN = re.compile(r"(`+)(?:.(?!\1))*?.?\1", re.S)
@@ -53,7 +54,7 @@ def links(text: str):
             continue
         stripped = CODE_SPAN.sub("", line)
         for found in INLINE.finditer(stripped):
-            yield number, found.group(1)
+            yield number, found.group(1) or found.group(2)
         ref = REFERENCE.match(stripped)
         if ref:
             yield number, ref.group(1)

@@ -113,9 +113,11 @@ def test_link_checker_finds_broken_relative_links_only(tmp_path):
         "```",
         "[local](runs/output.npz)",
         "[ref]: docs/gone.md",
+        "[spaced](<docs/has space.md>) [spaced ok](<docs/ok.md>)",
     ]))
     broken, local = links.check([page], tmp_path)
-    assert broken == ["README.md:2: docs/missing.md", "README.md:2: docs/none.png", "README.md:8: docs/gone.md"]
+    assert broken == ["README.md:2: docs/missing.md", "README.md:2: docs/none.png", "README.md:8: docs/gone.md",
+                      "README.md:9: docs/has space.md"]
     assert local == ["README.md:7: runs/output.npz"]
 
 
@@ -180,18 +182,19 @@ def test_check_env_cli_exit_status(tmp_path):
 
 
 
-def run_plugin_on(tmp_path, files):
+def run_plugin_on(tmp_path, files, *extra):
     """Run pytest with only the repository plugin on throwaway test files."""
     for name, body in files.items():
+        (tmp_path / name).parent.mkdir(parents=True, exist_ok=True)
         (tmp_path / name).write_text(body)
     (tmp_path / "pytest.ini").write_text("[pytest]\n")
     env = dict(os.environ, PYTHONPATH=str(ROOT / "tests/support"), PYTHONDONTWRITEBYTECODE="1")
     return subprocess.run([sys.executable, "-B", "-m", "pytest", "-p", "alz_pytest_plugin", "-p", "no:cacheprovider",
-                           "-rs", str(tmp_path)], cwd=tmp_path, env=env, capture_output=True, text=True).stdout
+                           "-rs", *extra, str(tmp_path)], cwd=tmp_path, env=env, capture_output=True, text=True).stdout
 
 
 def test_optional_import_inside_a_test_body_is_a_skip_not_a_failure(tmp_path):
-    out = run_plugin_on(tmp_path, {"test_body.py": (
+    out = run_plugin_on(tmp_path, {"paper_watch/tests/test_body.py": (
         "def test_needs_pandas():\n"
         "    raise ModuleNotFoundError(\"No module named 'pandas'\", name='pandas')\n\n"
         "def test_needs_repo_module():\n"
@@ -202,7 +205,29 @@ def test_optional_import_inside_a_test_body_is_a_skip_not_a_failure(tmp_path):
 
 def test_optional_import_at_module_level_is_a_skip_not_an_error(tmp_path):
     out = run_plugin_on(tmp_path, {
-        "test_mod.py": "import particlegan_absent_probe\n",
-        "test_mod2.py": "raise ModuleNotFoundError(\"No module named 'torch'\", name='torch')\n"})
+        "paper_watch/tests/test_mod.py": "import particlegan_absent_probe\n",
+        "tests/test_gan.py": "raise ModuleNotFoundError(\"No module named 'torch'\", name='torch')\n"})
     assert "1 skipped, 1 error" in out, out
     assert "optional dependency torch is not installed" in out
+
+
+def test_core_tests_never_skip_for_a_missing_optional_package(tmp_path):
+    # A stray torch/scipy import reached from a core (numpy-only) test file must
+    # fail, not turn into a skip; only OPTIONAL_DEPENDENCY_SCOPE files may skip.
+    out = run_plugin_on(tmp_path, {
+        "tests/test_microglia_default.py": "raise ModuleNotFoundError(\"No module named 'scipy'\", name='scipy')\n",
+        "tests/test_repo_body.py": (
+            "def test_body():\n"
+            "    raise ModuleNotFoundError(\"No module named 'torch'\", name='torch')\n"),
+        "tests/test_new_file.py": "raise ModuleNotFoundError(\"No module named 'pandas'\", name='pandas')\n"},
+        "--continue-on-collection-errors")
+    assert "1 failed" in out and "2 errors" in out and "skipped" not in out, out
+
+
+def test_optional_dependency_scope_lists_existing_files():
+    for scope in plugin.OPTIONAL_DEPENDENCY_SCOPE:
+        assert (ROOT / scope).exists(), scope
+    assert plugin.optional_dependency_allowed(ROOT / "paper_watch/tests/test_harness.py")
+    assert plugin.optional_dependency_allowed(ROOT / "tests/test_gan.py")
+    assert not plugin.optional_dependency_allowed(ROOT / "tests/test_microglia_default.py")
+    assert not plugin.optional_dependency_allowed(ROOT / "tests/test_repo_docs.py")
