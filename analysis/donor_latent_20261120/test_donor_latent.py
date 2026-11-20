@@ -158,3 +158,12 @@ def test_per_donor_matches_frozen_summary():
 def test_worktree_sources_match_pinned_application_sources():
     import dl_host
     assert dl_host.check_pinned()['n_pinned_sources_checked'] > 50
+
+
+def test_seed_replicate_reads_seed1_archives_and_keeps_seed0_scores():
+    import score
+    import seed_replicate as SR
+    p = SR.seed_archive('variant', 1)
+    assert p.name == f'{score.MODE}.npz'
+    assert p.parent.name == 'seed1' and p.parent.parent.name == 'fold1' and 'g.dre,pbulk' in p.parts
+    assert SR.SCORES[0] == score.SCORES and SR.SCORES[1] != score.SCORES
