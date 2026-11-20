@@ -1,0 +1,84 @@
+{
+  "genes": [
+    "PPARG",
+    "SPP1",
+    "NHSL1",
+    "MT-ND3",
+    "KCNIP1",
+    "AL138927.1",
+    "LINC00355",
+    "LINC01500",
+    "TMEM163",
+    "AL163541.1",
+    "XACT",
+    "GRID2",
+    "AL079338.1",
+    "AC105402.3",
+    "AC104248.1",
+    "AC011586.2"
+  ],
+  "k": 16,
+  "forced": "PPARG",
+  "rule": "Choose the offpc gene set from TRAINING donors only (fold 0).\n\nInput: raw ``snapens`` readout of the retained native EMPF fold0/seed0 fit (trained on the\n25 fold-0 training donors) and the fold-0 TRAINING counts.  Held-out generated rows and the\nheld-out cache directory are never read.\n\nFor each training stage s:  gap_s = mean_{train donors d of stage s}(gen mean_log - real mean_log) / sd_g\n(= mean gap of the standardized per-cell log expression z that the critic's PCs project).\nOff-PC part r_s = gap_s - Wo Wo^T gap_s.  score_g = sqrt(mean_s r_{s,g}^2).\nSelected: PPARG (declared a priori from the README diagnostic) + the K-1 highest-score other genes.",
+  "scores": {
+    "PPARG": 0.05345401557867281,
+    "SPP1": 0.3218741379178861,
+    "NHSL1": 0.2862123367788741,
+    "MT-ND3": 0.2690853889116903,
+    "KCNIP1": 0.23056966381605798,
+    "AL138927.1": 0.22993554917553968,
+    "LINC00355": 0.2124392150549733,
+    "LINC01500": 0.2025686829686987,
+    "TMEM163": 0.1949325130018739,
+    "AL163541.1": 0.19459734666011821,
+    "XACT": 0.19272076783713107,
+    "GRID2": 0.18537672638380756,
+    "AL079338.1": 0.17485517385505894,
+    "AC105402.3": 0.17398667850000119,
+    "AC104248.1": 0.16947823899504508,
+    "AC011586.2": 0.16191462016488956
+  },
+  "score_rank_of_PPARG": 501,
+  "median_score_all_genes": 0.03939302872613854,
+  "pparg_training_gap": {
+    "stage0": {
+      "n_train_donors": 3,
+      "real_mean_log": 0.8887857397593395,
+      "gen_mean_log": 1.0935514904558659,
+      "gap_z": 0.10493946349810263,
+      "offpc_gap_z": 0.017689283912510387,
+      "offpc_share": 0.16856655563929218
+    },
+    "stage1": {
+      "n_train_donors": 3,
+      "real_mean_log": 1.3772529817572519,
+      "gen_mean_log": 1.322189649567008,
+      "gap_z": -0.02821915539491641,
+      "offpc_gap_z": 0.09050388691122355,
+      "offpc_share": -3.207179153474151
+    },
+    "stage2": {
+      "n_train_donors": 6,
+      "real_mean_log": 1.168454518919472,
+      "gen_mean_log": 1.3910807324573398,
+      "gap_z": 0.11409269045145155,
+      "offpc_gap_z": 0.034550443349719726,
+      "offpc_share": 0.30282784298457355
+    },
+    "stage3": {
+      "n_train_donors": 13,
+      "real_mean_log": 1.1048282398329001,
+      "gen_mean_log": 1.0172420640547688,
+      "gap_z": -0.044886638828724505,
+      "offpc_gap_z": 0.04161405626589231,
+      "offpc_share": -0.9270922784991877
+    }
+  },
+  "inputs": {
+    "generated": "/ml2/alz/runs/research_20261120/pparg-critic/selection/default_fit_snapens.npz",
+    "generated_sha256": "37c82d16ae8dcaa3cf86729b304dc1d9013c80a61332c8365d6bdb42480a9b47",
+    "train_counts_sha256": "aacf88cbc48708656cc2d07581dff27a169fa95a42350b24752dc1e1d055a0b9",
+    "space_sha256": "87959216f5d912a340e483b1a5635e5e777644d8566c19da96eee2f8b8ba8fc1"
+  },
+  "heldout_data_read": false
+}
