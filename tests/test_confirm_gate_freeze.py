@@ -52,6 +52,51 @@ def extract_guards(path):
     return {k: float(v) for k, v in value.items()}, ast.get_source_segment(text, found[0])
 
 
+MUTATORS = {'update', 'setdefault', 'pop', 'popitem', 'clear', '__setitem__', '__delitem__', '__ior__'}
+
+
+def guard_mutations(path):
+    """Every place in ``path`` that could change GUARDS after its one display assignment:
+    a second assignment or annotated assignment, an augmented assignment, a subscript or
+    attribute store or delete, a mutating method call, `global GUARDS`, or a walrus. Thresholds
+    written that way would bypass extract_guards(), which reads only the display."""
+    tree = ast.parse(Path(path).read_text())
+    found, assigns = [], 0
+
+    def is_guards(node):
+        return isinstance(node, ast.Name) and node.id == 'GUARDS'
+
+    def stored(target):
+        for t in ast.walk(target):
+            if is_guards(t) and isinstance(t.ctx, (ast.Store, ast.Del)):
+                yield 'GUARDS rebound'
+            elif isinstance(t, (ast.Subscript, ast.Attribute)) and is_guards(t.value):
+                yield 'GUARDS item or attribute stored or deleted'
+
+    for node in ast.walk(tree):
+        line = getattr(node, 'lineno', '?')
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if is_guards(target) and node in tree.body:
+                    assigns += 1
+                    continue
+                found += [f'line {line}: {w}' for w in stored(target)]
+        elif isinstance(node, (ast.AugAssign, ast.AnnAssign, ast.Delete, ast.For, ast.With, ast.NamedExpr)):
+            targets = (node.targets if isinstance(node, ast.Delete) else
+                       [i.optional_vars for i in node.items if i.optional_vars] if isinstance(node, ast.With) else
+                       [node.target])
+            for target in targets:
+                found += [f'line {line}: {w}' for w in stored(target)]
+        elif isinstance(node, ast.Global) and 'GUARDS' in node.names:
+            found.append(f'line {line}: global GUARDS')
+        elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and is_guards(node.func.value) \
+                and node.func.attr in MUTATORS:
+            found.append(f'line {line}: GUARDS.{node.func.attr}()')
+    if assigns != 1:
+        found.append(f'{assigns} module-level GUARDS assignments (expected 1)')
+    return found
+
+
 def check_freeze(directory):
     """Raise AssertionError when the committed sources disagree with the freeze or the pins."""
     directory = Path(directory)
@@ -59,8 +104,15 @@ def check_freeze(directory):
     freeze = json.loads((directory/'gate_freeze.json').read_text())
     problems = []
     pinned_score = manifest['execution_sources'].get(PREFIX + 'score.py')
-    if sha(directory/'score.py') != pinned_score:
+    score_sha = sha(directory/'score.py')
+    if score_sha != pinned_score:
         problems.append('score.py differs from its execution_sources pin')
+    # score.py is frozen as a whole (thresholds outside GUARDS count too). A deliberate later
+    # version (e.g. the post-drain two-step write) is listed in score_py_post_freeze with a reason.
+    allowed = {freeze['score_py_sha256'], *(e['sha256'] for e in freeze.get('score_py_post_freeze', [])
+                                             if e.get('reason'))}
+    if score_sha not in allowed:
+        problems.append('score.py differs from gate_freeze.json score_py_sha256 (edited after the first score)')
     analysis = manifest.get('analysis_sources', {})
     for name in ANALYSIS:
         digest = sha(directory/name)
@@ -71,7 +123,13 @@ def check_freeze(directory):
     if analysis != freeze['analysis_sources']:
         problems.append('source_manifest.json analysis_sources were re-pinned after the freeze')
     for name in GUARD_FILES:
-        value, _ = extract_guards(directory/name)
+        for where in guard_mutations(directory/name):
+            problems.append(f'{name} changes GUARDS outside its frozen display: {where}')
+        try:
+            value, _ = extract_guards(directory/name)
+        except AssertionError as exc:
+            problems.append(f'{name} GUARDS cannot be read as one frozen display: {exc}')
+            continue
         if value != freeze['guards'][name]:
             problems.append(f'{name} GUARDS differ from gate_freeze.json: {value} != {freeze["guards"][name]}')
     if freeze['guards']['score.py'] != freeze['guards']['analyze.py']:
@@ -167,3 +225,64 @@ def test_guards_extraction_refuses_names(tmp_path):
         extract_guards(tmp_path/'m.py')
     (tmp_path/'n.py').write_text("GUARDS = {'pb_rmse': .005, **{k: .02 for k in ('a', 'b')}}\n")
     assert extract_guards(tmp_path/'n.py')[0] == {'pb_rmse': .005, 'a': .02, 'b': .02}
+
+
+# --------------------------------------------------------------------------- bypasses (adversarial review)
+def repin_score(directory):
+    """What a manifest refreeze does to execution_sources after a score.py edit."""
+    path = Path(directory)/'source_manifest.json'
+    manifest = json.loads(path.read_text())
+    manifest['execution_sources'][PREFIX + 'score.py'] = sha(Path(directory)/'score.py')
+    path.write_text(json.dumps(manifest, indent=2) + '\n')
+
+
+def _after_guards(text, line):
+    """Insert ``line`` right after the (multi-line) GUARDS display."""
+    tree = ast.parse(text)
+    node = next(n for n in tree.body if isinstance(n, ast.Assign) and any(
+        isinstance(t, ast.Name) and t.id == 'GUARDS' for t in n.targets))
+    lines = text.splitlines(keepends=True)
+    return ''.join(lines[:node.end_lineno]) + line + '\n' + ''.join(lines[node.end_lineno:])
+
+
+@pytest.mark.parametrize('line', [
+    "GUARDS['pb_rmse'] = 0.5  # loosened after results",
+    "GUARDS.update(pb_rmse=0.5)",
+    "GUARDS |= {'pb_rmse': 0.5}",
+    "GUARDS = {**GUARDS, 'pb_rmse': 0.5}",
+    "del GUARDS['pc_energy_rep']",
+    "def _loosen():\n    global GUARDS\n    GUARDS = {}",
+])
+@pytest.mark.parametrize('name', GUARD_FILES)
+def test_guards_overridden_after_the_display_fail(copy, name, line):
+    """t8 repro: GUARDS display untouched, value overridden later in the module, then the
+    execution or analysis pins refreshed; check_freeze used to pass."""
+    path = copy/name
+    path.write_text(_after_guards(path.read_text(), line))
+    repin_score(copy)
+    repin(copy)
+    with pytest.raises(AssertionError, match='outside its frozen display'):
+        check_freeze(copy)
+
+
+def test_score_py_edit_outside_guards_fails_even_after_a_refreeze(copy):
+    path = copy/'score.py'
+    path.write_text(path.read_text() + '\nMIN_CELLS = 1  # a threshold outside GUARDS\n')
+    repin_score(copy)
+    with pytest.raises(AssertionError, match='score_py_sha256'):
+        check_freeze(copy)
+    # a deliberate post-freeze version is accepted only when listed with a reason
+    freeze_path = copy/'gate_freeze.json'
+    freeze = json.loads(freeze_path.read_text())
+    freeze['score_py_post_freeze'] = [dict(sha256=sha(path), reason='')]
+    freeze_path.write_text(json.dumps(freeze))
+    with pytest.raises(AssertionError, match='score_py_sha256'):
+        check_freeze(copy)
+    freeze['score_py_post_freeze'] = [dict(sha256=sha(path), reason='post-drain two-step write (test)')]
+    freeze_path.write_text(json.dumps(freeze))
+    check_freeze(copy)
+
+
+def test_committed_sources_have_no_guard_mutations():
+    for name in GUARD_FILES:
+        assert guard_mutations(HERE/name) == [], name

@@ -12,6 +12,11 @@ script. Nothing here reads runs/coverage_empf_confirm_20261120.
 (d) PID reuse: a recorded pid that is alive with another starttime is dead
 (e) classify() over sample log tails
 (f) legacy adoption over a fixture mirroring the 05:37 situation, and the gen-2 formats
+(r) adversarial-review regressions: a stale adopted ledger catching up (and `run` never
+    retraining a legacy-finished job), gen-1 failures re-queued in jobs_queue2.txt, adopted
+    jobs with no tries left, the requeue cap, a refused start, an abandon racing a retry, a
+    failing worker, a lingering descendant holding the run lock, a child that never ran,
+    ledger job lists that only grow, concurrent --write-ledger, corrupt/partial inputs
 """
 
 from __future__ import annotations
@@ -505,12 +510,15 @@ def test_legacy_adoption_at_0537_is_not_drained(tmp_path):
         v = jobs[job]
         assert v['state'] == 'RUNNING' and v['generation'] == 1 and v['pid'] == pids[job], (job, v)
         assert 'no retry' in v['blocked']
+    # 8 0's gen-1 attempt failed, but jobs_queue2.txt re-queued it: waiting, not FAILED
     f8 = jobs[(8, 0)]
-    assert (f8['state'], f8['reason'], f8['retryable'], f8['tries']) == ('FAILED', 'HOST_DIFFERS', True, 1)
+    assert (f8['state'], f8['tries']) == ('UNCLAIMED', 1)
+    assert f8['earlier'] == dict(gen=1, rc=1, reason='HOST_DIFFERS', retryable=True)
+    assert 're-queued in jobs_queue2.txt after gen-1 rc=1 (HOST_DIFFERS)' in f8['blocked']
     for k in range(1, 9):
         assert jobs[(k, 1)]['state'] == 'UNCLAIMED', (k, jobs[(k, 1)])
     assert report['cursor']['next'] == 1 and len(report['cursor']['sha256']) == 64
-    assert report['derived']['counts'] == {'FAILED': 1, 'RUNNING': 8, 'UNCLAIMED': 8}
+    assert report['derived']['counts'] == {'RUNNING': 8, 'UNCLAIMED': 9}
 
 
 def test_legacy_adoption_gen2_formats(tmp_path):
@@ -571,7 +579,8 @@ def test_write_ledger_adopts_into_the_chosen_directory_only(tmp_path):
     assert report['derived']['queue'] == 'NOT_DRAINED'
     ledger = QS.Ledger(ledger_dir)
     views = ledger.views()
-    assert views[(8, 0)]['state'] == 'FAILED' and views[(8, 0)]['reason'] == 'HOST_DIFFERS'
+    assert views[(8, 0)]['state'] == 'UNCLAIMED' and views[(8, 0)]['legacy_tracked'] is True
+    assert ledger.sf((8, 0)).read().data['legacy_earlier']['reason'] == 'HOST_DIFFERS'
     assert views[(3, 0)]['state'] == 'RUNNING' and views[(3, 0)]['owner']['legacy'] is True
     assert views[(4, 1)]['state'] == 'UNCLAIMED'
     snap = ledger.sf((3, 0)).read()
@@ -638,3 +647,381 @@ def test_scorer_blocked_reasons():
     assert QS.scorer_blocked(row, 3, 0, scoring) == 'awaiting score.py'          # pid runs another fit
     assert QS.scorer_blocked(dict(row, failures=1), 3, 1, lambda pid: None).startswith('scorer failed 1 of 2')
     assert QS.scorer_blocked(None, 3, 1) == 'awaiting score.py'
+
+
+# --------------------------------------------------------------------------- adversarial-review regressions
+def gen2_fixture(tmp_path, rows, nxt):
+    """A run root with jobs_queue2.txt + queue.next and an empty queue.log."""
+    repo = tmp_path/'repo'
+    run_root = repo/'runs/coverage_empf_confirm_20261120'
+    logs = run_root/'logs'
+    logs.mkdir(parents=True, exist_ok=True)
+    (logs/'jobs_queue2.txt').write_text(''.join(f'{k} {s}\n' for k, s in rows))
+    (logs/'queue.next').write_text(f'{nxt}\n')
+    (logs/'queue.log').touch()
+    return repo, run_root, logs
+
+
+def fake_proc(*args, cwd=None):
+    """A sleeping process whose cmdline carries ``args`` (for cmdline matching)."""
+    p = subprocess.Popen([PY, '-c', 'import time; time.sleep(60)', *map(str, args)], cwd=cwd)
+    for _ in range(100):
+        if QS.cmdline(p.pid) and str(args[-1]) in QS.cmdline(p.pid):
+            break
+        time.sleep(0.01)
+    return p
+
+
+def test_adopted_ledger_follows_legacy_to_scored_and_run_never_retrains(tmp_path):
+    """t3: status --write-ledger while the bash queue runs a job; the job then ends, is trained,
+    generated and scored by the legacy pipeline. The ledger must catch up (read-only status shows
+    it at once, --write-ledger records it) and a post-drain `run` must not run the job again.
+    The same holds for a job that was still waiting in jobs_queue2.txt at adoption."""
+    b = Bench(tmp_path, [(3, 1), (4, 1)], sleep=0.01)
+    logs = b.run_root/'logs'
+    (logs/'jobs_queue2.txt').write_text('3 1\n4 1\n')
+    (logs/'queue.next').write_text('2\n')
+    job_proc = fake_proc('scripts/microglia.py', 'train', '--fold', '3', '--seed', '1', '--device', 'cuda')
+    try:
+        (logs/'queue.log').write_text(f'{now_iso(-5)} start fold3 seed1 cores6-8 try1\n')
+        (logs/'pid_fold3_seed1.try1').write_text(f'{job_proc.pid}\n')
+        kw = dict(jobs=[(3, 1), (4, 1)], live_scan={})
+        r = QS.status(b.run_root, b.repo, ledger_dir=b.ledger, write_ledger=True, queue_alive=True, **kw)
+        assert r['jobs'][(3, 1)]['state'] == 'RUNNING' and r['jobs'][(4, 1)]['state'] == 'UNCLAIMED'
+        assert all(v['legacy_tracked'] for v in b.views().values())
+    finally:
+        job_proc.kill(); job_proc.wait()
+    # the bash queue finishes both jobs; the legacy pipeline trains, generates and scores them
+    (logs/'rc_fold3_seed1.try1').write_text('0\n')
+    with (logs/'queue.log').open('a') as fh:
+        fh.write(f'{now_iso(-4)} end fold3 seed1 rc=0\n{now_iso(-3)} start fold4 seed1 cores9-11 try1\n'
+                 f'{now_iso(-2)} end fold4 seed1 rc=0\n{now_iso(-1)} queue2 finished\n')
+    (logs/'queue.next').write_text('3\n')
+    for job in [(3, 1), (4, 1)]:
+        make_fit(b.repo, *job); make_readout(b.repo, *job)
+    make_score(b.run_root, 3, 1)
+    kw['queue_alive'] = False
+    # read-only status: shows the legacy truth, writes nothing
+    before = sorted(p.relative_to(tmp_path) for p in tmp_path.rglob('*'))
+    r = QS.status(b.run_root, b.repo, ledger_dir=b.ledger, **kw)
+    assert sorted(p.relative_to(tmp_path) for p in tmp_path.rglob('*')) == before
+    assert r['jobs'][(3, 1)]['state'] == 'SCORED' and 'behind the legacy files' in r['jobs'][(3, 1)]['blocked']
+    assert r['jobs'][(4, 1)]['state'] == 'CLI_GENERATED'
+    assert r['derived']['training_drained'] is True
+    # --write-ledger records it, and re-running it is stable
+    for _ in range(2):
+        QS.status(b.run_root, b.repo, ledger_dir=b.ledger, write_ledger=True, **kw)
+        views = b.views()
+        assert views[(3, 1)]['state'] == 'SCORED' and views[(4, 1)]['state'] == 'CLI_GENERATED'
+    versions = {j: v['version'] for j, v in views.items()}
+    QS.status(b.run_root, b.repo, ledger_dir=b.ledger, write_ledger=True, **kw)
+    assert {j: v['version'] for j, v in b.views().items()} == versions, 'an unchanged legacy view wrote again'
+    r = b.run()
+    assert r.returncode == 0, r.stderr
+    assert b.count((3, 1)) == 0 and b.count((4, 1)) == 0, 'run retrained a job the legacy queue finished'
+
+
+def test_run_syncs_legacy_itself_and_leaves_jobs_to_a_live_bash_queue(tmp_path):
+    """`run` alone (no status --write-ledger) mirrors the legacy files first; while a bash
+    queue script inside this repo runs, its tracked jobs are not claimed."""
+    b = Bench(tmp_path, [(5, 1), (6, 1)], sleep=0.01)
+    logs = b.run_root/'logs'
+    (logs/'jobs_queue2.txt').write_text('5 1\n6 1\n')
+    (logs/'queue.next').write_text('1\n')
+    QS.status(b.run_root, b.repo, ledger_dir=b.ledger, write_ledger=True, jobs=[(5, 1), (6, 1)], live_scan={},
+              queue_alive=True)
+    queue = fake_proc(b.repo/'analysis/coverage_empf_confirm_20261120/train_queue.sh')
+    try:
+        assert QS.queue_process_alive(repo_root=b.repo)
+        assert not QS.queue_process_alive(repo_root=tmp_path/'another-checkout')
+        r = b.run()
+        assert r.returncode == 0, r.stderr
+        out = json.loads(r.stdout.strip().splitlines()[-1])
+        assert out['legacy_busy'] is True and out['queue'] == 'NOT_DRAINED'
+        assert b.count((5, 1)) == 0 and b.count((6, 1)) == 0
+    finally:
+        queue.kill(); queue.wait()
+    # the bash queue ran 5 1 to completion, then died before 6 1
+    (logs/'queue.log').write_text(f'{now_iso(-3)} start fold5 seed1 cores0-2 try1\n{now_iso(-2)} end fold5 seed1 rc=0\n')
+    (logs/'queue.next').write_text('2\n')
+    make_fit(b.repo, 5, 1); make_readout(b.repo, 5, 1); make_score(b.run_root, 5, 1)
+    r = b.run()
+    assert r.returncode == 0, r.stderr
+    views = b.views()
+    assert views[(5, 1)]['state'] == 'SCORED' and b.count((5, 1)) == 0
+    assert views[(6, 1)]['state'] == 'CLI_GENERATED' and b.count((6, 1)) == 1
+    assert views[(6, 1)]['legacy_tracked'] is False
+
+
+def test_queue_process_scoping():
+    cmds = {'1': 'bash /repo/analysis/x/train_queue.sh /repo/logs/jobs', '2': 'bash train_all.sh',
+            '3': 'zsh -c eval \'pgrep -f "train_queue.sh|x"\''}
+    cwds = {'2': '/repo'}
+    read = lambda pid: cmds.get(str(pid))  # noqa: E731
+    cwd = lambda pid: cwds.get(str(pid))  # noqa: E731
+    orig = Path.iterdir
+    try:
+        Path.iterdir = lambda self: iter([Path('/proc')/p for p in cmds]) if str(self) == '/proc' else orig(self)
+        assert QS.queue_process_alive(read, '/repo', cwd)
+        assert not QS.queue_process_alive(read, '/elsewhere', cwd)
+        cmds.pop('1')
+        assert QS.queue_process_alive(read, '/repo', cwd)          # relative path resolved against cwd
+        cwds['2'] = '/other'
+        assert not QS.queue_process_alive(read, '/repo', cwd)
+    finally:
+        Path.iterdir = orig
+
+
+@pytest.mark.parametrize('log,reason', [
+    ('torch.OutOfMemoryError: CUDA out of memory.\n', 'OOM'),
+    ('ValueError: x\n', 'TRAIN_ERROR'),
+    ('FileExistsError: completed fit exists, refusing to overwrite\n', 'OUTPUT_EXISTS'),
+    ('microglia runtime: runtime source manifest changed during execution\n', 'SOURCE_CHANGED'),
+])
+def test_gen1_failure_requeued_in_jobs_queue2_is_never_terminal(tmp_path, log, reason):
+    """t5 G: a non-retryable gen-1 failure for a job jobs_queue2.txt re-queued is waiting
+    (or claimed by the cursor), never FAILED/terminal and never DRAINED."""
+    repo, run_root, logs = gen2_fixture(tmp_path, [(8, 0)], 1)
+    ts = '2026-11-20T03:31:39+00:00'
+    (logs/'queue.log').write_text(f'{ts} start fold8 seed0 gpu1\n{ts} end fold8 seed0 rc=1\n')
+    (logs/'train_fold8_seed0.log').write_text(log)
+    kw = dict(jobs=[(8, 0)], live_scan={})
+    for nxt, alive_, state in [(1, True, 'UNCLAIMED'), (2, True, 'CLAIMED'), (2, False, 'UNCLAIMED')]:
+        (logs/'queue.next').write_text(f'{nxt}\n')
+        r = QS.status(run_root, repo, queue_alive=alive_, **kw)
+        v = r['jobs'][(8, 0)]
+        assert v['state'] == state and not QS.is_terminal_view(v), (nxt, alive_, v)
+        assert r['derived']['queue'] == 'NOT_DRAINED'
+        assert v['earlier']['reason'] == reason and f'({reason})' in v['blocked']
+    # once the gen-2 attempt exists, it decides
+    (logs/'queue.log').write_text(f'{ts} start fold8 seed0 gpu1\n{ts} end fold8 seed0 rc=1\n'
+                                  f'{ts} start fold8 seed0 cores0-2 try1\n{ts} end fold8 seed0 rc=1\n')
+    (logs/'train_fold8_seed0.try1.log').write_text(log)
+    v = QS.status(run_root, repo, queue_alive=False, **kw)['jobs'][(8, 0)]
+    assert (v['state'], v['reason'], v['terminal']) == ('FAILED', reason, True)
+
+
+def test_adopted_job_with_no_tries_left_is_failed_not_stuck(tmp_path):
+    """t10: gen-1 failure + two activation-race retries + an open, dead try3 adopts as
+    UNCLAIMED with tries=3. claim() used to take it and start() refuse it, killing the worker
+    and spending a requeue per run forever. Now the first claim pass marks it FAILED."""
+    b = Bench(tmp_path, [(8, 0)], sleep=0.01)
+    logs = b.run_root/'logs'
+    ts = '2026-11-20T05:00:00+00:00'
+    (logs/'queue.log').write_text('\n'.join([
+        f'{ts} start fold8 seed0 gpu1', f'{ts} end fold8 seed0 rc=1',
+        f'{ts} start fold8 seed0 cores18-20 try1', f'{ts} retry fold8 seed0 rc=1 (activation race)',
+        f'{ts} start fold8 seed0 cores18-20 try2', f'{ts} retry fold8 seed0 rc=1 (activation race)',
+        f'{ts} start fold8 seed0 cores18-20 try3']) + '\n')
+    (logs/'pid_fold8_seed0.try3').write_text('999999\n')
+    (logs/'jobs_queue2.txt').write_text('8 0\n'); (logs/'queue.next').write_text('2\n')
+    r = QS.status(b.run_root, b.repo, ledger_dir=b.ledger, write_ledger=True, jobs=[(8, 0)], queue_alive=False,
+                  live_scan={})
+    v = r['jobs'][(8, 0)]
+    assert (v['state'], v['tries']) == ('UNCLAIMED', 3) and 'TRIES_EXHAUSTED' in v['blocked']
+    b.jobfile.write_text('8 0\n')
+    for _ in range(2):
+        res = b.run()
+        assert res.returncode == 0 and 'Traceback' not in res.stderr, res.stderr
+        assert json.loads(res.stdout.strip().splitlines()[-1])['queue'] == 'DRAINED'
+    v = b.views()[(8, 0)]
+    assert (v['state'], v['reason'], v['retryable'], v['requeues']) == ('FAILED', 'TRIES_EXHAUSTED', False, 0)
+    assert b.count((8, 0)) == 0
+
+
+def test_requeue_limit_is_terminal_with_a_reason(tmp_path):
+    """t5 D: after MAX_REQUEUES dead owners the job used to stay UNCLAIMED forever, unclaimable
+    and never terminal, with no reason shown."""
+    b = Bench(tmp_path, [(1, 0)])
+    ledger = QS.Ledger(b.ledger, QS.Layout(b.run_root, b.repo))
+    ledger.init([(1, 0)], QS.read_jobfile(b.jobfile)[1])
+    for _ in range(QS.MAX_REQUEUES):
+        job = ledger.claim(dead_identity())
+        ledger.owner_dead(job, ledger.sf(job).read())
+    v = ledger.views()[(1, 0)]
+    assert v['state'] == 'UNCLAIMED' and 'REQUEUE_LIMIT' in v['blocked']
+    res = b.run()
+    assert res.returncode == 0, res.stderr
+    assert json.loads(res.stdout.strip().splitlines()[-1])['queue'] == 'DRAINED'
+    v = b.views()[(1, 0)]
+    assert (v['state'], v['reason'], v['retryable']) == ('FAILED', 'REQUEUE_LIMIT', False)
+    assert 'operator must fix or abandon' in v['blocked'] and b.count((1, 0)) == 0
+
+
+def test_start_refused_releases_the_claim(tmp_path, monkeypatch):
+    b = Bench(tmp_path, [(2, 1)])
+    ledger = QS.Ledger(b.ledger, QS.Layout(b.run_root, b.repo))
+    ledger.init([(2, 1)], 'd')
+    driver = QS.Driver(ledger, workers=1, spacing=0, poll=0.01)
+    assert ledger.claim(driver.me) == (2, 1)
+
+    def refuse(job, owner):
+        raise ds.GuardFailed('guard rejected CLAIMED -start->')
+    monkeypatch.setattr(ledger, 'start', refuse)
+    driver.run_job((2, 1), '0-2')
+    v = ledger.views()[(2, 1)]
+    assert v['state'] == 'UNCLAIMED' and v['requeues'] == 1 and driver.notes and not driver.errors
+
+
+def test_operator_abandon_during_retry_does_not_kill_the_worker(tmp_path, monkeypatch):
+    """t5 E: abandon lands between the driver reading FAILED and its retry. The worker used to
+    die with VersionConflict and the driver still exited 0."""
+    b = Bench(tmp_path, [(2, 0)])
+    ledger = QS.Ledger(b.ledger, QS.Layout(b.run_root, b.repo))
+    ledger.init([(2, 0)], 'd')
+    driver = QS.Driver(ledger, workers=1, spacing=0, poll=0.01)
+    ledger.claim(driver.me); ledger.start((2, 0), driver.me)
+    ledger.exit((2, 0), 1, 'RuntimeError: existing derived EMPF host differs: /x')
+    real_retry = ledger.retry
+
+    def retry_after_abandon(job, owner, expect_version=None):
+        ledger.abandon(job, 'operator: dropped fold 2')
+        return real_retry(job, owner, expect_version=expect_version)
+    monkeypatch.setattr(ledger, 'retry', retry_after_abandon)
+    driver.run_job((2, 0), '0-2')
+    assert ledger.views()[(2, 0)]['state'] == 'ABANDONED'
+    assert len(driver.notes) == 1 and 'VersionConflict' in driver.notes[0] and not driver.errors
+
+
+def test_a_failing_worker_makes_the_run_exit_nonzero(tmp_path, monkeypatch):
+    b = Bench(tmp_path, [(3, 0)])
+    ledger = QS.Ledger(b.ledger, QS.Layout(b.run_root, b.repo))
+    ledger.init([(3, 0)], 'd')
+    driver = QS.Driver(ledger, workers=1, spacing=0, poll=0.01)
+    monkeypatch.setattr(driver, 'run_job', lambda *a, **k: (_ for _ in ()).throw(RuntimeError('boom')))
+    result = driver.run()
+    assert result['worker_errors'] == 1 and 'boom' in driver.errors[0]
+
+
+def test_lingering_descendant_does_not_hold_the_attempt_open(tmp_path):
+    """t9: the job exits 0 at once but leaves a background descendant holding the inherited
+    run-lock fd. The attempt is settled from <base>.rc instead of waiting for the lock."""
+    marker = f'qs_lingering_{os.getpid()}_{int(time.time() * 1e6)}'
+    b = Bench(tmp_path, [(6, 1)])
+    argv = b.argv()
+    argv[argv.index('--job-cmd') + 1] = json.dumps(['bash', '-c', f'(exec -a {marker} sleep 8) & exit 0'])
+    t0 = time.time()
+    try:
+        r = subprocess.run(argv, capture_output=True, text=True, timeout=60)
+        took = time.time() - t0
+    finally:
+        subprocess.run(['pkill', '-f', marker])
+    assert r.returncode == 0, r.stderr
+    assert took < 5, f'driver waited {took:.1f}s for a lingering descendant'
+    v = b.views()[(6, 1)]
+    assert v['state'] == 'EXITED_OK' and v['tries'] == 1
+
+
+def test_recovery_settles_from_rc_while_a_descendant_holds_the_lock(tmp_path):
+    ledger = QS.Ledger(tmp_path/'l')
+    ledger.init([(7, 0)], 'd')
+    dead = dead_identity()
+    ledger.claim(dead)
+    snap = ledger.start((7, 0), dead)
+    base = ledger.child_base((7, 0), snap.data['try'])
+    holder = subprocess.Popen([PY, '-c', 'import fcntl, sys, time\nfh = open(sys.argv[1], "a")\n'
+                               'fcntl.flock(fh, fcntl.LOCK_EX)\nprint("locked", flush=True)\ntime.sleep(60)',
+                               f'{base}.run'], stdout=subprocess.PIPE, text=True)
+    try:
+        assert holder.stdout.readline().strip() == 'locked'
+        ds.atomic_write_json(f'{base}.rc', dict(rc=0, launch_id=snap.data['launch_id'], at=time.time()))
+        assert ledger.recover(QS.identity()) == []                   # not reowned: the attempt is over
+        assert ledger.views()[(7, 0)]['state'] == 'EXITED_OK'
+    finally:
+        holder.kill(); holder.wait()
+
+
+def test_child_that_never_ran_the_command_is_requeued_without_a_try(tmp_path):
+    """A wrapper that exits 75 (lock busy or superseded launch) never ran the job command:
+    the attempt is released, not counted as KILLED."""
+    ledger = QS.Ledger(tmp_path/'l')
+    ledger.init([(4, 0)], 'd')
+    driver = QS.Driver(ledger, workers=1, spacing=0, poll=0.01)
+    ledger.claim(driver.me)
+    snap = ledger.start((4, 0), driver.me)
+    proc = subprocess.Popen([PY, '-c', 'raise SystemExit(75)'])
+    snap = driver.wait_child((4, 0), snap, proc)
+    assert snap.state is J.UNCLAIMED and snap.data['tries'] == 0 and snap.data['requeues'] == 1
+    assert 'never started' in snap.data['released']['why']
+
+
+def test_init_never_drops_jobs_from_the_ledger(tmp_path):
+    """t5 C: `run --jobfile` with the adoption digest rewrote queue.json with only the
+    jobfile's rows, orphaning the other state files."""
+    ledger = QS.Ledger(tmp_path/'l')
+    ledger.init([(1, 1), (2, 1), (3, 1)], 'same')
+    ledger.init([(2, 1)], 'same')
+    assert ledger.jobs() == [(1, 1), (2, 1), (3, 1)]
+    # a state file queue.json does not list still counts
+    QS.Ledger(tmp_path/'l').sf((9, 1)).create({'fold': 9, 'seed': 1, 'tries': 0, 'requeues': 0})
+    assert (9, 1) in ledger.jobs() and (9, 1) in ledger.views()
+    ledger.init([(2, 1)], 'same')
+    assert QS.Ledger(tmp_path/'l').header()['jobs'] == [[1, 1], [2, 1], [3, 1], [9, 1]]
+
+
+def test_concurrent_write_ledger_processes_do_not_crash(tmp_path):
+    """t4: concurrent status --write-ledger used to race sf.exists() / sf.create()."""
+    rows = list(QS.CONFIRMATION)
+    for rnd in range(2):
+        repo, run_root, logs = gen2_fixture(tmp_path/f'r{rnd}', rows, 1)
+        argv = [PY, '-B', str(QS_PATH), 'status', '--run-root', str(run_root), '--repo-root', str(repo),
+                '--ledger-dir', str(tmp_path/f'r{rnd}/ledger'), '--write-ledger', '--json']
+        procs = [subprocess.Popen(argv, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE, text=True)
+                 for _ in range(8)]
+        for p in procs:
+            _, err = p.communicate(timeout=120)
+            assert p.returncode == 0, err
+        views = QS.Ledger(tmp_path/f'r{rnd}/ledger').views()
+        assert set(views) == set(rows) and all(v['state'] == 'UNCLAIMED' for v in views.values())
+
+
+def test_status_reports_corrupt_or_partial_inputs_instead_of_crashing(tmp_path):
+    """t5 F and L."""
+    repo, run_root, logs = gen2_fixture(tmp_path, [(4, 0), (5, 0)], 1)
+    ledger_dir = tmp_path/'ledger'
+    ledger = QS.Ledger(ledger_dir)
+    ledger.init([(4, 0), (5, 0)], 'y' * 64)
+    ledger.abandon((5, 0), 'x')
+    kw = dict(ledger_dir=ledger_dir, jobs=[(4, 0), (5, 0)], queue_alive=False, live_scan={})
+    # a truncated job file
+    good = (ledger_dir/'fold4_seed0.json').read_text()
+    (ledger_dir/'fold4_seed0.json').write_text('{"schema": ')
+    r = QS.status(run_root, repo, **kw)
+    assert r['jobs'][(4, 0)]['state'] == 'CORRUPT' and r['derived']['queue'] == 'NOT_DRAINED'
+    assert r['jobs'][(5, 0)]['state'] == 'ABANDONED'
+    # an unknown state name
+    (ledger_dir/'fold4_seed0.json').write_text(good.replace('"UNCLAIMED"', '"DONE"'))
+    r = QS.status(run_root, repo, **kw)
+    assert r['jobs'][(4, 0)]['state'] == 'CORRUPT' and 'DONE' in r['jobs'][(4, 0)]['blocked']
+    (ledger_dir/'fold4_seed0.json').write_text(good)
+    # a truncated queue.json, then one without jobs: the job files are still read
+    for broken in ('{"jobs": [[4, 0]', '{"schema": "confirm_queue/1"}'):
+        (ledger_dir/'queue.json').write_text(broken)
+        r = QS.status(run_root, repo, **kw)
+        assert r['jobs'][(5, 0)]['state'] == 'ABANDONED' and r['jobs'][(5, 0)]['source'] == 'ledger'
+        assert any('queue.json' in a for a in r['anomalies']), r['anomalies']
+    # partial / malformed jobs_queue2.txt lines
+    for content, bad in [('8 0\n1 ', 'line 2'), ('8 0\n1', 'line 2'), ('8 0\nx y\n', 'line 2'),
+                         ('8 0 extra\n', 'extra columns')]:
+        (logs/'jobs_queue2.txt').write_text(content)
+        r = QS.status(run_root, repo, jobs=[(8, 0)], queue_alive=True, live_scan={})
+        assert r['jobs'][(8, 0)]['state'] == 'UNCLAIMED'
+        assert any(bad in a for a in r['anomalies']), (content, r['anomalies'])
+    # an empty queue.next is unknown, not 1
+    (logs/'jobs_queue2.txt').write_text('8 0\n')
+    (logs/'queue.next').write_text('')
+    r = QS.status(run_root, repo, jobs=[(8, 0)], queue_alive=True, live_scan={})
+    assert r['cursor']['next'] is None and 'unknown' in r['jobs'][(8, 0)]['blocked']
+    assert any('queue.next' in a for a in r['anomalies'])
+
+
+def test_run_skips_a_corrupt_job_file(tmp_path):
+    b = Bench(tmp_path, [(4, 0), (5, 0)], sleep=0.01)
+    ledger = QS.Ledger(b.ledger)
+    ledger.init(b.jobs, QS.read_jobfile(b.jobfile)[1])
+    (b.ledger/'fold4_seed0.json').write_text('{"schema": ')
+    r = b.run()
+    assert r.returncode == 0, r.stderr
+    out = json.loads(r.stdout.strip().splitlines()[-1])
+    assert out['counts'] == {'CLI_GENERATED': 1, 'CORRUPT': 1} and out['queue'] == 'NOT_DRAINED'
+    assert b.count((5, 0)) == 1 and b.count((4, 0)) == 0

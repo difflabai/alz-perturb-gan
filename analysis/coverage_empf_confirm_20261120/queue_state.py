@@ -11,9 +11,14 @@ makes that state an explicit per-job machine on top of
     RUNNING -exit_failed-> FAILED(reason, retryable)
     FAILED -retry-> RETRY_WAIT -start-> RUNNING     (retryable and tries < 3)
     CLAIMED | RUNNING | RETRY_WAIT -owner_dead-> UNCLAIMED
+    CLAIMED | RUNNING | RETRY_WAIT -release-> UNCLAIMED (the owner gives it back:
+                                                     the child never ran)
+    UNCLAIMED -exhaust-> FAILED(TRIES_EXHAUSTED | REQUEUE_LIMIT, terminal)
     RUNNING -reown-> RUNNING                         (driver died, job alive)
     UNCLAIMED | FAILED | RETRY_WAIT | EXITED_OK | TRAINED | CLI_GENERATED
         -abandon-> ABANDONED                         (manual, with a reason)
+    any non-terminal -legacy_<state>-> <state>       (mirror of the legacy files,
+                                                     only while legacy_tracked)
 
 Commands:
 
@@ -111,9 +116,18 @@ TRANSITIONS = {
     (J.EXITED_OK, 'verify_fit'): J.TRAINED,
     (J.TRAINED, 'verify_cli_a'): J.CLI_GENERATED,
     (J.CLI_GENERATED, 'scored'): J.SCORED,
+    **{(s, 'release'): J.UNCLAIMED for s in (J.CLAIMED, J.RUNNING, J.RETRY_WAIT)},
+    (J.UNCLAIMED, 'exhaust'): J.FAILED,
     **{(s, 'abandon'): J.ABANDONED for s in (J.UNCLAIMED, J.FAILED, J.RETRY_WAIT, J.EXITED_OK,
                                              J.TRAINED, J.CLI_GENERATED)},
 }
+# Legacy mirror: while a job is legacy_tracked (adopted from the bash queue and never claimed
+# by a ledger driver), the ledger follows the legacy files wherever they go, including back
+# to UNCLAIMED when the bash queue re-queues a job. One event per target state.
+MIRROR_SOURCES = (J.UNCLAIMED, J.CLAIMED, J.RUNNING, J.RETRY_WAIT, J.FAILED, J.EXITED_OK, J.TRAINED,
+                  J.CLI_GENERATED)
+MIRROR_TARGETS = MIRROR_SOURCES + (J.SCORED,)
+TRANSITIONS.update({(src, f'legacy_{dst.name.lower()}'): dst for src in MIRROR_SOURCES for dst in MIRROR_TARGETS})
 JOB_MACHINE = Machine('confirm_queue_job', JobState, J.UNCLAIMED, {J.SCORED, J.ABANDONED}, TRANSITIONS,
                       adopt_entries=set(JobState) - {J.UNCLAIMED})
 LIVE_STATES = (J.CLAIMED, J.RUNNING, J.RETRY_WAIT)
@@ -123,6 +137,11 @@ LIVE_STATES = (J.CLAIMED, J.RUNNING, J.RETRY_WAIT)
 REASONS = {'HOST_DIFFERS': True, 'HOST_PARTIAL_IMPORT': True, 'KILLED': True, 'OOM': False,
            'OUTPUT_EXISTS': False, 'SOURCE_CHANGED': False, 'GENERATION_FAILED': True,
            'TRAIN_ERROR': False}
+# Set by the ledger itself (UNCLAIMED -exhaust-> FAILED), never by classify().
+LEDGER_REASONS = {'TRIES_EXHAUSTED': False, 'REQUEUE_LIMIT': False}
+# Ordering used to tell whether file evidence is further along than a ledger state.
+RANK = {'UNCLAIMED': 0, 'CLAIMED': 1, 'RUNNING': 2, 'RETRY_WAIT': 2, 'FAILED': 3, 'EXITED_OK': 3,
+        'TRAINED': 4, 'CLI_GENERATED': 5, 'SCORED': 6}
 
 
 def fault(point):
@@ -154,6 +173,20 @@ def cmdline(pid):
     return raw.replace(b'\0', b' ').decode(errors='replace')
 
 
+def proc_cwd(pid):
+    try:
+        return os.readlink(f'/proc/{int(pid)}/cwd')
+    except (OSError, ValueError):
+        return None
+
+
+def _under(path, root):
+    try:
+        return Path(path).resolve().is_relative_to(Path(root).resolve())
+    except (OSError, ValueError):
+        return False
+
+
 def cmd_matches_job(cmd, fold, seed):
     if not cmd or 'microglia' not in cmd:
         return False
@@ -173,8 +206,10 @@ def legacy_pid_alive(pid, fold, seed, not_before=None, read_cmdline=cmdline, sta
     return True
 
 
-def scan_live_jobs(read_cmdline=cmdline):
-    """{(fold, seed): [pid, ...]} for live processes whose cmdline names a microglia job."""
+def scan_live_jobs(read_cmdline=cmdline, repo_root=None, read_cwd=proc_cwd):
+    """{(fold, seed): [pid, ...]} for live processes whose cmdline names a microglia job.
+    With repo_root, only processes whose working directory is inside it count (the bash
+    queues `cd $ROOT` before they start a job), so another checkout's jobs are ignored."""
     found = {}
     for proc in Path('/proc').iterdir():
         if not proc.name.isdigit():
@@ -182,6 +217,10 @@ def scan_live_jobs(read_cmdline=cmdline):
         cmd = read_cmdline(proc.name)
         if not cmd or 'microglia' not in cmd:
             continue
+        if repo_root is not None:
+            cwd = read_cwd(proc.name)
+            if cwd is None or not _under(cwd, repo_root):
+                continue
         m = re.search(r'--fold\s+(\d+)\s(?:.*\s)?--seed\s+(\d+)(\s|$)', cmd)
         if m:
             found.setdefault((int(m.group(1)), int(m.group(2))), []).append(int(proc.name))
@@ -423,25 +462,70 @@ def scorer_blocked(row, k, s, read_cmdline=cmdline):
 
 
 def read_cursor(logs):
-    """The gen-2 positional cursor: (jobfile rows, next index, jobfile sha256) or None."""
+    """The gen-2 positional cursor: (jobfile rows, next index, jobfile sha256) or None.
+
+    train_queue.sh reads jobfile line n with `sed -n np` and splits it into `fold seed`,
+    so rows are positional: a line that does not start with two integers is kept as a
+    None row (it still occupies its position) and reported in 'anomalies'. A missing
+    queue.next means 1 (the script creates it with 1); an empty or unparsable one, as
+    seen inside the shell's `>` truncate window, means the position is unknown
+    (next=None, nothing counted as claimed or unclaimed)."""
     jobfile, idx = Path(logs)/'jobs_queue2.txt', Path(logs)/'queue.next'
     if not jobfile.exists():
         return None
     raw = jobfile.read_bytes()
-    rows = [tuple(int(x) for x in line.split()) for line in raw.decode().splitlines() if line.strip()]
-    try:
-        nxt = int(idx.read_text().strip())
-    except (OSError, ValueError):
-        nxt = 1
-    return dict(jobfile=str(jobfile), sha256=hashlib.sha256(raw).hexdigest(), rows=rows, next=nxt,
-                claimed=rows[:max(0, nxt - 1)], unclaimed=rows[max(0, nxt - 1):])
+    rows, anomalies = [], []
+    for lineno, line in enumerate(raw.decode(errors='replace').splitlines(), 1):
+        if not line.strip():
+            continue
+        parts = line.split()
+        try:
+            rows.append((int(parts[0]), int(parts[1])))
+            if len(parts) > 2:
+                anomalies.append(f'jobs_queue2.txt line {lineno}: extra columns ignored: {line!r}')
+        except (IndexError, ValueError):
+            rows.append(None)
+            anomalies.append(f'jobs_queue2.txt line {lineno}: not "fold seed": {line!r}')
+    if not raw.endswith(b'\n') and raw.strip():
+        anomalies.append('jobs_queue2.txt: last line has no newline (partial write?)')
+    nxt = 1
+    if idx.exists():
+        try:
+            nxt = int(idx.read_text().strip())
+        except (OSError, ValueError):
+            nxt = None
+            anomalies.append('queue.next is empty or unreadable (mid-write?): cursor position unknown')
+    good = lambda rs: [r for r in rs if r is not None]  # noqa: E731
+    return dict(jobfile=str(jobfile), sha256=hashlib.sha256(raw).hexdigest(), rows=good(rows), next=nxt,
+                claimed=good(rows[:max(0, nxt - 1)]) if nxt is not None else [],
+                unclaimed=good(rows[max(0, nxt - 1):]) if nxt is not None else [],
+                anomalies=anomalies)
 
 
-def queue_process_alive(read_cmdline=cmdline):
+QUEUE_SCRIPTS = ('train_queue.sh', 'train_all.sh')
+
+
+def queue_process_alive(read_cmdline=cmdline, repo_root=None, read_cwd=proc_cwd):
+    """Whether a bash queue script is running. With repo_root, only a script whose path
+    (resolved against the process's cwd) lies inside repo_root counts; when the cwd
+    cannot be read a relative path counts (conservative)."""
     for proc in Path('/proc').iterdir():
-        if proc.name.isdigit():
-            cmd = read_cmdline(proc.name)
-            if cmd and ('train_queue.sh' in cmd or 'train_all.sh' in cmd):
+        if not proc.name.isdigit():
+            continue
+        cmd = read_cmdline(proc.name)
+        if not cmd or not any(name in cmd for name in QUEUE_SCRIPTS):
+            continue
+        if repo_root is None:
+            return True
+        for arg in cmd.split():
+            if not any(arg.endswith(name) for name in QUEUE_SCRIPTS):
+                continue
+            if os.path.isabs(arg):
+                if _under(arg, repo_root):
+                    return True
+                continue
+            cwd = read_cwd(proc.name)
+            if cwd is None or _under(Path(cwd)/arg, repo_root):
                 return True
     return False
 
@@ -457,9 +541,11 @@ def adopt_legacy(run_root, repo_root=None, jobs=None, *, read_cmdline=cmdline, l
     logs = layout.logs
     attempts, markers, anomalies = parse_queue_log(tail(logs/'queue.log', limit=10**7))
     cursor = read_cursor(logs)
+    if cursor:
+        anomalies.extend(cursor['anomalies'])
     scorers = parse_score_queue_log(tail(logs/'score_queue.log', limit=10**7))
-    live = live_scan if live_scan is not None else scan_live_jobs(read_cmdline)
-    q_alive = queue_alive if queue_alive is not None else queue_process_alive(read_cmdline)
+    live = live_scan if live_scan is not None else scan_live_jobs(read_cmdline, layout.repo_root)
+    q_alive = queue_alive if queue_alive is not None else queue_process_alive(read_cmdline, layout.repo_root)
     universe = list(jobs) if jobs is not None else list(CONFIRMATION)
     for job in list(attempts) + (cursor['rows'] if cursor else []):
         if job not in universe:
@@ -512,7 +598,18 @@ def adopt_legacy(run_root, repo_root=None, jobs=None, *, read_cmdline=cmdline, l
             else:
                 view.update(state='UNCLAIMED', blocked='attempt open but no live process and no rc: '
                             'owner dead, re-queue (owner_dead)')
-        if view['state'] is None and stage == 'CLI_GENERATED':
+        # A gen-1 attempt that ended, for a job jobs_queue2.txt lists with no gen-2 attempt yet:
+        # the bash queue will run it again, so the gen-1 outcome must not decide the state
+        # (it would read as a terminal FAILED and a DRAINED queue while the job is queued).
+        requeued = (view['state'] is None and last is not None and last['gen'] == 1
+                    and last['outcome'] == 'end' and cursor is not None and (k, s) in cursor['rows'])
+        if requeued:
+            earlier = dict(gen=1, rc=last['rc'])
+            if last['rc'] != 0:
+                earlier['reason'], earlier['retryable'] = classify(
+                    tail(logs/f'train_fold{k}_seed{s}.log'), last['rc'], layout.fit(k, s))
+            view['earlier'] = earlier
+        elif view['state'] is None and stage == 'CLI_GENERATED':
             view['state'] = 'CLI_GENERATED'
             view['blocked'] = scorer_blocked(scorers.get((k, s)), k, s, read_cmdline)
         elif view['state'] is None and last is not None and last['outcome'] == 'retry':
@@ -527,11 +624,14 @@ def adopt_legacy(run_root, repo_root=None, jobs=None, *, read_cmdline=cmdline, l
                             else f'train_fold{k}_seed{s}.log')
                 reason, retryable = classify(tail(log), last['rc'], layout.fit(k, s))
                 view.update(state='FAILED', reason=reason, retryable=retryable, rc=last['rc'])
-        if view['state'] is None and stage == 'TRAINED':
+        if view['state'] is None and stage == 'TRAINED' and not requeued:
             view.update(state='TRAINED', blocked='CLI readout A missing')
         if view['state'] is None:
             claimed = cursor is not None and (k, s) in cursor['claimed']
-            if claimed and not rows_since_cursor(rows):
+            if cursor is not None and cursor['next'] is None and (k, s) in cursor['rows'] \
+                    and not rows_since_cursor(rows):
+                view.update(state='UNCLAIMED', blocked='queue.next unreadable: cursor position unknown')
+            elif claimed and not rows_since_cursor(rows):
                 if q_alive:
                     view.update(state='CLAIMED', blocked='claimed by queue.next, waiting for the start lock')
                 else:
@@ -543,6 +643,11 @@ def adopt_legacy(run_root, repo_root=None, jobs=None, *, read_cmdline=cmdline, l
                     view['blocked'] = None if q_alive else 'waiting in jobs_queue2.txt but the queue process is dead'
                 elif cursor is None or (k, s) not in cursor['rows']:
                     view['blocked'] = 'not in any live job file'
+        if view.get('earlier') and view['state'] in ('UNCLAIMED', 'CLAIMED'):
+            e = view['earlier']
+            note = f"re-queued in jobs_queue2.txt after gen-1 rc={e['rc']}" + (
+                f" ({e['reason']})" if e.get('reason') else '')
+            view['blocked'] = f"{view['blocked']}; {note}" if view['blocked'] else note
         if view['state'] == 'FAILED':
             terminal = not view['retryable'] or view['tries'] >= MAX_TRIES
             view['terminal'] = terminal
@@ -568,8 +673,9 @@ def is_terminal_view(view):
 def derive_queue(views):
     states = {job: v['state'] for job, v in views.items()}
     drained = bool(views) and all(is_terminal_view(v) for v in views.values())
+    # CORRUPT (an unreadable ledger file) is unknown, so it counts as open.
     training_open = [job for job, v in views.items()
-                     if v['state'] in ('UNCLAIMED', 'CLAIMED', 'RUNNING', 'RETRY_WAIT')
+                     if v['state'] in ('UNCLAIMED', 'CLAIMED', 'RUNNING', 'RETRY_WAIT', 'CORRUPT')
                      or (v['state'] == 'FAILED' and not is_terminal_view(v))]
     counts = {}
     for st in states.values():
@@ -583,16 +689,72 @@ def retry_left(data):
     return bool((data.get('failure') or {}).get('retryable')) and data.get('tries', 0) < MAX_TRIES
 
 
+def exhausted(data):
+    """Why an UNCLAIMED job may not be claimed again, or None."""
+    if data.get('tries', 0) >= MAX_TRIES:
+        return 'TRIES_EXHAUSTED'
+    if data.get('requeues', 0) >= MAX_REQUEUES:
+        return 'REQUEUE_LIMIT'
+    return None
+
+
 def job_name(job):
     return f'fold{job[0]}_seed{job[1]}'
+
+
+STATE_FILE = re.compile(r'^fold(\d+)_seed(\d+)\.json$')
 
 
 def _view_from_snapshot(snap):
     d = snap.data
     failure = d.get('failure') or {}
-    return dict(state=snap.state.name, try_=d.get('try'), tries=d.get('tries', 0), reason=failure.get('reason'),
+    view = dict(state=snap.state.name, try_=d.get('try'), tries=d.get('tries', 0), reason=failure.get('reason'),
                 retryable=failure.get('retryable'), owner=d.get('owner'), child=d.get('child'),
-                requeues=d.get('requeues', 0), version=snap.version, blocked=None)
+                requeues=d.get('requeues', 0), version=snap.version, blocked=None,
+                legacy_tracked=bool(d.get('legacy_tracked')), legacy_view=d.get('legacy_view'))
+    if snap.state is J.UNCLAIMED and exhausted(d):
+        view['blocked'] = (f"{exhausted(d)} (tries {d.get('tries', 0)}/{MAX_TRIES}, requeues "
+                           f"{d.get('requeues', 0)}/{MAX_REQUEUES}): the next claim marks it FAILED")
+    elif snap.state is J.FAILED and not retry_left(d):
+        view['blocked'] = f"terminal failure {failure.get('reason')}: operator must fix or abandon"
+    return view
+
+
+def _corrupt_view(exc):
+    return dict(state='CORRUPT', try_=None, tries=0, reason=None, retryable=None, owner=None, child=None,
+                requeues=0, version=None, blocked=f'unreadable ledger file: {exc}', legacy_tracked=False,
+                legacy_view=None)
+
+
+def legacy_fingerprint(view):
+    """What the legacy reader said about a job; the mirror moves only when this changes."""
+    return dict(state=view['state'], try_=view.get('try_') or None, tries=view.get('tries', 0),
+                pid=view.get('pid'), reason=view.get('reason'), retryable=view.get('retryable'))
+
+
+def legacy_update(view):
+    """update(d) for a legacy_* mirror transition (and for adoption): the legacy view becomes
+    the ledger's data while the job is legacy_tracked."""
+    st = view['state']
+
+    def update(d):
+        d = dict(d)
+        d['tries'] = view.get('tries', 0)
+        d['legacy_view'] = legacy_fingerprint(view)
+        d['legacy'] = {k: view[k] for k in ('generation', 'pid', 'attempts') if view.get(k) is not None}
+        if view.get('earlier'):
+            d['legacy_earlier'] = view['earlier']
+        if st == 'FAILED':
+            d['failure'] = dict(reason=view['reason'], retryable=view['retryable'])
+        elif st == 'RETRY_WAIT':
+            d['failure'] = dict(reason='HOST_DIFFERS', retryable=True)  # the bash queue retries only this
+        else:
+            d['failure'] = None
+        d['owner'] = (dict(legacy=True, pid=view.get('pid'), pid_starttime=None)
+                      if st in ('CLAIMED', 'RUNNING', 'RETRY_WAIT') else None)
+        d['try'] = (view.get('try_') or None) if st == 'RUNNING' else d.get('try')
+        return d
+    return update
 
 
 class Ledger:
@@ -603,6 +765,7 @@ class Ledger:
         self.layout = layout
         self.deep = deep
         self.read_only = read_only
+        self.anomalies = []
 
     # -- files
     def sf(self, job):
@@ -612,62 +775,129 @@ class Ledger:
     def child_base(self, job, n):
         return self.dir/'children'/f'{job_name(job)}.try{n}'
 
+    def _header_raw(self):
+        """(header, problem): a valid queue.json, or None and why it cannot be used."""
+        path = self.dir/'queue.json'
+        if not path.exists():
+            return None, None
+        try:
+            doc = json.loads(path.read_text())
+        except (OSError, ValueError) as exc:
+            return None, f'queue.json unreadable ({exc})'
+        if not isinstance(doc, dict) or not isinstance(doc.get('jobs'), list) \
+                or not isinstance(doc.get('jobfile_sha256'), str):
+            return None, 'queue.json lacks jobs or jobfile_sha256'
+        if not all(isinstance(j, list) and len(j) == 2 and all(isinstance(x, int) for x in j) for j in doc['jobs']):
+            return None, 'queue.json jobs are not [fold, seed] pairs'
+        return doc, None
+
     def header(self):
-        return _json(self.dir/'queue.json')
+        return self._header_raw()[0]
+
+    def header_problem(self):
+        return self._header_raw()[1]
+
+    def state_files(self):
+        """Jobs that have a state file, whether or not queue.json lists them."""
+        if not self.dir.is_dir():
+            return []
+        found = [STATE_FILE.match(p.name) for p in self.dir.iterdir()]
+        return sorted(((int(m[1]), int(m[2])) for m in found if m), key=lambda j: (j[1], j[0]))
+
+    def exists(self):
+        return (self.dir/'queue.json').exists() or bool(self.state_files())
 
     def jobs(self):
+        """queue.json's job order, then any state file it does not list: a job is never dropped
+        from the ledger because queue.json is missing, truncated or was rewritten."""
         h = self.header()
-        return [tuple(j) for j in h['jobs']] if h else []
+        listed = [tuple(j) for j in h['jobs']] if h else []
+        return list(dict.fromkeys([*listed, *self.state_files()]))
+
+    def _write_header(self, jobs, jobfile_sha256, jobfile, previous, **extra):
+        ds.atomic_write_json(self.dir/'queue.json', dict(
+            schema=SCHEMA, jobfile=str(jobfile) if jobfile else None, jobfile_sha256=jobfile_sha256,
+            jobs=[list(j) for j in jobs], **extra,
+            history=[*((previous or {}).get('history', [])), dict(jobfile_sha256=jobfile_sha256, at=time.time())]))
 
     def init(self, jobs, jobfile_sha256, jobfile=None, replace=False):
         """Record the job list and the jobfile digest. A different jobfile is refused unless
-        replace=True: per-job states are keyed by (fold, seed), never by position."""
+        replace=True: per-job states are keyed by (fold, seed), never by position. The job
+        list only grows: jobs already in the ledger stay in it."""
         self.dir.mkdir(parents=True, exist_ok=True)
         (self.dir/'children').mkdir(exist_ok=True)
         with FileLock(self.dir/'queue.json', purpose='init'):
-            h = self.header()
+            h, problem = self._header_raw()
+            if problem and not replace:
+                raise SystemExit(f'ledger {self.dir}: {problem}; repair it or pass --replace-jobfile')
             if h and h['jobfile_sha256'] != jobfile_sha256 and not replace:
                 raise SystemExit(f'ledger {self.dir} belongs to jobfile {h["jobfile_sha256"][:12]} '
                                  f'({h.get("jobfile")}); refusing {jobfile_sha256[:12]} without --replace-jobfile')
-            ordered = list(dict.fromkeys([*(tuple(j) for j in (h['jobs'] if h and replace else [])), *jobs]))
-            if not h or h['jobfile_sha256'] != jobfile_sha256 or [tuple(j) for j in h['jobs']] != ordered:
-                ds.atomic_write_json(self.dir/'queue.json', dict(
-                    schema=SCHEMA, jobfile=str(jobfile) if jobfile else None, jobfile_sha256=jobfile_sha256,
-                    jobs=[list(j) for j in ordered], history=[*((h or {}).get('history', [])),
-                                                            dict(jobfile_sha256=jobfile_sha256, at=time.time())]))
+            listed = [tuple(j) for j in h['jobs']] if h else []
+            ordered = list(dict.fromkeys([*listed, *self.state_files(), *jobs]))
+            if not h or h['jobfile_sha256'] != jobfile_sha256 or listed != ordered:
+                self._write_header(ordered, jobfile_sha256, jobfile, h)
         for job in jobs:
-            self.sf(job).create({'fold': job[0], 'seed': job[1], 'tries': 0, 'requeues': 0}, exist_ok=True)
+            try:
+                self.sf(job).create({'fold': job[0], 'seed': job[1], 'tries': 0, 'requeues': 0}, exist_ok=True)
+            except ds.CorruptState as exc:  # reported as CORRUPT and never claimed; the operator repairs it
+                self.anomalies.append(f'{job_name(job)}: {exc}')
+                print(f'queue_state: {job_name(job)}: {exc}', file=sys.stderr, flush=True)
 
     # -- reading
+    def read(self, job):
+        """The job's snapshot, or None when it has no state file or the file is corrupt (noted)."""
+        try:
+            return self.sf(job).read()
+        except ds.CorruptState as exc:
+            self.anomalies.append(f'{job_name(job)}: {exc}')
+            return None
+
     def views(self):
         out = {}
         for job in self.jobs():
-            snap = self.sf(job).read()
+            try:
+                snap = self.sf(job).read()
+            except ds.CorruptState as exc:
+                out[job] = _corrupt_view(exc)
+                continue
             if snap is not None:
                 out[job] = _view_from_snapshot(snap)
         return out
 
     # -- transitions
-    def claim(self, owner):
+    def claim(self, owner, legacy_busy=False):
         """Claim the first UNCLAIMED job in queue order (or take over a retryable FAILED job
-        through FAILED -retry-> RETRY_WAIT); None when nothing is claimable."""
+        through FAILED -retry-> RETRY_WAIT); None when nothing is claimable. UNCLAIMED jobs
+        with no tries or requeues left are moved to FAILED on the way (exhaust). Jobs the
+        bash queue still owns (legacy_tracked while it runs) are skipped."""
         for job in self.jobs():
-            sf = self.sf(job)
-            snap = sf.read()
-            if snap is None:
+            snap = self.read(job)
+            if snap is None or (legacy_busy and snap.data.get('legacy_tracked')):
                 continue
             try:
-                if snap.state is J.UNCLAIMED and snap.data.get('requeues', 0) < MAX_REQUEUES:
-                    sf.transition('claim', expect_version=snap.version,
-                                  update=lambda d: {**d, 'owner': owner, 'claimed_at': time.time()})
+                if snap.state is J.UNCLAIMED:
+                    if exhausted(snap.data):
+                        self.exhaust(job, snap)
+                        continue
+                    self.sf(job).transition(
+                        'claim', expect_version=snap.version, guard=lambda s: not exhausted(s.data),
+                        update=lambda d: {**d, 'owner': owner, 'claimed_at': time.time(), 'legacy_tracked': False})
                 elif snap.state is J.FAILED and retry_left(snap.data):
                     self.retry(job, owner, expect_version=snap.version)
                 else:
                     continue
-            except (IllegalTransition, VersionConflict, GuardFailed):
+            except ds.DurableStateError:
                 continue
             return job
         return None
+
+    def exhaust(self, job, snap):
+        reason = exhausted(snap.data)
+        return self.sf(job).transition(
+            'exhaust', expect_version=snap.version, guard=lambda s: exhausted(s.data) == reason,
+            update=lambda d: {**d, 'failure': dict(reason=reason, retryable=False), 'legacy_tracked': False,
+                              'owner': None})
 
     def start(self, job, owner):
         """CLAIMED|RETRY_WAIT -start-> RUNNING; records try n and a launch id. Returns the snapshot."""
@@ -711,7 +941,7 @@ class Ledger:
 
     def retry(self, job, owner, expect_version=None):
         return self.sf(job).transition('retry', guard=lambda s: retry_left(s.data), expect_version=expect_version,
-                                       update=lambda d: {**d, 'owner': owner})
+                                       update=lambda d: {**d, 'owner': owner, 'legacy_tracked': False})
 
     def owner_dead(self, job, snap):
         def update(d):
@@ -721,22 +951,34 @@ class Ledger:
             return d
         return self.sf(job).transition('owner_dead', update=update, expect_version=snap.version)
 
+    def release(self, job, snap, why):
+        """The owner gives the job back without spending a try (its command never ran)."""
+        def update(d):
+            d['requeues'] = d.get('requeues', 0) + 1
+            d['owner'] = None
+            d['child'] = None
+            d['released'] = dict(why=why, at=time.time())
+            return d
+        return self.sf(job).transition('release', update=update, expect_version=snap.version)
+
     def reown(self, job, snap, owner):
         return self.sf(job).transition('reown', expect_version=snap.version,
                                        update=lambda d: {**d, 'owner': owner})
 
     def abandon(self, job, reason):
-        return self.sf(job).transition('abandon', update=lambda d: {**d, 'abandoned': dict(
+        return self.sf(job).transition('abandon', update=lambda d: {**d, 'legacy_tracked': False, 'abandoned': dict(
             reason=reason, at=time.time(), by=identity())})
 
     def advance(self, job):
         """EXITED_OK -> TRAINED -> CLI_GENERATED -> SCORED as far as the files verify."""
         if self.layout is None:
-            return self.sf(job).read()
+            return self.read(job)
         k, s = job
-        sf = self.sf(job)
         while True:
-            snap = sf.read()
+            snap = self.read(job)
+            if snap is None:
+                return None
+            sf = self.sf(job)
             if snap.state is J.EXITED_OK:
                 st, _ = fit_state(self.layout.fit(k, s))
                 if st not in ('RECEIPTED', 'AUDITED'):
@@ -759,15 +1001,84 @@ class Ledger:
                               update=lambda d, ev=ev, event=event: {**d, event: ev})
             except VersionConflict:
                 continue
+            except (IllegalTransition, GuardFailed):
+                return self.read(job)
+
+    # -- the legacy mirror
+    def adopt_job(self, job, view, legacy_dir=None):
+        """Create a legacy_tracked state file from a legacy view, or catch an existing tracked
+        one up with the legacy files. Safe to run concurrently."""
+        data = legacy_update(view)({'fold': job[0], 'seed': job[1], 'requeues': 0, 'legacy_tracked': True})
+        evidence = dict(view['evidence'], legacy_state=view['state'], blocked=view['blocked'])
+        sf = self.sf(job)
+        try:
+            if view['state'] == 'UNCLAIMED':
+                sf.create(dict(data, adopted={'evidence': evidence, 'legacy_dir': legacy_dir}), exist_ok=True)
+            else:
+                sf.adopt(lambda _d: (view['state'], evidence), legacy_dir=legacy_dir, data=data)
+        except ds.AlreadyExists:
+            pass
+        return self.mirror(job, view)
+
+    def mirror(self, job, view):
+        """Move a legacy_tracked job to what the legacy files say now. Only a change in the
+        legacy view moves it, so the ledger's own progress (advance) is never undone."""
+        target = J[view['state']]
+        fp = legacy_fingerprint(view)
+        for _ in range(5):
+            snap = self.read(job)
+            if snap is None or not snap.data.get('legacy_tracked') or JOB_MACHINE.is_terminal(snap.state):
+                return snap
+            if snap.data.get('legacy_view') == fp:
+                return snap
+            try:
+                return self.sf(job).transition(f'legacy_{target.name.lower()}', expect_version=snap.version,
+                                               guard=lambda s: s.data.get('legacy_tracked'),
+                                               update=legacy_update(view))
+            except VersionConflict:
+                continue
+            except (IllegalTransition, GuardFailed):
+                return self.read(job)
+        return self.read(job)
+
+    def sync_legacy(self, **legacy_kw):
+        """Mirror the legacy files into every legacy_tracked job. Returns the legacy report, or
+        None when no job is tracked or the ledger has no layout."""
+        if self.layout is None:
+            return None
+        tracked = []
+        for job in self.jobs():
+            snap = self.read(job)
+            if snap is not None and snap.data.get('legacy_tracked') and not JOB_MACHINE.is_terminal(snap.state):
+                tracked.append(job)
+        if not tracked:
+            return None
+        legacy = adopt_legacy(self.layout.run_root, self.layout.repo_root, jobs=tracked, deep=self.deep,
+                              **legacy_kw)
+        for job in tracked:
+            if job in legacy['jobs']:
+                self.mirror(job, legacy['jobs'][job])
+        return legacy
 
     # -- recovery
     @contextlib.contextmanager
     def child_lock(self, job, snap):
-        """Yields None while the attempt's child is alive, else ('exited', rc) | ('vanished', None) |
-        ('never', None) with the child's run lock held. The child holds <base>.run's flock for its
-        whole life (the fd is passed on to the job command), so a free lock means no live child, and
-        a late-starting child blocks on the lock and then sees the ledger has moved on."""
+        """Yields None while the attempt is in progress, else ('exited', rc) | ('vanished', 'missing') |
+        ('never', None).
+
+        An '.rc' for this launch id settles the attempt at once, lock or no lock: the wrapper
+        writes it after the job command exited, and a descendant that outlived the command (it
+        inherited the run-lock fd) must not hold the job open. Without an '.rc', the run lock
+        tells the rest: the wrapper holds `<base>.run` for its whole life, so a held lock means
+        the attempt is alive, and a free lock is examined while this process holds it. A
+        wrapper that starts late finds the lock held (Busy) or the ledger moved on (another
+        launch id, or not RUNNING) and exits 75 without running the command."""
         base = self.child_base(job, snap.data.get('try'))
+        launch = snap.data.get('launch_id')
+        rc = _json(f'{base}.rc')
+        if isinstance(rc, dict) and rc.get('launch_id') == launch:
+            yield 'exited', rc['rc']
+            return
         lock = FileLock(f'{base}.run', blocking=False, record_owner=False)
         try:
             lock.acquire()
@@ -775,7 +1086,6 @@ class Ledger:
             yield None
             return
         try:
-            launch = snap.data.get('launch_id')
             rc = _json(f'{base}.rc')
             started = _json(f'{base}.child')
             if isinstance(rc, dict) and rc.get('launch_id') == launch:
@@ -788,10 +1098,10 @@ class Ledger:
             lock.release()
 
     def settle(self, job, snap, outcome):
-        """Apply a dead child's outcome (lock held by the caller)."""
+        """Apply a finished attempt's outcome. 'never' re-queues without spending a try."""
         kind, rc = outcome
         if kind == 'never':
-            return self.owner_dead(job, snap)
+            return self.release(job, snap, 'the child never started the job command')
         base = self.child_base(job, snap.data.get('try'))
         return self.exit(job, rc, tail(f'{base}.log'), launch_id=snap.data.get('launch_id'))
 
@@ -800,30 +1110,44 @@ class Ledger:
             return bool(owner.get('pid')) and legacy_pid_alive(owner['pid'], *job)
         return alive(owner)
 
-    def recover(self, me, adopt_running=True):
+    def recover(self, me, adopt_running=True, legacy=None):
         """Re-queue claimed-but-unfinished jobs whose owner is dead (pid + starttime), apply exits a
-        dead driver never recorded, and return RUNNING jobs whose live child this driver now owns."""
+        dead driver never recorded, and return RUNNING jobs whose live child this driver now owns.
+
+        Jobs owned by the bash queue (legacy owner) have no child files: their exits, fits and
+        scores reach the ledger through sync_legacy(), never through owner_dead. Pass that
+        sync's report as ``legacy``; without it, or while the bash queue runs, they are left
+        alone."""
+        legacy_running = legacy is None or bool(legacy.get('queue_process_alive'))
         adopted = []
         for job in self.jobs():
-            snap = self.sf(job).read()
+            snap = self.read(job)
             if snap is None or snap.state not in LIVE_STATES:
                 continue
             owner = snap.data.get('owner') or {}
             if owner.get('pid') == me['pid'] and owner.get('pid_starttime') == me['pid_starttime']:
                 continue
-            if self.owner_alive(job, owner):
-                continue
             try:
+                if owner.get('legacy'):
+                    if legacy_running or snap.state is J.RUNNING or self.owner_alive(job, owner):
+                        continue
+                    self.owner_dead(job, snap)  # bash queue gone, job still CLAIMED or RETRY_WAIT
+                    continue
+                if self.owner_alive(job, owner):
+                    continue
                 if snap.state is not J.RUNNING:
                     self.owner_dead(job, snap)
                     continue
                 with self.child_lock(job, snap) as outcome:
-                    if outcome is not None:
+                    if outcome is None:
+                        if adopt_running:
+                            self.reown(job, snap, me)
+                            adopted.append(job)
+                    elif outcome[0] == 'never':
+                        self.owner_dead(job, snap)
+                    else:
                         self.settle(job, snap, outcome)
-                    elif adopt_running:
-                        self.reown(job, snap, me)
-                        adopted.append(job)
-            except (VersionConflict, IllegalTransition, GuardFailed):
+            except ds.DurableStateError:
                 continue
         return adopted
 
@@ -839,7 +1163,8 @@ def _pdeathsig():
 def child_main(argv):
     """Internal: run one job attempt. Holds <base>.run's flock (passed on to the job command),
     records itself in <base>.child, runs the command with its output in <base>.log and writes
-    <base>.rc atomically. Refuses to run unless the ledger still says RUNNING with this launch id."""
+    <base>.rc atomically. Exits 75 without running anything when the lock is held or the
+    ledger no longer says RUNNING with this launch id."""
     p = argparse.ArgumentParser(prog='queue_state.py _child')
     p.add_argument('--ledger', required=True); p.add_argument('--fold', type=int, required=True)
     p.add_argument('--seed', type=int, required=True); p.add_argument('--try', dest='n', type=int, required=True)
@@ -881,7 +1206,7 @@ def default_command(job, cores, python=PYTHON):
 
 class Driver:
     def __init__(self, ledger, workers=8, worker_offset=0, spacing=25.0, poll=30.0, command=None,
-                 cwd=None):
+                 cwd=None, legacy_kw=None):
         self.ledger = ledger
         self.workers = workers
         self.offset = worker_offset
@@ -889,8 +1214,21 @@ class Driver:
         self.poll = poll
         self.command = command or default_command
         self.cwd = cwd
+        self.legacy_kw = legacy_kw or {}
         self.me = identity()
         self.stop = threading.Event()
+        self.errors = []   # uncaught worker exceptions: the run exits nonzero
+        self.notes = []    # handled conflicts (an operator abandon, a concurrent transition)
+        self.legacy_busy = False
+
+    def note(self, job, text):
+        msg = f'{job_name(job)}: {text}'
+        self.notes.append(msg)
+        print(f'queue_state: {msg}', file=sys.stderr, flush=True)
+
+    def mine(self, snap):
+        owner = snap.data.get('owner') or {}
+        return owner.get('pid') == self.me['pid'] and owner.get('pid_starttime') == self.me['pid_starttime']
 
     def launch(self, job, snap, cores):
         n, launch_id = snap.data['try'], snap.data['launch_id']
@@ -907,7 +1245,7 @@ class Driver:
         return proc
 
     def wait_child(self, job, snap, proc=None):
-        """Wait until the attempt's child is gone, then apply its exit. Returns the new snapshot."""
+        """Wait until the attempt has finished, then apply its exit. Returns the new snapshot."""
         first = True
         while True:
             if proc is not None and proc.poll() is None:
@@ -916,42 +1254,74 @@ class Driver:
                 with self.ledger.child_lock(job, snap) as outcome:
                     if outcome is not None:
                         fault('after_exit')
-                        return self.ledger.settle(job, snap, outcome if outcome[0] != 'never'
-                                                  else ('vanished', 'missing'))
+                        return self.ledger.settle(job, snap, outcome)
             if first:
                 fault('while_running')
             first = False
             time.sleep(self.poll)
 
     def run_job(self, job, cores, snap=None):
-        """Drive one claimed (or reowned RUNNING) job until it leaves the retry loop."""
+        """Drive one job this driver owns until it leaves the retry loop. Ledger conflicts (an
+        operator abandon, another driver's recovery) are handled by re-reading the job."""
+        proc, errors = None, 0
         while True:
-            proc = None
-            if snap is None or snap.state is not J.RUNNING:
-                snap = self.ledger.start(job, self.me)
-                fault('after_start')
-                proc = self.launch(job, snap, cores)
-            snap = self.wait_child(job, snap, proc)
-            if snap.state is J.EXITED_OK:
-                self.ledger.advance(job)
-                return
-            if retry_left(snap.data):
-                self.ledger.retry(job, self.me, expect_version=snap.version)
+            try:
+                if snap is None:
+                    snap = self.ledger.sf(job).read()
+                if snap is None or JOB_MACHINE.is_terminal(snap.state) or not self.mine(snap):
+                    return
+                if snap.state in (J.CLAIMED, J.RETRY_WAIT):
+                    snap = self.ledger.start(job, self.me)
+                    fault('after_start')
+                    proc = self.launch(job, snap, cores)
+                elif snap.state is J.RUNNING:
+                    snap, proc = self.wait_child(job, snap, proc), None
+                elif snap.state is J.FAILED and retry_left(snap.data):
+                    snap = self.ledger.retry(job, self.me, expect_version=snap.version)
+                else:
+                    if snap.state is J.EXITED_OK:
+                        self.ledger.advance(job)
+                    return
+            except ds.DurableStateError as exc:
+                errors += 1
+                fresh = self.ledger.read(job)
+                self.note(job, f'{type(exc).__name__}: {exc}; ledger now '
+                               f'{fresh.state.name if fresh else "unreadable"}')
+                if errors > 5:
+                    return
+                if fresh is not None and isinstance(exc, GuardFailed) and self.mine(fresh) \
+                        and fresh.state in (J.CLAIMED, J.RETRY_WAIT):
+                    try:  # start refused: give the claim back explicitly
+                        self.ledger.release(job, fresh, f'start refused: {exc}')
+                    except ds.DurableStateError:
+                        pass
+                    return
                 snap = None
-                continue
-            return
 
     def worker(self, w, adopted):
+        try:
+            self._worker(w, adopted)
+        except BaseException:  # noqa: BLE001 - recorded, and the run exits nonzero
+            import traceback
+            self.errors.append(traceback.format_exc())
+            traceback.print_exc()
+
+    def _sync_and_recover(self, adopt_running):
+        legacy = self.ledger.sync_legacy(**self.legacy_kw)
+        self.legacy_busy = bool(legacy and legacy['queue_process_alive'])
+        return self.ledger.recover(self.me, adopt_running=adopt_running, legacy=legacy)
+
+    def _worker(self, w, adopted):
         cores = f'{3 * (w + self.offset)}-{3 * (w + self.offset) + 2}'
         while not self.stop.is_set():
             with adopted['lock']:
                 job = adopted['jobs'].pop(0) if adopted['jobs'] else None
             if job is not None:
-                self.run_job(job, cores, snap=self.ledger.sf(job).read())
+                self.run_job(job, cores)
                 continue
             with FileLock(self.ledger.dir/'claim', purpose='claim'):
-                self.ledger.recover(self.me, adopt_running=False)
-                job = self.ledger.claim(self.me)
+                self._sync_and_recover(adopt_running=False)
+                job = self.ledger.claim(self.me, legacy_busy=self.legacy_busy)
             if job is None:
                 return
             fault('after_claim')
@@ -959,7 +1329,10 @@ class Driver:
 
     def run(self):
         with FileLock(self.ledger.dir/'claim', purpose='recover'):
-            adopted = {'jobs': self.ledger.recover(self.me), 'lock': threading.Lock()}
+            adopted = {'jobs': self._sync_and_recover(adopt_running=True), 'lock': threading.Lock()}
+        if self.legacy_busy:
+            print('queue_state: the bash queue is running; its legacy-tracked jobs are left to it',
+                  file=sys.stderr, flush=True)
         for job in self.ledger.jobs():
             self.ledger.advance(job)
         threads = [threading.Thread(target=self.worker, args=(w, adopted), daemon=True)
@@ -968,14 +1341,25 @@ class Driver:
             t.start()
         for t in threads:
             t.join()
+        self.ledger.sync_legacy(**self.legacy_kw)
         for job in self.ledger.jobs():
             self.ledger.advance(job)
-        return derive_queue(self.ledger.views())
+        return dict(derive_queue(self.ledger.views()), worker_errors=len(self.errors), notes=len(self.notes),
+                    legacy_busy=self.legacy_busy)
 
 
 def read_jobfile(path):
     raw = Path(path).read_bytes()
-    jobs = [tuple(int(x) for x in line.split()[:2]) for line in raw.decode().splitlines() if line.strip()]
+    jobs = []
+    for lineno, line in enumerate(raw.decode().splitlines(), 1):
+        if not line.strip():
+            continue
+        try:
+            jobs.append(tuple(int(x) for x in line.split()[:2]))
+        except ValueError:
+            raise SystemExit(f'{path} line {lineno}: not "fold seed": {line!r}') from None
+        if len(jobs[-1]) != 2:
+            raise SystemExit(f'{path} line {lineno}: not "fold seed": {line!r}')
     return jobs, hashlib.sha256(raw).hexdigest()
 
 
@@ -986,49 +1370,57 @@ def status(run_root, repo_root=None, ledger_dir=None, write_ledger=False, deep=F
     ledger_dir = Path(ledger_dir) if ledger_dir else layout.logs/'queue_state'
     ledger = Ledger(ledger_dir, layout, deep=deep, read_only=not write_ledger)
     views = {job: dict(v, source='legacy') for job, v in legacy['jobs'].items()}
+    anomalies = list(legacy['anomalies'])
     if write_ledger:
         jobs = list(legacy['jobs'])
         digest = legacy['cursor']['sha256'] if legacy['cursor'] else hashlib.sha256(
             json.dumps(sorted(jobs)).encode()).hexdigest()
         ledger.dir.mkdir(parents=True, exist_ok=True)
         with FileLock(ledger.dir/'queue.json', purpose='adopt'):
-            h = ledger.header()
-            if not h:
-                ds.atomic_write_json(ledger.dir/'queue.json', dict(
-                    schema=SCHEMA, jobfile=legacy['cursor']['jobfile'] if legacy['cursor'] else None,
-                    jobfile_sha256=digest, jobs=[list(j) for j in jobs], adopted_from=str(run_root),
-                    history=[dict(jobfile_sha256=digest, at=time.time())]))
-        for job, v in legacy['jobs'].items():
-            sf = ledger.sf(job)
-            if sf.exists():
-                continue
-            data = {'fold': job[0], 'seed': job[1], 'tries': v.get('tries', 0), 'requeues': 0,
-                    'legacy': {k: v[k] for k in ('generation', 'pid', 'attempts') if v.get(k) is not None}}
-            if v['state'] == 'FAILED':
-                data['failure'] = dict(reason=v['reason'], retryable=v['retryable'])
-            if v['state'] in ('RUNNING', 'CLAIMED'):
-                data['owner'] = dict(legacy=True, pid=v.get('pid'), pid_starttime=None)
-            if v['state'] == 'RUNNING':
-                data['try'] = v.get('try_')
-            evidence = dict(v['evidence'], legacy_state=v['state'], blocked=v['blocked'])
-            if v['state'] == 'UNCLAIMED':
-                sf.create(dict(data, adopted={'evidence': evidence}))
+            h, problem = ledger._header_raw()
+            if problem:
+                anomalies.append(f'ledger {problem}: left as it is; job files are read directly')
+            elif not h:
+                ledger._write_header(jobs, digest, legacy['cursor']['jobfile'] if legacy['cursor'] else None,
+                                     None, adopted_from=str(run_root))
             else:
-                sf.adopt(lambda _d, st=v['state'], ev=evidence: (st, ev), legacy_dir=str(layout.logs), data=data)
+                listed = [tuple(j) for j in h['jobs']]
+                if any(j not in listed for j in jobs):
+                    ledger._write_header(list(dict.fromkeys([*listed, *jobs])), h['jobfile_sha256'],
+                                         h.get('jobfile'), h)
+        for job, v in legacy['jobs'].items():
+            ledger.adopt_job(job, v, str(layout.logs))
         for job in jobs:
             ledger.advance(job)
-    if ledger.header():
+    if ledger.exists():
+        problem = ledger.header_problem()
+        if problem and not write_ledger:
+            anomalies.append(f'ledger {ledger.dir}: {problem}; reading its job files directly')
         for job, v in ledger.views().items():
             leg = views.get(job, {})
-            v['source'] = 'ledger'
-            v['legacy_state'] = leg.get('state')
-            if leg.get('state') and leg['state'] != v['state']:
-                v['blocked'] = f"ledger says {v['state']}, legacy files say {leg['state']}"
-            v['evidence'] = leg.get('evidence', {})
+            v.update(source='ledger', legacy_state=leg.get('state'), evidence=leg.get('evidence', {}))
+            if v['state'] != 'CORRUPT':
+                if v['legacy_tracked'] and leg and legacy_fingerprint(leg) != v['legacy_view']:
+                    # read-only: show what the mirror would record (status --write-ledger or run do it)
+                    note = (f"ledger mirror is behind the legacy files (ledger {v['state']}); "
+                            'status --write-ledger or run records it')
+                    v = dict(leg, source='ledger+legacy', ledger_state=v['state'], legacy_state=leg['state'],
+                             blocked=f"{note}; {leg['blocked']}" if leg.get('blocked') else note)
+                stage, _ = evidence_state(layout, *job, deep=deep)
+                live = v['state'] in ('CLAIMED', 'RUNNING', 'RETRY_WAIT') and v.get('owner') \
+                    and ledger.owner_alive(job, v['owner'])
+                if stage and not live and v['state'] != 'ABANDONED' and RANK[stage] > RANK.get(v['state'], 0):
+                    v = dict(v, ledger_state=v.get('ledger_state', v['state']), state=stage,
+                             blocked=f"files show {stage}, ledger says {v.get('ledger_state', v['state'])}; "
+                                     'the next run or --write-ledger records it')
+                    if stage == 'CLI_GENERATED':
+                        v['blocked'] += '; ' + scorer_blocked(
+                            parse_score_queue_log(tail(layout.logs/'score_queue.log', limit=10**7)).get(job), *job)
             views[job] = v
+    anomalies.extend(ledger.anomalies)
     return dict(run_root=str(run_root), ledger_dir=str(ledger_dir), wrote_ledger=bool(write_ledger),
                 derived=derive_queue(views), jobs=views, markers=legacy['markers'],
-                anomalies=legacy['anomalies'], cursor=legacy['cursor'] and {
+                anomalies=anomalies, cursor=legacy['cursor'] and {
                     k: legacy['cursor'][k] for k in ('jobfile', 'sha256', 'next')},
                 queue_process_alive=legacy['queue_process_alive'])
 
@@ -1112,6 +1504,10 @@ def main(argv=None):
     driver = Driver(ledger, a.workers, a.worker_offset, a.start_spacing, a.poll, command, cwd=layout.repo_root)
     result = driver.run()
     print(json.dumps(dict(result, training_open=[job_name(j) for j in result['training_open']])))
+    if result['worker_errors']:
+        print(f"queue_state: {result['worker_errors']} worker thread(s) failed; see the tracebacks above",
+              file=sys.stderr)
+        return 1
     return 0
 
 
