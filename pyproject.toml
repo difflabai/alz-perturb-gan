@@ -45,3 +45,6 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = ["-q"]
+markers = [
+    "needs_particlegan: needs the frozen ParticleGAN 0.10.0 site-packages (skipped when absent)",
+]
