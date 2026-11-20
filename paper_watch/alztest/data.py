@@ -4,6 +4,10 @@ Each loader either returns real data or raises DataUnavailable with a
 precise, checkable reason (access terms, accession, what was tried).
 Tests convert DataUnavailable into a clean pytest skip — a gated dataset
 is a finding about access, never a silent pass and never a fake run.
+
+Loaders for the closed, access-blocked NeuroKO, panAD and GNPC finds
+were removed; their access facts and revival requirements are recorded
+in notes/blocked_finds.md.
 """
 from __future__ import annotations
 
@@ -15,36 +19,6 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
 class DataUnavailable(RuntimeError):
     """Raised when a find's data cannot be obtained; carries the reason."""
-
-
-def neuroko_path() -> Path:
-    env = os.environ.get("NEUROKO_H5AD")
-    if env:
-        return Path(env)
-    return DATA_DIR / "neuroko_annotated.h5ad"
-
-
-def load_neuroko():
-    """NeuroKO Perturb-seq (Dominicus et al., bioRxiv 2026.10.13.758778).
-
-    Stated access in the preprint: annotated integrated scRNA-seq objects
-    on Zenodo (DOI as printed: 10.5281/zenodo.2326038861 — the identifier
-    does not resolve as printed; verified 2026-11-17 against the Zenodo
-    API, Europe PMC, and the authors' GitHub), raw sequencing at ENA
-    ERP134820, code at github.com/Lotfollahi-lab/NeuroID-reproducibility.
-    """
-    p = neuroko_path()
-    if not p.exists():
-        raise DataUnavailable(
-            "NeuroKO annotated objects not present locally and the Zenodo "
-            "DOI printed in the preprint (10.5281/zenodo.2326038861) does "
-            "not resolve via the Zenodo API (checked 2026-11-17); raw data "
-            "exists at ENA ERP134820 but is unprocessed FASTQ. Place the "
-            "annotated h5ad at data/neuroko_annotated.h5ad or set "
-            "NEUROKO_H5AD."
-        )
-    import anndata as ad
-    return ad.read_h5ad(p)
 
 
 def seaad_region_path(region: str = "LEC") -> Path:
@@ -117,25 +91,6 @@ def seaad_annotations(region: str = "LEC", *, include_cognition: bool = False):
     return df.set_index("cell_label")
 
 
-def load_panad():
-    """panAD integrated atlas (bioRxiv 2026.09.03.747935).
-
-    The preprint's full text is not PMC-archived (license) and no direct
-    download of the integrated object or the MONET donor subtype labels
-    was located on the preprint server / CELLxGENE as of 2026-11-17.
-    """
-    p = DATA_DIR / "panad.h5ad"
-    if not p.exists():
-        raise DataUnavailable(
-            "panAD integrated object + MONET subtype labels not openly "
-            "downloadable as of 2026-11-17 (preprint full text not "
-            "archived; no CELLxGENE collection found). Place at "
-            "data/panad.h5ad with donor subtype labels in obs to enable."
-        )
-    import anndata as ad
-    return ad.read_h5ad(p)
-
-
 def load_psychad(path: Path | None = None):
     """Public PsychAD MSSM microglial raw counts and three diagnosis labels."""
     if path is None:
@@ -149,19 +104,36 @@ def load_psychad(path: Path | None = None):
     return ad.read_h5ad(path)
 
 
-def load_gnpc():
-    """GNPC longitudinal plasma proteomics (medRxiv 2026.07.01.26356385).
 
-    The v4.1 SomaScan resource (17,269 samples / 13,449 participants) is
-    distributed by the Global Neurodegeneration Proteomics Consortium
-    under consortium access terms; no public download exists.
+def hypoad_microglia_path() -> Path:
+    env = os.environ.get("HYPOAD_H5AD")
+    if env:
+        return Path(env)
+    return DATA_DIR / "hypoad_microglia.h5ad"
+
+
+def load_hypoad_microglia():
+    """HypoAD hypothalamic microglia (Yu et al., Nature 2026).
+
+    Source: GEO GSE342635 (public), processed series object
+    GSE342635_HypoAD.h5ad — 51,107,823,722 bytes for 614,403 nuclei,
+    with NO per-sample supplementary files and no per-cell-type
+    subset except a neuron-only object (9.3 GB). The microglia
+    compartment (~52k nuclei; 7 mostly early-stage AD + 7 age-matched
+    controls among the post-mortem donors, with the familial donor AD_44
+    excluded downstream by alztest.hypoad.EXCLUDE_DONORS) is produced by
+    downloading the object (scripts/parallel_download.py) and running
+    scripts/extract_hypoad_microglia.py, which writes
+    data/hypoad_microglia.h5ad with raw counts and obs columns donor,
+    condition and cell_type. Or set HYPOAD_H5AD.
     """
-    p = DATA_DIR / "gnpc_plasma.parquet"
+    p = hypoad_microglia_path()
     if not p.exists():
         raise DataUnavailable(
-            "GNPC plasma proteomics is consortium-access only; no public "
-            "download. Place an approved export at data/gnpc_plasma.parquet "
-            "to enable."
+            f"HypoAD microglia extract not present at {p}. GEO GSE342635 "
+            "is open but ships one 51 GB object with no per-sample files; "
+            "download GSE342635_HypoAD.h5ad with scripts/parallel_download.py, "
+            "run scripts/extract_hypoad_microglia.py, or set HYPOAD_H5AD."
         )
-    import pandas as pd
-    return pd.read_parquet(p)
+    import anndata as ad
+    return ad.read_h5ad(p)
