@@ -9,16 +9,16 @@ dated subdirectory, as the 2026-11 studies do. The current project state is in
 [STATUS.md](../STATUS.md); root-level legacy files are described in
 [docs/LEGACY_LAYOUT.md](../docs/LEGACY_LAYOUT.md).
 
-Tracked files: 2644 (1477 at the top level of `analysis/`, 1167 in 57 subdirectories).
+Tracked files: 2648 (1479 at the top level of `analysis/`, 1169 in 57 subdirectories).
 
 ## Studies behind the current default
 
 | Directory | Files | Start here | What it is |
 | --- | ---: | --- | --- |
-| `default_empf_20261117/` | 9 | [README.md](default_empf_20261117/README.md) | Owner selection of native EMPF as the CLI default; runtime setup |
+| `default_empf_20261117/` | 10 | [README.md](default_empf_20261117/README.md) | Owner selection of native EMPF as the CLI default; runtime setup |
 | `empf_comparison_20261117/` | 36 | [README.txt](empf_comparison_20261117/README.txt) | Fixed fold 0/seed 0 comparison of EMPF against the 0.9.7 default |
 | `coverage_empf_20261117/` | 18 | [README.md](coverage_empf_20261117/README.md) | Coverage pilot: quarter-contraction readout and SD-only calibration |
-| `coverage_empf_confirm_20261120/` | 2 | [PROTOCOL.md](coverage_empf_confirm_20261120/PROTOCOL.md) | In progress: 17-fit fold/seed confirmation of the default and readout |
+| `coverage_empf_confirm_20261120/` | 3 | [PROTOCOL.md](coverage_empf_confirm_20261120/PROTOCOL.md) | In progress: 17-fit fold/seed confirmation of the default and readout |
 | `particlegan_review_20261117/` | 2 | [README.md](particlegan_review_20261117/README.md) | CPU probe of EMPF conditional residual at wide input widths |
 | `particlegan_upgrade_20261117/` | 46 | [README.txt](particlegan_upgrade_20261117/README.txt) | Isolated ParticleGAN 0.10.0 release test |
 
@@ -43,8 +43,8 @@ Dates come from the directory name or, failing that, from file names inside it.
 | `count_dependence_20261114/` | 14 | 20261114 | [PROTOCOL.txt](count_dependence_20261114/PROTOCOL.txt) |
 | `covariance_challenge_20261114/` | 45 | 20261114 | [PROTOCOL.txt](covariance_challenge_20261114/PROTOCOL.txt) |
 | `coverage_empf_20261117/` (current) | 18 | 20261117 | [README.md](coverage_empf_20261117/README.md) |
-| `coverage_empf_confirm_20261120/` (current) | 2 | 20261120 | [PROTOCOL.md](coverage_empf_confirm_20261120/PROTOCOL.md) |
-| `default_empf_20261117/` (current) | 9 | 20261117 | [README.md](default_empf_20261117/README.md) |
+| `coverage_empf_confirm_20261120/` (current) | 3 | 20261120 | [PROTOCOL.md](coverage_empf_confirm_20261120/PROTOCOL.md) |
+| `default_empf_20261117/` (current) | 10 | 20261117 | [README.md](default_empf_20261117/README.md) |
 | `dispersion097/` | 22 | 20261108 |  |
 | `dispersion_challenge_20261114/` | 19 | 20261114 | [PROTOCOL.txt](dispersion_challenge_20261114/PROTOCOL.txt) |
 | `distribution097/` | 14 |  |  |
@@ -98,7 +98,7 @@ Prefixes with fewer than 3 files are pooled in the last row.
 | `released` | 228 | json 197, jsonl 5, pdf 13, png 13 | 20261105 | `released_best40k_rejection_and_clean_settlement.json`, `released_best_40k_duration_comparison.json` |
 | `benchmark097` | 153 | json 151, py 2 | 20261107-20261108 | `benchmark097_CFGen_same_fold_generation_timing_metadata_20261108.json`, `benchmark097_CFGen_seed2_AEcomplete_FM_progress_20261108T0341.json` |
 | `released097` | 98 | json 83, png 3, py 9, svg 3 | 20261107-20261108 | `released097_actual_hyperparameter_coverage_20261108.json`, `released097_adaptive_CPU_handoff_20261107.json` |
-| `CAL` | 90 | json 90 |  | `CAL_GPU0_V1_balanced8_v1_f0_pg_s0-result.json`, `CAL_GPU0_V1_bcap_adam_v1_f0_pg_s0-result.json` |
+| `CAL` | 91 | json 91 |  | `CAL_GPU0_V1_INDEX.json`, `CAL_GPU0_V1_balanced8_v1_f0_pg_s0-result.json` |
 | `test` | 72 | py 72 |  | `test_aggregate_benchmark097.py`, `test_aggregate_benchmark097_dual.py` |
 | `pure` | 46 | json 37, pdf 4, png 4, txt 1 |  | `pure_balanced8_verification.json`, `pure_calibration_comparison.pdf` |
 | `audit` | 42 | py 42 |  | `audit_bcap_checkpoint.py`, `audit_candidate_resources.py` |
@@ -172,7 +172,7 @@ Prefixes with fewer than 3 files are pooled in the last row.
 | `uniform` | 3 | json 3 |  | `uniform_training_seed_ensemble_estimate.json`, `uniform_training_seed_ensemble_hypothesis.json` |
 | `update` | 3 | py 3 |  | `update_formulation_coverage_routed_live.py`, `update_pure_leaderboard_after_e22.py` |
 | `wait` | 3 | py 3 |  | `wait_next_GPU1_capacity_after_sixth.py`, `wait_released_upper_generator2589_capacity.py` |
-| `(other)` | 93 | json 58, py 26, txt 9 | 20261104-20261108 | `ALZ_foreign_bridge_peak_profile_source_observation_20261108.json`, `CELL_ENERGY_LIVE_CONTINUATION.txt` |
+| `(other)` | 94 | json 59, py 26, txt 9 | 20261104-20261108 | `ALZ_foreign_bridge_peak_profile_source_observation_20261108.json`, `CELL_ENERGY_LIVE_CONTINUATION.txt` |
 
 ## Byte-identical copies
 

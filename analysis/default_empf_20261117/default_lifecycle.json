@@ -1,0 +1,371 @@
+{
+ "schema": 1,
+ "purpose": "Append-only transition log of the microglia default-model lifecycle. Append entries; never edit or reorder earlier ones (each entry chains the sha256 of the previous one). Checked by tests/test_record_registry.py and scripts/hygiene/build_record_registry.py --check.",
+ "states": [
+  "DECLARED",
+  "PRELAUNCH_PASSED",
+  "RUNNING",
+  "COMPLETED",
+  "AUDITED",
+  "OWNER_SELECTED_EXPERIMENTAL",
+  "UNDER_CONFIRMATION",
+  "CONFIRMED_QUALIFIED",
+  "CONFIRMATION_FAILED",
+  "PROMOTED",
+  "REJECTED",
+  "REVERTED",
+  "REPLACED"
+ ],
+ "transitions": [
+  [
+   null,
+   "declare",
+   "DECLARED"
+  ],
+  [
+   null,
+   "import_legacy_default",
+   "PROMOTED"
+  ],
+  [
+   "DECLARED",
+   "prelaunch_pass",
+   "PRELAUNCH_PASSED"
+  ],
+  [
+   "DECLARED",
+   "reject",
+   "REJECTED"
+  ],
+  [
+   "PRELAUNCH_PASSED",
+   "launch",
+   "RUNNING"
+  ],
+  [
+   "PRELAUNCH_PASSED",
+   "reject",
+   "REJECTED"
+  ],
+  [
+   "RUNNING",
+   "complete",
+   "COMPLETED"
+  ],
+  [
+   "RUNNING",
+   "reject",
+   "REJECTED"
+  ],
+  [
+   "COMPLETED",
+   "audit",
+   "AUDITED"
+  ],
+  [
+   "COMPLETED",
+   "reject",
+   "REJECTED"
+  ],
+  [
+   "AUDITED",
+   "reject",
+   "REJECTED"
+  ],
+  [
+   "COMPLETED",
+   "owner_override",
+   "OWNER_SELECTED_EXPERIMENTAL"
+  ],
+  [
+   "AUDITED",
+   "owner_override",
+   "OWNER_SELECTED_EXPERIMENTAL"
+  ],
+  [
+   "OWNER_SELECTED_EXPERIMENTAL",
+   "start_confirmation",
+   "UNDER_CONFIRMATION"
+  ],
+  [
+   "OWNER_SELECTED_EXPERIMENTAL",
+   "revert",
+   "REVERTED"
+  ],
+  [
+   "UNDER_CONFIRMATION",
+   "pass",
+   "CONFIRMED_QUALIFIED"
+  ],
+  [
+   "UNDER_CONFIRMATION",
+   "fail",
+   "CONFIRMATION_FAILED"
+  ],
+  [
+   "CONFIRMATION_FAILED",
+   "owner_keep",
+   "OWNER_SELECTED_EXPERIMENTAL"
+  ],
+  [
+   "CONFIRMATION_FAILED",
+   "revert",
+   "REVERTED"
+  ],
+  [
+   "CONFIRMED_QUALIFIED",
+   "promote",
+   "PROMOTED"
+  ],
+  [
+   "PROMOTED",
+   "replace",
+   "REPLACED"
+  ],
+  [
+   "PROMOTED",
+   "revert",
+   "REVERTED"
+  ],
+  [
+   "OWNER_SELECTED_EXPERIMENTAL",
+   "replace",
+   "REPLACED"
+  ]
+ ],
+ "config": "configs/microglia_default.json",
+ "selection": "analysis/default_empf_20261117/selection.json",
+ "state_mapping": {
+  "OWNER_SELECTED_EXPERIMENTAL": {
+   "config_status": "owner-selected-experimental",
+   "selection_status": "owner_selected_experimental_default",
+   "population_qualified": false,
+   "prospective_promotion_rule_passed": false
+  },
+  "UNDER_CONFIRMATION": {
+   "config_status": "owner-selected-experimental",
+   "selection_status": "owner_selected_experimental_default",
+   "population_qualified": false,
+   "prospective_promotion_rule_passed": false
+  },
+  "CONFIRMATION_FAILED": {
+   "config_status": "owner-selected-experimental",
+   "selection_status": "owner_selected_experimental_default",
+   "population_qualified": false,
+   "prospective_promotion_rule_passed": false
+  },
+  "CONFIRMED_QUALIFIED": {
+   "config_status": "owner-selected-experimental",
+   "selection_status": "owner_selected_experimental_default",
+   "population_qualified": null,
+   "prospective_promotion_rule_passed": null
+  },
+  "PROMOTED": {
+   "config_status": "development-selected",
+   "selection_status": null,
+   "population_qualified": null,
+   "prospective_promotion_rule_passed": null
+  }
+ },
+ "superseded_records": [
+  {
+   "path": "analysis/empf_comparison_20261117/completion/status.json",
+   "field": "default_changed",
+   "recorded_value": false,
+   "sha256": "7157e4c55a91b33812871004c3723a31ca99e01d207f4e051a179be7f022268e",
+   "superseded_by_seq": 7,
+   "note": "Historical and left unedited. It was true when written (comparison complete, default unchanged); the owner_override entry later made this model the default."
+  }
+ ],
+ "entries": [
+  {
+   "seq": 0,
+   "prev": null,
+   "subject": "microglia-pbulk-countshape-v2",
+   "at": "2026-11-13T08:16:39Z",
+   "event": "import_legacy_default",
+   "from": null,
+   "to": "PROMOTED",
+   "actor": "commit dac8c95 \"Promote validated count-shape distribution readout as default\"",
+   "evidence": [
+    {
+     "path": "analysis/improve_20261109/default_config.json",
+     "sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+     "commit": "dac8c95c183d2a8643e65f6972ec501ebeaa1e0f"
+    }
+   ],
+   "note": "ParticleGAN 0.9.7 count-shape default; its earlier history predates this log. Config status vocabulary: development-selected."
+  },
+  {
+   "seq": 1,
+   "prev": "12c4469defae82e6661984475966252ca3fa926215ad9f4a903f1e35dd0582fa",
+   "subject": "microglia-empf-countshape-v1",
+   "at": "2026-11-17T02:17:30Z",
+   "event": "declare",
+   "from": null,
+   "to": "DECLARED",
+   "actor": "agent, on owner request (commit 8eee1c1)",
+   "evidence": [
+    {
+     "path": "analysis/empf_comparison_20261117/PROTOCOL.txt",
+     "sha256": "1dbb6ec2f626de8b1afd643cd9c43874a7ae9430caffb573950b9731df53cc6c",
+     "commit": "8eee1c14fac2d5ef4be7b74a82ad61df39909abf"
+    }
+   ]
+  },
+  {
+   "seq": 2,
+   "prev": "09329ab4860583af29816156d31aef7e78417f5d9dda420402849057719997d7",
+   "subject": "microglia-empf-countshape-v1",
+   "at": "2026-11-17T02:17:30Z",
+   "event": "prelaunch_pass",
+   "from": "DECLARED",
+   "to": "PRELAUNCH_PASSED",
+   "actor": "agent (commit 8eee1c1)",
+   "evidence": [
+    {
+     "path": "analysis/empf_comparison_20261117/prelaunch.json",
+     "sha256": "bfc650854dec11d8c8e6bc0939ce8dc4af6560b809d854aa6f7eb38d026a47e4",
+     "commit": "8eee1c14fac2d5ef4be7b74a82ad61df39909abf"
+    }
+   ]
+  },
+  {
+   "seq": 3,
+   "prev": "f2b0b7e2e0f0842fc7857935b52ce1e20032020b247ffeb70c98bf50702871bf",
+   "subject": "microglia-empf-countshape-v1",
+   "at": "2026-11-17T02:17:30Z",
+   "event": "launch",
+   "from": "PRELAUNCH_PASSED",
+   "to": "RUNNING",
+   "actor": "agent",
+   "evidence": [
+    {
+     "path": "analysis/empf_comparison_20261117/prelaunch.json",
+     "sha256": "bfc650854dec11d8c8e6bc0939ce8dc4af6560b809d854aa6f7eb38d026a47e4",
+     "commit": "8eee1c14fac2d5ef4be7b74a82ad61df39909abf"
+    },
+    {
+     "path": "analysis/empf_comparison_20261117/completion/final_audit.json",
+     "sha256": "9742570565e34304659f7418a5a6ef6b0ad438d6df3bce9152fd4719b6657e09",
+     "commit": "77b2d7d8a2efe9456a158a01485af6d9c3d6f908"
+    }
+   ],
+   "note": "No launch receipt is committed; the time is the prelaunch commit. final_audit.json records the two full 20000-update fits that ran."
+  },
+  {
+   "seq": 4,
+   "prev": "4efcc2ce34153d91e458990629a67ba0438101c49a099de3345608c07285d2af",
+   "subject": "microglia-empf-countshape-v1",
+   "at": "2026-11-17T03:30:24Z",
+   "event": "complete",
+   "from": "RUNNING",
+   "to": "COMPLETED",
+   "actor": "agent (commit 77b2d7d)",
+   "evidence": [
+    {
+     "path": "analysis/empf_comparison_20261117/completion/status.json",
+     "sha256": "7157e4c55a91b33812871004c3723a31ca99e01d207f4e051a179be7f022268e",
+     "commit": "77b2d7d8a2efe9456a158a01485af6d9c3d6f908"
+    },
+    {
+     "path": "analysis/empf_comparison_20261117/completion/comparison.json",
+     "sha256": "91c3d493a78f6716268289de5696ec3da52076f90eda8ceecc3dd96f425c3e47",
+     "commit": "77b2d7d8a2efe9456a158a01485af6d9c3d6f908"
+    }
+   ],
+   "note": "Time from completion/status.json \"time\" (1794886224.06). That record says default_changed:false; see superseded_records."
+  },
+  {
+   "seq": 5,
+   "prev": "0cfcbcb8f15d2eeb05e2773d6ed5ddc48e70422b947445292d354aff4f08dee6",
+   "subject": "microglia-empf-countshape-v1",
+   "at": "2026-11-17T03:37:18Z",
+   "event": "audit",
+   "from": "COMPLETED",
+   "to": "AUDITED",
+   "actor": "agent plus independent reviewer (commit 77b2d7d)",
+   "evidence": [
+    {
+     "path": "analysis/empf_comparison_20261117/completion/final_audit.json",
+     "sha256": "9742570565e34304659f7418a5a6ef6b0ad438d6df3bce9152fd4719b6657e09",
+     "commit": "77b2d7d8a2efe9456a158a01485af6d9c3d6f908"
+    },
+    {
+     "path": "analysis/empf_comparison_20261117/completion/independent_final_review.json",
+     "sha256": "926b2f460975b389d9a14b392326bf5c2d577dec614ec8f26b7c97dc8eea2a38",
+     "commit": "77b2d7d8a2efe9456a158a01485af6d9c3d6f908"
+    }
+   ]
+  },
+  {
+   "seq": 6,
+   "prev": "2acad00cdde7ef0f449c55b182db80d01aca5e54ea28860549e6f0e10a9dead4",
+   "subject": "microglia-pbulk-countshape-v2",
+   "at": "2026-11-17T04:15:59Z",
+   "event": "replace",
+   "from": "PROMOTED",
+   "to": "REPLACED",
+   "actor": "owner (\"lets set it as default and push\"), applied in commit dc8e101",
+   "evidence": [
+    {
+     "path": "analysis/default_empf_20261117/selection.json",
+     "sha256": "c4e6a2cbe31f14ef7614c7fa4ef23d6b5f531e06ad0307e976bee7e067dcdf5b",
+     "commit": "dc8e10160f74568ee566df845bae0780fb4160b1"
+    },
+    {
+     "path": "analysis/default_empf_20261117/previous/default_config.json",
+     "sha256": "fecbfce1e92d31a5d8c3d646f0a6dfb036c975b599dbdc880c332c1023bb3c23",
+     "commit": "dc8e10160f74568ee566df845bae0780fb4160b1"
+    }
+   ],
+   "note": "selection.json previous_config archives the replaced config (sha256 fecbfce1...)."
+  },
+  {
+   "seq": 7,
+   "prev": "0e079bee628ba53ec2132c354e5927fee9402ce9c3962ea63fbd8a2dc80133a3",
+   "subject": "microglia-empf-countshape-v1",
+   "at": "2026-11-17T04:15:59Z",
+   "event": "owner_override",
+   "from": "AUDITED",
+   "to": "OWNER_SELECTED_EXPERIMENTAL",
+   "actor": "owner (\"lets set it as default and push\"), applied in commit dc8e101",
+   "evidence": [
+    {
+     "path": "analysis/default_empf_20261117/selection.json",
+     "sha256": "c4e6a2cbe31f14ef7614c7fa4ef23d6b5f531e06ad0307e976bee7e067dcdf5b",
+     "commit": "dc8e10160f74568ee566df845bae0780fb4160b1"
+    },
+    {
+     "path": "configs/microglia_default.json",
+     "sha256": "ab6434b002bdefc2022573eea3c4118a46e41fd90fb52ad4d1f8c0ea4ec4108a",
+     "commit": "dc8e10160f74568ee566df845bae0780fb4160b1"
+    }
+   ],
+   "note": "Owner override: prospective_promotion_rule_passed=false, population_qualified=false."
+  },
+  {
+   "seq": 8,
+   "prev": "bb817e9a1b086a561b4933700bc0e937580f94c036ade1340cae79594436de17",
+   "subject": "microglia-empf-countshape-v1",
+   "at": "2026-11-20T03:31:26Z",
+   "event": "start_confirmation",
+   "from": "OWNER_SELECTED_EXPERIMENTAL",
+   "to": "UNDER_CONFIRMATION",
+   "actor": "agent (commit d578e83)",
+   "evidence": [
+    {
+     "path": "analysis/coverage_empf_confirm_20261120/PROTOCOL.md",
+     "sha256": "39f2d38eff1476d1c25af21335899de98553b4d440b0292858e2e2cf6143482d",
+     "commit": "d578e834d8176619e4f99b52be49d32b61186a69"
+    },
+    {
+     "path": "STATUS.md",
+     "sha256": "f99f2faa83fdb0c13a4f23e1d70b584ecd6bf9f41f8b6f55f3aa3beb1c620982",
+     "commit": "2b7ca0fe07acd2d60efaa8e4505b400e2ff67f06"
+    }
+   ],
+   "note": "17-fit fold/seed confirmation declared before any of its fits existed. Pass/fail is appended here when it finishes."
+  }
+ ]
+}

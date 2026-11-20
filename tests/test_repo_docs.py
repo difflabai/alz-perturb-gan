@@ -8,7 +8,20 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 BANNER = 'SUPERSEDED by STATUS.md (2026-11-20).'
-SUPERSEDED = (
+CHECKED_MARKDOWN = ('README.md', 'STATUS.md', 'docs/LEGACY_LAYOUT.md', 'analysis/INDEX.md')
+LINK = re.compile(r'(?<!!)\[[^\]]*\]\(([^)\s]+)\)')
+
+spec = importlib.util.spec_from_file_location('index_analysis', ROOT/'scripts/hygiene/index_analysis.py')
+INDEX = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(INDEX)
+spec = importlib.util.spec_from_file_location('build_record_registry',
+                                              ROOT/'scripts/hygiene/build_record_registry.py')
+REG = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(REG)
+REGISTRY = json.loads((ROOT/REG.REGISTRY).read_text(encoding='utf-8'))
+# Every handoff known when the glob replaced the closed allowlist; the glob must
+# keep finding all of them (it may find more).
+KNOWN_HANDOFFS = (
     'CONTINUATION.txt',
     'analysis/CELL_ENERGY_LIVE_CONTINUATION.txt',
     'analysis/EMA_READOUT_CONTINUATION.txt',
@@ -19,16 +32,19 @@ SUPERSEDED = (
     'analysis/ROUTED_E22_CPU_CONTINUATION.txt',
     'analysis/STAGE_PRIOR_LIVE_CONTINUATION.txt',
     'analysis/TURNOVER_CONTINUATION_REVIEW.txt',
+    'analysis/amplitude_challenge_20261114/TAKEOVER.txt',
+    'analysis/branch_geometry_20261114/TAKEOVER.txt',
+    'analysis/count_dependence_20261114/TAKEOVER.txt',
+    'analysis/covariance_challenge_20261114/TAKEOVER.txt',
+    'analysis/dispersion_challenge_20261114/TAKEOVER.txt',
     'analysis/empf_comparison_20261117/TAKEOVER.txt',
-    'analysis/particlegan_upgrade_20261117/README.txt',
+    'analysis/empirical_challenge_20261114/TAKEOVER.txt',
+    'analysis/hybrid_challenge_20261114/TAKEOVER.txt',
+    'analysis/improve_20261109/TAKEOVER_20261113.txt',
+    'analysis/paired_challenge_20261114/TAKEOVER.txt',
     'analysis/particlegan_upgrade_20261117/TAKEOVER.txt',
 )
-CHECKED_MARKDOWN = ('README.md', 'STATUS.md', 'docs/LEGACY_LAYOUT.md', 'analysis/INDEX.md')
-LINK = re.compile(r'(?<!!)\[[^\]]*\]\(([^)\s]+)\)')
-
-spec = importlib.util.spec_from_file_location('index_analysis', ROOT/'scripts/hygiene/index_analysis.py')
-INDEX = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(INDEX)
+HANDOFFS = REG.handoff_files(ROOT)
 
 
 def relative_links(path):
@@ -45,10 +61,71 @@ def test_relative_links_resolve(name):
     assert not missing, f'{name}: {missing}'
 
 
-@pytest.mark.parametrize('name', SUPERSEDED)
+def test_glob_finds_every_known_handoff():
+    assert set(KNOWN_HANDOFFS) <= set(HANDOFFS)
+    assert all(p in REGISTRY['documents'] for p in HANDOFFS)
+
+
+@pytest.mark.parametrize('name', sorted(set(HANDOFFS) | set(REG.EXTRA_SUPERSEDED)))
 def test_historical_handoffs_point_to_status(name):
+    """Each handoff is bannered or is the single CURRENT document in the registry."""
+    entry = REGISTRY['documents'][name]
+    if entry['state'] == 'CURRENT':
+        return
     first = (ROOT/name).read_text(encoding='utf-8').splitlines()[0]
     assert first.startswith(BANNER)
+    # The banner must say that CURRENT/AUTHORITATIVE/ACTIVE text below is history.
+    assert REG.BANNER_HISTORICAL in first and 'out of date' in first
+    assert entry == {'state': 'SUPERSEDED', 'by': 'STATUS.md', 'date': '2026-11-20'}
+
+
+def test_exactly_one_document_is_current():
+    current = [p for p, d in REGISTRY['documents'].items() if d['state'] == 'CURRENT']
+    assert current == ['STATUS.md'] == [REGISTRY['current']]
+    assert not REG.check_doc_registry(REGISTRY, ROOT)
+
+
+def test_registry_is_fresh():
+    assert (ROOT/REG.REGISTRY).read_text(encoding='utf-8') == REG.render(REG.build_doc_registry(ROOT))
+
+
+def _fixture(tmp_path):
+    (tmp_path/'analysis/study').mkdir(parents=True)
+    (tmp_path/'STATUS.md').write_text('# Project status\n')
+    (tmp_path/'CONTINUATION.txt').write_text(REG.BANNER_TEXT + '\n\nCURRENT AUTHORITATIVE: old\n')
+    return tmp_path
+
+
+def test_unbannered_takeover_fixture_fails(tmp_path):
+    root = _fixture(tmp_path)
+    registry = REG.build_doc_registry(root)
+    assert not REG.check_doc_registry(registry, root)
+    (root/'analysis/study/TAKEOVER.txt').write_text('CURRENT AUTHORITATIVE: do this next\n')
+    with pytest.raises(ValueError, match='TAKEOVER.txt'):
+        REG.build_doc_registry(root)
+    assert any('TAKEOVER.txt' in e for e in REG.check_doc_registry(registry, root))
+    # A banner that does not mark the text below as historical is not enough.
+    (root/'analysis/study/TAKEOVER.txt').write_text('SUPERSEDED by STATUS.md (2026-11-20).\nx\n')
+    with pytest.raises(ValueError):
+        REG.build_doc_registry(root)
+    (root/'analysis/study/TAKEOVER.txt').write_text(REG.BANNER_TEXT + '\nx\n')
+    assert REG.build_doc_registry(root)['documents']['analysis/study/TAKEOVER.txt']['state'] == 'SUPERSEDED'
+
+
+def test_handoff_name_variants_are_globbed(tmp_path):
+    root = _fixture(tmp_path)
+    for rel in ('analysis/X_HANDOFF.md', 'analysis/study/TAKEOVER_20261201.txt',
+                'analysis/LIVE_CONTINUATION_V2.txt'):
+        (root/rel).write_text('live\n')
+    found = REG.handoff_files(root)
+    assert {'analysis/X_HANDOFF.md', 'analysis/study/TAKEOVER_20261201.txt',
+            'analysis/LIVE_CONTINUATION_V2.txt', 'CONTINUATION.txt'} == set(found)
+
+
+def test_second_current_document_fails():
+    registry = json.loads(json.dumps(REGISTRY))
+    registry['documents']['CONTINUATION.txt'] = {'state': 'CURRENT'}
+    assert any('exactly one CURRENT' in e for e in REG.check_doc_registry(registry, ROOT))
 
 
 def test_status_names_the_configured_default():
