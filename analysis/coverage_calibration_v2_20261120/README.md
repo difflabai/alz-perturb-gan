@@ -73,7 +73,7 @@ current model's PCs 31–50 SD score (.347 → .394; −13.5% [−22.9, −5.2])
 [`rescore.json`](rescore.json) has every group × block × readout and all
 contrasts.
 
-## The held-out deficit on late PCs is PCA shrinkage
+## The held-out deficit on late PCs is consistent with out-of-sample PCA shrinkage (fold 0)
 
 [`pca_shrinkage.py`](pca_shrinkage.py) refits the cache's PCA recipe. With all
 25 TRAIN donors, the refit reproduces the cache basis: identical gene
@@ -93,17 +93,20 @@ behind the interval targets:
 | Generated, quarter, held-out targets | .598 | .743 | .852 |
 
 Moving the same donors in or out of the PCA fit moves their late-PC SD between about
-.76 and .99. The held-out reduction on PCs 11–50 is therefore an out-of-sample
-PCA effect, not a property of these donors. Generated cells are new cells, so
+.76 and .99. In this fold-0 diagnostic, the held-out reduction on PCs 11–50 is
+consistent with an out-of-sample PCA effect rather than a property of
+these donors. Generated cells are new cells, so
 they behave like out-of-sample cells. On PCs 31–50 the current readout is
 close to the out-of-sample real level (.784 vs .757–.762), and the quarter
 readout exceeds it (.852). This matches the quarter readout's increase in below-misses there.
 On PCs 1–10 both readouts are under-dispersed under every reference (.52–.60
-vs .72–.81). The same effect explains why raw TRAIN SD coverage (27.7% current,
-49.9% quarter) is lower than held-out coverage (58.3%, 62.2%): TRAIN targets
-on later PCs carry in-sample PCA variance that no generated cell has. This
-is a fold-0 diagnostic. Refit PCs are not matched one-to-one with cache PCs,
-so only block means are compared.
+vs .72–.81). The same effect is consistent with raw TRAIN SD coverage being
+lower than held-out coverage on PCs 11–50 (current: 24.0% vs 58.5% on 11–30,
+30.4% vs 75.0% on 31–50): TRAIN targets on later PCs carry in-sample PCA
+variance that no generated cell has. It does not explain PCs 1–10, where raw
+TRAIN coverage is slightly higher than held-out (current 29.9% vs 24.6%;
+quarter 52.7% vs 44.8%). This is a fold-0 diagnostic. Refit PCs are not
+matched one-to-one with cache PCs, so only block means are compared.
 
 ## Calibration v2
 
@@ -122,7 +125,13 @@ bounds are clipped at zero. It adds:
   held-out donors: n = 11, rank 10, nominal 10/12 = 83.3%;
 - `pooled_loo_sd`: the same across several fits (folds/seeds), excluding every
   row that shares the evaluation donor's identity. Rows from different fits
-  are only approximately exchangeable.
+  are only approximately exchangeable. Calibration rows from other fits can be
+  GAN-TRAIN donors of the evaluation row's own fit; this is not
+  self-calibration, but it weakens exchangeability further. Each evaluation
+  row's record gives its calibration size, rank, nominal level, whether
+  rank = n (with a warning), and how many calibration rows were TRAIN donors of
+  its fit; `exclude_training=True` drops those rows. `pooled_loo_sd` is not
+  used for the results below, which come from one fit.
 
 Held-out results, all PCs (the pilot's split-half rows reproduced for comparison):
 
@@ -150,7 +159,7 @@ leave-one-out calibration the quarter readout still scores better on PCs 1–10
 There are 12 held-out donors: 1 Not AD, 2 Low, 3 Intermediate and 6 High.
 TRAIN has 3, 3, 6 and 13. The pilot's fixed halves are unstratified, and one
 calibration half contains no Not-AD donor. Raw held-out SD coverage, current →
-quarter: Not AD 51.8% → 76.5% (1 donor), Low 65.7% → 68.4% (2), Intermediate
+quarter: Not AD 51.8% → 76.5% (1 donor), Low 65.8% → 68.4% (2), Intermediate
 58.7% → 63.2% (3), High 56.7% → 57.2% (6). With one to three donors per stage,
 stage-conditional coverage is not estimable here. Leave-one-out calibration
 at least uses every other donor, including the other stages, for each

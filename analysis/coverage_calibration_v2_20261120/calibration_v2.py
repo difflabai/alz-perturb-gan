@@ -162,7 +162,7 @@ def loo_sd(low, high, observed, donors, training_donors, alpha=.2, asymmetric=Fa
     return lo, hi, records
 
 
-def pooled_loo_sd(blocks, alpha=.2, asymmetric=False):
+def pooled_loo_sd(blocks, alpha=.2, asymmetric=False, exclude_training=False):
     """Leave-one-donor-identity-out calibration pooled across fits.
 
     ``blocks`` is a list of dicts with keys low, high, observed, donors,
@@ -171,6 +171,16 @@ def pooled_loo_sd(blocks, alpha=.2, asymmetric=False):
     differs, across all fits, so repeated identities across folds/seeds are
     never calibrated on themselves. Pooled rows from different fits are only
     approximately exchangeable; report the pooled scheme as such.
+
+    Calibration rows from other fits can be GAN-TRAIN donors of the evaluation
+    row's own fit. That is not self-calibration, but it adds to the approximate
+    exchangeability. Each row's record counts such rows; with
+    ``exclude_training=True`` they are dropped from that row's calibration set.
+
+    Each returned block carries ``records``: one dict per evaluation row with
+    the calibration size n (rows and distinct identities), rank, nominal level
+    and whether rank == n. A RankAtMaximumWarning is issued if any row has
+    rank == n, as in ``fit_sd``.
     """
     rows = []
     for block in blocks:
@@ -183,20 +193,37 @@ def pooled_loo_sd(blocks, alpha=.2, asymmetric=False):
     identity = np.array([r[1] for r in rows])
     lower = np.stack([r[3] for r in rows]); upper = np.stack([r[4] for r in rows])
     symmetric = np.stack([r[5] for r in rows])
-    out = []
+    out, at_maximum = [], []
     for block in blocks:
         low, high, _ = arrays(block['low'], block['high'])
-        lo, hi = low.copy(), high.copy()
+        lo, hi, records = low.copy(), high.copy(), []
+        own_training = np.isin(identity, sorted({str(d) for d in block['training_donors']}))
         for i, d in enumerate(identities(block['donors'], len(low))):
             keep = identity != d
+            n_training_rows = int((keep & own_training).sum())
+            if exclude_training:
+                keep &= ~own_training
             n = int(keep.sum())
             if asymmetric:
-                rank, _ = conformal_rank(n, alpha / 2)
+                rank, side = conformal_rank(n, alpha / 2)
+                nominal = max(0., 1 - 2 * (1 - side))
                 down = np.sort(lower[keep], axis=0)[rank-1]; up = np.sort(upper[keep], axis=0)[rank-1]
             else:
-                rank, _ = conformal_rank(n, alpha)
+                rank, nominal = conformal_rank(n, alpha)
                 down = up = np.sort(symmetric[keep], axis=0)[rank-1]
             lo[i, D:] = np.maximum(0, low[i, D:] - down)
             hi[i, D:] = high[i, D:] + up
-        out.append(dict(fit=block['fit'], low=lo, high=hi))
+            records.append(dict(donor=d, n_calibration_rows=n,
+                                n_calibration_identities=len(set(identity[keep])), rank=rank,
+                                rank_is_maximum=rank == n, nominal_coverage=nominal,
+                                n_rows_training_donor_of_fit=n_training_rows,
+                                training_rows_excluded=bool(exclude_training)))
+            if rank == n:
+                at_maximum.append((block['fit'], d, n))
+        out.append(dict(fit=block['fit'], low=lo, high=hi, records=records))
+    if at_maximum:
+        warnings.warn(f'conformal rank equals the calibration size for {len(at_maximum)} pooled rows '
+                      f'(first: fit {at_maximum[0][0]}, donor {at_maximum[0][1]}, n={at_maximum[0][2]}): '
+                      f'each such correction is the per-coordinate maximum score',
+                      RankAtMaximumWarning, stacklevel=2)
     return out

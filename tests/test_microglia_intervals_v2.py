@@ -142,6 +142,33 @@ def test_training_donors_are_rejected_for_calibration_and_evaluation():
         C2.apply_sd(low[:1], high[:1], tampered, ['test'])
 
 
+def test_pooled_records_rank_nominal_and_training_rows():
+    rng = np.random.default_rng(6)
+    low, high, y = synthetic(rng, 12)
+    blocks = [dict(fit='a', low=low[:6], high=high[:6], observed=y[:6], donors=ids('d', 6),
+                   training_donors=['t0', 'd7']),
+              dict(fit='b', low=low[6:], high=high[6:], observed=y[6:], donors=ids('d', 12)[6:],
+                   training_donors=['t0'])]
+    out = C2.pooled_loo_sd(blocks)
+    first = out[0]['records'][0]
+    assert (first['donor'], first['n_calibration_rows'], first['n_calibration_identities']) == ('d0', 11, 11)
+    assert (first['rank'], first['rank_is_maximum']) == (10, False)
+    assert abs(first['nominal_coverage'] - 10/12) < 1e-12
+    assert first['n_rows_training_donor_of_fit'] == 1 and not first['training_rows_excluded']
+    assert out[1]['records'][0]['n_rows_training_donor_of_fit'] == 0
+    excluded = C2.pooled_loo_sd(blocks, exclude_training=True)
+    assert excluded[0]['records'][0]['n_calibration_rows'] == 10
+    assert excluded[0]['records'][0]['training_rows_excluded']
+    assert excluded[1]['records'][0]['n_calibration_rows'] == 11
+    # Excluding d7 from fit a's calibration can only change fit a's bounds.
+    assert np.array_equal(excluded[1]['high'], out[1]['high'])
+    with pytest.warns(C2.RankAtMaximumWarning):
+        small = C2.pooled_loo_sd([dict(blocks[0], low=low[:7], high=high[:7], observed=y[:7],
+                                       donors=ids('d', 7), training_donors=['t0'])])
+    assert small[0]['records'][0]['rank'] == small[0]['records'][0]['n_calibration_rows'] == 6
+    assert abs(small[0]['records'][0]['nominal_coverage'] - 6/7) < 1e-12
+
+
 @pytest.mark.filterwarnings('ignore::UserWarning')
 def test_calibration_leaves_means_alone_and_respects_sd_support():
     low, high, y = synthetic(np.random.default_rng(5), 11)

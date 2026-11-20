@@ -11,8 +11,11 @@ per-PC TRAIN SD scaling; analysis/improve_20261109/build_cache.py:fit_space)
 
 then reports the mean 64-cell bag SD per PC block, using the same 24 fixed
 subsamples as the interval targets. If left-out TRAIN donors shrink like
-held-out donors, the held-out deficit on late PCs is an out-of-sample PCA
-effect rather than a donor property. CPU only, read only.
+held-out donors, the held-out deficit on late PCs is consistent with an
+out-of-sample PCA effect rather than a donor property. CPU only, read only.
+
+Run rescore_pilot.py first: the generated-vs-real ratios are read from its
+rescore.json (--rescore). Without it they are empty and a warning is issued.
 
     PY=/mnt/nvme/ai/conda/anaconda3/bin/python3
     $PY -B analysis/coverage_calibration_v2_20261120/pca_shrinkage.py [--data-root /ml2/alz]
@@ -25,6 +28,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+import warnings
 
 import numpy as np
 from sklearn.utils.extmath import randomized_svd
@@ -75,6 +79,9 @@ def main():
     parser.add_argument('--rescore', default=HERE/'rescore.json', type=Path)
     parser.add_argument('--out', default=HERE/'pca_shrinkage.json', type=Path)
     args = parser.parse_args()
+    if not args.rescore.exists():
+        warnings.warn(f'{args.rescore} not found; run rescore_pilot.py first. Generated-vs-real '
+                      'ratios will be empty in the output.', stacklevel=1)
     sys.path.insert(0, str(R5))
     import evaluate as E
     cache = args.data_root.resolve()/'runs/improve_20261109/caches/hvg2000/fold0'
