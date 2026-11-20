@@ -12,8 +12,6 @@ RUN = Path('/ml2/alz/runs/research_20261120/pparg-critic')
 def main(updates=5000):
     mine = torch.load(RUN/'fits/pbulk/hvg2000/fold0/seed0/final.pt', map_location='cpu', weights_only=False)
     snap = torch.load(RETAINED/f'snap_{updates}.pt', map_location='cpu', weights_only=False)
-    models = mine['policy']['models'] if 'models' in mine['policy'] else None
-    G = mine['policy']['models']['generator'] if models and 'generator' in models else None
     out = {}
     for key, ref in (('generator', snap['generator']), ('prior', snap['prior'])):
         live = mine['policy']['models'][key]

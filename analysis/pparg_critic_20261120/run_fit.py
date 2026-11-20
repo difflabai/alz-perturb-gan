@@ -49,7 +49,7 @@ def main(argv=None):
     record = q['policy']['optimizers'][1]['regularizer']['record']
     audit = dict(arm=a.arm, seed=a.seed, updates=a.updates, completed_updates=q['completed_updates'],
                  penalty_calls=record['calls'], observed_steps=record['observed_steps'],
-                 native_recipe=q['native_recipe'], recipe_equals_default_fit=q['recipe'] == want,
+                 native_recipe=q['native_recipe'], recipe_equals_default_fit=json.loads(json.dumps(q['recipe'])) == want,
                  penalty_options=q['penalty_options'], particlegan_version=q['particlegan_version'], provenance=prov)
     assert record['calls'] == record['observed_steps'] == q['completed_updates'] == a.updates, audit
     del q
