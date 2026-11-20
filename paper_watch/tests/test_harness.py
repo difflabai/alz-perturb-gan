@@ -76,6 +76,24 @@ def test_unbiased_energy_distance_is_near_zero_for_one_distribution(m):
     assert np.mean(biased) > 0.9 * 7.7 * (1 / m + 1 / 512) - 0.02
 
 
+@pytest.mark.parametrize("m", [3, 8, 25])
+def test_unbiased_energy_distance_with_unequal_small_n_heavy_tails(m):
+    # Unequal sample sizes (300 vs m), heavy-tailed t(3) data and no
+    # subsampling: the U-statistic is unbiased at any n >= 2, so the mean
+    # over replicates sits within a few standard errors of 0, while the
+    # V-statistic is far above it.
+    rng = np.random.default_rng(100 + m)
+    unbiased, biased = [], []
+    for _ in range(200):
+        a = rng.standard_t(3, size=(300, 5))
+        b = rng.standard_t(3, size=(m, 5))
+        unbiased.append(energy_distance(a, b, max_n=None))
+        biased.append(energy_distance(a, b, max_n=None, unbiased=False))
+    se = np.std(unbiased) / np.sqrt(len(unbiased))
+    assert abs(np.mean(unbiased)) < 4 * se + 0.01
+    assert np.mean(biased) > 10 * se + 0.1
+
+
 def test_unbiased_energy_distance_does_not_track_donor_depth():
     # The bias the review found: same distribution, different cell counts.
     rng = np.random.default_rng(0)
@@ -170,6 +188,52 @@ def test_grouped_permutation_with_per_region_labels():
     assert len(seen) == 4
     with pytest.raises(ValueError, match="identify one unit"):
         next(grouped_permutations(target, donors, within=np.zeros(7)))
+
+
+def test_within_region_grouped_permutation_is_calibrated():
+    # LL-like layout: donors seen in AnG only, LEC only or both; a donor
+    # random effect on both burden and deviation, plus a region offset.
+    # Under this null the donor-block permutation within region patterns
+    # is calibrated, and the unit-level permutation over-rejects.
+    from scipy.stats import rankdata
+    rng = np.random.default_rng(6)
+    grouped, per_unit = [], []
+    for sim in range(200):
+        pattern = rng.choice(3, size=30)
+        donor, region = [], []
+        for d, k in enumerate(pattern):
+            for r in (["AnG", "LEC"], ["AnG"], ["LEC"])[k]:
+                donor.append(d)
+                region.append(r)
+        donor, region = np.array(donor), np.array(region)
+        lec = (region == "LEC") * 1.0
+        burden = 2 * rng.normal(size=30)[donor] + 0.3 * rng.normal(size=len(donor)) + lec
+        dev = 2 * rng.normal(size=30)[donor] + 0.3 * rng.normal(size=len(donor)) + lec
+        rank_dev = rankdata(dev)
+
+        def stat(lab):
+            return np.corrcoef(rank_dev, rankdata(lab))[0, 1]
+        grouped.append(permutation_pvalue(stat, burden, donor, within=region,
+                                          n_perm=99, seed=sim)["p"])
+        per_unit.append(permutation_pvalue(stat, burden, None, n_perm=99, seed=sim)["p"])
+    grouped, per_unit = np.array(grouped), np.array(per_unit)
+    assert kstest(grouped, "uniform").pvalue > 0.01
+    assert 0.01 < np.mean(grouped <= 0.05) < 0.10
+    assert np.mean(per_unit <= 0.05) > 0.10
+
+
+def test_permutation_pvalue_refuses_a_nan_observed_statistic():
+    labels = np.array([0, 1, 0, 1, 0, 1])
+    with pytest.raises(ValueError, match="not finite"):
+        permutation_pvalue(lambda lab: float("nan"), labels, n_perm=10)
+    # NaN null statistics count as hits (conservative), never as misses.
+    calls = iter(range(100))
+
+    def stat(lab):
+        return 1.0 if next(calls) == 0 else float("nan")
+    out = permutation_pvalue(stat, labels, n_perm=10)
+    assert out["p"] == 1.0 and out["n_nonfinite_null"] == 10
+    assert out["null_mean"] is None
 
 
 def test_permutation_pvalue_detects_a_real_donor_effect():

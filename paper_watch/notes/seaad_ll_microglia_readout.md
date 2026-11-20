@@ -74,8 +74,9 @@ The SEA-AD inputs are not on the current machine, so the recorded
 numbers above have not been rerun under these changes.
 - Held-out CTRL donors: iterations 1-3 fit the PCA, burden thresholds,
   ParticleGAN, Gaussian and centroid on all CTRL cells and then scored
-  those same CTRL donors, whose burden and deviation are both low by
-  construction. Half of the CTRL donors (a seeded hash of the donor
+  those same CTRL donors. Their deviation is low by construction (the
+  arms were fit on them) and the burden thresholds were set on their own
+  cells. Half of the CTRL donors (a seeded hash of the donor
   label, the same side in both regions) are now fit donors. Gene
   selection, PCA, standardization, burden thresholds and every arm use
   fit donors only. Scored units are held-out CTRL plus all non-CTRL

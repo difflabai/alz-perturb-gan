@@ -302,24 +302,35 @@ def permutation_pvalue(stat_fn: Callable[[np.ndarray], float], labels, groups=No
     of the permutations, ``(1 + #{null >= observed}) / (n_perm + 1)``, so it
     is never 0 and is valid at any ``n_perm``. ``alternative`` is
     "greater", "less" or "two-sided" (absolute values about 0).
+
+    A non-finite observed statistic raises ValueError: every comparison
+    with NaN is False, so it would otherwise give the smallest possible
+    p-value. A non-finite null statistic is counted as a hit (the
+    conservative choice) and reported in ``n_nonfinite_null``; the null
+    summaries use the finite values only.
     """
     if alternative not in ("greater", "less", "two-sided"):
         raise ValueError(f"unknown alternative {alternative!r}")
     observed = float(stat_fn(np.asarray(labels)))
+    if not np.isfinite(observed):
+        raise ValueError(f"observed statistic is not finite ({observed})")
     null = np.array([float(stat_fn(perm)) for perm in grouped_permutations(
         labels, groups, within=within, n_perm=n_perm, seed=seed)])
+    finite = np.isfinite(null)
     if alternative == "greater":
-        hits = np.sum(null >= observed - 1e-12)
+        hits = np.sum(null[finite] >= observed - 1e-12)
     elif alternative == "less":
-        hits = np.sum(null <= observed + 1e-12)
+        hits = np.sum(null[finite] <= observed + 1e-12)
     else:
-        hits = np.sum(np.abs(null) >= abs(observed) - 1e-12)
+        hits = np.sum(np.abs(null[finite]) >= abs(observed) - 1e-12)
+    hits += int(np.sum(~finite))
     return {
         "observed": observed,
         "p": float((1 + hits) / (n_perm + 1)),
-        "null_mean": float(null.mean()),
-        "null_q95": float(np.quantile(null, 0.95)),
+        "null_mean": float(null[finite].mean()) if finite.any() else None,
+        "null_q95": float(np.quantile(null[finite], 0.95)) if finite.any() else None,
         "n_perm": int(n_perm),
+        "n_nonfinite_null": int(np.sum(~finite)),
     }
 
 
