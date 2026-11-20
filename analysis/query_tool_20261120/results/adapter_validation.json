@@ -1,0 +1,45 @@
+{
+  "status": "passed_bitwise_same_process_self_check",
+  "check": {
+    "mean_log": true,
+    "nonzero": true,
+    "lib": true,
+    "sq_log": true,
+    "pb_counts": true,
+    "pcs": true,
+    "reference": "frozen generate.generate_arrays, same process, models, plans and streams"
+  },
+  "targets": 3,
+  "device": "cuda",
+  "replicate": 0,
+  "mode": "cellshape@0.5:biascal:stagehalf",
+  "generation_streams": [
+    20261114,
+    6,
+    0,
+    "development donor index",
+    0
+  ],
+  "weights_sha256": {
+    "snap_18000.pt": "0db6c373d76d5f2cedc0ffbde9e5902d04078238f6e4fa83f5b1b8c93080b892",
+    "snap_5000.pt": "5ed440ed7b0066907dc02dfb78f81591bc23558827f75a919051a767d4512422",
+    "final.pt": "4f42d9250224c7ed5cbab7d6e973d49ca7ec596f0540187102040e3f9334cb25",
+    "snap_19000.pt": "9ef81002749e96002119b740627f4c6444d98da7bcb8664cdce71c4776fa24d6",
+    "snap_10000.pt": "cb04902219440d879b2ab9b4a734f0488e9f0cf9f1623c512c4d8e1aa966d81f",
+    "snap_16000.pt": "1e5cb8c7d78a956f6b8d1006ec6d8a723dd3e9e12570049a97bca9df87a53c41",
+    "snap_15000.pt": "d49ec7d2812ca2e598bf0d0bdf92bfd650cb473fae81d752970748e1cdf1b1a5",
+    "snap_17000.pt": "dae274386a0d1b42ff4bf4a330b1fecbd3425a26d4f25065cf30106b07e56783"
+  },
+  "source_sha256": "4faaf237b79b37f0bc4b765fa2b6224ede3aa522381ce31e8fde44dc706e8378",
+  "loader_sha256": "fcc71f4db9f3252bb3c33bd370802f51419688e8edf1ff8f24a7e1d0a72c32e9",
+  "host_snapshot_files": {
+    "release_env.py": "f426d77c30e56cdbfaa928442a6aa5e8c0daf88f50594a10f7ca46646d9ef3a3",
+    "trainer.py": "da40847c8db8fa47b0bde8a06d4b3658a055eb4de6ea4d943c3459179aec552c",
+    "generate.py": "ee8778bc8f536bd67d4ad793e9be36a359ee12532bec3dbf851ae030c3c5042e"
+  },
+  "cpu_archive_reproduction": {
+    "status": "not_completed",
+    "reason": "a 2-target CPU run against runs/microglia_empf/verification/generated.npz was stopped by this session after 90 min wall time on the oversubscribed host (load ~140); no result was produced"
+  },
+  "note": "The adapter loop matches the frozen generate.generate_arrays bitwise (all six archive arrays) for 3 targets with the same models, plans and replicate-0 streams. The added subtype classification consumes no random stream."
+}
