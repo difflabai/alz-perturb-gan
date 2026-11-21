@@ -96,22 +96,29 @@ class ConditionalPGAN:
 
     def fit(
         self, X: np.ndarray, cond: np.ndarray, steps: int = 300, *,
-        min_condition_rows: int = 32, after_step: Callable[[int], None] | None = None
+        min_condition_rows: int = 32, after_step: Callable[[int], None] | None = None,
+        replay_batches: int = 0,
     ) -> None:
         if min_condition_rows < 1:
             raise ValueError("min_condition_rows must be positive")
+        if replay_batches and replay_batches != self.trainer.completed_steps:
+            raise ValueError("batch replay must match the restored trainer's update count")
         by_cond = [np.flatnonzero(cond == k) for k in range(self.n_cond)]
         order = [k for k, indices in enumerate(by_cond) if len(indices) >= min_condition_rows]
         if not order:
             raise ValueError(f"training needs at least {min_condition_rows} rows in one condition")
         data = torch.tensor(X, dtype=torch.float32, device=self.device)
         batch_size = self.trainer.recipe.batch_size
-        for s in range(steps):
+        # A restored trainer has its own RNG state. Replay the inexpensive NumPy
+        # draws from the original seed to recover the data cursor and label order.
+        for s in range(replay_batches + steps):
             if s % len(order) == 0:
                 self._rng.shuffle(order)
             k = order[s % len(order)]
             ix = by_cond[k]
             pick = self._rng.choice(ix, size=batch_size, replace=len(ix) < batch_size)
+            if s < replay_batches:
+                continue
             self._set_cond(k)
             rows = torch.as_tensor(pick, device=self.device)
             self.trainer.step(data.index_select(0, rows))

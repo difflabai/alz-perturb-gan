@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 from contextlib import ExitStack
+from hashlib import sha256
 from importlib.metadata import version
 import json
 import os
@@ -76,7 +77,7 @@ def run(args, panel, conditions, device):
         raise RuntimeError("all fitted parameters must reside on CUDA")
     recipe = model.trainer.recipe
     receipt = {
-        "particlegan": version("particlegan"), "torch": torch.__version__, "recipe": args.recipe,
+        "particlegan": version("particlegan"), "torch": str(torch.__version__), "recipe": args.recipe,
         "device": str(device), "gpu": torch.cuda.get_device_name(device),
         "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
         "group": args.group, "seed": args.seed, "base_rate": recipe.lr,
@@ -91,6 +92,32 @@ def run(args, panel, conditions, device):
         "empirical_scores": score(empirical, observed, conditions), "checkpoints": [],
     }
     checkpoints = set(args.checkpoints)
+    endpoint = max(checkpoints)
+    trainer = model.trainer
+    if args.state_file:
+        digest = sha256()
+        for arr in (xfit, yfit, xobserved, yobserved):
+            digest.update(np.ascontiguousarray(arr).view(np.uint8))
+        receipt["projected_data_sha256"] = digest.hexdigest()
+        if args.state_file.exists():
+            saved = torch.load(args.state_file, weights_only=True)
+            previous = saved["receipt"]
+            if any(previous[k] != v for k, v in receipt.items() if k != "checkpoints"):
+                raise ValueError("checkpoint and requested run configurations differ")
+            state = saved["trainer"]
+            cap = state.get("max_steps", recipe.total_steps)
+            if cap > trainer.max_steps:
+                trainer.extend_execution(cap)
+            trainer.load_state_dict(state)
+            receipt = previous
+            scored = {row["updates"] for row in previous["checkpoints"]}
+            if (trainer.completed_steps != max(scored) or endpoint < trainer.completed_steps
+                    or any(k <= trainer.completed_steps and k not in scored for k in checkpoints)):
+                raise ValueError("requested checkpoints are incompatible with the saved fit")
+            write_receipt(args.out, receipt)
+            print(f"Resuming {args.recipe} at {trainer.completed_steps} updates", flush=True)
+    if endpoint > trainer.max_steps:
+        trainer.extend_execution(endpoint)
     torch.cuda.synchronize(device)
     started = perf_counter()
 
@@ -117,12 +144,18 @@ def run(args, panel, conditions, device):
             "function_space_gains": function_space_gains(model.trainer),
             "mean_energy_distance": energy, "scores": scores,
         })
+        if args.state_file:
+            part = args.state_file.with_suffix(f".{os.getpid()}.tmp")
+            torch.save({"trainer": trainer.state_dict(), "receipt": receipt}, part)
+            part.replace(args.state_file)
         write_receipt(args.out, receipt)
         print(f"{args.group} {args.recipe}: {update} updates, energy {energy:.6f}, {seconds:.1f}s segment", flush=True)
         torch.cuda.synchronize(device)
         started = perf_counter()
 
-    model.fit(xfit, yfit, steps=max(checkpoints), after_step=observe)
+    if trainer.completed_steps < endpoint:
+        model.fit(xfit, yfit, steps=endpoint - trainer.completed_steps,
+                  replay_batches=trainer.completed_steps, after_step=observe)
     if model.trainer.completed_steps != max(checkpoints):
         raise RuntimeError("the requested fit did not complete")
 
@@ -131,6 +164,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--state-file", type=Path, help="save and resume a local trainer checkpoint")
     parser.add_argument("--group", choices=sum(GROUPS.values(), ()), required=True)
     parser.add_argument("--recipe", choices=("empf", "unified_v11"), required=True)
     configuration = parser.add_mutually_exclusive_group(required=True)
@@ -153,6 +187,10 @@ def main():
     device = torch.device("cuda", torch.cuda.current_device())
     torch.set_num_threads(2)
     args.out.parent.mkdir(parents=True, exist_ok=True)
+    if args.state_file:
+        if args.state_file.resolve() == args.out.resolve():
+            parser.error("choose separate paths for scores and trainer state")
+        args.state_file.parent.mkdir(parents=True, exist_ok=True)
     with ExitStack() as stack:
         screens = [stack.enter_context(open_screen(args.data, name)) for name in LAYOUT]
         conditions, panels = load_comparison(screens, 100, 160, 6)

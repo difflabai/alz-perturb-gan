@@ -47,3 +47,22 @@ def test_released_empf_trains_and_draws_on_cpu():
     draws = model.sample(0, 8)
     assert draws.shape == (8, 2)
     assert np.isfinite(draws).all()
+
+
+def test_restored_fit_replays_condition_order_and_row_draws():
+    labels = np.repeat([0, 1, 2], [36, 71, 53])
+    values = np.random.default_rng(42).normal(size=(len(labels), 3))
+    original = ConditionalPGAN(data_dim=3, n_cond=3, seed=7)
+    saved = {}
+
+    def save(step):
+        if step == 5:
+            saved.update(original.trainer.state_dict())
+
+    original.fit(values, labels, steps=12, after_step=save)
+    restored = ConditionalPGAN(data_dim=3, n_cond=3, seed=7)
+    restored.trainer.load_state_dict(saved)
+    restored.fit(values, labels, steps=7, replay_batches=restored.trainer.completed_steps)
+    assert restored.trainer.completed_steps == 12
+    for label in range(3):
+        np.testing.assert_array_equal(restored.sample(label, 32), original.sample(label, 32))
