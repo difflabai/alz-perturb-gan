@@ -128,6 +128,26 @@ EMPF had lower energy distance on all four targets at 3,600. Its mean rose from 
 
 At 3,600 updates, the generated-to-observed spread ratio was 1.070 for EMPF and 0.635 for Unified v11. The covariance effective dimensions were 16.6 and 20.4, respectively, compared with 11.2 in the held-out cells. Empirical resampling scored 1.278 on energy distance. [Checkpoint and per-target results](neuroko_cuda_duration.json)
 
+## Neuronal comparison at 40,000 updates
+
+Both 64-row pilot configurations were retrained on the same neuronal holdout (Screen1_0, seed 1). The trainer was saved and restored at 300 updates. ParticleGAN's execution limit was extended to 40,000 with its public API. Both original 7,000-update recipe schedules and their learning-rate floors of 1.0 were retained. Scores use the same held-out cells and evaluation draws as the earlier comparison.
+
+| Updates | 0.10.0 EMPF ↓ | 0.11.1 tuned Unified v11 ↓ |
+|---:|---:|---:|
+| 3,600 | 1.368 | 1.771 |
+| 7,000 | 1.259 | 1.729 |
+| 10,000 | 1.319 | 1.708 |
+| 20,000 | 1.442 | 1.681 |
+| 30,000 | 1.336 | 1.703 |
+| 35,000 | 1.361 | 1.744 |
+| 40,000 | 1.309 | 1.710 |
+
+![Held-out score, spread and effective dimensions through 40,000 CUDA updates](neuroko_cuda_40000.png)
+
+EMPF had lower mean held-out energy distance at all 41 measured checkpoints. At 40,000 it scored 1.309 versus 1.710 for tuned Unified v11, 23.4% lower, and won on each of the four targets. The last ten checkpoint means averaged 1.352 and 1.721, respectively. Synchronized training took 104.8 minutes for EMPF and 108.9 minutes for v11 on separate shared GPUs.
+
+At the endpoint, EMPF had 1.149× the observed spread and 19.3 effective covariance dimensions. Tuned Unified v11 had 0.659× observed spread and 19.4 effective dimensions. The held-out cells had 11.2 effective dimensions. The empirical resampling baseline scored 1.278 on energy distance. [All checkpoints and endpoint target scores](neuroko_cuda_40000.json)
+
 ## Reproduce
 
 Use a CUDA-enabled paper-watch environment with the verified 0.11.1 wheel and the pilot H5ADs in `paper_watch/data/neuroko/pilot`. Run the same stages for `Screen1_0`, `Screen1_1`, `Screen1_3`, `Screen1_4`, `SCREEN1_1` and `SCREEN1_2`.
@@ -185,3 +205,5 @@ CUDA_VISIBLE_DEVICES=0 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
 ```
 
 For the longer neuronal replay, append `--checkpoints 300 600 900 1200 1500 1800 2100 2400 2700 3000 3300 3600` to the fixed-rate command. Use the separately installed 0.10.0 release with `--recipe empf --rate 0.005` for the EMPF replay. Choose a different output path for each fit.
+
+For the 40,000-update replay, pass 300, 1200, 2400, 3600 and every multiple of 1000 from 4000 through 40000 to `--checkpoints`. Choose a `--state-file` path for each release. Repeating the same command resumes from the last saved score with its trainer and data cursor.
