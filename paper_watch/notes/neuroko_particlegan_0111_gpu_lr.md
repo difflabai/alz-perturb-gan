@@ -106,11 +106,27 @@ The stock preset's energy distance fell by 6.9% between 300 and 600 updates, and
 
 One additional replay on `Screen1_0` used seed 1 and scored every 300 updates. The two arms reproduced their earlier 300- and 600-update scores within 0.001%. The 1,200-update EMPF energy scores were 1.473 in the first replay and 1.453 in this longer replay. All values below describe the single longer run per recipe.
 
-![Neuronal held-out energy distance, within-target spread, and effective dimensions through 2,400 training updates](neuroko_cuda_duration.png)
-
 EMPF rose from 1.343 at 1,800 updates to 1.433 at 2,100, then reached its lowest energy distance of 1.319 at 2,400. Unified v11 reached 1.648 at 1,500 and ended at 1.708. At 2,400, Unified v11's within-target spread was 0.648× the held-out spread and EMPF's was 1.081×. Unified v11's variance was distributed across more effective dimensions (20.0 versus 15.4 for EMPF and 11.2 in the held-out data). The covariance participation ratio is the squared trace divided by the sum of squared covariance entries. It measures the number of directions sharing the variance. The spread ratio measures the square root of total generated variance divided by total observed variance.
 
 The configured learning rates remained constant. The generator's checkpointed `ema_func_gain` ranged from 0.881 to 1.000 at the eight measured updates, and the critic's was 1.000 at each checkpoint. The generator's last-step gain was 0.840 at update 2,400. The optimizer applies a step-specific gain in addition to its configured rate. Below an `ema_func_gain` of 0.75 it also incorporates the EMA into the next generator step's scale before the displacement probe. [Optimizer source](https://github.com/HyperGAN/ParticleGAN/blob/d5dec2fe005305082acf382f0939a4bdb51c7131/particlegan/_unified_v11/optimizer.py) · [Checkpoint metrics and gains](neuroko_cuda_duration.json)
+
+## Neuronal comparison at 3,600 updates
+
+The 2,400-update runs saved scores only. Both releases were retrained from seed 1 on the same neuronal holdout with the same 64-row batches, prior, and learning rates as the preceding matched comparison. They ran on separate shared RTX A6000s. Energy distances are means across four targets.
+
+| Updates | 0.10.0 EMPF ↓ | 0.11.1 tuned Unified v11 ↓ |
+|---:|---:|---:|
+| 2,400 | 1.369 | 1.708 |
+| 2,700 | 1.281 | 1.722 |
+| 3,000 | 1.291 | 1.674 |
+| 3,300 | 1.260 | 1.766 |
+| 3,600 | 1.314 | 1.771 |
+
+![Neuronal held-out energy distance, within-target spread, and effective dimensions through 3,600 training updates](neuroko_cuda_duration.png)
+
+EMPF had lower energy distance on all four targets at 3,600. Its mean rose from 1.260 at 3,300 to 1.314 at 3,600, finishing 25.8% below tuned Unified v11.
+
+At 3,600 updates, the generated-to-observed spread ratio was 1.070 for EMPF and 0.635 for Unified v11. The covariance effective dimensions were 16.6 and 20.4, respectively, compared with 11.2 in the held-out cells. Empirical resampling scored 1.278 on energy distance. [Checkpoint and per-target results](neuroko_cuda_duration.json)
 
 ## Reproduce
 
@@ -168,4 +184,4 @@ CUDA_VISIBLE_DEVICES=0 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
   --out paper_watch/data/neuroko/lr-cuda/duration/Screen1_0-unified_v11-stock.json
 ```
 
-For the longer neuronal replay, append `--checkpoints 300 600 900 1200 1500 1800 2100 2400` to the fixed-rate command. Use the separately installed 0.10.0 release with `--recipe empf --rate 0.005` for the EMPF replay. Choose a different output path for each fit.
+For the longer neuronal replay, append `--checkpoints 300 600 900 1200 1500 1800 2100 2400 2700 3000 3300 3600` to the fixed-rate command. Use the separately installed 0.10.0 release with `--recipe empf --rate 0.005` for the EMPF replay. Choose a different output path for each fit.
