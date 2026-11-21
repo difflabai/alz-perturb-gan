@@ -1,14 +1,21 @@
 """CPU regression checks for the paper-watch harness."""
-from types import SimpleNamespace
-
 import numpy as np
+from particlegan import get_recipe
 import pytest
 
 from paper_watch.alztest.harness import BATCH, ConditionalPGAN
 
 
-def test_fit_keeps_condition_ids_and_fixed_batch_size():
-    model = ConditionalPGAN(data_dim=2, n_cond=3, seed=7)
+@pytest.mark.parametrize("use_recipe_defaults", (False, True))
+def test_fit_keeps_condition_ids_and_uses_recipe_batch_size(monkeypatch, use_recipe_defaults):
+    model = ConditionalPGAN(data_dim=2, n_cond=3, seed=7, use_recipe_defaults=use_recipe_defaults)
+    expected_batch_size = BATCH
+    if use_recipe_defaults:
+        published = get_recipe("empf")
+        assert model.trainer.recipe == published
+        assert model.prior.num_particles == published.num_particles
+        assert model.prior.z_dim == published.z_dim
+        expected_batch_size = published.batch_size
     labels = np.repeat([0, 1, 2], [8, 33, BATCH])
     values = np.broadcast_to(labels[:, None], (len(labels), 2))
     seen = []
@@ -16,11 +23,11 @@ def test_fit_keeps_condition_ids_and_fixed_batch_size():
     def record(batch):
         expected = model.G.cond.argmax().item()
         assert model.D.cond.argmax().item() == expected
-        assert batch.shape == (BATCH, 2)
+        assert batch.shape == (expected_batch_size, 2)
         assert (batch == expected).all()
         seen.append(expected)
 
-    model.trainer = SimpleNamespace(step=record)
+    monkeypatch.setattr(model.trainer, "step", record)
     model.fit(values, labels, steps=4)
 
     assert sorted(seen) == [1, 1, 2, 2]

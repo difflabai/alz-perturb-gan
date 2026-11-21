@@ -66,24 +66,27 @@ class ConditionalPGAN:
 
     def __init__(
         self, data_dim: int, n_cond: int, seed: int = 0, *,
-        learning_rate: float = 0.005, recipe_name: str = "empf",
-        device: str | torch.device = "cpu",
+        learning_rate: float | None = None, recipe_name: str = "empf",
+        device: str | torch.device = "cpu", use_recipe_defaults: bool = False,
     ):
         self.n_cond = n_cond
         self.device = torch.device(device)
-        self.G = _CondGenerator(Z_DIM, n_cond, data_dim)
+        if use_recipe_defaults:
+            if learning_rate is not None:
+                raise ValueError("a learning-rate override cannot be used with recipe defaults")
+            recipe = get_recipe(recipe_name)
+        else:
+            recipe = get_recipe(recipe_name, z_dim=Z_DIM, num_particles=NUM_PARTICLES,
+                                batch_size=BATCH, lr=0.005 if learning_rate is None else learning_rate)
+        self.G = _CondGenerator(recipe.z_dim, n_cond, data_dim)
         self.D = _CondCritic(data_dim, n_cond)
         deterministic_orthogonal_(self.G, seed=seed)
         deterministic_orthogonal_(self.D, seed=seed + 1)
-        recipe = get_recipe(
-            recipe_name, z_dim=Z_DIM, num_particles=NUM_PARTICLES,
-            batch_size=BATCH, lr=learning_rate,
-        )
         self.G.to(self.device)
         self.D.to(self.device)
-        self.prior = recipe.make_prior(sigma=0.025).to(self.device)
-        self.trainer = GANTrainer(recipe, self.G, self.D, prior=self.prior,
-                                  seed=seed, serial_backward=True)
+        prior = None if use_recipe_defaults else recipe.make_prior(sigma=0.025).to(self.device)
+        self.trainer = GANTrainer(recipe, self.G, self.D, prior=prior, seed=seed, serial_backward=True)
+        self.prior = self.trainer.prior
         self._rng = np.random.default_rng(seed)
 
     def _set_cond(self, idx: int) -> None:
@@ -102,12 +105,13 @@ class ConditionalPGAN:
         if not order:
             raise ValueError(f"training needs at least {min_condition_rows} rows in one condition")
         data = torch.tensor(X, dtype=torch.float32, device=self.device)
+        batch_size = self.trainer.recipe.batch_size
         for s in range(steps):
             if s % len(order) == 0:
                 self._rng.shuffle(order)
             k = order[s % len(order)]
             ix = by_cond[k]
-            pick = self._rng.choice(ix, size=BATCH, replace=len(ix) < BATCH)
+            pick = self._rng.choice(ix, size=batch_size, replace=len(ix) < batch_size)
             self._set_cond(k)
             rows = torch.as_tensor(pick, device=self.device)
             self.trainer.step(data.index_select(0, rows))

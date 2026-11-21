@@ -60,6 +60,58 @@ The 0.10.0 EMPF arm uses the earlier NeuroKO base rate of 0.005. Both releases u
 
 Relative to 0.10.0 EMPF, mean energy distance was 13.3% higher at fixed 0.028 and 13.7% higher with fold-specific tuning. Fixed 0.028 beat EMPF on 12 of 48 paired rows. Fold-specific tuning beat it on 13 of 48. The rows share experimental groups and are descriptive. [Machine-readable comparison](neuroko_cuda_010_vs_0111.json)
 
+## Released default and NeuroKO overrides
+
+The 0.11.1 wheel resolves `get_recipe()` and `get_recipe("unified_v11")` to the same recipe. All 170 non-name fields in the released Forge configuration match the installed preset. The NeuroKO CUDA path passes the preset to the public `GANTrainer`. It retains `UnifiedV11GANLoss`, `UnifiedV11CriticPenalty`, `UnifiedV11PriorRegularizer` and `UnifiedV11EquilibratedOptimizer` for both the critic and generator/particle optimizer. The critic takes a single expression tensor, and the harness supplies the same categorical one-hot condition inside G and D. This uses the scalar-vector GAN path. The separate continuous-context fiber bank is outside this experiment. [0.11.1 release](https://github.com/HyperGAN/ParticleGAN/releases/tag/v0.11.1) · [Forge configuration](https://github.com/HyperGAN/ParticleGAN/blob/d5dec2fe005305082acf382f0939a4bdb51c7131/configs/forge/ideas/unified-v11.json) · [Trainer source](https://github.com/HyperGAN/ParticleGAN/blob/d5dec2fe005305082acf382f0939a4bdb51c7131/particlegan/training.py)
+
+A five-update CUDA trace on the neuronal fold verified that the forward-AD penalty ran, the loss captured the real and fake tensors, and the generator, critic and prior parameters all changed. At a fixed sample seed, changing the condition changed the generated expression. NeuroKO uses 30 expression coordinates. The release gates the specialized prior pullback for point masses and continuous kernels to at most 16 output coordinates. [Prior source](https://github.com/HyperGAN/ParticleGAN/blob/d5dec2fe005305082acf382f0939a4bdb51c7131/particlegan/_unified_v11/prior.py) · [Trace results](neuroko_cuda_duration.json)
+
+| Setting | 0.11.1 default | Tuned NeuroKO replay |
+|---|---:|---:|
+| Generator LR | 0.014 | 0.028 |
+| Critic LR | 0.021 | 0.042 |
+| Particle LR | 0.0406 | 0.0812 |
+| Batch size | 2,048 | 64 |
+| Trainable particles | 20,000 | 64 |
+| Latent dimensions | 2 | 16 |
+| Added Gaussian prior noise | None | σ = 0.025 |
+
+The sweep multiplied the base rate by the stock critic factor of 1.5 and particle factor of 2.9. Neither multiplier was tuned independently. Both `lr_floor` and `network_lr_floor` are 1.0, so the cosine schedule leaves all three rates constant. The replay reads these rates from the optimizer groups at initialization and at each checkpoint. The published-rate arm in the earlier sweep uses 0.014 with the smaller NeuroKO settings. [Recipe source](https://github.com/HyperGAN/ParticleGAN/blob/d5dec2fe005305082acf382f0939a4bdb51c7131/particlegan/recipes.py)
+
+## 1,200-update CUDA replay
+
+Seed 1 was replayed on the first neuronal replicate and the first astrocyte batch. Each pair uses the same physical RTX A6000, the same held-out cells and the same empirical draw. The fit time sums synchronized CUDA training segments. It includes the first update and excludes preprocessing, model construction, generating evaluation samples and scoring. GPU workload was shared and varied between runs. Each group ran the two recipes in the opposite order from the other group.
+
+| Holdout | Recipe | Energy at 300 ↓ | At 600 ↓ | At 1,200 ↓ | Fit time |
+|---|---|---:|---:|---:|---:|
+| Neurons `Screen1_0` | 0.10.0 EMPF, 0.005 | 1.470 | 1.580 | 1.473 | 92.0 s |
+| Neurons `Screen1_0` | 0.11.1 Unified v11, 0.028 | 1.742 | 1.767 | 1.706 | 136.3 s |
+| Astrocytes `SCREEN1_1` | 0.10.0 EMPF, 0.005 | 1.795 | 1.716 | 1.548 | 293.4 s |
+| Astrocytes `SCREEN1_1` | 0.11.1 Unified v11, 0.028 | 1.873 | 1.854 | 1.856 | 269.7 s |
+
+EMPF had lower energy distance in both holdouts at all three checkpoints. Empirical resampling scored 1.278 for the neuronal replicate and 1.538 for the astrocyte batch. Unified v11 took 48% longer on GPU 0 for the neuronal pair and 8% less time on the busier GPU 1 for the astrocyte pair. The median times in the four earlier same-GPU 300-update pairs were 26.6 seconds for EMPF and 32.9 seconds for Unified v11. [Machine-readable duration results](neuroko_cuda_duration.json)
+
+## Stock 0.11.1 on the neuronal fold
+
+The unmodified preset ran on `Screen1_0` with seed 1 and the same conditioned MLPs. Each 2,048-row batch samples with replacement from 303–480 training cells of the current condition. The stock check ended at 600 updates.
+
+| Updates | Stock v11 energy ↓ | Tuned v11 energy ↓ | EMPF energy ↓ | Stock v11 cumulative fit time |
+|---:|---:|---:|---:|---:|
+| 300 | 1.712 | 1.742 | 1.470 | 14.4 min |
+| 600 | 1.594 | 1.767 | 1.580 | 33.1 min |
+
+The stock preset's energy distance fell by 6.9% between 300 and 600 updates, and its spread ratio rose from 0.715 to 0.798. The configuration changes the optimizer rates, batch size, latent dimension, particle count and prior noise together. These results cover one fold. [Stock replay metrics](neuroko_cuda_duration.json)
+
+## Neuronal convergence and spread through 2,400 updates
+
+One additional replay on `Screen1_0` used seed 1 and scored every 300 updates. The two arms reproduced their earlier 300- and 600-update scores within 0.001%. The 1,200-update EMPF energy scores were 1.473 in the first replay and 1.453 in this longer replay. All values below describe the single longer run per recipe.
+
+![Neuronal held-out energy distance, within-target spread, and effective dimensions through 2,400 training updates](neuroko_cuda_duration.png)
+
+EMPF rose from 1.343 at 1,800 updates to 1.433 at 2,100, then reached its lowest energy distance of 1.319 at 2,400. Unified v11 reached 1.648 at 1,500 and ended at 1.708. At 2,400, Unified v11's within-target spread was 0.648× the held-out spread and EMPF's was 1.081×. Unified v11's variance was distributed across more effective dimensions (20.0 versus 15.4 for EMPF and 11.2 in the held-out data). The covariance participation ratio is the squared trace divided by the sum of squared covariance entries. It measures the number of directions sharing the variance. The spread ratio measures the square root of total generated variance divided by total observed variance.
+
+The configured learning rates remained constant. The generator's checkpointed `ema_func_gain` ranged from 0.881 to 1.000 at the eight measured updates, and the critic's was 1.000 at each checkpoint. The generator's last-step gain was 0.840 at update 2,400. The optimizer applies a step-specific gain in addition to its configured rate. Below an `ema_func_gain` of 0.75 it also incorporates the EMA into the next generator step's scale before the displacement probe. [Optimizer source](https://github.com/HyperGAN/ParticleGAN/blob/d5dec2fe005305082acf382f0939a4bdb51c7131/particlegan/_unified_v11/optimizer.py) · [Checkpoint metrics and gains](neuroko_cuda_duration.json)
+
 ## Reproduce
 
 Use a CUDA-enabled paper-watch environment with the verified 0.11.1 wheel and the pilot H5ADs in `paper_watch/data/neuroko/pilot`. Run the same stages for `Screen1_0`, `Screen1_1`, `Screen1_3`, `Screen1_4`, `SCREEN1_1` and `SCREEN1_2`.
@@ -98,3 +150,22 @@ CUDA_VISIBLE_DEVICES=0 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
   --data paper_watch/data/neuroko/pilot --output paper_watch/data/neuroko/lr-cuda/version-replays \
   --group Screen1_0 --recipe unified_v11 --rates 0.028 --seed 1
 ```
+
+For a single fit scored at 300, 600 and 1,200 updates, use `neuroko_duration` with each release and its recipe and base rate. `--use-recipe-defaults` uses the preset's learning rate, dimensions, batch size and trainer-built prior. On the capped pilot, a 2,048-row batch draws with replacement from its current condition. G and D retain the same task-specific networks and conditioning wrapper.
+
+```sh
+# In the 0.11.1 environment.
+CUDA_VISIBLE_DEVICES=0 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
+  python -m paper_watch.alztest.neuroko_duration --data paper_watch/data/neuroko/pilot \
+  --group Screen1_0 --recipe unified_v11 --rate 0.028 \
+  --out paper_watch/data/neuroko/lr-cuda/duration/Screen1_0-unified_v11.json
+
+# The same held-out fold with the published preset.
+CUDA_VISIBLE_DEVICES=0 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
+  python -m paper_watch.alztest.neuroko_duration --data paper_watch/data/neuroko/pilot \
+  --group Screen1_0 --recipe unified_v11 --use-recipe-defaults \
+  --checkpoints 1 10 300 600 \
+  --out paper_watch/data/neuroko/lr-cuda/duration/Screen1_0-unified_v11-stock.json
+```
+
+For the longer neuronal replay, append `--checkpoints 300 600 900 1200 1500 1800 2100 2400` to the fixed-rate command. Use the separately installed 0.10.0 release with `--recipe empf --rate 0.005` for the EMPF replay. Choose a different output path for each fit.
