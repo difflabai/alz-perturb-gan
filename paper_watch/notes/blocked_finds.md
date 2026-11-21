@@ -9,7 +9,7 @@ for reference. It is not a template to merge as written.
 
 | Find | Closed PR | Design branch | Blocker | Recheck after |
 |---|---|---|---|---|
-| NeuroKO Perturb-seq | [#10](https://github.com/difflabai/alz-perturb-gan/pull/10) | `paper-watch/neuroko` | Annotated objects have no resolvable public location | 2026-12-20 |
+| NeuroKO Perturb-seq | [#10](https://github.com/difflabai/alz-perturb-gan/pull/10) | `paper-watch/neuroko` | Resolved on 2026-11-21 | [NeuroKO follow-up](neuroko_revival.md) |
 | panAD MONET subtypes | [#12](https://github.com/difflabai/alz-perturb-gan/pull/12) | `paper-watch/panad` | No open release of the matrix or donor subtype labels | 2026-12-20 |
 | GNPC plasma proteomics | [#14](https://github.com/difflabai/alz-perturb-gan/pull/14) | `paper-watch/gnpc` | Consortium access only, and outside the microglia scope | 2026-12-20 |
 
@@ -21,6 +21,11 @@ The dataset loaders for these three finds were removed from
 revival should add a new loader with its own access check.
 
 ## NeuroKO
+
+On 2026-11-21, we verified the [public Zenodo release](https://zenodo.org/records/23260389)
+with both processed H5ADs. The [follow-up evaluation](neuroko_revival.md)
+uses this release and addresses the original split and preprocessing defects.
+The access checks below are the historical record for PR #10.
 
 - **Find.** Dominicus et al., bioRxiv 2026.10.13.758778 (DOI prefix
   10.64898). It is a pooled Perturb-seq screen of Alzheimer's risk genes

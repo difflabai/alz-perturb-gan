@@ -1,0 +1,476 @@
+{
+  "source_doi": "10.5281/zenodo.23260389",
+  "versions": {
+    "anndata": "0.12.7",
+    "numpy": "1.26.4",
+    "scipy": "1.17.1",
+    "torch": "2.14.1+cu130",
+    "particlegan": "0.10.0"
+  },
+  "inputs": {
+    "iNeurons": {
+      "shape": [
+        40000,
+        36601
+      ],
+      "release_intervals": [
+        [
+          0,
+          10000
+        ],
+        [
+          25323,
+          35323
+        ],
+        [
+          59060,
+          69060
+        ],
+        [
+          120978,
+          130978
+        ]
+      ],
+      "local_slice_sha256": "40d5b6ad8dc36b2f0acf2c5cb6e7b6cbfc4c3c697e1a5fc668848f701672bd3f"
+    },
+    "iAstrocytes": {
+      "shape": [
+        20000,
+        36601
+      ],
+      "release_intervals": [
+        [
+          0,
+          10000
+        ],
+        [
+          87080,
+          97080
+        ]
+      ],
+      "local_slice_sha256": "2d1fa4570b8b40ed29174a70be2cb3b1f5a782339fc7a511e23f50ab2212c44a"
+    }
+  },
+  "distribution_evaluation": {
+    "config": {
+      "min_cells": 100,
+      "cap": 160,
+      "max_targets": 6,
+      "steps": 300,
+      "seeds": [
+        0,
+        1,
+        2
+      ]
+    },
+    "targets": [
+      "GLCCI1",
+      "SLC2A4RG",
+      "PLEKHA1",
+      "MAMSTR"
+    ],
+    "mean_scores_by_screen": {
+      "iNeurons": {
+        "control_only": {
+          "energy_distance": 1.0484298516541397,
+          "shift_cosine": null,
+          "spread_ratio": 1.2423203524806894,
+          "comparisons": 48,
+          "energy_wins_vs_empirical": 23
+        },
+        "mean_shift": {
+          "energy_distance": 1.0515187686003433,
+          "shift_cosine": -0.027064503393531395,
+          "spread_ratio": 1.2423203524806894,
+          "comparisons": 48,
+          "energy_wins_vs_empirical": 23
+        },
+        "empirical_target": {
+          "energy_distance": 1.0488112798839757,
+          "shift_cosine": -0.0733834591920066,
+          "spread_ratio": 1.205989448735669,
+          "comparisons": 48,
+          "energy_wins_vs_empirical": 0
+        },
+        "diagonal_gaussian": {
+          "energy_distance": 1.0362415487604648,
+          "shift_cosine": -0.026817100856318343,
+          "spread_ratio": 1.2050436951288614,
+          "comparisons": 48,
+          "energy_wins_vs_empirical": 27
+        },
+        "expression_matched_target": {
+          "energy_distance": 1.035933885423634,
+          "shift_cosine": -0.017100223679066696,
+          "spread_ratio": 1.2056805363860001,
+          "comparisons": 48,
+          "energy_wins_vs_empirical": 29
+        },
+        "empf": {
+          "energy_distance": 1.2976830868643658,
+          "shift_cosine": -0.040692682831793954,
+          "spread_ratio": 1.3590650905718333,
+          "comparisons": 48,
+          "energy_wins_vs_empirical": 1
+        },
+        "shuffled_empf": {
+          "energy_distance": 1.2800652655888416,
+          "shift_cosine": -0.019474067658961737,
+          "spread_ratio": 1.3607022679760685,
+          "comparisons": 48,
+          "energy_wins_vs_empirical": 0
+        }
+      },
+      "iAstrocytes": {
+        "control_only": {
+          "energy_distance": 1.4361991953254876,
+          "shift_cosine": null,
+          "spread_ratio": 1.1643863106151315,
+          "comparisons": 24,
+          "energy_wins_vs_empirical": 14
+        },
+        "mean_shift": {
+          "energy_distance": 1.4350351980264646,
+          "shift_cosine": 0.0857696628923779,
+          "spread_ratio": 1.1643863106151315,
+          "comparisons": 24,
+          "energy_wins_vs_empirical": 16
+        },
+        "empirical_target": {
+          "energy_distance": 1.4681419232704336,
+          "shift_cosine": 0.04614304730332786,
+          "spread_ratio": 1.20577986992866,
+          "comparisons": 24,
+          "energy_wins_vs_empirical": 0
+        },
+        "diagonal_gaussian": {
+          "energy_distance": 1.4309651701932367,
+          "shift_cosine": 0.08076596512864345,
+          "spread_ratio": 1.2023756085876278,
+          "comparisons": 24,
+          "energy_wins_vs_empirical": 15
+        },
+        "expression_matched_target": {
+          "energy_distance": 1.4666606249295078,
+          "shift_cosine": 0.06653958497490198,
+          "spread_ratio": 1.2020677371585973,
+          "comparisons": 24,
+          "energy_wins_vs_empirical": 13
+        },
+        "empf": {
+          "energy_distance": 1.6569823853360535,
+          "shift_cosine": -0.01954192707208839,
+          "spread_ratio": 1.3815633726771117,
+          "comparisons": 24,
+          "energy_wins_vs_empirical": 0
+        },
+        "shuffled_empf": {
+          "energy_distance": 1.586743477469922,
+          "shift_cosine": 0.08315195461377295,
+          "spread_ratio": 1.3709242601651994,
+          "comparisons": 24,
+          "energy_wins_vs_empirical": 2
+        }
+      }
+    }
+  },
+  "transfer_diagnostic": {
+    "common_unique_gene_symbols": 36601,
+    "genes_after_excluding_panel_targets": 36536,
+    "targets": [
+      "GLCCI1",
+      "SLC2A4RG",
+      "PLEKHA1",
+      "MAMSTR",
+      "CD55",
+      "RIN3",
+      "FOXF1",
+      "HTRA1",
+      "RASGRF1",
+      "APP",
+      "PLD3",
+      "ATF5",
+      "LIPC",
+      "CELSR1",
+      "SPRED2",
+      "CREB5",
+      "USP40",
+      "SNX22",
+      "NIPSNAP3B",
+      "SORL1",
+      "STK39",
+      "HLA-DRB1",
+      "ATXN2",
+      "IDUA",
+      "APH1B",
+      "GAS8",
+      "UNC13A",
+      "USP6NL",
+      "RAB39B",
+      "SLC9A8",
+      "MTHFSD",
+      "WWOX",
+      "ABCA1",
+      "BIN1",
+      "CCDC6",
+      "HLA-DRA",
+      "OTULIN",
+      "TPCN1",
+      "HAVCR2",
+      "RASA1",
+      "DBNDD1",
+      "TMEM106B",
+      "B3GNT4",
+      "NEK1",
+      "PLCG2",
+      "AGRN",
+      "CD2AP",
+      "ITGA2B",
+      "TSPOAP1",
+      "PLAC9",
+      "VPS13C",
+      "APOE",
+      "C1orf159",
+      "CTSL",
+      "EED",
+      "GPM6B",
+      "RAB29",
+      "SNX1",
+      "ZYX",
+      "CFAP410",
+      "GPX3",
+      "PTK2B",
+      "SLC26A1",
+      "THSD7A",
+      "TRIB3"
+    ],
+    "by_destination": {
+      "iNeurons": {
+        "within_type": {
+          "median_cosine": 0.008731980342417955,
+          "median_of_wrong_target_medians": -0.0018121808825526386,
+          "top1": 5,
+          "above_wrong_target_median": 161,
+          "comparisons": 260
+        },
+        "cross_type": {
+          "median_cosine": 0.0021228319965302944,
+          "median_of_wrong_target_medians": 0.001800604775780812,
+          "top1": 5,
+          "above_wrong_target_median": 140,
+          "comparisons": 260
+        },
+        "within_type_excluding_panel_genes": {
+          "median_cosine": 0.008646867703646421,
+          "median_of_wrong_target_medians": -0.0018389186589047313,
+          "top1": 5,
+          "above_wrong_target_median": 161,
+          "comparisons": 260
+        },
+        "cross_type_excluding_panel_genes": {
+          "median_cosine": 0.0019780471338890493,
+          "median_of_wrong_target_medians": 0.0018033164378721267,
+          "top1": 4,
+          "above_wrong_target_median": 140,
+          "comparisons": 260
+        }
+      },
+      "iAstrocytes": {
+        "within_type": {
+          "median_cosine": 0.012748009525239468,
+          "median_of_wrong_target_medians": 0.004485852725338191,
+          "top1": 6,
+          "above_wrong_target_median": 81,
+          "comparisons": 130
+        },
+        "cross_type": {
+          "median_cosine": 0.005633426830172539,
+          "median_of_wrong_target_medians": 0.005350325373001397,
+          "top1": 2,
+          "above_wrong_target_median": 70,
+          "comparisons": 130
+        },
+        "within_type_excluding_panel_genes": {
+          "median_cosine": 0.013086450286209583,
+          "median_of_wrong_target_medians": 0.004770226194523275,
+          "top1": 6,
+          "above_wrong_target_median": 81,
+          "comparisons": 130
+        },
+        "cross_type_excluding_panel_genes": {
+          "median_cosine": 0.005606845719739795,
+          "median_of_wrong_target_medians": 0.005372605286538601,
+          "top1": 1,
+          "above_wrong_target_median": 72,
+          "comparisons": 130
+        }
+      }
+    },
+    "config": {
+      "min_cells": 32,
+      "cap": 128,
+      "max_targets": 100
+    }
+  },
+  "transfer_using_all_available_cells": {
+    "common_unique_gene_symbols": 36601,
+    "genes_after_excluding_panel_targets": 36536,
+    "targets": [
+      "GLCCI1",
+      "SLC2A4RG",
+      "PLEKHA1",
+      "MAMSTR",
+      "CD55",
+      "RIN3",
+      "FOXF1",
+      "HTRA1",
+      "RASGRF1",
+      "APP",
+      "PLD3",
+      "ATF5",
+      "LIPC",
+      "CELSR1",
+      "SPRED2",
+      "CREB5",
+      "USP40",
+      "SNX22",
+      "NIPSNAP3B",
+      "SORL1",
+      "STK39",
+      "HLA-DRB1",
+      "ATXN2",
+      "IDUA",
+      "APH1B",
+      "GAS8",
+      "UNC13A",
+      "USP6NL",
+      "RAB39B",
+      "SLC9A8",
+      "MTHFSD",
+      "WWOX",
+      "ABCA1",
+      "BIN1",
+      "CCDC6",
+      "HLA-DRA",
+      "OTULIN",
+      "TPCN1",
+      "HAVCR2",
+      "RASA1",
+      "DBNDD1",
+      "TMEM106B",
+      "B3GNT4",
+      "NEK1",
+      "PLCG2",
+      "AGRN",
+      "CD2AP",
+      "ITGA2B",
+      "TSPOAP1",
+      "PLAC9",
+      "VPS13C",
+      "APOE",
+      "C1orf159",
+      "CTSL",
+      "EED",
+      "GPM6B",
+      "RAB29",
+      "SNX1",
+      "ZYX",
+      "CFAP410",
+      "GPX3",
+      "PTK2B",
+      "SLC26A1",
+      "THSD7A",
+      "TRIB3"
+    ],
+    "by_destination": {
+      "iNeurons": {
+        "within_type": {
+          "median_cosine": 0.011468871962279081,
+          "median_of_wrong_target_medians": 0.0018471351795597002,
+          "top1": 12,
+          "above_wrong_target_median": 161,
+          "comparisons": 260
+        },
+        "cross_type": {
+          "median_cosine": 0.0007480366621166468,
+          "median_of_wrong_target_medians": -0.0009703232790343463,
+          "top1": 5,
+          "above_wrong_target_median": 139,
+          "comparisons": 260
+        },
+        "within_type_excluding_panel_genes": {
+          "median_cosine": 0.01151400851085782,
+          "median_of_wrong_target_medians": 0.0016670850454829633,
+          "top1": 12,
+          "above_wrong_target_median": 158,
+          "comparisons": 260
+        },
+        "cross_type_excluding_panel_genes": {
+          "median_cosine": 0.00014286597433965653,
+          "median_of_wrong_target_medians": -0.0009701127601147164,
+          "top1": 4,
+          "above_wrong_target_median": 137,
+          "comparisons": 260
+        }
+      },
+      "iAstrocytes": {
+        "within_type": {
+          "median_cosine": 0.021320093423128128,
+          "median_of_wrong_target_medians": 0.0018316447822144255,
+          "top1": 4,
+          "above_wrong_target_median": 82,
+          "comparisons": 130
+        },
+        "cross_type": {
+          "median_cosine": 0.0021396424854174256,
+          "median_of_wrong_target_medians": -0.0004430224362295121,
+          "top1": 1,
+          "above_wrong_target_median": 76,
+          "comparisons": 130
+        },
+        "within_type_excluding_panel_genes": {
+          "median_cosine": 0.020890474319458008,
+          "median_of_wrong_target_medians": 0.0015872303338255733,
+          "top1": 4,
+          "above_wrong_target_median": 80,
+          "comparisons": 130
+        },
+        "cross_type_excluding_panel_genes": {
+          "median_cosine": 0.0017514172359369695,
+          "median_of_wrong_target_medians": -0.00035982946246804204,
+          "top1": 1,
+          "above_wrong_target_median": 74,
+          "comparisons": 130
+        }
+      }
+    },
+    "config": {
+      "min_cells": 32,
+      "cap": 10000,
+      "max_targets": 100,
+      "use_available_cells": true
+    }
+  },
+  "within_group_guide_holdout": {
+    "iNeurons": {
+      "comparisons": 168,
+      "median_cosine": 0.005803728708997369
+    },
+    "iAstrocytes": {
+      "comparisons": 90,
+      "median_cosine": 0.007105289492756128
+    }
+  },
+  "target_expression_audit": {
+    "iNeurons": {
+      "eligible_vector_group_rows": 271,
+      "rows_with_nonzero_detection_in_int": 236,
+      "rows_with_lower_mean_expression_than_int": 150
+    },
+    "iAstrocytes": {
+      "eligible_vector_group_rows": 149,
+      "rows_with_nonzero_detection_in_int": 144,
+      "rows_with_lower_mean_expression_than_int": 113
+    }
+  }
+}

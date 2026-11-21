@@ -61,10 +61,16 @@ public `allen-brain-cell-atlas` bucket (Allen Brain Cell Atlas).
 | [PsychAD cross-disorder specificity](notes/psychad_cross_disorder.md) | Mean shift and empirical donor sampling beat the 300-step EMPF fit on held-out disease specificity and distribution fit |
 | [PsychAD lipid and lysosome programs](notes/psychad_program_readout.md) | With the configuration chosen on training donors, mean shift and empirical sampling matched the held-out program correlation better than EMPF in an exploratory three-split readout. Energy distance differences were within donor uncertainty |
 
+## NeuroKO
+
+The [versioned NeuroKO release](https://zenodo.org/records/23260389) includes
+processed neuronal and astrocyte count matrices. The [NeuroKO evaluation](notes/neuroko_revival.md)
+documents the release audit and the grouped perturbation tests that follow
+closed PR #10.
+
 ## Blocked finds
 
-The NeuroKO, panAD, and GNPC conversions were closed without a fit
-because their data is not accessible. [Blocked finds](notes/blocked_finds.md)
+The panAD and GNPC conversions are still waiting for data access. [Blocked finds](notes/blocked_finds.md)
 records each access blocker, the defects in the closed designs, and what
 a revival would need. HypoAD is tracked in an
 [open pull request waiting for data access](https://github.com/difflabai/alz-perturb-gan/pulls?q=is%3Apr+is%3Aopen+label%3A%22waiting+for+data+access%22).

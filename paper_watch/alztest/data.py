@@ -5,9 +5,9 @@ precise, checkable reason (access terms, accession, what was tried).
 Tests convert DataUnavailable into a clean pytest skip — a gated dataset
 is a finding about access, never a silent pass and never a fake run.
 
-Loaders for the closed, access-blocked NeuroKO, panAD and GNPC finds
-were removed; their access facts and revival requirements are recorded
-in notes/blocked_finds.md.
+The NeuroKO release loader and grouped evaluation live in alztest/neuroko.py.
+Historical access checks for NeuroKO, panAD and GNPC are recorded in
+notes/blocked_finds.md.
 """
 from __future__ import annotations
 
