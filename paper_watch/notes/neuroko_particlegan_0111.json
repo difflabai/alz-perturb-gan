@@ -1,0 +1,805 @@
+{
+  "source_doi": "10.5281/zenodo.23260389",
+  "shared_software_versions": {
+    "anndata": "0.12.7",
+    "numpy": "1.26.4",
+    "scipy": "1.17.1",
+    "torch": "2.14.1+cu130"
+  },
+  "particlegan_wheel_sha256": {
+    "0.10.0": "05eb18714e41890467fb29c66721d5c44db63363b48bc33bdc82cfeeb9cc0c0c",
+    "0.11.1": "ce9dd51cf2bf0067751c9e6409d05d149ce41c1df98fe3edb0412e3df430de52"
+  },
+  "h5ad_pilot_sha256": {
+    "iNeurons.h5ad": "40d5b6ad8dc36b2f0acf2c5cb6e7b6cbfc4c3c697e1a5fc668848f701672bd3f",
+    "iAstrocytes.h5ad": "2d1fa4570b8b40ed29174a70be2cb3b1f5a782339fc7a511e23f50ab2212c44a"
+  },
+  "raw_json_sha256": {
+    "0.10.0_empf": {
+      "0.10.0-empf.json": "2d1c20341a9a719ecfd286bb3a0cfe0bf4263f12a55bf152586adcb18bf9bc4c"
+    },
+    "0.11.1_empf": {
+      "0.11.1-empf.json": "11ed5ec739c98148130d78a30f0a675c2fffa9811a38cdbd2fb07035fa99d24c"
+    },
+    "0.11.1_unified_v11": {
+      "0.11.1-unified-v11-seed0.json": "5b3a203cd309b59ceaa846c21d0b06717f15a05f41cea3c245debd9605a63bcc",
+      "0.11.1-unified-v11-seed1.json": "4bf1ef739ee9bfc2b09ca4f05bfe875dc93e7bca59ce68611c62b14672d5e677",
+      "0.11.1-unified-v11-seed2.json": "2193f3b8240d0c03627a71e4dfbe4961ffd1c48f4ed1df23334045f2d361525a"
+    },
+    "0.11.1_unified_v11_published_rate_seed0": {
+      "0.11.1-unified-v11-native-rate-seed0.json": "f3c579056374f7b1d7bd1967a9a3a83e34b3cba995f34cfd1b3edc3cdd620095"
+    }
+  },
+  "protocol": {
+    "min_cells": 100,
+    "cap": 160,
+    "max_targets": 6,
+    "steps": 300,
+    "seeds": [
+      0,
+      1,
+      2
+    ]
+  },
+  "targets": [
+    "GLCCI1",
+    "SLC2A4RG",
+    "PLEKHA1",
+    "MAMSTR"
+  ],
+  "matching_empf_serialized_recipe": true,
+  "archive_0.10.0_scores_reproduced_exactly": true,
+  "all_simple_control_scores_reproduced_exactly": true,
+  "0.11.1_empf_max_abs_metric_difference_vs_0.10.0": {
+    "empf": {
+      "energy_distance": 0.0,
+      "shift_cosine": 0.0,
+      "spread_ratio": 0.0
+    },
+    "shuffled_empf": {
+      "energy_distance": 0.0,
+      "shift_cosine": 0.0,
+      "spread_ratio": 0.0
+    }
+  },
+  "recipes": {
+    "0.10.0_empf": {
+      "base_learning_rate": 0.005,
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "screens": {
+        "iAstrocytes": {
+          "target_fold_seed_rows": 24,
+          "arm_mean_scores": {
+            "empf": {
+              "energy_distance": 1.6569823853360535,
+              "shift_cosine": -0.01954192707208839,
+              "spread_ratio": 1.3815633726771117
+            },
+            "shuffled_empf": {
+              "energy_distance": 1.586743477469922,
+              "shift_cosine": 0.08315195461377295,
+              "spread_ratio": 1.3709242601651994
+            },
+            "empirical_target": {
+              "energy_distance": 1.4681419232704336,
+              "shift_cosine": 0.04614304730332786,
+              "spread_ratio": 1.20577986992866
+            },
+            "diagonal_gaussian": {
+              "energy_distance": 1.4309651701932367,
+              "shift_cosine": 0.08076596512864345,
+              "spread_ratio": 1.2023756085876278
+            },
+            "mean_shift": {
+              "energy_distance": 1.4350351980264646,
+              "shift_cosine": 0.0857696628923779,
+              "spread_ratio": 1.1643863106151315
+            },
+            "control_only": {
+              "energy_distance": 1.4361991953254876,
+              "spread_ratio": 1.1643863106151315
+            },
+            "expression_matched_target": {
+              "energy_distance": 1.4666606249295078,
+              "shift_cosine": 0.06653958497490198,
+              "spread_ratio": 1.2020677371585973
+            }
+          },
+          "model_energy_wins": {
+            "shuffled_empf": 4,
+            "empirical_target": 0,
+            "diagonal_gaussian": 0,
+            "mean_shift": 0,
+            "control_only": 0,
+            "expression_matched_target": 2,
+            "0.10.0_empf": 0
+          },
+          "mean_paired_energy_change_vs_0.10.0_empf": 0.0,
+          "model_fit_cpu_ms_per_update_median": 52.672722155000045,
+          "shuffled_fit_cpu_ms_per_update_median": 52.10144584166661,
+          "holdout_group_energy_means": {
+            "SCREEN1_1": {
+              "model_energy_distance": 1.7492371989364355,
+              "reference_empf_energy_distance": 1.7492371989364355,
+              "empirical_energy_distance": 1.5022043768115254
+            },
+            "SCREEN1_2": {
+              "model_energy_distance": 1.5647275717356717,
+              "reference_empf_energy_distance": 1.5647275717356717,
+              "empirical_energy_distance": 1.434079469729342
+            }
+          }
+        },
+        "iNeurons": {
+          "target_fold_seed_rows": 48,
+          "arm_mean_scores": {
+            "empf": {
+              "energy_distance": 1.2976830868643658,
+              "shift_cosine": -0.040692682831793954,
+              "spread_ratio": 1.3590650905718333
+            },
+            "shuffled_empf": {
+              "energy_distance": 1.2800652655888416,
+              "shift_cosine": -0.019474067658961737,
+              "spread_ratio": 1.3607022679760685
+            },
+            "empirical_target": {
+              "energy_distance": 1.0488112798839757,
+              "shift_cosine": -0.0733834591920066,
+              "spread_ratio": 1.205989448735669
+            },
+            "diagonal_gaussian": {
+              "energy_distance": 1.0362415487604648,
+              "shift_cosine": -0.026817100856318343,
+              "spread_ratio": 1.2050436951288614
+            },
+            "mean_shift": {
+              "energy_distance": 1.0515187686003433,
+              "shift_cosine": -0.027064503393531395,
+              "spread_ratio": 1.2423203524806894
+            },
+            "control_only": {
+              "energy_distance": 1.0484298516541397,
+              "spread_ratio": 1.2423203524806894
+            },
+            "expression_matched_target": {
+              "energy_distance": 1.035933885423634,
+              "shift_cosine": -0.017100223679066696,
+              "spread_ratio": 1.2056805363860001
+            }
+          },
+          "model_energy_wins": {
+            "shuffled_empf": 24,
+            "empirical_target": 1,
+            "diagonal_gaussian": 1,
+            "mean_shift": 1,
+            "control_only": 0,
+            "expression_matched_target": 0,
+            "0.10.0_empf": 0
+          },
+          "mean_paired_energy_change_vs_0.10.0_empf": 0.0,
+          "model_fit_cpu_ms_per_update_median": 54.082768849999965,
+          "shuffled_fit_cpu_ms_per_update_median": 52.49119344833332,
+          "holdout_group_energy_means": {
+            "Screen1_0": {
+              "model_energy_distance": 1.4722830771650146,
+              "reference_empf_energy_distance": 1.4722830771650146,
+              "empirical_energy_distance": 1.3004111424184752
+            },
+            "Screen1_1": {
+              "model_energy_distance": 1.2916766432275448,
+              "reference_empf_energy_distance": 1.2916766432275448,
+              "empirical_energy_distance": 0.9940103133019939
+            },
+            "Screen1_3": {
+              "model_energy_distance": 1.1120255057533617,
+              "reference_empf_energy_distance": 1.1120255057533617,
+              "empirical_energy_distance": 0.8068760669068774
+            },
+            "Screen1_4": {
+              "model_energy_distance": 1.3147471213115423,
+              "reference_empf_energy_distance": 1.3147471213115423,
+              "empirical_energy_distance": 1.0939475969085561
+            }
+          }
+        }
+      }
+    },
+    "0.11.1_empf": {
+      "base_learning_rate": 0.005,
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "screens": {
+        "iAstrocytes": {
+          "target_fold_seed_rows": 24,
+          "arm_mean_scores": {
+            "empf": {
+              "energy_distance": 1.6569823853360535,
+              "shift_cosine": -0.01954192707208839,
+              "spread_ratio": 1.3815633726771117
+            },
+            "shuffled_empf": {
+              "energy_distance": 1.586743477469922,
+              "shift_cosine": 0.08315195461377295,
+              "spread_ratio": 1.3709242601651994
+            },
+            "empirical_target": {
+              "energy_distance": 1.4681419232704336,
+              "shift_cosine": 0.04614304730332786,
+              "spread_ratio": 1.20577986992866
+            },
+            "diagonal_gaussian": {
+              "energy_distance": 1.4309651701932367,
+              "shift_cosine": 0.08076596512864345,
+              "spread_ratio": 1.2023756085876278
+            },
+            "mean_shift": {
+              "energy_distance": 1.4350351980264646,
+              "shift_cosine": 0.0857696628923779,
+              "spread_ratio": 1.1643863106151315
+            },
+            "control_only": {
+              "energy_distance": 1.4361991953254876,
+              "spread_ratio": 1.1643863106151315
+            },
+            "expression_matched_target": {
+              "energy_distance": 1.4666606249295078,
+              "shift_cosine": 0.06653958497490198,
+              "spread_ratio": 1.2020677371585973
+            }
+          },
+          "model_energy_wins": {
+            "shuffled_empf": 4,
+            "empirical_target": 0,
+            "diagonal_gaussian": 0,
+            "mean_shift": 0,
+            "control_only": 0,
+            "expression_matched_target": 2,
+            "0.10.0_empf": 0
+          },
+          "mean_paired_energy_change_vs_0.10.0_empf": 0.0,
+          "model_fit_cpu_ms_per_update_median": 51.704614010000014,
+          "shuffled_fit_cpu_ms_per_update_median": 51.908992823333335,
+          "holdout_group_energy_means": {
+            "SCREEN1_1": {
+              "model_energy_distance": 1.7492371989364355,
+              "reference_empf_energy_distance": 1.7492371989364355,
+              "empirical_energy_distance": 1.5022043768115254
+            },
+            "SCREEN1_2": {
+              "model_energy_distance": 1.5647275717356717,
+              "reference_empf_energy_distance": 1.5647275717356717,
+              "empirical_energy_distance": 1.434079469729342
+            }
+          }
+        },
+        "iNeurons": {
+          "target_fold_seed_rows": 48,
+          "arm_mean_scores": {
+            "empf": {
+              "energy_distance": 1.2976830868643658,
+              "shift_cosine": -0.040692682831793954,
+              "spread_ratio": 1.3590650905718333
+            },
+            "shuffled_empf": {
+              "energy_distance": 1.2800652655888416,
+              "shift_cosine": -0.019474067658961737,
+              "spread_ratio": 1.3607022679760685
+            },
+            "empirical_target": {
+              "energy_distance": 1.0488112798839757,
+              "shift_cosine": -0.0733834591920066,
+              "spread_ratio": 1.205989448735669
+            },
+            "diagonal_gaussian": {
+              "energy_distance": 1.0362415487604648,
+              "shift_cosine": -0.026817100856318343,
+              "spread_ratio": 1.2050436951288614
+            },
+            "mean_shift": {
+              "energy_distance": 1.0515187686003433,
+              "shift_cosine": -0.027064503393531395,
+              "spread_ratio": 1.2423203524806894
+            },
+            "control_only": {
+              "energy_distance": 1.0484298516541397,
+              "spread_ratio": 1.2423203524806894
+            },
+            "expression_matched_target": {
+              "energy_distance": 1.035933885423634,
+              "shift_cosine": -0.017100223679066696,
+              "spread_ratio": 1.2056805363860001
+            }
+          },
+          "model_energy_wins": {
+            "shuffled_empf": 24,
+            "empirical_target": 1,
+            "diagonal_gaussian": 1,
+            "mean_shift": 1,
+            "control_only": 0,
+            "expression_matched_target": 0,
+            "0.10.0_empf": 0
+          },
+          "mean_paired_energy_change_vs_0.10.0_empf": 0.0,
+          "model_fit_cpu_ms_per_update_median": 51.71237862833337,
+          "shuffled_fit_cpu_ms_per_update_median": 51.66792098000002,
+          "holdout_group_energy_means": {
+            "Screen1_0": {
+              "model_energy_distance": 1.4722830771650146,
+              "reference_empf_energy_distance": 1.4722830771650146,
+              "empirical_energy_distance": 1.3004111424184752
+            },
+            "Screen1_1": {
+              "model_energy_distance": 1.2916766432275448,
+              "reference_empf_energy_distance": 1.2916766432275448,
+              "empirical_energy_distance": 0.9940103133019939
+            },
+            "Screen1_3": {
+              "model_energy_distance": 1.1120255057533617,
+              "reference_empf_energy_distance": 1.1120255057533617,
+              "empirical_energy_distance": 0.8068760669068774
+            },
+            "Screen1_4": {
+              "model_energy_distance": 1.3147471213115423,
+              "reference_empf_energy_distance": 1.3147471213115423,
+              "empirical_energy_distance": 1.0939475969085561
+            }
+          }
+        }
+      }
+    },
+    "0.11.1_unified_v11": {
+      "base_learning_rate": 0.005,
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "screens": {
+        "iAstrocytes": {
+          "target_fold_seed_rows": 24,
+          "arm_mean_scores": {
+            "unified_v11": {
+              "energy_distance": 2.0022271982240953,
+              "shift_cosine": 0.05518560558064012,
+              "spread_ratio": 0.6211182357574073
+            },
+            "shuffled_unified_v11": {
+              "energy_distance": 2.009262471524829,
+              "shift_cosine": 0.046381403862277286,
+              "spread_ratio": 0.6210302825598953
+            },
+            "empirical_target": {
+              "energy_distance": 1.4681419232704336,
+              "shift_cosine": 0.04614304730332786,
+              "spread_ratio": 1.20577986992866
+            },
+            "diagonal_gaussian": {
+              "energy_distance": 1.4309651701932367,
+              "shift_cosine": 0.08076596512864345,
+              "spread_ratio": 1.2023756085876278
+            },
+            "mean_shift": {
+              "energy_distance": 1.4350351980264646,
+              "shift_cosine": 0.0857696628923779,
+              "spread_ratio": 1.1643863106151315
+            },
+            "control_only": {
+              "energy_distance": 1.4361991953254876,
+              "spread_ratio": 1.1643863106151315
+            },
+            "expression_matched_target": {
+              "energy_distance": 1.4666606249295078,
+              "shift_cosine": 0.06653958497490198,
+              "spread_ratio": 1.2020677371585973
+            }
+          },
+          "model_energy_wins": {
+            "shuffled_unified_v11": 13,
+            "empirical_target": 0,
+            "diagonal_gaussian": 0,
+            "mean_shift": 0,
+            "control_only": 0,
+            "expression_matched_target": 0,
+            "0.10.0_empf": 0
+          },
+          "mean_paired_energy_change_vs_0.10.0_empf": 0.3452448128880416,
+          "model_fit_cpu_ms_per_update_median": 104.2214564566667,
+          "shuffled_fit_cpu_ms_per_update_median": 107.1819990166666,
+          "holdout_group_energy_means": {
+            "SCREEN1_1": {
+              "model_energy_distance": 1.9300625003619347,
+              "reference_empf_energy_distance": 1.7492371989364355,
+              "empirical_energy_distance": 1.5022043768115254
+            },
+            "SCREEN1_2": {
+              "model_energy_distance": 2.0743918960862557,
+              "reference_empf_energy_distance": 1.5647275717356717,
+              "empirical_energy_distance": 1.434079469729342
+            }
+          }
+        },
+        "iNeurons": {
+          "target_fold_seed_rows": 48,
+          "arm_mean_scores": {
+            "unified_v11": {
+              "energy_distance": 1.5215649270811222,
+              "shift_cosine": 0.006123450086691712,
+              "spread_ratio": 0.6077598295492223
+            },
+            "shuffled_unified_v11": {
+              "energy_distance": 1.5343696070079602,
+              "shift_cosine": 0.006311092518288889,
+              "spread_ratio": 0.6071710083263941
+            },
+            "empirical_target": {
+              "energy_distance": 1.0488112798839757,
+              "shift_cosine": -0.0733834591920066,
+              "spread_ratio": 1.205989448735669
+            },
+            "diagonal_gaussian": {
+              "energy_distance": 1.0362415487604648,
+              "shift_cosine": -0.026817100856318343,
+              "spread_ratio": 1.2050436951288614
+            },
+            "mean_shift": {
+              "energy_distance": 1.0515187686003433,
+              "shift_cosine": -0.027064503393531395,
+              "spread_ratio": 1.2423203524806894
+            },
+            "control_only": {
+              "energy_distance": 1.0484298516541397,
+              "spread_ratio": 1.2423203524806894
+            },
+            "expression_matched_target": {
+              "energy_distance": 1.035933885423634,
+              "shift_cosine": -0.017100223679066696,
+              "spread_ratio": 1.2056805363860001
+            }
+          },
+          "model_energy_wins": {
+            "shuffled_unified_v11": 33,
+            "empirical_target": 0,
+            "diagonal_gaussian": 0,
+            "mean_shift": 0,
+            "control_only": 0,
+            "expression_matched_target": 0,
+            "0.10.0_empf": 9
+          },
+          "mean_paired_energy_change_vs_0.10.0_empf": 0.22388184021675642,
+          "model_fit_cpu_ms_per_update_median": 101.95082815999996,
+          "shuffled_fit_cpu_ms_per_update_median": 101.2057984433333,
+          "holdout_group_energy_means": {
+            "Screen1_0": {
+              "model_energy_distance": 1.8812358970235672,
+              "reference_empf_energy_distance": 1.4722830771650146,
+              "empirical_energy_distance": 1.3004111424184752
+            },
+            "Screen1_1": {
+              "model_energy_distance": 1.4136076820721215,
+              "reference_empf_energy_distance": 1.2916766432275448,
+              "empirical_energy_distance": 0.9940103133019939
+            },
+            "Screen1_3": {
+              "model_energy_distance": 1.0709036834141004,
+              "reference_empf_energy_distance": 1.1120255057533617,
+              "empirical_energy_distance": 0.8068760669068774
+            },
+            "Screen1_4": {
+              "model_energy_distance": 1.7205124458146999,
+              "reference_empf_energy_distance": 1.3147471213115423,
+              "empirical_energy_distance": 1.0939475969085561
+            }
+          }
+        }
+      }
+    },
+    "0.11.1_unified_v11_published_rate_seed0": {
+      "base_learning_rate": 0.014,
+      "seeds": [
+        0
+      ],
+      "screens": {
+        "iAstrocytes": {
+          "target_fold_seed_rows": 8,
+          "arm_mean_scores": {
+            "unified_v11": {
+              "energy_distance": 1.9648831011951855,
+              "shift_cosine": 0.024358314673385662,
+              "spread_ratio": 0.6409938142186903
+            },
+            "shuffled_unified_v11": {
+              "energy_distance": 1.9619039366718387,
+              "shift_cosine": -0.09884902458599924,
+              "spread_ratio": 0.6436774011275445
+            },
+            "empirical_target": {
+              "energy_distance": 1.4670632983582315,
+              "shift_cosine": -0.017313628117311176,
+              "spread_ratio": 1.2038374579365907
+            },
+            "diagonal_gaussian": {
+              "energy_distance": 1.4198892347599195,
+              "shift_cosine": 0.07489223135739037,
+              "spread_ratio": 1.2048642858082097
+            },
+            "mean_shift": {
+              "energy_distance": 1.403786845777668,
+              "shift_cosine": 0.08576966289237795,
+              "spread_ratio": 1.1691789527435317
+            },
+            "control_only": {
+              "energy_distance": 1.403362430322534,
+              "spread_ratio": 1.1691789527435317
+            },
+            "expression_matched_target": {
+              "energy_distance": 1.458238436861838,
+              "shift_cosine": 0.005196939215387892,
+              "spread_ratio": 1.2022035086102965
+            }
+          },
+          "model_energy_wins": {
+            "shuffled_unified_v11": 2,
+            "empirical_target": 0,
+            "diagonal_gaussian": 0,
+            "mean_shift": 0,
+            "control_only": 0,
+            "expression_matched_target": 0,
+            "0.10.0_empf": 0
+          },
+          "mean_paired_energy_change_vs_0.10.0_empf": 0.3336614928860233,
+          "model_fit_cpu_ms_per_update_median": 104.72183990500005,
+          "shuffled_fit_cpu_ms_per_update_median": 99.48699075166672,
+          "holdout_group_energy_means": {
+            "SCREEN1_1": {
+              "model_energy_distance": 1.8817863701325304,
+              "reference_empf_energy_distance": 1.7445794708969244,
+              "empirical_energy_distance": 1.4975591201315295
+            },
+            "SCREEN1_2": {
+              "model_energy_distance": 2.047979832257841,
+              "reference_empf_energy_distance": 1.5178637457214001,
+              "empirical_energy_distance": 1.4365674765849337
+            }
+          }
+        },
+        "iNeurons": {
+          "target_fold_seed_rows": 16,
+          "arm_mean_scores": {
+            "unified_v11": {
+              "energy_distance": 1.4581880000855079,
+              "shift_cosine": -0.039759236980528925,
+              "spread_ratio": 0.632864284807844
+            },
+            "shuffled_unified_v11": {
+              "energy_distance": 1.5001708792355264,
+              "shift_cosine": -0.019027235558299174,
+              "spread_ratio": 0.6298472282185867
+            },
+            "empirical_target": {
+              "energy_distance": 1.05038237842166,
+              "shift_cosine": -0.06502316156039517,
+              "spread_ratio": 1.2015838382262227
+            },
+            "diagonal_gaussian": {
+              "energy_distance": 1.0402277209295434,
+              "shift_cosine": -0.02219052297667867,
+              "spread_ratio": 1.2075479078422326
+            },
+            "mean_shift": {
+              "energy_distance": 1.0584788061132793,
+              "shift_cosine": -0.027064503393531385,
+              "spread_ratio": 1.2324895533385047
+            },
+            "control_only": {
+              "energy_distance": 1.0534365581086507,
+              "spread_ratio": 1.2324895533385047
+            },
+            "expression_matched_target": {
+              "energy_distance": 1.0398800168516726,
+              "shift_cosine": -0.021180099708211133,
+              "spread_ratio": 1.2049491619310884
+            }
+          },
+          "model_energy_wins": {
+            "shuffled_unified_v11": 12,
+            "empirical_target": 0,
+            "diagonal_gaussian": 0,
+            "mean_shift": 0,
+            "control_only": 0,
+            "expression_matched_target": 0,
+            "0.10.0_empf": 4
+          },
+          "mean_paired_energy_change_vs_0.10.0_empf": 0.20112535823072414,
+          "model_fit_cpu_ms_per_update_median": 103.07300519833339,
+          "shuffled_fit_cpu_ms_per_update_median": 99.89067449,
+          "holdout_group_energy_means": {
+            "Screen1_0": {
+              "model_energy_distance": 1.799733905581243,
+              "reference_empf_energy_distance": 1.4017754333029033,
+              "empirical_energy_distance": 1.27773983983231
+            },
+            "Screen1_1": {
+              "model_energy_distance": 1.363124819349721,
+              "reference_empf_energy_distance": 1.1894013719901835,
+              "empirical_energy_distance": 0.9918819619547117
+            },
+            "Screen1_3": {
+              "model_energy_distance": 1.0201264441709006,
+              "reference_empf_energy_distance": 1.1192840826149173,
+              "empirical_energy_distance": 0.8060037442607582
+            },
+            "Screen1_4": {
+              "model_energy_distance": 1.6497668312401674,
+              "reference_empf_energy_distance": 1.3177896795111312,
+              "empirical_energy_distance": 1.1259039676388598
+            }
+          }
+        }
+      }
+    }
+  },
+  "matched_unified_v11_seed0": {
+    "base_learning_rate": 0.005,
+    "seeds": [
+      0
+    ],
+    "screens": {
+      "iAstrocytes": {
+        "target_fold_seed_rows": 8,
+        "arm_mean_scores": {
+          "unified_v11": {
+            "energy_distance": 1.9919617368185625,
+            "shift_cosine": -0.04213788505736465,
+            "spread_ratio": 0.6217076057779488
+          },
+          "shuffled_unified_v11": {
+            "energy_distance": 1.9934454059060278,
+            "shift_cosine": -0.08647828798545121,
+            "spread_ratio": 0.6249123684737301
+          },
+          "empirical_target": {
+            "energy_distance": 1.4670632983582315,
+            "shift_cosine": -0.017313628117311176,
+            "spread_ratio": 1.2038374579365907
+          },
+          "diagonal_gaussian": {
+            "energy_distance": 1.4198892347599195,
+            "shift_cosine": 0.07489223135739037,
+            "spread_ratio": 1.2048642858082097
+          },
+          "mean_shift": {
+            "energy_distance": 1.403786845777668,
+            "shift_cosine": 0.08576966289237795,
+            "spread_ratio": 1.1691789527435317
+          },
+          "control_only": {
+            "energy_distance": 1.403362430322534,
+            "spread_ratio": 1.1691789527435317
+          },
+          "expression_matched_target": {
+            "energy_distance": 1.458238436861838,
+            "shift_cosine": 0.005196939215387892,
+            "spread_ratio": 1.2022035086102965
+          }
+        },
+        "model_energy_wins": {
+          "shuffled_unified_v11": 4,
+          "empirical_target": 0,
+          "diagonal_gaussian": 0,
+          "mean_shift": 0,
+          "control_only": 0,
+          "expression_matched_target": 0,
+          "0.10.0_empf": 0
+        },
+        "mean_paired_energy_change_vs_0.10.0_empf": 0.3607401285094003,
+        "model_fit_cpu_ms_per_update_median": 108.52240195333337,
+        "shuffled_fit_cpu_ms_per_update_median": 110.46042200333338,
+        "holdout_group_energy_means": {
+          "SCREEN1_1": {
+            "model_energy_distance": 1.9204560807988655,
+            "reference_empf_energy_distance": 1.7445794708969244,
+            "empirical_energy_distance": 1.4975591201315295
+          },
+          "SCREEN1_2": {
+            "model_energy_distance": 2.06346739283826,
+            "reference_empf_energy_distance": 1.5178637457214001,
+            "empirical_energy_distance": 1.4365674765849337
+          }
+        }
+      },
+      "iNeurons": {
+        "target_fold_seed_rows": 16,
+        "arm_mean_scores": {
+          "unified_v11": {
+            "energy_distance": 1.51789109606666,
+            "shift_cosine": -0.03766694659184761,
+            "spread_ratio": 0.6086927811605806
+          },
+          "shuffled_unified_v11": {
+            "energy_distance": 1.5361660418294947,
+            "shift_cosine": -0.041705552395496434,
+            "spread_ratio": 0.6077521975682864
+          },
+          "empirical_target": {
+            "energy_distance": 1.05038237842166,
+            "shift_cosine": -0.06502316156039517,
+            "spread_ratio": 1.2015838382262227
+          },
+          "diagonal_gaussian": {
+            "energy_distance": 1.0402277209295434,
+            "shift_cosine": -0.02219052297667867,
+            "spread_ratio": 1.2075479078422326
+          },
+          "mean_shift": {
+            "energy_distance": 1.0584788061132793,
+            "shift_cosine": -0.027064503393531385,
+            "spread_ratio": 1.2324895533385047
+          },
+          "control_only": {
+            "energy_distance": 1.0534365581086507,
+            "spread_ratio": 1.2324895533385047
+          },
+          "expression_matched_target": {
+            "energy_distance": 1.0398800168516726,
+            "shift_cosine": -0.021180099708211133,
+            "spread_ratio": 1.2049491619310884
+          }
+        },
+        "model_energy_wins": {
+          "shuffled_unified_v11": 11,
+          "empirical_target": 0,
+          "diagonal_gaussian": 0,
+          "mean_shift": 0,
+          "control_only": 0,
+          "expression_matched_target": 0,
+          "0.10.0_empf": 3
+        },
+        "mean_paired_energy_change_vs_0.10.0_empf": 0.2608284542118761,
+        "model_fit_cpu_ms_per_update_median": 103.09725274666667,
+        "shuffled_fit_cpu_ms_per_update_median": 102.01441974166666,
+        "holdout_group_energy_means": {
+          "Screen1_0": {
+            "model_energy_distance": 1.871161381471466,
+            "reference_empf_energy_distance": 1.4017754333029033,
+            "empirical_energy_distance": 1.27773983983231
+          },
+          "Screen1_1": {
+            "model_energy_distance": 1.4212809289835429,
+            "reference_empf_energy_distance": 1.1894013719901835,
+            "empirical_energy_distance": 0.9918819619547117
+          },
+          "Screen1_3": {
+            "model_energy_distance": 1.0633987522373685,
+            "reference_empf_energy_distance": 1.1192840826149173,
+            "empirical_energy_distance": 0.8060037442607582
+          },
+          "Screen1_4": {
+            "model_energy_distance": 1.7157233215742624,
+            "reference_empf_energy_distance": 1.3177896795111312,
+            "empirical_energy_distance": 1.1259039676388598
+          }
+        }
+      }
+    }
+  },
+  "published_rate_vs_matched_rate_seed0": {
+    "iNeurons": {
+      "mean_paired_energy_change": -0.05970309598115198,
+      "rows_favoring_published_rate": 16,
+      "target_holdout_rows": 16
+    },
+    "iAstrocytes": {
+      "mean_paired_energy_change": -0.02707863562337698,
+      "rows_favoring_published_rate": 7,
+      "target_holdout_rows": 8
+    }
+  }
+}

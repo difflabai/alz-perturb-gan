@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from importlib.metadata import version
 import json
 from pathlib import Path
+from time import perf_counter, process_time
 
 import numpy as np
 import pandas as pd
@@ -342,7 +343,7 @@ def _resample(rows, n, rng):
     return rows[rng.choice(len(rows), n, replace=True)]
 
 
-def score_fold(panel, group, conditions, steps, seed, projected):
+def score_fold(panel, group, conditions, steps, seed, projected, *, recipe_name="empf", learning_rate=0.005):
     import torch
 
     from .harness import ConditionalPGAN, energy_distance
@@ -353,13 +354,20 @@ def score_fold(panel, group, conditions, steps, seed, projected):
     train = [xtrain[ytrain == k] for k in range(len(conditions))]
     test = [xtest[ytest == k] for k in range(len(conditions))]
     model_arms = {}
+    fit_times = {}
     if steps:
         shuffled = np.random.default_rng(seed + 31).permutation(ytrain)
-        for arm, labels in (("empf", ytrain), ("shuffled_empf", shuffled)):
+        for arm, labels in ((recipe_name, ytrain), (f"shuffled_{recipe_name}", shuffled)):
             with torch.random.fork_rng(devices=[]):
                 torch.default_generator.manual_seed(seed)
-                model = ConditionalPGAN(xtrain.shape[1], len(conditions), seed=seed)
+                model = ConditionalPGAN(xtrain.shape[1], len(conditions), seed=seed,
+                                        recipe_name=recipe_name, learning_rate=learning_rate)
+            started_wall, started_cpu = perf_counter(), process_time()
             model.fit(xtrain, labels, steps=steps)
+            fit_times[arm] = {
+                "cpu_seconds": process_time() - started_cpu,
+                "wall_seconds": perf_counter() - started_wall,
+            }
             model_arms[arm] = model
 
     n_draws = 256
@@ -405,7 +413,8 @@ def score_fold(panel, group, conditions, steps, seed, projected):
                 } for arm, predicted in predictions.items()
             },
         })
-    return {"held_out_group": group, "seed": seed, "components": xtrain.shape[1], "targets": records}
+    return {"held_out_group": group, "seed": seed, "components": xtrain.shape[1],
+            "fit_times": fit_times, "targets": records}
 
 
 def load_comparison(screens, min_cells, cap, max_targets, requested_targets=None, *, use_available_cells=False):
@@ -430,7 +439,8 @@ def compare(conditions, panels):
     }
 
 
-def evaluate(screens, *, min_cells, cap, max_targets, steps, seeds, requested_targets=None):
+def evaluate(screens, *, min_cells, cap, max_targets, steps, seeds,
+             requested_targets=None, recipe_name="empf", learning_rate=0.005):
     conditions, panels = load_comparison(screens, min_cells, cap, max_targets, requested_targets)
     report = compare(conditions, panels)
     scores = {}
@@ -441,8 +451,11 @@ def evaluate(screens, *, min_cells, cap, max_targets, steps, seeds, requested_ta
             heldout = panel.groups == group
             projection = project_fold(panel.x[~heldout], panel.x[heldout])
             for seed in seeds:
-                print(f"{screen.name} held out {group}, seed {seed}, {steps} steps", flush=True)
-                scores[screen.name].append(score_fold(panel, group, conditions, steps, seed, projection))
+                print(f"{recipe_name}: {screen.name} held out {group}, seed {seed}, {steps} steps", flush=True)
+                scores[screen.name].append(
+                    score_fold(panel, group, conditions, steps, seed, projection,
+                               recipe_name=recipe_name, learning_rate=learning_rate)
+                )
     report["folds"] = scores
     return report
 
@@ -460,10 +473,16 @@ def main():
     parser.add_argument("--use-available-cells", action="store_true",
                         help="for transfer, sample up to the cap independently in each target and group")
     parser.add_argument("--steps", type=int, default=300, help="use 0 to evaluate the baselines alone")
+    parser.add_argument("--recipe", choices=("empf", "unified_v11"), default="empf",
+                        help="public ParticleGAN recipe for the evaluation arms")
+    parser.add_argument("--learning-rate", type=float, default=0.005,
+                        help="base learning rate for the model and shuffled-label control")
     parser.add_argument("--seeds", nargs="+", type=int, default=SEEDS)
     args = parser.parse_args()
     if not 32 <= args.min_cells <= args.cap or args.targets < 2 or args.steps < 0:
         parser.error("require 32 <= min-cells <= cap, targets >= 2 and steps >= 0")
+    if not np.isfinite(args.learning_rate) or args.learning_rate <= 0:
+        parser.error("learning-rate must be finite and positive")
     if args.use_available_cells and args.command != "transfer":
         parser.error("--use-available-cells applies only to transfer")
     if args.window_cells is not None and args.window_cells < 1:
@@ -491,7 +510,8 @@ def main():
                     conditions, panels = load_comparison(screens, **config)
                     report.update(compare(conditions, panels))
                 else:
-                    config.update(steps=args.steps, seeds=args.seeds)
+                    config.update(steps=args.steps, seeds=args.seeds, recipe_name=args.recipe,
+                                  learning_rate=args.learning_rate)
                     report["versions"].update(torch=version("torch"), particlegan=version("particlegan"))
                     report.update(evaluate(screens, **config))
     except DataUnavailable as error:

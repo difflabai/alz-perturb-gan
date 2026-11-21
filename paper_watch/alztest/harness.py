@@ -1,7 +1,7 @@
 """Shared harness for ALZ paper-watch toy tests.
 
 Everything here is deliberately small and CPU-bound: a conditional
-ParticleGAN (EMPF recipe, company-standard configuration, unmodified)
+ParticleGAN (EMPF by default, with unmodified public trainer recipes)
 with caller-side condition concatenation, the two standing control arms
 (mean/linear baseline and shuffled-condition training), and distribution
 metrics (energy distance, shift-direction cosine).
@@ -72,7 +72,8 @@ class ConditionalPGAN:
     """
 
     def __init__(
-        self, data_dim: int, n_cond: int, seed: int = 0, *, learning_rate: float = 0.005
+        self, data_dim: int, n_cond: int, seed: int = 0, *,
+        learning_rate: float = 0.005, recipe_name: str = "empf",
     ):
         self.n_cond = n_cond
         self.G = _CondGenerator(Z_DIM, n_cond, data_dim)
@@ -80,7 +81,7 @@ class ConditionalPGAN:
         deterministic_orthogonal_(self.G, seed=seed)
         deterministic_orthogonal_(self.D, seed=seed + 1)
         recipe = get_recipe(
-            "empf", z_dim=Z_DIM, num_particles=NUM_PARTICLES,
+            recipe_name, z_dim=Z_DIM, num_particles=NUM_PARTICLES,
             batch_size=BATCH, lr=learning_rate,
         )
         self.prior = recipe.make_prior(sigma=0.025)

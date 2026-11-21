@@ -22,6 +22,8 @@ The [release coverage audit](neuroko_release_coverage.json) records cell and vec
 
 ## Pilot results
 
+The [ParticleGAN 0.11.1 replay](neuroko_particlegan_0111.md) compares this benchmark with both EMPF and the public `unified_v11` default.
+
 The pilot uses the first 10,000 released rows of each group, for 40,000 neuronal and 20,000 astrocyte cells. These are contiguous release windows. The coverage audit above uses the complete annotations from both files. The pilot's coverage-ranked distribution panel had four targets with at least 100 cells per group. The broader profile comparison had 65 targets with at least 32 cells per group.
 
 ![NeuroKO distribution fit and knockout rank in held-out groups](neuroko_pilot.png)
