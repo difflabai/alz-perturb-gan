@@ -1,10 +1,9 @@
 """Shared harness for ALZ paper-watch toy tests.
 
-Everything here is deliberately small and CPU-bound: a conditional
-ParticleGAN (EMPF by default, with unmodified public trainer recipes)
-with caller-side condition concatenation, the two standing control arms
-(mean/linear baseline and shuffled-condition training), and distribution
-metrics (energy distance, shift-direction cosine).
+The small conditional ParticleGAN networks run on CPU by default and support
+CUDA. The harness uses public trainer recipes, caller-side condition
+concatenation, mean-shift and shuffled-condition controls, and distribution
+metrics including energy distance and shift-direction cosine.
 
 The GAN formulation is never touched by this harness or by the tests:
 conditioning lives entirely in the caller-supplied networks, exactly the
@@ -57,12 +56,6 @@ class _CondCritic(nn.Module):
         return self.net(torch.cat([x, c], dim=1))
 
 
-def _onehot(idx: int, n_cond: int) -> torch.Tensor:
-    v = torch.zeros(n_cond)
-    v[idx] = 1.0
-    return v
-
-
 class ConditionalPGAN:
     """One conditional ParticleGAN over (condition -> distribution).
 
@@ -74,8 +67,10 @@ class ConditionalPGAN:
     def __init__(
         self, data_dim: int, n_cond: int, seed: int = 0, *,
         learning_rate: float = 0.005, recipe_name: str = "empf",
+        device: str | torch.device = "cpu",
     ):
         self.n_cond = n_cond
+        self.device = torch.device(device)
         self.G = _CondGenerator(Z_DIM, n_cond, data_dim)
         self.D = _CondCritic(data_dim, n_cond)
         deterministic_orthogonal_(self.G, seed=seed)
@@ -84,15 +79,17 @@ class ConditionalPGAN:
             recipe_name, z_dim=Z_DIM, num_particles=NUM_PARTICLES,
             batch_size=BATCH, lr=learning_rate,
         )
-        self.prior = recipe.make_prior(sigma=0.025)
+        self.G.to(self.device)
+        self.D.to(self.device)
+        self.prior = recipe.make_prior(sigma=0.025).to(self.device)
         self.trainer = GANTrainer(recipe, self.G, self.D, prior=self.prior,
                                   seed=seed, serial_backward=True)
         self._rng = np.random.default_rng(seed)
 
     def _set_cond(self, idx: int) -> None:
-        v = _onehot(idx, self.n_cond)
-        self.G.cond.copy_(v)
-        self.D.cond.copy_(v)
+        self.G.cond.zero_()
+        self.G.cond[idx] = 1.0
+        self.D.cond.copy_(self.G.cond)
 
     def fit(
         self, X: np.ndarray, cond: np.ndarray, steps: int = 300, *,
@@ -104,6 +101,7 @@ class ConditionalPGAN:
         order = [k for k, indices in enumerate(by_cond) if len(indices) >= min_condition_rows]
         if not order:
             raise ValueError(f"training needs at least {min_condition_rows} rows in one condition")
+        data = torch.tensor(X, dtype=torch.float32, device=self.device)
         for s in range(steps):
             if s % len(order) == 0:
                 self._rng.shuffle(order)
@@ -111,17 +109,17 @@ class ConditionalPGAN:
             ix = by_cond[k]
             pick = self._rng.choice(ix, size=BATCH, replace=len(ix) < BATCH)
             self._set_cond(k)
-            batch = torch.tensor(X[pick], dtype=torch.float32)
-            self.trainer.step(batch)
+            rows = torch.as_tensor(pick, device=self.device)
+            self.trainer.step(data.index_select(0, rows))
             if after_step is not None:
                 after_step(self.trainer.completed_steps)
 
     @torch.no_grad()
     def sample(self, cond_idx: int, n: int, seed: int = 999) -> np.ndarray:
         self._set_cond(cond_idx)
-        gen = torch.Generator().manual_seed(seed)
+        gen = torch.Generator(device=self.device).manual_seed(seed)
         out = self.trainer.sample(n, generator=gen, output_noise=False)
-        return out.numpy().astype(np.float64)
+        return out.cpu().numpy().astype(np.float64)
 
 
 def fit_unconditional(X: np.ndarray, steps: int = 300, seed: int = 0) -> ConditionalPGAN:

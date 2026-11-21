@@ -2,6 +2,8 @@
 
 This is a matched replay of the [NeuroKO pilot](neuroko_revival.md) with the tested `0.10.0` wheel and the verified `0.11.1` wheel. Release `0.11.1` retains explicit EMPF and uses `unified_v11` as the public default. Its changelog includes a GPU memory fix and changes to the default's critic penalty and optimizer. The NeuroKO workload uses small CPU vector networks. [Release notes](https://github.com/HyperGAN/ParticleGAN/releases/tag/v0.11.1) · [PyPI wheel](https://pypi.org/project/particlegan/0.11.1/)
 
+The [CUDA learning-rate sweep](neuroko_particlegan_0111_gpu_lr.md) follows this CPU comparison with separate training validation and GPU holdout fits.
+
 ## Results
 
 The 0.10.0 replay reproduced the archived pilot exactly. With explicit EMPF, the 0.11.1 wheel reproduced every energy-distance, shift-cosine and spread-ratio score for both the model and its shuffled-label arm. The serialized EMPF recipes and non-model controls also matched exactly.

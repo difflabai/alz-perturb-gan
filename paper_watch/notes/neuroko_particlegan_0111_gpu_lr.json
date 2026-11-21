@@ -1,0 +1,657 @@
+{
+  "source_doi": "10.5281/zenodo.23260389",
+  "inputs": {
+    "iNeurons": {
+      "shape": [
+        40000,
+        36601
+      ],
+      "release_intervals": [
+        [
+          0,
+          10000
+        ],
+        [
+          25323,
+          35323
+        ],
+        [
+          59060,
+          69060
+        ],
+        [
+          120978,
+          130978
+        ]
+      ],
+      "local_slice_sha256": "40d5b6ad8dc36b2f0acf2c5cb6e7b6cbfc4c3c697e1a5fc668848f701672bd3f"
+    },
+    "iAstrocytes": {
+      "shape": [
+        20000,
+        36601
+      ],
+      "release_intervals": [
+        [
+          0,
+          10000
+        ],
+        [
+          87080,
+          97080
+        ]
+      ],
+      "local_slice_sha256": "2d1fa4570b8b40ed29174a70be2cb3b1f5a782339fc7a511e23f50ab2212c44a"
+    }
+  },
+  "cuda_device": "NVIDIA RTX A6000",
+  "torch_version": "2.14.1+cu130",
+  "particlegan": "0.11.1",
+  "recipe": "unified_v11",
+  "targets": [
+    "GLCCI1",
+    "SLC2A4RG",
+    "PLEKHA1",
+    "MAMSTR"
+  ],
+  "steps_per_fit": 300,
+  "selection_seed": 0,
+  "confirmation_seeds": [
+    1,
+    2
+  ],
+  "published_rate": 0.014,
+  "best_pooled_validation_rate": 0.028,
+  "validation_summary_by_rate": {
+    "0.005": {
+      "all_groups": 1.3947424932338546,
+      "neurons": 1.786863253957216,
+      "astrocytes": 0.6105009717871317,
+      "validation_by_outer_group": {
+        "Screen1_0": 1.5874005876577126,
+        "Screen1_1": 1.0807094072327215,
+        "Screen1_3": 2.7757330011148094,
+        "Screen1_4": 1.7036100198236204,
+        "SCREEN1_1": 0.678051818435512,
+        "SCREEN1_2": 0.5429501251387514
+      }
+    },
+    "0.014": {
+      "all_groups": 1.358811868519095,
+      "neurons": 1.73959565393239,
+      "astrocytes": 0.5972442976925054,
+      "validation_by_outer_group": {
+        "Screen1_0": 1.5745946652357758,
+        "Screen1_1": 1.0454400390705654,
+        "Screen1_3": 2.73492863007845,
+        "Screen1_4": 1.6034192813447685,
+        "SCREEN1_1": 0.6491657124132959,
+        "SCREEN1_2": 0.5453228829717149
+      }
+    },
+    "0.028": {
+      "all_groups": 1.343935793634366,
+      "neurons": 1.7194408921496604,
+      "astrocytes": 0.5929255966037772,
+      "validation_by_outer_group": {
+        "Screen1_0": 1.5857541152119385,
+        "Screen1_1": 1.0075549653858868,
+        "Screen1_3": 2.7304161935019735,
+        "Screen1_4": 1.554038294498843,
+        "SCREEN1_1": 0.6425336308522405,
+        "SCREEN1_2": 0.5433175623553139
+      }
+    },
+    "0.056": {
+      "all_groups": 1.3485627681319576,
+      "neurons": 1.7270617133793462,
+      "astrocytes": 0.5915648776371804,
+      "validation_by_outer_group": {
+        "Screen1_0": 1.5931378920733148,
+        "Screen1_1": 1.0079270140576266,
+        "Screen1_3": 2.7372352982667385,
+        "Screen1_4": 1.5699466491197052,
+        "SCREEN1_1": 0.6396891890940333,
+        "SCREEN1_2": 0.5434405661803274
+      }
+    },
+    "0.112": {
+      "all_groups": 1.367305682974812,
+      "neurons": 1.7508215253532806,
+      "astrocytes": 0.600273998217875,
+      "validation_by_outer_group": {
+        "Screen1_0": 1.55107300586357,
+        "Screen1_1": 1.0318737566976914,
+        "Screen1_3": 2.7520989434982486,
+        "Screen1_4": 1.668240395353612,
+        "SCREEN1_1": 0.6628443307323022,
+        "SCREEN1_2": 0.5377036657034477
+      }
+    }
+  },
+  "selected_rate_by_outer_group": {
+    "Screen1_0": 0.224,
+    "Screen1_1": 0.028,
+    "Screen1_3": 0.0396,
+    "Screen1_4": 0.028,
+    "SCREEN1_1": 0.0396,
+    "SCREEN1_2": 0.112
+  },
+  "by_screen": {
+    "iNeurons": {
+      "means": {
+        "tuned": {
+          "energy_distance": 1.4343296237984415,
+          "shift_cosine": -0.039508508680177246,
+          "spread_ratio": 0.6418574348182804
+        },
+        "published": {
+          "energy_distance": 1.4689071194915793,
+          "shift_cosine": -0.004483932204395579,
+          "spread_ratio": 0.6303717342566196
+        },
+        "empirical": {
+          "energy_distance": 1.0515066398652633,
+          "shift_cosine": -0.07146166622745798,
+          "spread_ratio": 1.2015285507590558
+        }
+      },
+      "total_target_group_seed_rows": 32,
+      "tuned_beats_published": 28,
+      "tuned_ties_published": 0,
+      "tuned_beats_empirical": 0,
+      "holdout_means": {
+        "Screen1_0": {
+          "selected_rate": 0.224,
+          "tuned_energy": 1.7686728095127588,
+          "published_energy": 1.792661039593396,
+          "empirical_energy": 1.2989825751925326
+        },
+        "Screen1_1": {
+          "selected_rate": 0.028,
+          "tuned_energy": 1.321963311960364,
+          "published_energy": 1.3495112583064248,
+          "empirical_energy": 0.9919738556423244
+        },
+        "Screen1_3": {
+          "selected_rate": 0.0396,
+          "tuned_energy": 1.0192988018514952,
+          "published_energy": 1.0609849052077176,
+          "empirical_energy": 0.7933308126471803
+        },
+        "Screen1_4": {
+          "selected_rate": 0.028,
+          "tuned_energy": 1.6273835718691478,
+          "published_energy": 1.6724712748587791,
+          "empirical_energy": 1.121739315979016
+        }
+      }
+    },
+    "iAstrocytes": {
+      "means": {
+        "tuned": {
+          "energy_distance": 1.9590122943430603,
+          "shift_cosine": 0.05782997696206538,
+          "spread_ratio": 0.6572372878748497
+        },
+        "published": {
+          "energy_distance": 1.9832551821657745,
+          "shift_cosine": 0.09875906427448519,
+          "spread_ratio": 0.6394941652675298
+        },
+        "empirical": {
+          "energy_distance": 1.470149173106979,
+          "shift_cosine": 0.07910653002256238,
+          "spread_ratio": 1.1998379841895797
+        }
+      },
+      "total_target_group_seed_rows": 16,
+      "tuned_beats_published": 11,
+      "tuned_ties_published": 0,
+      "tuned_beats_empirical": 0,
+      "holdout_means": {
+        "SCREEN1_1": {
+          "selected_rate": 0.0396,
+          "tuned_energy": 1.8520065596348267,
+          "published_energy": 1.9143937602242762,
+          "empirical_energy": 1.537194408739102
+        },
+        "SCREEN1_2": {
+          "selected_rate": 0.112,
+          "tuned_energy": 2.066018029051294,
+          "published_energy": 2.052116604107273,
+          "empirical_energy": 1.4031039374748557
+        }
+      }
+    }
+  },
+  "all_groups": {
+    "means": {
+      "tuned": {
+        "energy_distance": 1.6092238473133145,
+        "shift_cosine": -0.007062346799429706,
+        "spread_ratio": 0.6469840525038034
+      },
+      "published": {
+        "energy_distance": 1.640356473716311,
+        "shift_cosine": 0.029930399955231345,
+        "spread_ratio": 0.6334125445935898
+      },
+      "empirical": {
+        "energy_distance": 1.1910541509458352,
+        "shift_cosine": -0.02127226747745119,
+        "spread_ratio": 1.2009650285692304
+      }
+    },
+    "total_target_group_seed_rows": 48,
+    "tuned_beats_published": 39,
+    "tuned_ties_published": 0,
+    "tuned_beats_empirical": 0,
+    "holdout_means": {
+      "SCREEN1_1": {
+        "selected_rate": 0.0396,
+        "tuned_energy": 1.8520065596348267,
+        "published_energy": 1.9143937602242762,
+        "empirical_energy": 1.537194408739102
+      },
+      "SCREEN1_2": {
+        "selected_rate": 0.112,
+        "tuned_energy": 2.066018029051294,
+        "published_energy": 2.052116604107273,
+        "empirical_energy": 1.4031039374748557
+      },
+      "Screen1_0": {
+        "selected_rate": 0.224,
+        "tuned_energy": 1.7686728095127588,
+        "published_energy": 1.792661039593396,
+        "empirical_energy": 1.2989825751925326
+      },
+      "Screen1_1": {
+        "selected_rate": 0.028,
+        "tuned_energy": 1.321963311960364,
+        "published_energy": 1.3495112583064248,
+        "empirical_energy": 0.9919738556423244
+      },
+      "Screen1_3": {
+        "selected_rate": 0.0396,
+        "tuned_energy": 1.0192988018514952,
+        "published_energy": 1.0609849052077176,
+        "empirical_energy": 0.7933308126471803
+      },
+      "Screen1_4": {
+        "selected_rate": 0.028,
+        "tuned_energy": 1.6273835718691478,
+        "published_energy": 1.6724712748587791,
+        "empirical_energy": 1.121739315979016
+      }
+    }
+  },
+  "validation_details": {
+    "Screen1_0": {
+      "split": {
+        "validation_group": "Screen1_1"
+      },
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "validation_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "candidates": [
+        {
+          "base_rate": 0.005,
+          "mean_energy_distance": 1.5874005876577126
+        },
+        {
+          "base_rate": 0.014,
+          "mean_energy_distance": 1.5745946652357758
+        },
+        {
+          "base_rate": 0.028,
+          "mean_energy_distance": 1.5857541152119385
+        },
+        {
+          "base_rate": 0.056,
+          "mean_energy_distance": 1.5931378920733148
+        },
+        {
+          "base_rate": 0.0792,
+          "mean_energy_distance": 1.581612679489092
+        },
+        {
+          "base_rate": 0.112,
+          "mean_energy_distance": 1.55107300586357
+        },
+        {
+          "base_rate": 0.224,
+          "mean_energy_distance": 1.5252990334546177
+        }
+      ]
+    },
+    "Screen1_1": {
+      "split": {
+        "validation_group": "Screen1_3"
+      },
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "validation_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "candidates": [
+        {
+          "base_rate": 0.005,
+          "mean_energy_distance": 1.0807094072327215
+        },
+        {
+          "base_rate": 0.014,
+          "mean_energy_distance": 1.0454400390705654
+        },
+        {
+          "base_rate": 0.0198,
+          "mean_energy_distance": 1.0292137262664252
+        },
+        {
+          "base_rate": 0.028,
+          "mean_energy_distance": 1.0075549653858868
+        },
+        {
+          "base_rate": 0.0396,
+          "mean_energy_distance": 1.0197988379950602
+        },
+        {
+          "base_rate": 0.056,
+          "mean_energy_distance": 1.0079270140576266
+        },
+        {
+          "base_rate": 0.112,
+          "mean_energy_distance": 1.0318737566976914
+        }
+      ]
+    },
+    "Screen1_3": {
+      "split": {
+        "validation_group": "Screen1_4"
+      },
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "validation_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "candidates": [
+        {
+          "base_rate": 0.005,
+          "mean_energy_distance": 2.7757330011148094
+        },
+        {
+          "base_rate": 0.014,
+          "mean_energy_distance": 2.73492863007845
+        },
+        {
+          "base_rate": 0.0198,
+          "mean_energy_distance": 2.732195302257421
+        },
+        {
+          "base_rate": 0.028,
+          "mean_energy_distance": 2.7304161935019735
+        },
+        {
+          "base_rate": 0.0396,
+          "mean_energy_distance": 2.7257879256012014
+        },
+        {
+          "base_rate": 0.056,
+          "mean_energy_distance": 2.7372352982667385
+        },
+        {
+          "base_rate": 0.112,
+          "mean_energy_distance": 2.7520989434982486
+        }
+      ]
+    },
+    "Screen1_4": {
+      "split": {
+        "validation_group": "Screen1_0"
+      },
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "validation_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "candidates": [
+        {
+          "base_rate": 0.005,
+          "mean_energy_distance": 1.7036100198236204
+        },
+        {
+          "base_rate": 0.014,
+          "mean_energy_distance": 1.6034192813447685
+        },
+        {
+          "base_rate": 0.0198,
+          "mean_energy_distance": 1.5768746507974036
+        },
+        {
+          "base_rate": 0.028,
+          "mean_energy_distance": 1.554038294498843
+        },
+        {
+          "base_rate": 0.0396,
+          "mean_energy_distance": 1.5711446436266583
+        },
+        {
+          "base_rate": 0.056,
+          "mean_energy_distance": 1.5699466491197052
+        },
+        {
+          "base_rate": 0.112,
+          "mean_energy_distance": 1.668240395353612
+        }
+      ]
+    },
+    "SCREEN1_1": {
+      "split": {
+        "validation_group": "SCREEN1_2",
+        "validation_vectors": {
+          "INT": [
+            "INT10",
+            "INT11",
+            "INT12",
+            "INT13",
+            "INT14",
+            "INT16",
+            "INT18"
+          ],
+          "GLCCI1": [
+            "GLCCI1_A",
+            "GLCCI1_C"
+          ],
+          "SLC2A4RG": [
+            "SLC2A4RG_B",
+            "SLC2A4RG_C"
+          ],
+          "PLEKHA1": [
+            "PLEKHA1_C"
+          ],
+          "MAMSTR": [
+            "MAMSTR_A",
+            "MAMSTR_B"
+          ]
+        }
+      },
+      "fit_cells": {
+        "INT": 107,
+        "GLCCI1": 110,
+        "SLC2A4RG": 144,
+        "PLEKHA1": 100,
+        "MAMSTR": 87
+      },
+      "validation_cells": {
+        "INT": 53,
+        "GLCCI1": 50,
+        "SLC2A4RG": 16,
+        "PLEKHA1": 60,
+        "MAMSTR": 24
+      },
+      "candidates": [
+        {
+          "base_rate": 0.005,
+          "mean_energy_distance": 0.678051818435512
+        },
+        {
+          "base_rate": 0.014,
+          "mean_energy_distance": 0.6491657124132959
+        },
+        {
+          "base_rate": 0.028,
+          "mean_energy_distance": 0.6425336308522405
+        },
+        {
+          "base_rate": 0.0396,
+          "mean_energy_distance": 0.6382694574830405
+        },
+        {
+          "base_rate": 0.056,
+          "mean_energy_distance": 0.6396891890940333
+        },
+        {
+          "base_rate": 0.0792,
+          "mean_energy_distance": 0.6530483928662139
+        },
+        {
+          "base_rate": 0.112,
+          "mean_energy_distance": 0.6628443307323022
+        }
+      ]
+    },
+    "SCREEN1_2": {
+      "split": {
+        "validation_group": "SCREEN1_1",
+        "validation_vectors": {
+          "INT": [
+            "INT1",
+            "INT10",
+            "INT11",
+            "INT12",
+            "INT13",
+            "INT15",
+            "INT18"
+          ],
+          "GLCCI1": [
+            "GLCCI1_A",
+            "GLCCI1_C"
+          ],
+          "SLC2A4RG": [
+            "SLC2A4RG_B",
+            "SLC2A4RG_C"
+          ],
+          "PLEKHA1": [
+            "PLEKHA1_C"
+          ],
+          "MAMSTR": [
+            "MAMSTR_A"
+          ]
+        }
+      },
+      "fit_cells": {
+        "INT": 107,
+        "GLCCI1": 119,
+        "SLC2A4RG": 140,
+        "PLEKHA1": 96,
+        "MAMSTR": 81
+      },
+      "validation_cells": {
+        "INT": 53,
+        "GLCCI1": 41,
+        "SLC2A4RG": 20,
+        "PLEKHA1": 64,
+        "MAMSTR": 30
+      },
+      "candidates": [
+        {
+          "base_rate": 0.005,
+          "mean_energy_distance": 0.5429501251387514
+        },
+        {
+          "base_rate": 0.014,
+          "mean_energy_distance": 0.5453228829717149
+        },
+        {
+          "base_rate": 0.028,
+          "mean_energy_distance": 0.5433175623553139
+        },
+        {
+          "base_rate": 0.056,
+          "mean_energy_distance": 0.5434405661803274
+        },
+        {
+          "base_rate": 0.0792,
+          "mean_energy_distance": 0.5557537755006436
+        },
+        {
+          "base_rate": 0.112,
+          "mean_energy_distance": 0.5377036657034477
+        },
+        {
+          "base_rate": 0.224,
+          "mean_energy_distance": 0.5741843561246205
+        }
+      ]
+    }
+  },
+  "cuda_fits": 66,
+  "receipt_sha256": {
+    "SCREEN1_1-validation.json": "cd583d13fc3f95c9df8d81e8ac121bab26e0c6aa37f0fe552783b8d76838f6f6",
+    "SCREEN1_2-validation.json": "23832df22410a63b07b09ed25010a7907ec233333e01ff8e04cf38f6d482c93e",
+    "Screen1_0-validation.json": "71ffb007f614b6ed3bd492ff1c77670c682176fea1ca24436fefbd7969e0940e",
+    "Screen1_1-validation.json": "f564ea7ec49ac46802c0d85506e66eeeae36def6b20555428eaba7d4208010a2",
+    "Screen1_3-validation.json": "594f93ac57895fee0e7f3d265b8469f065430a3c92967feea57e4decc0f5f5b8",
+    "Screen1_4-validation.json": "db6470e27928c1ef596e0f099a33f937f85d7727949d57afb62c8cb641285bc6",
+    "SCREEN1_1-heldout-seed1.json": "c5526c2fb9a52166008ad3fa8f01d9e81f230cf846f47736804aba5b57b1e77f",
+    "SCREEN1_1-heldout-seed2.json": "c39ce043b24483a605b8b4697df7d24ce278fbd2b5da69efe6add72c410d6a71",
+    "SCREEN1_2-heldout-seed1.json": "c875277fab80271699124f701d1c8bbef833439e5879ba4911b6fa22e9cb1968",
+    "SCREEN1_2-heldout-seed2.json": "ce6868f8ca9c4ef7c04d3665446a7cca8928d2890c8eb11d408491d297441639",
+    "Screen1_0-heldout-seed1.json": "be7a669fc0c9108dee73c25842c449a0d445cc7ad384d6c954a757f904794fc2",
+    "Screen1_0-heldout-seed2.json": "a955fe1a458ef26670c4a43f17a7e76b2b8aa0cf0d5df5cffbcb1d4376c93c69",
+    "Screen1_1-heldout-seed1.json": "0eea27e9112a7ab2f701bef2332e92089550ac5e02fdcc32dd7f47c59be55335",
+    "Screen1_1-heldout-seed2.json": "824df50aa8bab74534ba91fb56dfb6dc694d3ac4c835b53035fd2c2b0ebd1a4e",
+    "Screen1_3-heldout-seed1.json": "5f602ebb11ab15aef8686a6f1e7980829ea3dc197f1dfa9a10234c886bfda18e",
+    "Screen1_3-heldout-seed2.json": "58d9cc68d6d12d0018dc7a48aa3dd8eac88ac7814f4a7d93c072f3711ebbc426",
+    "Screen1_4-heldout-seed1.json": "f11b52bfd91780a37772d3cbb1f72037b53a3f8eb2c82be6b88e183e5c392034",
+    "Screen1_4-heldout-seed2.json": "82ef170e877fc932d71c4571a982ebaa198e40b69b4f1bc2f99308f53422c075"
+  }
+}

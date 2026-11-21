@@ -105,3 +105,40 @@ def test_fetch_promotes_only_verified_bytes(tmp_path, monkeypatch):
     path.write_bytes(b"wrong")
     with pytest.raises(ValueError, match="checksum mismatch"):
         fetch_neuroko.fetch(tmp_path, screen)
+
+
+def test_rate_selection_keeps_outer_group_out_of_preprocessing_and_validation():
+    from types import SimpleNamespace
+
+    from alztest.neuroko_lr import validation_split
+
+    panel = SimpleNamespace(groups=np.array(["a", "b", "c", "d"]))
+    fit, validation, description = validation_split(panel, "b", ["INT", "A"])
+    np.testing.assert_array_equal(fit, [True, False, False, True])
+    np.testing.assert_array_equal(validation, [False, False, True, False])
+    assert description == {"validation_group": "c"}
+
+
+def test_rate_selection_in_one_batch_holds_out_whole_vectors():
+    from types import SimpleNamespace
+
+    from alztest.neuroko_lr import validation_split
+
+    panel = SimpleNamespace(
+        groups=np.repeat(["a", "b"], 192),
+        labels=np.tile(np.repeat([0, 1], 96), 2),
+        vectors=np.tile(np.repeat(["i1", "i2", "i3", "A1", "A2", "A3"], 32), 2),
+    )
+    fit, validation, description = validation_split(panel, "a", ["INT", "A"])
+    assert not np.any((fit | validation) & (panel.groups == "a"))
+    assert set(panel.vectors[fit]).isdisjoint(panel.vectors[validation])
+    assert validation.sum() == 64
+    assert fit.sum() == 128
+    assert description["validation_group"] == "b"
+
+
+def test_rate_refinement_brackets_an_upper_bound_winner():
+    from alztest.neuroko_lr import RATES, finer_rates
+
+    records = [{"base_rate": rate, "mean_energy_distance": 1 / rate} for rate in RATES]
+    assert finer_rates(records) == (0.0792, 0.224)
