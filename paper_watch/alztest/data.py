@@ -165,3 +165,67 @@ def load_gnpc():
         )
     import pandas as pd
     return pd.read_parquet(p)
+
+
+def load_gse289721():
+    """GSE289721 Perturb-seq (Cardona et al., J Neuroinflammation 2025).
+
+    CRISPRi of AD GWAS genes in human iPSC-derived microglia; the
+    Perturb-seq arm covers 6 targets (AGFG2, EED, INPP5D, MS4A6A,
+    PVR, RABEP1) + non-targeting control, 72 guide-capture features
+    in the same matrices as the 36,601 genes. Public on GEO since
+    2025-12-31 (GSE289721_RAW.tar, 4 libraries SS001/SS002/AS001/
+    AS002). Guide assignment: dominant guide >= 50% of a cell's
+    guide UMIs with >= 3 guide UMIs total; guide -> target via
+    GSE289721_feature_ref4.csv.gz. Built object cached at
+    data/gse289721_perturbseq.h5ad.
+    """
+    cache = DATA_DIR / "gse289721_perturbseq.h5ad"
+    import anndata as ad
+    if cache.exists():
+        return ad.read_h5ad(cache)
+    raw_dir = DATA_DIR / "gse289721"
+    ref_p = DATA_DIR / "feature_ref4.csv.gz"
+    if not raw_dir.exists() or not ref_p.exists():
+        raise DataUnavailable(
+            "GSE289721 raw files not present. Download GSE289721_RAW.tar "
+            "and GSE289721_feature_ref4.csv.gz from GEO series GSE289721 "
+            "into data/ and extract the tar into data/gse289721/.")
+    import numpy as np
+    import pandas as pd
+    from scipy.io import mmread
+    from scipy import sparse
+    ref = pd.read_csv(ref_p)
+    g2t = dict(zip(ref["id"], ref["target_gene_name"]))
+    blocks, obs_frames = [], []
+    for mtx_p in sorted(raw_dir.glob("*_matrix.mtx.gz")):
+        stem = mtx_p.name.replace("_matrix.mtx.gz", "")
+        feats = pd.read_csv(raw_dir / f"{stem}_features.tsv.gz", sep="\t",
+                            header=None, names=["id", "name", "type"])
+        barcodes = pd.read_csv(raw_dir / f"{stem}_barcodes.tsv.gz",
+                               sep="\t", header=None)[0].astype(str)
+        M = mmread(str(mtx_p)).tocsc()
+        guide_rows = np.where(feats["type"].values == "CRISPR Guide Capture")[0]
+        gene_rows = np.where(feats["type"].values == "Gene Expression")[0]
+        G = M[guide_rows, :].toarray().astype(float)
+        tot, am, mx = G.sum(0), G.argmax(0), G.max(0)
+        ok = (tot >= 3) & (mx >= 0.5 * np.maximum(tot, 1))
+        guide_ids = feats["id"].values[guide_rows]
+        targets = np.array([g2t.get(guide_ids[i], "Unassigned") for i in am])
+        targets = np.where(ok, targets, "Unassigned")
+        X = M[gene_rows, :].T.tocsr()[ok]
+        obs = pd.DataFrame({
+            "target": targets[ok],
+            "library": stem.split("_", 1)[1],
+            "n_guide_umi": tot[ok].astype(int),
+        }, index=[f"{stem}:{b}" for b in barcodes[ok]])
+        blocks.append(X)
+        obs_frames.append(obs)
+        var_names = feats["id"].values[gene_rows]
+    X = sparse.vstack(blocks).tocsr()
+    obs = pd.concat(obs_frames)
+    adata = ad.AnnData(X=X, obs=obs)
+    adata.var_names = [str(v) for v in var_names]
+    adata.obs["target"] = adata.obs["target"].astype(str)
+    adata.write_h5ad(cache)
+    return adata
