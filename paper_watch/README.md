@@ -68,6 +68,62 @@ processed neuronal and astrocyte count matrices. The [NeuroKO evaluation](notes/
 documents the release audit and the grouped perturbation tests that follow
 closed PR #10.
 
+### NeuroKO GPU comparison
+
+Run from the repository root in Bash on Linux with Python 3.11, Git, curl and an NVIDIA GPU. The reference runs used an RTX A6000, a CUDA 13.0-compatible driver and PyTorch 2.14.1+cu130. Allow space for both H5ADs (13.78 GB total), the CUDA environment and the checkout. The two release wheels below use a shared Python environment and separate import directories. The top-level project's ParticleGAN pin is for a different experiment.
+
+```bash
+python3.11 -m venv .venv-neuroko
+source .venv-neuroko/bin/activate
+python -m pip install --upgrade pip
+python -m pip install 'torch==2.14.1' --index-url https://download.pytorch.org/whl/cu130
+python -m pip install 'numpy==1.26.4' 'scipy==1.17.1' 'pandas==2.3.3' \
+  'h5py==3.16.0' 'anndata==0.12.7' 'pytest>=8,<10'
+python -c 'import torch; assert torch.cuda.is_available(); print(torch.__version__, torch.cuda.get_device_name(0))'
+
+data=paper_watch/data/neuroko
+for version in 0.10.0 0.11.1; do
+  python -m pip install --no-deps --target "$data/wheels/$version" "particlegan==$version"
+done
+python paper_watch/scripts/fetch_neuroko.py --out "$data"
+```
+
+The fetcher resumes interrupted transfers and verifies each original H5AD against its Zenodo byte count and MD5. Keep the filenames `iNeurons.h5ad` and `iAstrocytes.h5ad`. The benchmark reads the first 10,000 cells per group for a 60,000-cell pilot. Both files determine the shared target panel. [Versioned NeuroKO data](https://zenodo.org/records/23260389)
+
+The following function uses one GPU and runs the two releases sequentially. Keep these commands in the same Bash session. On a machine with multiple GPUs, set `CUDA_VISIBLE_DEVICES` to the desired device before starting.
+
+```bash
+run_neuroko_pair() {
+  local version recipe rate
+  for version in 0.10.0 0.11.1; do
+    case "$version" in
+      0.10.0) recipe=empf; rate=0.005 ;;
+      0.11.1) recipe=unified_v11; rate=0.028 ;;
+    esac
+    PYTHONPATH="$data/wheels/$version" python -c \
+      'import sys; from importlib.metadata import version; assert version("particlegan") == sys.argv[1]' "$version" || return 1
+    PYTHONPATH="$data/wheels/$version" OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 \
+      python -m paper_watch.alztest.neuroko_duration \
+        --data "$data" --window-cells 10000 --device cuda:0 --group Screen1_0 --seed 1 \
+        --recipe "$recipe" --rate "$rate" --checkpoints "$@" \
+        --out "$data/results/$recipe.json" --state-file "$data/results/$recipe.pt" || return 1
+  done
+}
+run_neuroko_pair 300
+```
+
+A successful smoke run writes one JSON and one trainer checkpoint per recipe in `paper_watch/data/neuroko/results/`. Check that both receipts report CUDA, the same fit and held-out cell counts, batch size 64, 64 particles, latent dimension 16 and a completed 300-update score. Our reference scores were about **1.470 for EMPF** and **1.742 for tuned Unified v11**. Hardware and numerical differences can affect later scores.
+
+```bash
+run_neuroko_pair 300 1200 2400 3600 {4000..40000..1000}
+```
+
+Use the long command again after an interruption. It resumes each arm from its saved trainer state. Compare `mean_energy_distance` in the final checkpoint (lower is better), each target's `spread_ratio` (1 matches the observed spread), and `effective_rank`. Report the seed and neuronal holdout with the results. [Reference runs and comparison](notes/neuroko_particlegan_0111_gpu_lr.md)
+
+#### Copy-paste prompt
+
+> Reproduce the NeuroKO GPU comparison. Clone https://github.com/difflabai/alz-perturb-gan on branch `paper-watch/neuroko-revival`, record the commit, and follow “NeuroKO GPU comparison” in `paper_watch/README.md`. Set up Python 3.11 and CUDA PyTorch, then download and checksum both NeuroKO H5ADs from Zenodo record 23260389. Run the matched seed-1 neuronal holdout (`Screen1_0`) with 0.10.0 EMPF at 0.005 and 0.11.1 Unified v11 at 0.028. Verify both 300-update smoke runs use CUDA and the same cells. Resume both to 40,000 updates. Save the receipts and checkpoints, then report which model has lower held-out energy distance, how many targets it wins, and how its spread compares with the observed cells.
+
 ## Blocked finds
 
 The panAD and GNPC conversions are still waiting for data access. [Blocked finds](notes/blocked_finds.md)

@@ -163,6 +163,8 @@ def run(args, panel, conditions, device):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, required=True)
+    parser.add_argument("--window-cells", type=int,
+                        help="use the first N cells per release group from the original H5ADs")
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--state-file", type=Path, help="save and resume a local trainer checkpoint")
     parser.add_argument("--group", choices=sum(GROUPS.values(), ()), required=True)
@@ -179,6 +181,8 @@ def main():
         parser.error("the base rate must be positive and finite")
     if min(args.checkpoints) <= 0:
         parser.error("the checkpoints must be positive")
+    if args.window_cells is not None and args.window_cells < 1:
+        parser.error("window-cells must be positive")
     device = torch.device(args.device)
     if device.type != "cuda" or not torch.cuda.is_available():
         parser.error("this experiment requires CUDA")
@@ -192,7 +196,7 @@ def main():
             parser.error("choose separate paths for scores and trainer state")
         args.state_file.parent.mkdir(parents=True, exist_ok=True)
     with ExitStack() as stack:
-        screens = [stack.enter_context(open_screen(args.data, name)) for name in LAYOUT]
+        screens = [stack.enter_context(open_screen(args.data, name, args.window_cells)) for name in LAYOUT]
         conditions, panels = load_comparison(screens, 100, 160, 6)
         panel = next(panel for name, panel in panels.items() if args.group in GROUPS[name])
         run(args, panel, conditions, device)
