@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 from contextlib import ExitStack
 from importlib.metadata import version
+import os
 import json
 from pathlib import Path
 from statistics import mean
@@ -61,11 +62,11 @@ def validation_split(panel, group, conditions):
     return training, validate, description
 
 
-def model_samples(x, labels, n_conditions, rate, steps, seed, device):
+def model_samples(x, labels, n_conditions, rate, steps, seed, device, recipe_name=RECIPE):
     with torch.random.fork_rng(devices=[]):
         torch.default_generator.manual_seed(seed)
         model = ConditionalPGAN(x.shape[1], n_conditions, seed=seed, learning_rate=rate,
-                                recipe_name=RECIPE, device=device)
+                                recipe_name=recipe_name, device=device)
     for module in (model.G, model.D, model.prior):
         if {parameter.device for parameter in module.parameters()} != {device}:
             raise RuntimeError("the generator, critic and prior must all run on the selected CUDA device")
@@ -95,7 +96,7 @@ def score(samples, observed, conditions):
     return results
 
 
-def compare_rates(panel, conditions, fit_rows, evaluation_rows, rates, steps, seed, device):
+def compare_rates(panel, conditions, fit_rows, evaluation_rows, rates, steps, seed, device, recipe_name=RECIPE):
     xfit, xobserved = project_fold(panel.x[fit_rows], panel.x[evaluation_rows])
     yfit, yobserved = panel.labels[fit_rows], panel.labels[evaluation_rows]
     n_conditions = len(conditions)
@@ -109,7 +110,7 @@ def compare_rates(panel, conditions, fit_rows, evaluation_rows, rates, steps, se
     for rate in rates:
         print(f"  lr {rate:g}, seed {seed}, {steps} CUDA updates", flush=True)
         try:
-            simulated, seconds = model_samples(xfit, yfit, n_conditions, rate, steps, seed, device)
+            simulated, seconds = model_samples(xfit, yfit, n_conditions, rate, steps, seed, device, recipe_name)
         except FloatingPointError as error:
             records.append({"base_rate": rate, "error": str(error)})
             continue
@@ -143,12 +144,25 @@ def finer_rates(records):
     return tuple(float(f"{(center * neighbor) ** 0.5:.3g}") for neighbor in (lower, upper))
 
 
+def experiment_config(args, conditions):
+    config = {"particlegan": version("particlegan"), "recipe": args.recipe, "steps": args.steps,
+              "targets": conditions[1:], "data": str(args.data.resolve())}
+    if args.stage == "replay":
+        files = {name: (args.data / f"{name}.h5ad").stat() for name in LAYOUT}
+        config["data_files"] = {name: [entry.st_size, entry.st_mtime_ns] for name, entry in files.items()}
+    return config
+
+
 def evaluate_group(args, conditions, panel, group, device):
     test = panel.groups == group
     validation_file = args.output / f"{group}-validation.json"
-    config = {"particlegan": RELEASE, "recipe": RECIPE, "steps": args.steps,
-              "targets": conditions[1:], "data": str(args.data.resolve())}
-    if args.stage != "heldout":
+    config = experiment_config(args, conditions)
+    if args.stage == "replay":
+        selected, = args.rates
+        split = {}
+        scores = compare_rates(panel, conditions, ~test, test, args.rates, args.steps, args.seed,
+                               device, args.recipe)
+    elif args.stage != "heldout":
         training, validation, split = validation_split(panel, group, conditions)
         prior = json.loads(validation_file.read_text()) if validation_file.exists() else None
         if args.stage == "refine" and prior is None:
@@ -176,7 +190,8 @@ def evaluate_group(args, conditions, panel, group, device):
         split = {"validation_seed": tuning["seed"]}
         rates = tuple(dict.fromkeys((selected, PUBLISHED_RATE)))
         scores = compare_rates(panel, conditions, ~test, test, rates, args.steps, args.seed, device)
-    return {"stage": "heldout" if args.stage == "heldout" else "validation",
+    stage = "validation" if args.stage == "refine" else args.stage
+    return {"stage": stage,
             "held_out_group": group, "config": config, "seed": args.seed,
             "device": str(device), "gpu": torch.cuda.get_device_name(device), "split": split,
             "torch_version": torch.__version__, "selected_rate": selected, **scores}
@@ -184,12 +199,14 @@ def evaluate_group(args, conditions, panel, group, device):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("stage", choices=("validation", "refine", "heldout"))
+    parser.add_argument("stage", choices=("validation", "refine", "heldout", "replay"))
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--group", choices=sum(GROUPS.values(), ()), action="append", required=True)
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--steps", type=int, default=300)
+    parser.add_argument("--recipe", choices=(RECIPE, "empf"), default=RECIPE,
+                        help="public recipe for a fixed-rate replay")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--rates", type=float, nargs="+", default=RATES)
     args = parser.parse_args()
@@ -200,8 +217,11 @@ def main():
     device = torch.device(args.device)
     if device.type != "cuda" or not torch.cuda.is_available():
         parser.error("this experiment requires CUDA")
-    if version("particlegan") != RELEASE:
-        parser.error(f"install ParticleGAN {RELEASE} for this comparison")
+    if args.stage == "replay":
+        if len(args.rates) != 1:
+            parser.error("replay requires exactly one explicit rate via --rates")
+    elif version("particlegan") != RELEASE or args.recipe != RECIPE:
+        parser.error(f"rate selection and confirmation require {RECIPE} on ParticleGAN {RELEASE}")
     if device.index is not None:
         torch.cuda.set_device(device)
     device = torch.device("cuda", torch.cuda.current_device())
@@ -212,14 +232,26 @@ def main():
         conditions, panels = load_comparison(screens, 100, 160, 6)
         for group in args.group:
             panel = next(panel for name, panel in panels.items() if group in GROUPS[name])
-            print(f"{args.stage} {group}, {torch.cuda.get_device_name(device)}", flush=True)
-            result = evaluate_group(args, conditions, panel, group, device)
-            if args.stage == "heldout":
+            if args.stage == "replay":
+                filename = f"{group}-replay-{args.recipe}-{version('particlegan')}-seed{args.seed}.json"
+            elif args.stage == "heldout":
                 filename = f"{group}-heldout-seed{args.seed}.json"
             else:
                 filename = f"{group}-validation.json"
             path = args.output / filename
-            temporary = path.with_suffix(".tmp")
+            if args.stage == "replay" and path.is_file():
+                completed = json.loads(path.read_text())
+                if (completed["config"] == experiment_config(args, conditions)
+                        and completed["selected_rate"] == args.rates[0]
+                        and completed["seed"] == args.seed and completed["held_out_group"] == group
+                        and completed["torch_version"] == torch.__version__
+                        and completed["gpu"] == torch.cuda.get_device_name(device)
+                        and "target_scores" in completed["rates"][0]):
+                    print(f"reused {path}", flush=True)
+                    continue
+            print(f"{args.stage} {group}, {torch.cuda.get_device_name(device)}", flush=True)
+            result = evaluate_group(args, conditions, panel, group, device)
+            temporary = path.with_suffix(f".{os.getpid()}.tmp")
             temporary.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
             temporary.replace(path)
             print(f"  selected {result['selected_rate']:g}, wrote {path}", flush=True)

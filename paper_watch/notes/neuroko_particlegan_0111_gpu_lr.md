@@ -47,6 +47,19 @@ The fold-local tuning procedure lowered mean held-out energy distance by 1.9%. I
 
 `Screen1_0` selected 0.224 at its local upper boundary. That fold's optimum could be beyond the values tested. In total, 66 CUDA fits ran 19,800 updates. A machine-readable [summary](neuroko_particlegan_0111_gpu_lr.json) includes the validation splits and scores for each fold.
 
+## Matched CUDA comparison with 0.10.0
+
+The 0.10.0 EMPF arm uses the earlier NeuroKO base rate of 0.005. Both releases used the same RTX A6000 model, 300 updates, six outer holdouts, four targets and seeds 1 and 2. Empirical samples and their scores matched exactly in every replay. The fixed 0.028 arm reuses the confirmation fits on `Screen1_1` and `Screen1_4`, which had selected that rate. The fixed replay describes the pooled validation recommendation. The fold-tuned arm selects each rate using only its own outer training data.
+
+| Model and base rate | Neuron energy ↓ | Astrocyte energy ↓ | All groups energy ↓ | Mean shift cosine ↑ | Mean absolute spread error ↓ |
+|---|---:|---:|---:|---:|---:|
+| 0.10.0 EMPF, 0.005 | 1.2904 | 1.6669 | 1.4159 | 0.015 | 0.370 |
+| 0.11.1 Unified v11, fixed 0.028 | 1.4379 | 1.9349 | 1.6036 | -0.001 | 0.352 |
+| 0.11.1 Unified v11, fold-tuned | 1.4343 | 1.9590 | 1.6092 | -0.007 | 0.353 |
+| Empirical resampling | 1.0515 | 1.4701 | 1.1911 | -0.021 | 0.201 |
+
+Relative to 0.10.0 EMPF, mean energy distance was 13.3% higher at fixed 0.028 and 13.7% higher with fold-specific tuning. Fixed 0.028 beat EMPF on 12 of 48 paired rows. Fold-specific tuning beat it on 13 of 48. The rows share experimental groups and are descriptive. [Machine-readable comparison](neuroko_cuda_010_vs_0111.json)
+
 ## Reproduce
 
 Use a CUDA-enabled paper-watch environment with the verified 0.11.1 wheel and the pilot H5ADs in `paper_watch/data/neuroko/pilot`. Run the same stages for `Screen1_0`, `Screen1_1`, `Screen1_3`, `Screen1_4`, `SCREEN1_1` and `SCREEN1_2`.
@@ -69,3 +82,19 @@ CUDA_VISIBLE_DEVICES=0 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
 ```
 
 Repeat the held-out command with `--seed 2`. Multiple `--group` flags allow a single process to run several folds. Each completed group writes a separate JSON receipt with the chosen rate, device, split and per-target scores.
+
+For the version replays, use the matching release wheel and the same data, groups and seeds. Append `--group` for each of the six groups and repeat with `--seed 2`.
+
+```sh
+# In the 0.10.0 environment.
+CUDA_VISIBLE_DEVICES=0 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
+  python -m paper_watch.alztest.neuroko_lr replay \
+  --data paper_watch/data/neuroko/pilot --output paper_watch/data/neuroko/lr-cuda/version-replays \
+  --group Screen1_0 --recipe empf --rates 0.005 --seed 1
+
+# In the 0.11.1 environment.
+CUDA_VISIBLE_DEVICES=0 OPENBLAS_NUM_THREADS=2 OMP_NUM_THREADS=2 \
+  python -m paper_watch.alztest.neuroko_lr replay \
+  --data paper_watch/data/neuroko/pilot --output paper_watch/data/neuroko/lr-cuda/version-replays \
+  --group Screen1_0 --recipe unified_v11 --rates 0.028 --seed 1
+```
