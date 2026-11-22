@@ -21,27 +21,36 @@ def neuroko_path() -> Path:
     env = os.environ.get("NEUROKO_H5AD")
     if env:
         return Path(env)
-    return DATA_DIR / "neuroko_annotated.h5ad"
+    # Corrected Zenodo record (10.5281/zenodo.23260389) ships one
+    # object per cell type; the test's primary stratum is iNeurons.
+    for name in ("iNeurons.h5ad", "neuroko_annotated.h5ad"):
+        p = DATA_DIR / name
+        if p.exists():
+            return p
+    return DATA_DIR / "iNeurons.h5ad"
 
 
 def load_neuroko():
     """NeuroKO Perturb-seq (Dominicus et al., bioRxiv 2026.10.13.758778).
 
-    Stated access in the preprint: annotated integrated scRNA-seq objects
-    on Zenodo (DOI as printed: 10.5281/zenodo.2326038861 — the identifier
-    does not resolve as printed; verified 2026-11-17 against the Zenodo
-    API, Europe PMC, and the authors' GitHub), raw sequencing at ENA
-    ERP134820, code at github.com/Lotfollahi-lab/NeuroID-reproducibility.
+    Access: annotated objects on Zenodo. The DOI printed in the
+    preprint (10.5281/zenodo.2326038861) is malformed and 404s; the
+    live record is 10.5281/zenodo.23260389 (v1, CC BY 4.0, verified
+    2026-11-21): iNeurons.h5ad (6,314,792,054 B, md5
+    cd4d1fbb316a66f6d4daebfd770acd8e) and iAstrocytes.h5ad
+    (7,465,978,066 B, md5 10abe464ca16bcaab07d644adcaae3ff). Raw
+    sequencing at ENA ERP134820; code at
+    github.com/Lotfollahi-lab/NeuroID-reproducibility (obs schema:
+    perturbation / target_gene / Replicate; control = "INT").
     """
     p = neuroko_path()
     if not p.exists():
         raise DataUnavailable(
-            "NeuroKO annotated objects not present locally and the Zenodo "
-            "DOI printed in the preprint (10.5281/zenodo.2326038861) does "
-            "not resolve via the Zenodo API (checked 2026-11-17); raw data "
-            "exists at ENA ERP134820 but is unprocessed FASTQ. Place the "
-            "annotated h5ad at data/neuroko_annotated.h5ad or set "
-            "NEUROKO_H5AD."
+            "NeuroKO annotated objects not present locally. Download "
+            "iNeurons.h5ad / iAstrocytes.h5ad from Zenodo record "
+            "10.5281/zenodo.23260389 into data/ or set NEUROKO_H5AD. "
+            "(The preprint's printed DOI 10.5281/zenodo.2326038861 is "
+            "malformed and 404s.)"
         )
     import anndata as ad
     return ad.read_h5ad(p)

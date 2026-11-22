@@ -43,31 +43,56 @@ TYPE_CANDIDATES = ["cell_type", "celltype", "Cell_type"]
 
 
 def _prepare(seed: int, cell_type: str = "iNeuron", max_kos: int = 12):
-    adata = load_neuroko()
+    # Backed read + row-subset BEFORE any dense/float64 step: the
+    # published object carries 784M nonzeros (6.3 GB as float32 CSR);
+    # a full in-memory load plus float64 conversion OOM-killed the
+    # first attempt (iteration 0 plumbing, logged in the notes).
+    import anndata as _ad
+    from alztest.data import neuroko_path
+    adata = _ad.read_h5ad(neuroko_path(), backed="r")
     obs = adata.obs
     ko_col = next((c for c in KO_CANDIDATES if c in obs.columns), None)
     type_col = next((c for c in TYPE_CANDIDATES if c in obs.columns), None)
     assert ko_col, f"no KO column among {KO_CANDIDATES}: {list(obs.columns)}"
-    ko = obs[ko_col].astype(str).to_numpy()
+    ko_all = obs[ko_col].astype(str).to_numpy()
+    keep = np.ones(len(ko_all), dtype=bool)
     if type_col:
-        keep_type = obs[type_col].astype(str).str.contains(cell_type, case=False)
-        adata, ko = adata[keep_type.to_numpy()], ko[keep_type.to_numpy()]
+        keep &= obs[type_col].astype(str).str.contains(
+            cell_type, case=False).to_numpy()
+    # Authors' own exclusion (NeuroID-reproducibility scripts):
+    # targets INT3/INT30 are dropped from their analyses.
+    if "target_gene" in obs.columns:
+        keep &= ~obs["target_gene"].astype(str).isin(["INT3", "INT30"]).to_numpy()
+    ko = ko_all[keep]
     counts = {k: int((ko == k).sum()) for k in np.unique(ko)}
+    # Control: the authors' DE baseline is "INT" (intergenic guides).
     ctrl_key = next((k for k in counts if k.lower() in
-                     ("control", "non-targeting", "ntc", "negctrl", "wt")), None)
+                     ("control", "non-targeting", "ntc", "negctrl", "wt",
+                      "int")), None)
     assert ctrl_key, f"no control condition identifiable: {sorted(counts)[:10]}"
     kos = sorted([k for k, c in counts.items() if c >= 300 and k != ctrl_key],
                  key=lambda k: -counts[k])[:max_kos]
     conds = [ctrl_key] + kos
+    sel = keep & np.isin(ko_all, conds)
+    rows = np.where(sel)[0]
+    ko_k = ko_all[rows]
+    from scipy import sparse as _sp
+    Xs = adata[rows].X
+    Xs = (Xs.tocsr() if _sp.issparse(Xs)
+          else _sp.csr_matrix(np.asarray(Xs))).astype(np.float32)
+    adata.file.close()
     rng = np.random.default_rng(seed)
+    if float(Xs.max()) > 50:  # raw counts -> log-normalize sparsely
+        rs = np.asarray(Xs.sum(1)).ravel()
+        Xs = Xs.multiply((1.0 / (rs + 1e-9) * 1e4)[:, None]).tocsr()
+        Xs.data = np.log1p(Xs.data)
+    mean = np.asarray(Xs.mean(0)).ravel()
+    var = np.asarray(Xs.multiply(Xs).mean(0)).ravel() - mean ** 2
+    top_all = np.argsort(var)[::-1][:2000]
+    raw = Xs[:, top_all].toarray()
     Xtr, ytr, Xte, yte = [], [], [], []
-    raw = np.asarray(adata.X.todense() if hasattr(adata.X, "todense") else adata.X,
-                     dtype=np.float64)
-    # log-normalize if the object arrives as raw counts
-    if raw.max() > 50:
-        raw = np.log1p(raw / (raw.sum(1, keepdims=True) + 1e-9) * 1e4)
     for ci, k in enumerate(conds):
-        ix = np.where(ko == k)[0]
+        ix = np.where(ko_k == k)[0]
         rng.shuffle(ix)
         cut = int(0.8 * len(ix))
         Xtr.append(raw[ix[:cut]]); ytr += [ci] * cut
@@ -77,11 +102,12 @@ def _prepare(seed: int, cell_type: str = "iNeuron", max_kos: int = 12):
 
 def run_once(seed: int = 0, steps: int = 300) -> dict:
     Xtr, ytr, Xte, yte, conds = _prepare(seed)
-    var = Xtr.var(0)
-    top = np.argsort(var)[::-1][:2000]
-    Ptr, _ = pca_fit_transform(Xtr[:, top], n_comp=30)
-    Pte, _ = pca_fit_transform(Xte[:, top], n_comp=30)
-    Ptr, Pte = standardize(Ptr), standardize(Pte)
+    # PCA + standardization fit on TRAIN only (the cycle-1 draft
+    # refit both on test; fixed 2026-11-21, as in the GSE test).
+    Ptr, (mu, comps) = pca_fit_transform(Xtr, n_comp=30)
+    Pte = (Xte - mu) @ comps.T
+    sd = Ptr.std(0) + 1e-8
+    Ptr, Pte = Ptr / sd, Pte / sd
     n_cond = len(conds)
 
     model = ConditionalPGAN(Ptr.shape[1], n_cond, seed=seed)
