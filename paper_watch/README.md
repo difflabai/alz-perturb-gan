@@ -120,6 +120,8 @@ run_neuroko_pair 300 1200 2400 3600 {4000..40000..1000}
 
 Use the long command again after an interruption. It resumes each arm from its saved trainer state. Compare `mean_energy_distance` in the final checkpoint (lower is better), each target's `spread_ratio` (1 matches the observed spread), and `effective_rank`. Report the seed and neuronal holdout with the results. [Reference runs and comparison](notes/neuroko_particlegan_0111_gpu_lr.md)
 
+The 1,200-update hyperparameter study includes matched-capacity EMPF and a three-seed held-out comparison. [Results and reproduction commands](notes/neuroko_cuda_tuning_1200.md)
+
 #### Copy-paste prompt
 
 > Reproduce the NeuroKO GPU comparison. Clone https://github.com/difflabai/alz-perturb-gan on branch `paper-watch/neuroko-revival`, record the commit, and follow “NeuroKO GPU comparison” in `paper_watch/README.md`. Set up Python 3.11 and CUDA PyTorch, then download and checksum both NeuroKO H5ADs from Zenodo record 23260389. Run the matched seed-1 neuronal holdout (`Screen1_0`) with 0.10.0 EMPF at 0.005 and 0.11.1 Unified v11 at 0.028. Verify both 300-update smoke runs use CUDA and the same cells. Resume both to 40,000 updates. Save the receipts and checkpoints, then report which model has lower held-out energy distance, how many targets it wins, and how its spread compares with the observed cells.

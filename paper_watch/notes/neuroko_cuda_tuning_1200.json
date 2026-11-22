@@ -1,0 +1,4814 @@
+{
+  "protocol": {
+    "primary_outcome": "Arithmetic mean energy distance over four matched targets on the neuronal Screen1_0 holdout, equally weighted across paired fit seeds 1, 2, and 3. Lower is better. A mean less than or equal to the fixed EMPF reference meets the point-estimate goal.",
+    "selection": "Screen1_1 validation with Screen1_3 and Screen1_4 used to fit. Screen candidate hyperparameters at seed 0. Retest the three best completed v11 configurations by mean four-target validation energy on seed 4. Freeze the finalist with the lowest two-seed validation mean before inspecting its held-out scores.",
+    "reference": "ParticleGAN 0.10.0 EMPF, base LR 0.005, 64-row batches, 64 particles, 16 latent dimensions, prior noise sigma 0.025.",
+    "additional_control": "If the selected v11 changes capacity or batch size, evaluate EMPF with the selected capacity, batch size and prior noise, retaining the reference EMPF optimizer rates.",
+    "fixed": "1200 updates, condition rotation, 96-wide two-layer tanh MLPs, energy metric on 30 fit-whitened PCA coordinates, 256 clean draws per condition. Shared GPU wall times include contention."
+  },
+  "freeze": {
+    "candidates": 33,
+    "finalists": {
+      "batch256-support": [
+        1.1440328153908883,
+        1.2022296138585913
+      ],
+      "support-critic-low": [
+        1.149758718873078,
+        1.2154497294747206
+      ],
+      "batch512-lr14": [
+        1.1558597627093536,
+        1.217780779671298
+      ]
+    },
+    "selected": {
+      "batch_size": 256,
+      "lr": 0.028,
+      "name": "batch256-support",
+      "num_particles": 512,
+      "z_dim": 32
+    }
+  },
+  "configurations": {
+    "batch1024": {
+      "batch_size": 1024,
+      "lr": 0.028,
+      "name": "batch1024"
+    },
+    "batch1024-stocklatent": {
+      "batch_size": 1024,
+      "lr": 0.014,
+      "name": "batch1024-stocklatent",
+      "num_particles": 2048,
+      "prior_sigma": 0,
+      "z_dim": 2
+    },
+    "batch16": {
+      "batch_size": 16,
+      "lr": 0.028,
+      "name": "batch16"
+    },
+    "batch256": {
+      "batch_size": 256,
+      "lr": 0.028,
+      "name": "batch256"
+    },
+    "batch256-lowz": {
+      "batch_size": 256,
+      "lr": 0.014,
+      "name": "batch256-lowz",
+      "num_particles": 1024,
+      "prior_sigma": 0,
+      "z_dim": 4
+    },
+    "batch256-support": {
+      "batch_size": 256,
+      "lr": 0.028,
+      "name": "batch256-support",
+      "num_particles": 512,
+      "z_dim": 32
+    },
+    "batch384-latent16": {
+      "batch_size": 384,
+      "lr": 0.014,
+      "name": "batch384-latent16",
+      "num_particles": 1024,
+      "z_dim": 16
+    },
+    "batch384-support": {
+      "batch_size": 384,
+      "lr": 0.028,
+      "name": "batch384-support",
+      "num_particles": 512,
+      "z_dim": 32
+    },
+    "batch512": {
+      "batch_size": 512,
+      "lr": 0.028,
+      "name": "batch512"
+    },
+    "batch512-kernel": {
+      "batch_size": 512,
+      "lr": 0.028,
+      "name": "batch512-kernel",
+      "prior_sigma": 0.6
+    },
+    "batch512-lr14": {
+      "batch_size": 512,
+      "lr": 0.014,
+      "name": "batch512-lr14"
+    },
+    "batch512-p-low": {
+      "batch_size": 512,
+      "lr": 0.028,
+      "name": "batch512-p-low",
+      "prior_lr_mult": 0.5
+    },
+    "batch512-rates": {
+      "batch_size": 512,
+      "d_lr_mult": 0.375,
+      "lr": 0.056,
+      "name": "batch512-rates",
+      "prior_lr_mult": 0.5
+    },
+    "batch512-support": {
+      "batch_size": 512,
+      "lr": 0.028,
+      "name": "batch512-support",
+      "num_particles": 512,
+      "z_dim": 32
+    },
+    "batch768": {
+      "batch_size": 768,
+      "lr": 0.028,
+      "name": "batch768"
+    },
+    "d-fast-p-slow": {
+      "d_lr_mult": 4,
+      "lr": 0.028,
+      "name": "d-fast-p-slow",
+      "prior_lr_mult": 0.5
+    },
+    "d-high": {
+      "d_lr_mult": 4,
+      "lr": 0.028,
+      "name": "d-high"
+    },
+    "d-low": {
+      "d_lr_mult": 0.3,
+      "lr": 0.028,
+      "name": "d-low"
+    },
+    "init4": {
+      "generator_output_init_gain": 4,
+      "lr": 0.028,
+      "name": "init4"
+    },
+    "init6-widez": {
+      "batch_size": 128,
+      "d_lr_mult": 15,
+      "generator_output_init_gain": 6,
+      "lr": 0.0014,
+      "name": "init6-widez",
+      "num_particles": 2048,
+      "prior_lr_mult": 8,
+      "z_dim": 64
+    },
+    "init8-widez": {
+      "batch_size": 128,
+      "d_lr_mult": 60,
+      "generator_output_init_gain": 8,
+      "lr": 0.00035,
+      "name": "init8-widez",
+      "num_particles": 2048,
+      "prior_lr_mult": 16,
+      "z_dim": 64
+    },
+    "kernel": {
+      "lr": 0.028,
+      "name": "kernel",
+      "prior_sigma": 0.6
+    },
+    "latent4": {
+      "lr": 0.028,
+      "name": "latent4",
+      "num_particles": 512,
+      "prior_sigma": 0,
+      "z_dim": 4
+    },
+    "p-high": {
+      "lr": 0.028,
+      "name": "p-high",
+      "prior_lr_mult": 8
+    },
+    "p-low": {
+      "lr": 0.028,
+      "name": "p-low",
+      "prior_lr_mult": 0.5
+    },
+    "plain": {
+      "lr": 0.028,
+      "name": "plain",
+      "prior_sigma": 0
+    },
+    "rates-fast": {
+      "d_lr_mult": 0.375,
+      "lr": 0.112,
+      "name": "rates-fast",
+      "prior_lr_mult": 0.725
+    },
+    "support": {
+      "lr": 0.028,
+      "name": "support",
+      "num_particles": 512,
+      "z_dim": 32
+    },
+    "support-critic-low": {
+      "batch_size": 256,
+      "d_lr_mult": 0.5,
+      "lr": 0.028,
+      "name": "support-critic-low",
+      "num_particles": 512,
+      "z_dim": 32
+    },
+    "support-init4": {
+      "generator_output_init_gain": 4,
+      "lr": 0.014,
+      "name": "support-init4",
+      "num_particles": 512,
+      "z_dim": 32
+    },
+    "support-init7": {
+      "generator_output_init_gain": 7,
+      "lr": 0.006,
+      "name": "support-init7",
+      "num_particles": 512,
+      "z_dim": 32
+    },
+    "support-particle-low": {
+      "batch_size": 256,
+      "lr": 0.028,
+      "name": "support-particle-low",
+      "num_particles": 512,
+      "prior_lr_mult": 0.6,
+      "z_dim": 32
+    },
+    "v11": {
+      "lr": 0.028,
+      "name": "v11"
+    }
+  },
+  "heldout_means": {
+    "batch256-support": {
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "seed_energies": [
+        1.533459147146685,
+        1.5814015335941893,
+        1.586763450450071
+      ],
+      "mean": {
+        "energy_distance": 1.567208043730315,
+        "shift_cosine": -0.041795469970601615,
+        "spread_ratio": 0.7605143206896229
+      },
+      "target_mean_energy": {
+        "GLCCI1": 1.7465443876894726,
+        "SLC2A4RG": 1.5374574483258714,
+        "PLEKHA1": 1.4128556742896594,
+        "MAMSTR": 1.571974664616257
+      },
+      "mean_fit_seconds": 214.56500766938552,
+      "mean_effective_rank": 24.28936584430833
+    },
+    "empf": {
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "seed_energies": [
+        1.4564789666944435,
+        1.4109255376715326,
+        1.3016615229395392
+      ],
+      "mean": {
+        "energy_distance": 1.3896886757685052,
+        "shift_cosine": 0.0352762031612381,
+        "spread_ratio": 0.95272333809352
+      },
+      "target_mean_energy": {
+        "GLCCI1": 1.533199667568666,
+        "SLC2A4RG": 1.4067061725886607,
+        "PLEKHA1": 1.2278522954038522,
+        "MAMSTR": 1.3909965675128413
+      },
+      "mean_fit_seconds": 306.2080003366961,
+      "mean_effective_rank": 11.592444963397469
+    },
+    "empf-matched": {
+      "seeds": [
+        1,
+        2,
+        3
+      ],
+      "seed_energies": [
+        1.3091356506153293,
+        1.239392244916531,
+        1.3289576019225164
+      ],
+      "mean": {
+        "energy_distance": 1.2924951658181256,
+        "shift_cosine": -0.01727564881008625,
+        "spread_ratio": 1.0555633138191693
+      },
+      "target_mean_energy": {
+        "GLCCI1": 1.4324621210579254,
+        "SLC2A4RG": 1.3241826349561547,
+        "PLEKHA1": 1.1524377074286216,
+        "MAMSTR": 1.2608981998298008
+      },
+      "mean_fit_seconds": 196.1159170063523,
+      "mean_effective_rank": 20.60838871600674
+    }
+  },
+  "validation_receipts": [
+    {
+      "name": "batch1024",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 1024,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 1109.7009839890525,
+      "means": {
+        "energy_distance": 1.2765937901503126,
+        "shift_cosine": -0.10397735840069626,
+        "spread_ratio": 0.896605658609191
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.3177483644297219,
+          "shift_cosine": -0.2071739240259111,
+          "spread_ratio": 0.8717714892772057
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.2135639681670494,
+          "shift_cosine": -0.1051478172141696,
+          "spread_ratio": 0.8720803907183838
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.326207812824789,
+          "shift_cosine": -0.1445507926349423,
+          "spread_ratio": 0.9100083522965476
+        },
+        "MAMSTR": {
+          "energy_distance": 1.2488550151796902,
+          "shift_cosine": 0.04096310027223798,
+          "spread_ratio": 0.9325624021446265
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 17.368228342992886,
+        "SLC2A4RG": 17.61498318956742,
+        "PLEKHA1": 18.93488152492225,
+        "MAMSTR": 19.973291988638355
+      }
+    },
+    {
+      "name": "batch1024-stocklatent",
+      "lr": 0.014,
+      "settings": {
+        "z_dim": 2,
+        "num_particles": 2048,
+        "batch_size": 1024,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "final_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "seconds": 1006.378110582009,
+      "means": {
+        "energy_distance": 1.4299924336005991,
+        "shift_cosine": -0.04953408978691896,
+        "spread_ratio": 0.7905755981167917
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.5165529864552303,
+          "shift_cosine": -0.33470089495361055,
+          "spread_ratio": 0.7523012405601427
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.358975886901642,
+          "shift_cosine": 0.08102691695961971,
+          "spread_ratio": 0.7951311458300262
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.4610857815337468,
+          "shift_cosine": 0.019574955831021753,
+          "spread_ratio": 0.8002009580712911
+        },
+        "MAMSTR": {
+          "energy_distance": 1.3833550795117775,
+          "shift_cosine": 0.03596266301529326,
+          "spread_ratio": 0.8146690480057069
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 16.85117464694738,
+        "SLC2A4RG": 15.589628672958199,
+        "PLEKHA1": 15.848939293350073,
+        "MAMSTR": 15.707211985178064
+      }
+    },
+    {
+      "name": "batch16",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 16,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 332.8325056708418,
+      "means": {
+        "energy_distance": 1.6790002710034748,
+        "shift_cosine": 0.007192936573802756,
+        "spread_ratio": 0.5706173847924393
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.7929208441507845,
+          "shift_cosine": -0.03223169480624895,
+          "spread_ratio": 0.5566404402504656
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.5121762008938822,
+          "shift_cosine": 0.10445541477305756,
+          "spread_ratio": 0.58020812930696
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.7004742382438458,
+          "shift_cosine": -0.1944003470827145,
+          "spread_ratio": 0.576571607799872
+        },
+        "MAMSTR": {
+          "energy_distance": 1.7104298007253869,
+          "shift_cosine": 0.15094837341111692,
+          "spread_ratio": 0.5690493618124597
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 14.951517332503375,
+        "SLC2A4RG": 14.765750977829224,
+        "PLEKHA1": 15.328262794221128,
+        "MAMSTR": 14.595212218001647
+      }
+    },
+    {
+      "name": "batch256-lowz",
+      "lr": 0.014,
+      "settings": {
+        "z_dim": 4,
+        "num_particles": 1024,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "final_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "seconds": 447.6275260958355,
+      "means": {
+        "energy_distance": 1.930556185235556,
+        "shift_cosine": 0.0016432935531499274,
+        "spread_ratio": 0.5489804282819812
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.848331439958537,
+          "shift_cosine": 0.050077809771989466,
+          "spread_ratio": 0.5690779707158016
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.6613966248710597,
+          "shift_cosine": 0.04099790168892971,
+          "spread_ratio": 0.5957657278135412
+        },
+        "PLEKHA1": {
+          "energy_distance": 2.109517684922781,
+          "shift_cosine": -0.33486024303778256,
+          "spread_ratio": 0.5090115899356624
+        },
+        "MAMSTR": {
+          "energy_distance": 2.102978991189846,
+          "shift_cosine": 0.2503577057894631,
+          "spread_ratio": 0.5220664246629197
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 14.046950671782138,
+        "SLC2A4RG": 13.481046733097424,
+        "PLEKHA1": 11.427591176190424,
+        "MAMSTR": 8.803182577658813
+      }
+    },
+    {
+      "name": "batch256",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 78.08744332799688,
+      "means": {
+        "energy_distance": 1.2981368508403022,
+        "shift_cosine": -0.041633299818781264,
+        "spread_ratio": 0.9504274566100667
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.4580479866443437,
+          "shift_cosine": -0.20479756500623106,
+          "spread_ratio": 0.8527867049310247
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.1927727643926112,
+          "shift_cosine": 0.16563224234728768,
+          "spread_ratio": 0.9217492278700746
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2329668012000123,
+          "shift_cosine": -0.22313511139874107,
+          "spread_ratio": 1.0118246754866984
+        },
+        "MAMSTR": {
+          "energy_distance": 1.3087598511242415,
+          "shift_cosine": 0.0957672347825594,
+          "spread_ratio": 1.015349218152469
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 19.46206156904345,
+        "SLC2A4RG": 18.09328355893206,
+        "PLEKHA1": 23.143845997883325,
+        "MAMSTR": 21.392799410830932
+      }
+    },
+    {
+      "name": "batch256-support",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 116.35345096001402,
+      "means": {
+        "energy_distance": 1.1440328153908883,
+        "shift_cosine": -0.0661829516071985,
+        "spread_ratio": 1.0372915158807197
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2391883443150888,
+          "shift_cosine": -0.19160570782998435,
+          "spread_ratio": 0.9043322810892852
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.0764640020954932,
+          "shift_cosine": -0.1302094612629548,
+          "spread_ratio": 0.9371592077367917
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.1620203651870957,
+          "shift_cosine": -0.38421876097083757,
+          "spread_ratio": 1.1645101770334574
+        },
+        "MAMSTR": {
+          "energy_distance": 1.0984585499658754,
+          "shift_cosine": 0.4413021236349827,
+          "spread_ratio": 1.1431643976633439
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 24.278989161520734,
+        "SLC2A4RG": 22.82643450720157,
+        "PLEKHA1": 23.971835838512007,
+        "MAMSTR": 23.874231313800177
+      }
+    },
+    {
+      "name": "batch256-support",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 4,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 198.5986225339584,
+      "means": {
+        "energy_distance": 1.2022296138585913,
+        "shift_cosine": -0.0898068220230402,
+        "spread_ratio": 1.0139953095262395
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.3204288894551253,
+          "shift_cosine": -0.20335160730955085,
+          "spread_ratio": 0.9074543711102057
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.146616694006199,
+          "shift_cosine": 0.052877156901185884,
+          "spread_ratio": 0.8839576922107454
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.1993394770391763,
+          "shift_cosine": -0.37729374382562353,
+          "spread_ratio": 1.1182176034554892
+        },
+        "MAMSTR": {
+          "energy_distance": 1.1425333949338645,
+          "shift_cosine": 0.16854090614182768,
+          "spread_ratio": 1.1463515713285175
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 23.720359243306824,
+        "SLC2A4RG": 23.093102222418203,
+        "PLEKHA1": 25.375494872060983,
+        "MAMSTR": 24.724667940120103
+      }
+    },
+    {
+      "name": "batch384-latent16",
+      "lr": 0.014,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 1024,
+        "batch_size": 384,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "final_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "seconds": 145.77501634787768,
+      "means": {
+        "energy_distance": 1.193485230753529,
+        "shift_cosine": -0.1036425077035342,
+        "spread_ratio": 1.399524242056887
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2306753672383843,
+          "shift_cosine": -0.15602153469576607,
+          "spread_ratio": 1.3599559872754519
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.0672484498136567,
+          "shift_cosine": 0.034729362988862325,
+          "spread_ratio": 1.3902351104296904
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2817738834452523,
+          "shift_cosine": -0.28861662088569917,
+          "spread_ratio": 1.4280023804370747
+        },
+        "MAMSTR": {
+          "energy_distance": 1.194243222516823,
+          "shift_cosine": -0.004661238221533885,
+          "spread_ratio": 1.4199034900853305
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 24.31230965348053,
+        "SLC2A4RG": 23.551437148425773,
+        "PLEKHA1": 24.026619654975892,
+        "MAMSTR": 23.448635814370174
+      }
+    },
+    {
+      "name": "batch384-support",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 384,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 206.15161457797512,
+      "means": {
+        "energy_distance": 1.1946588520355201,
+        "shift_cosine": -0.10951382573671245,
+        "spread_ratio": 1.3915939660142016
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2256772473197746,
+          "shift_cosine": -0.16939973723776097,
+          "spread_ratio": 1.4033878185712139
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.0393561219788445,
+          "shift_cosine": -0.14407425340911206,
+          "spread_ratio": 1.4330478333525123
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.281644570549556,
+          "shift_cosine": -0.051496982856766856,
+          "spread_ratio": 1.38679282798355
+        },
+        "MAMSTR": {
+          "energy_distance": 1.2319574682939054,
+          "shift_cosine": -0.0730843294432099,
+          "spread_ratio": 1.3431473841495305
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 23.776186275079738,
+        "SLC2A4RG": 23.9290482037832,
+        "PLEKHA1": 23.600752935030815,
+        "MAMSTR": 24.408513232213753
+      }
+    },
+    {
+      "name": "batch512-kernel",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 512,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.6,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 205.19891848787665,
+      "means": {
+        "energy_distance": 1.1838989430606983,
+        "shift_cosine": 0.025193693116202752,
+        "spread_ratio": 1.2780775363495624
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2654161787493745,
+          "shift_cosine": -0.08044713945451108,
+          "spread_ratio": 1.2273748066131762
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.0877195795992494,
+          "shift_cosine": -0.027444910168132178,
+          "spread_ratio": 1.313147785202506
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2458305578898328,
+          "shift_cosine": 0.08258179166288082,
+          "spread_ratio": 1.2711188104095879
+        },
+        "MAMSTR": {
+          "energy_distance": 1.1366294560043366,
+          "shift_cosine": 0.12608503042457345,
+          "spread_ratio": 1.30066874317298
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 17.477160219082702,
+        "SLC2A4RG": 15.927471515114016,
+        "PLEKHA1": 17.75590326168982,
+        "MAMSTR": 16.564917913211932
+      }
+    },
+    {
+      "name": "batch512-lr14",
+      "lr": 0.014,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 512,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "final_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "seconds": 128.4990876801312,
+      "means": {
+        "energy_distance": 1.1558597627093536,
+        "shift_cosine": 0.0035455217113392642,
+        "spread_ratio": 1.2984880760081257
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.1844806824826497,
+          "shift_cosine": -0.01319768380802137,
+          "spread_ratio": 1.2664706286776772
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.0728617915534002,
+          "shift_cosine": -0.10054852851116478,
+          "spread_ratio": 1.2945134728238583
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2355790335946608,
+          "shift_cosine": 0.014139881345907513,
+          "spread_ratio": 1.3349069585658666
+        },
+        "MAMSTR": {
+          "energy_distance": 1.1305175432067038,
+          "shift_cosine": 0.11378841781863569,
+          "spread_ratio": 1.2980612439651007
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 17.48781827550936,
+        "SLC2A4RG": 17.164307528569807,
+        "PLEKHA1": 16.068522514470367,
+        "MAMSTR": 16.58959935265543
+      }
+    },
+    {
+      "name": "batch512-lr14",
+      "lr": 0.014,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 512,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 4,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "final_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "seconds": 199.0080336809624,
+      "means": {
+        "energy_distance": 1.217780779671298,
+        "shift_cosine": -0.004998718221863943,
+        "spread_ratio": 1.3132670347413635
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.269036247201476,
+          "shift_cosine": 0.2689710522054125,
+          "spread_ratio": 1.2878176467231928
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.1167347607536948,
+          "shift_cosine": -0.21881138112369222,
+          "spread_ratio": 1.3271067962556282
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2056230013364937,
+          "shift_cosine": -0.29884444098678326,
+          "spread_ratio": 1.323536539426281
+        },
+        "MAMSTR": {
+          "energy_distance": 1.2797291093935277,
+          "shift_cosine": 0.2286898970176072,
+          "spread_ratio": 1.3146071565603519
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 16.727315373787604,
+        "SLC2A4RG": 17.453871283460142,
+        "PLEKHA1": 16.80709969228782,
+        "MAMSTR": 17.213717663348323
+      }
+    },
+    {
+      "name": "batch512-p-low",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 512,
+        "d_lr_mult": null,
+        "prior_lr_mult": 0.5,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.014
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.014
+      },
+      "seconds": 202.38802339695394,
+      "means": {
+        "energy_distance": 1.2476349473560477,
+        "shift_cosine": -0.01675537560157251,
+        "spread_ratio": 1.2199307329699742
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2764811710282693,
+          "shift_cosine": 0.06771764514831732,
+          "spread_ratio": 1.1843140795444789
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.1470818664668077,
+          "shift_cosine": -0.1967432851192944,
+          "spread_ratio": 1.2325346120791487
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2260781230127336,
+          "shift_cosine": -0.261038547013403,
+          "spread_ratio": 1.24340604302996
+        },
+        "MAMSTR": {
+          "energy_distance": 1.3408986289163805,
+          "shift_cosine": 0.32304268457809004,
+          "spread_ratio": 1.2194681972263093
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 16.410966439596816,
+        "SLC2A4RG": 16.71813879772711,
+        "PLEKHA1": 16.625450571396183,
+        "MAMSTR": 16.45249904458618
+      }
+    },
+    {
+      "name": "batch512-rates",
+      "lr": 0.056,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 512,
+        "d_lr_mult": 0.375,
+        "prior_lr_mult": 0.5,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.056,
+        "critic": 0.021,
+        "particles": 0.028
+      },
+      "final_rates": {
+        "generator": 0.056,
+        "critic": 0.021,
+        "particles": 0.028
+      },
+      "seconds": 150.10435715899803,
+      "means": {
+        "energy_distance": 1.2971311257898415,
+        "shift_cosine": -0.1814970281432108,
+        "spread_ratio": 1.3405147046214905
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.3989150118459293,
+          "shift_cosine": -0.31195327482950647,
+          "spread_ratio": 1.325118457528265
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.2059349330777787,
+          "shift_cosine": 0.2851682304066355,
+          "spread_ratio": 1.3492652614841822
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2545984514429644,
+          "shift_cosine": -0.20788411383709934,
+          "spread_ratio": 1.3644819148360394
+        },
+        "MAMSTR": {
+          "energy_distance": 1.3290761067926935,
+          "shift_cosine": -0.4913189543128729,
+          "spread_ratio": 1.3231931846374752
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 16.97493461320626,
+        "SLC2A4RG": 17.045554586454337,
+        "PLEKHA1": 17.298143075690124,
+        "MAMSTR": 16.70680275681569
+      }
+    },
+    {
+      "name": "batch512",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 512,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 149.94820430781692,
+      "means": {
+        "energy_distance": 1.1973600048561515,
+        "shift_cosine": 0.07356269332441076,
+        "spread_ratio": 1.2485792513974039
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2182376769198564,
+          "shift_cosine": 0.19197465971402047,
+          "spread_ratio": 1.2316133514472536
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.0834347848604446,
+          "shift_cosine": 0.12743218488742128,
+          "spread_ratio": 1.231722694336116
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.1896154891934394,
+          "shift_cosine": 0.08010477423998162,
+          "spread_ratio": 1.2640080046834785
+        },
+        "MAMSTR": {
+          "energy_distance": 1.2981520684508654,
+          "shift_cosine": -0.10526084554378033,
+          "spread_ratio": 1.2669729551227678
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 17.068118063419714,
+        "SLC2A4RG": 17.295375057852215,
+        "PLEKHA1": 17.250002311710354,
+        "MAMSTR": 16.35087158781097
+      }
+    },
+    {
+      "name": "batch512-support",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 512,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 147.80658504297026,
+      "means": {
+        "energy_distance": 1.1987795561492982,
+        "shift_cosine": 0.04747060616898463,
+        "spread_ratio": 1.3742775041707644
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2985571223517667,
+          "shift_cosine": -0.09295243716770132,
+          "spread_ratio": 1.3620747896611325
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.0695371888074314,
+          "shift_cosine": 0.21101528356939678,
+          "spread_ratio": 1.3436868045564598
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.118909713959697,
+          "shift_cosine": -0.29017482809504036,
+          "spread_ratio": 1.4063642345223775
+        },
+        "MAMSTR": {
+          "energy_distance": 1.3081141994782977,
+          "shift_cosine": 0.36199440636928343,
+          "spread_ratio": 1.3849841879430882
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 23.838151525724026,
+        "SLC2A4RG": 24.15981226180024,
+        "PLEKHA1": 23.371315402952558,
+        "MAMSTR": 24.268482755863474
+      }
+    },
+    {
+      "name": "batch768",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 768,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 1009.172701286152,
+      "means": {
+        "energy_distance": 1.2073658631473925,
+        "shift_cosine": 0.03212325668643939,
+        "spread_ratio": 1.2531225405026434
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2573577680332768,
+          "shift_cosine": 0.2826815872962759,
+          "spread_ratio": 1.213871771680677
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.1048860936850282,
+          "shift_cosine": -0.24825165692246096,
+          "spread_ratio": 1.2365371512187016
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2503445299507128,
+          "shift_cosine": -0.221430771259007,
+          "spread_ratio": 1.2911025257942395
+        },
+        "MAMSTR": {
+          "energy_distance": 1.216875060920552,
+          "shift_cosine": 0.3154938676309496,
+          "spread_ratio": 1.2709787133169554
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 16.952611046383833,
+        "SLC2A4RG": 17.13681567174907,
+        "PLEKHA1": 16.89745777164471,
+        "MAMSTR": 16.453018468151424
+      }
+    },
+    {
+      "name": "d-fast-p-slow",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": 4,
+        "prior_lr_mult": 0.5,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.112,
+        "particles": 0.014
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.112,
+        "particles": 0.014
+      },
+      "seconds": 135.08125464688055,
+      "means": {
+        "energy_distance": 1.5012458878320827,
+        "shift_cosine": -0.006411941528275741,
+        "spread_ratio": 0.7123789795931522
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.6042796497790306,
+          "shift_cosine": -0.003340896381943484,
+          "spread_ratio": 0.6879864816744566
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.3957448391274871,
+          "shift_cosine": 0.040400777969629924,
+          "spread_ratio": 0.7200178466007175
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.4908306128935855,
+          "shift_cosine": -0.2845246293359259,
+          "spread_ratio": 0.7255616902276022
+        },
+        "MAMSTR": {
+          "energy_distance": 1.5141284495282274,
+          "shift_cosine": 0.22181698163513652,
+          "spread_ratio": 0.7159498998698325
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.279151665000427,
+        "SLC2A4RG": 18.86823911271584,
+        "PLEKHA1": 19.902486159391124,
+        "MAMSTR": 18.607572412003073
+      }
+    },
+    {
+      "name": "d-high",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": 4,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.112,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.112,
+        "particles": 0.0812
+      },
+      "seconds": 132.68077374901623,
+      "means": {
+        "energy_distance": 1.5112102771740794,
+        "shift_cosine": -0.028849673008778803,
+        "spread_ratio": 0.7105567017555035
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.6417714621141526,
+          "shift_cosine": -0.0642752426449208,
+          "spread_ratio": 0.6833566595339624
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.3747539896249403,
+          "shift_cosine": -0.11304955628837765,
+          "spread_ratio": 0.719104231468995
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.5059627703029017,
+          "shift_cosine": -0.31297972671114643,
+          "spread_ratio": 0.7304568185542184
+        },
+        "MAMSTR": {
+          "energy_distance": 1.522352886654323,
+          "shift_cosine": 0.37490583360932966,
+          "spread_ratio": 0.7093090974648378
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.699383295114014,
+        "SLC2A4RG": 19.0013777066656,
+        "PLEKHA1": 19.244322827486904,
+        "MAMSTR": 19.1973322741537
+      }
+    },
+    {
+      "name": "d-low",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": 0.3,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.0084,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.0084,
+        "particles": 0.0812
+      },
+      "seconds": 405.7384137508925,
+      "means": {
+        "energy_distance": 1.488755399836297,
+        "shift_cosine": -0.044012570799607825,
+        "spread_ratio": 0.7155550976778842
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.6209793585065668,
+          "shift_cosine": -0.00896066702658175,
+          "spread_ratio": 0.689490494985582
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.3710055914754884,
+          "shift_cosine": -0.15331348369608203,
+          "spread_ratio": 0.7263874577201613
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.4840940471575017,
+          "shift_cosine": -0.3600224645114614,
+          "spread_ratio": 0.7334257940460018
+        },
+        "MAMSTR": {
+          "energy_distance": 1.4789426022056311,
+          "shift_cosine": 0.3462463320356939,
+          "spread_ratio": 0.7129166439597914
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.459145719664566,
+        "SLC2A4RG": 18.633899842936547,
+        "PLEKHA1": 19.31091309091526,
+        "MAMSTR": 18.87934092298509
+      }
+    },
+    {
+      "name": "empf",
+      "lr": 0.005,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "empf",
+      "particlegan": "0.10.0",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "empf",
+      "optimizer_family": "dualnorm",
+      "prior_regularizer": "empf",
+      "initial_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "final_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "seconds": 94.51376797794364,
+      "means": {
+        "energy_distance": 1.1559742743256136,
+        "shift_cosine": 0.2846708052544189,
+        "spread_ratio": 1.122574692109355
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.139072209908191,
+          "shift_cosine": 0.6180252999703784,
+          "spread_ratio": 1.0991590752075988
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.0767251533647224,
+          "shift_cosine": 0.18366349346995214,
+          "spread_ratio": 1.124363579225887
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2688099836124511,
+          "shift_cosine": 0.03714692237483346,
+          "spread_ratio": 1.1411069597916204
+        },
+        "MAMSTR": {
+          "energy_distance": 1.13928975041709,
+          "shift_cosine": 0.2998475052025117,
+          "spread_ratio": 1.1256691542123134
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 12.100251409365804,
+        "SLC2A4RG": 12.059960739539369,
+        "PLEKHA1": 12.156140095524707,
+        "MAMSTR": 11.943669659109894
+      }
+    },
+    {
+      "name": "empf",
+      "lr": 0.005,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "empf",
+      "particlegan": "0.10.0",
+      "torch": "2.14.1+cu130",
+      "seed": 4,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "empf",
+      "optimizer_family": "dualnorm",
+      "prior_regularizer": "empf",
+      "initial_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "final_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "seconds": 234.2427748129703,
+      "means": {
+        "energy_distance": 1.2041741080881512,
+        "shift_cosine": -0.18449138034719498,
+        "spread_ratio": 1.1462817965962477
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2069609425842573,
+          "shift_cosine": -0.022477609132858883,
+          "spread_ratio": 1.1190252854369458
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.136977647128437,
+          "shift_cosine": -0.17415735681756775,
+          "spread_ratio": 1.149721824426438
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2994722797474498,
+          "shift_cosine": -0.3085977047780868,
+          "spread_ratio": 1.1586843927813055
+        },
+        "MAMSTR": {
+          "energy_distance": 1.1732855628924606,
+          "shift_cosine": -0.23273285066026644,
+          "spread_ratio": 1.1576956837403019
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 9.11301128691381,
+        "SLC2A4RG": 9.390556228359713,
+        "PLEKHA1": 9.270376104498338,
+        "MAMSTR": 9.400734319685988
+      }
+    },
+    {
+      "name": "init4",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 4
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 363.42558306385763,
+      "means": {
+        "energy_distance": 1.48634846030558,
+        "shift_cosine": 0.0212118070934605,
+        "spread_ratio": 0.709038723789671
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.5419279998020095,
+          "shift_cosine": -0.004145819016176592,
+          "spread_ratio": 0.6842987477143446
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.4259159902224274,
+          "shift_cosine": 0.1370453393503386,
+          "spread_ratio": 0.7135348787813415
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.4897215486343622,
+          "shift_cosine": -0.275194143956217,
+          "spread_ratio": 0.719591040823109
+        },
+        "MAMSTR": {
+          "energy_distance": 1.4878283025635213,
+          "shift_cosine": 0.22714185199589698,
+          "spread_ratio": 0.718730227839889
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 19.512416251259744,
+        "SLC2A4RG": 19.01900160543366,
+        "PLEKHA1": 19.183918006909934,
+        "MAMSTR": 18.077535119955524
+      }
+    },
+    {
+      "name": "init6-widez",
+      "lr": 0.0014,
+      "settings": {
+        "z_dim": 64,
+        "num_particles": 2048,
+        "batch_size": 128,
+        "d_lr_mult": 15,
+        "prior_lr_mult": 8,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 6
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.0014,
+        "critic": 0.021,
+        "particles": 0.0112
+      },
+      "final_rates": {
+        "generator": 0.0014,
+        "critic": 0.021,
+        "particles": 0.0112
+      },
+      "seconds": 123.94533077208325,
+      "means": {
+        "energy_distance": 1.4023691838005055,
+        "shift_cosine": 0.03076421046319518,
+        "spread_ratio": 0.7355415639438894
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.458119656612979,
+          "shift_cosine": -0.12198965427186349,
+          "spread_ratio": 0.7165370553814703
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.338253657208666,
+          "shift_cosine": 0.0984016149008281,
+          "spread_ratio": 0.7471111266577861
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.4301187056968523,
+          "shift_cosine": 0.02065894912805255,
+          "spread_ratio": 0.7394200979204835
+        },
+        "MAMSTR": {
+          "energy_distance": 1.3829847156835244,
+          "shift_cosine": 0.12598593209576356,
+          "spread_ratio": 0.7390979758158174
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 23.913572853895477,
+        "SLC2A4RG": 23.311752002557736,
+        "PLEKHA1": 23.91377334788886,
+        "MAMSTR": 24.064460824639497
+      }
+    },
+    {
+      "name": "init8-widez",
+      "lr": 0.00035,
+      "settings": {
+        "z_dim": 64,
+        "num_particles": 2048,
+        "batch_size": 128,
+        "d_lr_mult": 60,
+        "prior_lr_mult": 16,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 8
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.00035,
+        "critic": 0.021,
+        "particles": 0.0056
+      },
+      "final_rates": {
+        "generator": 0.00035,
+        "critic": 0.021,
+        "particles": 0.0056
+      },
+      "seconds": 126.7941226141993,
+      "means": {
+        "energy_distance": 1.4348463267463127,
+        "shift_cosine": -0.021787732663188532,
+        "spread_ratio": 0.7292055409171228
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.4301135639723945,
+          "shift_cosine": -0.06724288073410786,
+          "spread_ratio": 0.7076146902172773
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.4794085779519426,
+          "shift_cosine": -0.20349012277531853,
+          "spread_ratio": 0.7398972006669805
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.4183502893163755,
+          "shift_cosine": 0.18924979634258682,
+          "spread_ratio": 0.7311108236453794
+        },
+        "MAMSTR": {
+          "energy_distance": 1.4115128757445383,
+          "shift_cosine": -0.005667723485914559,
+          "spread_ratio": 0.7381994491388539
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 24.768689158169376,
+        "SLC2A4RG": 24.4625500567447,
+        "PLEKHA1": 24.738962106732398,
+        "MAMSTR": 24.581688095602676
+      }
+    },
+    {
+      "name": "kernel",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.6,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 114.3339848020114,
+      "means": {
+        "energy_distance": 1.453802766418349,
+        "shift_cosine": 0.05234773211224271,
+        "spread_ratio": 0.7326382415596489
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.5354191267927453,
+          "shift_cosine": 0.015489445989912032,
+          "spread_ratio": 0.7047478770278235
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.278553168878017,
+          "shift_cosine": 0.37597946252627834,
+          "spread_ratio": 0.7449280748175036
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.5248732959866995,
+          "shift_cosine": -0.28491069312802364,
+          "spread_ratio": 0.749987487709133
+        },
+        "MAMSTR": {
+          "energy_distance": 1.4763654740159344,
+          "shift_cosine": 0.1028327130608041,
+          "spread_ratio": 0.7308895266841351
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 21.051039529289017,
+        "SLC2A4RG": 19.691225849711877,
+        "PLEKHA1": 20.69131851465692,
+        "MAMSTR": 20.540791872340353
+      }
+    },
+    {
+      "name": "latent4",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 4,
+        "num_particles": 512,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 466.9779367770534,
+      "means": {
+        "energy_distance": 1.8908187998266384,
+        "shift_cosine": -0.09094901379056239,
+        "spread_ratio": 0.5393008785331497
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.9622884089718937,
+          "shift_cosine": -0.1328852129850118,
+          "spread_ratio": 0.5300021330113448
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.7863971870741517,
+          "shift_cosine": -0.06233093547576269,
+          "spread_ratio": 0.5417823537539008
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.9495619015723884,
+          "shift_cosine": -0.14824026016544406,
+          "spread_ratio": 0.533861247044018
+        },
+        "MAMSTR": {
+          "energy_distance": 1.8650277016881196,
+          "shift_cosine": -0.020339646536031018,
+          "spread_ratio": 0.5515577803233352
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 12.058259202984285,
+        "SLC2A4RG": 12.391956634325345,
+        "PLEKHA1": 12.543389467828767,
+        "MAMSTR": 12.095138182416518
+      }
+    },
+    {
+      "name": "p-high",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": 8,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.224
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.224
+      },
+      "seconds": 74.62348596914671,
+      "means": {
+        "energy_distance": 1.4995647297831027,
+        "shift_cosine": -0.0012374985544543757,
+        "spread_ratio": 0.7108675435757533
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.5950390826255711,
+          "shift_cosine": -0.031375938206034834,
+          "spread_ratio": 0.6901034848971638
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.3942537021107029,
+          "shift_cosine": 0.010907402514305647,
+          "spread_ratio": 0.7238446448605803
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.4926315114090558,
+          "shift_cosine": -0.4112062701471288,
+          "spread_ratio": 0.7183992038495915
+        },
+        "MAMSTR": {
+          "energy_distance": 1.516334622987081,
+          "shift_cosine": 0.4267248116210405,
+          "spread_ratio": 0.7111228406956778
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.075274900679936,
+        "SLC2A4RG": 19.14745502852729,
+        "PLEKHA1": 19.534328401062112,
+        "MAMSTR": 19.946854968607987
+      }
+    },
+    {
+      "name": "p-low",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": 0.5,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.014
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.014
+      },
+      "seconds": 353.5391010160092,
+      "means": {
+        "energy_distance": 1.499964225838101,
+        "shift_cosine": -0.009441437236499203,
+        "spread_ratio": 0.712378179068601
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.6080117519632724,
+          "shift_cosine": -0.002021007046887962,
+          "spread_ratio": 0.6877082727560032
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.395408579300292,
+          "shift_cosine": 0.04737353297410123,
+          "spread_ratio": 0.7202455343532848
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.4888107114268303,
+          "shift_cosine": -0.2951951084703827,
+          "spread_ratio": 0.7251417200593779
+        },
+        "MAMSTR": {
+          "energy_distance": 1.5076258606620092,
+          "shift_cosine": 0.21207683359717264,
+          "spread_ratio": 0.716417189105738
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.229356869974104,
+        "SLC2A4RG": 18.8857756980836,
+        "PLEKHA1": 19.90985078596221,
+        "MAMSTR": 18.51784121646099
+      }
+    },
+    {
+      "name": "plain",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 128.20949505805038,
+      "means": {
+        "energy_distance": 1.61690669462224,
+        "shift_cosine": -0.03279436998082871,
+        "spread_ratio": 0.6481808050625407
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.6628457460794168,
+          "shift_cosine": -0.005841370351922442,
+          "spread_ratio": 0.6317217096830698
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.507638761428585,
+          "shift_cosine": 0.015296161258233545,
+          "spread_ratio": 0.6545212124179444
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.6522801117607218,
+          "shift_cosine": -0.30960185792019596,
+          "spread_ratio": 0.6586176988552749
+        },
+        "MAMSTR": {
+          "energy_distance": 1.644862159220236,
+          "shift_cosine": 0.16896958709057003,
+          "spread_ratio": 0.6478625992938737
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 15.43682330275665,
+        "SLC2A4RG": 15.363613517342747,
+        "PLEKHA1": 15.89311024807632,
+        "MAMSTR": 15.682499867237668
+      }
+    },
+    {
+      "name": "rates-fast",
+      "lr": 0.112,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": 0.375,
+        "prior_lr_mult": 0.725,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.112,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.112,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 80.80200737691484,
+      "means": {
+        "energy_distance": 1.528376546373734,
+        "shift_cosine": 0.043204477892111744,
+        "spread_ratio": 0.7099471283262515
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.6470943659828867,
+          "shift_cosine": -0.17644673705115943,
+          "spread_ratio": 0.6931318129126836
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.4070599096625633,
+          "shift_cosine": 0.2817785194312947,
+          "spread_ratio": 0.7119579586305104
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.5637548704402056,
+          "shift_cosine": -0.12813877122916648,
+          "spread_ratio": 0.7068889639664583
+        },
+        "MAMSTR": {
+          "energy_distance": 1.4955970394092803,
+          "shift_cosine": 0.19562490041747815,
+          "spread_ratio": 0.7278097777953537
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 17.944192350333832,
+        "SLC2A4RG": 17.879724706232075,
+        "PLEKHA1": 19.024185322339076,
+        "MAMSTR": 17.876833357309923
+      }
+    },
+    {
+      "name": "support-critic-low",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": 0.5,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.014,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.014,
+        "particles": 0.0812
+      },
+      "seconds": 193.68780646915548,
+      "means": {
+        "energy_distance": 1.149758718873078,
+        "shift_cosine": -0.03353345968931511,
+        "spread_ratio": 1.0478932189831278
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2457731272677766,
+          "shift_cosine": -0.10841367274546775,
+          "spread_ratio": 0.9204527458945904
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.0424002440846092,
+          "shift_cosine": -0.12119031545574305,
+          "spread_ratio": 0.9604972558705259
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.174733053990769,
+          "shift_cosine": -0.2975286976869812,
+          "spread_ratio": 1.160380115333992
+        },
+        "MAMSTR": {
+          "energy_distance": 1.1361284501491573,
+          "shift_cosine": 0.3929988471309316,
+          "spread_ratio": 1.150242758833403
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 24.24097575200096,
+        "SLC2A4RG": 22.398694919671453,
+        "PLEKHA1": 24.28069091395571,
+        "MAMSTR": 24.079847224501385
+      }
+    },
+    {
+      "name": "support-critic-low",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": 0.5,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 4,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.014,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.014,
+        "particles": 0.0812
+      },
+      "seconds": 105.3854661511723,
+      "means": {
+        "energy_distance": 1.2154497294747206,
+        "shift_cosine": -0.08056967429940994,
+        "spread_ratio": 1.0320432120782732
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.3214140158358312,
+          "shift_cosine": -0.10963093617077924,
+          "spread_ratio": 0.9268118338374385
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.1705186681440258,
+          "shift_cosine": 0.030600046013883192,
+          "spread_ratio": 0.8954428262125277
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2120751823815166,
+          "shift_cosine": -0.32794674328866924,
+          "spread_ratio": 1.1484513282585047
+        },
+        "MAMSTR": {
+          "energy_distance": 1.157791051537509,
+          "shift_cosine": 0.08469893624792556,
+          "spread_ratio": 1.1574668600046216
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 22.884992719910304,
+        "SLC2A4RG": 23.194412387445496,
+        "PLEKHA1": 22.425801826276,
+        "MAMSTR": 25.022260823636532
+      }
+    },
+    {
+      "name": "support-init4",
+      "lr": 0.014,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 4
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "final_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "seconds": 427.5523454619106,
+      "means": {
+        "energy_distance": 1.3898638572978388,
+        "shift_cosine": -0.05451244335831612,
+        "spread_ratio": 0.7215500067394767
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.4856973214386073,
+          "shift_cosine": -0.1734936400027662,
+          "spread_ratio": 0.7061476617106051
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.2507868818275538,
+          "shift_cosine": 0.03896878383067419,
+          "spread_ratio": 0.7273136160039967
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.3407388226888743,
+          "shift_cosine": -0.26091830239539604,
+          "spread_ratio": 0.7327745562944851
+        },
+        "MAMSTR": {
+          "energy_distance": 1.4822324032363197,
+          "shift_cosine": 0.1773933851342236,
+          "spread_ratio": 0.7199641929488201
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.703728986615925,
+        "SLC2A4RG": 20.33362189610469,
+        "PLEKHA1": 19.74144561395972,
+        "MAMSTR": 20.771776242759774
+      }
+    },
+    {
+      "name": "support-init7",
+      "lr": 0.006,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 7
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.006,
+        "critic": 0.009000000000000001,
+        "particles": 0.0174
+      },
+      "final_rates": {
+        "generator": 0.006,
+        "critic": 0.009000000000000001,
+        "particles": 0.0174
+      },
+      "seconds": 413.29553420399316,
+      "means": {
+        "energy_distance": 1.4207625529126635,
+        "shift_cosine": -0.009982537450393816,
+        "spread_ratio": 0.7029768527204914
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.4943781064869484,
+          "shift_cosine": -0.04339006868016198,
+          "spread_ratio": 0.6861192500754032
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.3020068204736672,
+          "shift_cosine": -0.042335249649941474,
+          "spread_ratio": 0.7120718635411919
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.438618406807965,
+          "shift_cosine": -0.2451682225836401,
+          "spread_ratio": 0.7146287815160294
+        },
+        "MAMSTR": {
+          "energy_distance": 1.4480468778820734,
+          "shift_cosine": 0.2909633911121683,
+          "spread_ratio": 0.6990875157493408
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.85632331056149,
+        "SLC2A4RG": 20.95829044655819,
+        "PLEKHA1": 19.888366235597616,
+        "MAMSTR": 20.78923419557905
+      }
+    },
+    {
+      "name": "support-particle-low",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": 0.6,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0168
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0168
+      },
+      "seconds": 110.44753114297055,
+      "means": {
+        "energy_distance": 1.1737898781843248,
+        "shift_cosine": -0.0046988916156537035,
+        "spread_ratio": 1.0097475399193785
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.3163602077186276,
+          "shift_cosine": -0.15825604662898612,
+          "spread_ratio": 0.859252747157488
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.1233717634541458,
+          "shift_cosine": 0.031265135371962995,
+          "spread_ratio": 0.8820399775678031
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.183750683232259,
+          "shift_cosine": -0.20346704220350267,
+          "spread_ratio": 1.1518905498985956
+        },
+        "MAMSTR": {
+          "energy_distance": 1.0716768583322667,
+          "shift_cosine": 0.311662386997911,
+          "spread_ratio": 1.1458068850536274
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 24.793808828586467,
+        "SLC2A4RG": 22.005864163397465,
+        "PLEKHA1": 23.46207551433519,
+        "MAMSTR": 23.600050400929586
+      }
+    },
+    {
+      "name": "support",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 103.64275841694325,
+      "means": {
+        "energy_distance": 1.3751244881958622,
+        "shift_cosine": -0.030111449483891363,
+        "spread_ratio": 0.7260170074322729
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.4476207356581536,
+          "shift_cosine": -0.14307371319979514,
+          "spread_ratio": 0.7081716562177651
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.2345916671025696,
+          "shift_cosine": -0.020629264279296265,
+          "spread_ratio": 0.735578347649057
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.3392200265244183,
+          "shift_cosine": -0.19811207070658277,
+          "spread_ratio": 0.7429197886683516
+        },
+        "MAMSTR": {
+          "energy_distance": 1.4790655234983072,
+          "shift_cosine": 0.24136925025010872,
+          "spread_ratio": 0.717398237193918
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.75019960580584,
+        "SLC2A4RG": 20.668391665864316,
+        "PLEKHA1": 20.02438096139919,
+        "MAMSTR": 21.0535374025284
+      }
+    },
+    {
+      "name": "v11",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 365.00567350699566,
+      "means": {
+        "energy_distance": 1.5130576086128984,
+        "shift_cosine": -0.040849212259307315,
+        "spread_ratio": 0.7121184212997099
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.6394392366029207,
+          "shift_cosine": -0.05387339862362966,
+          "spread_ratio": 0.6856799018333152
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.381410406242594,
+          "shift_cosine": -0.11885152187202723,
+          "spread_ratio": 0.7216254775243162
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.5138689702152446,
+          "shift_cosine": -0.36651502276598524,
+          "spread_ratio": 0.729240800462863
+        },
+        "MAMSTR": {
+          "energy_distance": 1.5175118213908343,
+          "shift_cosine": 0.37584309422441287,
+          "spread_ratio": 0.7119275053783454
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.671571931792663,
+        "SLC2A4RG": 18.803500193015505,
+        "PLEKHA1": 19.423322734985522,
+        "MAMSTR": 19.092543660893462
+      }
+    }
+  ],
+  "heldout_receipts": [
+    {
+      "name": "batch256-support",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 1,
+      "stage": "heldout",
+      "projected_data_sha256": "4122ee1f848c1985d266936a426a8ed5922a445e82589c2178d4409f2f86563f",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_0"
+      ],
+      "fit_cells": {
+        "INT": 480,
+        "GLCCI1": 435,
+        "SLC2A4RG": 408,
+        "PLEKHA1": 354,
+        "MAMSTR": 303
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 129.61064418498427,
+      "means": {
+        "energy_distance": 1.533459147146685,
+        "shift_cosine": 0.01217113951040487,
+        "spread_ratio": 0.770793697175406
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.7225292959536995,
+          "shift_cosine": 0.19830354025803407,
+          "spread_ratio": 0.7851275688853165
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.516340355999251,
+          "shift_cosine": -0.07574988961748375,
+          "spread_ratio": 0.7769173692935009
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.3656994063142909,
+          "shift_cosine": -0.021337118039512895,
+          "spread_ratio": 0.7451328162084486
+        },
+        "MAMSTR": {
+          "energy_distance": 1.5292675303194985,
+          "shift_cosine": -0.052531974559417945,
+          "spread_ratio": 0.7759970343143581
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 24.30747257302205,
+        "SLC2A4RG": 24.18432497566086,
+        "PLEKHA1": 23.934188813834464,
+        "MAMSTR": 23.922949702863992
+      }
+    },
+    {
+      "name": "batch256-support",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 2,
+      "stage": "heldout",
+      "projected_data_sha256": "4122ee1f848c1985d266936a426a8ed5922a445e82589c2178d4409f2f86563f",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_0"
+      ],
+      "fit_cells": {
+        "INT": 480,
+        "GLCCI1": 435,
+        "SLC2A4RG": 408,
+        "PLEKHA1": 354,
+        "MAMSTR": 303
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 389.06195265008137,
+      "means": {
+        "energy_distance": 1.5814015335941893,
+        "shift_cosine": -0.08695139468698242,
+        "spread_ratio": 0.7560034082278791
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.7117839153980485,
+          "shift_cosine": 0.03502489363561857,
+          "spread_ratio": 0.7759536729882214
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.5588155074231347,
+          "shift_cosine": 0.041107394142259536,
+          "spread_ratio": 0.7570551092364795
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.4317493004647055,
+          "shift_cosine": -0.41102017242511807,
+          "spread_ratio": 0.724378715210587
+        },
+        "MAMSTR": {
+          "energy_distance": 1.6232574110908686,
+          "shift_cosine": -0.012917694100689733,
+          "spread_ratio": 0.7666261354762287
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 24.805550594915392,
+        "SLC2A4RG": 24.59849260085533,
+        "PLEKHA1": 24.57704772079657,
+        "MAMSTR": 23.891659120054804
+      }
+    },
+    {
+      "name": "batch256-support",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 3,
+      "stage": "heldout",
+      "projected_data_sha256": "4122ee1f848c1985d266936a426a8ed5922a445e82589c2178d4409f2f86563f",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_0"
+      ],
+      "fit_cells": {
+        "INT": 480,
+        "GLCCI1": 435,
+        "SLC2A4RG": 408,
+        "PLEKHA1": 354,
+        "MAMSTR": 303
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 125.02242617309093,
+      "means": {
+        "energy_distance": 1.586763450450071,
+        "shift_cosine": -0.0506061547352273,
+        "spread_ratio": 0.7547458566655836
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.8053199517166698,
+          "shift_cosine": -0.02787198913466981,
+          "spread_ratio": 0.7727491138383515
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.5372164815552285,
+          "shift_cosine": 0.04725016902717896,
+          "spread_ratio": 0.7605444581380734
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.441118316089982,
+          "shift_cosine": -0.1913979985772228,
+          "spread_ratio": 0.7203690720762495
+        },
+        "MAMSTR": {
+          "energy_distance": 1.5633990524384034,
+          "shift_cosine": -0.030404800256195554,
+          "spread_ratio": 0.7653207826096602
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 24.110065390871817,
+        "SLC2A4RG": 24.339030200089102,
+        "PLEKHA1": 24.27838551179789,
+        "MAMSTR": 24.523222926937677
+      }
+    },
+    {
+      "name": "empf-matched",
+      "lr": 0.005,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "empf",
+      "particlegan": "0.10.0",
+      "torch": "2.14.1+cu130",
+      "seed": 1,
+      "stage": "heldout",
+      "projected_data_sha256": "4122ee1f848c1985d266936a426a8ed5922a445e82589c2178d4409f2f86563f",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_0"
+      ],
+      "fit_cells": {
+        "INT": 480,
+        "GLCCI1": 435,
+        "SLC2A4RG": 408,
+        "PLEKHA1": 354,
+        "MAMSTR": 303
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "empf",
+      "optimizer_family": "dualnorm",
+      "prior_regularizer": "empf",
+      "initial_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "final_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "seconds": 69.19563764613122,
+      "means": {
+        "energy_distance": 1.3091356506153293,
+        "shift_cosine": -0.11118799919613227,
+        "spread_ratio": 1.052803406693824
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.5163497619339283,
+          "shift_cosine": -0.010939481673424511,
+          "spread_ratio": 1.0759815836047717
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.2610314773389009,
+          "shift_cosine": -0.38092079888287356,
+          "spread_ratio": 1.0568991199285167
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.16117153565604,
+          "shift_cosine": -0.009088424614941991,
+          "spread_ratio": 1.0228977206701935
+        },
+        "MAMSTR": {
+          "energy_distance": 1.2979898275324482,
+          "shift_cosine": -0.043803291613289046,
+          "spread_ratio": 1.0554352025718143
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.637826233013826,
+        "SLC2A4RG": 21.368670090957863,
+        "PLEKHA1": 19.947232328141656,
+        "MAMSTR": 20.79840278643175
+      }
+    },
+    {
+      "name": "empf-matched",
+      "lr": 0.005,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "empf",
+      "particlegan": "0.10.0",
+      "torch": "2.14.1+cu130",
+      "seed": 2,
+      "stage": "heldout",
+      "projected_data_sha256": "4122ee1f848c1985d266936a426a8ed5922a445e82589c2178d4409f2f86563f",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_0"
+      ],
+      "fit_cells": {
+        "INT": 480,
+        "GLCCI1": 435,
+        "SLC2A4RG": 408,
+        "PLEKHA1": 354,
+        "MAMSTR": 303
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "empf",
+      "optimizer_family": "dualnorm",
+      "prior_regularizer": "empf",
+      "initial_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "final_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "seconds": 449.3664576059673,
+      "means": {
+        "energy_distance": 1.239392244916531,
+        "shift_cosine": 0.13494906333794904,
+        "spread_ratio": 1.0731677929572776
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.3963659356494569,
+          "shift_cosine": 0.20836554469241506,
+          "spread_ratio": 1.08719679812112
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.2927702463263637,
+          "shift_cosine": 0.03549748509196681,
+          "spread_ratio": 1.0819787999810928
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.0737672362229747,
+          "shift_cosine": 0.1229541960483025,
+          "spread_ratio": 1.0404489969937487
+        },
+        "MAMSTR": {
+          "energy_distance": 1.1946655614673292,
+          "shift_cosine": 0.1729790275191118,
+          "spread_ratio": 1.0830465767331492
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 21.126034294265207,
+        "SLC2A4RG": 20.968007700065574,
+        "PLEKHA1": 20.246596565579,
+        "MAMSTR": 20.670246667280384
+      }
+    },
+    {
+      "name": "empf-matched",
+      "lr": 0.005,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "empf",
+      "particlegan": "0.10.0",
+      "torch": "2.14.1+cu130",
+      "seed": 3,
+      "stage": "heldout",
+      "projected_data_sha256": "4122ee1f848c1985d266936a426a8ed5922a445e82589c2178d4409f2f86563f",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_0"
+      ],
+      "fit_cells": {
+        "INT": 480,
+        "GLCCI1": 435,
+        "SLC2A4RG": 408,
+        "PLEKHA1": 354,
+        "MAMSTR": 303
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "empf",
+      "optimizer_family": "dualnorm",
+      "prior_regularizer": "empf",
+      "initial_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "final_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "seconds": 69.78565576695837,
+      "means": {
+        "energy_distance": 1.3289576019225164,
+        "shift_cosine": -0.07558801057207551,
+        "spread_ratio": 1.0407187418064061
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.3846706655903906,
+          "shift_cosine": -0.21928907876054313,
+          "spread_ratio": 1.0648103653284948
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.4187461812031996,
+          "shift_cosine": -0.006565126034815128,
+          "spread_ratio": 1.057622931907304
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2223743504068505,
+          "shift_cosine": -0.03424129258098501,
+          "spread_ratio": 0.9930851700718982
+        },
+        "MAMSTR": {
+          "energy_distance": 1.290039210489625,
+          "shift_cosine": -0.042256544911958765,
+          "spread_ratio": 1.0473564999179275
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 20.510655601076884,
+        "SLC2A4RG": 20.363995414374866,
+        "PLEKHA1": 20.459280415577364,
+        "MAMSTR": 20.20371649531652
+      }
+    },
+    {
+      "name": "empf",
+      "lr": 0.005,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "empf",
+      "particlegan": "0.10.0",
+      "torch": "2.14.1+cu130",
+      "seed": 1,
+      "stage": "heldout",
+      "projected_data_sha256": "4122ee1f848c1985d266936a426a8ed5922a445e82589c2178d4409f2f86563f",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_0"
+      ],
+      "fit_cells": {
+        "INT": 480,
+        "GLCCI1": 435,
+        "SLC2A4RG": 408,
+        "PLEKHA1": 354,
+        "MAMSTR": 303
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "empf",
+      "optimizer_family": "dualnorm",
+      "prior_regularizer": "empf",
+      "initial_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "final_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "seconds": 159.1158089430537,
+      "means": {
+        "energy_distance": 1.4564789666944435,
+        "shift_cosine": 0.11752961650688425,
+        "spread_ratio": 0.8916130519277427
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.6514690395085276,
+          "shift_cosine": -0.0022659023888470776,
+          "spread_ratio": 0.9052358582118524
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.3978106959726846,
+          "shift_cosine": 0.14216224298768546,
+          "spread_ratio": 0.9110697758369711
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.310243899099932,
+          "shift_cosine": 0.24964829996066545,
+          "spread_ratio": 0.8594942473822753
+        },
+        "MAMSTR": {
+          "energy_distance": 1.4663922321966298,
+          "shift_cosine": 0.08057382546803313,
+          "spread_ratio": 0.8906523262798717
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 12.754858477848119,
+        "SLC2A4RG": 12.629834503417662,
+        "PLEKHA1": 12.028161558415105,
+        "MAMSTR": 12.022531123254671
+      }
+    },
+    {
+      "name": "empf",
+      "lr": 0.005,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "empf",
+      "particlegan": "0.10.0",
+      "torch": "2.14.1+cu130",
+      "seed": 2,
+      "stage": "heldout",
+      "projected_data_sha256": "4122ee1f848c1985d266936a426a8ed5922a445e82589c2178d4409f2f86563f",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "0",
+      "fit_groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_0"
+      ],
+      "fit_cells": {
+        "INT": 480,
+        "GLCCI1": 435,
+        "SLC2A4RG": 408,
+        "PLEKHA1": 354,
+        "MAMSTR": 303
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "empf",
+      "optimizer_family": "dualnorm",
+      "prior_regularizer": "empf",
+      "initial_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "final_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "seconds": 600.5630666539073,
+      "means": {
+        "energy_distance": 1.4109255376715326,
+        "shift_cosine": -0.0366435014655306,
+        "spread_ratio": 0.9625103336764723
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.519221953770801,
+          "shift_cosine": 0.0611670556816495,
+          "spread_ratio": 0.9769656729335403
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.5463529983882083,
+          "shift_cosine": -0.04941795399438121,
+          "spread_ratio": 0.9747800736048644
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.2540277723971442,
+          "shift_cosine": 0.030756368537371664,
+          "spread_ratio": 0.9326566707276606
+        },
+        "MAMSTR": {
+          "energy_distance": 1.324099426129977,
+          "shift_cosine": -0.18907947608676237,
+          "spread_ratio": 0.9656389174398241
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 12.098064231620167,
+        "SLC2A4RG": 11.59886483492791,
+        "PLEKHA1": 11.70164285660363,
+        "MAMSTR": 11.737691262158615
+      }
+    },
+    {
+      "name": "empf",
+      "lr": 0.005,
+      "settings": {
+        "z_dim": 16,
+        "num_particles": 64,
+        "batch_size": 64,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "empf",
+      "particlegan": "0.10.0",
+      "torch": "2.14.1+cu130",
+      "seed": 3,
+      "stage": "heldout",
+      "projected_data_sha256": "4122ee1f848c1985d266936a426a8ed5922a445e82589c2178d4409f2f86563f",
+      "updates": 1200,
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_0"
+      ],
+      "fit_cells": {
+        "INT": 480,
+        "GLCCI1": 435,
+        "SLC2A4RG": 408,
+        "PLEKHA1": 354,
+        "MAMSTR": 303
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "empf",
+      "optimizer_family": "dualnorm",
+      "prior_regularizer": "empf",
+      "initial_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "final_rates": {
+        "generator": 0.005,
+        "critic": 0.0075,
+        "particles": 0.0125
+      },
+      "seconds": 158.94512541312724,
+      "means": {
+        "energy_distance": 1.3016615229395392,
+        "shift_cosine": 0.02494249444236065,
+        "spread_ratio": 1.004046628676345
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.42890800942667,
+          "shift_cosine": -0.2549456388026369,
+          "spread_ratio": 1.029350079266602
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.2759548234050895,
+          "shift_cosine": 0.15300409250105348,
+          "spread_ratio": 1.0045159456881911
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.1192852147144805,
+          "shift_cosine": 0.027486232096624562,
+          "spread_ratio": 0.9654712101607097
+        },
+        "MAMSTR": {
+          "energy_distance": 1.3824980442119168,
+          "shift_cosine": 0.17422529197440143,
+          "spread_ratio": 1.0168492795898774
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 10.02347562836557,
+        "SLC2A4RG": 11.413648993641761,
+        "PLEKHA1": 10.561446773208946,
+        "MAMSTR": 10.53911931730747
+      }
+    }
+  ],
+  "validation_traces": [
+    {
+      "name": "batch256-support",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 0,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "trace_every": 150,
+      "trace": [
+        {
+          "updates": 150,
+          "mean_energy_distance": 1.2761632368745999
+        },
+        {
+          "updates": 300,
+          "mean_energy_distance": 1.2118448579620917
+        },
+        {
+          "updates": 450,
+          "mean_energy_distance": 1.2095708265719534
+        },
+        {
+          "updates": 600,
+          "mean_energy_distance": 1.1797481512226136
+        },
+        {
+          "updates": 750,
+          "mean_energy_distance": 1.1923021935348272
+        },
+        {
+          "updates": 900,
+          "mean_energy_distance": 1.1893706442729022
+        },
+        {
+          "updates": 1050,
+          "mean_energy_distance": 1.1677774915453762
+        },
+        {
+          "updates": 1200,
+          "mean_energy_distance": 1.1440328153908883
+        }
+      ],
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 107.27557901805267,
+      "means": {
+        "energy_distance": 1.1440328153908883,
+        "shift_cosine": -0.0661829516071985,
+        "spread_ratio": 1.0372915158807197
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.2391883443150888,
+          "shift_cosine": -0.19160570782998435,
+          "spread_ratio": 0.9043322810892852
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.0764640020954932,
+          "shift_cosine": -0.1302094612629548,
+          "spread_ratio": 0.9371592077367917
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.1620203651870957,
+          "shift_cosine": -0.38421876097083757,
+          "spread_ratio": 1.1645101770334574
+        },
+        "MAMSTR": {
+          "energy_distance": 1.0984585499658754,
+          "shift_cosine": 0.4413021236349827,
+          "spread_ratio": 1.1431643976633439
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 24.278989161520734,
+        "SLC2A4RG": 22.82643450720157,
+        "PLEKHA1": 23.971835838512007,
+        "MAMSTR": 23.874231313800177
+      }
+    },
+    {
+      "name": "batch256-support",
+      "lr": 0.028,
+      "settings": {
+        "z_dim": 32,
+        "num_particles": 512,
+        "batch_size": 256,
+        "d_lr_mult": null,
+        "prior_lr_mult": null,
+        "prior_sigma": 0.025,
+        "generator_output_init_gain": 1.0
+      },
+      "recipe": "unified_v11",
+      "particlegan": "0.11.1",
+      "torch": "2.14.1+cu130",
+      "seed": 4,
+      "stage": "validation",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "updates": 1200,
+      "trace_every": 150,
+      "trace": [
+        {
+          "updates": 150,
+          "mean_energy_distance": 1.2696466080780224
+        },
+        {
+          "updates": 300,
+          "mean_energy_distance": 1.1777728944361265
+        },
+        {
+          "updates": 450,
+          "mean_energy_distance": 1.1916070714955793
+        },
+        {
+          "updates": 600,
+          "mean_energy_distance": 1.2481316316700266
+        },
+        {
+          "updates": 750,
+          "mean_energy_distance": 1.300838213557472
+        },
+        {
+          "updates": 900,
+          "mean_energy_distance": 1.2309198987562742
+        },
+        {
+          "updates": 1050,
+          "mean_energy_distance": 1.2450126653085882
+        },
+        {
+          "updates": 1200,
+          "mean_energy_distance": 1.2022296138585913
+        }
+      ],
+      "gpu": "NVIDIA RTX A6000",
+      "visible_devices": "1",
+      "fit_groups": [
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "fit_cells": {
+        "INT": 320,
+        "GLCCI1": 290,
+        "SLC2A4RG": 272,
+        "PLEKHA1": 236,
+        "MAMSTR": 202
+      },
+      "scored_cells": {
+        "INT": 160,
+        "GLCCI1": 145,
+        "SLC2A4RG": 136,
+        "PLEKHA1": 118,
+        "MAMSTR": 101
+      },
+      "formulation": "unified_v11",
+      "optimizer_family": "unified_v11_equil",
+      "prior_regularizer": "unified_v11",
+      "initial_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "final_rates": {
+        "generator": 0.028,
+        "critic": 0.042,
+        "particles": 0.0812
+      },
+      "seconds": 108.43447616603225,
+      "means": {
+        "energy_distance": 1.2022296138585913,
+        "shift_cosine": -0.0898068220230402,
+        "spread_ratio": 1.0139953095262395
+      },
+      "targets": {
+        "GLCCI1": {
+          "energy_distance": 1.3204288894551253,
+          "shift_cosine": -0.20335160730955085,
+          "spread_ratio": 0.9074543711102057
+        },
+        "SLC2A4RG": {
+          "energy_distance": 1.146616694006199,
+          "shift_cosine": 0.052877156901185884,
+          "spread_ratio": 0.8839576922107454
+        },
+        "PLEKHA1": {
+          "energy_distance": 1.1993394770391763,
+          "shift_cosine": -0.37729374382562353,
+          "spread_ratio": 1.1182176034554892
+        },
+        "MAMSTR": {
+          "energy_distance": 1.1425333949338645,
+          "shift_cosine": 0.16854090614182768,
+          "spread_ratio": 1.1463515713285175
+        }
+      },
+      "effective_rank": {
+        "GLCCI1": 23.720359243306824,
+        "SLC2A4RG": 23.093102222418203,
+        "PLEKHA1": 25.375494872060983,
+        "MAMSTR": 24.724667940120103
+      }
+    }
+  ]
+}

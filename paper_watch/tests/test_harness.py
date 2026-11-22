@@ -3,7 +3,8 @@ import numpy as np
 from particlegan import get_recipe
 import pytest
 
-from paper_watch.alztest.harness import BATCH, ConditionalPGAN
+from paper_watch.alztest.harness import BATCH, ConditionalPGAN, TrainingSettings
+from paper_watch.alztest.neuroko_duration import optimizer_rates
 
 
 @pytest.mark.parametrize("use_recipe_defaults", (False, True))
@@ -66,3 +67,15 @@ def test_restored_fit_replays_condition_order_and_row_draws():
     assert restored.trainer.completed_steps == 12
     for label in range(3):
         np.testing.assert_array_equal(restored.sample(label, 32), original.sample(label, 32))
+
+
+def test_independent_rates_and_output_initialization():
+    settings = TrainingSettings(d_lr_mult=0.3, prior_lr_mult=4.0, generator_output_init_gain=2)
+    tuned = ConditionalPGAN(3, 2, seed=5, learning_rate=0.01, settings=settings)
+    reference = ConditionalPGAN(3, 2, seed=5, learning_rate=0.01)
+    assert optimizer_rates(tuned) == pytest.approx({"generator": 0.01, "critic": 0.003, "particles": 0.04})
+    for (name, param), reference_param in zip(tuned.G.named_parameters(), reference.G.parameters()):
+        factor = 2 if name == "net.4.weight" else 1
+        np.testing.assert_array_equal(param.detach(), reference_param.detach() * factor)
+    assert tuned.trainer.recipe.optimizer_family == reference.trainer.recipe.optimizer_family
+    assert tuned.trainer.recipe.prior_regularizer == reference.trainer.recipe.prior_regularizer

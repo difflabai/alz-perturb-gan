@@ -12,6 +12,7 @@ way the production ALZ adapter wraps the trainer.
 from __future__ import annotations
 
 from collections.abc import Callable
+from dataclasses import asdict, dataclass
 
 import numpy as np
 import torch
@@ -56,6 +57,32 @@ class _CondCritic(nn.Module):
         return self.net(torch.cat([x, c], dim=1))
 
 
+@dataclass(frozen=True)
+class TrainingSettings:
+    z_dim: int = Z_DIM
+    num_particles: int = NUM_PARTICLES
+    batch_size: int = BATCH
+    d_lr_mult: float | None = None
+    prior_lr_mult: float | None = None
+    prior_sigma: float = 0.025
+    optimizer_smoothing: float | None = None
+    prior_reg: float | None = None
+    reg_coeff: float | None = None
+    rhbi_eps: float | None = None
+    rhbi_rho: float | None = None
+    rhbi_tau: float | None = None
+    rhbi_relativistic_weight: float | None = None
+    rhbi_nn_quantile: float | None = None
+    rhbi_self_coupling: str | None = None
+    generator_output_init_gain: float = 1.0
+
+    def __post_init__(self):
+        if not np.isfinite(self.prior_sigma) or self.prior_sigma < 0:
+            raise ValueError("prior sigma must be finite and nonnegative")
+        if not np.isfinite(self.generator_output_init_gain) or self.generator_output_init_gain <= 0:
+            raise ValueError("generator output initialization gain must be finite and positive")
+
+
 class ConditionalPGAN:
     """One conditional ParticleGAN over (condition -> distribution).
 
@@ -68,23 +95,29 @@ class ConditionalPGAN:
         self, data_dim: int, n_cond: int, seed: int = 0, *,
         learning_rate: float | None = None, recipe_name: str = "empf",
         device: str | torch.device = "cpu", use_recipe_defaults: bool = False,
+        settings: TrainingSettings | None = None,
     ):
         self.n_cond = n_cond
         self.device = torch.device(device)
         if use_recipe_defaults:
-            if learning_rate is not None:
-                raise ValueError("a learning-rate override cannot be used with recipe defaults")
+            if learning_rate is not None or settings is not None:
+                raise ValueError("explicit training overrides cannot be used with recipe defaults")
             recipe = get_recipe(recipe_name)
         else:
-            recipe = get_recipe(recipe_name, z_dim=Z_DIM, num_particles=NUM_PARTICLES,
-                                batch_size=BATCH, lr=0.005 if learning_rate is None else learning_rate)
+            settings = settings or TrainingSettings()
+            overrides = {key: value for key, value in asdict(settings).items()
+                         if value is not None and key not in {"prior_sigma", "generator_output_init_gain"}}
+            recipe = get_recipe(recipe_name, lr=0.005 if learning_rate is None else learning_rate, **overrides)
         self.G = _CondGenerator(recipe.z_dim, n_cond, data_dim)
         self.D = _CondCritic(data_dim, n_cond)
         deterministic_orthogonal_(self.G, seed=seed)
         deterministic_orthogonal_(self.D, seed=seed + 1)
+        if settings is not None and settings.generator_output_init_gain != 1.0:
+            with torch.no_grad():
+                self.G.net[-1].weight.mul_(settings.generator_output_init_gain)
         self.G.to(self.device)
         self.D.to(self.device)
-        prior = None if use_recipe_defaults else recipe.make_prior(sigma=0.025).to(self.device)
+        prior = None if use_recipe_defaults else recipe.make_prior(sigma=settings.prior_sigma).to(self.device)
         self.trainer = GANTrainer(recipe, self.G, self.D, prior=prior, seed=seed, serial_backward=True)
         self.prior = self.trainer.prior
         self._rng = np.random.default_rng(seed)
@@ -98,6 +131,7 @@ class ConditionalPGAN:
         self, X: np.ndarray, cond: np.ndarray, steps: int = 300, *,
         min_condition_rows: int = 32, after_step: Callable[[int], None] | None = None,
         replay_batches: int = 0,
+        on_batch: Callable[[int, np.ndarray], None] | None = None,
     ) -> None:
         if min_condition_rows < 1:
             raise ValueError("min_condition_rows must be positive")
@@ -119,6 +153,8 @@ class ConditionalPGAN:
             pick = self._rng.choice(ix, size=batch_size, replace=len(ix) < batch_size)
             if s < replay_batches:
                 continue
+            if on_batch is not None:
+                on_batch(k, pick)
             self._set_cond(k)
             rows = torch.as_tensor(pick, device=self.device)
             self.trainer.step(data.index_select(0, rows))
