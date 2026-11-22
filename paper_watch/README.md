@@ -122,6 +122,8 @@ Use the long command again after an interruption. It resumes each arm from its s
 
 The 1,200-update hyperparameter study includes matched-capacity EMPF and a three-seed held-out comparison. [Results and reproduction commands](notes/neuroko_cuda_tuning_1200.md)
 
+The fixed-network formulation comparison also pins the particle table, batch size and evaluation draws. Its two-GPU reproduction command covers the released Unified v11 recipe with tuned transport settings, same-wheel EMPF and historical EMPF. [1,200-update formulation comparison](notes/neuroko_formulation_1200.md)
+
 #### Copy-paste prompt
 
 > Reproduce the NeuroKO GPU comparison. Clone https://github.com/difflabai/alz-perturb-gan on branch `paper-watch/neuroko-revival`, record the commit, and follow “NeuroKO GPU comparison” in `paper_watch/README.md`. Set up Python 3.11 and CUDA PyTorch, then download and checksum both NeuroKO H5ADs from Zenodo record 23260389. Run the matched seed-1 neuronal holdout (`Screen1_0`) with 0.10.0 EMPF at 0.005 and 0.11.1 Unified v11 at 0.028. Verify both 300-update smoke runs use CUDA and the same cells. Resume both to 40,000 updates. Save the receipts and checkpoints, then report which model has lower held-out energy distance, how many targets it wins, and how its spread compares with the observed cells.

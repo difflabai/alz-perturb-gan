@@ -20,10 +20,43 @@ from time import perf_counter
 import numpy as np
 import torch
 
-from .harness import ConditionalPGAN, TrainingSettings
+from .harness import ConditionalPGAN, TrainingSettings, energy_distance
 from .neuroko import LAYOUT, load_comparison, open_screen, project_fold
 from .neuroko_duration import effective_rank, optimizer_rates, write_receipt
 from .neuroko_lr import DRAWS, score
+
+
+def optimizer_momentum(trainer):
+    """Read the state that each released optimizer uses to calculate its step."""
+    result = {}
+    for role, optimizer in (("generator_and_particles", trainer.opt_g), ("critic", trainer.opt_d)):
+        state = {"class": type(optimizer).__name__}
+        if trainer.recipe.optimizer_family == "dualnorm":
+            state["momentum"] = optimizer.momentum
+        else:
+            state["group_betas"] = [list(group["betas"]) for group in optimizer.param_groups]
+        result[role] = state
+    return result
+
+
+def diagnose_energy(samples, observed, training, labels, conditions):
+    """Measure centroid and spread contributions after the primary evaluation."""
+    targets = {}
+    for k, target in enumerate(conditions[1:], 1):
+        generated, real, fitted = samples[k], observed[k], training[labels == k]
+        generated_mean, real_mean, fitted_mean = (rows.mean(0) for rows in (generated, real, fitted))
+        centered = generated - generated_mean
+        variance = centered.var(0).sum()
+        rescaled = centered * np.sqrt(real.var(0).sum() / variance) if variance > 0 else centered
+        targets[target] = {
+            "generated_to_observed_centroid": float(np.linalg.norm(generated_mean - real_mean)),
+            "generated_to_training_centroid": float(np.linalg.norm(generated_mean - fitted_mean)),
+            "training_to_observed_centroid": float(np.linalg.norm(fitted_mean - real_mean)),
+            "energy_at_observed_centroid": energy_distance(centered + real_mean, real),
+            "energy_at_observed_centroid_and_spread": energy_distance(rescaled + real_mean, real),
+            "energy_to_training_cells": energy_distance(generated, fitted),
+        }
+    return targets
 
 
 def main():
@@ -38,11 +71,19 @@ def main():
     parser.add_argument("--trial", action="append", type=json.loads, required=True,
                         help='JSON object, e.g. {"name":"v11","lr":0.028,"batch_size":256}')
     parser.add_argument("--trace-every", type=int, help="also score validation or holdout at this update interval")
+    parser.add_argument("--deterministic", action="store_true",
+                        help="seed PyTorch and require deterministic CUDA kernels for repeatability checks")
+    parser.add_argument("--diagnose-energy", action="store_true",
+                        help="also score the final samples after matching their observed centroid and spread")
     parser.add_argument("--release", choices=("0.10.0", "0.11.1"),
                         help="pin the installed wheel; EMPF is available in both releases")
     parser.add_argument("--validation-group", choices=("Screen1_1", "Screen1_3", "Screen1_4"),
                         default="Screen1_1")
+    parser.add_argument("--self-plan", choices=("observe", "exclude-same-id", "opposite-halves", "discount-same-id"),
+                        help="trace the v11 solver or run an explicit self-pairing counterfactual")
     args = parser.parse_args()
+    if args.self_plan and args.recipe != "unified_v11":
+        parser.error("the self-plan diagnostic requires unified_v11")
     if args.trace_every is not None and not 0 < args.trace_every <= 1200:
         parser.error("--trace-every must be between 1 and 1200")
     release = version("particlegan")
@@ -51,6 +92,10 @@ def main():
         parser.error(f"unexpected ParticleGAN release {release} for {args.recipe}")
     if args.window_cells is not None and args.window_cells < 1:
         parser.error("--window-cells must be positive")
+    if args.deterministic:
+        os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+        torch.use_deterministic_algorithms(True)
+        torch.manual_seed(args.seed)
     if not torch.cuda.is_available():
         parser.error("the 1,200-update benchmark requires CUDA")
     device = torch.device("cuda", torch.cuda.current_device())
@@ -92,9 +137,19 @@ def main():
                   "stage": args.stage, "projected_data_sha256": digest.hexdigest(), "updates": 1200}
         if args.stage == "validation" and args.validation_group != "Screen1_1":
             path = path.with_stem(f"{path.stem}-{args.validation_group}")
+        if args.deterministic:
+            config["deterministic"] = True
+            config["cublas_workspace_config"] = os.environ["CUBLAS_WORKSPACE_CONFIG"]
+            path = path.with_stem(f"{path.stem}-deterministic")
+        if args.diagnose_energy:
+            config["diagnose_energy"] = True
+            path = path.with_stem(f"{path.stem}-diagnosis")
         if args.trace_every:
             config["trace_every"] = args.trace_every
             path = path.with_stem(f"{path.stem}-trace{args.trace_every}")
+        if args.self_plan:
+            config["diagnostic_self_plan"] = args.self_plan
+            path = path.with_stem(f"{path.stem}-{args.self_plan}")
         if path.exists():
             previous = json.loads(path.read_text())
             previous["settings"] = asdict(TrainingSettings(**previous["settings"]))
@@ -107,6 +162,10 @@ def main():
                                     recipe_name=args.recipe, learning_rate=lr, settings=settings)
         if any(p.device != device for m in (model.G, model.D, model.prior) for p in m.parameters()):
             raise RuntimeError("all trainable modules must reside on the selected GPU")
+        if args.self_plan:
+            from .neuroko_radial import trace_training_plans
+
+            plan_trace = trace_training_plans(model.trainer, args.self_plan)
         recipe = model.trainer.recipe
         if recipe.effective_critic_formulation != args.recipe or recipe.prior_regularizer != args.recipe:
             raise RuntimeError("the requested formulation and prior regularizer must be active")
@@ -153,10 +212,16 @@ def main():
             raise RuntimeError("expected exactly 1,200 completed updates")
         samples = [model.sample(i, DRAWS, seed=args.seed + 100 + i) for i in range(len(conditions))]
         metrics = score(samples, observed, conditions)
+        if args.diagnose_energy:
+            config["energy_diagnosis"] = diagnose_energy(samples, observed, x, labels, conditions)
         averages = {key: mean(row[key] for row in metrics.values()) for key in next(iter(metrics.values()))}
         if args.trace_every:
             trace.append({"updates": 1200, "mean_energy_distance": averages["energy_distance"]})
             config["trace"] = trace
+        if args.self_plan:
+            if len(plan_trace) != 48:
+                raise RuntimeError("expected 48 observed self plans")
+            config["training_plans"] = plan_trace
         write_receipt(path, {**config, "gpu": torch.cuda.get_device_name(device),
                              "visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
                              "fit_groups": sorted(set(panel.groups[fit])),
@@ -165,6 +230,7 @@ def main():
                              "scored_cells": dict(zip(conditions, map(len, observed))),
                              "formulation": recipe.effective_critic_formulation,
                              "optimizer_family": recipe.optimizer_family, "prior_regularizer": recipe.prior_regularizer,
+                             "optimizer_momentum": optimizer_momentum(model.trainer),
                              "initial_rates": rates, "final_rates": optimizer_rates(model),
                              "initial_parameters_sha256": initialization.hexdigest(),
                              "training_batches_sha256": batch_digest.hexdigest(),

@@ -10,6 +10,8 @@ The 0.11.1 Unified v11 configuration selected on validation scored **1.567** on 
 
 All three arms received 1,200 updates on RTX A6000 GPUs. The original processed 76,800 sampled cell rows and each larger-batch arm processed 307,200. Individual synchronized fit times varied with GPU contention. The selected model used generator, critic and particle learning rates of 0.028, 0.042 and 0.0812. Both EMPF controls used 0.005, 0.0075 and 0.0125. The library supplied each formulation's loss, optimizer and prior regularizer.
 
+The follow-up locks the original network and particle dimensions in both arms. [Controlled formulation comparison and diagnosis](neuroko_formulation_1200.md)
+
 ## What improved validation
 
 The benchmark kept the original 30 training-whitened expression coordinates, condition rotation and four-target mean energy metric. The search fitted on neuronal replicates `Screen1_3` and `Screen1_4` and scored `Screen1_1`. It tested 33 v11 configurations at seed 0 and repeated the best three at seed 4. The lowest two-seed mean selected the final configuration before scoring it on `Screen1_0` at seeds 1, 2 and 3. Both inner and outer evaluations used 256 clean draws per condition.

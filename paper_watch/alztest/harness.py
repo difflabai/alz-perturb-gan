@@ -66,9 +66,15 @@ class TrainingSettings:
     prior_lr_mult: float | None = None
     prior_sigma: float = 0.025
     optimizer_smoothing: float | None = None
+    betas: tuple[float, float] | None = None
+    total_steps: int | None = None
+    lr_floor: float | None = None
+    network_lr_floor: float | None = None
     prior_reg: float | None = None
+    prior_reg_target_std: float | None = None
     reg_coeff: float | None = None
     rhbi_eps: float | None = None
+    rhbi_iters: int | None = None
     rhbi_rho: float | None = None
     rhbi_tau: float | None = None
     rhbi_relativistic_weight: float | None = None
