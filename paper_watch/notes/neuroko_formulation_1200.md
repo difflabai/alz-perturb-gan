@@ -1,6 +1,6 @@
 # ParticleGAN formulation comparison at 1,200 updates
 
-With zero momentum, the released hollow self-plan option and active critic weight 2, v11 averaged **1.3852** across eight deterministic seeds. Historical EMPF at its original rates scored **1.3889**. Same-wheel EMPF with identical rates to v11 scored **1.3655**. Lower energy distance is better.
+With the network, momentum and all three optimizer-group rates matched, the zero-momentum v11 candidate averaged **1.3711** against **1.3658** for EMPF on eight fresh deterministic seeds at the v11 preset rates. At the historical rates, v11 scored **1.4440** and EMPF **1.3643**. Lower energy distance is better. The 0.10.0 and 0.11.1 EMPF releases produced exactly the same target metrics for every seed at each rate setting.
 
 The controlled benchmark keeps the generator at 21 → 96 → 96 → 30, the critic at 35 → 96 → 96 → 1, the learned particle table at 64 × 16, the per-condition batch at 64 and the latent noise standard deviation at 0.025. Both recipes run from the same 0.11.1 wheel. The benchmark hashes the starting generator, critic and prior parameters, the projected data and the complete sequence of training minibatches. In the shared-rate comparisons, both arms started with identical hashes and optimizer-group rates. Targets and evaluation draws follow the [original NeuroKO study](neuroko_cuda_tuning_1200.md).
 
@@ -92,9 +92,20 @@ A second validation seed tested whether the ordering depended on initialization.
 
 Raising the native nearest-neighbor distance quantile from 0.25 to 0.99 also reduced contraction in the neutral-critic radial experiment. On the three deterministic validation folds, that single setting scored 0.975. Using active critic weight 2 with quantiles 0.90 and 0.99 scored 0.972 and 1.012, respectively. The default self-plan rule remained active in these runs.
 
+## Crossing both rate settings with both releases
+
+Seeds 40–47 ran all six configurations, counterbalancing arm order and keeping each seed on a single physical card. Each v11 arm used the hollow self plan and active critic weight 2. Both formulations used zero optimizer momentum. The primary comparison used the historical rates. The second compared both at the v11 preset rates. All three group rates were read from the optimizers.
+
+| Generator / critic / particle LR | Unified v11 | 0.10.0 EMPF | 0.11.1 EMPF | V11 seed wins | V11 target wins by mean |
+|---|---:|---:|---:|---:|---:|
+| 0.005 / 0.0075 / 0.0125 | 1.4440 | 1.3643 | 1.3643 | 3/8 | 0/4 |
+| 0.014 / 0.021 / 0.0406 | 1.3711 | 1.3658 | 1.3658 | 3/8 | 3/4 |
+
+The paired differences for v11 minus EMPF were +0.0797 (95% interval −0.0042 to +0.1635) at the lower setting and +0.0053 (−0.0392 to +0.0497) at the higher setting. At the higher rates, v11 averaged 0.0410 more energy on SLC2A4RG, which outweighed small wins on the other three targets. The two EMPF wheels agreed exactly on all four targets for every paired seed and rate. Across the three training-side folds and seeds 0 and 1, v11 scored 0.9926 against same-wheel EMPF’s 0.9638 at the historical rates and 0.9395 against 0.9509 at the higher rates. The held-out comparison uses the same biological replicate throughout.
+
 ## Reproduction
 
-Use the [GPU environment and public H5AD instructions](../README.md#neuroko-gpu-comparison). From the repository root, set `data=paper_watch/data/neuroko`. The function below runs the confirmations. Seeds 8–19 compare the two-setting candidate to same-wheel EMPF. Seeds 20–27 run the momentum candidate, two repeats of same-wheel EMPF at the same rates and the historical 0.10.0 reference. Seeds 28–31 repeat the same four arms with deterministic CUDA operations. Seeds 32–39 evaluate the frozen hollow self plan against same-wheel and historical EMPF. Each seed runs its arms on one physical card. The two groups of seeds run concurrently.
+Use the [GPU environment and public H5AD instructions](../README.md#neuroko-gpu-comparison). From the repository root, set `data=paper_watch/data/neuroko`. The function below runs the confirmations. Seeds 8–19 compare the two-setting candidate to same-wheel EMPF. Seeds 20–27 run the momentum candidate, two repeats of same-wheel EMPF at the same rates and the historical 0.10.0 reference. Seeds 28–31 repeat the same four arms with deterministic CUDA operations. Seeds 32–39 evaluate the frozen hollow self plan against same-wheel and historical EMPF. Seeds 40–47 cross both rate settings with v11 and with both EMPF releases. Each seed runs its arms on one physical card. The two groups of seeds run concurrently.
 
 ```bash
 data=paper_watch/data/neuroko
@@ -111,7 +122,7 @@ fit1200() {
 card1200() (
   set -e
   gpu=$1
-  for ((seed=8+gpu; seed<40; seed+=2)); do
+  for ((seed=8+gpu; seed<48; seed+=2)); do
     if ((seed < 20)); then
       fit1200 "$gpu" "$seed" 0.11.1 unified_v11 '{"name":"transport-1-12-legacy-rates","lr":0.005,"d_lr_mult":1.5,"prior_lr_mult":2.5,"rhbi_eps":1,"rhbi_rho":12}'
       fit1200 "$gpu" "$seed" 0.11.1 empf '{"name":"legacy-rates","lr":0.005,"d_lr_mult":1.5,"prior_lr_mult":2.5}'
@@ -120,10 +131,17 @@ card1200() (
       fit1200 "$gpu" "$seed" 0.11.1 empf '{"name":"control-b9-mid","lr":0.014,"d_lr_mult":1.5,"prior_lr_mult":2.9,"betas":[0.9,0.999]}'
       fit1200 "$gpu" "$seed" 0.11.1 empf '{"name":"mid","lr":0.014,"d_lr_mult":1.5,"prior_lr_mult":2.9}'
       fit1200 "$gpu" "$seed" 0.10.0 empf '{"name":"legacy-rates","lr":0.005,"d_lr_mult":1.5,"prior_lr_mult":2.5}'
-    else
+    elif ((seed < 40)); then
       fit1200 "$gpu" "$seed" 0.11.1 unified_v11 '{"name":"hollow-active2-mid","lr":0.014,"d_lr_mult":1.5,"prior_lr_mult":2.9,"rhbi_self_coupling":"hollow","rhbi_relativistic_weight":2}'
       fit1200 "$gpu" "$seed" 0.11.1 empf '{"name":"mid","lr":0.014,"d_lr_mult":1.5,"prior_lr_mult":2.9}'
       fit1200 "$gpu" "$seed" 0.10.0 empf '{"name":"legacy-rates","lr":0.005,"d_lr_mult":1.5,"prior_lr_mult":2.5}'
+    else
+      fit1200 "$gpu" "$seed" 0.11.1 unified_v11 '{"name":"hollow-active2-legacy-rates","lr":0.005,"d_lr_mult":1.5,"prior_lr_mult":2.5,"rhbi_self_coupling":"hollow","rhbi_relativistic_weight":2}'
+      fit1200 "$gpu" "$seed" 0.11.1 unified_v11 '{"name":"hollow-active2-mid","lr":0.014,"d_lr_mult":1.5,"prior_lr_mult":2.9,"rhbi_self_coupling":"hollow","rhbi_relativistic_weight":2}'
+      for version in 0.10.0 0.11.1; do
+        fit1200 "$gpu" "$seed" "$version" empf '{"name":"legacy-rates","lr":0.005,"d_lr_mult":1.5,"prior_lr_mult":2.5}'
+        fit1200 "$gpu" "$seed" "$version" empf '{"name":"mid","lr":0.014,"d_lr_mult":1.5,"prior_lr_mult":2.9}'
+      done
     fi
   done
 )
