@@ -1,6 +1,6 @@
 """Compare fixed 1,200-update NeuroKO configurations on CUDA.
 
-Run validation on Screen1_1, then refit a fixed configuration for Screen1_0.
+Hold out a training group for validation, then refit a fixed configuration for Screen1_0.
 Each configuration after --trial is a JSON object with name, base rate (lr),
 and optional TrainingSettings fields. Each completed fit writes one receipt.
 """
@@ -67,7 +67,7 @@ def main():
     parser.add_argument("--window-cells", type=int,
                         help="use the first N cells of each group from the public files")
     parser.add_argument("--seed", type=int, required=True)
-    parser.add_argument("--recipe", choices=("unified_v11", "empf"), default="unified_v11")
+    parser.add_argument("--recipe", choices=("unified_v12", "unified_v11", "empf"), default="unified_v11")
     parser.add_argument("--trial", action="append", type=json.loads, required=True,
                         help='JSON object, e.g. {"name":"v11","lr":0.028,"batch_size":256}')
     parser.add_argument("--trace-every", type=int, help="also score validation or holdout at this update interval")
@@ -75,8 +75,8 @@ def main():
                         help="seed PyTorch and require deterministic CUDA kernels for repeatability checks")
     parser.add_argument("--diagnose-energy", action="store_true",
                         help="also score the final samples after matching their observed centroid and spread")
-    parser.add_argument("--release", choices=("0.10.0", "0.11.1"),
-                        help="pin the installed wheel; EMPF is available in both releases")
+    parser.add_argument("--release", choices=("0.10.0", "0.11.1", "0.12.0"),
+                        help="pin the installed wheel for the requested recipe")
     parser.add_argument("--validation-group", choices=("Screen1_1", "Screen1_3", "Screen1_4"),
                         default="Screen1_1")
     parser.add_argument("--self-plan", choices=("observe", "exclude-same-id", "opposite-halves", "discount-same-id"),
@@ -87,8 +87,10 @@ def main():
     if args.trace_every is not None and not 0 < args.trace_every <= 1200:
         parser.error("--trace-every must be between 1 and 1200")
     release = version("particlegan")
-    expected = args.release or {"unified_v11": "0.11.1", "empf": "0.10.0"}[args.recipe]
-    if release != expected or (args.recipe == "unified_v11" and release != "0.11.1"):
+    supported = {"unified_v12": ("0.12.0",), "unified_v11": ("0.11.1", "0.12.0"),
+                 "empf": ("0.10.0", "0.11.1", "0.12.0")}
+    expected = args.release or supported[args.recipe][0]
+    if release != expected or release not in supported[args.recipe]:
         parser.error(f"unexpected ParticleGAN release {release} for {args.recipe}")
     if args.window_cells is not None and args.window_cells < 1:
         parser.error("--window-cells must be positive")
@@ -167,8 +169,16 @@ def main():
 
             plan_trace = trace_training_plans(model.trainer, args.self_plan)
         recipe = model.trainer.recipe
-        if recipe.effective_critic_formulation != args.recipe or recipe.prior_regularizer != args.recipe:
-            raise RuntimeError("the requested formulation and prior regularizer must be active")
+        formulation = "unified_v11" if args.recipe == "unified_v12" else args.recipe
+        optimizer = {"unified_v12": "unified_v12_equil", "unified_v11": "unified_v11_equil", "empf": "dualnorm"}
+        if (recipe.name != args.recipe or recipe.effective_critic_formulation != formulation
+                or recipe.prior_regularizer != formulation or recipe.optimizer_family != optimizer[args.recipe]):
+            raise RuntimeError("the requested recipe, critic formulation, prior and optimizer must be active")
+        if args.recipe == "unified_v12" and any(
+            getattr(opt, "recipe_optimizer_family", None) != "unified_v12_equil"
+            for opt in (model.trainer.opt_g, model.trainer.opt_d)
+        ):
+            raise RuntimeError("both optimizers must use the released v12 implementation")
         rates = optimizer_rates(model)
         initialization = sha256()
         for module in (model.G, model.D, model.prior):
