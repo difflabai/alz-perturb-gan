@@ -122,6 +122,7 @@ def summarize(output):
             "rates": first["initial_rates"], "optimizer": first["optimizer_momentum"],
             "optimizer_family": first["optimizer_family"], "prior": first["prior_regularizer"],
             "critic_formulation": first["formulation"], "gpu": first["gpu"], "torch": first["torch"],
+            "fit_cells": first["fit_cells"], "scored_cells": first["scored_cells"],
             "mean": {m: mean(row[m] for row in metrics) for m in metrics[0]},
             "median_seconds": median(r["seconds"] for r in records),
             "targets": {target: {m: mean(r["targets"][target][m] for r in records)

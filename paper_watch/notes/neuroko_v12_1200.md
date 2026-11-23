@@ -1,5 +1,53 @@
 # ParticleGAN 0.12.0 on NeuroKO at 1,200 updates
 
+Retuned v12 lowered mean held-out energy by **22.1%** against its release defaults at fixed capacity, winning on all 12 seeds. Mean generated spread increased from **0.648 to 1.031** relative to the observed neurons. Validation selected the default learning rates with hollow self-coupling and relativistic weight 2. Under hollow self-coupling, a generated draw cannot match itself when the within-batch transport weights are computed. Distinct draws from the same latent particle can still match. Both transport settings were available in 0.11.1.
+
+The independently tuned EMPF control and selected v12 finished within **0.0013** mean energy of each other. At identical actual rates, EMPF scored **0.0265** lower on average and won 9 of 12 seeds. The same-wheel v11 optimizer scored **0.0282** lower on average and won 8 of 12. All three paired intervals include zero. V12 finished its 1,200 updates in a median **123 seconds**, about 18% less time than v11 on the same wheel. The evidence supports the gain over default v12 and leaves the quality ordering between the formulations unresolved on this holdout.
+
+## Results on the held-out neurons
+
+| Arm | Generator / critic / particles LR | Energy ↓ | Spread (target 1) | Median fit |
+| --- | --- | ---: | ---: | ---: |
+| v12, selected | 0.014 / 0.021 / 0.0406 | 1.3892 | 1.031 | 123 s |
+| v12, release defaults at fixed capacity | 0.014 / 0.021 / 0.0406 | 1.7837 | 0.648 | 131 s |
+| v12, previous v11 settings | 0.014 / 0.0075 / 0.0125 | 1.3866 | 1.073 | 124 s |
+| v11, same wheel and selected settings | 0.014 / 0.021 / 0.0406 | 1.3610 | 1.040 | 150 s |
+| v11, previously tuned on 0.11.1 | 0.014 / 0.0075 / 0.0125 | 1.3823 | 1.041 | 178 s |
+| EMPF, matched rates on 0.12.0 | 0.014 / 0.021 / 0.0406 | 1.3627 | 1.047 | 149 s |
+| EMPF, independently tuned rates on 0.12.0 | 0.02 / 0.03 / 0.058 | 1.3879 | 1.063 | 144 s |
+
+The differences below subtract each control’s energy from selected v12 on the same seed. A negative difference favors v12.
+
+| Control | Mean difference | Paired 95% interval | Seeds won by v12 |
+| --- | ---: | ---: | ---: |
+| v12, release defaults at fixed capacity | -0.3945 | [-0.4375, -0.3515] | 12/12 |
+| v12, previous v11 settings | +0.0026 | [-0.0382, +0.0433] | 6/12 |
+| v11, same wheel and selected settings | +0.0282 | [-0.0237, +0.0802] | 4/12 |
+| v11, previously tuned on 0.11.1 | +0.0069 | [-0.0279, +0.0417] | 5/12 |
+| EMPF, matched rates on 0.12.0 | +0.0265 | [-0.0061, +0.0592] | 3/12 |
+| EMPF, independently tuned rates on 0.12.0 | +0.0013 | [-0.0424, +0.0450] | 7/12 |
+
+### Held-out energy by perturbation
+
+| Target | Selected v12 | Same-wheel v11 | Matched EMPF | Tuned EMPF |
+| --- | ---: | ---: | ---: | ---: |
+| GLCCI1 | 1.5458 | 1.4894 | 1.5165 | 1.5480 |
+| SLC2A4RG | 1.4145 | 1.3816 | 1.3785 | 1.4041 |
+| PLEKHA1 | 1.2169 | 1.1974 | 1.2170 | 1.2141 |
+| MAMSTR | 1.3797 | 1.3756 | 1.3387 | 1.3853 |
+
+### Training-group selection
+
+| Finalist | Mean energy over two seeds and three groups |
+| --- | ---: |
+| `hollow-active2` | 0.9603 |
+| `v11-transfer` | 0.9608 |
+| `hollow` | 0.9924 |
+| `default` | 1.2255 |
+
+Selection used 36 first-seed fits and 12 second-seed fits across four finalists. Four additional second-seed validation fits ran on spare GPU capacity. The selection used only the prespecified finalists. All 84 held-out fits passed the pairing checks for projected data, starting weights and the full minibatch sequence. [Per-seed measurements, hashes and frozen selection](neuroko_v12_1200.json)
+
+
 ## Benchmark
 
 Use the fixed neuronal benchmark from the v11 study. The conditional generator and critic each have two 96-unit hidden layers. Every fit uses 64 particles with 16 latent coordinates, a batch size of 64, and exactly 1,200 updates. The primary metric is the unweighted mean energy distance over GLCCI1, SLC2A4RG, PLEKHA1 and MAMSTR. Lower is better. Each score uses 256 draws per condition. Spread is the ratio of generated to observed root total variance, with a target of 1. [Previous formulation study](neuroko_formulation_1200.md)
