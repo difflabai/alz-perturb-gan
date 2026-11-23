@@ -179,3 +179,109 @@ def test_seaad_lysodam_coupling_readout():
         assert r["rho_model"] > r["rho_gauss"], r
         assert r["rho_model"] > r["rho_lin"], r
         assert r["rho_model"] > r["rho_shuffled"], r
+
+
+# ------------------------------------------------------------------
+# Iteration 3 (2026-11-22, deep-pass correction): the SPLIT readout.
+# Iterations 1-2 pooled all donors: rho(deviation, coupling minus
+# CTRL mean) mostly re-measures BASELINE coupling, which the source
+# paper itself establishes as the large term. The disease-specific
+# quantity is the Delta: coupling estimated separately in CTRL and
+# AD donors. This readout (a) reports Delta with a donor-level
+# permutation interval (paper: SEA-AD +0.072), and (b) asserts on
+# the AD arm only: within AD donors, does model deviation track
+# within-AD coupling amplification (c_d - mean AD coupling), clear
+# of Gaussian / linear / shuffled arms? A GPNMB-single-gene variant
+# of the DAM score is reported alongside (the 2026-11-20 GPNMB
+# lysosomal-program paper). Same fits/deviations pipeline as
+# run_once; only the grouping and estimand change.
+# ------------------------------------------------------------------
+
+def run_split(seed: int = 0, steps: int = 300) -> dict:
+    per = {"model": [], "gauss": [], "lin": []}
+    amps_ad, amps_ctrl = [], []
+    coup_ad, coup_ctrl = [], []
+    gpnmb_rhos = []
+    rng = np.random.default_rng(seed)
+    for region in REGIONS:
+        X, group, donors, lyso_pos, dam_pos = _load_microglia(region)
+        coup = _coupling(X, group, donors, lyso_pos, dam_pos)
+        # GPNMB-only DAM proxy coupling (reported arm)
+        g_pos = [dam_pos[-1]] if len(dam_pos) else []
+        coup_g = (_coupling(X, group, donors, lyso_pos, g_pos)
+                  if g_pos else {})
+        ctrl_mask = group == "CTRL"
+        Xc = X[ctrl_mask]
+        if len(Xc) > 6000:
+            Xc = Xc[rng.choice(len(Xc), 6000, replace=False)]
+        Pc, (mu, comps) = pca_fit_transform(Xc, n_comp=N_COMP, seed=seed)
+        Pc = standardize(Pc)
+        gens = [fit_unconditional(Pc, steps=steps, seed=seed + 100 * k
+                                  ).sample(0, 1024, seed=seed + 100 * k)
+                for k in range(3)]
+        gmu, gsd = Pc.mean(0), Pc.std(0) + 1e-9
+        dev_by_donor = {}
+        for d, c in coup.items():
+            m = donors == d
+            Pd = standardize((X[m] - mu) @ comps.T)
+            if len(Pd) > 512:
+                Pd = Pd[rng.choice(len(Pd), 512, replace=False)]
+            dev_by_donor[d] = (
+                float(np.mean([energy_distance(g, Pd, seed=seed)
+                               for g in gens])),
+                energy_distance(rng.normal(gmu, gsd,
+                                           size=(1024, Pc.shape[1])),
+                                Pd, seed=seed),
+                float(np.linalg.norm(Pd.mean(0) - Pc.mean(0))),
+                str(group[m][0]), c,
+                coup_g.get(d, np.nan))
+        ad = {d: v for d, v in dev_by_donor.items() if v[3] == "AD"}
+        ct = {d: v for d, v in dev_by_donor.items() if v[3] == "CTRL"}
+        if len(ad) >= 10 and len(ct) >= 10:
+            ma = np.mean([v[4] for v in ad.values()])
+            mc = np.mean([v[4] for v in ct.values()])
+            for d, v in ad.items():
+                per["model"].append(v[0]); per["gauss"].append(v[1])
+                per["lin"].append(v[2]); amps_ad.append(v[4] - ma)
+                coup_ad.append(v[4])
+                if not np.isnan(v[5]):
+                    gpnmb_rhos.append((v[0], v[5]))
+            for d, v in ct.items():
+                coup_ctrl.append(v[4])
+    amps_ad = np.array(amps_ad)
+    res = {"seed": seed, "n_ad_units": int(len(amps_ad)),
+           "delta_coupling_ad_minus_ctrl": float(
+               np.mean(coup_ad) - np.mean(coup_ctrl)),
+           "mean_coupling_ad": float(np.mean(coup_ad)),
+           "mean_coupling_ctrl": float(np.mean(coup_ctrl))}
+    for k, v in per.items():
+        res[f"rho_ad_{k}"] = float(spearmanr(v, amps_ad).statistic)
+    res["rho_ad_shuffled"] = float(
+        spearmanr(per["model"], rng.permutation(amps_ad)).statistic)
+    if gpnmb_rhos:
+        res["rho_ad_gpnmb_coupling"] = float(spearmanr(
+            [g[0] for g in gpnmb_rhos], [g[1] for g in gpnmb_rhos]
+        ).statistic)
+    # Donor-level permutation interval for Delta (reported).
+    all_c = np.array(coup_ad + coup_ctrl)
+    labels = np.array([1] * len(coup_ad) + [0] * len(coup_ctrl))
+    deltas = []
+    for _ in range(200):
+        p = rng.permutation(labels)
+        deltas.append(all_c[p == 1].mean() - all_c[p == 0].mean())
+    res["delta_perm_p95"] = float(np.percentile(np.abs(deltas), 95))
+    return res
+
+
+def test_seaad_lysodam_split_delta_readout():
+    try:
+        results = [run_split(seed=s) for s in (0, 1, 2)]
+    except DataUnavailable as e:
+        pytest.skip(str(e))
+    for r in results:
+        # The AD-arm readout: model deviation tracks within-AD
+        # coupling amplification, clear of every control arm.
+        assert r["rho_ad_model"] > 0.3, r
+        assert r["rho_ad_model"] > r["rho_ad_gauss"], r
+        assert r["rho_ad_model"] > r["rho_ad_lin"], r
+        assert r["rho_ad_model"] > r["rho_ad_shuffled"], r

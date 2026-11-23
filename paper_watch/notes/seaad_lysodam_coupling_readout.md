@@ -53,6 +53,44 @@ Ensembling lifted the model mean +0.332 -> +0.398 (the SEA-AD
 iteration-9 effect again); model now clears 0.3, linear and
 shuffled on every seed, and clears the Gaussian on seed 1 only.
 
+## Iteration 3 — split control-vs-AD Delta readout + GPNMB arm
+(2026-11-22 deep-pass design; run completed 2026-11-23, cycle 12)
+Design change (readout only): coupling estimated SEPARATELY in
+control vs AD donors; the disease Delta is reported against a
+donor-label permutation interval (200 perms, p95 of |Delta|).
+AD-only readout: per-AD-donor deviation (3-fit ensemble, as in
+iteration 2) vs that donor's coupling CENTRED on the AD mean —
+removing the pooled baseline coupling the deep pass warned the
+iteration 1-2 rho mostly re-measured. A GPNMB-only coupling arm
+(lyso score vs GPNMB alone) is reported alongside. n = 39 AD
+donor x region units. Raw: data/lysodam_split_results.jsonl.
+| seed | Delta AD-CTRL | perm p95 | rho model | rho gauss | rho lin | rho shuffled | rho GPNMB-coupling |
+| 0 | +0.049 | 0.059 | +0.279 | +0.303 | +0.140 | -0.115 | +0.546 |
+| 1 | +0.049 | 0.064 | +0.240 | +0.364 | +0.139 | +0.008 | +0.510 |
+| 2 | +0.049 | 0.064 | +0.291 | +0.288 | +0.139 | +0.293 | +0.513 |
+(Delta is fit-independent, hence identical across seeds.)
+Verdict: NOT PROVEN, and the split design explains the pooled
+result. (1) The disease Delta itself (+0.049) sits INSIDE the
+permutation interval (p95 0.059-0.064): at n=39 AD units the
+Delta is not resolvable from donor-label noise — a null here
+AGREES with the paper (their SEA-AD Delta is +0.072, small by
+design), it does not contradict it. (2) AD-only model rho drops
+to 0.24-0.29 (from pooled 0.38-0.42): most of the pooled signal
+was baseline coupling, exactly the deep-pass correction.
+(3) The GPNMB-only coupling is the surprise: model deviation
+tracks it at rho 0.51-0.55 on every seed, well clear of the
+full-program coupling — consistent with the cycle-9 GPNMB brief
+(the lysosomal subprogram, not DAM as a whole, is the severity
+signal). Hypothesis-generating only: GPNMB coupling is a
+single-gene correlation (noisier per-donor), the shuffled arm
+is unstable at this n (seed 2: +0.293), and no assertion was
+pre-registered for this arm. Named follow-up, not a claim: a
+pre-registered GPNMB-coupling readout on the Perez/LPS-IFN
+microglia or a larger SEA-AD compartment, if the queue opens.
+Loop status: the LysoDAM follow-up is COMPLETE as designed;
+the target stays an honest partial. No biological claim rests
+on this toy test alone (house rule).
+
 ## LOOP CLOSED at iteration 2 of 10 — honest partial (closest yet)
 Not proven: the assertions require clearing EVERY arm every seed;
 the Gaussian sampler stays ~+0.01-0.03 ahead on seeds 0 and 2,
