@@ -139,6 +139,8 @@ def test_shared_smoothing_duration_reuses_four_arms_and_audits_new_empf(tmp_path
     anchors = {(row["seed"], row["group"]): row for cohort in shared["cohorts"].values() for row in cohort["rows"]}
     trained = []
     wrong_smoothing = False
+    steps = study.STEPS
+    endpoint = steps[-1]
 
     def write_receipt(directory, role, seed, group):
         arm = arms[role]
@@ -150,18 +152,18 @@ def test_shared_smoothing_duration_reuses_four_arms_and_audits_new_empf(tmp_path
         settings = dict(optimizer_smoothing=None, z_dim=16)
         settings.update({k: v for k, v in trial.items() if k not in ("name", "lr")})
         trace = [dict(updates=u, mean_energy_distance=energy, effective_rank=18., spread_ratio=1.,
-                      training_batches_sha256=hashes["training_batches_sha256"] if u == 1200 else str(u)) for u in study.STEPS]
+                      training_batches_sha256=hashes["training_batches_sha256"] if u == 1200 else str(u)) for u in steps]
         data = dict(**hashes, seed=seed, name=trial["name"], stage="validation", recipe=recipe, particlegan=release,
-                    score_groups=[group], fit_groups=[g for g in study.GROUPS if g != group], updates=3600,
+                    score_groups=[group], fit_groups=[g for g in study.GROUPS if g != group], updates=endpoint,
                     lr=trial["lr"], settings=settings, deterministic=True, initial_rates=rates, final_rates=rates,
-                    constant_lr_verified_updates=3600, fixed_lr_optimizer_steps=dict(generator_and_particles=3600, critic=3600),
+                    constant_lr_verified_updates=endpoint, fixed_lr_optimizer_steps=dict(generator_and_particles=endpoint, critic=endpoint),
                     means=dict(energy_distance=energy), trace=trace)
-        data["training_batches_sha256"] = "3600"
+        data["training_batches_sha256"] = str(endpoint)
         if role == "matched_empf":
             data["optimizer_smoothing"] = dict(generator_and_particles=.0061, critic=.001 if wrong_smoothing else .0061)
         base = study.receipt(directory, "validation", *arm, seed, group)
         base.parent.mkdir(parents=True, exist_ok=True)
-        base.with_stem(base.stem + "-u3600-trace1200").write_text(json.dumps(data))
+        base.with_stem(base.stem + f"-u{endpoint}-trace1200").write_text(json.dumps(data))
 
     for seed in plan["seeds"]:
         for group in study.GROUPS:
@@ -171,7 +173,7 @@ def test_shared_smoothing_duration_reuses_four_arms_and_audits_new_empf(tmp_path
 
     def fit_empf(args, stage, seed, group, gpu, requested, *, options):
         assert requested == [arms["matched_empf"]] and args.output == output and stage == "validation"
-        assert args.require_constant_lr and options == ("--updates", "3600", "--trace-every", "1200")
+        assert args.require_constant_lr and options == ("--updates", str(endpoint), "--trace-every", "1200")
         trained.append((seed, group))
         write_receipt(output, "matched_empf", seed, group)
 
@@ -185,6 +187,32 @@ def test_shared_smoothing_duration_reuses_four_arms_and_audits_new_empf(tmp_path
     assert json.loads((output / "protocol.json").read_text())["matched_optimizer_smoothing"] == .0061
     wrong_smoothing = True
     with pytest.raises(ValueError, match="Optimizer smoothing mismatch"):
+        study.main()
+
+    short = output
+    source = tmp_path / "native-long"
+    output = tmp_path / "shared-long"
+    source.mkdir()
+    steps = study.LONG_STEPS
+    endpoint = steps[-1]
+    wrong_smoothing = False
+    trained.clear()
+    (source / "protocol.json").write_text(json.dumps(dict(plan, groups=study.GROUPS[:1], checkpoints=steps)))
+    for seed in plan["seeds"]:
+        for role in arms:
+            if role != "matched_empf":
+                write_receipt(source, role, seed, study.GROUPS[0])
+    monkeypatch.setattr(sys, "argv", ["study", "--shared-smoothing-from", str(source), "--smoothing-pilot", str(short),
+                                      "--output", str(output), "--data", str(tmp_path), "--wheels", str(tmp_path)])
+    study.main()
+    assert sorted(trained) == [(s, study.GROUPS[0]) for s in plan["seeds"]]
+    result = json.loads((output / "comparison.json").read_text())
+    assert result["mean_energy_30000_to_40000"] == pytest.approx(result["endpoint_means"])
+    curve = short / "curves-22-Screen1_1.json"
+    changed = json.loads(curve.read_text())
+    changed["curves"]["matched_empf"][1]["effective_rank"] += 1
+    curve.write_text(json.dumps(changed))
+    with pytest.raises(ValueError, match="differs from its shared-smoothing pilot"):
         study.main()
 
 

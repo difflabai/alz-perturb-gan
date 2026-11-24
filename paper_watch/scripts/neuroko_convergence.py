@@ -75,6 +75,11 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
     points, fingerprints, targets = {}, {}, {}
     source = getattr(args, "same_wheel_from", None)
     smoothing_source = getattr(args, "shared_smoothing_from", None)
+    if smoothing_source and steps == LONG_STEPS:
+        pilot = json.loads((args.smoothing_pilot / f"curves-{seed}-{group}.json").read_text())
+        if ((pilot["seed"], pilot["group"], pilot["gpu"]) != (seed, group, gpu)
+                or set(pilot["curves"]) != set(arms)):
+            raise ValueError("Expected the paired smoothing pilot on the same seed, group and GPU")
     for role in ("v12", "tuned_empf", "tuned_v11", "matched_empf", "matched_v11", "same_wheel_v11"):
         if role not in arms:
             continue
@@ -136,7 +141,13 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
                     paired_settings = shared, rates
                 elif (shared, rates) != paired_settings:
                     raise ValueError(f"Unmatched training settings for {role}, seed {seed}, {group}")
-        if endpoint == LONG_STEPS[-1]:
+        if smoothing_source and steps == LONG_STEPS:
+            prior = pilot["fingerprints"]
+            if (trace[:len(STEPS)] != pilot["curves"][role] or hashes["data"] != prior["data"]
+                    or hashes["initialization"] != prior["initialization"]
+                    or hashes["training_batches"][:len(STEPS)] != prior["training_batches"]):
+                raise ValueError(f"The long run differs from its shared-smoothing pilot for {role}, seed {seed}, {group}")
+        elif endpoint == LONG_STEPS[-1]:
             anchor = args.pilot_anchors[seed, group]
             prefix = [dict(updates=p["updates"], **{m: p[m] for m in METRICS}) for p in trace[:len(STEPS)]]
             prior = anchor["fingerprints"]
@@ -203,7 +214,9 @@ def main():
     mode.add_argument("--same-wheel-from", type=Path, metavar="CONVERGENCE_DIR",
                       help="compare the v12 and v11 optimizers inside release 0.12.0 at the source run's endpoint")
     mode.add_argument("--shared-smoothing-from", type=Path, metavar="CONVERGENCE_DIR",
-                      help="compare the original releases at 3,600 updates with matched optimizer smoothing")
+                      help="compare the original releases with matched optimizer smoothing at the source endpoint")
+    parser.add_argument("--smoothing-pilot", type=Path, metavar="PILOT_DIR",
+                        help="3,600-update shared-smoothing pilot to verify when extending it to 40,000")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     args.data, args.wheels, args.output = (p.resolve() for p in (args.data, args.wheels, args.output))
@@ -227,7 +240,7 @@ def main():
             parser.error("use a distinct output directory for the optimizer comparison")
         plan = json.loads((comparison_source / "protocol.json").read_text())
         seeds = plan["seeds"]
-        if args.same_wheel_from and plan["checkpoints"] == list(LONG_STEPS):
+        if plan["checkpoints"] == list(LONG_STEPS):
             args.checkpoints = LONG_STEPS
             groups = GROUPS[:1]
             valid_seeds = seeds == [22, 251]
@@ -236,6 +249,8 @@ def main():
         if (plan["arms"] != arms or plan["groups"] != list(groups)
                 or plan["checkpoints"] != list(args.checkpoints) or not valid_seeds):
             raise ValueError("Expected a frozen five-arm NeuroKO convergence comparison")
+    if bool(args.smoothing_pilot) != bool(args.shared_smoothing_from and args.checkpoints == LONG_STEPS):
+        parser.error("--smoothing-pilot is required specifically for the 40,000-update shared-smoothing comparison")
     if args.shared_smoothing_from:
         args.shared_smoothing_from = args.shared_smoothing_from.resolve()
         arms, args.smoothing_inputs = shared_smoothing_pilot(arms, anchors)
@@ -244,6 +259,17 @@ def main():
                 "Reuse the four original unchanged fits and train matched EMPF on identical cells, initial "
                 "weights and minibatches with fixed learning rates. Report the paired 3,600-update "
                 "endpoint and the two earlier checkpoints on the pilot and fresh seeds.")
+        if args.smoothing_pilot:
+            args.smoothing_pilot = args.smoothing_pilot.resolve()
+            pilot = json.loads((args.smoothing_pilot / "protocol.json").read_text())
+            if (pilot["arms"] != arms or pilot["groups"] != list(GROUPS) or pilot["seeds"] != seeds
+                    or pilot["checkpoints"] != list(STEPS) or pilot["matched_optimizer_smoothing"] != SMOOTHING):
+                raise ValueError("Expected the 3,600-update pilot with the same matched optimizer smoothing")
+            rule = ("Compare the original releases through 40,000 updates on Screen1_1 for seeds 22 and 251. "
+                    "Set both optimizers' smoothing to 0.0061 for the three matched formulations. Train only "
+                    "the adjusted EMPF fits, reuse the other four configurations and replay all five pilot "
+                    "curves through 3,600 on identical inputs. Compare the paired endpoints and the "
+                    "time-weighted mean from 30,000 to 40,000 updates regardless of earlier rankings.")
     elif args.same_wheel_from:
         args.same_wheel_from = args.same_wheel_from.resolve()
         v12 = arms["v12"]
@@ -302,7 +328,7 @@ def main():
         rule = ("Run all five arms through 3,600 updates on every pair regardless of intermediate scores. "
                 "Reproduce the published 1,200-update value and match data, weights and minibatches. "
                 "Assess whether v12 beats all four controls at 3,600 updates on each seed.")
-    if args.checkpoints == LONG_STEPS:
+    if args.checkpoints == LONG_STEPS and not args.shared_smoothing_from:
         archive = ("neuroko_v12_optimizer_3600_pilot.json" if args.same_wheel_from
                    else "neuroko_v12_convergence_3600_tuned_empf.json")
         pilot = json.loads((NOTES / archive).read_text())

@@ -152,6 +152,8 @@ On seed 251, effective covariance rank fell from 22.21 at 3,600 to 16.42 at 40,0
 
 The first completed 40,000-update comparison against an original control used seed 251. V12 scored **1.14060** and rate-matched original EMPF **1.23949**, a difference of **0.09889** in v12’s favor. The final 10,000 updates averaged 1.10308 for v12 and 1.25794 for EMPF. V12 had lower energy at all 34 measured checkpoints and on three of four targets at the endpoint. EMPF’s endpoint covariance rank was 18.03, closer to the observed 18.23 than v12’s 16.42. EMPF took 79.0 minutes and v12 took 57.6 minutes under different shared GPU loads. Both used fixed generator, critic and particle rates of 0.014, 0.0049 and 0.0406, the same network and the same 34 minibatch fingerprints. Each optimizer used its release’s native smoothing, 0.001 for EMPF and 0.0061 for v12. [Paired checkpoints, per-target scores and optimizer-step verification](neuroko_v12_convergence_40000.json)
 
+The long shared-smoothing comparison repeats the two original EMPF fits at 0.0061 on seeds 22 and 251. V12 and original v11 already use 0.0061. It keeps the independent tuned controls, pairs all inputs, and checks each trajectory against its 3,600-update shared-smoothing pilot. The endpoint and the mean over updates 30,000–40,000 use the same criteria as the native-smoothing comparison. [Two-GPU reproduction command](../README.md#follow-v12-and-the-four-original-controls-to-40000-updates)
+
 ![V12 and rate-matched original EMPF energy distance and effective covariance rank on Screen1_1, seed 251](neuroko_v12_convergence_40000_seed251.png)
 
 ## Six configurations on the same nine training pairs
