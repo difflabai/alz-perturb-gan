@@ -65,6 +65,7 @@ class TrainingSettings:
     d_lr_mult: float | None = None
     prior_lr_mult: float | None = None
     prior_sigma: float = 0.025
+    stratified_prior: bool = False
     optimizer_smoothing: float | None = None
     betas: tuple[float, float] | None = None
     total_steps: int | None = None
@@ -84,6 +85,8 @@ class TrainingSettings:
     generator_output_init_gain: float = 1.0
 
     def __post_init__(self):
+        if type(self.stratified_prior) is not bool:
+            raise ValueError("stratified_prior must be a boolean")
         if not np.isfinite(self.prior_sigma) or self.prior_sigma < 0:
             raise ValueError("prior sigma must be finite and nonnegative")
         if not np.isfinite(self.generator_output_init_gain) or self.generator_output_init_gain <= 0:
@@ -113,7 +116,7 @@ class ConditionalPGAN:
         else:
             settings = settings or TrainingSettings()
             overrides = {key: value for key, value in asdict(settings).items()
-                         if value is not None and key not in {"prior_sigma", "generator_output_init_gain"}}
+                         if value is not None and key not in {"prior_sigma", "stratified_prior", "generator_output_init_gain"}}
             recipe = get_recipe(recipe_name, lr=0.005 if learning_rate is None else learning_rate, **overrides)
         self.G = _CondGenerator(recipe.z_dim, n_cond, data_dim)
         self.D = _CondCritic(data_dim, n_cond)
@@ -124,7 +127,16 @@ class ConditionalPGAN:
                 self.G.net[-1].weight.mul_(settings.generator_output_init_gain)
         self.G.to(self.device)
         self.D.to(self.device)
-        prior = None if use_recipe_defaults else recipe.make_prior(sigma=settings.prior_sigma).to(self.device)
+        prior = None
+        if settings is not None:
+            if settings.stratified_prior:
+                from particlegan.priors import StratifiedSamplingManipulator
+
+                sampler = StratifiedSamplingManipulator(recipe.num_particles, jitter_std=0.)
+                prior = recipe.make_prior(sigma=settings.prior_sigma, manipulators=[sampler])
+            else:
+                prior = recipe.make_prior(sigma=settings.prior_sigma)
+            prior.to(self.device)
         self.trainer = GANTrainer(recipe, self.G, self.D, prior=prior, seed=seed, serial_backward=True)
         self.prior = self.trainer.prior
         self._rng = np.random.default_rng(seed)

@@ -168,6 +168,12 @@ def main():
             from .neuroko_radial import trace_training_plans
 
             plan_trace = trace_training_plans(model.trainer, args.self_plan)
+        if settings.stratified_prior:
+            from particlegan.priors import StratifiedSamplingManipulator
+
+            if not any(isinstance(module, StratifiedSamplingManipulator) for module in model.prior.modules()):
+                raise RuntimeError("the requested stratified prior must be active")
+            config["prior_manipulators"] = model.prior.manipulator_spec()
         recipe = model.trainer.recipe
         formulation = "unified_v11" if args.recipe == "unified_v12" else args.recipe
         optimizer = {"unified_v12": "unified_v12_equil", "unified_v11": "unified_v11_equil", "empf": "dualnorm"}

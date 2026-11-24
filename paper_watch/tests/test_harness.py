@@ -79,3 +79,36 @@ def test_independent_rates_and_output_initialization():
         np.testing.assert_array_equal(param.detach(), reference_param.detach() * factor)
     assert tuned.trainer.recipe.optimizer_family == reference.trainer.recipe.optimizer_family
     assert tuned.trainer.recipe.prior_regularizer == reference.trainer.recipe.prior_regularizer
+
+
+def test_stratified_prior_uses_every_particle_during_training_and_preserves_evaluation(monkeypatch):
+    import torch
+
+    priors = pytest.importorskip("particlegan.priors")
+    if not hasattr(priors, "StratifiedSamplingManipulator"):
+        pytest.skip("the installed ParticleGAN release predates stratified prior sampling")
+
+    def make(stratified):
+        with torch.random.fork_rng(devices=[]):
+            torch.manual_seed(7)
+            return ConditionalPGAN(3, 2, seed=7, recipe_name="empf",
+                                   settings=TrainingSettings(stratified_prior=stratified))
+
+    plain, stratified = make(False), make(True)
+    torch.testing.assert_close(stratified.prior.z, plain.prior.z, rtol=0, atol=0)
+    np.testing.assert_array_equal(stratified.sample(1, 256, seed=12), plain.sample(1, 256, seed=12))
+    sampler = next(m for m in stratified.prior.manipulators if isinstance(m, priors.StratifiedSamplingManipulator))
+    draw = sampler.sample_indices
+    observed = []
+
+    def record(base, batch_size, **kwargs):
+        ids = draw(base, batch_size, **kwargs)
+        observed.append((sampler.training, len(ids), ids.unique().numel()))
+        return ids
+
+    monkeypatch.setattr(sampler, "sample_indices", record)
+    labels = np.repeat([0, 1], BATCH)
+    stratified.fit(np.random.default_rng(4).normal(size=(len(labels), 3)), labels, steps=2)
+    assert observed and all(row == (True, BATCH, BATCH) for row in observed)
+    stratified.sample(0, 256, seed=12)
+    assert observed[-1][0:2] == (False, 256)
