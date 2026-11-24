@@ -897,6 +897,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study optimizer-smoothing --d
 
 Halving smoothing raised v12 mean energy from **0.92850 to 0.93312**. Three of nine fits improved. The mean spread ratio moved slightly closer to the observations (1.20162 to 1.19855), while the energy remained above both tuned original v11 (0.92547) and EMPF (0.92240). [All nine paired energies and spread ratios](neuroko_v12_smoothing_half_energy.json)
 
+Doubling smoothing to 0.0122 also worsened the nine-pair mean, from **0.92850 to 0.95963**. Five individual fits improved, but the four increases were larger. For example, seed 23 on Screen1_1 rose by 0.14649. Mean energy increased on each of the three seeds, and mean spread moved from 1.20162 to 1.19497. The released 0.0061 setting had the lowest mean of the three values. [Nine paired fits and original controls](neuroko_v12_smoothing_double_energy.json)
+
 The original 0.10.0 EMPF optimizer defaults to smoothing **0.001**. Original v11 and v12 both default to **0.0061**. The earlier rate-matched comparison used each optimizer’s native value. A separate comparison gives all three formulations 0.0061, then gives all three 0.001. Each setting runs on both development cohorts and retains the separately tuned original controls. The runner reuses a native-default fit when its resolved setting already matches. [Implementation and comparison protocol](../scripts/neuroko_rate_noise.py)
 
 ```bash
