@@ -68,6 +68,7 @@ class TrainingSettings:
     optimizer_smoothing: float | None = None
     betas: tuple[float, float] | None = None
     total_steps: int | None = None
+    lr_anneal_start: float | None = None
     lr_floor: float | None = None
     network_lr_floor: float | None = None
     prior_reg: float | None = None

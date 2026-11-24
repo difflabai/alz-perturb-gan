@@ -194,6 +194,7 @@ def main():
         torch.cuda.synchronize(device)
         start = perf_counter()
         trace = []
+        rate_trace = []
         scoring_seconds = 0.0
 
         def progress(step):
@@ -213,6 +214,8 @@ def main():
                 print(f"{name} update {step} energy {energy:.6f}", flush=True)
                 scoring_seconds += perf_counter() - tick
             if step % 300 == 0:
+                if settings.total_steps is not None:
+                    rate_trace.append({"update": step, **optimizer_rates(model)})
                 print(f"{name} completed {step}/1200", flush=True)
 
         model.fit(x, labels, steps=1200, after_step=progress, on_batch=record_batch)
@@ -228,6 +231,8 @@ def main():
         if args.trace_every:
             trace.append({"updates": 1200, "mean_energy_distance": averages["energy_distance"]})
             config["trace"] = trace
+        if rate_trace:
+            config["rate_trace"] = rate_trace
         if args.self_plan:
             if len(plan_trace) != 48:
                 raise RuntimeError("expected 48 observed self plans")
