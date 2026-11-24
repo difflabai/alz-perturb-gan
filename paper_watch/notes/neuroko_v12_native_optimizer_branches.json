@@ -1,0 +1,203 @@
+{
+  "version": "0.12.0",
+  "recipe": "unified_v12",
+  "release_commit": "3256a05867688ab7ec0e5b4f50354c14d6972e6f",
+  "training_module_git_blob": "2c6fe995dba41293974f325793a7d34cf6f79705",
+  "optimizer_module_git_blob": "3f5f80c5ba6fca8ef639084aaccfd672dd925ce0",
+  "measure": "64 updates on each training group at seeds 22\u201324. A step pre-hook observed the native generator/particle optimizer state immediately before each update. Reading conditional and thermal flags from opt_g._active_record(), number of objectives from _protected.shape[0] or _protected_single, direction_blend, current_stiff_gate() and _ema_func_gain. All nine fits repeated without the observer, with equal initial and final parameters and equal training minibatches. Compared initial parameters and full projected-data fingerprints with the standard 1200-update fits.",
+  "rates": {
+    "generator": 0.014,
+    "critic": 0.0049,
+    "particles": 0.0406
+  },
+  "summary": {
+    "total_steps": 576,
+    "steps_with_single_protected_objective": 576,
+    "conditional_steps": 0,
+    "stiff_steps": 0,
+    "min_function_gain": 1.0,
+    "max_function_gain": 1.0
+  },
+  "runs": [
+    {
+      "seed": 22,
+      "group": "Screen1_1",
+      "gpu": 0,
+      "data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "parameters_initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "parameters_final": "db9edbd59ad22450e5025fad0d27abfdb8dc3e341ab3dadec43221fdeb9c387b",
+      "batches_sha256": "fa4b1c369a070f880fbd750f0483c7e0cacf863732841e8807a4b69d13761a2a",
+      "states": [
+        {
+          "conditional": false,
+          "protected_objectives": 1,
+          "direction_blend": true,
+          "stiff_gate": 0.0,
+          "func_gain": 1.0,
+          "thermal_scale": 1.0,
+          "steps": 64
+        }
+      ]
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_3",
+      "gpu": 1,
+      "data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "parameters_initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "parameters_final": "56a2a3835e0aa219a090420cf0e2502540ff33b699f6c64b428c6005f4fab2b6",
+      "batches_sha256": "a74bcc8ec8a72977119c23263e889a82db38a15115b54d17b525d363ec39dc4c",
+      "states": [
+        {
+          "conditional": false,
+          "protected_objectives": 1,
+          "direction_blend": true,
+          "stiff_gate": 0.0,
+          "func_gain": 1.0,
+          "thermal_scale": 1.0,
+          "steps": 64
+        }
+      ]
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_4",
+      "gpu": 0,
+      "data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "parameters_initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "parameters_final": "7e335adf49c0d6724e28acda7bd330d707d6139f8ffbbf3c09cc1d2621b5662d",
+      "batches_sha256": "5882ff87acf2c81cade98ecc134c78ed35be71f207f1eb58c0dcb37e52123074",
+      "states": [
+        {
+          "conditional": false,
+          "protected_objectives": 1,
+          "direction_blend": true,
+          "stiff_gate": 0.0,
+          "func_gain": 1.0,
+          "thermal_scale": 1.0,
+          "steps": 64
+        }
+      ]
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_1",
+      "gpu": 1,
+      "data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "parameters_initial": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+      "parameters_final": "7e672759d379c0cc03d5ea50791d9033573c957e7c7b864a8965cdeb2b5ddb8b",
+      "batches_sha256": "a0dfe5c1aa12976829f083469f4ab7cc0868efc7cf33f870f3f58343f3df937f",
+      "states": [
+        {
+          "conditional": false,
+          "protected_objectives": 1,
+          "direction_blend": true,
+          "stiff_gate": 0.0,
+          "func_gain": 1.0,
+          "thermal_scale": 1.0,
+          "steps": 64
+        }
+      ]
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_3",
+      "gpu": 0,
+      "data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "parameters_initial": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+      "parameters_final": "92f4ec5a373def9c575166b0997483b25e20c1143342e459a44b55ccc0390841",
+      "batches_sha256": "66b40c4db6e0b8efa970efde69a95edebc727a2835892e109b2eb3440fbf3b4d",
+      "states": [
+        {
+          "conditional": false,
+          "protected_objectives": 1,
+          "direction_blend": true,
+          "stiff_gate": 0.0,
+          "func_gain": 1.0,
+          "thermal_scale": 1.0,
+          "steps": 64
+        }
+      ]
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_4",
+      "gpu": 1,
+      "data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "parameters_initial": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+      "parameters_final": "be183c6fc1ac4d2c84470662cee49a35d4c057aeeb02a0c769e64fc03cc3d7b2",
+      "batches_sha256": "e39994bfb8d13eae87e9d2737f30cf799cfa76688579d4a98f6cd127a239c0a5",
+      "states": [
+        {
+          "conditional": false,
+          "protected_objectives": 1,
+          "direction_blend": true,
+          "stiff_gate": 0.0,
+          "func_gain": 1.0,
+          "thermal_scale": 1.0,
+          "steps": 64
+        }
+      ]
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_1",
+      "gpu": 0,
+      "data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "parameters_initial": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+      "parameters_final": "d5633766b94ac405a188f9fb599de590727e05a50fe11d7f8ed42f35b2a26914",
+      "batches_sha256": "7d67c647e8015f3c90a32239c1e699bcc7a0df56d6cf25431f41355b073e56d2",
+      "states": [
+        {
+          "conditional": false,
+          "protected_objectives": 1,
+          "direction_blend": true,
+          "stiff_gate": 0.0,
+          "func_gain": 1.0,
+          "thermal_scale": 1.0,
+          "steps": 64
+        }
+      ]
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_3",
+      "gpu": 1,
+      "data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "parameters_initial": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+      "parameters_final": "a4b7d0f17ecea4ac8947d5c98fdf0771004f7e04a75ef9b33b5a722762030f5d",
+      "batches_sha256": "0e64f01b60fb600f0378ae290f0affac1bddc6126d3d0a3be793f2eed5b1edd2",
+      "states": [
+        {
+          "conditional": false,
+          "protected_objectives": 1,
+          "direction_blend": true,
+          "stiff_gate": 0.0,
+          "func_gain": 1.0,
+          "thermal_scale": 1.0,
+          "steps": 64
+        }
+      ]
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_4",
+      "gpu": 0,
+      "data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "parameters_initial": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+      "parameters_final": "1eac2fae47c94b3487e3081f3e4ec75fb070204c420a4ef2fd16ba1b1238c9a9",
+      "batches_sha256": "d996cc6a6bce56b50b96531a91d60ea58ef7f896868eb60b99763b1858391549",
+      "states": [
+        {
+          "conditional": false,
+          "protected_objectives": 1,
+          "direction_blend": true,
+          "stiff_gate": 0.0,
+          "func_gain": 1.0,
+          "thermal_scale": 1.0,
+          "steps": 64
+        }
+      ]
+    }
+  ]
+}

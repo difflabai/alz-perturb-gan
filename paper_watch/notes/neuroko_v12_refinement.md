@@ -877,6 +877,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study critic-weight-interacti
 
 The original v11 and v12 optimizers use different update rules with the same coupled loss. Original v11 came closer to the measured spread on all 144 target-level comparisons at the shared rates. We are testing whether changing the smoothing used for small gradients improves v12’s energy distance. The three learning rates, network, latent noise and loss stay fixed.
 
+We also checked which v12 optimizer features ran on these data. The harness passes one intervention group per batch and supplies its one-hot group label to both networks. At each of the first 64 generator/particle updates in nine calibrated fits, v12 registered one protected objective, its function gain was 1.0, and its low-gain stiffness gate was zero. The native two-objective rule for shared continuous conditioning did not activate in these 576 steps. Each fit reproduced the final weights of its uninstrumented replay. [Per-fit state counts and hashes](neuroko_v12_native_optimizer_branches.json) · [Released optimizer](https://github.com/HyperGAN/ParticleGAN/blob/3256a05867688ab7ec0e5b4f50354c14d6972e6f/particlegan/_unified_v12/optimizer.py#L675-L717)
+
 The 1,200-update screen compares half (0.00305) and double (0.0122) the released v12 smoothing value of 0.0061. It selects the lower mean energy over all nine development fits on seeds 22–24. To advance, it must beat the default v12 and both independently tuned original controls. All matched controls then receive the selected smoothing value. The comparison repeats on seeds 251–253 and, if it qualifies, on fresh seeds 860–865 before the biological holdout. [Matched spread measurements](neuroko_v12_matched_original_spread.json)
 
 ```bash
