@@ -65,7 +65,7 @@ def test_extended_curves_check_replayed_anchor_and_intermediate_batches(tmp_path
         base.with_stem(base.stem + "-u3600-trace1200").write_text(json.dumps(row))
 
     monkeypatch.setattr(study, "fit", fake_fit)
-    args = SimpleNamespace(output=tmp_path)
+    args = SimpleNamespace(output=tmp_path, checkpoints=study.STEPS)
     if fault:
         with pytest.raises(ValueError, match="Invalid fixed-rate curve|identical projected cells"):
             study.run_fold(args, arms, 22, group, energy)
@@ -103,6 +103,57 @@ def test_fresh_duration_reports_all_pairs_at_fixed_endpoint(tmp_path, monkeypatc
     assert summary["pairs_won"] == 12 and summary["seed_means_won"] == 4
     assert summary["mean_v12_minus_control"] == pytest.approx(-1 / 30)
     assert not result["leads_all_controls_on_average"]
+
+
+def test_long_duration_matches_pilot_and_integrates_uneven_final_interval(tmp_path, monkeypatch):
+    import json
+    import sys
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_convergence as study
+
+    def fake_fit(args, stage, seed, group, gpu, requested, *, options):
+        arm, = requested
+        version, recipe, trial = arm
+        role = next(r for r, a in plan["arms"].items() if a == arm)
+        anchor = args.pilot_anchors[seed, group]
+        prefix = (anchor["curves"] | anchor["other_control_curves"])[role]
+        hashes = anchor["fingerprints"]
+        assert options == ("--updates", "40000", "--trace-every", "1200")
+        trace = [dict(p, training_batches_sha256=h) for p, h in zip(prefix, hashes["training_batches"], strict=True)]
+        for step in study.LONG_STEPS[len(prefix):]:
+            energy = 1.2 if step == 40000 and role == "v12" else 1.
+            trace.append(dict(updates=step, mean_energy_distance=energy, spread_ratio=1., effective_rank=18.,
+                              training_batches_sha256=str(step)))
+        if corrupt and role == "v12":
+            trace[1]["mean_energy_distance"] += .01
+        rates = dict(generator=trial["lr"], critic=trial["lr"] * trial["d_lr_mult"],
+                     particles=trial["lr"] * trial["prior_lr_mult"])
+        row = dict(updates=40000, constant_lr_verified_updates=40000, particlegan=version, recipe=recipe,
+                   seed=seed, deterministic=True, score_groups=[group], fit_groups=study.GROUPS[1:],
+                   fixed_lr_optimizer_steps=dict(generator_and_particles=40000, critic=40000),
+                   initial_rates=rates, final_rates=rates, visible_devices=str(gpu), trace=trace,
+                   means=dict(energy_distance=trace[-1]["mean_energy_distance"]), projected_data_sha256=hashes["projected_data"],
+                   initial_parameters_sha256=hashes["initial_parameters"], training_batches_sha256="40000")
+        base = study.receipt(args.output, stage, *arm, seed, group)
+        base.parent.mkdir(parents=True, exist_ok=True)
+        base.with_stem(base.stem + "-u40000-trace1200").write_text(json.dumps(row))
+
+    plan = json.loads((study.NOTES / "neuroko_v12_convergence_3600_tuned_empf.json").read_text())
+    monkeypatch.setattr(study, "fit", fake_fit)
+    monkeypatch.setattr(sys, "argv", ["study", "--forty-thousand", "--output", str(tmp_path),
+                                       "--data", str(tmp_path), "--wheels", str(tmp_path)])
+    corrupt = False
+    study.main()
+    protocol = json.loads((tmp_path / "protocol.json").read_text())
+    result = json.loads((tmp_path / "comparison.json").read_text())
+    assert protocol["groups"] == ["Screen1_1"] and protocol["seeds"] == [22, 251]
+    assert protocol["checkpoints"][-2:] == [39600, 40000]
+    assert result["mean_energy_30000_to_40000"]["v12"] == pytest.approx(1.004)
+    assert result["endpoint_means"]["v12"] == 1.2 and len(result["cells"]) == 2
+    corrupt = True
+    with pytest.raises(ValueError, match="published 3,600-update pilot"):
+        study.main()
 
 
 @pytest.mark.parametrize("beats_empf", [False, True])

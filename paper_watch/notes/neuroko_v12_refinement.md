@@ -96,6 +96,8 @@ Calibrated v12 (epsilon 0.1, rho 3) scored **0.93564** against **0.97148** for i
 
 The exception at 3,600 was seed 251 on Screen1_3, where EMPF scored 0.61242 and v12 scored 0.62942. V12 produced higher effective covariance rank on all six pairs. EMPF came closer to the observed cells' rank on all six when comparing within each target. On pilot seed 22, the first with all three tuned curves complete, v12 led both tuned originals at 1,200 with mean energy 0.90830, compared with 0.91599 for EMPF and 0.92459 for v11. At 3,600, original v11 led on two of the three groups and on the seed mean (0.91627 versus 0.93046 for v12). V12 beat both tuned originals on Screen1_4 at 3,600, scoring 0.99880 against 1.00439 for v11 and 1.04100 for EMPF.
 
+Across the six pilot pairs, tuned original EMPF's mean energy rose from 0.91790 at 1,200 to 0.97148 at 3,600. Its generated samples also grew wider on all six pairs. Mean generated-to-observed spread rose from 1.167 to 1.248, and effective covariance rank rose on five pairs, averaging 16.35 then 17.62. V12 averaged 22.48 then 22.00 effective dimensions. [Spread, effective rank and energy on each trajectory](neuroko_v12_convergence_3600_tuned_empf.json)
+
 After five of the pilot pairs, six fresh training seeds (838–843) were reserved to test the same five configurations if v12 led tuned original EMPF on both complete pilot seed means at 3,600. Both seed means passed, and the fresh runs started on both GPUs. The 18 fresh pairs use the same fixed endpoint with evaluations at 1,200 and 2,400. Their primary comparison is the mean across all 18 pairs against each original control.
 
 On the first fresh group with all five fits complete (seed 838, Screen1_3), v12 scored below all four original controls at 3,600 updates. V12’s energy fell at both checkpoints. The two v11 fits reached their lowest measured energy at 2,400. All checkpoints come from the same continuously trained models.
@@ -107,6 +109,8 @@ On the first fresh group with all five fits complete (seed 838, Screen1_3), v12 
 | 3,600 | **0.59052** | 0.63337 | 0.69010 | 0.63374 | 0.74192 |
 
 V12 beat each v11 configuration on three of the four targets and each EMPF configuration on all four at 3,600. This is one group–seed pair out of 18 in the fresh comparison. The matched columns share the v12 learning rates, noise and prior weight and retain release-native optimizer smoothing. [All five configurations, paired training hashes, checkpoint curves and per-target scores](neuroko_v12_convergence_3600_first_fresh_group.json)
+
+A longer run follows all five configurations to 40,000 updates on Screen1_1, the first development group in the protocol, with seeds 22 and 251. V12 trailed tuned original v11 on this group at 3,600 on both pilot seeds. The primary outcome is mean energy at 40,000. A secondary outcome averages energy over updates 30,000–40,000 using the elapsed number of updates between measurements. Every fit replays the published checkpoints through 3,600 and checks the generator, critic and particle rates at every optimizer step. [Two-GPU command and checkpoint schedule](../README.md#follow-v12-and-the-four-original-controls-to-40000-updates)
 
 ## Six configurations on the same nine training pairs
 

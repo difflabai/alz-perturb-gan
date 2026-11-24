@@ -152,6 +152,17 @@ python paper_watch/scripts/neuroko_convergence.py --data "$data" --window-cells 
 
 The script checks the learning rates at every optimizer step, runs all three development groups, and writes the full comparison to `comparison.json` in the output directory. The 3,600-update endpoint is fixed before training. To run the same five configurations on six fresh seeds, add `--fresh` and use a separate output directory such as `"$data/v12-convergence-3600/fresh-838-843"`. This produces 18 paired group–seed comparisons and reports the mean difference against each original control at 3,600 updates.
 
+#### Follow v12 and the four original controls to 40,000 updates
+
+> Use the same checkout, NeuroKO data and pinned wheels. Run the five configurations on the first development group, Screen1_1, using pilot seeds 22 and 251 on separate GPUs. Compare energy distance at 40,000 updates and the average over the final 10,000 updates. Check whether spread and effective covariance rank move closer to the observed cells. Keep the learning rates constant and report each seed as well as the two-seed mean.
+
+```bash
+python paper_watch/scripts/neuroko_convergence.py --forty-thousand --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-convergence-40000"
+```
+
+The run scores every 1,200 updates and again at 40,000. It checks each arm against its published 1,200-, 2,400- and 3,600-update scores and minibatch fingerprints. The last interval is 400 updates. The late-training mean uses linear interpolation between checkpoints to account for the shorter interval. [Observed cell ranks by group and target](notes/neuroko_v12_tuned_empf_geometry.json)
+
 #### Copy-paste prompt for the stronger-prior v12 comparison
 
 > Clone `https://github.com/difflabai/alz-perturb-gan` on branch `paper-watch/neuroko-revival` and record the commit. Follow the NeuroKO GPU setup in `paper_watch/README.md`, including the data checksums, and install the pinned 0.12.0 wheel as shown in `paper_watch/notes/neuroko_v12_1200.md`. Use both GPUs. Run the “Prior penalty at latent noise 0.15” command in `paper_watch/notes/neuroko_v12_refinement.md`. Compare v12, v11 and EMPF at 1,200 updates with 64 particles, 16 latent dimensions, batch size 64, noise 0.15 and native prior penalty weight 0.1 for all three. Keep the generator LR at 0.014, critic LR at 0.021 and particle LR at 0.0406. Verify the flat learning rates and paired input hashes. Report the four-target mean energy, paired wins, spread ratio and fit time against the matched and tuned controls. Report the screening and independent training results separately. Run the biological holdout with `--stage confirm` if the selection qualifies.
