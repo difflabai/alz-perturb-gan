@@ -14,6 +14,7 @@ from neuroko_particle_rates import particle_rate_grid
 from neuroko_role_factorial import REFERENCES, TRIALS as RATES, paired
 from neuroko_stratified import NOISY, confirm_candidate, control_arms, evaluate, key
 from neuroko_transport_scale import TRIALS as TRANSPORT, validate_finalist
+from neuroko_transport_grid import transport_grid
 from retune_neuroko_v12 import BASE, RELEASE, V12
 
 RATE_NAMES = ("g-high-d-high-p-low", "g-low-d-low-p-high")
@@ -30,7 +31,7 @@ CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight", "critic-m
 PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise",
                        "release-loss", *CENTROID_STUDIES)
 TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "critic-interval", "loss-factorial",
-                      "calibrated-particles", *PRELIMINARY_STUDIES, *MOTION_STUDIES)
+                      "calibrated-particles", "transport-grid", *PRELIMINARY_STUDIES, *MOTION_STUDIES)
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
     for name in RATE_NAMES for sigma in (75, 150)
@@ -686,7 +687,7 @@ def compare_prior_weight(args):
                 "If it passes, compare against all matched and previously tuned controls on 22–24 and 251–253. "
                 "Reserve fresh seeds 480–485 including original releases, then biological holdout seeds 486–501.")
     elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "release-loss",
-                        "loss-factorial", "calibrated-particles", *CENTROID_STUDIES):
+                        "loss-factorial", "calibrated-particles", "transport-grid", *CENTROID_STUDIES):
         baseline = NOISY_PRIOR
         trial, ratios = original_v11_critic_rate(args.original_v11_motion)
         write_frozen(args.output / "original_critic_calibration.json",
@@ -778,14 +779,21 @@ def compare_prior_weight(args):
                             "and fresh seeds 684–689 before biological holdout seeds 690–705.")
                 for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
                     references.append(("original-generator-rate-" + arm[1], [release, *arm[1:]]))
-        elif args.study == "calibrated-particles":
+        elif args.study in ("calibrated-particles", "transport-grid"):
             baseline = trial
-            trial, grid = particle_rate_grid(args, baseline, NOISY_PRIOR, WIDE_NOISY_PRIOR, REPLICATION_SEEDS)
+            if args.study == "transport-grid":
+                label = "transport"
+                trial, grid = transport_grid(args, baseline, WIDE_NOISY_PRIOR, REPLICATION_SEEDS)
+                references.append(("calibrated-hollow-weight05", grid["references"][1]))
+            else:
+                label = "particle"
+                trial, grid = particle_rate_grid(args, baseline, NOISY_PRIOR, WIDE_NOISY_PRIOR, REPLICATION_SEEDS)
             if trial is None:
                 return
-            references.append(("calibrated-particle-baseline", paired(baseline)[0]))
+            references.append((f"calibrated-{label}-baseline", paired(baseline)[0]))
             for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
-                references.append(("original-particle-rate-" + arm[1], [release, *arm[1:]]))
+                prefix = "original-transport-" if label == "transport" else "original-particle-rate-"
+                references.append((prefix + arm[1], [release, *arm[1:]]))
             independent_seeds, outer_seeds, rule = grid["fresh"], grid["outer"], grid["rule"]
         elif args.study == "loss-factorial":
             baseline = trial
@@ -846,7 +854,7 @@ def compare_prior_weight(args):
                         "original tuned releases, on both development cohorts. Qualify on fresh training seeds "
                         "552–557 with the original releases before the biological holdout on 558–573.")
         if args.study in ("original-v11-critic-narrow-noise", "critic-interval", "release-loss", "loss-factorial",
-                          "calibrated-particles", *CENTROID_STUDIES):
+                          "calibrated-particles", "transport-grid", *CENTROID_STUDIES):
             for arm, release in zip(paired(WIDE_NOISY_PRIOR)[1:], ("0.11.1", "0.10.0"), strict=True):
                 references.append(("original-tuned-" + arm[1], [release, *arm[1:]]))
     elif args.study == "prior-target-spread":

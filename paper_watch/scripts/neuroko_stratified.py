@@ -30,6 +30,15 @@ def key(arm):
     return "/".join([arm[0], arm[1], arm[2]["name"]])
 
 
+def rank_cohort_gaps(cohorts, candidates, references):
+    """Rank by the worst cohort mean difference to its strongest reference."""
+    best_reference = {cohort: min(mean(scores[ref]) for ref in references)
+                      for cohort, scores in cohorts.items()}
+    gaps = {name: {cohort: mean(scores[name]) - best_reference[cohort]
+                   for cohort, scores in cohorts.items()} for name in candidates}
+    return sorted(candidates, key=lambda name: (max(gaps[name].values()), name)), gaps
+
+
 def evaluate(args, arms, seeds, *, groups_by_seed=None):
     tasks = []
     paths = {}

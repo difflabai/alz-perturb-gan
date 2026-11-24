@@ -29,6 +29,35 @@ def test_particle_search_uses_both_cohorts_and_changes_only_particle_rate(monkey
     assert not select_particle_rate(dict(first=first, second=second), ("low", "high"), ("baseline", "empf"))["passes"]
 
 
+def test_transport_grid_selects_using_remaining_seeds(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_transport_grid as study
+    from neuroko_rate_noise import NOISY_PRIOR, WIDE_NOISY_PRIOR
+
+    baseline = dict(NOISY_PRIOR, name="original-v11-critic-49", d_lr_mult=.0049 / .014)
+    arms = study.transport_arms(baseline)
+    leader, runner_up = map(study.key, arms[:2])
+    cohorts = []
+
+    def scores(args, requested, seeds):
+        first = len(seeds) == 1
+        cohorts.append((tuple(seeds), len(requested)))
+        values = {study.key(arm): [1.] * (3 * len(seeds)) for arm in requested}
+        values[leader] = [.5 if first else 1.01] * (3 * len(seeds))
+        values[runner_up] = [.9 if first else .95] * (3 * len(seeds))
+        return values
+
+    monkeypatch.setattr(study, "evaluate", scores)
+    args = SimpleNamespace(output=tmp_path, shared_screen=None, second_screen=None, stage="search")
+    winner, grid = study.transport_grid(args, baseline, WIDE_NOISY_PRIOR, [22, 23, 24])
+    assert cohorts == [((22,), 12), ((251,), 12), ((23, 24), 6), ((252, 253), 6)]
+    assert winner == arms[1][2]
+    assert len({(a[2]["rhbi_tau"], a[2]["rhbi_eps"]) for a in grid["candidates"]}) == 8
+    assert all(v == baseline[k] for k, v in winner.items() if k not in ("name", "rhbi_eps", "rhbi_tau"))
+
+
 def test_prior_spread_target_is_shared_through_qualification(monkeypatch):
     root = Path(__file__).resolve().parents[1]
     monkeypatch.syspath_prepend(str(root / "scripts"))

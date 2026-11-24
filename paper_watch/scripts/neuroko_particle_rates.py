@@ -1,11 +1,10 @@
 """Compare particle learning rates at two fixed critic rates on paired development fits."""
 from copy import copy
 import json
-from statistics import mean
 
 from compare_neuroko_v12 import GROUPS, write_frozen
 from neuroko_role_factorial import paired
-from neuroko_stratified import evaluate, key
+from neuroko_stratified import evaluate, key, rank_cohort_gaps
 
 
 def particle_arms(baseline):
@@ -15,13 +14,8 @@ def particle_arms(baseline):
 
 
 def select_particle_rate(cohorts, candidates, references):
-    gaps = {}
-    for name in candidates:
-        gaps[name] = {
-            cohort: mean(scores[name]) - min(mean(scores[ref]) for ref in references)
-            for cohort, scores in cohorts.items()
-        }
-    winner = min(candidates, key=lambda name: (max(gaps[name].values()), name))
+    ranking, gaps = rank_cohort_gaps(cohorts, candidates, references)
+    winner = ranking[0]
     return dict(winner=winner, gaps=gaps, passes=max(gaps[winner].values()) < 0)
 
 

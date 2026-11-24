@@ -698,6 +698,13 @@ A separate run restores the released loss defaults at the same tuned rates, nois
 
 Restoring the released loss defaults raised mean energy from **0.92850 to 1.17520** at the calibrated rates. It worsened all nine paired v12 fits. This comparison changes both self-coupling and relativistic weight. A follow-up crosses `hollow` and `feydy_discrete` with weights 0 and 2 to measure each change at both values of the other setting. It uses `--study loss-factorial` and `--output "$data/v12-loss-factorial"`. Only a new combination that beats both previous corners, hollow weight 0.5 and both tuned controls on the first cohort can advance. The follow-up reserves fresh seeds 706–711 and biological holdout seeds 712–727. [Nine paired scores with the released loss defaults](neuroko_v12_release_loss_energy.json)
 
+Across the nine training pairs on seeds 22–24, allowing weight 2 helped much more with the default self-coupling than with hollow self-coupling. The respective energy reductions were 0.18880 and 0.00911. At weight zero, hollow beat the default on all nine pairs. The two new combinations both missed tuned EMPF (0.92240). [Four combinations, paired effects and decision](neuroko_v12_fixed_critic_loss_factorial.json)
+
+| Self-coupling | Relativistic weight 0 | Relativistic weight 2 |
+| --- | ---: | ---: |
+| Released default (`feydy_discrete`) | 1.17520 | 0.98641 |
+| Hollow | 0.93760 | 0.92850 |
+
 ### Measuring the generator's output movement at fixed learning rates
 
 At relativistic weight 0.5, original v11 (0.11.1) and v12 (0.12.0) train with generator LR 0.014, critic LR 0.0049, particle LR 0.0406, latent noise 0.15 and prior weight 0.1. Before training, we freeze the 64 initial latent rows with one independently seeded noise draw per row. After each of 64 updates, we evaluate the generator at these same latent values for all four targets. The RMS change across targets, rows and output coordinates measures the movement of the generator itself. We also measure mean translation and movement around the target mean. Each instrumented fit is repeated with observation disabled and must reproduce its final parameters and minibatch hash.
@@ -727,5 +734,17 @@ Both new particle rates run on all three training groups for seeds 22–24 and 2
 ```bash
 python paper_watch/scripts/neuroko_rate_noise.py --study calibrated-particles --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-calibrated-particles" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
+```
+
+### Critic scores and entropy in the transport loss
+
+In the released coupling, `rhbi_tau` scales the critic scores in the cost assigned to unmatched mass, and `rhbi_eps` controls how sharply the transport plan allocates mass. The default pair is 2 and 0.1. This study crosses tau 1, 2 and 4 with epsilon 0.05, 0.1 and 0.2 at fixed rates of 0.014/0.0049/0.0406, hollow coupling and relativistic weight 2. The same eight alternative pairs resolve in the native loss on both Unified releases. [Released transport implementation](https://github.com/HyperGAN/ParticleGAN/blob/v0.12.0/particlegan/_t1_coupling/primitive.py)
+
+Each alternative runs for 1,200 updates on three groups at seeds 22 and 251. For each seed we compare its mean energy with the lowest mean among the default transport settings, hollow weight 0.5, tuned v11 and tuned EMPF. The two candidates with the smallest worst-seed gap advance to seeds 23–24 and 252–253. To qualify for the matched release comparisons, a candidate must beat the references both on the added seeds and on the full cohort means. The next stages use fresh seeds 750–755 and then, for a qualifying model, biological holdout seeds 756–771.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study transport-grid --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-transport-grid" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
