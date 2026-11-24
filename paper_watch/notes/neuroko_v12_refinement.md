@@ -326,3 +326,15 @@ Across the 72 v12 fits, increasing the prior weight from 0.02 to 0.1 raised mean
 | 0.020 / 0.042 / 0.0203 | 0.150 | 0.97967 | 0.95381 | −0.02586 |
 
 The higher-critic candidate at noise 0.15 and weight 0.1 scored 0.95381. An EMPF reference already scored 0.94613 on these nine pairs, ruling the candidate out under the published criterion.
+
+### Increasing noise with the stronger prior
+
+At weight 0.1, increasing noise from 0.025 to 0.15 improved v12 at both rate settings. The next comparison increases noise one more time, to 0.25, between the previously tested values 0.15 and 0.4. It keeps weight 0.1 and the release learning rates of 0.014, 0.021 and 0.0406 for all three matched formulations.
+
+The candidate must beat every reference, including all three lower-noise arms, first on seeds 22–24 and then separately on seeds 251–253. Both cohorts have informed earlier experiments. Passing both qualifies the candidate for six fresh training seeds (266–271), where it must also beat the original 0.10.0 EMPF and 0.11.1 v11 at the candidate settings. A qualifying independent result goes to the same biological holdout on paired seeds 332–347. Every fit uses the original architecture and 1,200 fixed-rate updates.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study strong-prior-noise --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-strong-prior-noise" \
+  --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
+```

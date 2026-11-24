@@ -81,6 +81,10 @@ def compare_releases(args, trial, seeds):
         raise ValueError("the frozen study has a different candidate or independent seeds")
     if not screen["passes"]:
         raise ValueError("the prior-weight trial must qualify for fresh training seeds")
+    if plan.get("second_screen_seeds"):
+        second = args.output / "second_screen.json"
+        if not second.is_file() or not json.loads(second.read_text())["passes"]:
+            raise ValueError("both development cohorts must pass before fitting the original releases")
     arms, labels = control_arms([trial])
     by_key = {key(arm): arm for arm in arms}
     v12, v11, empf = (by_key[labels[n]] for n in ("selected_v12", "matched_v11", "matched_empf"))
@@ -107,6 +111,7 @@ def compare_releases(args, trial, seeds):
 
 def compare_prior_weight(args):
     screen_only = []
+    pinned = []
     if args.study == "matched-prior-weight":
         trial = MATCHED_PRIOR
         baseline = MATCHED_RATE_TRIAL
@@ -154,6 +159,26 @@ def compare_prior_weight(args):
             "260–265 it must beat every reference, including all three release-rate models at noise "
             "0.15 and weight 0.1. Only then score the biological holdout on seeds 316–331."
         )
+    elif args.study == "strong-prior-noise":
+        baseline = NOISY_PRIOR
+        trial = dict(baseline, name="noise250-prior100", prior_sigma=0.25)
+        references = [("noise150-" + arm[1], arm) for arm in paired(baseline)]
+        candidates, labels = control_arms([trial])
+        by_key = {key(arm): arm for arm in candidates}
+        for role, release in (("matched_v11", "0.11.1"), ("matched_empf", "0.10.0")):
+            pinned.append(("original-" + role, [release, *by_key[labels[role]][1:]]))
+        independent_seeds = list(range(266, 272))
+        outer_seeds = list(range(332, 348))
+        rule = (
+            "At fixed rates 0.014/0.021/0.0406 and prior weight 0.1, increase only latent noise "
+            "from 0.15 to 0.25. Apply the same noise and weight to v11 and EMPF. On training seeds "
+            "22–24 require lower mean v12 energy than every matched and established reference and "
+            "all three lower-noise arms. If successful, require the same result separately on the "
+            "second development cohort, seeds 251–253. Only a passing candidate goes to six new "
+            "independent training seeds 266–271, including exact-setting original 0.11.1 v11 and "
+            "0.10.0 EMPF. Only a win over every independent reference qualifies for the biological "
+            "holdout on seeds 332–347. All decisions use energy at 1200 constant-rate updates."
+        )
     else:
         trial = NOISY_PRIOR
         baseline = NOISY
@@ -177,15 +202,20 @@ def compare_prior_weight(args):
             raise ValueError("the frozen study has a different candidate or holdout seeds")
         if not decision["advances"] or decision["winner"] != trial["name"]:
             raise ValueError("the prior-weight candidate did not pass independent validation")
+        # confirm_candidate already includes the rate-matched original EMPF arm.
+        outer_refs = [*references, *(p for p in pinned if p[1][1] == "unified_v11")]
         confirm_candidate(args, decision, trial, outer_seeds, compare_historical_empf=True,
-                          previous_transport=TRANSPORT["q75-noise25"], reference_arms=references)
+                          previous_transport=TRANSPORT["q75-noise25"], reference_arms=outer_refs)
         return
 
     matches, arms = comparison(trial, False)
     arms.extend(arm for _, arm in references)
     arms[1:1] = screen_only
-    write_frozen(args.output / "search.json", dict(rule=rule, arms=arms, groups=list(GROUPS),
-                 screen_seeds=REPLICATION_SEEDS, independent_seeds=independent_seeds, outer_seeds=outer_seeds))
+    protocol = dict(rule=rule, arms=arms, groups=list(GROUPS),
+                    screen_seeds=REPLICATION_SEEDS, independent_seeds=independent_seeds, outer_seeds=outer_seeds)
+    if args.study == "strong-prior-noise":
+        protocol.update(second_screen_seeds=[251, 252, 253], pinned_independent_arms=[arm for _, arm in pinned])
+    write_frozen(args.output / "search.json", protocol)
     screen_args = copy(args)
     if args.shared_screen is not None:
         screen_args.output = args.shared_screen.resolve()
@@ -197,14 +227,25 @@ def compare_prior_weight(args):
         required.extend(key(arm) for _, arm in references)
     elif args.study == "prior-interaction":
         required.extend(key(arm) for arm in arms if arm[1] != V12)
+    elif args.study == "strong-prior-noise":
+        required = [key(arm) for arm in arms if key(arm) != own]
     passes = all(means[own] < means[control] for control in required)
     screened = dict(scores=scores, means=means, passes=passes)
     write_frozen(args.output / "screen.json", screened)
     if args.study == "prior-interaction":
         write_frozen(args.output / "prior_effects.json", prior_effects(arms, scores, REPLICATION_SEEDS))
     decision = dict(screening=screened, advances=False, winner=None)
+    if passes and args.study == "strong-prior-noise":
+        second_args = copy(args)
+        if args.second_screen is not None:
+            second_args.output = args.second_screen.resolve()
+        second_scores = evaluate(second_args, arms, protocol["second_screen_seeds"])
+        second_means = {name: mean(values) for name, values in second_scores.items()}
+        passes = all(second_means[own] < second_means[control] for control in required)
+        decision["second_screening"] = dict(scores=second_scores, means=second_means, passes=passes)
+        write_frozen(args.output / "second_screen.json", decision["second_screening"])
     if passes:
-        decision.update(validate_finalist(args, trial, independent_seeds, reference_arms=references))
+        decision.update(validate_finalist(args, trial, independent_seeds, reference_arms=[*references, *pinned]))
     write_frozen(args.output / "selection.json", decision)
     print("Prior-weight screen passed", passes, "qualified for holdout", decision["advances"], flush=True)
 
@@ -217,12 +258,16 @@ def main():
     parser.add_argument("--window-cells", type=int)
     parser.add_argument("--stage", choices=("search", "confirm", "compare-releases"), default="search")
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
-                                            "prior-interaction"),
+                                            "prior-interaction", "strong-prior-noise"),
                         default="rates")
     parser.add_argument("--shared-screen", type=Path,
                         help="reuse the seed 22–24 reference receipts for the prior-weight comparison")
+    parser.add_argument("--second-screen", type=Path,
+                        help="reuse seeds 251–253 from the prior-weight study for strong-prior-noise")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
+    if args.second_screen is not None and args.study != "strong-prior-noise":
+        parser.error("--second-screen applies to the strong-prior-noise study")
     for field in ("data", "wheels", "output"):
         setattr(args, field, getattr(args, field).resolve())
     args.output.mkdir(parents=True, exist_ok=True)
