@@ -67,6 +67,8 @@ def fit(args, stage, seed, group, gpu, arms):
                "--release", release, "--recipe", recipe, "--seed", str(seed), "--data", str(args.data),
                "--output", str(target.parent), "--deterministic", "--validation-group", group,
                "--trial", json.dumps(trial)]
+        if getattr(args, "require_constant_lr", False):
+            cmd.append("--require-constant-lr")
         if args.window_cells:
             cmd.extend(["--window-cells", str(args.window_cells)])
         with target.with_suffix(".log").open("a") as log:

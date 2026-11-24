@@ -212,6 +212,7 @@ def main():
         parser.add_argument("--" + flag, required=True, type=Path)
     parser.add_argument("--window-cells", type=int)
     parser.add_argument("--workers-per-gpu", type=int, default=3)
+    parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     for key in ("data", "wheels", "output", "previous"):
         setattr(args, key, getattr(args, key).resolve())

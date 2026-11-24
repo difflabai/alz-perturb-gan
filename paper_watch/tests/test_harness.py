@@ -112,3 +112,13 @@ def test_stratified_prior_uses_every_particle_during_training_and_preserves_eval
     assert observed and all(row == (True, BATCH, BATCH) for row in observed)
     stratified.sample(0, 256, seed=12)
     assert observed[-1][0:2] == (False, 256)
+
+
+@pytest.mark.parametrize("field", ["lr_floor", "network_lr_floor"])
+def test_fixed_rate_benchmark_rejects_decay_in_either_role(field):
+    from paper_watch.alztest.neuroko_tune import verify_fixed_schedule
+
+    fixed = {"lr_floor": 1., "network_lr_floor": 1., "total_steps": 1200}
+    verify_fixed_schedule(get_recipe("unified_v11", **fixed), 1200)
+    with pytest.raises(ValueError, match="changes network or particle LR"):
+        verify_fixed_schedule(get_recipe("unified_v11", **(fixed | {field: .1})), 1200)

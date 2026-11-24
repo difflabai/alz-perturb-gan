@@ -26,6 +26,15 @@ from .neuroko_duration import effective_rank, optimizer_rates, write_receipt
 from .neuroko_lr import DRAWS, score
 
 
+def verify_fixed_schedule(recipe, updates):
+    from particlegan import learning_rate_scales
+
+    for step in range(updates + 1):
+        scales = learning_rate_scales(step, recipe)
+        if tuple(scales) != (1.0, 1.0):
+            raise ValueError(f"{recipe.name} changes network or particle LR at update {step}: {scales}")
+
+
 def optimizer_momentum(trainer):
     """Read the state that each released optimizer uses to calculate its step."""
     result = {}
@@ -70,6 +79,8 @@ def main():
     parser.add_argument("--recipe", choices=("unified_v12", "unified_v11", "empf"), default="unified_v11")
     parser.add_argument("--trial", action="append", type=json.loads, required=True,
                         help='JSON object, e.g. {"name":"v11","lr":0.028,"batch_size":256}')
+    parser.add_argument("--require-constant-lr", action="store_true",
+                        help="require unit network and particle schedule multipliers and verify live optimizer rates")
     parser.add_argument("--trace-every", type=int, help="also score validation or holdout at this update interval")
     parser.add_argument("--deterministic", action="store_true",
                         help="seed PyTorch and require deterministic CUDA kernels for repeatability checks")
@@ -157,6 +168,14 @@ def main():
             previous["settings"] = asdict(TrainingSettings(**previous["settings"]))
             if any(previous[k] != v for k, v in config.items()):
                 raise ValueError(f"incompatible cached run at {path}")
+            if args.require_constant_lr:
+                from particlegan import get_recipe
+
+                verify_fixed_schedule(get_recipe(args.recipe, lr=lr, **settings.recipe_overrides()), config["updates"])
+                rates = previous["initial_rates"]
+                trace = previous.get("rate_trace", [])
+                if previous["final_rates"] != rates or any(row[k] != value for row in trace for k, value in rates.items()):
+                    raise ValueError(f"cached optimizer rates changed at {path}")
             continue
         with torch.random.fork_rng(devices=[]):
             torch.default_generator.manual_seed(args.seed)
@@ -185,6 +204,8 @@ def main():
             for opt in (model.trainer.opt_g, model.trainer.opt_d)
         ):
             raise RuntimeError("both optimizers must use the released v12 implementation")
+        if args.require_constant_lr:
+            verify_fixed_schedule(recipe, config["updates"])
         rates = optimizer_rates(model)
         initialization = sha256()
         for module in (model.G, model.D, model.prior):
@@ -219,8 +240,12 @@ def main():
                 trace.append({"updates": step, "mean_energy_distance": energy})
                 print(f"{name} update {step} energy {energy:.6f}", flush=True)
                 scoring_seconds += perf_counter() - tick
+            if args.require_constant_lr or step % 300 == 0:
+                live_rates = optimizer_rates(model)
+                if args.require_constant_lr and live_rates != rates:
+                    raise RuntimeError(f"optimizer rates changed at update {step}: {rates} -> {live_rates}")
             if step % 300 == 0:
-                rate_trace.append({"update": step, **optimizer_rates(model)})
+                rate_trace.append({"update": step, **live_rates})
                 print(f"{name} completed {step}/1200", flush=True)
 
         model.fit(x, labels, steps=1200, after_step=progress, on_batch=record_batch)
@@ -236,6 +261,8 @@ def main():
         if args.trace_every:
             trace.append({"updates": 1200, "mean_energy_distance": averages["energy_distance"]})
             config["trace"] = trace
+        if args.require_constant_lr:
+            config["constant_lr_verified_updates"] = model.trainer.completed_steps
         if rate_trace:
             config["rate_trace"] = rate_trace
         if args.self_plan:

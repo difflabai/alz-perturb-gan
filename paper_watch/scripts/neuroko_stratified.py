@@ -160,6 +160,7 @@ def main():
     parser.add_argument("--window-cells", type=int)
     parser.add_argument("--workers-per-gpu", type=int, default=2)
     parser.add_argument("--stage", choices=("search", "confirm"), default="search")
+    parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     for field in ("data", "wheels", "output"):
         setattr(args, field, getattr(args, field).resolve())

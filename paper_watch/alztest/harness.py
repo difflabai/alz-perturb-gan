@@ -84,6 +84,10 @@ class TrainingSettings:
     rhbi_self_coupling: str | None = None
     generator_output_init_gain: float = 1.0
 
+    def recipe_overrides(self):
+        harness_fields = {"prior_sigma", "stratified_prior", "generator_output_init_gain"}
+        return {key: value for key, value in asdict(self).items() if value is not None and key not in harness_fields}
+
     def __post_init__(self):
         if type(self.stratified_prior) is not bool:
             raise ValueError("stratified_prior must be a boolean")
@@ -115,9 +119,8 @@ class ConditionalPGAN:
             recipe = get_recipe(recipe_name)
         else:
             settings = settings or TrainingSettings()
-            overrides = {key: value for key, value in asdict(settings).items()
-                         if value is not None and key not in {"prior_sigma", "stratified_prior", "generator_output_init_gain"}}
-            recipe = get_recipe(recipe_name, lr=0.005 if learning_rate is None else learning_rate, **overrides)
+            recipe = get_recipe(recipe_name, lr=0.005 if learning_rate is None else learning_rate,
+                                **settings.recipe_overrides())
         self.G = _CondGenerator(recipe.z_dim, n_cond, data_dim)
         self.D = _CondCritic(data_dim, n_cond)
         deterministic_orthogonal_(self.G, seed=seed)
