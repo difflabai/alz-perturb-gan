@@ -1,0 +1,293 @@
+{
+  "trial": [
+    "0.12.0",
+    "unified_v12",
+    {
+      "name": "original-v11-critic-49-rho150",
+      "lr": 0.014,
+      "rhbi_self_coupling": "hollow",
+      "rhbi_relativistic_weight": 2.0,
+      "prior_sigma": 0.15,
+      "d_lr_mult": 0.35,
+      "prior_lr_mult": 2.9,
+      "prior_reg": 0.1,
+      "rhbi_rho": 1.5
+    }
+  ],
+  "method": "Evaluate the three native generator cross plans on each unchanged baseline minibatch. Summaries are the median over 64 updates in each fit, then the median over nine fits. The baseline and higher-entropy control reproduced both stats and all training fingerprints from the earlier transport diagnostic.",
+  "result": {
+    "settings": [
+      [
+        2.0,
+        0.1,
+        3.0
+      ],
+      [
+        2.0,
+        0.1,
+        1.5
+      ],
+      [
+        2.0,
+        0.2,
+        3.0
+      ]
+    ],
+    "setting_columns": [
+      "tau",
+      "epsilon",
+      "rho"
+    ],
+    "steps": 64,
+    "seeds": [
+      22,
+      23,
+      24
+    ],
+    "metrics": [
+      "fraction_of_generated_mass_unmatched",
+      "effective_real_matches_per_matched_row"
+    ],
+    "medians": [
+      [
+        3.746309824270453e-05,
+        34.0635906245039
+      ],
+      [
+        0.06077726103740999,
+        33.243901815703396
+      ],
+      [
+        0.03725738542518255,
+        53.099621889848514
+      ]
+    ],
+    "cells": [
+      {
+        "seed": 22,
+        "group": "Screen1_1",
+        "gpu": 0,
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "fingerprints": {
+          "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "final_parameters_sha256": "db9edbd59ad22450e5025fad0d27abfdb8dc3e341ab3dadec43221fdeb9c387b",
+          "training_batches_sha256": "fa4b1c369a070f880fbd750f0483c7e0cacf863732841e8807a4b69d13761a2a"
+        },
+        "medians": [
+          [
+            3.739287675505027e-05,
+            32.949887373269426
+          ],
+          [
+            0.07639708676640869,
+            32.138634449064455
+          ],
+          [
+            0.03744373962161211,
+            52.54259115283183
+          ]
+        ]
+      },
+      {
+        "seed": 22,
+        "group": "Screen1_3",
+        "gpu": 1,
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "fingerprints": {
+          "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "final_parameters_sha256": "56a2a3835e0aa219a090420cf0e2502540ff33b699f6c64b428c6005f4fab2b6",
+          "training_batches_sha256": "a74bcc8ec8a72977119c23263e889a82db38a15115b54d17b525d363ec39dc4c"
+        },
+        "medians": [
+          [
+            3.634843279065614e-05,
+            35.09093613924243
+          ],
+          [
+            0.055816403160420754,
+            34.94280436147256
+          ],
+          [
+            0.036978007212234446,
+            53.801234855937444
+          ]
+        ]
+      },
+      {
+        "seed": 22,
+        "group": "Screen1_4",
+        "gpu": 0,
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "fingerprints": {
+          "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "final_parameters_sha256": "7e335adf49c0d6724e28acda7bd330d707d6139f8ffbbf3c09cc1d2621b5662d",
+          "training_batches_sha256": "5882ff87acf2c81cade98ecc134c78ed35be71f207f1eb58c0dcb37e52123074"
+        },
+        "medians": [
+          [
+            3.642995963342642e-05,
+            33.83598642263422
+          ],
+          [
+            0.059960140841500045,
+            33.243901815703396
+          ],
+          [
+            0.0370543503063624,
+            53.099621889848514
+          ]
+        ]
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_1",
+        "gpu": 1,
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "fingerprints": {
+          "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+          "final_parameters_sha256": "7e672759d379c0cc03d5ea50791d9033573c957e7c7b864a8965cdeb2b5ddb8b",
+          "training_batches_sha256": "a0dfe5c1aa12976829f083469f4ab7cc0868efc7cf33f870f3f58343f3df937f"
+        },
+        "medians": [
+          [
+            3.818325129590831e-05,
+            32.149188010253795
+          ],
+          [
+            0.075207896737816,
+            31.30620121357706
+          ],
+          [
+            0.037759827362144005,
+            52.156066707656194
+          ]
+        ]
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_3",
+        "gpu": 0,
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "fingerprints": {
+          "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+          "final_parameters_sha256": "92f4ec5a373def9c575166b0997483b25e20c1143342e459a44b55ccc0390841",
+          "training_batches_sha256": "66b40c4db6e0b8efa970efde69a95edebc727a2835892e109b2eb3440fbf3b4d"
+        },
+        "medians": [
+          [
+            3.8381781411148e-05,
+            35.92308779606947
+          ],
+          [
+            0.055732129490505586,
+            35.26089104529219
+          ],
+          [
+            0.037399859850262916,
+            54.28604326645925
+          ]
+        ]
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_4",
+        "gpu": 1,
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "fingerprints": {
+          "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+          "final_parameters_sha256": "be183c6fc1ac4d2c84470662cee49a35d4c057aeeb02a0c769e64fc03cc3d7b2",
+          "training_batches_sha256": "e39994bfb8d13eae87e9d2737f30cf799cfa76688579d4a98f6cd127a239c0a5"
+        },
+        "medians": [
+          [
+            3.859038788548364e-05,
+            33.54605411504319
+          ],
+          [
+            0.06077726103740999,
+            33.10897901524797
+          ],
+          [
+            0.03725738542518255,
+            53.0848478691775
+          ]
+        ]
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_1",
+        "gpu": 0,
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "fingerprints": {
+          "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+          "final_parameters_sha256": "d5633766b94ac405a188f9fb599de590727e05a50fe11d7f8ed42f35b2a26914",
+          "training_batches_sha256": "7d67c647e8015f3c90a32239c1e699bcc7a0df56d6cf25431f41355b073e56d2"
+        },
+        "medians": [
+          [
+            3.817626941830735e-05,
+            34.0635906245039
+          ],
+          [
+            0.07214972629785374,
+            32.79293234209106
+          ],
+          [
+            0.03759411899264629,
+            53.08305215773835
+          ]
+        ]
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_3",
+        "gpu": 1,
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "fingerprints": {
+          "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+          "final_parameters_sha256": "a4b7d0f17ecea4ac8947d5c98fdf0771004f7e04a75ef9b33b5a722762030f5d",
+          "training_batches_sha256": "0e64f01b60fb600f0378ae290f0affac1bddc6126d3d0a3be793f2eed5b1edd2"
+        },
+        "medians": [
+          [
+            3.746309824270453e-05,
+            35.70642297375691
+          ],
+          [
+            0.05738906933824743,
+            35.419878994639014
+          ],
+          [
+            0.03708405768614947,
+            53.94179168184727
+          ]
+        ]
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_4",
+        "gpu": 0,
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "fingerprints": {
+          "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+          "final_parameters_sha256": "1eac2fae47c94b3487e3081f3e4ec75fb070204c420a4ef2fd16ba1b1238c9a9",
+          "training_batches_sha256": "d996cc6a6bce56b50b96531a91d60ea58ef7f896868eb60b99763b1858391549"
+        },
+        "medians": [
+          [
+            3.711256184078951e-05,
+            34.219096276014724
+          ],
+          [
+            0.06394999748554209,
+            33.685057762105046
+          ],
+          [
+            0.037117381560148155,
+            53.19511035338181
+          ]
+        ]
+      }
+    ]
+  }
+}

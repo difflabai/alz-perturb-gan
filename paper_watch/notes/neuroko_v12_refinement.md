@@ -787,6 +787,8 @@ At the default tau of 2, doubling epsilon to 0.2 reduced v12's 1,200-update mean
 
 Increasing epsilon improved v12 on all six paired fits. The live optimizer checks verified the same generator, critic and particle rates at every step of all 7,200 updates. Its largest single advantage against tuned EMPF was on Screen1_4 at seed 22 (0.91597 versus 1.05250). The other seven transport candidates already had worse first-seed gaps than this candidate's worst gap on either seed, which guarantees that epsilon 0.2 at tau 2 ranks first under the published two-seed rule. The four additional development seeds test whether that lead repeats. [Per-group scores, settings, fingerprints and shortlist calculation](neuroko_v12_entropy020_screen.json)
 
+At epsilon 0.2 and identical settings, original v11 averaged 0.92078 on seed 22 and 0.91101 on seed 251. V12 scored lower on five of six pairs and on both seed means. The lead on seed 251 was 0.00153. [Original v11 with identical transport and optimizer rates](neuroko_v12_entropy020_original_v11_screen.json)
+
 On development seeds 23 and 24, the same candidate averaged **0.96582**, versus **0.92561** for tuned original EMPF. EMPF won both seed means. Across all nine pairs at seeds 22–24, epsilon 0.2 scored **0.93777**, the epsilon 0.1 baseline scored **0.92850**, tuned original v11 scored **0.92547** and tuned original EMPF scored **0.92240**. EMPF won seven of the nine pairs. The candidate missed the advancement threshold on this cohort. [Full first cohort, two follow-up seeds and fixed-rate checks](neuroko_v12_entropy020_development_first.json)
 
 On the same generated and real minibatches from 64 updates of nine baseline fits, reducing epsilon from 0.1 to 0.05 concentrated the real matches. At tau 2, a generated row had **34.06 effective real matches** at epsilon 0.1, **14.55** at 0.05 and **53.10** at 0.2 out of 64 possible. At epsilon 0.2, 3.73% of the generated mass went unmatched, compared with 0.00375% at 0.1. Varying tau from 1 to 4 moved the median effective match count by less than 0.10 in every fit at each epsilon. These measurements describe the transport plan during early training. The 1,200-update runs score generated samples. [All nine settings, statistics and matched trajectory hashes](neuroko_v12_transport_plans.json)
@@ -795,6 +797,18 @@ On the same generated and real minibatches from 64 updates of nine baseline fits
 PYTHONPATH="$data/wheels/0.12.0:$PWD:$PWD/paper_watch" python paper_watch/scripts/neuroko_transport_plans.py \
   --data "$data" --window-cells 10000 --grid "$data/v12-transport-grid/transport_grid.json" \
   --reference "$data/v12-original-critic-rate-check" --output "$data/v12-transport-plans"
+```
+
+### Cost of leaving transport mass unmatched
+
+The released Unified recipes set `rhbi_rho` to 3. Halving it to 1.5 keeps entropy at 0.1 and changes both the cost of unmatched mass and the transformation applied to real-match distances. Across the same 64 updates in each of nine baseline fits, this raised the median fraction of generated mass left unmatched from **0.00375% to 6.08%**. The effective number of real matches per matched row moved from **34.06 to 33.24** out of 64. By comparison, raising entropy alone to 0.2 gave 3.73% unmatched mass and 53.10 effective matches. All nine baseline parameter and training-batch fingerprints were reproduced. [Matched transport plans](neuroko_v12_transport_rho_plans.json)
+
+The energy comparison changes only rho from the calibrated v12 setting. Its first evaluation uses 1,200 updates on all three groups at seeds 22–24. A qualifying candidate faces the matched and independently tuned original releases on both development cohorts, followed by fresh seeds 794–799 and biological holdout seeds 800–815.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study transport-rho --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-transport-rho" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
 
 ### Combining critic LR 0.0071 with relativistic weight 0.5

@@ -32,7 +32,7 @@ def inspect_plans(model, settings, trace):
     loss = model.trainer.loss
     coupling = loss.t1c
     generator_loss, native_plan = loss.g_loss, coupling._sinkhorn_slack
-    if (coupling.tau, coupling.eps, coupling.self_coupling) != (2., .1, "hollow"):
+    if (coupling.tau, coupling.eps, coupling.rho, coupling.self_coupling) != (2., .1, 3., "hollow"):
         raise ValueError("Expected the calibrated hollow baseline")
     in_generator = False
 
@@ -49,11 +49,11 @@ def inspect_plans(model, settings, trace):
         if in_generator and not hollow:
             probe = copy(coupling)
             values = []
-            for tau, eps in settings:
-                probe.tau, probe.eps = tau, eps
+            for tau, eps, rho in settings:
+                probe.tau, probe.eps, probe.rho = tau, eps, rho
                 candidate = type(probe)._sinkhorn_slack(probe, cost, row_scores, col_scores,
                                                        hollow=False, pair_mask=pair_mask)
-                if (tau, eps) == (2., .1) and not torch.equal(candidate, plan):
+                if (tau, eps, rho) == (2., .1, 3.) and not torch.equal(candidate, plan):
                     raise ValueError("The unmodified probe must exactly reproduce the native cross plan")
                 values.append(torch.stack(plan_metrics(candidate)))
             trace.append(torch.stack(values).tolist())
@@ -94,22 +94,40 @@ def run_gpu(args, settings, seeds, gpu):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    for field in ("data", "reference", "grid", "output"):
+    for field in ("data", "reference", "output"):
         parser.add_argument("--" + field, type=Path, required=True)
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--grid", type=Path, help="frozen tau and epsilon grid")
+    source.add_argument("--rho-study", type=Path, help="frozen single-rho training protocol")
     parser.add_argument("--window-cells", type=int)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
-    grid = json.loads(args.grid.read_text())
-    settings = sorted([(2., .1), *((a[2]["rhbi_tau"], a[2]["rhbi_eps"]) for a in grid["candidates"])])
-    seeds = grid["first"]
-    if len(set(settings)) != 9 or tuple(grid["groups"]) != GROUPS or seeds != [22, 23, 24]:
-        raise ValueError("Expected the frozen three-by-three transport grid")
+    study = json.loads((args.grid or args.rho_study).read_text())
+    if args.grid:
+        pairs = sorted([(2., .1), *((a[2]["rhbi_tau"], a[2]["rhbi_eps"]) for a in study["candidates"])])
+        if pairs != [(tau, eps) for tau in (1., 2., 4.) for eps in (.05, .1, .2)]:
+            raise ValueError("Expected the frozen three-by-three transport grid")
+        settings = [(tau, eps, 3.) for tau, eps in pairs]
+        metadata = dict(settings=pairs)
+        seeds = study["first"]
+    else:
+        release, recipe, trial = study["arms"][0]
+        unchanged = {k: v for k, v in trial.items() if k not in ("name", "rhbi_rho")}
+        baseline = dict(unchanged, name="original-v11-critic-49")
+        if (release != "0.12.0" or recipe != "unified_v12" or trial.get("rhbi_rho") != 1.5
+                or [release, recipe, baseline] not in study["arms"]):
+            raise ValueError("Expected the calibrated v12 comparison with only rho changed to 1.5")
+        settings = [(2., .1, 3.), (2., .1, trial["rhbi_rho"]), (2., .2, 3.)]
+        metadata = dict(settings=settings, setting_columns=["tau", "epsilon", "rho"])
+        seeds = study["screen_seeds"]
+    if tuple(study["groups"]) != GROUPS or seeds != [22, 23, 24]:
+        raise ValueError("Expected the three calibrated seeds and groups")
     os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
     with ProcessPoolExecutor(2, mp_context=multiprocessing.get_context("spawn")) as pool:
         jobs = [pool.submit(run_gpu, args, settings, seeds, gpu) for gpu in (0, 1)]
         cells = sorted([cell for job in jobs for cell in job.result()], key=lambda c: (c["seed"], c["group"]))
     overall = [[median(c["medians"][j][k] for c in cells) for k in (0, 1)] for j in range(len(settings))]
-    write_frozen(args.output / "result.json", dict(settings=settings, steps=STEPS, seeds=seeds,
+    write_frozen(args.output / "result.json", dict(**metadata, steps=STEPS, seeds=seeds,
                  metrics=["fraction_of_generated_mass_unmatched", "effective_real_matches_per_matched_row"],
                  medians=overall, cells=cells))
 

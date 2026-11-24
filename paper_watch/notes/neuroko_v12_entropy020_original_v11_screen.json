@@ -1,0 +1,283 @@
+{
+  "protocol": {
+    "arms": {
+      "v12_entropy_020": [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49-tau2-eps20",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1,
+          "rhbi_tau": 2.0,
+          "rhbi_eps": 0.2
+        }
+      ],
+      "baseline_v12": [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "tuned_v11": [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.041,
+          "rhbi_relativistic_weight": 2.0,
+          "rhbi_self_coupling": "hollow"
+        }
+      ],
+      "tuned_empf": [
+        "0.10.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ],
+      "matched_empf": [
+        "0.10.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      "matched_v11": [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49-tau2-eps20",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1,
+          "rhbi_tau": 2.0,
+          "rhbi_eps": 0.2
+        }
+      ]
+    },
+    "seeds": [
+      22,
+      251
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "updates": 1200,
+    "reason": "The entropy 0.2 candidate led tuned original EMPF at seed 22 in the registered grid. Evaluate that same candidate at the other registered screening seed, retain all three groups, and compare the original v11 using identical transport settings. This supplementary comparison does not change the frozen shortlist rule."
+  },
+  "screening_seeds": {
+    "22": {
+      "seed": 22,
+      "groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "scores": {
+        "v12_entropy_020": [
+          1.1248281743055188,
+          0.6042585594585448,
+          0.9159726675269693
+        ],
+        "baseline_v12": [
+          1.1263494186235306,
+          0.6114014145359561,
+          0.9871477581704231
+        ],
+        "tuned_v11": [
+          1.1660039904749095,
+          0.5815572646608409,
+          1.0262047123882294
+        ],
+        "tuned_empf": [
+          1.1223464943750359,
+          0.5731292339540484,
+          1.0525022939435076
+        ],
+        "matched_empf": [
+          1.115794115205545,
+          0.6069872397044966,
+          1.0819989154854617
+        ],
+        "matched_v11": [
+          1.1431210235896234,
+          0.6074102614189978,
+          1.0117978032481973
+        ]
+      },
+      "means": {
+        "v12_entropy_020": 0.8816864670970109,
+        "baseline_v12": 0.9082995304433032,
+        "tuned_v11": 0.9245886558413267,
+        "tuned_empf": 0.9159926740908639,
+        "matched_empf": 0.9349267567985011,
+        "matched_v11": 0.9207763627522728
+      },
+      "comparisons": {
+        "baseline_v12": {
+          "v12_minus_control": -0.026613063346292282,
+          "pairs_won": 3
+        },
+        "tuned_v11": {
+          "v12_minus_control": -0.04290218874431565,
+          "pairs_won": 2
+        },
+        "tuned_empf": {
+          "v12_minus_control": -0.03430620699385297,
+          "pairs_won": 1
+        },
+        "matched_empf": {
+          "v12_minus_control": -0.05324028970149016,
+          "pairs_won": 2
+        },
+        "matched_v11": {
+          "v12_minus_control": -0.039089895655261886,
+          "pairs_won": 3
+        }
+      },
+      "fingerprints": [
+        {
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "visible_devices": "0",
+          "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96"
+        },
+        {
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "visible_devices": "1",
+          "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "training_batches_sha256": "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4"
+        },
+        {
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "visible_devices": "0",
+          "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "training_batches_sha256": "85f4aff48cde6ba1da727b69d794e423e9f4cb879abe43d9899c96b3e19486a8"
+        }
+      ]
+    },
+    "251": {
+      "seed": 251,
+      "groups": [
+        "Screen1_1",
+        "Screen1_3",
+        "Screen1_4"
+      ],
+      "scores": {
+        "v12_entropy_020": [
+          1.14048320405698,
+          0.6178275683974523,
+          0.9701308699260844
+        ],
+        "baseline_v12": [
+          1.1412954010469378,
+          0.633696660494178,
+          1.0131135530000601
+        ],
+        "tuned_v11": [
+          1.2471203081930413,
+          0.5731604694655941,
+          0.9655771799355235
+        ],
+        "tuned_empf": [
+          1.1566485332439562,
+          0.6206967452030661,
+          0.9820954604564001
+        ],
+        "matched_empf": [
+          1.2178591190828363,
+          0.753468302803721,
+          1.0508637302242403
+        ],
+        "matched_v11": [
+          1.1731602026325627,
+          0.5817749389729518,
+          0.9781036766000719
+        ]
+      },
+      "means": {
+        "v12_entropy_020": 0.9094805474601723,
+        "baseline_v12": 0.929368538180392,
+        "tuned_v11": 0.928619319198053,
+        "tuned_empf": 0.9198135796344741,
+        "matched_empf": 1.0073970507035992,
+        "matched_v11": 0.9110129394018621
+      },
+      "comparisons": {
+        "baseline_v12": {
+          "v12_minus_control": -0.019887990720219777,
+          "pairs_won": 3
+        },
+        "tuned_v11": {
+          "v12_minus_control": -0.019138771737880738,
+          "pairs_won": 1
+        },
+        "tuned_empf": {
+          "v12_minus_control": -0.01033303217430189,
+          "pairs_won": 3
+        },
+        "matched_empf": {
+          "v12_minus_control": -0.09791650324342697,
+          "pairs_won": 3
+        },
+        "matched_v11": {
+          "v12_minus_control": -0.001532391941689933,
+          "pairs_won": 2
+        }
+      },
+      "fingerprints": [
+        {
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "visible_devices": "1",
+          "initial_parameters_sha256": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+          "training_batches_sha256": "dde3a72737ee81577630c4da56ae2dda3deaf70c92b040bce2b82b2bad93b798"
+        },
+        {
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "visible_devices": "0",
+          "initial_parameters_sha256": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+          "training_batches_sha256": "fce0d152e0171eb434dec3ab059d4c0f6522a7353d2ea60d3dd23dbafd3de8dd"
+        },
+        {
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "visible_devices": "1",
+          "initial_parameters_sha256": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+          "training_batches_sha256": "b09e7ed029a1a57ca608f5e7221125703ccd251c0a71c30d120250ff5b906017"
+        }
+      ]
+    }
+  }
+}
