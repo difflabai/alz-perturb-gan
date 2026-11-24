@@ -50,9 +50,10 @@ BY_NAME = {trial["name"]: trial for trial in CANDIDATES}
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def write_frozen(path, value):
+def write_frozen(path, value, *, read_only=False):
+    """Check an existing record, or publish it atomically when writing is enabled."""
     encoded = json.dumps(value, indent=2, allow_nan=False) + "\n"
-    if not path.exists():
+    if not read_only and not path.exists():
         temporary = path.with_name(f".{path.name}.{uuid4().hex}.tmp")
         try:
             temporary.write_text(encoded)

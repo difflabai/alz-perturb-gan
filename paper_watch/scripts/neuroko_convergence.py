@@ -3,7 +3,7 @@ import argparse
 from concurrent.futures import ThreadPoolExecutor
 from copy import copy
 import json
-from math import sqrt
+from math import isfinite, sqrt
 from pathlib import Path
 from statistics import mean, stdev
 
@@ -64,14 +64,21 @@ def shared_smoothing_pilot(arms, anchors, smoothing=SMOOTHING):
     return expected, inputs
 
 
-def run_fold(args, arms, seed, group, original, *, read_only=False):
+def late_energy(curve):
+    tail = [p for p in curve if p["updates"] >= 30000]
+    area = sum((b["updates"] - a["updates"]) * (a["mean_energy_distance"] + b["mean_energy_distance"]) / 2
+               for a, b in zip(tail, tail[1:]))
+    return area / (tail[-1]["updates"] - tail[0]["updates"])
+
+
+def run_fold(args, arms, seed, group, original, *, read_only=False, include_measurements=False):
     holdout = group == "Screen1_0"
     stage = "heldout" if holdout else "validation"
     fit_groups = set(GROUPS) if holdout else set(GROUPS) - {group}
     gpu = seed % 2 if holdout else (seed + GROUPS.index(group)) % 2
     steps = getattr(args, "checkpoints", STEPS)
     endpoint = steps[-1]
-    points, fingerprints, targets = {}, {}, {}
+    points, fingerprints, targets, measurements = {}, {}, {}, {}
     source = getattr(args, "same_wheel_from", None)
     smoothing_source = getattr(args, "shared_smoothing_from", None)
     smoothing_replication = getattr(args, "smoothing_replication", None)
@@ -165,11 +172,21 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
             raise ValueError("Curves must use identical projected cells, initialization and training batches")
         fingerprints = hashes
         points[role] = trace
-        if holdout:
+        if holdout or include_measurements:
             targets[role] = row["targets"]
             if (len(targets[role]) != 4 or (targets["v12"].keys() != targets[role].keys())
                     or mean(t["energy_distance"] for t in targets[role].values()) != row["means"]["energy_distance"]):
                 raise ValueError(f"Inconsistent biological target scores for {role}, seed {seed}")
+        if include_measurements:
+            if not isfinite(row["seconds"]) or row["seconds"] <= 0:
+                raise ValueError(f"Invalid training time for {role}, seed {seed}")
+            measurements[role] = dict(fit_seconds=row["seconds"], fixed_rates=rates,
+                                      verified_optimizer_steps=row["fixed_lr_optimizer_steps"],
+                                      endpoint_targets=targets[role])
+            if "optimizer_smoothing" in row:
+                measurements[role]["measured_optimizer_smoothing"] = row["optimizer_smoothing"]
+            if steps == LONG_STEPS:
+                measurements[role]["mean_energy_30000_to_40000"] = late_energy(trace)
         if not read_only:
             print(seed, group, role, [round(p["mean_energy_distance"], 5) for p in trace], flush=True)
     result = dict(seed=seed, group=group, gpu=gpu, curves=points, fingerprints=fingerprints)
@@ -181,6 +198,8 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
             raise ValueError(f"Archived curves differ from the optimizer receipts for seed {seed}, {group}")
     else:
         write_frozen(path, result)
+    if include_measurements:
+        result["training"] = measurements
     return result
 
 
@@ -217,6 +236,8 @@ def main():
     for field in ("data", "wheels", "output"):
         parser.add_argument("--" + field, type=Path, required=True)
     parser.add_argument("--window-cells", type=int)
+    parser.add_argument("--report-completed", action="store_true",
+                        help="read completed paired curves and print verified timings, rates and target scores as JSON")
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--fresh", action="store_true", help="replicate the fixed curves on seeds 838 through 843")
     mode.add_argument("--forty-thousand", action="store_true", help="extend all five pilot arms on Screen1_1 to 40,000 updates")
@@ -241,7 +262,8 @@ def main():
     if args.matched_smoothing is None:
         args.matched_smoothing = SMOOTHING
     args.data, args.wheels, args.output = (p.resolve() for p in (args.data, args.wheels, args.output))
-    args.output.mkdir(parents=True, exist_ok=True)
+    if not args.report_completed:
+        args.output.mkdir(parents=True, exist_ok=True)
     sources = [json.loads((NOTES / f"neuroko_v12_original_control_benchmark_{cohort}.json").read_text())
                for cohort in ("first", "second")]
     arms = sources[0]["protocol"]["arms"]
@@ -336,11 +358,15 @@ def main():
             arms, args.smoothing_inputs = shared_smoothing_pilot(arms, anchors, args.matched_smoothing)
             extra_protocol["matched_optimizer_smoothing"] = args.matched_smoothing
             args.output = shared_output
-            args.output.mkdir(exist_ok=True)
+            if not args.report_completed:
+                args.output.mkdir(exist_ok=True)
         qualification = heldout_qualification(args, arms)
-        write_frozen(args.output / "qualification.json", qualification)
+        write_frozen(args.output / "qualification.json", qualification, read_only=args.report_completed)
         if not qualification["qualifies"]:
-            print("Fresh v12 did not lead all four controls at 3,600 updates.", qualification, flush=True)
+            if args.report_completed:
+                print(json.dumps(dict(status="did_not_qualify", qualification=qualification), indent=2))
+            else:
+                print("Fresh v12 did not lead all four controls at 3,600 updates.", qualification, flush=True)
             return
         seeds = list(range(844, 860))
         groups = ("Screen1_0",)
@@ -379,8 +405,26 @@ def main():
                 or set(args.pilot_anchors) != {(s, g) for s in seeds for g in groups}
                 or any(set(c["curves"] | c.get("other_control_curves", {})) != set(arms) for c in selected)):
             raise ValueError("The long run needs a published pilot curve for every arm and seed")
-    write_frozen(args.output / "protocol.json", dict(arms=arms, seeds=seeds, groups=list(groups),
-                 checkpoints=args.checkpoints, metric="four-target mean energy distance", rule=rule, **extra_protocol))
+    protocol = dict(arms=arms, seeds=seeds, groups=list(groups), checkpoints=args.checkpoints,
+                    metric="four-target mean energy distance", rule=rule, **extra_protocol)
+    write_frozen(args.output / "protocol.json", protocol, read_only=args.report_completed)
+    if args.report_completed:
+        cells = [run_fold(args, arms, seed, group, anchors.get((seed, group)), read_only=True, include_measurements=True)
+                 for seed in seeds for group in groups if (args.output / f"curves-{seed}-{group}.json").is_file()]
+        expected = len(seeds) * len(groups)
+        report = dict(status="complete" if len(cells) == expected else "partial",
+                      completed_pairs=len(cells), expected_pairs=expected, protocol=protocol, cells=cells)
+        if len(cells) == expected:
+            report["endpoint_means"] = {}
+            for role in arms:
+                seed_means = [mean(c["curves"][role][-1]["mean_energy_distance"] for c in cells if c["seed"] == seed)
+                              for seed in seeds]
+                report["endpoint_means"][role] = mean(seed_means)
+            if args.checkpoints == LONG_STEPS:
+                report["mean_energy_30000_to_40000"] = {
+                    r: mean(c["training"][r]["mean_energy_30000_to_40000"] for c in cells) for r in arms}
+        print(json.dumps(report, indent=2, allow_nan=False))
+        return
     with ThreadPoolExecutor(1) as first, ThreadPoolExecutor(1) as second:
         jobs = []
         for seed in seeds:
@@ -420,16 +464,7 @@ def main():
     else:
         result["leads_both_seeds"] = all(max(row["v12_minus_control"].values()) < 0 for row in endpoint)
     if args.checkpoints == LONG_STEPS:
-        late = {}
-        for role in arms:
-            seed_means = []
-            for cell in cells:
-                tail = [p for p in cell["curves"][role] if p["updates"] >= 30000]
-                area = sum((b["updates"] - a["updates"]) * (a["mean_energy_distance"] + b["mean_energy_distance"]) / 2
-                           for a, b in zip(tail, tail[1:]))
-                seed_means.append(area / (tail[-1]["updates"] - tail[0]["updates"]))
-            late[role] = mean(seed_means)
-        result["mean_energy_30000_to_40000"] = late
+        result["mean_energy_30000_to_40000"] = {r: mean(late_energy(c["curves"][r]) for c in cells) for r in arms}
     write_frozen(args.output / "comparison.json", result)
     print(f"{args.checkpoints[-1]:,}-update comparison", {k: v for k, v in result.items() if k not in ("cells", "comparisons")}, flush=True)
 

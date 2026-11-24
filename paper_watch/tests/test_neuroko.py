@@ -121,7 +121,7 @@ def test_fresh_duration_reports_all_pairs_at_fixed_endpoint(tmp_path, monkeypatc
 
 
 @pytest.mark.parametrize("smoothing", (.0061, .001))
-def test_shared_smoothing_duration_reuses_native_fits_and_audits_changed_optimizers(tmp_path, monkeypatch, smoothing):
+def test_shared_smoothing_duration_reuses_native_fits_and_audits_changed_optimizers(tmp_path, monkeypatch, capsys, smoothing):
     import json
     import sys
 
@@ -160,7 +160,8 @@ def test_shared_smoothing_duration_reuses_native_fits_and_audits_changed_optimiz
                     score_groups=[group], fit_groups=[g for g in study.GROUPS if g != group], updates=endpoint,
                     lr=trial["lr"], settings=settings, deterministic=True, initial_rates=rates, final_rates=rates,
                     constant_lr_verified_updates=endpoint, fixed_lr_optimizer_steps=dict(generator_and_particles=endpoint, critic=endpoint),
-                    means=dict(energy_distance=energy), trace=trace)
+                    means=dict(energy_distance=energy), trace=trace, seconds=seed + 0.5,
+                    targets={str(i): dict(energy_distance=energy) for i in range(4)})
         data["training_batches_sha256"] = str(endpoint)
         if role in changed_roles:
             data["optimizer_smoothing"] = dict(generator_and_particles=smoothing, critic=-1. if wrong_smoothing else smoothing)
@@ -212,6 +213,26 @@ def test_shared_smoothing_duration_reuses_native_fits_and_audits_changed_optimiz
     assert sorted(trained) == [(s, study.GROUPS[0], r) for s in plan["seeds"] for r in changed_roles]
     result = json.loads((output / "comparison.json").read_text())
     assert result["mean_energy_30000_to_40000"] == pytest.approx(result["endpoint_means"])
+    capsys.readouterr()
+    trained.clear()
+    monkeypatch.setattr(sys, "argv", [*sys.argv, "--report-completed"])
+    study.main()
+    report = json.loads(capsys.readouterr().out)
+    assert (report["status"], report["completed_pairs"], report["expected_pairs"]) == ("complete", 2, 2)
+    assert {k: report[k] for k in ("endpoint_means", "mean_energy_30000_to_40000")} == {
+        k: result[k] for k in ("endpoint_means", "mean_energy_30000_to_40000")}
+    for cell in report["cells"]:
+        for role, details in cell["training"].items():
+            assert details["fit_seconds"] == cell["seed"] + 0.5
+            assert details["verified_optimizer_steps"] == dict(generator_and_particles=40000, critic=40000)
+            assert len(details["endpoint_targets"]) == 4
+            if role in changed_roles:
+                assert details["measured_optimizer_smoothing"] == dict(generator_and_particles=smoothing, critic=smoothing)
+    (output / "curves-251-Screen1_1.json").unlink()
+    study.main()
+    partial = json.loads(capsys.readouterr().out)
+    assert partial["status"] == "partial" and partial["completed_pairs"] == 1 and partial["cells"] == report["cells"][:1]
+    assert "endpoint_means" not in partial and not trained and not (output / "curves-251-Screen1_1.json").exists()
     curve = short / "curves-22-Screen1_1.json"
     changed = json.loads(curve.read_text())
     changed["curves"]["matched_empf"][1]["effective_rank"] += 1

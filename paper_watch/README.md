@@ -217,6 +217,16 @@ python paper_watch/scripts/neuroko_convergence.py --shared-smoothing-from "$data
   --wheels "$data/wheels" --output "$data/v12-smoothing-40000"
 ```
 
+To repeat the 40,000-update comparison at EMPF’s native smoothing of **0.001**, run the 0.001 pilot above and use its directory below. This trains v12 and original v11 on each of the same two seeds, reuses original EMPF and the two tuned controls, and verifies the first three checkpoints against the 0.001 pilot. In each output directory, `comparison.json` contains the two-seed endpoint means and the mean energy over updates 30,000–40,000.
+
+```bash
+python paper_watch/scripts/neuroko_convergence.py --shared-smoothing-from "$data/v12-convergence-40000" \
+  --matched-smoothing 0.001 --smoothing-pilot "$data/v12-smoothing-0.001-3600/pilot" \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-smoothing-0.001-40000"
+```
+
+Append `--report-completed` to a convergence command to inspect its finished group–seed pairs during or after training. It reads and verifies the saved fits and prints JSON. Each pair includes checkpoint energies, per-target endpoint scores, fixed learning rates, optimizer step counts and training time in seconds on the recorded GPU. For 40,000-update runs it also reports the time-weighted late mean for each fit. The overall means appear once all planned pairs are available.
+
 #### Copy-paste prompt for the stronger-prior v12 comparison
 
 > Clone `https://github.com/difflabai/alz-perturb-gan` on branch `paper-watch/neuroko-revival` and record the commit. Follow the NeuroKO GPU setup in `paper_watch/README.md`, including the data checksums, and install the pinned 0.12.0 wheel as shown in `paper_watch/notes/neuroko_v12_1200.md`. Use both GPUs. Run the “Prior penalty at latent noise 0.15” command in `paper_watch/notes/neuroko_v12_refinement.md`. Compare v12, v11 and EMPF at 1,200 updates with 64 particles, 16 latent dimensions, batch size 64, noise 0.15 and native prior penalty weight 0.1 for all three. Keep the generator LR at 0.014, critic LR at 0.021 and particle LR at 0.0406. Verify the flat learning rates and paired input hashes. Report the four-target mean energy, paired wins, spread ratio and fit time against the matched and tuned controls. Report the screening and independent training results separately. Run the biological holdout with `--stage confirm` if the selection qualifies.
