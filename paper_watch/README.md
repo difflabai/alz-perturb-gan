@@ -150,7 +150,7 @@ python paper_watch/scripts/neuroko_convergence.py --data "$data" --window-cells 
   --wheels "$data/wheels" --output "$data/v12-convergence-3600"
 ```
 
-The script checks the learning rates at every optimizer step, runs all three development groups, and writes the full comparison to `comparison.json` in the output directory. The 3,600-update endpoint is fixed before training.
+The script checks the learning rates at every optimizer step, runs all three development groups, and writes the full comparison to `comparison.json` in the output directory. The 3,600-update endpoint is fixed before training. To run the same five configurations on six fresh seeds, add `--fresh` and use a separate output directory such as `"$data/v12-convergence-3600/fresh-838-843"`. This produces 18 paired group–seed comparisons and reports the mean difference against each original control at 3,600 updates.
 
 #### Copy-paste prompt for the stronger-prior v12 comparison
 

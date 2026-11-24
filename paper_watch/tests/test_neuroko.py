@@ -75,6 +75,36 @@ def test_extended_curves_check_replayed_anchor_and_intermediate_batches(tmp_path
         assert cell["fingerprints"]["training_batches"] == ["1200", "2400", "3600"]
 
 
+def test_fresh_duration_reports_all_pairs_at_fixed_endpoint(tmp_path, monkeypatch):
+    import json
+    import sys
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_convergence as study
+
+    def example(args, arms, seed, group, original):
+        assert original is None
+        scores = dict(v12=1., tuned_v11=.95, matched_v11=1.05, matched_empf=1.1,
+                      tuned_empf=.9 if seed < 840 else 1.1)
+        curves = {role: [dict(updates=n, mean_energy_distance=value if n == 3600 else 1.,
+                              effective_rank=18., spread_ratio=1.) for n in study.STEPS]
+                  for role, value in scores.items()}
+        return dict(seed=seed, group=group, curves=curves)
+
+    monkeypatch.setattr(study, "run_fold", example)
+    monkeypatch.setattr(sys, "argv", ["study", "--fresh", "--output", str(tmp_path),
+                                       "--data", str(tmp_path), "--wheels", str(tmp_path)])
+    study.main()
+    protocol = json.loads((tmp_path / "protocol.json").read_text())
+    result = json.loads((tmp_path / "comparison.json").read_text())
+    assert protocol["seeds"] == list(range(838, 844))
+    assert len(result["cells"]) == 18
+    summary = result["endpoint_comparisons"]["tuned_empf"]
+    assert summary["pairs_won"] == 12 and summary["seed_means_won"] == 4
+    assert summary["mean_v12_minus_control"] == pytest.approx(-1 / 30)
+    assert not result["leads_all_controls_on_average"]
+
+
 def test_transport_grid_selects_using_remaining_seeds(tmp_path, monkeypatch):
     from types import SimpleNamespace
 

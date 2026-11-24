@@ -82,7 +82,7 @@
     2400,
     3600
   ],
-  "completed_pairs": 3,
+  "completed_pairs": 5,
   "expected_pairs": 6,
   "cells": [
     {
@@ -131,7 +131,28 @@
           }
         ]
       },
-      "other_control_curves": {},
+      "other_control_curves": {
+        "tuned_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1660039904749095,
+            "spread_ratio": 1.1961299314248635,
+            "effective_rank": 22.729443837816095
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.2419001917082118,
+            "spread_ratio": 1.2457895195358328,
+            "effective_rank": 21.760302427356343
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.168543691101476,
+            "spread_ratio": 1.2240738409389835,
+            "effective_rank": 21.190954541951225
+          }
+        ]
+      },
       "endpoint_geometry": {
         "v12": {
           "observed_mean_effective_rank": 18.232987000718275,
@@ -142,6 +163,11 @@
           "observed_mean_effective_rank": 18.232987000718275,
           "generated_mean_effective_rank": 16.99508006157512,
           "mean_absolute_target_rank_error": 1.2379069391431532
+        },
+        "tuned_v11": {
+          "observed_mean_effective_rank": 18.232987000718275,
+          "generated_mean_effective_rank": 21.190954541951225,
+          "mean_absolute_target_rank_error": 2.957967541232951
         }
       },
       "fingerprints": {
@@ -221,6 +247,26 @@
             "effective_rank": 21.163926348861565
           }
         ],
+        "matched_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6169509422632742,
+            "spread_ratio": 1.2401507167071906,
+            "effective_rank": 22.745513233599773
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6324320309679912,
+            "spread_ratio": 1.2407398184952925,
+            "effective_rank": 22.498197940302752
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.5955594507180135,
+            "spread_ratio": 1.2445869515878036,
+            "effective_rank": 20.427685145164705
+          }
+        ],
         "matched_empf": [
           {
             "updates": 1200,
@@ -258,6 +304,11 @@
           "generated_mean_effective_rank": 21.163926348861565,
           "mean_absolute_target_rank_error": 5.261855726591735
         },
+        "matched_v11": {
+          "observed_mean_effective_rank": 15.90207062226983,
+          "generated_mean_effective_rank": 20.427685145164705,
+          "mean_absolute_target_rank_error": 4.525614522894876
+        },
         "matched_empf": {
           "observed_mean_effective_rank": 15.90207062226983,
           "generated_mean_effective_rank": 17.722377664740343,
@@ -271,6 +322,144 @@
           "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4",
           "9a34677ed5a3a7ba6f1540a9d8f091e9af6b2e829ce67521c38ef7ee3db566ba",
           "427b565d44ca7e2596ae9e4f077fb03726817021b93cf3f388e96adfd50ef268"
+        ]
+      }
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_4",
+      "gpu": 0,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.9871477581704231,
+            "spread_ratio": 1.0576265643739278,
+            "effective_rank": 23.25856049116996
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.0736768277031148,
+            "spread_ratio": 1.0870390128518235,
+            "effective_rank": 21.62852181571487
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.9988027660222161,
+            "spread_ratio": 1.0535946429417162,
+            "effective_rank": 21.950731980763816
+          }
+        ],
+        "tuned_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.0525022939435076,
+            "spread_ratio": 1.0159460598569405,
+            "effective_rank": 16.409186720798687
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.9983161937817979,
+            "spread_ratio": 1.0578399033579584,
+            "effective_rank": 17.699042654132924
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.041004338573373,
+            "spread_ratio": 1.1191400630975257,
+            "effective_rank": 17.74901311976362
+          }
+        ]
+      },
+      "other_control_curves": {},
+      "endpoint_geometry": {
+        "v12": {
+          "observed_mean_effective_rank": 18.192231343148237,
+          "generated_mean_effective_rank": 21.950731980763816,
+          "mean_absolute_target_rank_error": 3.7585006376155805
+        },
+        "tuned_empf": {
+          "observed_mean_effective_rank": 18.192231343148237,
+          "generated_mean_effective_rank": 17.74901311976362,
+          "mean_absolute_target_rank_error": 0.7232726570587342
+        }
+      },
+      "fingerprints": {
+        "projected_data": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches": [
+          "85f4aff48cde6ba1da727b69d794e423e9f4cb879abe43d9899c96b3e19486a8",
+          "de6c0cb657ffef4af35e970bbf910c92034c2cec8cfba8602826ce8b9aaac477",
+          "3411b92bb33b01cecae27b9975821df2ff6fa623d6d063622d0dbf7681f308a5"
+        ]
+      }
+    },
+    {
+      "seed": 251,
+      "group": "Screen1_1",
+      "gpu": 1,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1412954010469378,
+            "spread_ratio": 1.2601342261165183,
+            "effective_rank": 21.686512836529523
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.1372993309113304,
+            "spread_ratio": 1.2781478136405917,
+            "effective_rank": 23.051495341665564
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.156311922419513,
+            "spread_ratio": 1.299293552096168,
+            "effective_rank": 22.208474283884087
+          }
+        ],
+        "tuned_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1566485332439562,
+            "spread_ratio": 1.2391277685750284,
+            "effective_rank": 15.683669287643013
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.1868525565645427,
+            "spread_ratio": 1.2634438426181456,
+            "effective_rank": 17.24289709232779
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.207094197662136,
+            "spread_ratio": 1.3670373729974872,
+            "effective_rank": 17.541434265723954
+          }
+        ]
+      },
+      "other_control_curves": {},
+      "endpoint_geometry": {
+        "v12": {
+          "observed_mean_effective_rank": 18.232987000718275,
+          "generated_mean_effective_rank": 22.208474283884087,
+          "mean_absolute_target_rank_error": 3.975487283165813
+        },
+        "tuned_empf": {
+          "observed_mean_effective_rank": 18.232987000718275,
+          "generated_mean_effective_rank": 17.541434265723954,
+          "mean_absolute_target_rank_error": 0.6915527349943194
+        }
+      },
+      "fingerprints": {
+        "projected_data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+        "training_batches": [
+          "dde3a72737ee81577630c4da56ae2dda3deaf70c92b040bce2b82b2bad93b798",
+          "3635babcb4a6a52a2d347d4aac288dbc4b8793488cd5dd71ec84b8135aca2e19",
+          "a1d8a822fffdfe5e32cd371677f1a8b3c97298d5544fa97583a7cef37697667f"
         ]
       }
     },
@@ -344,5 +533,18 @@
       }
     }
   ],
-  "complete_seed_means": {}
+  "complete_seed_means": {
+    "22": {
+      "v12": [
+        0.9082995304433032,
+        0.9600630508781481,
+        0.9304563952742917
+      ],
+      "tuned_empf": [
+        0.9159926740908639,
+        0.9698634281266197,
+        0.976449377395423
+      ]
+    }
+  }
 }
