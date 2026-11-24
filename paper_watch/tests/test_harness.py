@@ -119,6 +119,21 @@ def test_fixed_rate_benchmark_rejects_decay_in_either_role(field):
     from paper_watch.alztest.neuroko_tune import verify_fixed_schedule
 
     fixed = {"lr_floor": 1., "network_lr_floor": 1., "total_steps": 1200}
-    verify_fixed_schedule(get_recipe("unified_v11", **fixed), 1200)
+    verify_fixed_schedule(get_recipe("empf", **fixed), 1200)
     with pytest.raises(ValueError, match="changes network or particle LR"):
-        verify_fixed_schedule(get_recipe("unified_v11", **(fixed | {field: .1})), 1200)
+        verify_fixed_schedule(get_recipe("empf", **(fixed | {field: .1})), 1200)
+
+
+def test_v12_gain_diagnostic_reads_the_released_optimizer_state():
+    from paper_watch.alztest.neuroko_duration import function_space_gains
+
+    pytest.importorskip("particlegan._unified_v12")
+    model = ConditionalPGAN(3, 2, seed=4, recipe_name="unified_v12")
+    labels = np.repeat([0, 1], BATCH)
+    model.fit(np.random.default_rng(9).normal(size=(len(labels), 3)), labels, steps=2)
+    gains = function_space_gains(model.trainer)
+    for role, opt in (("generator", model.trainer.opt_g), ("critic", model.trainer.opt_d)):
+        expected = opt.state_dict()["unified_v12_equil"]
+        assert gains[role] == {"ema_func_gain": expected["ema_func_gain"],
+                               "last_step_gain": expected["last_step_gain"],
+                               "probe_consumptions": opt.probe_consumptions}

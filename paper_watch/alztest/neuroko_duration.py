@@ -35,12 +35,15 @@ def optimizer_rates(model):
 
 
 def function_space_gains(trainer):
-    if trainer.recipe.effective_critic_formulation != "unified_v11":
+    family = trainer.recipe.optimizer_family
+    if family not in ("unified_v11_equil", "unified_v12_equil"):
         return {}
     gains = {}
     for role, optimizer in (("generator", trainer.opt_g), ("critic", trainer.opt_d)):
-        state = optimizer.state_dict()["unified_v11_equil"]
+        state = optimizer.state_dict()[family]
         gains[role] = {key: state[key] for key in ("ema_func_gain", "last_step_gain")}
+        if hasattr(optimizer, "probe_consumptions"):
+            gains[role]["probe_consumptions"] = optimizer.probe_consumptions
     return gains
 
 

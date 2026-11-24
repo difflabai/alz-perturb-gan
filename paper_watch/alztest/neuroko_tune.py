@@ -22,7 +22,7 @@ import torch
 
 from .harness import ConditionalPGAN, TrainingSettings, energy_distance
 from .neuroko import LAYOUT, load_comparison, open_screen, project_fold
-from .neuroko_duration import effective_rank, optimizer_rates, write_receipt
+from .neuroko_duration import effective_rank, function_space_gains, optimizer_rates, write_receipt
 from .neuroko_lr import DRAWS, score
 
 
@@ -222,6 +222,7 @@ def main():
         start = perf_counter()
         trace = []
         rate_trace = []
+        gain_trace = []
         scoring_seconds = 0.0
 
         def progress(step):
@@ -246,6 +247,9 @@ def main():
                     raise RuntimeError(f"optimizer rates changed at update {step}: {rates} -> {live_rates}")
             if step % 300 == 0:
                 rate_trace.append({"update": step, **live_rates})
+                gains = function_space_gains(model.trainer)
+                if gains:
+                    gain_trace.append({"update": step, **gains})
                 print(f"{name} completed {step}/1200", flush=True)
 
         model.fit(x, labels, steps=1200, after_step=progress, on_batch=record_batch)
@@ -263,6 +267,8 @@ def main():
             config["trace"] = trace
         if args.require_constant_lr:
             config["constant_lr_verified_updates"] = model.trainer.completed_steps
+        if gain_trace:
+            config["function_space_gain_trace"] = gain_trace
         if rate_trace:
             config["rate_trace"] = rate_trace
         if args.self_plan:
