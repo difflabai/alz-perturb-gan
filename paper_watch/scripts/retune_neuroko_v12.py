@@ -146,8 +146,11 @@ def summarize(args, freeze):
         label = "selected_v12" + suffix
         if label not in labels:
             continue
-        for control in ("matched_empf", "matched_v11"):
-            for a, b in zip(records[labels[label]], records[labels[control + suffix]]):
+        comparators = ["matched_empf" + suffix, "matched_v11" + suffix]
+        if not suffix and "empf-010-matched" in labels:
+            comparators.append("empf-010-matched")
+        for control in comparators:
+            for a, b in zip(records[labels[label]], records[labels[control]]):
                 for field in ("initial_rates", "final_rates", "rate_trace"):
                     if a.get(field) != b.get(field):
                         raise ValueError(f"Actual training rates differ for {control}, seed {a['seed']}")

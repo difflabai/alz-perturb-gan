@@ -51,7 +51,8 @@ def main():
         selection = json.loads((args.output / "selection.json").read_text())
         if not selection["advances"]:
             raise ValueError("no transport-scale candidate passed training validation")
-        confirm_candidate(args, selection, TRIALS[selection["winner"]], list(range(116, 132)))
+        confirm_candidate(args, selection, TRIALS[selection["winner"]], list(range(116, 132)),
+                          compare_historical_empf=True)
         return
 
     write_frozen(args.output / "search.json", dict(trials=TRIALS, groups=list(GROUPS), rule=RULE))

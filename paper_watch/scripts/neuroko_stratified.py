@@ -137,8 +137,18 @@ def validation_controls(finalists):
     return arms, references, mapping
 
 
-def confirm_candidate(args, selection, chosen, seeds):
+def confirm_candidate(args, selection, chosen, seeds, *, compare_historical_empf=False):
     arms, labels = control_arms([chosen])
+    if compare_historical_empf:
+        matched = next(arm[2] for arm in arms if key(arm) == labels["matched_empf"])
+        historical = [
+            {"name": "empf-010-matched", **{k: v for k, v in matched.items() if k != "name"}},
+            {"name": "empf-010-historical", "lr": 0.005, "d_lr_mult": 1.5, "prior_lr_mult": 2.5},
+        ]
+        for trial in historical:
+            arm = ["0.10.0", "empf", trial]
+            arms.append(arm)
+            labels[trial["name"]] = key(arm)
     freeze = {"selection": selection, "arms": arms, "labels": labels, "seeds": seeds}
     write_frozen(args.output / "freeze.json", freeze)
 
