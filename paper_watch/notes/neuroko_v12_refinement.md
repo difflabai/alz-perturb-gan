@@ -821,6 +821,10 @@ python paper_watch/scripts/neuroko_rate_noise.py --study transport-rho --data "$
 
 Halving rho raised v12 mean energy from **0.92850 to 1.00441** on seeds 22–24. All nine paired fits worsened. Tuned EMPF scored 0.92240. The new setting stopped at the first cohort. [Paired energy, data fingerprints and constant learning rates](neuroko_v12_transport_rho_energy.json)
 
+After rho 1.5 worsened every paired fit, the next trial doubles rho from 3 to 6 while keeping epsilon at 0.1. It uses the same first-cohort selection rule. A passing setting faces the two original formulations at matched and separately tuned settings on both development cohorts and fresh seeds 816–821 before biological holdout seeds 822–837. Reproduce it with the preceding command using `--study transport-rho-high` and `--output "$data/v12-transport-rho-high"`.
+
+At rho 6, the measured unmatched mass fraction fell to 1.12e-11. The effective number of real matches per matched row fell from 34.06 to 34.06. All baseline and high-entropy reference medians reproduced exactly in the same nine fits. [Higher-rho transport measurements](neuroko_v12_transport_rho_high_plans.json)
+
 ### Combining critic LR 0.0071 with relativistic weight 0.5
 
 Calibrated v12 produced variation in more covariance dimensions than tuned original EMPF on both seed cohorts. V12 averaged 22.24 and 22.51 effective dimensions, tuned EMPF averaged 16.31 and 16.43, and the observed cells averaged 17.44. Tuned EMPF had lower mean absolute rank error on all 18 pairs and lower absolute log spread error on 17. [Target-averaged rank, spread, energy and conditional shift on both cohorts](neuroko_v12_tuned_empf_geometry.json)
@@ -828,6 +832,8 @@ Calibrated v12 produced variation in more covariance dimensions than tuned origi
 On seeds 22–24, increasing the v12 critic LR from 0.0049 to 0.0071 at weight 2 reduced mean absolute rank error from 4.80 to 3.74 with nearly identical energy (0.92850 and 0.92853). Separately, lowering the weight to 0.5 at critic LR 0.0049 reduced energy to 0.92322 and absolute log spread error from 0.180 to 0.141. The study combines the two changes and measures their interaction on both development cohorts. It holds the generator LR at 0.014, particle LR at 0.0406, latent noise at 0.15 and prior coefficient at 0.1.
 
 On seeds 22–24 the combined setting scored 0.95105. Lowering the relativistic weight from 2 to 0.5 improved mean energy by 0.00528 at critic LR 0.0049 and worsened it by 0.02252 at critic LR 0.0071. The two changes therefore failed the first-cohort qualification rule. Tuned original EMPF scored 0.92240. [First-cohort means and per-pair interaction](neuroko_v12_critic_weight_first.json)
+
+On seeds 251–253 the interaction reversed direction. The combined setting averaged **0.93677**, slightly below the other three v12 combinations (0.93815–0.94349). Original tuned v11 scored **0.93033** and original tuned EMPF scored **0.90413**. The combined setting lost to tuned EMPF on both development cohorts. [Second-cohort means and paired interaction](neuroko_v12_critic_weight_second.json)
 
 The combined setting must beat the three other combinations and the controls tuned on each wheel on both cohorts. A qualifying candidate proceeds to fresh seeds 772–777 and then to biological holdout seeds 778–793 if it still leads.
 

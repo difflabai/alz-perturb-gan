@@ -26,11 +26,12 @@ ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
 ROLE_OUTER_SEEDS = list(range(396, 412))
 ORIGINAL_CONTROL_SELECTION = "paper_watch/notes/neuroko_original_control_selection.json"
 CRITIC_NOISE_STUDIES = ("original-v11-critic-wide-noise", "original-v11-critic-narrow-noise")
+RHO_STUDIES = {"transport-rho": (1.5, 794), "transport-rho-high": (6., 816)}
 CENTROID_WEIGHTS = (.5, 1., 2., 4.)
 CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight", "critic-mid-weight",
                     "generator-motion", "lower-generator")
 PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise",
-                       "release-loss", "transport-rho", *CENTROID_STUDIES)
+                       "release-loss", *RHO_STUDIES, *CENTROID_STUDIES)
 TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "critic-interval", "loss-factorial",
                       "calibrated-particles", "transport-grid", "critic-weight-interaction",
                       *PRELIMINARY_STUDIES, *MOTION_STUDIES)
@@ -766,7 +767,7 @@ def compare_prior_weight(args):
                 "Reserve fresh seeds 480–485 including original releases, then biological holdout seeds 486–501.")
     elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "release-loss",
                         "loss-factorial", "calibrated-particles", "transport-grid", "critic-weight-interaction",
-                        "transport-rho", *CENTROID_STUDIES):
+                        *RHO_STUDIES, *CENTROID_STUDIES):
         baseline = NOISY_PRIOR
         trial, ratios = original_v11_critic_rate(args.original_v11_motion)
         write_frozen(args.output / "original_critic_calibration.json",
@@ -858,19 +859,23 @@ def compare_prior_weight(args):
                             "and fresh seeds 684–689 before biological holdout seeds 690–705.")
                 for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
                     references.append(("original-generator-rate-" + arm[1], [release, *arm[1:]]))
-        elif args.study == "transport-rho":
+        elif args.study in RHO_STUDIES:
             baseline = trial
-            trial = dict(baseline, name=baseline["name"] + "-rho150", rhbi_rho=1.5)
+            rho, first_seed = RHO_STUDIES[args.study]
+            trial = dict(baseline, name=baseline["name"] + f"-rho{round(100*rho)}", rhbi_rho=rho)
             references.append(("calibrated-rho3", paired(baseline)[0]))
             references.extend(("panel-selected-" + role, arm) for role, arm in published_original_controls().items())
             for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
                 references.append(("original-rho-" + arm[1], [release, *arm[1:]]))
-            independent_seeds, outer_seeds = list(range(794, 800)), list(range(800, 816))
-            rule = ("Halve native transport rho from 3 to 1.5 at epsilon 0.1, tau 2, hollow coupling and "
+            independent_seeds = list(range(first_seed, first_seed + 6))
+            outer_seeds = list(range(first_seed + 6, first_seed + 22))
+            change = "Halve native transport rho from 3 to 1.5" if rho == 1.5 else "Double native transport rho from 3 to 6"
+            rule = (change + " at epsilon 0.1, tau 2, hollow coupling and "
                     "relativistic weight 2. Keep the network, 1,200 updates and all three learning rates fixed. "
                     "On seeds 22–24 first beat the unchanged v12 and both tuned same-wheel controls. "
                     "Then beat every matched and tuned control, including the originals, on both development "
-                    "cohorts and six fresh seeds 794–799 before biological holdout seeds 800–815.")
+                    f"cohorts and six fresh seeds {independent_seeds[0]}–{independent_seeds[-1]} before biological "
+                    f"holdout seeds {outer_seeds[0]}–{outer_seeds[-1]}.")
         elif args.study == "critic-weight-interaction":
             baseline = trial
             trial, grid = critic_weight_interaction(args, baseline)

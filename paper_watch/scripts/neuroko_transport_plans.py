@@ -114,9 +114,9 @@ def main():
         release, recipe, trial = study["arms"][0]
         unchanged = {k: v for k, v in trial.items() if k not in ("name", "rhbi_rho")}
         baseline = dict(unchanged, name="original-v11-critic-49")
-        if (release != "0.12.0" or recipe != "unified_v12" or trial.get("rhbi_rho") != 1.5
+        if (release != "0.12.0" or recipe != "unified_v12" or trial.get("rhbi_rho") not in (1.5, 6.)
                 or [release, recipe, baseline] not in study["arms"]):
-            raise ValueError("Expected the calibrated v12 comparison with only rho changed to 1.5")
+            raise ValueError("Expected the calibrated v12 comparison with only rho halved or doubled")
         settings = [(2., .1, 3.), (2., .1, trial["rhbi_rho"]), (2., .2, 3.)]
         metadata = dict(settings=settings, setting_columns=["tau", "epsilon", "rho"])
         seeds = study["screen_seeds"]

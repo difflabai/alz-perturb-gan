@@ -1,0 +1,272 @@
+{
+  "protocol": {
+    "cells": {
+      "low2": [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "low_half": [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49-rel5",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 0.5,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "upper2": [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "interval-critic-71",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.5071428571428571,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "upper_half": [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "interval-critic-71-rel5",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 0.5,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.5071428571428571,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ]
+    },
+    "controls": [
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.25,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.041,
+          "rhbi_relativistic_weight": 2.0,
+          "rhbi_self_coupling": "hollow"
+        }
+      ],
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "first": [
+      22,
+      23,
+      24
+    ],
+    "second": [
+      251,
+      252,
+      253
+    ],
+    "fresh": [
+      772,
+      773,
+      774,
+      775,
+      776,
+      777
+    ],
+    "outer": [
+      778,
+      779,
+      780,
+      781,
+      782,
+      783,
+      784,
+      785,
+      786,
+      787,
+      788,
+      789,
+      790,
+      791,
+      792,
+      793
+    ],
+    "rule": "Cross critic LR 0.0049 or 0.0071 with relativistic weight 0.5 or 2. Evaluate all four settings on both development cohorts. Only the new 0.0071/0.5 combination can advance. It must beat the three other corners and both independently tuned controls on both the original and 0.12.0 wheels. For qualification repeat against all matched and tuned references including the selected original releases on six fresh seeds before the holdout."
+  },
+  "result": {
+    "scores": {
+      "0.12.0/unified_v12/original-v11-critic-49": [
+        1.1412954010469378,
+        0.633696660494178,
+        1.0131135530000601,
+        1.2306572823088493,
+        0.6138221992773936,
+        1.0325482063250722,
+        1.0808511714939395,
+        0.6675814603899681,
+        1.0409889928206046
+      ],
+      "0.12.0/unified_v12/original-v11-critic-49-rel5": [
+        1.2125133070913205,
+        0.597003548867993,
+        1.0175194653123814,
+        1.1815173378981785,
+        0.6238118774981396,
+        1.0644963620516545,
+        1.1590839943171785,
+        0.6041801222824574,
+        1.0312870901954336
+      ],
+      "0.12.0/unified_v12/interval-critic-71": [
+        1.173266217706674,
+        0.5894944273120055,
+        0.9848924529319389,
+        1.1088456570632843,
+        0.5797869054799094,
+        1.0786809475512766,
+        1.2040416671983367,
+        0.655833891419547,
+        1.0685283623216608
+      ],
+      "0.12.0/unified_v12/interval-critic-71-rel5": [
+        1.1789259015244935,
+        0.6115245128930846,
+        0.995732983477462,
+        1.1831071890002374,
+        0.5692758236984237,
+        1.1169065116677765,
+        1.1498223318432788,
+        0.61901974862909,
+        1.0066058129201316
+      ],
+      "0.12.0/unified_v11/noise250-prior100": [
+        1.2046290732651421,
+        0.6431797824682548,
+        0.9896809202041645,
+        1.1478956308991257,
+        0.582432076583989,
+        1.0698143847223107,
+        0.983078207528687,
+        0.6216809812535689,
+        1.048058851417851
+      ],
+      "0.12.0/empf/noise250-prior100": [
+        1.1566485332439562,
+        0.6206967452030661,
+        0.9820954604564001,
+        1.0777784378935291,
+        0.6172634586043444,
+        0.9421862293921406,
+        1.1361177669356388,
+        0.575229532762398,
+        1.0291768706489963
+      ],
+      "0.11.1/unified_v11/motion-critic-46-prior41": [
+        1.2471203081930413,
+        0.5731604694655941,
+        0.9655771799355235,
+        1.097044337627287,
+        0.6450300617387121,
+        1.0388312073600556,
+        1.1320638241626846,
+        0.6221521148586688,
+        1.0520159917939265
+      ],
+      "0.10.0/empf/noise250-prior100": [
+        1.1566485332439562,
+        0.6206967452030661,
+        0.9820954604564001,
+        1.0777784378935291,
+        0.6172634586043444,
+        0.9421862293921406,
+        1.1361177669356388,
+        0.575229532762398,
+        1.0291768706489963
+      ]
+    },
+    "means": {
+      "0.12.0/unified_v12/original-v11-critic-49": 0.9393949919063337,
+      "0.12.0/unified_v12/original-v11-critic-49-rel5": 0.943490345057193,
+      "0.12.0/unified_v12/interval-critic-71": 0.9381522809982926,
+      "0.12.0/unified_v12/interval-critic-71-rel5": 0.9367689795171087,
+      "0.12.0/unified_v11/noise250-prior100": 0.9211611009270104,
+      "0.12.0/empf/noise250-prior100": 0.9041325594600522,
+      "0.11.1/unified_v11/motion-critic-46-prior41": 0.9303328327928326,
+      "0.10.0/empf/noise250-prior100": 0.9041325594600522
+    },
+    "paired_interaction": [
+      -0.06555822222656316,
+      0.058723197207264155,
+      0.006434618233201794,
+      0.12340147634762388,
+      -0.020500760002231777,
+      0.006277408389917527,
+      -0.13245215817829692,
+      0.02658719531705378,
+      -0.05222064677635818
+    ],
+    "passes": false
+  }
+}
