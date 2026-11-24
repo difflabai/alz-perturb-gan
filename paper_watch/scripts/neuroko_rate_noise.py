@@ -72,7 +72,7 @@ def compare_prior_weight(args):
     if args.study == "matched-prior-weight":
         trial = dict(MATCHED_RATE_TRIAL, name="matched-rates-prior100", prior_reg=0.1)
         baseline = MATCHED_RATE_TRIAL
-        references = (MATCHED_RATE_TRIAL, NOISY_PRIOR)
+        references = [(ref["name"], [RELEASE, V12, ref]) for ref in (MATCHED_RATE_TRIAL, NOISY_PRIOR)]
         independent_seeds = [254, 255, 256]
         outer_seeds = list(range(228, 244))
         rule = (
@@ -83,6 +83,20 @@ def compare_prior_weight(args):
             "weight-0.1 candidate as well. If the screen passes, require a lower v12 mean than every "
             "matched and established reference, including both preceding v12 settings, on fresh "
             "training seeds 254–256 before scoring the biological holdout on seeds 228–243."
+        )
+    elif args.study == "double-prior-weight":
+        trial = dict(NOISY_PRIOR, name="noise150-prior200", prior_reg=0.2)
+        baseline = NOISY_PRIOR
+        references = [("prior100-" + arm[1], arm) for arm in paired(NOISY_PRIOR)]
+        independent_seeds = [257, 258, 259]
+        outer_seeds = list(range(300, 316))
+        rule = (
+            "At fixed generator/critic/particle rates 0.014/0.021/0.0406 and latent noise 0.15, "
+            "double the prior weight from 0.1 to 0.2 in all three formulations. Require lower mean "
+            "v12 energy than the two matched weight-0.2 controls and all three weight-0.1 models "
+            "on training seeds 22–24. If this passes, require the frozen v12 to beat all matched "
+            "and established references, including all three weight-0.1 models, on fresh training "
+            "seeds 257–259 before scoring the biological holdout on seeds 300–315."
         )
     else:
         trial = NOISY_PRIOR
@@ -108,11 +122,11 @@ def compare_prior_weight(args):
         if not decision["advances"] or decision["winner"] != trial["name"]:
             raise ValueError("the prior-weight candidate did not pass independent validation")
         confirm_candidate(args, decision, trial, outer_seeds, compare_historical_empf=True,
-                          previous_transport=TRANSPORT["q75-noise25"], v12_references=references)
+                          previous_transport=TRANSPORT["q75-noise25"], reference_arms=references)
         return
 
     matches, arms = comparison(trial, False)
-    arms.extend([RELEASE, V12, reference] for reference in references)
+    arms.extend(arm for _, arm in references)
     write_frozen(args.output / "search.json", dict(rule=rule, arms=arms, groups=list(GROUPS),
                  screen_seeds=REPLICATION_SEEDS, independent_seeds=independent_seeds, outer_seeds=outer_seeds))
     screen_args = copy(args)
@@ -121,12 +135,15 @@ def compare_prior_weight(args):
     scores = evaluate(screen_args, arms, REPLICATION_SEEDS)
     means = {k: mean(v) for k, v in scores.items()}
     own, v11, empf = [key(arm) for arm in matches]
-    passes = means[own] < min(means[v11], means[empf], means[key([RELEASE, V12, baseline])])
+    required = [v11, empf, key([RELEASE, V12, baseline])]
+    if args.study == "double-prior-weight":
+        required.extend(key(arm) for _, arm in references)
+    passes = all(means[own] < means[control] for control in required)
     screened = dict(scores=scores, means=means, passes=passes)
     write_frozen(args.output / "screen.json", screened)
     decision = dict(screening=screened, advances=False, winner=None)
     if passes:
-        decision.update(validate_finalist(args, trial, independent_seeds, v12_references=references))
+        decision.update(validate_finalist(args, trial, independent_seeds, reference_arms=references))
     write_frozen(args.output / "selection.json", decision)
     print("Prior-weight screen passed", passes, "qualified for holdout", decision["advances"], flush=True)
 
@@ -138,7 +155,8 @@ def main():
     parser.add_argument("--workers-per-gpu", type=int, default=2)
     parser.add_argument("--window-cells", type=int)
     parser.add_argument("--stage", choices=("search", "confirm", "compare-releases"), default="search")
-    parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight"), default="rates")
+    parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight"),
+                        default="rates")
     parser.add_argument("--shared-screen", type=Path,
                         help="reuse the seed 22–24 reference receipts for the prior-weight comparison")
     parser.set_defaults(require_constant_lr=True)
@@ -146,7 +164,7 @@ def main():
     for field in ("data", "wheels", "output"):
         setattr(args, field, getattr(args, field).resolve())
     args.output.mkdir(parents=True, exist_ok=True)
-    if args.study in ("prior-weight", "matched-prior-weight"):
+    if args.study != "rates":
         compare_prior_weight(args)
         return
     if args.stage == "compare-releases":

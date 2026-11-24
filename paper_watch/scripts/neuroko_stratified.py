@@ -140,12 +140,11 @@ def validation_controls(finalists):
 
 
 def confirm_candidate(args, selection, chosen, seeds, *, compare_historical_empf=False, previous_transport=None,
-                      noise_reference=None, v12_references=()):
+                      noise_reference=None, reference_arms=()):
     arms, labels = control_arms([chosen])
-    for reference in v12_references:
-        arm = [RELEASE, V12, reference]
+    for label, arm in reference_arms:
         arms.append(arm)
-        labels[reference["name"]] = key(arm)
+        labels[label] = key(arm)
     if noise_reference is not None:
         arm = [RELEASE, V12, noise_reference]
         arms.append(arm)

@@ -242,13 +242,17 @@ For the comparison with the original releases, run the same prior-weight command
 
 On fresh training seeds 251–253, v12 averaged 0.94813 and matched 0.12.0 EMPF averaged 0.93927. V12 won three of nine pairs and one of three seed means. The largest gap was on `Screen1_4`, where EMPF won at each seed. V12 led on `Screen1_3` by 0.0320 in the three-seed mean. These results rule out the stronger-prior candidate at noise 0.15 under its predefined biological holdout criterion.
 
-| Fresh seed, mean over three training folds | V12 energy ↓ | Matched EMPF |
-| --- | ---: | ---: |
-| 251 | 0.97204 | 0.93740 |
-| 252 | 0.93266 | 0.97112 |
-| 253 | 0.93969 | 0.90930 |
+Matched v11 from the 0.12.0 wheel averaged 0.93629. V12 beat it on three of nine pairs and one of the three seed means. Within v12 itself, increasing the penalty from 0.02 to 0.1 also helped on the fresh seeds. Mean energy fell from 0.97650 to 0.94813, an improvement of 2.9%. The higher weight improved seven of nine pairs, all three seed means and each of the four target means.
 
-The generator, critic and particle rates held at 0.014, 0.021 and 0.0406 on every update in all 18 fits. V12's generator and critic adaptive gains also read 1.0 at each of the 36 logged checkpoints per role. For fixed-rate comparisons, the runner replays older cached fits that lack the per-update verification count.
+| Fresh seed, mean over three training folds | V12 energy ↓ | Matched v11 (0.12.0) | Matched EMPF (0.12.0) |
+| --- | ---: | ---: | ---: |
+| 251 | 0.97204 | 0.93236 | 0.93740 |
+| 252 | 0.93266 | 0.91767 | 0.97112 |
+| 253 | 0.93969 | 0.95885 | 0.90930 |
+
+The original 0.10.0 EMPF reproduced the 0.12.0 EMPF per-target measurements exactly across all nine pairs. The original 0.11.1 v11 averaged 0.93856. V12 scored lower on three of nine pairs against each original release. The median fit took 124 s for v12, 147 s for original EMPF and 155 s for original v11 under concurrent GPU workloads. Every one of the 45 fits across the five recipe and release combinations verified all 1,200 updates and matched its corresponding input, initialization and minibatch hashes. [Pinned settings, paired scores, rate checks and timings](neuroko_v12_prior_weight_original_releases.json)
+
+Across all five combinations the generator, critic and particle rates held at 0.014, 0.021 and 0.0406. V12's release recipe sets both `lr_floor` and `network_lr_floor` to 1.0. We checked its schedule at every update through 40,000 and both multipliers stayed at 1.0. In the nine 1,200-update v12 runs, its generator and critic adaptive gains also read 1.0 at each of the 36 logged checkpoints per role. For fixed-rate comparisons, the runner replays older cached fits that lack the per-update verification count.
 
 ### Stronger prior at the replicated matched rates
 
@@ -257,4 +261,15 @@ At generator 0.020, critic 0.042, particles 0.0203 and latent noise 0.025, v12 h
 ```bash
 python paper_watch/scripts/neuroko_rate_noise.py --study matched-prior-weight --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-matched-prior" --shared-screen "$data/v12-rate-noise"
+```
+
+At these rates, raising the prior weight from 0.02 to 0.1 increased v12's nine-pair mean energy from 0.97744 to 0.98734. The stronger weight improved four of nine pairs and one of three seed means, which rules out independent validation under the screening criterion. All 18 v12 fits verified constant learning rates at every update. At update 1,200, the native generator step gain averaged 0.9190 with weight 0.02 and 0.9289 with weight 0.1.
+
+### Doubling the prior penalty at latent noise 0.15
+
+At noise 0.15 and generator, critic and particle rates of 0.014, 0.021 and 0.0406, the within-v12 improvement at weight 0.1 repeated on the fresh cohort. We chose a single further increase to 0.2, with all learning rates fixed and the larger weight assigned to all three formulations. On seeds 22–24, weight-0.2 v12 must beat matched v11 and EMPF as well as all three models at weight 0.1. Independent training seeds 257–259 and biological holdout seeds 300–315 were reserved before fitting. Only a lower independent mean than every frozen reference qualifies for that holdout.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study double-prior-weight --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-double-prior" --shared-screen "$data/v12-rate-noise"
 ```

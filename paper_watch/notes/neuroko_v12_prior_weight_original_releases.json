@@ -1,0 +1,2278 @@
+{
+  "protocol": {
+    "arms": [
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "matched-empf",
+          "lr": 0.014,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "matched-v11",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "matched-v11",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "matched-empf",
+          "lr": 0.014,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "seeds": [
+      251,
+      252,
+      253
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "metric": "Mean four-target energy at 1200 fixed-rate updates on the independent training folds."
+  },
+  "scores": {
+    "0.10.0/empf/matched-empf": [
+      1.1782337563771947,
+      0.596869895054368,
+      1.037083341996178,
+      1.251919889228063,
+      0.6389216476104449,
+      1.0225041471579464,
+      1.0841291901562045,
+      0.6363469504892887,
+      1.00743526196698
+    ],
+    "0.11.1/unified_v11/matched-v11": [
+      1.2334354025155145,
+      0.6042845607459895,
+      1.0248370462606031,
+      1.1325065486354537,
+      0.6134542989279559,
+      1.0834271169374992,
+      1.1087890679692805,
+      0.557358862243637,
+      1.0889589525759413
+    ],
+    "0.12.0/unified_v12/noise150-prior100": [
+      1.2416175990552027,
+      0.6164895345613126,
+      1.0580231282066397,
+      1.0948545996209305,
+      0.5953818442191594,
+      1.1077428637219089,
+      1.179260337919627,
+      0.5642726022381039,
+      1.0755465393014312
+    ],
+    "0.12.0/unified_v11/matched-v11": [
+      1.1918541036624604,
+      0.6032821721996282,
+      1.0019506404269987,
+      1.0952213699380524,
+      0.5781007951246873,
+      1.0796729593112,
+      1.1878467111179596,
+      0.6416084032952694,
+      1.0471045045813436
+    ],
+    "0.12.0/empf/matched-empf": [
+      1.1782337563771947,
+      0.596869895054368,
+      1.037083341996178,
+      1.251919889228063,
+      0.6389216476104449,
+      1.0225041471579464,
+      1.0841291901562045,
+      0.6363469504892887,
+      1.00743526196698
+    ]
+  },
+  "summaries": {
+    "0.10.0/empf/matched-empf": {
+      "energy": 0.9392715644485187,
+      "v12_minus_arm": 0.008860552089738634,
+      "v12_pairs_won": 3
+    },
+    "0.11.1/unified_v11/matched-v11": {
+      "energy": 0.9385613174235417,
+      "v12_minus_arm": 0.009570799114715688,
+      "v12_pairs_won": 3
+    },
+    "0.12.0/unified_v12/noise150-prior100": {
+      "energy": 0.9481321165382574,
+      "v12_minus_arm": 0.0,
+      "v12_pairs_won": 0
+    },
+    "0.12.0/unified_v11/matched-v11": {
+      "energy": 0.9362935177397332,
+      "v12_minus_arm": 0.011838598798524039,
+      "v12_pairs_won": 3
+    },
+    "0.12.0/empf/matched-empf": {
+      "energy": 0.9392715644485187,
+      "v12_minus_arm": 0.008860552089738634,
+      "v12_pairs_won": 3
+    }
+  },
+  "cells": [
+    {
+      "seed": 251,
+      "group": "Screen1_1",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "initial_parameters_sha256": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+      "training_batches_sha256": "dde3a72737ee81577630c4da56ae2dda3deaf70c92b040bce2b82b2bad93b798",
+      "visible_devices": "1"
+    },
+    {
+      "seed": 251,
+      "group": "Screen1_3",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "initial_parameters_sha256": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+      "training_batches_sha256": "fce0d152e0171eb434dec3ab059d4c0f6522a7353d2ea60d3dd23dbafd3de8dd",
+      "visible_devices": "0"
+    },
+    {
+      "seed": 251,
+      "group": "Screen1_4",
+      "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "initial_parameters_sha256": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+      "training_batches_sha256": "b09e7ed029a1a57ca608f5e7221125703ccd251c0a71c30d120250ff5b906017",
+      "visible_devices": "1"
+    },
+    {
+      "seed": 252,
+      "group": "Screen1_1",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "initial_parameters_sha256": "3ad24a61fcf8c521119ac4120a98493804afe62c7b396431157945ba95fcb6e8",
+      "training_batches_sha256": "8d0bf3fddf0be37947a89ba4d6724dcbaa80727608258900a8b757619ab62205",
+      "visible_devices": "0"
+    },
+    {
+      "seed": 252,
+      "group": "Screen1_3",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "initial_parameters_sha256": "3ad24a61fcf8c521119ac4120a98493804afe62c7b396431157945ba95fcb6e8",
+      "training_batches_sha256": "d7708476357b653925372cc5946922581eb1505c06ee1ec6ce5498521d04d8c5",
+      "visible_devices": "1"
+    },
+    {
+      "seed": 252,
+      "group": "Screen1_4",
+      "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "initial_parameters_sha256": "3ad24a61fcf8c521119ac4120a98493804afe62c7b396431157945ba95fcb6e8",
+      "training_batches_sha256": "2998e270704a0803f7506f62e14da9481f228c8f07f8192eccc6b10b754b57bc",
+      "visible_devices": "0"
+    },
+    {
+      "seed": 253,
+      "group": "Screen1_1",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "initial_parameters_sha256": "dff75aafac51b66bf4af10a5ebd544631bc91405c3b3b33bb98f7c0ce42d25b7",
+      "training_batches_sha256": "0d7e0388610a199b73f5b4e9c3ae924f2e35e133052b59e26fc463073be48639",
+      "visible_devices": "1"
+    },
+    {
+      "seed": 253,
+      "group": "Screen1_3",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "initial_parameters_sha256": "dff75aafac51b66bf4af10a5ebd544631bc91405c3b3b33bb98f7c0ce42d25b7",
+      "training_batches_sha256": "d430b3b285f0a4df8745a19dbc03e129a3c6ca7141e31d64b97ead13a3be9ab4",
+      "visible_devices": "0"
+    },
+    {
+      "seed": 253,
+      "group": "Screen1_4",
+      "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "initial_parameters_sha256": "dff75aafac51b66bf4af10a5ebd544631bc91405c3b3b33bb98f7c0ce42d25b7",
+      "training_batches_sha256": "bf6e4b56e1034060daf6794263f512e0ee510bfef1a5f9c5262a5918bc237abc",
+      "visible_devices": "1"
+    }
+  ],
+  "per_arm": {
+    "0.10.0/empf/matched-empf": [
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.1782337563771947,
+          "shift_cosine": -0.02857459792697384,
+          "spread_ratio": 1.2471570147943465
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.1982005462776417,
+            "shift_cosine": 0.2364000401866081,
+            "spread_ratio": 1.2067681800810783
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1611806099815025,
+            "shift_cosine": -0.044254409351521126,
+            "spread_ratio": 1.2673662834085146
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.1676296631759753,
+            "shift_cosine": 0.2160331111923097,
+            "spread_ratio": 1.2591017431494498
+          },
+          "MAMSTR": {
+            "energy_distance": 1.1859242060736594,
+            "shift_cosine": -0.522477133735292,
+            "spread_ratio": 1.2553918525383434
+          }
+        },
+        "seconds": 146.88229941693135,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.596869895054368,
+          "shift_cosine": -0.14187411734324884,
+          "spread_ratio": 1.2248315912263334
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6339956603324923,
+            "shift_cosine": -0.1942374155075984,
+            "spread_ratio": 1.225779007900035
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.5784420487394746,
+            "shift_cosine": -0.2229214368162701,
+            "spread_ratio": 1.246378385011563
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.6571246642735842,
+            "shift_cosine": -0.14664075206439292,
+            "spread_ratio": 1.247946233973983
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5179172068719211,
+            "shift_cosine": -0.0036968649847339548,
+            "spread_ratio": 1.1792227380197526
+          }
+        },
+        "seconds": 246.4878378950525,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.037083341996178,
+          "shift_cosine": 0.26239136150638964,
+          "spread_ratio": 1.0162908177801886
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.0105752929954575,
+            "shift_cosine": 0.2777516620665964,
+            "spread_ratio": 1.0123974663783533
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1110444552568595,
+            "shift_cosine": 0.4596093583825409,
+            "spread_ratio": 1.020509393223978
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.9146632710126088,
+            "shift_cosine": 0.2608583834723023,
+            "spread_ratio": 1.0105964221405122
+          },
+          "MAMSTR": {
+            "energy_distance": 1.1120503487197864,
+            "shift_cosine": 0.05134604210411886,
+            "spread_ratio": 1.021659989377911
+          }
+        },
+        "seconds": 71.48424494685605,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.251919889228063,
+          "shift_cosine": 0.07857693469368099,
+          "spread_ratio": 1.2609928771496675
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.2774465988991945,
+            "shift_cosine": 0.3002854613968728,
+            "spread_ratio": 1.2009881698123956
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1465991310224117,
+            "shift_cosine": -0.009983858415156888,
+            "spread_ratio": 1.2799657208028625
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.325170786522075,
+            "shift_cosine": -0.14358987741566465,
+            "spread_ratio": 1.2801867720917774
+          },
+          "MAMSTR": {
+            "energy_distance": 1.2584630404685706,
+            "shift_cosine": 0.1675960132086727,
+            "spread_ratio": 1.2828308458916347
+          }
+        },
+        "seconds": 266.5653034471907,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.6389216476104449,
+          "shift_cosine": -0.12949581418591466,
+          "spread_ratio": 1.2500569110473552
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6164195985765106,
+            "shift_cosine": -0.04028846849041453,
+            "spread_ratio": 1.2625550671978871
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.6208524913455831,
+            "shift_cosine": -0.1421073299380821,
+            "spread_ratio": 1.2555696635866889
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.7505684206641421,
+            "shift_cosine": -0.1859040722922389,
+            "spread_ratio": 1.268184907138
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5678460798555438,
+            "shift_cosine": -0.14968338602292316,
+            "spread_ratio": 1.2139180062668444
+          }
+        },
+        "seconds": 80.90004059206694,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.0225041471579464,
+          "shift_cosine": 0.15671697480952046,
+          "spread_ratio": 1.0010359645490108
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.0173135874301815,
+            "shift_cosine": 0.037501555991016136,
+            "spread_ratio": 1.000000851366111
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.055474831469538,
+            "shift_cosine": 0.2583377129208942,
+            "spread_ratio": 1.0197154895124163
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.9384770028056115,
+            "shift_cosine": 0.4505551826376939,
+            "spread_ratio": 0.9933102890233674
+          },
+          "MAMSTR": {
+            "energy_distance": 1.0787511669264545,
+            "shift_cosine": -0.11952655231152241,
+            "spread_ratio": 0.9911172282941482
+          }
+        },
+        "seconds": 249.7687010448426,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.0841291901562045,
+          "shift_cosine": -0.1324962312902339,
+          "spread_ratio": 1.2665497925680271
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.1239276077268467,
+            "shift_cosine": -0.12720676594991182,
+            "spread_ratio": 1.2274281860476361
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.0031056626054182,
+            "shift_cosine": -0.2634201204226079,
+            "spread_ratio": 1.299072690330657
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.0756968304092478,
+            "shift_cosine": -0.39788303238864403,
+            "spread_ratio": 1.2672657737765343
+          },
+          "MAMSTR": {
+            "energy_distance": 1.133786659883305,
+            "shift_cosine": 0.258524993600228,
+            "spread_ratio": 1.2724325201172806
+          }
+        },
+        "seconds": 106.19195874081925,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.6363469504892887,
+          "shift_cosine": -0.1598537147994953,
+          "spread_ratio": 1.2496834795131675
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6998697712537156,
+            "shift_cosine": -0.12443070206798382,
+            "spread_ratio": 1.2804613434357552
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.5722975806175485,
+            "shift_cosine": -0.03353881651633581,
+            "spread_ratio": 1.2415472416929993
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.7047918210349016,
+            "shift_cosine": -0.14659287056969125,
+            "spread_ratio": 1.2739503048289282
+          },
+          "MAMSTR": {
+            "energy_distance": 0.568428629050989,
+            "shift_cosine": -0.3348524700439704,
+            "spread_ratio": 1.2027750280949876
+          }
+        },
+        "seconds": 311.9965902559925,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.00743526196698,
+          "shift_cosine": 0.0030462007654525136,
+          "spread_ratio": 1.019521826058061
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.9499031013334971,
+            "shift_cosine": 0.07012859915413723,
+            "spread_ratio": 1.0153649438918262
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.9932250483532652,
+            "shift_cosine": -0.0048555475906948975,
+            "spread_ratio": 1.0300806970868834
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.9936928208522104,
+            "shift_cosine": -0.026257776232628288,
+            "spread_ratio": 1.0151794686566524
+          },
+          "MAMSTR": {
+            "energy_distance": 1.0929200773289471,
+            "shift_cosine": -0.02683047226900399,
+            "spread_ratio": 1.0174621945968816
+          }
+        },
+        "seconds": 118.73785161599517,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      }
+    ],
+    "0.11.1/unified_v11/matched-v11": [
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.2334354025155145,
+          "shift_cosine": 0.06208945002386895,
+          "spread_ratio": 1.1886302328897314
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.2911035945330145,
+            "shift_cosine": 0.16318794717882867,
+            "spread_ratio": 1.1798539535797474
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1621182584027112,
+            "shift_cosine": -0.04525772945741793,
+            "spread_ratio": 1.2012130410125823
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.2567813257274478,
+            "shift_cosine": -0.05223958852369785,
+            "spread_ratio": 1.1942439241173854
+          },
+          "MAMSTR": {
+            "energy_distance": 1.2237384313988846,
+            "shift_cosine": 0.1826671708977629,
+            "spread_ratio": 1.17921001284921
+          }
+        },
+        "seconds": 132.13230811804533,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.6042845607459895,
+          "shift_cosine": 0.12715868542690614,
+          "spread_ratio": 1.165062473799667
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6645125804827998,
+            "shift_cosine": 0.15402139463552514,
+            "spread_ratio": 1.1781708413267833
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.573679280414713,
+            "shift_cosine": 0.3755308431606235,
+            "spread_ratio": 1.1662633997015461
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.6578292176560554,
+            "shift_cosine": 0.11782557570011733,
+            "spread_ratio": 1.1964859175798956
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5211171644303896,
+            "shift_cosine": -0.13874307178864143,
+            "spread_ratio": 1.1193297365904433
+          }
+        },
+        "seconds": 262.8854632950388,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.0248370462606031,
+          "shift_cosine": -0.02496425402476586,
+          "spread_ratio": 0.9825025797290985
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.0818710664534654,
+            "shift_cosine": -0.14718554212165566,
+            "spread_ratio": 0.9626104724647114
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.0222939724833644,
+            "shift_cosine": 0.040899657622758843,
+            "spread_ratio": 1.0032060049884517
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.91476896935586,
+            "shift_cosine": -0.3287483284875874,
+            "spread_ratio": 0.9901092241149929
+          },
+          "MAMSTR": {
+            "energy_distance": 1.0804141767497226,
+            "shift_cosine": 0.33517719688742076,
+            "spread_ratio": 0.974084617348238
+          }
+        },
+        "seconds": 137.0851901071146,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.1325065486354537,
+          "shift_cosine": 0.0172906421971177,
+          "spread_ratio": 1.2150588718636526
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.1676255638949549,
+            "shift_cosine": -0.09876451076000499,
+            "spread_ratio": 1.1904681324669366
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.120880968754375,
+            "shift_cosine": 0.0975907040046299,
+            "spread_ratio": 1.232353162145691
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.150809740951848,
+            "shift_cosine": 0.024168317278094684,
+            "spread_ratio": 1.2142425136750412
+          },
+          "MAMSTR": {
+            "energy_distance": 1.090709920940637,
+            "shift_cosine": 0.04616805826575121,
+            "spread_ratio": 1.2231716791669416
+          }
+        },
+        "seconds": 265.93037649895996,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.6134542989279559,
+          "shift_cosine": 0.07135464789075388,
+          "spread_ratio": 1.151728821036743
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.5897871083534598,
+            "shift_cosine": 0.24500046160184005,
+            "spread_ratio": 1.1638871168424774
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.6538767312089329,
+            "shift_cosine": -0.1383375110144164,
+            "spread_ratio": 1.175188275084384
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.6712075943891049,
+            "shift_cosine": -0.009699812821298063,
+            "spread_ratio": 1.1729237340200442
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5389457617603259,
+            "shift_cosine": 0.18845545379688997,
+            "spread_ratio": 1.0949161582000655
+          }
+        },
+        "seconds": 140.72475406597368,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.0834271169374992,
+          "shift_cosine": 0.02604547592407874,
+          "spread_ratio": 0.9779044975264873
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.122407385489411,
+            "shift_cosine": -0.1438103427546323,
+            "spread_ratio": 0.9516775687795378
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.131186267267319,
+            "shift_cosine": 0.0017067361607375202,
+            "spread_ratio": 1.0079783004619616
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.9895761163063677,
+            "shift_cosine": 0.29661392749190724,
+            "spread_ratio": 0.973030149834383
+          },
+          "MAMSTR": {
+            "energy_distance": 1.090538698686899,
+            "shift_cosine": -0.05032841720169749,
+            "spread_ratio": 0.9789319710300671
+          }
+        },
+        "seconds": 241.07639519893564,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.1087890679692805,
+          "shift_cosine": -0.11555517395948708,
+          "spread_ratio": 1.1980624568168692
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.136731383755854,
+            "shift_cosine": -0.27284510549981,
+            "spread_ratio": 1.1464090021591795
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.9974618462593021,
+            "shift_cosine": -0.15126088032227472,
+            "spread_ratio": 1.1992648311453598
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.1644260589732278,
+            "shift_cosine": -0.055724255955037175,
+            "spread_ratio": 1.2176826921563983
+          },
+          "MAMSTR": {
+            "energy_distance": 1.136536982888738,
+            "shift_cosine": 0.017609545939173542,
+            "spread_ratio": 1.2288933018065389
+          }
+        },
+        "seconds": 124.47974521620199,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.557358862243637,
+          "shift_cosine": -0.06909094123502614,
+          "spread_ratio": 1.205643573294378
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.612006425551419,
+            "shift_cosine": -0.1332330233950682,
+            "spread_ratio": 1.215111024592687
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.5580860118980473,
+            "shift_cosine": -0.19658849318232197,
+            "spread_ratio": 1.2341123972817505
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.5631365189295652,
+            "shift_cosine": 0.06867450692577048,
+            "spread_ratio": 1.2187292394507432
+          },
+          "MAMSTR": {
+            "energy_distance": 0.4962064925955163,
+            "shift_cosine": -0.015216755288484887,
+            "spread_ratio": 1.1546216318523317
+          }
+        },
+        "seconds": 247.6386118689552,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.0889589525759413,
+          "shift_cosine": 0.07268884824556782,
+          "spread_ratio": 1.010507533701873
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.0595434105032444,
+            "shift_cosine": 0.0550670744041392,
+            "spread_ratio": 0.9950295264841008
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1719350918579838,
+            "shift_cosine": 0.13689742583489858,
+            "spread_ratio": 1.0304961973430826
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.0171560914951545,
+            "shift_cosine": 0.11177375694923918,
+            "spread_ratio": 1.0004327849573909
+          },
+          "MAMSTR": {
+            "energy_distance": 1.1072012164473826,
+            "shift_cosine": -0.012982864206005706,
+            "spread_ratio": 1.0160716260229177
+          }
+        },
+        "seconds": 154.6594774730038,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      }
+    ],
+    "0.12.0/unified_v12/noise150-prior100": [
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.2416175990552027,
+          "shift_cosine": 0.08905810333761423,
+          "spread_ratio": 1.1663795232908178
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.3167983336620415,
+            "shift_cosine": 0.01902761343451922,
+            "spread_ratio": 1.171199710778587
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.073240290349161,
+            "shift_cosine": 0.31581057183109174,
+            "spread_ratio": 1.1707987323754887
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.3349927833001534,
+            "shift_cosine": 0.0010932919977920852,
+            "spread_ratio": 1.1646386698423477
+          },
+          "MAMSTR": {
+            "energy_distance": 1.2414389889094553,
+            "shift_cosine": 0.02030093608705388,
+            "spread_ratio": 1.1588809801668483
+          }
+        },
+        "seconds": 121.62852129107341,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.6164895345613126,
+          "shift_cosine": 0.05719429350750198,
+          "spread_ratio": 1.1934695767147516
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6323702029929867,
+            "shift_cosine": 0.13161421015290514,
+            "spread_ratio": 1.219875661515326
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.609838225157362,
+            "shift_cosine": -0.04524533357801382,
+            "spread_ratio": 1.1992382438683518
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.6360429402333869,
+            "shift_cosine": 0.20978982939769794,
+            "spread_ratio": 1.2325029486628511
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5877067698615148,
+            "shift_cosine": -0.06738153194258135,
+            "spread_ratio": 1.1222614528124775
+          }
+        },
+        "seconds": 143.57231929595582,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.0580231282066397,
+          "shift_cosine": 0.13701188623877156,
+          "spread_ratio": 0.987449566555002
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.0751727698084723,
+            "shift_cosine": 0.0667314858980651,
+            "spread_ratio": 0.9774397950861258
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.0972253422640978,
+            "shift_cosine": 0.3803615828748534,
+            "spread_ratio": 0.9950220867402725
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.9750603678969174,
+            "shift_cosine": -0.240356167050193,
+            "spread_ratio": 1.0025915706991
+          },
+          "MAMSTR": {
+            "energy_distance": 1.0846340328570712,
+            "shift_cosine": 0.34131064323236077,
+            "spread_ratio": 0.9747448136945097
+          }
+        },
+        "seconds": 98.53226238605566,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.0948545996209305,
+          "shift_cosine": 0.13912300013202758,
+          "spread_ratio": 1.2047814953500167
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.14614750135628,
+            "shift_cosine": 0.22491869348774007,
+            "spread_ratio": 1.1764419503056522
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.0326295860565669,
+            "shift_cosine": 0.2158687991964752,
+            "spread_ratio": 1.2134634122553807
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.1024662520922544,
+            "shift_cosine": -0.08762435500472447,
+            "spread_ratio": 1.216397444510279
+          },
+          "MAMSTR": {
+            "energy_distance": 1.0981750589786206,
+            "shift_cosine": 0.20332886284861948,
+            "spread_ratio": 1.2128231743287545
+          }
+        },
+        "seconds": 148.48396856617182,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.5953818442191594,
+          "shift_cosine": -0.054355356601360344,
+          "spread_ratio": 1.2096427333261952
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6416801359712467,
+            "shift_cosine": 0.10842242873733282,
+            "spread_ratio": 1.2319971613051048
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.5306653210625543,
+            "shift_cosine": -0.07236721618922068,
+            "spread_ratio": 1.2191574181911902
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.6230511533558749,
+            "shift_cosine": -0.09309499670300572,
+            "spread_ratio": 1.2443717221788435
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5861307664869617,
+            "shift_cosine": -0.1603816422505478,
+            "spread_ratio": 1.1430446316296425
+          }
+        },
+        "seconds": 91.88432157807983,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.1077428637219089,
+          "shift_cosine": -0.27363685631854373,
+          "spread_ratio": 0.9840878580482585
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.1798033684277023,
+            "shift_cosine": -0.4096928076795238,
+            "spread_ratio": 0.9527181298328213
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1347824561802433,
+            "shift_cosine": -0.14750238513259664,
+            "spread_ratio": 1.009995447998018
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.033111813422872,
+            "shift_cosine": -0.16612946082706284,
+            "spread_ratio": 0.9831179770348754
+          },
+          "MAMSTR": {
+            "energy_distance": 1.083273816856818,
+            "shift_cosine": -0.37122277163499173,
+            "spread_ratio": 0.9905198773273193
+          }
+        },
+        "seconds": 172.47788055683486,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.179260337919627,
+          "shift_cosine": -0.13820183940004632,
+          "spread_ratio": 1.1918249931310971
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.1795742231315813,
+            "shift_cosine": -0.2867583960353691,
+            "spread_ratio": 1.1679952946773688
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.0570323627383953,
+            "shift_cosine": -0.23301983054500627,
+            "spread_ratio": 1.1954081866243282
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.278486342600381,
+            "shift_cosine": -0.29582967619543177,
+            "spread_ratio": 1.1927806878015226
+          },
+          "MAMSTR": {
+            "energy_distance": 1.20194842320815,
+            "shift_cosine": 0.2628005451756219,
+            "spread_ratio": 1.211115803421169
+          }
+        },
+        "seconds": 124.44472604501061,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.5642726022381039,
+          "shift_cosine": 0.14322081100432682,
+          "spread_ratio": 1.2129938570206893
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.5577874781488434,
+            "shift_cosine": -0.025391277988158805,
+            "spread_ratio": 1.2299251151720316
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.5024519563466834,
+            "shift_cosine": 0.2348643507965569,
+            "spread_ratio": 1.2358624173729038
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.6302221878745113,
+            "shift_cosine": 0.1900360242417514,
+            "spread_ratio": 1.2281569446311822
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5666287865823776,
+            "shift_cosine": 0.1733741469671578,
+            "spread_ratio": 1.1580309509066393
+          }
+        },
+        "seconds": 155.15670925099403,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.0755465393014312,
+          "shift_cosine": -0.13321798039559707,
+          "spread_ratio": 0.9976112291605963
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.090649866505978,
+            "shift_cosine": -0.17141571355742655,
+            "spread_ratio": 0.9738378132734261
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1139484799638009,
+            "shift_cosine": -0.12023076540758827,
+            "spread_ratio": 0.9959124486339203
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.9402397710036077,
+            "shift_cosine": -0.2466068616252788,
+            "spread_ratio": 1.00527974439184
+          },
+          "MAMSTR": {
+            "energy_distance": 1.1573480397323381,
+            "shift_cosine": 0.005381419007905325,
+            "spread_ratio": 1.0154149103431989
+          }
+        },
+        "seconds": 111.88463132013567,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      }
+    ],
+    "0.12.0/unified_v11/matched-v11": [
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.1918541036624604,
+          "shift_cosine": 0.1961957938055743,
+          "spread_ratio": 1.1799476267628566
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.1857416932743465,
+            "shift_cosine": 0.19154133414522825,
+            "spread_ratio": 1.170239311315804
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.0985743524797806,
+            "shift_cosine": 0.3157435235616793,
+            "spread_ratio": 1.1898102569433073
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.2264486751915813,
+            "shift_cosine": 0.009693446357157322,
+            "spread_ratio": 1.17382002838081
+          },
+          "MAMSTR": {
+            "energy_distance": 1.256651693704133,
+            "shift_cosine": 0.26780487115823237,
+            "spread_ratio": 1.1859209104115054
+          }
+        },
+        "seconds": 92.57876219484024,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.6032821721996282,
+          "shift_cosine": -0.00246121993550403,
+          "spread_ratio": 1.2046559353817914
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.639166144046043,
+            "shift_cosine": -0.05083843457874117,
+            "spread_ratio": 1.2139445699331162
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.5558874196291947,
+            "shift_cosine": 0.2422267717914412,
+            "spread_ratio": 1.2131694927009902
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.6423724808374471,
+            "shift_cosine": 0.026858393093201715,
+            "spread_ratio": 1.2384163231994747
+          },
+          "MAMSTR": {
+            "energy_distance": 0.575702644285828,
+            "shift_cosine": -0.22809161004791786,
+            "spread_ratio": 1.1530933556935845
+          }
+        },
+        "seconds": 155.0346349030733,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.0019506404269987,
+          "shift_cosine": -0.13713627366906458,
+          "spread_ratio": 1.0145222178581037
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.0568154131319059,
+            "shift_cosine": -0.3302483851420123,
+            "spread_ratio": 0.9925049049416267
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.9857281664933772,
+            "shift_cosine": -0.013110422487675993,
+            "spread_ratio": 1.0243371830613919
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.9655758657651603,
+            "shift_cosine": -0.048536743382835625,
+            "spread_ratio": 1.0096473452282821
+          },
+          "MAMSTR": {
+            "energy_distance": 0.9996831163175512,
+            "shift_cosine": -0.1566495436637344,
+            "spread_ratio": 1.031599438201114
+          }
+        },
+        "seconds": 97.86818604590371,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.0952213699380524,
+          "shift_cosine": -0.08271444312872114,
+          "spread_ratio": 1.1990132500802033
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.1380816622843577,
+            "shift_cosine": -0.23992500091638747,
+            "spread_ratio": 1.1668685017068172
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.0500462293306496,
+            "shift_cosine": -0.049821203473556265,
+            "spread_ratio": 1.2032603817706478
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.0511187485412208,
+            "shift_cosine": -0.09532195378926678,
+            "spread_ratio": 1.2061763767759544
+          },
+          "MAMSTR": {
+            "energy_distance": 1.1416388395959816,
+            "shift_cosine": 0.05421038566432595,
+            "spread_ratio": 1.2197477400673942
+          }
+        },
+        "seconds": 154.34120994992554,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.5781007951246873,
+          "shift_cosine": 0.08880231128752912,
+          "spread_ratio": 1.1991092457682546
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6053680777773325,
+            "shift_cosine": 0.03484841701547128,
+            "spread_ratio": 1.2185214181276436
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.5515895517057858,
+            "shift_cosine": 0.19115385142404848,
+            "spread_ratio": 1.2043931868560755
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.6004975123608158,
+            "shift_cosine": 0.22143583628247002,
+            "spread_ratio": 1.2164433175726204
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5549480386548149,
+            "shift_cosine": -0.09222885957187327,
+            "spread_ratio": 1.1570790605166787
+          }
+        },
+        "seconds": 104.546854729997,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.0796729593112,
+          "shift_cosine": -0.2091272259018364,
+          "spread_ratio": 0.9945032022183637
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.0909827746726988,
+            "shift_cosine": -0.2820020435759864,
+            "spread_ratio": 0.9987245676696722
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1185840945684236,
+            "shift_cosine": -0.23999940194782468,
+            "spread_ratio": 1.0108614780063667
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.0479885591092941,
+            "shift_cosine": -0.08644812719114396,
+            "spread_ratio": 0.9775589119962603
+          },
+          "MAMSTR": {
+            "energy_distance": 1.0611364088943835,
+            "shift_cosine": -0.2280593308923906,
+            "spread_ratio": 0.9908678512011557
+          }
+        },
+        "seconds": 156.54713493795134,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.1878467111179596,
+          "shift_cosine": -0.054145353246696504,
+          "spread_ratio": 1.2106351130923825
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.176480913893096,
+            "shift_cosine": -0.11542105656011012,
+            "spread_ratio": 1.1843026536371812
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1770226968242303,
+            "shift_cosine": -0.13848662734069428,
+            "spread_ratio": 1.2247239147103273
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.2016530109873678,
+            "shift_cosine": -0.11802930161468618,
+            "spread_ratio": 1.2248071653854007
+          },
+          "MAMSTR": {
+            "energy_distance": 1.1962302227671442,
+            "shift_cosine": 0.15535557252870455,
+            "spread_ratio": 1.2087067186366212
+          }
+        },
+        "seconds": 115.29733840399422,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.6416084032952694,
+          "shift_cosine": 0.09023438408274957,
+          "spread_ratio": 1.2475286465578885
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6411459631066725,
+            "shift_cosine": 0.2193581202772946,
+            "spread_ratio": 1.2432799665455052
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.6491197614256494,
+            "shift_cosine": 0.21457015270630964,
+            "spread_ratio": 1.2524650417836145
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.6911290192614921,
+            "shift_cosine": -0.17921124501303182,
+            "spread_ratio": 1.2936125410835055
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5850388693872635,
+            "shift_cosine": 0.10622050836042587,
+            "spread_ratio": 1.200757036818929
+          }
+        },
+        "seconds": 163.61907107685693,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.0471045045813436,
+          "shift_cosine": -0.02674116438778874,
+          "spread_ratio": 1.020313017513079
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.9822333521721616,
+            "shift_cosine": 0.09334319743526272,
+            "spread_ratio": 1.002191994392587
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1291330451038597,
+            "shift_cosine": 0.044320549904624494,
+            "spread_ratio": 1.023773464029108
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.993338621396914,
+            "shift_cosine": 0.05669120443172818,
+            "spread_ratio": 1.0229264805971323
+          },
+          "MAMSTR": {
+            "energy_distance": 1.0837129996524393,
+            "shift_cosine": -0.30131960932277035,
+            "spread_ratio": 1.032360131033489
+          }
+        },
+        "seconds": 114.13381915097125,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      }
+    ],
+    "0.12.0/empf/matched-empf": [
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.1782337563771947,
+          "shift_cosine": -0.02857459792697384,
+          "spread_ratio": 1.2471570147943465
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.1982005462776417,
+            "shift_cosine": 0.2364000401866081,
+            "spread_ratio": 1.2067681800810783
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1611806099815025,
+            "shift_cosine": -0.044254409351521126,
+            "spread_ratio": 1.2673662834085146
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.1676296631759753,
+            "shift_cosine": 0.2160331111923097,
+            "spread_ratio": 1.2591017431494498
+          },
+          "MAMSTR": {
+            "energy_distance": 1.1859242060736594,
+            "shift_cosine": -0.522477133735292,
+            "spread_ratio": 1.2553918525383434
+          }
+        },
+        "seconds": 73.51159657584503,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.596869895054368,
+          "shift_cosine": -0.14187411734324884,
+          "spread_ratio": 1.2248315912263334
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6339956603324923,
+            "shift_cosine": -0.1942374155075984,
+            "spread_ratio": 1.225779007900035
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.5784420487394746,
+            "shift_cosine": -0.2229214368162701,
+            "spread_ratio": 1.246378385011563
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.6571246642735842,
+            "shift_cosine": -0.14664075206439292,
+            "spread_ratio": 1.247946233973983
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5179172068719211,
+            "shift_cosine": -0.0036968649847339548,
+            "spread_ratio": 1.1792227380197526
+          }
+        },
+        "seconds": 243.6329633030109,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 251,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.037083341996178,
+          "shift_cosine": 0.26239136150638964,
+          "spread_ratio": 1.0162908177801886
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.0105752929954575,
+            "shift_cosine": 0.2777516620665964,
+            "spread_ratio": 1.0123974663783533
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1110444552568595,
+            "shift_cosine": 0.4596093583825409,
+            "spread_ratio": 1.020509393223978
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.9146632710126088,
+            "shift_cosine": 0.2608583834723023,
+            "spread_ratio": 1.0105964221405122
+          },
+          "MAMSTR": {
+            "energy_distance": 1.1120503487197864,
+            "shift_cosine": 0.05134604210411886,
+            "spread_ratio": 1.021659989377911
+          }
+        },
+        "seconds": 131.86542071495205,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.251919889228063,
+          "shift_cosine": 0.07857693469368099,
+          "spread_ratio": 1.2609928771496675
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.2774465988991945,
+            "shift_cosine": 0.3002854613968728,
+            "spread_ratio": 1.2009881698123956
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.1465991310224117,
+            "shift_cosine": -0.009983858415156888,
+            "spread_ratio": 1.2799657208028625
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.325170786522075,
+            "shift_cosine": -0.14358987741566465,
+            "spread_ratio": 1.2801867720917774
+          },
+          "MAMSTR": {
+            "energy_distance": 1.2584630404685706,
+            "shift_cosine": 0.1675960132086727,
+            "spread_ratio": 1.2828308458916347
+          }
+        },
+        "seconds": 276.2297074899543,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.6389216476104449,
+          "shift_cosine": -0.12949581418591466,
+          "spread_ratio": 1.2500569110473552
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6164195985765106,
+            "shift_cosine": -0.04028846849041453,
+            "spread_ratio": 1.2625550671978871
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.6208524913455831,
+            "shift_cosine": -0.1421073299380821,
+            "spread_ratio": 1.2555696635866889
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.7505684206641421,
+            "shift_cosine": -0.1859040722922389,
+            "spread_ratio": 1.268184907138
+          },
+          "MAMSTR": {
+            "energy_distance": 0.5678460798555438,
+            "shift_cosine": -0.14968338602292316,
+            "spread_ratio": 1.2139180062668444
+          }
+        },
+        "seconds": 134.88245343999006,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 252,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.0225041471579464,
+          "shift_cosine": 0.15671697480952046,
+          "spread_ratio": 1.0010359645490108
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.0173135874301815,
+            "shift_cosine": 0.037501555991016136,
+            "spread_ratio": 1.000000851366111
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.055474831469538,
+            "shift_cosine": 0.2583377129208942,
+            "spread_ratio": 1.0197154895124163
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.9384770028056115,
+            "shift_cosine": 0.4505551826376939,
+            "spread_ratio": 0.9933102890233674
+          },
+          "MAMSTR": {
+            "energy_distance": 1.0787511669264545,
+            "shift_cosine": -0.11952655231152241,
+            "spread_ratio": 0.9911172282941482
+          }
+        },
+        "seconds": 254.57744802185334,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_1"
+        ],
+        "means": {
+          "energy_distance": 1.0841291901562045,
+          "shift_cosine": -0.1324962312902339,
+          "spread_ratio": 1.2665497925680271
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 1.1239276077268467,
+            "shift_cosine": -0.12720676594991182,
+            "spread_ratio": 1.2274281860476361
+          },
+          "SLC2A4RG": {
+            "energy_distance": 1.0031056626054182,
+            "shift_cosine": -0.2634201204226079,
+            "spread_ratio": 1.299072690330657
+          },
+          "PLEKHA1": {
+            "energy_distance": 1.0756968304092478,
+            "shift_cosine": -0.39788303238864403,
+            "spread_ratio": 1.2672657737765343
+          },
+          "MAMSTR": {
+            "energy_distance": 1.133786659883305,
+            "shift_cosine": 0.258524993600228,
+            "spread_ratio": 1.2724325201172806
+          }
+        },
+        "seconds": 148.78699320391752,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_3"
+        ],
+        "means": {
+          "energy_distance": 0.6363469504892887,
+          "shift_cosine": -0.1598537147994953,
+          "spread_ratio": 1.2496834795131675
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.6998697712537156,
+            "shift_cosine": -0.12443070206798382,
+            "spread_ratio": 1.2804613434357552
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.5722975806175485,
+            "shift_cosine": -0.03353881651633581,
+            "spread_ratio": 1.2415472416929993
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.7047918210349016,
+            "shift_cosine": -0.14659287056969125,
+            "spread_ratio": 1.2739503048289282
+          },
+          "MAMSTR": {
+            "energy_distance": 0.568428629050989,
+            "shift_cosine": -0.3348524700439704,
+            "spread_ratio": 1.2027750280949876
+          }
+        },
+        "seconds": 234.3827260399703,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      },
+      {
+        "seed": 253,
+        "score_groups": [
+          "Screen1_4"
+        ],
+        "means": {
+          "energy_distance": 1.00743526196698,
+          "shift_cosine": 0.0030462007654525136,
+          "spread_ratio": 1.019521826058061
+        },
+        "targets": {
+          "GLCCI1": {
+            "energy_distance": 0.9499031013334971,
+            "shift_cosine": 0.07012859915413723,
+            "spread_ratio": 1.0153649438918262
+          },
+          "SLC2A4RG": {
+            "energy_distance": 0.9932250483532652,
+            "shift_cosine": -0.0048555475906948975,
+            "spread_ratio": 1.0300806970868834
+          },
+          "PLEKHA1": {
+            "energy_distance": 0.9936928208522104,
+            "shift_cosine": -0.026257776232628288,
+            "spread_ratio": 1.0151794686566524
+          },
+          "MAMSTR": {
+            "energy_distance": 1.0929200773289471,
+            "shift_cosine": -0.02683047226900399,
+            "spread_ratio": 1.0174621945968816
+          }
+        },
+        "seconds": 71.48698414722458,
+        "constant_lr_verified_updates": 1200,
+        "initial_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "final_rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        }
+      }
+    ]
+  }
+}
