@@ -6,7 +6,7 @@ from math import exp, isfinite, log
 from pathlib import Path
 from statistics import mean, median
 
-from compare_neuroko_v12 import GROUPS, ROOT, write_frozen
+from compare_neuroko_v12 import GROUPS, ROOT, receipt, reusable_fit, write_frozen
 from neuroko_matched_rate_replication import (
     SEEDS as REPLICATION_SEEDS, TRIAL as MATCHED_RATE_TRIAL, comparison, original_release_scores,
 )
@@ -17,6 +17,7 @@ from retune_neuroko_v12 import BASE, RELEASE, V12
 
 RATE_NAMES = ("g-high-d-high-p-low", "g-low-d-low-p-high")
 NOISY_PRIOR = dict(NOISY, name="noise150-prior100", d_lr_mult=1.5, prior_lr_mult=2.9, prior_reg=0.1)
+WIDE_NOISY_PRIOR = dict(NOISY_PRIOR, name="noise250-prior100", prior_sigma=.25)
 MATCHED_PRIOR = dict(MATCHED_RATE_TRIAL, name="matched-rates-prior100", prior_reg=0.1)
 MOTION_STUDIES = ("critic-motion", "matched-critic-motion", "balanced-particle-prior")
 ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
@@ -206,6 +207,51 @@ def individual_rates(args):
     return trials[selected["chosen"]]
 
 
+def compare_noise_controls(args):
+    """Compare the role-rate candidates with the stronger noise-0.25 v11 and EMPF controls."""
+    grid = json.loads((args.output / "role_grid.json").read_text())
+    controls = paired(WIDE_NOISY_PRIOR)[1:]
+    baseline = [RELEASE, V12, NOISY_PRIOR]
+    trials = [[RELEASE, V12, t] for t in grid["trials"]]
+    protocol = dict(controls=controls, baseline=baseline, trials=trials,
+                    first=grid["screen_seeds"], second=grid["second_screen_seeds"],
+                    rule="The completed noise-0.25 comparison identified stronger v11 and EMPF controls "
+                         "during the role-rate search. Score these two frozen controls on both development "
+                         "cohorts. Compare every first-cohort role-rate score to them. On the second cohort "
+                         "compare the chosen rate only if its nine runs exist under the original protocol. "
+                         "Report the additional comparisons separately from the original selection.")
+    write_frozen(args.output / "wide_noise_control_protocol.json", protocol)
+    shortlist = args.output / "role_shortlist.json"
+    for cohort, shared in (("first", args.shared_screen), ("second", args.second_screen)):
+        seeds = protocol[cohort]
+        local = copy(args)
+        if shared is not None:
+            local.output = shared.resolve()
+        reference_arms = [baseline, *controls]
+        reference_scores = evaluate(local, reference_arms, seeds)
+        means = {k: mean(v) for k, v in reference_scores.items()}
+        write_frozen(args.output / f"wide_noise_{cohort}_controls.json", dict(scores=reference_scores, means=means))
+        if not shortlist.is_file():
+            continue
+        ranking = json.loads(shortlist.read_text())
+        chosen = [arm for arm in trials if arm[2]["name"] == ranking["chosen"]]
+        candidates = trials if cohort == "first" else chosen
+        if cohort == "second" and (not ranking["passes"] or not all(
+            reusable_fit(receipt(local.output, "validation", *chosen[0], seed, group), True)
+            for seed in seeds for group in GROUPS
+        )):
+            continue
+        scores = evaluate(local, [*reference_arms, *candidates], seeds)
+        if cohort == "first" and any(ranking["scores"][key(arm)] != scores[key(arm)] for arm in [baseline, *trials]):
+            raise ValueError("Role-rate scores differ from the frozen shortlist")
+        differences = {}
+        for arm in candidates:
+            values = scores[key(arm)]
+            gaps = {key(c): [a - b for a, b in zip(values, scores[key(c)], strict=True)] for c in controls}
+            differences[key(arm)] = {k: dict(mean=mean(v), pairs_won=sum(d < 0 for d in v)) for k, v in gaps.items()}
+        write_frozen(args.output / f"wide_noise_{cohort}_rates.json", dict(scores=scores, differences=differences))
+
+
 def compare_prior_weight(args):
     screen_only = []
     pinned = []
@@ -278,7 +324,7 @@ def compare_prior_weight(args):
                 "then six fresh training seeds with both original releases before the biological holdout.")
     elif args.study == "strong-prior-noise":
         baseline = NOISY_PRIOR
-        trial = dict(baseline, name="noise250-prior100", prior_sigma=0.25)
+        trial = WIDE_NOISY_PRIOR
         references = [("noise150-" + arm[1], arm) for arm in paired(baseline)]
         independent_seeds = list(range(266, 272))
         outer_seeds = list(range(332, 348))
@@ -421,7 +467,7 @@ def main():
         parser.add_argument("--" + field, type=Path, required=True)
     parser.add_argument("--workers-per-gpu", type=int, default=2)
     parser.add_argument("--window-cells", type=int)
-    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases"), default="search")
+    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-noise-controls"), default="search")
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
                         default="rates")
@@ -442,6 +488,11 @@ def main():
     for field in ("data", "wheels", "output"):
         setattr(args, field, getattr(args, field).resolve())
     args.output.mkdir(parents=True, exist_ok=True)
+    if args.stage == "compare-noise-controls":
+        if args.study != "individual-role-rates":
+            parser.error("--stage compare-noise-controls applies to individual-role-rates")
+        compare_noise_controls(args)
+        return
     if args.study != "rates":
         compare_prior_weight(args)
         return

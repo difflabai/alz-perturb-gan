@@ -221,7 +221,7 @@ At noise 0.025, moving from the earlier rates of 0.020, 0.042 and 0.0203 to thes
 
 ### Checking the original releases at both rate settings
 
-To test whether the matched comparisons also hold for EMPF from 0.10.0 and Unified v11 from 0.11.1, run these two commands after the corresponding same-wheel comparisons. Both repeat seeds 22–24 on the same three training groups. The scores of all three 0.12.0 formulations must reproduce the published values, and each original-release fit must match the corresponding initial weights, training data, minibatches, physical GPU and fixed learning rates. The biological holdout decisions above use the original qualification rules.
+To test whether the matched comparisons also hold for EMPF from 0.10.0 and Unified v11 from 0.11.1, run these two commands after the corresponding same-wheel comparisons. Both repeat seeds 22–24 on the same three training groups and retain the native prior weights of 0.02 for v12 and v11 and 0.01 for EMPF. The experiments with weight 0.1 apply that same coefficient to all three formulations. The scores of all three 0.12.0 formulations must reproduce the published values, and each original-release fit must match the corresponding initial weights, training data, minibatches, physical GPU and fixed learning rates. The biological holdout decisions above use the original qualification rules.
 
 ```bash
 python paper_watch/scripts/neuroko_matched_rate_replication.py --stage compare-releases --rates seed15 \
@@ -352,7 +352,13 @@ python paper_watch/scripts/neuroko_rate_noise.py --study strong-prior-noise --da
   --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
 ```
 
-Increasing noise from 0.15 to 0.25 raised v12's mean energy from 0.94231 to 0.94988 on the first development cohort. Four of nine pairs improved. The candidate scored above the earlier EMPF reference at 0.94613 and failed the comparison with its lower-noise predecessor.
+At fixed generator, critic and particle rates of 0.014, 0.021 and 0.0406 and a shared prior weight of 0.1, increasing noise helped v11 and EMPF and raised v12's mean energy. The higher-noise v12 failed its first development screen. [All paired scores and selection decision](neuroko_v12_strong_prior_noise_screen.json)
+
+| Formulation from 0.12.0 | Energy at noise 0.15 ↓ | Energy at noise 0.25 ↓ | Pairs improved at 0.25 |
+| --- | ---: | ---: | ---: |
+| Unified v12 | 0.94231 | 0.94988 | 4/9 |
+| Unified v11 | 0.96751 | 0.92511 | 8/9 |
+| EMPF | 0.95183 | 0.92240 | 6/9 |
 
 ### Separating training noise from sampling noise
 
@@ -451,4 +457,12 @@ Rank the four alternatives by mean four-target energy across nine training pairs
 python paper_watch/scripts/neuroko_rate_noise.py --study individual-role-rates --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-individual-role-rates" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior"
+```
+
+The noise-0.25 controls finished while the individual-rate trials were running. They had lower first-cohort energies than the earlier v11 and EMPF references. An additional comparison fixes these two controls and measures them on seeds 251–253. It reports each of the four rate trials against them on seeds 22–24 once the shortlist exists. If the selected trial has completed the second cohort under its original protocol, it reports the same paired comparison there. Run the command again after the shortlist and any second-cohort fits finish to include those results.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --stage compare-noise-controls --study individual-role-rates \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-individual-role-rates" \
+  --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
 ```

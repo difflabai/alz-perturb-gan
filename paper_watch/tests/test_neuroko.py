@@ -85,6 +85,31 @@ def test_individual_role_rate_shortlist_preserves_other_rates(tmp_path, monkeypa
             study.individual_rates(args)
 
 
+def test_wide_noise_rivals_can_be_measured_without_promoting_failed_candidates(tmp_path, monkeypatch):
+    import json
+    from types import SimpleNamespace
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_rate_noise as study
+
+    calls = []
+
+    def evaluate(args, arms, seeds):
+        calls.append((list(seeds), [a[2]["name"] for a in arms]))
+        return {study.key(a): [1.] * 9 for a in arms}
+
+    monkeypatch.setattr(study, "evaluate", evaluate)
+    args = SimpleNamespace(output=tmp_path, shared_screen=None, second_screen=None, stage="search")
+    assert study.individual_rates(args) is None
+    study.compare_noise_controls(args)
+    first = json.loads((tmp_path / "wide_noise_first_rates.json").read_text())
+    assert len(first["differences"]) == 4
+    assert all(len(comparators) == 2 for comparators in first["differences"].values())
+    assert (tmp_path / "wide_noise_second_controls.json").is_file()
+    assert not (tmp_path / "wide_noise_second_rates.json").exists()
+    assert calls[-1] == ([251, 252, 253], ["noise150-prior100", "noise250-prior100", "noise250-prior100"])
+
+
 def test_test_cells_use_training_coordinates():
     train = csr_matrix(np.array([[0., 0.], [3., 1.], [2., 1.], [1., 0.], [4., 3.]]))
     test = train[[2, 0, 3]]
