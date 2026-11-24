@@ -24,7 +24,8 @@ ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
 ROLE_OUTER_SEEDS = list(range(396, 412))
 CRITIC_NOISE_STUDIES = ("original-v11-critic-wide-noise", "original-v11-critic-narrow-noise")
 CENTROID_WEIGHTS = (.5, 1., 2., 4.)
-PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise", "critic-centroid-weight")
+CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight")
+PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise", *CENTROID_STUDIES)
 TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "critic-interval",
                       *PRELIMINARY_STUDIES, *MOTION_STUDIES)
 TRIALS = {
@@ -270,6 +271,23 @@ def compare_noise_controls(args):
             gaps = {key(c): [a - b for a, b in zip(values, scores[key(c)], strict=True)] for c in controls}
             differences[key(arm)] = {k: dict(mean=mean(v), pairs_won=sum(d < 0 for d in v)) for k, v in gaps.items()}
         write_frozen(args.output / f"wide_noise_{cohort}_rates.json", dict(scores=scores, differences=differences))
+
+
+def compare_original_noise_controls(args):
+    matches = paired(WIDE_NOISY_PRIOR)
+    plan = json.loads((args.output / "wide_noise_control_protocol.json").read_text())
+    if plan["controls"] != matches[1:] or plan["first"] != REPLICATION_SEEDS or plan["second"] != [251, 252, 253]:
+        raise ValueError("Expected the two published development cohorts and noise-0.25 controls")
+    for cohort, shared in (("first", args.shared_screen), ("second", args.second_screen)):
+        scores = json.loads((args.output / f"wide_noise_{cohort}_controls.json").read_text())["scores"]
+        destination = args.output / f"wide-noise-original-{cohort}"
+        destination.mkdir(exist_ok=True)
+        local = copy(args)
+        local.output = shared or args.output
+        original_release_scores(local, destination, matches, plan[cohort],
+                                "Mean four-target energy for the original releases and same-wheel controls "
+                                "at fixed rates 0.014/0.021/0.0406, latent noise 0.25 and prior weight 0.1.",
+                                published={key(a): scores[key(a)] for a in matches[1:]})
 
 
 def original_v11_critic_rate(path):
@@ -529,7 +547,7 @@ def compare_prior_weight(args):
                 "On seeds 22–24 first require a lower v12 mean than baseline v12 and both noise-0.25 controls. "
                 "If it passes, compare against all matched and previously tuned controls on 22–24 and 251–253. "
                 "Reserve fresh seeds 480–485 including original releases, then biological holdout seeds 486–501.")
-    elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "critic-centroid-weight"):
+    elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", *CENTROID_STUDIES):
         baseline = NOISY_PRIOR
         trial, ratios = original_v11_critic_rate(args.original_v11_motion)
         write_frozen(args.output / "original_critic_calibration.json",
@@ -546,7 +564,7 @@ def compare_prior_weight(args):
                 "a lower mean than all three, fit the matched controls and test all established arms on "
                 "22–24 and 251–253 separately. Fresh seeds 458–463 include the two original releases. "
                 "Reserve biological holdout seeds 464–479 for a passing candidate.")
-        if args.study == "critic-centroid-weight":
+        if args.study in CENTROID_STUDIES:
             baseline = trial
             trial = centroid_weight_trial(args.centroid_result, baseline)
             if trial is None:
@@ -562,6 +580,20 @@ def compare_prior_weight(args):
                     "identical for EMPF. V12 must first beat the weight-2 baseline and both tuned noise-0.25 "
                     "controls. Check all matched and established arms on both development cohorts, then on "
                     "fresh seeds 574–579 with the original releases before biological holdout seeds 580–595.")
+            if args.study == "critic-quarter-weight":
+                if trial["rhbi_relativistic_weight"] != .5:
+                    raise ValueError("The preceding NeuroKO loss-weight experiment must select weight 0.5")
+                baseline = trial
+                references.append(("calibrated-weight05", paired(baseline)[0]))
+                trial = dict(trial, name=trial["name"].removesuffix("-rel5") + "-rel025", rhbi_relativistic_weight=.25)
+                independent_seeds, outer_seeds = list(range(596, 602)), list(range(602, 618))
+                rule = ("Halve the relativistic weight from 0.5 to 0.25 at the same fixed rates. "
+                        "First beat weight 0.5 and both tuned noise-0.25 controls on seeds 22–24. "
+                        "Then beat every matched and tuned reference, including the original releases, "
+                        "on 22–24 and 251–253 separately and on fresh seeds 596–601. "
+                        "Only a qualifying candidate goes to the biological holdout on seeds 602–617.")
+                for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
+                    references.append(("original-quarter-weight-" + arm[1], [release, *arm[1:]]))
         elif args.study == "critic-interval":
             baseline = trial
             trial, interval = critic_interval(args, baseline)
@@ -593,7 +625,7 @@ def compare_prior_weight(args):
                         "and tuned wide-noise controls. Then compare all matched and established arms, including "
                         "original tuned releases, on both development cohorts. Qualify on fresh training seeds "
                         "552–557 with the original releases before the biological holdout on 558–573.")
-        if args.study in ("original-v11-critic-narrow-noise", "critic-interval", "critic-centroid-weight"):
+        if args.study in ("original-v11-critic-narrow-noise", "critic-interval", *CENTROID_STUDIES):
             for arm, release in zip(paired(WIDE_NOISY_PRIOR)[1:], ("0.11.1", "0.10.0"), strict=True):
                 references.append(("original-tuned-" + arm[1], [release, *arm[1:]]))
     elif args.study == "prior-target-spread":
@@ -784,7 +816,8 @@ def main():
         parser.add_argument("--" + field, type=Path, required=True)
     parser.add_argument("--workers-per-gpu", type=int, default=2)
     parser.add_argument("--window-cells", type=int)
-    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-prior-screen-releases", "compare-noise-controls",
+    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-prior-screen-releases",
+                                          "compare-noise-controls", "compare-original-noise-controls",
                                           "replicate-balanced-releases", "replicate-calibrated-critic"), default="search")
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
@@ -822,10 +855,13 @@ def main():
             parser.error(f"--stage {args.stage} requires --study {replication[args.stage]}")
         replicate_calibrated_releases(args)
         return
-    if args.stage == "compare-noise-controls":
+    if args.stage in ("compare-noise-controls", "compare-original-noise-controls"):
         if args.study != "individual-role-rates":
-            parser.error("--stage compare-noise-controls applies to individual-role-rates")
-        compare_noise_controls(args)
+            parser.error(f"--stage {args.stage} applies to individual-role-rates")
+        if args.stage == "compare-original-noise-controls":
+            compare_original_noise_controls(args)
+        else:
+            compare_noise_controls(args)
         return
     if args.study != "rates":
         compare_prior_weight(args)

@@ -614,6 +614,10 @@ python paper_watch/scripts/neuroko_rate_noise.py --study critic-interval --data 
 
 The calibrated 0.0049 critic improved v12 again on seeds 251–253, from **0.94813 to 0.93939**. Five of the nine pairs improved, as in the first cohort. Tuned v11 scored **0.92116** and tuned EMPF **0.90413** on those same pairs. Across the two cohorts, four of the six three-fold seed means favored 0.0049 over 0.021. [All 18 paired scores and the predefined comparison](neuroko_v12_calibrated_critic_replication.json)
 
+At the exact rates 0.014/0.0049/0.0406, prior weight 0.1 and latent noise 0.15, **original 0.10.0 EMPF averaged 0.99652** on seeds 22–24. V12 averaged **0.92850** and won six of nine matched pairs. Every pair shared the GPU, initial parameters, projected cells and real minibatches. EMPF in the 0.12.0 wheel with its stronger noise-0.25 setting at critic rate 0.021 scored **0.92240** on the same pairs.
+
+To check how the stronger noise-0.25 controls transfer across releases, the role-rate driver also accepts `--study individual-role-rates --stage compare-original-noise-controls` with the same two shared training directories and the original `v12-individual-role-rates` output directory. It compares all three original releases and the 0.12.0 controls at a common noise width, prior weight and set of rates on each development cohort.
+
 A separate experiment keeps the 0.0049 critic rate and tests **latent noise 0.09**. This is one multiplicative step below 0.15, using the same factor as the increase from 0.15 to 0.25. It tests whether reducing noise helps with the excess generated spread. The first nine v12 runs must beat the 0.15 reference and both tuned controls. The subsequent stages reserve fresh training seeds 552–557 and biological holdout seeds 558–573. Run the same command with `--study original-v11-critic-narrow-noise` and `--output "$data/v12-original-critic-narrow-noise"`.
 
 Reducing latent noise from 0.15 to 0.09 raised mean energy from **0.92850 to 0.94357**. Three of nine paired fits improved. Among the three noise widths tested at the 0.0049 critic rate, 0.15 had the lowest mean on this cohort. [Nine paired scores and selection rule](neuroko_v12_original_critic_narrow_noise_energy.json)
@@ -644,3 +648,7 @@ python paper_watch/scripts/neuroko_rate_noise.py --study critic-centroid-weight 
   --wheels "$data/wheels" --output "$data/v12-critic-centroid-weight" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior" --centroid-result "$data/v12-centroid-gradient/result.json"
 ```
+
+At 1,200 updates, reducing the relativistic weight from 2 to 0.5 lowered v12 mean energy from **0.92850 to 0.92322**. Six of nine pairs improved. On the same pairs, tuned v11 in the 0.12.0 wheel scored **0.92511**, and tuned EMPF scored **0.92240**. V12 won five of nine individual pairs against EMPF and finished 0.00082 higher on the prespecified mean. The weight-0.5 candidate stopped at this stage. [Paired energies and screening rule](neuroko_v12_centroid_weight_energy.json)
+
+The next experiment tests one further reduction to 0.25 at the same constant rates. Its first nine fits must beat weight 0.5 and both tuned controls. Further comparisons include original and same-wheel matched controls, then fresh training seeds 596–601. The biological holdout uses seeds 602–617 only if the candidate qualifies. To reproduce, change the last command to `--study critic-quarter-weight` and `--output "$data/v12-critic-quarter-weight"`.
