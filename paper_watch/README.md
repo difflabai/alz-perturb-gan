@@ -128,6 +128,19 @@ The ParticleGAN 0.12.0 comparison tunes the generator, critic and particle rates
 
 A fixed-learning-rate follow-up compared two v12 finalists and matched controls at 1,200 updates. On 16 paired seeds the training-selected v12 scored 1.3665, matched v11 scored 1.3584 and matched EMPF scored 1.3531 (lower is better). [Full comparison and reproduction commands](notes/neuroko_v12_refinement.md)
 
+#### Copy-paste prompt for v12 versus the original v11 and EMPF releases
+
+> Clone `https://github.com/difflabai/alz-perturb-gan` on branch `paper-watch/neuroko-revival` and record the commit. Follow the NeuroKO GPU setup in `paper_watch/README.md` to fetch and verify the public data and install the 0.10.0, 0.11.1 and 0.12.0 wheels in separate directories. Run the command below on two CUDA GPUs. Compare all five configurations at 1,200 updates with fixed learning rates. Report the four-target mean energy for each seed cohort, and how often v12 beat each original release at shared settings and at its independently tuned settings.
+
+```bash
+data=paper_watch/data/neuroko
+python -m pip install --no-deps --target "$data/wheels/0.12.0" 'particlegan==0.12.0'
+python paper_watch/scripts/neuroko_rate_noise.py --study original-v11-critic --stage compare-published-rates \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/calibrated-original-releases"
+```
+
+This command reads the published calibration and computes the fits directly. The tuned controls had the lowest first-cohort mean among seven original v11 configurations and eight original EMPF configurations. In the output directory, `comparison_protocol.json` records the settings and `first_comparison.json` and `second_comparison.json` contain the paired scores for seeds 22–24 and 251–253. All six seeds use the same three development groups. [Control selection and scores](notes/neuroko_original_control_selection.json) · [Original-release results](notes/neuroko_v12_refinement.md#comparisons-with-the-original-releases)
+
 #### Copy-paste prompt for the stronger-prior v12 comparison
 
 > Clone `https://github.com/difflabai/alz-perturb-gan` on branch `paper-watch/neuroko-revival` and record the commit. Follow the NeuroKO GPU setup in `paper_watch/README.md`, including the data checksums, and install the pinned 0.12.0 wheel as shown in `paper_watch/notes/neuroko_v12_1200.md`. Use both GPUs. Run the “Prior penalty at latent noise 0.15” command in `paper_watch/notes/neuroko_v12_refinement.md`. Compare v12, v11 and EMPF at 1,200 updates with 64 particles, 16 latent dimensions, batch size 64, noise 0.15 and native prior penalty weight 0.1 for all three. Keep the generator LR at 0.014, critic LR at 0.021 and particle LR at 0.0406. Verify the flat learning rates and paired input hashes. Report the four-target mean energy, paired wins, spread ratio and fit time against the matched and tuned controls. Report the screening and independent training results separately. Run the biological holdout with `--stage confirm` if the selection qualifies.

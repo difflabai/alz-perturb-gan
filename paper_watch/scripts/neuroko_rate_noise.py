@@ -334,6 +334,40 @@ def compare_original_noise_controls(args):
                                 published={key(a): scores[key(a)] for a in matches[1:]})
 
 
+def compare_published_rates(args):
+    """Reproduce the original releases at the shared and independently tuned settings from a clean checkout."""
+    trial, _ = original_v11_critic_rate(args.original_v11_motion)
+    v12, v11, empf = paired(trial)
+    selection_file = "paper_watch/notes/neuroko_original_control_selection.json"
+    selection = json.loads((ROOT / selection_file).read_text())
+    tuned = selection["controls"]
+    for recipe, candidates in selection["candidates"].items():
+        best = min(candidates, key=lambda row: (mean(row["scores"]), key(row["arm"])))
+        if best["arm"] != tuned[recipe]:
+            raise ValueError(f"Published {recipe} control differs from the lowest measured original-release mean")
+    arms = {"v12": v12, "matched_v11": ["0.11.1", *v11[1:]], "matched_empf": ["0.10.0", *empf[1:]],
+            "tuned_v11": tuned["unified_v11"], "tuned_empf": tuned["empf"]}
+    cohorts = {"first": REPLICATION_SEEDS, "second": [251, 252, 253]}
+    write_frozen(args.output / "comparison_protocol.json", dict(arms=arms, cohorts=cohorts, groups=list(GROUPS),
+                 updates=1200, evaluation_draws=256, metric="four-target mean energy distance",
+                 original_control_selection=selection_file))
+    for cohort, cached in (("first", args.shared_screen), ("second", args.second_screen)):
+        local = copy(args)
+        local.output = cached or args.output
+        scores = evaluate(local, list(arms.values()), cohorts[cohort])
+        by_role = {role: scores[key(arm)] for role, arm in arms.items()}
+        means = {role: mean(values) for role, values in by_role.items()}
+        comparisons = {}
+        for role, values in by_role.items():
+            if role == "v12":
+                continue
+            gaps = [v - x for v, x in zip(by_role["v12"], values, strict=True)]
+            comparisons[role] = dict(mean_v12_minus_control=mean(gaps), pairs_won=sum(g < 0 for g in gaps))
+        write_frozen(args.output / f"{cohort}_comparison.json",
+                     dict(seeds=cohorts[cohort], scores=by_role, means=means, comparisons=comparisons))
+        print(cohort, json.dumps(means), flush=True)
+
+
 def original_v11_critic_rate(path):
     data = json.loads(path.read_text())
     cells = data["cells"]
@@ -1048,7 +1082,8 @@ def main():
     parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-prior-screen-releases",
                                           "compare-noise-controls", "compare-original-noise-controls",
                                           "replicate-balanced-releases", "replicate-calibrated-critic",
-                                          "replicate-loss-weight", "compare-calibrated-second"), default="search")
+                                          "replicate-loss-weight", "compare-calibrated-second",
+                                          "compare-published-rates"), default="search")
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
                         default="rates")
@@ -1075,6 +1110,11 @@ def main():
     for field in ("data", "wheels", "output"):
         setattr(args, field, getattr(args, field).resolve())
     args.output.mkdir(parents=True, exist_ok=True)
+    if args.stage == "compare-published-rates":
+        if args.study != "original-v11-critic":
+            parser.error("--stage compare-published-rates requires --study original-v11-critic")
+        compare_published_rates(args)
+        return
     if args.stage == "replicate-loss-weight":
         if args.study != "critic-centroid-weight":
             parser.error("--stage replicate-loss-weight requires --study critic-centroid-weight")

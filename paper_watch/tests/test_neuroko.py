@@ -71,6 +71,40 @@ def test_transport_metrics_exclude_slack_row_and_weight_by_matched_mass(monkeypa
     assert (slack.item(), count.item()) == (1., 0.)
 
 
+def test_published_release_comparison_needs_only_tracked_calibration(tmp_path, monkeypatch):
+    import json
+    from types import SimpleNamespace
+
+    root = Path(__file__).resolve().parents[1]
+    monkeypatch.syspath_prepend(str(root / "scripts"))
+    import neuroko_rate_noise as study
+
+    args = SimpleNamespace(output=tmp_path, shared_screen=None, second_screen=None,
+                           original_v11_motion=root / "notes/neuroko_original_v11_critic_motion.json")
+    seen = []
+
+    def scores(local, arms, seeds):
+        assert local.output == tmp_path
+        seen.append(list(seeds))
+        return {study.key(a): [1 + i * .01] * 9 for i, a in enumerate(arms)}
+
+    monkeypatch.setattr(study, "evaluate", scores)
+    study.compare_published_rates(args)
+    assert seen == [[22, 23, 24], [251, 252, 253]]
+    arms = json.loads((tmp_path / "comparison_protocol.json").read_text())["arms"]
+    assert arms["matched_v11"][:2] == arms["tuned_v11"][:2] == ["0.11.1", "unified_v11"]
+    assert arms["matched_empf"][:2] == arms["tuned_empf"][:2] == ["0.10.0", "empf"]
+    assert arms["v12"][2] == arms["matched_v11"][2]
+    for role, (_, _, t) in arms.items():
+        critic = {"tuned_v11": .0046, "tuned_empf": .021}.get(role, .0049)
+        assert (t["lr"], t["lr"] * t["d_lr_mult"], t["lr"] * t["prior_lr_mult"]) == pytest.approx(
+            (.014, critic, .0406))
+        assert t["prior_sigma"] == (.25 if role == "tuned_empf" else .15)
+        assert t["prior_reg"] == (.041 if role == "tuned_v11" else .1)
+    result = json.loads((tmp_path / "second_comparison.json").read_text())
+    assert result["comparisons"]["tuned_empf"]["pairs_won"] == 9
+
+
 def test_prior_spread_target_is_shared_through_qualification(monkeypatch):
     root = Path(__file__).resolve().parents[1]
     monkeypatch.syspath_prepend(str(root / "scripts"))

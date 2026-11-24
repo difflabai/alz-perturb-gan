@@ -1,6 +1,6 @@
 # Can tuned v12 outperform v11 and EMPF on NeuroKO?
 
-The comparison uses the published 1,200-update neuronal benchmark with the same network, 64 × 16 learned particle table, batch size 64, training cells, 256 generated draws per target and four-target mean energy distance. The incumbent v12 uses hollow self-coupling, relativistic weight 2 and constant generator, critic and particle learning rates of 0.014, 0.021 and 0.0406. [Previous twelve-seed comparison](neuroko_v12_1200.md)
+The comparison uses the published 1,200-update neuronal benchmark with the same network, 64 × 16 learned particle table, batch size 64, training cells, 256 generated draws per target and four-target mean energy distance. The original held-out comparison used generator, critic and particle learning rates of 0.014, 0.021 and 0.0406. The calibrated v12 comparison uses a critic rate of 0.0049, hollow self-coupling and relativistic weight 2. [Run the original-release comparison on two GPUs](../README.md#copy-paste-prompt-for-v12-versus-the-original-v11-and-empf-releases) · [Previous twelve-seed comparison](neuroko_v12_1200.md)
 
 Every v12 run in the fixed-rate comparison uses **no learning-rate decay**. Both schedule multipliers stayed at 1.0 through update 40,000. Two 1,200-update GPU replays of the lower-critic-rate configuration checked the actual optimizer rates on every step. ParticleGAN’s native generator gain can still adjust an individual step in response to the model. [Optimizer rates and gain traces on both cards](neuroko_v12_optimizer_step_rates.json)
 
@@ -59,6 +59,10 @@ Original v11 reversed the ordering on the second cohort at the same fixed rates.
 The first cohort also qualified for the predeclared six-seed replication at the shared rates. All five release/formulation combinations completed. V11 from the 0.12.0 wheel scored 0.95051, and EMPF from that wheel reproduced the 0.10.0 energy in every pair. The replicate uses seeds 524–529 on the same three biological groups. [Five-way comparison and replication decision](neuroko_v12_fixed_critic_matched_development.json)
 
 At its independently tuned settings, original 0.10.0 EMPF also reproduced the corresponding 0.12.0 EMPF score on every first-cohort pair. Raising the critic rate from 0.0049 to 0.021 and latent noise from 0.15 to 0.25 together lowered its mean energy from 0.99652 to 0.92240. V12 at the calibrated rates averaged 0.92850 and won four of nine pairs against tuned original EMPF. [Matched inputs, energy and original wheel comparison](neuroko_v12_tuned_original_empf_first.json)
+
+The settings that transfer between releases depend on the formulation. At critic LR 0.021 and latent noise 0.25, v11 scored 0.92511 from the 0.12.0 wheel and 0.95564 from its original 0.11.1 wheel on the same nine pairs. EMPF scored 0.92240 from both wheels. [All five configurations at the wider noise setting](neuroko_v12_wide_noise_original_first.json)
+
+Selecting the lowest mean on seeds 22–24 separately for each original release gave v11 **0.92547** (critic 0.0046, latent noise 0.15, prior coefficient 0.041) and EMPF **0.92240** (critic 0.021, noise 0.25, prior coefficient 0.1). Seven v11 and eight EMPF configurations had all nine verified scores in the shared development directory. At its calibrated rates v12 averaged 0.92850, trailing the two selected original controls by 0.00303 and 0.00610. The particle rate was 0.0406 and the generator rate was 0.014 for all three. [Original control selection](neuroko_original_control_selection.json) · [Five-way first-cohort comparison](neuroko_v12_original_control_benchmark_first.json)
 
 ## Six configurations on the same nine training pairs
 
