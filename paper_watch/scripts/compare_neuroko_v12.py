@@ -1,12 +1,14 @@
 """Select a v12 setting on training groups, then test the frozen setting and controls on two GPUs."""
 import argparse
 from concurrent.futures import ThreadPoolExecutor
+import fcntl
 import json
 import os
 from pathlib import Path
 from statistics import mean, median, stdev
 import subprocess
 import sys
+from uuid import uuid4
 
 
 GROUPS = ("Screen1_1", "Screen1_3", "Screen1_4")
@@ -38,13 +40,19 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def write_frozen(path, value):
-    if path.exists():
-        if json.loads(path.read_text()) != value:
-            raise ValueError(f"protocol or selection differs from {path}")
-        return
-    temp = path.with_suffix(".tmp")
-    temp.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n")
-    temp.replace(path)
+    encoded = json.dumps(value, indent=2, allow_nan=False) + "\n"
+    if not path.exists():
+        temporary = path.with_name(f".{path.name}.{uuid4().hex}.tmp")
+        try:
+            temporary.write_text(encoded)
+            try:
+                os.link(temporary, path)
+            except FileExistsError:
+                pass
+        finally:
+            temporary.unlink(missing_ok=True)
+    if json.loads(path.read_text()) != json.loads(encoded):
+        raise ValueError(f"protocol or selection differs from {path}")
 
 
 def receipt(output, stage, release, recipe, trial, seed, group):
@@ -72,6 +80,8 @@ def fit(args, stage, seed, group, gpu, arms):
         if args.window_cells:
             cmd.extend(["--window-cells", str(args.window_cells)])
         with target.with_suffix(".log").open("a") as log:
+            # Replications may request the same control; the second worker validates the cached fit.
+            fcntl.flock(log, fcntl.LOCK_EX)
             subprocess.run(cmd, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT, check=True)
 
 
