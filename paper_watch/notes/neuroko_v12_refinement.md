@@ -776,6 +776,15 @@ python paper_watch/scripts/neuroko_rate_noise.py --study transport-grid --data "
   --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
 
+At the default tau of 2, doubling epsilon to 0.2 reduced v12's 1,200-update mean energy on both screening seeds. The learning rates, network, batches, initial weights and sampling budget were held fixed. The baseline column uses epsilon 0.1. The v11 and EMPF columns use the settings selected separately on their original releases.
+
+| Training seed | V12 baseline | V12 epsilon 0.2 | Tuned v11 (0.11.1) | Tuned EMPF (0.10.0) | V12 group wins vs tuned EMPF |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 22 | 0.90830 | **0.88169** | 0.92459 | 0.91599 | 1/3 |
+| 251 | 0.92937 | **0.90948** | 0.92862 | 0.91981 | 3/3 |
+
+Increasing epsilon improved v12 on all six paired fits. Its largest single advantage against tuned EMPF was on Screen1_4 at seed 22 (0.91597 versus 1.05250). The other seven transport candidates already had worse first-seed gaps than this candidate's worst gap on either seed, which guarantees that epsilon 0.2 at tau 2 ranks first under the published two-seed rule. The four additional development seeds test whether that lead repeats. [Per-group scores, settings, fingerprints and shortlist calculation](neuroko_v12_entropy020_screen.json)
+
 On the same generated and real minibatches from 64 updates of nine baseline fits, reducing epsilon from 0.1 to 0.05 concentrated the real matches. At tau 2, a generated row had **34.06 effective real matches** at epsilon 0.1, **14.55** at 0.05 and **53.10** at 0.2 out of 64 possible. At epsilon 0.2, 3.73% of the generated mass went unmatched, compared with 0.00375% at 0.1. Varying tau from 1 to 4 moved the median effective match count by less than 0.10 in every fit at each epsilon. These measurements describe the transport plan during early training. The 1,200-update runs score generated samples. [All nine settings, statistics and matched trajectory hashes](neuroko_v12_transport_plans.json)
 
 ```bash
