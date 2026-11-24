@@ -43,6 +43,7 @@ def test_native_release_ranking_gates_the_fresh_matched_replication(tmp_path, mo
     scores = {study.key(arm): [1.0 + i / 10] * 9 for i, arm in enumerate(arms)}
     study.write_frozen(tmp_path / "screen.json", dict(scores=scores, passes=False))
     cohorts = []
+
     def compare(args, destination, matches, seeds, rule, *, published):
         assert matches == arms
         assert published == (scores if not cohorts else None)
@@ -55,6 +56,34 @@ def test_native_release_ranking_gates_the_fresh_matched_replication(tmp_path, mo
     study.replicate_balanced_releases(args)
     assert cohorts == [("development", [22, 23, 24]), ("fresh", list(range(452, 458)))][:expected_cohorts]
     assert json.loads((tmp_path / "screen.json").read_text())["passes"] is False
+
+
+
+def test_original_critic_probe_gates_expensive_controls_on_training_energy(tmp_path, monkeypatch):
+    import json
+    from types import SimpleNamespace
+    root = Path(__file__).resolve().parents[1]
+    monkeypatch.syspath_prepend(str(root / "scripts"))
+    import neuroko_rate_noise as study
+
+    args = SimpleNamespace(study="original-v11-critic", stage="search", output=tmp_path,
+                           shared_screen=None, original_v11_motion=root / "notes/neuroko_original_v11_critic_motion.json",
+                           motion_result=root / "notes/neuroko_v12_critic_motion.json",
+                           motion_check=root / "notes/neuroko_v12_critic_motion_check.json",
+                           gradient_result=root / "notes/neuroko_v12_particle_balance.json")
+    candidate, ratios = study.original_v11_critic_rate(args.original_v11_motion)
+    assert candidate["lr"] * candidate["d_lr_mult"] == pytest.approx(.0049)
+    assert ratios[.0046] < 1 < ratios[.021]
+
+    def screen(config, arms, seeds):
+        assert [a[1] for a in arms] == ["unified_v12", "unified_v12", "unified_v11", "empf"]
+        assert [a[2]["prior_sigma"] for a in arms] == [.15, .15, .25, .25]
+        return {study.key(arm): [1.0 - i / 100] * 9 for i, arm in enumerate(arms)}
+
+    monkeypatch.setattr(study, "evaluate", screen)
+    study.compare_prior_weight(args)
+    assert json.loads((tmp_path / "selection.json").read_text())["advances"] is False
+    assert not (tmp_path / "screen.json").exists()
 
 
 def test_critic_rate_interpolation_checks_the_same_v11_reference(tmp_path, monkeypatch):

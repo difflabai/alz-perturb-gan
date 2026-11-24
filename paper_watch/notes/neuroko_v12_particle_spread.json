@@ -1,0 +1,938 @@
+{
+  "protocol": {
+    "pairs": [
+      [
+        22,
+        "Screen1_1"
+      ],
+      [
+        24,
+        "Screen1_3"
+      ],
+      [
+        23,
+        "Screen1_4"
+      ]
+    ],
+    "lower": [
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "higher": [
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.25,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.25,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "repeats": 32,
+    "seed": 73219,
+    "updates": 1200,
+    "rule": "Use one distinct training seed per group. For each target, draw fresh Gaussian jitter 32 times from each of the 64 table rows with the release sampler. Within and between describe this balanced finite panel. Average the per-target quantities equally across four targets and three fitted pairs. Diagnostic only."
+  },
+  "summary": {
+    "unified_v12": {
+      "0.15": {
+        "within_fraction": 0.01617207268370249,
+        "within_over_observed": 0.02004254219664883,
+        "between_over_observed": 1.2207244354449087,
+        "centroid_distance": 2.2143985952874323,
+        "table_variance": 43.97637846911039,
+        "table_effective_rank": 14.616908677361454
+      },
+      "0.25": {
+        "within_fraction": 0.07642036764106269,
+        "within_over_observed": 0.11113866440712264,
+        "between_over_observed": 1.3029569879904097,
+        "centroid_distance": 2.2173244817087308,
+        "table_variance": 39.34257024740287,
+        "table_effective_rank": 14.098262205554217
+      }
+    },
+    "unified_v11": {
+      "0.15": {
+        "within_fraction": 0.015085303920771656,
+        "within_over_observed": 0.02022887393729008,
+        "between_over_observed": 1.3143676390231591,
+        "centroid_distance": 2.2623717462086703,
+        "table_variance": 45.53410057985148,
+        "table_effective_rank": 14.693908103231193
+      },
+      "0.25": {
+        "within_fraction": 0.04417457679508512,
+        "within_over_observed": 0.06182161469461256,
+        "between_over_observed": 1.3317075068497406,
+        "centroid_distance": 2.1853746648908743,
+        "table_variance": 43.42778738642529,
+        "table_effective_rank": 14.413589278174877
+      }
+    },
+    "empf": {
+      "0.15": {
+        "within_fraction": 0.00614759605871904,
+        "within_over_observed": 0.008602103896729982,
+        "between_over_observed": 1.3920159709278557,
+        "centroid_distance": 2.302697780206124,
+        "table_variance": 88.33948387369837,
+        "table_effective_rank": 15.747616001287659
+      },
+      "0.25": {
+        "within_fraction": 0.015541363972145993,
+        "within_over_observed": 0.02154194646558991,
+        "between_over_observed": 1.3618920916354056,
+        "centroid_distance": 2.251547441968978,
+        "table_variance": 86.81581302254149,
+        "table_effective_rank": 15.686189486160284
+      }
+    }
+  },
+  "cells": [
+    {
+      "seed": 22,
+      "group": "Screen1_1",
+      "gpu": 0,
+      "hashes": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96"
+      },
+      "measurements": {
+        "unified_v12": {
+          "0.15": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 42.92045548819102,
+              "table_effective_rank": 14.546985536735248,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.35479148097774377,
+                  "between": 19.62658709175831,
+                  "total": 19.981378572736055,
+                  "observed": 16.393685222378192,
+                  "centroid_distance": 2.5356612715643148
+                },
+                "SLC2A4RG": {
+                  "within": 0.3630022565247945,
+                  "between": 19.68076496974506,
+                  "total": 20.04376722626986,
+                  "observed": 15.387858843032413,
+                  "centroid_distance": 2.4194173248969983
+                },
+                "PLEKHA1": {
+                  "within": 0.358668169101235,
+                  "between": 19.70074761422,
+                  "total": 20.05941578332124,
+                  "observed": 15.414379186614866,
+                  "centroid_distance": 2.6414281154133596
+                },
+                "MAMSTR": {
+                  "within": 0.36419505415495296,
+                  "between": 19.752912634667002,
+                  "total": 20.117107688821953,
+                  "observed": 15.503327525949121,
+                  "centroid_distance": 2.5524247834372833
+                }
+              }
+            },
+            "energy": 1.1558245879047615
+          },
+          "0.25": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 38.66820995371879,
+              "table_effective_rank": 14.196788110529392,
+              "targets": {
+                "GLCCI1": {
+                  "within": 1.997662343915621,
+                  "between": 21.79338964104545,
+                  "total": 23.79105198496107,
+                  "observed": 16.393685222378192,
+                  "centroid_distance": 2.593605166597306
+                },
+                "SLC2A4RG": {
+                  "within": 2.0111151031778003,
+                  "between": 21.775823386547533,
+                  "total": 23.786938489725337,
+                  "observed": 15.387858843032413,
+                  "centroid_distance": 2.354710213711628
+                },
+                "PLEKHA1": {
+                  "within": 2.0257820844385286,
+                  "between": 21.77320130578653,
+                  "total": 23.798983390225064,
+                  "observed": 15.414379186614866,
+                  "centroid_distance": 2.5802439581576486
+                },
+                "MAMSTR": {
+                  "within": 1.9750559717787446,
+                  "between": 21.88174469952172,
+                  "total": 23.856800671300466,
+                  "observed": 15.503327525949121,
+                  "centroid_distance": 2.5562772865076897
+                }
+              }
+            },
+            "energy": 1.1724253440489414
+          }
+        },
+        "unified_v11": {
+          "0.15": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 44.9449708749332,
+              "table_effective_rank": 14.661350118048253,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.37256640853492745,
+                  "between": 23.010725277978196,
+                  "total": 23.38329168651311,
+                  "observed": 16.393685222378192,
+                  "centroid_distance": 2.6838976636277017
+                },
+                "SLC2A4RG": {
+                  "within": 0.36831594143296364,
+                  "between": 23.040714971139792,
+                  "total": 23.409030912572767,
+                  "observed": 15.387858843032413,
+                  "centroid_distance": 2.5395935163467187
+                },
+                "PLEKHA1": {
+                  "within": 0.37079126259883305,
+                  "between": 23.057163147443877,
+                  "total": 23.427954410042705,
+                  "observed": 15.414379186614866,
+                  "centroid_distance": 2.6968586051582957
+                },
+                "MAMSTR": {
+                  "within": 0.3720914458963008,
+                  "between": 23.029151416158818,
+                  "total": 23.40124286205511,
+                  "observed": 15.503327525949121,
+                  "centroid_distance": 2.6331934918506477
+                }
+              }
+            },
+            "energy": 1.2634637985084134
+          },
+          "0.25": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 42.061203073276246,
+              "table_effective_rank": 14.389664318505995,
+              "targets": {
+                "GLCCI1": {
+                  "within": 1.1043095909111158,
+                  "between": 22.848038579938414,
+                  "total": 23.952348170849532,
+                  "observed": 16.393685222378192,
+                  "centroid_distance": 2.5852350375564925
+                },
+                "SLC2A4RG": {
+                  "within": 1.1152016296677996,
+                  "between": 22.80549358231753,
+                  "total": 23.920695211985333,
+                  "observed": 15.387858843032413,
+                  "centroid_distance": 2.392694355072954
+                },
+                "PLEKHA1": {
+                  "within": 1.1143689332127535,
+                  "between": 22.77048499185461,
+                  "total": 23.884853925067368,
+                  "observed": 15.414379186614866,
+                  "centroid_distance": 2.5420464331416732
+                },
+                "MAMSTR": {
+                  "within": 1.1264355562790336,
+                  "between": 22.747726126842156,
+                  "total": 23.874161683121173,
+                  "observed": 15.503327525949121,
+                  "centroid_distance": 2.5335410608438202
+                }
+              }
+            },
+            "energy": 1.131282990474319
+          }
+        },
+        "empf": {
+          "0.15": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 88.89903382702224,
+              "table_effective_rank": 15.690545195458162,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.14556920854488742,
+                  "between": 23.648830565432583,
+                  "total": 23.794399773977467,
+                  "observed": 16.393685222378192,
+                  "centroid_distance": 2.6224211836134734
+                },
+                "SLC2A4RG": {
+                  "within": 0.1416887993465974,
+                  "between": 23.750460946450772,
+                  "total": 23.89214974579737,
+                  "observed": 15.387858843032413,
+                  "centroid_distance": 2.5500310049696595
+                },
+                "PLEKHA1": {
+                  "within": 0.14823047657895866,
+                  "between": 23.726158205868778,
+                  "total": 23.874388682447744,
+                  "observed": 15.414379186614866,
+                  "centroid_distance": 2.6420726820356912
+                },
+                "MAMSTR": {
+                  "within": 0.14765450361595595,
+                  "between": 23.759789518557398,
+                  "total": 23.907444022173348,
+                  "observed": 15.503327525949121,
+                  "centroid_distance": 2.66505543854296
+                }
+              }
+            },
+            "energy": 1.2535926404500655
+          },
+          "0.25": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 86.95731639687239,
+              "table_effective_rank": 15.675648895162553,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.365145598435628,
+                  "between": 23.422232435629827,
+                  "total": 23.78737803406546,
+                  "observed": 16.393685222378192,
+                  "centroid_distance": 2.5023392776767417
+                },
+                "SLC2A4RG": {
+                  "within": 0.3689018068122486,
+                  "between": 23.405847738395508,
+                  "total": 23.77474954520776,
+                  "observed": 15.387858843032413,
+                  "centroid_distance": 2.4105933144263463
+                },
+                "PLEKHA1": {
+                  "within": 0.3670672560623791,
+                  "between": 23.35921878683776,
+                  "total": 23.72628604290014,
+                  "observed": 15.414379186614866,
+                  "centroid_distance": 2.49636972319774
+                },
+                "MAMSTR": {
+                  "within": 0.3699259447244022,
+                  "between": 23.414675123300754,
+                  "total": 23.78460106802515,
+                  "observed": 15.503327525949121,
+                  "centroid_distance": 2.5436833115202044
+                }
+              }
+            },
+            "energy": 1.1223464943750359
+          }
+        }
+      }
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_3",
+      "gpu": 1,
+      "hashes": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "507c8545718ac1248d187d920f15b7d033dfc06a2e29f3ea052422cf584d5a90"
+      },
+      "measurements": {
+        "unified_v12": {
+          "0.15": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 44.339169144410306,
+              "table_effective_rank": 14.522785104057403,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.3423766371335757,
+                  "between": 22.54961451169229,
+                  "total": 22.891991148825866,
+                  "observed": 15.254468913479663,
+                  "centroid_distance": 1.5585804969660475
+                },
+                "SLC2A4RG": {
+                  "within": 0.34191676116205527,
+                  "between": 22.62425797778892,
+                  "total": 22.96617473895098,
+                  "observed": 15.321363567572844,
+                  "centroid_distance": 1.5010362546016018
+                },
+                "PLEKHA1": {
+                  "within": 0.340971597547363,
+                  "between": 22.58389719133098,
+                  "total": 22.924868788878364,
+                  "observed": 14.985389429253036,
+                  "centroid_distance": 1.6088953267257193
+                },
+                "MAMSTR": {
+                  "within": 0.3413606147472148,
+                  "between": 22.550287300117144,
+                  "total": 22.891647914864357,
+                  "observed": 16.976181227026238,
+                  "centroid_distance": 1.4906090199573174
+                }
+              }
+            },
+            "energy": 0.5790882342441512
+          },
+          "0.25": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 39.29277730723779,
+              "table_effective_rank": 14.044974536250397,
+              "targets": {
+                "GLCCI1": {
+                  "within": 2.263052614152502,
+                  "between": 22.435212638690682,
+                  "total": 24.698265252843175,
+                  "observed": 15.254468913479663,
+                  "centroid_distance": 1.6408154263931873
+                },
+                "SLC2A4RG": {
+                  "within": 2.230870910072044,
+                  "between": 22.275941482427633,
+                  "total": 24.506812392499686,
+                  "observed": 15.321363567572844,
+                  "centroid_distance": 1.5534075802548495
+                },
+                "PLEKHA1": {
+                  "within": 2.191491609582604,
+                  "between": 22.502202390209163,
+                  "total": 24.693693999791765,
+                  "observed": 14.985389429253036,
+                  "centroid_distance": 1.6197493995849979
+                },
+                "MAMSTR": {
+                  "within": 2.294129712956324,
+                  "between": 22.321226008627036,
+                  "total": 24.61535572158337,
+                  "observed": 16.976181227026238,
+                  "centroid_distance": 1.5776715062462356
+                }
+              }
+            },
+            "energy": 0.6152556320190563
+          }
+        },
+        "unified_v11": {
+          "0.15": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 44.75813272761046,
+              "table_effective_rank": 14.747708074188974,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.3488781893650069,
+                  "between": 22.90237369157992,
+                  "total": 23.251251880944938,
+                  "observed": 15.254468913479663,
+                  "centroid_distance": 1.6827499885885633
+                },
+                "SLC2A4RG": {
+                  "within": 0.34749353452188675,
+                  "between": 22.96018785998902,
+                  "total": 23.3076813945109,
+                  "observed": 15.321363567572844,
+                  "centroid_distance": 1.570053446009947
+                },
+                "PLEKHA1": {
+                  "within": 0.3420529568729159,
+                  "between": 22.9029004959983,
+                  "total": 23.24495345287122,
+                  "observed": 14.985389429253036,
+                  "centroid_distance": 1.651719880288694
+                },
+                "MAMSTR": {
+                  "within": 0.35279307706149377,
+                  "between": 22.897476856658518,
+                  "total": 23.250269933720013,
+                  "observed": 16.976181227026238,
+                  "centroid_distance": 1.558230587568897
+                }
+              }
+            },
+            "energy": 0.6147466833478679
+          },
+          "0.25": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 43.182339419549145,
+              "table_effective_rank": 14.513218017962197,
+              "targets": {
+                "GLCCI1": {
+                  "within": 1.0887616592935354,
+                  "between": 24.422044943067213,
+                  "total": 25.510806602360745,
+                  "observed": 15.254468913479663,
+                  "centroid_distance": 1.594447210766495
+                },
+                "SLC2A4RG": {
+                  "within": 1.1121496821559234,
+                  "between": 24.318896019231673,
+                  "total": 25.431045701387593,
+                  "observed": 15.321363567572844,
+                  "centroid_distance": 1.474444612755326
+                },
+                "PLEKHA1": {
+                  "within": 1.1065410543680805,
+                  "between": 24.273712890292963,
+                  "total": 25.380253944661032,
+                  "observed": 14.985389429253036,
+                  "centroid_distance": 1.5666134260453777
+                },
+                "MAMSTR": {
+                  "within": 1.1072256736491175,
+                  "between": 24.193354429088977,
+                  "total": 25.30058010273811,
+                  "observed": 16.976181227026238,
+                  "centroid_distance": 1.4852203287962424
+                }
+              }
+            },
+            "energy": 0.5905625402012029
+          }
+        },
+        "empf": {
+          "0.15": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 85.5403072603037,
+              "table_effective_rank": 15.789890146354729,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.15587264127424355,
+                  "between": 25.180290212091876,
+                  "total": 25.33616285336611,
+                  "observed": 15.254468913479663,
+                  "centroid_distance": 1.8320786149029853
+                },
+                "SLC2A4RG": {
+                  "within": 0.15486469745885628,
+                  "between": 25.141884136668196,
+                  "total": 25.29674883412705,
+                  "observed": 15.321363567572844,
+                  "centroid_distance": 1.7305797551439903
+                },
+                "PLEKHA1": {
+                  "within": 0.15469416192223678,
+                  "between": 25.170229777937244,
+                  "total": 25.324923939859495,
+                  "observed": 14.985389429253036,
+                  "centroid_distance": 1.8435836277343693
+                },
+                "MAMSTR": {
+                  "within": 0.1558775466982213,
+                  "between": 25.125790045674727,
+                  "total": 25.281667592372948,
+                  "observed": 16.976181227026238,
+                  "centroid_distance": 1.644353181649334
+                }
+              }
+            },
+            "energy": 0.7036477171570692
+          },
+          "0.25": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 86.03710579922121,
+              "table_effective_rank": 15.795446974935894,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.39045770154128456,
+                  "between": 24.455930594588104,
+                  "total": 24.846388296129387,
+                  "observed": 15.254468913479663,
+                  "centroid_distance": 1.827476806121202
+                },
+                "SLC2A4RG": {
+                  "within": 0.39770993001945065,
+                  "between": 24.395113326528723,
+                  "total": 24.79282325654818,
+                  "observed": 15.321363567572844,
+                  "centroid_distance": 1.6980072456430957
+                },
+                "PLEKHA1": {
+                  "within": 0.39146281877625577,
+                  "between": 24.38475319936177,
+                  "total": 24.776216018138033,
+                  "observed": 14.985389429253036,
+                  "centroid_distance": 1.7968468634169634
+                },
+                "MAMSTR": {
+                  "within": 0.39025729247223473,
+                  "between": 24.414461935554215,
+                  "total": 24.804719228026435,
+                  "observed": 16.976181227026238,
+                  "centroid_distance": 1.6878120739083515
+                }
+              }
+            },
+            "energy": 0.696174307530145
+          }
+        }
+      }
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_4",
+      "gpu": 1,
+      "hashes": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "f0fc24166dc52bf914506e6eccc97cdb2937937bcb548c4ee7f877c9038456c6"
+      },
+      "measurements": {
+        "unified_v12": {
+          "0.15": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 44.66951077472983,
+              "table_effective_rank": 14.78095539129171,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.34002948977225933,
+                  "between": 21.9474909337958,
+                  "total": 22.287520423568076,
+                  "observed": 23.61568209932475,
+                  "centroid_distance": 2.5679888924353143
+                },
+                "SLC2A4RG": {
+                  "within": 0.352351871022268,
+                  "between": 21.835533778011722,
+                  "total": 22.187885649033984,
+                  "observed": 22.075806135602882,
+                  "centroid_distance": 2.5960948930566277
+                },
+                "PLEKHA1": {
+                  "within": 0.35125875765242587,
+                  "between": 21.883696767683983,
+                  "total": 22.23495552533641,
+                  "observed": 23.036884429538972,
+                  "centroid_distance": 2.496956133200019
+                },
+                "MAMSTR": {
+                  "within": 0.3480820989181189,
+                  "between": 21.893135468602676,
+                  "total": 22.241217567520795,
+                  "observed": 22.76695493384427,
+                  "centroid_distance": 2.603690631194587
+                }
+              }
+            },
+            "energy": 1.0481554259654402
+          },
+          "0.25": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 40.066723481252026,
+              "table_effective_rank": 14.053023969882863,
+              "targets": {
+                "GLCCI1": {
+                  "within": 1.4091174828518258,
+                  "between": 24.73711904676328,
+                  "total": 26.146236529615102,
+                  "observed": 23.61568209932475,
+                  "centroid_distance": 2.5479601535007967
+                },
+                "SLC2A4RG": {
+                  "within": 1.4156903328800154,
+                  "between": 24.755133883597782,
+                  "total": 26.170824216477794,
+                  "observed": 22.075806135602882,
+                  "centroid_distance": 2.557460324548844
+                },
+                "PLEKHA1": {
+                  "within": 1.418070235758673,
+                  "between": 24.671940910849987,
+                  "total": 26.090011146608663,
+                  "observed": 23.036884429538972,
+                  "centroid_distance": 2.453795615804648
+                },
+                "MAMSTR": {
+                  "within": 1.402529288111968,
+                  "between": 24.726906195653804,
+                  "total": 26.12943548376577,
+                  "observed": 22.76695493384427,
+                  "centroid_distance": 2.572197149196938
+                }
+              }
+            },
+            "energy": 1.0311780455160409
+          }
+        },
+        "unified_v11": {
+          "0.15": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 46.899198137010785,
+              "table_effective_rank": 14.672666117456354,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.33355123048557944,
+                  "between": 22.9164348959054,
+                  "total": 23.249986126390972,
+                  "observed": 23.61568209932475,
+                  "centroid_distance": 2.5508990185024314
+                },
+                "SLC2A4RG": {
+                  "within": 0.33703140436091394,
+                  "between": 22.90718669368876,
+                  "total": 23.244218098049664,
+                  "observed": 22.075806135602882,
+                  "centroid_distance": 2.580772839900203
+                },
+                "PLEKHA1": {
+                  "within": 0.34228254693740345,
+                  "between": 22.981818859674963,
+                  "total": 23.324101406612375,
+                  "observed": 23.036884429538972,
+                  "centroid_distance": 2.4360760497774736
+                },
+                "MAMSTR": {
+                  "within": 0.33289103851175583,
+                  "between": 22.93668323807888,
+                  "total": 23.269574276590628,
+                  "observed": 22.76695493384427,
+                  "centroid_distance": 2.564415866884471
+                }
+              }
+            },
+            "energy": 1.0299508505671373
+          },
+          "0.25": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 45.03981966645046,
+              "table_effective_rank": 14.33788549805644,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.9765596175674842,
+                  "between": 22.414601247152312,
+                  "total": 23.391160864719797,
+                  "observed": 23.61568209932475,
+                  "centroid_distance": 2.5218650921256396
+                },
+                "SLC2A4RG": {
+                  "within": 0.9883171685965038,
+                  "between": 22.504283816987584,
+                  "total": 23.492600985584087,
+                  "observed": 22.075806135602882,
+                  "centroid_distance": 2.547462193085843
+                },
+                "PLEKHA1": {
+                  "within": 1.0212099402964003,
+                  "between": 22.382667118634245,
+                  "total": 23.403877058930654,
+                  "observed": 23.036884429538972,
+                  "centroid_distance": 2.366213054125665
+                },
+                "MAMSTR": {
+                  "within": 0.9925717547702143,
+                  "between": 22.468471913714165,
+                  "total": 23.461043668484383,
+                  "observed": 22.76695493384427,
+                  "centroid_distance": 2.614713174374961
+                }
+              }
+            },
+            "energy": 1.016504427475284
+          }
+        },
+        "empf": {
+          "0.15": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 90.57911053376917,
+              "table_effective_rank": 15.762412662050085,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.14675724295570045,
+                  "between": 23.941354829507297,
+                  "total": 24.088112072463012,
+                  "observed": 23.61568209932475,
+                  "centroid_distance": 2.5140298745345584
+                },
+                "SLC2A4RG": {
+                  "within": 0.1503209587110301,
+                  "between": 23.98424430790329,
+                  "total": 24.134565266614327,
+                  "observed": 22.075806135602882,
+                  "centroid_distance": 2.5682537396654532
+                },
+                "PLEKHA1": {
+                  "within": 0.14927521721537818,
+                  "between": 23.95926398732145,
+                  "total": 24.10853920453683,
+                  "observed": 23.036884429538972,
+                  "centroid_distance": 2.4203557184194398
+                },
+                "MAMSTR": {
+                  "within": 0.15169165687640612,
+                  "between": 24.013512595772916,
+                  "total": 24.165204252649314,
+                  "observed": 22.76695493384427,
+                  "centroid_distance": 2.5995585412615707
+                }
+              }
+            },
+            "energy": 1.0293422191940769
+          },
+          "0.25": {
+            "panel": {
+              "particles": 64,
+              "repeats": 32,
+              "seed": 73219,
+              "table_variance": 87.45301687153088,
+              "table_effective_rank": 15.587472588382404,
+              "targets": {
+                "GLCCI1": {
+                  "within": 0.36982472221826884,
+                  "between": 23.48048604117089,
+                  "total": 23.850310763389164,
+                  "observed": 23.61568209932475,
+                  "centroid_distance": 2.4962866313041125
+                },
+                "SLC2A4RG": {
+                  "within": 0.36134099264497765,
+                  "between": 23.431981018664757,
+                  "total": 23.79332201130974,
+                  "observed": 22.075806135602882,
+                  "centroid_distance": 2.560989902657501
+                },
+                "PLEKHA1": {
+                  "within": 0.36380836976553804,
+                  "between": 23.466182256835452,
+                  "total": 23.829990626600985,
+                  "observed": 23.036884429538972,
+                  "centroid_distance": 2.4215986777473075
+                },
+                "MAMSTR": {
+                  "within": 0.3664451551006097,
+                  "between": 23.496153271089565,
+                  "total": 23.86259842619018,
+                  "observed": 22.76695493384427,
+                  "centroid_distance": 2.576565476008167
+                }
+              }
+            },
+            "energy": 1.0015550178129418
+          }
+        }
+      }
+    }
+  ]
+}

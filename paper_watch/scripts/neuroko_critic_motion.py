@@ -138,13 +138,11 @@ def measure(x, labels, probes, seed, recipe, device, critic_lr, prior_weight, *,
     return row, first
 
 
-def run_gpu(args, gpu):
+def probe_folds(args, gpu):
     import numpy as np
     import torch
     from paper_watch.alztest.neuroko import LAYOUT, load_comparison, open_screen, project_fold
 
-    if version("particlegan") != "0.12.0":
-        raise ValueError("This optimizer comparison requires ParticleGAN 0.12.0")
     torch.set_num_threads(2)
     torch.cuda.set_device(gpu)
     torch.use_deterministic_algorithms(True)
@@ -153,7 +151,6 @@ def run_gpu(args, gpu):
         screens = [stack.enter_context(open_screen(args.data, name, args.window_cells)) for name in LAYOUT]
         conditions, panels = load_comparison(screens, 100, 160, 6)
     panel = panels["iNeurons"]
-    cells = []
     for i, group in enumerate(GROUPS):
         training = (panel.groups != "Screen1_0") & (panel.groups != group)
         x, y = project_fold(panel.x[training], panel.x[panel.groups == group])
@@ -164,6 +161,17 @@ def run_gpu(args, gpu):
         rng = np.random.default_rng(5847)
         indices = np.stack([rng.choice(np.flatnonzero(labels == k), 32, replace=False) for k in range(len(conditions))])
         probes = torch.as_tensor(x[indices], device=device, dtype=torch.float32)
+        yield i, group, x, labels, probes, data_hash.hexdigest(), sha256(indices.astype("<i8").tobytes()).hexdigest()
+
+
+def run_gpu(args, gpu):
+    import numpy as np
+
+    if version("particlegan") != "0.12.0":
+        raise ValueError("This optimizer comparison requires ParticleGAN 0.12.0")
+    cells = []
+    for i, group, x, labels, probes, data_hash, probe_hash in probe_folds(args, gpu):
+        device = probes.device
         for seed in REPLICATION_SEEDS:
             if (seed + i) % 2 != gpu:
                 continue
@@ -176,7 +184,7 @@ def run_gpu(args, gpu):
                 path = receipt(args.reference, "validation", "0.12.0", recipe, NOISY_PRIOR, seed, group)
                 ref = json.loads(path.read_text())
                 if (ref["initial_parameters_sha256"] != row["initial_parameters_sha256"]
-                        or ref["projected_data_sha256"] != data_hash.hexdigest()
+                        or ref["projected_data_sha256"] != data_hash
                         or ref["visible_devices"] != str(gpu)
                         or ref["initial_rates"] != {"generator": .014, "critic": .021, "particles": .0406}
                         or row["steps"] != STEPS):
@@ -192,8 +200,8 @@ def run_gpu(args, gpu):
             if any(v11[k] != v12[k] for k in ("initial_parameters_sha256", "training_batches_sha256")):
                 raise ValueError("Different initial parameters or training minibatches between formulations")
             a, b = (first[r] for r in RECIPES)
-            cell = dict(seed=seed, group=group, gpu=gpu, projected_data_sha256=data_hash.hexdigest(),
-                        probe_indices_sha256=sha256(indices.astype("<i8").tobytes()).hexdigest(), rows=rows,
+            cell = dict(seed=seed, group=group, gpu=gpu, projected_data_sha256=data_hash,
+                        probe_indices_sha256=probe_hash, rows=rows,
                         first_step_centered_cosine=float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))),
                         first_step_ratio=v12["centered_rms"][0] / v11["centered_rms"][0],
                         median_step_ratio=median(v12["centered_rms"]) / median(v11["centered_rms"]))

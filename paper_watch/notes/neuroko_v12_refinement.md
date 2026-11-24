@@ -238,6 +238,8 @@ All 179 fields of the resolved v11 recipe agreed across the two releases at thes
 
 The rate-matched comparison also has a shared-prior check. At each rate setting, `--stage compare-shared-prior` gives EMPF the same 0.02 prior coefficient as Unified v11 and v12. Before reusing a Unified fit, the driver resolves the complete recipe in the appropriate installed wheel and verifies that explicitly setting the coefficient gives the identical recipe. It refits EMPF from both 0.10.0 and 0.12.0, checks each of the 1,200 learning rates, and compares all five formulation–release combinations on the same nine pairs. Use the commands above with `--stage compare-shared-prior` to reproduce this comparison.
 
+With the prior weight fixed to **0.02 in all three original releases**, v12 averaged **0.97744**, EMPF **1.00727** and v11 **0.94688**. V12 beat EMPF on six of nine training pairs and v11 on one. The advantage over original EMPF at this rate setting survives equalizing the prior coefficient. [Equal-prior scores for the three original releases](neuroko_original_releases_shared_prior_002.json)
+
 ## Prior penalty at latent noise 0.15
 
 At the release role rates, two individual changes lowered v12's mean energy on earlier training folds. Increasing latent noise to 0.15 moved the mean from 0.9782 to 0.9417. Increasing the native prior penalty weight from 0.02 to 0.1 at the original noise moved it to 0.9641. The follow-up combines those two changes at constant generator, critic and particle rates of 0.014, 0.021 and 0.0406. It tests whether the stronger penalty helps with the higher noise. A training qualification for the preceding rate-and-noise candidate gives its biological holdout priority.
@@ -518,4 +520,22 @@ A separate replay at noise 0.15 and 0.25 measures how much generated variation c
 ```bash
 python paper_watch/scripts/neuroko_particle_spread.py --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --reference "$data/v12-rate-noise" --output "$data/v12-particle-spread"
+```
+
+Across 18 deterministic replays spanning three seed–group pairs, widening the latent noise increased the within-particle share of generated variance in all three formulations. V12 rose from **1.62% to 7.64%**, v11 from **1.51% to 4.42%** and EMPF from **0.61% to 1.55%**. The v12 increase was largest on each of the three pairs. The mean distance from the generated centroid to the observed centroid stayed nearly equal for v12 (2.214 to 2.217), while it fell for v11 (2.262 to 2.185) and EMPF (2.303 to 2.252). These measurements describe the three selected training pairs at update 1,200. [Per-target variance components and original benchmark scores](neuroko_v12_particle_spread.json)
+
+### Calibrating the critic against original v11
+
+We repeated the nine 64-update v11 motion probes with ParticleGAN **0.11.1**, using the original input rows, initialization, minibatches and physical GPU for each seed–group pair. V12's median centered critic displacement was **5.861 times** original v11 at critic LR 0.021, **0.684 times** at 0.0035 and **0.923 times** at 0.0046. Original v11 used critic LR 0.021 throughout. Log interpolation between the two nearest bracketing v12 rates predicts **0.0049** for equal median movement. [Original v11 measurements and paired v12 ratios](neuroko_original_v11_critic_motion.json)
+
+The independent rate check at 0.0049 produced a median v12-to-original-v11 motion ratio of **0.992**, ranging from 0.941 to 1.040 across the nine training pairs. [Fixed-rate check and per-update v12 traces](neuroko_v12_original_critic_check.json)
+
+The energy study changes only the v12 critic rate from the 0.014 / 0.021 / 0.0406 baseline. Noise stays at 0.15 and prior weight at 0.1. Before fitting new matched controls, the 0.0049 candidate must beat the baseline and the stronger noise-0.25 v11 and EMPF arms on nine training pairs. A passing candidate goes through both development cohorts, six fresh seeds 458–463 with both original releases, and then the biological holdout on seeds 464–479 if it qualifies.
+
+```bash
+PYTHONPATH="$data/wheels/0.11.1:." python paper_watch/scripts/neuroko_original_critic_motion.py \
+  --data "$data" --window-cells 10000 --references paper_watch/notes --output "$data/v12-original-v11-critic-motion"
+python paper_watch/scripts/neuroko_rate_noise.py --study original-v11-critic --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --original-v11-motion "$data/v12-original-v11-critic-motion/result.json" \
+  --output "$data/v12-original-v11-critic-rate" --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
 ```

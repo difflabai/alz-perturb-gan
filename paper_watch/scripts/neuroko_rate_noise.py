@@ -22,7 +22,7 @@ MATCHED_PRIOR = dict(MATCHED_RATE_TRIAL, name="matched-rates-prior100", prior_re
 MOTION_STUDIES = ("critic-motion", "matched-critic-motion", "balanced-particle-prior")
 ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
 ROLE_OUTER_SEEDS = list(range(396, 412))
-TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", *MOTION_STUDIES)
+TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "original-v11-critic", *MOTION_STUDIES)
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
     for name in RATE_NAMES for sigma in (75, 150)
@@ -252,6 +252,30 @@ def compare_noise_controls(args):
         write_frozen(args.output / f"wide_noise_{cohort}_rates.json", dict(scores=scores, differences=differences))
 
 
+def original_v11_critic_rate(path):
+    data = json.loads(path.read_text())
+    cells = data["cells"]
+    if (data["original_v11_release"] != "0.11.1" or data["v12_release"] != RELEASE
+            or data["settings"] != NOISY_PRIOR or data["original_v11_critic_lr"] != .021
+            or [(c["seed"], c["group"]) for c in cells] != [(s, g) for s in REPLICATION_SEEDS for g in GROUPS]):
+        raise ValueError("Expected the nine original v11 probes at the reference settings")
+    ratios = {}
+    for rate in (.0035, .0046, .021):
+        observations = [c["v12_to_original_by_critic_lr"][str(rate)] for c in cells]
+        if not all(isfinite(v) and v > 0 for v in observations):
+            raise ValueError("Invalid original-v11 critic movement")
+        ratios[rate] = median(observations)
+        if ratios[rate] != data["median_ratios"][str(rate)]:
+            raise ValueError("Recorded critic ratios differ from the measurements")
+    low, high = .0046, .021
+    if not ratios[.0035] < ratios[low] < 1 < ratios[high]:
+        raise ValueError("The two nearest critic rates must bracket the original v11 movement")
+    fraction = -log(ratios[low]) / log(ratios[high] / ratios[low])
+    critic = round(exp(log(low) + fraction * log(high / low)), 4)
+    return dict(NOISY_PRIOR, name=f"original-v11-critic-{round(critic * 10000)}",
+                d_lr_mult=critic / NOISY_PRIOR["lr"]), ratios
+
+
 def critic_references(args):
     lower, _ = calibrated_critic(args.motion_result)
     middle, _ = calibrated_critic(args.motion_result, args.motion_check)
@@ -363,6 +387,23 @@ def compare_prior_weight(args):
             "260–265 it must beat every reference, including all three release-rate models at noise "
             "0.15 and weight 0.1. Only then score the biological holdout on seeds 316–331."
         )
+    elif args.study == "original-v11-critic":
+        baseline = NOISY_PRIOR
+        trial, ratios = original_v11_critic_rate(args.original_v11_motion)
+        write_frozen(args.output / "original_critic_calibration.json",
+                     dict(median_ratios=ratios, fixed_critic_lr=trial["lr"] * trial["d_lr_mult"]))
+        references = [(ref["name"] + "-" + arm[1], arm)
+                      for ref in (NOISY_PRIOR, WIDE_NOISY_PRIOR) for arm in paired(ref)]
+        references.extend(critic_references(args))
+        independent_seeds = list(range(458, 464))
+        outer_seeds = list(range(464, 480))
+        rule = ("At the published role rates with noise 0.15 and prior weight 0.1, match the "
+                "original 0.11.1 v11 critic's median centered output displacement by log-interpolating "
+                "the two bracketing v12 rates, rounding to 0.0001. First compare this one v12 rate on "
+                "nine training pairs to the baseline and both stronger noise-0.25 controls. Only after "
+                "a lower mean than all three, fit the matched controls and test all established arms on "
+                "22–24 and 251–253 separately. Fresh seeds 458–463 include the two original releases. "
+                "Reserve biological holdout seeds 464–479 for a passing candidate.")
     elif args.study == "prior-target-spread":
         baseline = NOISY_PRIOR
         trial, spread = spread_target(args.spread_result)
@@ -503,6 +544,17 @@ def compare_prior_weight(args):
     screen_args = copy(args)
     if args.shared_screen is not None:
         screen_args.output = args.shared_screen.resolve()
+    if args.study == "original-v11-critic":
+        preliminary = [matches[0], [RELEASE, V12, baseline], *paired(WIDE_NOISY_PRIOR)[1:]]
+        initial_scores = evaluate(screen_args, preliminary, REPLICATION_SEEDS)
+        initial_means = {k: mean(v) for k, v in initial_scores.items()}
+        own = key(matches[0])
+        passes = all(initial_means[own] < value for name, value in initial_means.items() if name != own)
+        early = dict(scores=initial_scores, means=initial_means, passes=passes)
+        write_frozen(args.output / "preliminary.json", early)
+        if not passes:
+            write_frozen(args.output / "selection.json", dict(preliminary=early, advances=False, winner=None))
+            return
     scores = evaluate(screen_args, arms, REPLICATION_SEEDS)
     means = {k: mean(v) for k, v in scores.items()}
     own, v11, empf = [key(arm) for arm in matches]
@@ -545,6 +597,7 @@ def main():
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
                         default="rates")
+    parser.add_argument("--original-v11-motion", type=Path, default=ROOT / "paper_watch/notes/neuroko_original_v11_critic_motion.json")
     parser.add_argument("--spread-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_prior_weight_geometry.json")
     parser.add_argument("--shared-screen", type=Path,
                         help="reuse the seed 22–24 reference receipts for the prior-weight comparison")
