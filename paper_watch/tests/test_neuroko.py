@@ -31,6 +31,26 @@ def test_critic_rate_interpolation_checks_the_same_v11_reference(tmp_path, monke
         calibrated_critic(baseline, incompatible)
 
 
+def test_prior_weight_uses_the_paired_particle_gradient_change(tmp_path, monkeypatch):
+    import json
+
+    paper_watch = Path(__file__).resolve().parents[1]
+    monkeypatch.syspath_prepend(str(paper_watch / "scripts"))
+    from neuroko_rate_noise import NOISY_PRIOR, balanced_prior
+
+    trial = dict(NOISY_PRIOR, name="motion-critic-46", d_lr_mult=.0046 / .014)
+    path = paper_watch / "notes/neuroko_v12_particle_balance.json"
+    balanced, scale = balanced_prior(path, trial)
+    assert balanced["prior_reg"] == round(.1 / scale, 3) == .041
+    assert balanced["lr"] * balanced["d_lr_mult"] == .0046
+    bad = json.loads(path.read_text())
+    bad["cells"][0]["v12_calibrated"]["ratios_by_update"].pop()
+    partial = tmp_path / "partial.json"
+    partial.write_text(json.dumps(bad))
+    with pytest.raises(ValueError, match="Incomplete paired particle gradients"):
+        balanced_prior(partial, trial)
+
+
 def test_test_cells_use_training_coordinates():
     train = csr_matrix(np.array([[0., 0.], [3., 1.], [2., 1.], [1., 0.], [4., 3.]]))
     test = train[[2, 0, 3]]

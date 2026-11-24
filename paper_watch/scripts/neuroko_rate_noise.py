@@ -16,7 +16,8 @@ from retune_neuroko_v12 import BASE, RELEASE, V12
 RATE_NAMES = ("g-high-d-high-p-low", "g-low-d-low-p-high")
 NOISY_PRIOR = dict(NOISY, name="noise150-prior100", d_lr_mult=1.5, prior_lr_mult=2.9, prior_reg=0.1)
 MATCHED_PRIOR = dict(MATCHED_RATE_TRIAL, name="matched-rates-prior100", prior_reg=0.1)
-TWO_COHORT_STUDIES = ("strong-prior-noise", "critic-motion", "matched-critic-motion")
+MOTION_STUDIES = ("critic-motion", "matched-critic-motion", "balanced-particle-prior")
+TWO_COHORT_STUDIES = ("strong-prior-noise", *MOTION_STUDIES)
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
     for name in RATE_NAMES for sigma in (75, 150)
@@ -46,6 +47,7 @@ def critic_motion_probe(path, v12_critic_lr):
     expected = {(s, g) for s in REPLICATION_SEEDS for g in GROUPS}
     if (spec["release"] != RELEASE or spec["settings"] != NOISY_PRIOR or spec["steps"] != 64
             or spec.get("v12_critic_lr", 0.021) != v12_critic_lr
+            or spec.get("v12_prior_weight", NOISY_PRIOR["prior_reg"]) != NOISY_PRIOR["prior_reg"]
             or len(cells) != len(expected) or {(r["seed"], r["group"]) for r in cells} != expected):
         raise ValueError("Critic calibration requires the nine paired 64-update probes at the release rates")
     ratios, reference = [], {}
@@ -86,6 +88,26 @@ def calibrated_critic(path, check=None):
         critic = round(exp(log(critic) + fraction * log(0.021 / critic)), 4)
     trial = dict(NOISY_PRIOR, name=f"motion-critic-{round(critic * 10000)}", d_lr_mult=critic / NOISY_PRIOR["lr"])
     return trial, dict(calibration, fixed_critic_lr=critic)
+
+
+def balanced_prior(path, trial):
+    result = json.loads(path.read_text())
+    cells = result["cells"]
+    if (result["calibrated_critic_rate"] != trial["lr"] * trial["d_lr_mult"]
+            or result["original_critic_rate"] != .021 or result["original_prior_weight"] != trial["prior_reg"]
+            or [(c["seed"], c["group"]) for c in cells] != [(s, g) for s in REPLICATION_SEEDS for g in GROUPS]):
+        raise ValueError("Particle-gradient measurements must match the fixed critic, prior and nine training pairs")
+    scales = []
+    for c in cells:
+        ratios = [c[name]["ratios_by_update"] for name in ("v12_original", "v12_calibrated")]
+        if any(len(row) != 64 or not all(isfinite(v) and v > 0 for v in row) for row in ratios):
+            raise ValueError("Incomplete paired particle gradients")
+        scales.append(median(ratios[1]) / median(ratios[0]))
+    scale = median(scales)
+    weight = round(trial["prior_reg"] / scale, 3)
+    if scale != result["median_relative_strength"] or weight != result["suggested_prior_weight"] or weight <= 0:
+        raise ValueError("The measured gradient ratios disagree with the proposed prior weight")
+    return dict(trial, prior_reg=weight, name=f"{trial['name']}-prior{round(weight * 1000)}"), scale
 
 
 def prior_effects(arms, scores, seeds):
@@ -226,7 +248,7 @@ def compare_prior_weight(args):
             "0.10.0 EMPF. Only a win over every independent reference qualifies for the biological "
             "holdout on seeds 332–347. All decisions use energy at 1200 constant-rate updates."
         )
-    elif args.study in ("critic-motion", "matched-critic-motion"):
+    elif args.study in MOTION_STUDIES:
         baseline = NOISY_PRIOR
         trial, calibration = calibrated_critic(args.motion_result)
         references = [("release-critic-" + arm[1], arm) for arm in paired(baseline)]
@@ -241,7 +263,7 @@ def compare_prior_weight(args):
             "seeds 22–24 and 251–253, then on six fresh seeds 272–277 including the original v11 and "
             "EMPF. Only then score the frozen candidate on outer seeds 348–363."
         )
-        if args.study == "matched-critic-motion":
+        if args.study in ("matched-critic-motion", "balanced-particle-prior"):
             references.extend(("first-calibration-" + arm[1], arm) for arm in paired(trial))
             trial, calibration = calibrated_critic(args.motion_result, args.motion_check)
             independent_seeds = list(range(278, 284))
@@ -255,6 +277,21 @@ def compare_prior_weight(args):
                 "require lower energy after 1200 updates than all matched and established references, "
                 "including all three at the original and first calibrated rates. Repeat on fresh seeds "
                 "278–283 with both original releases before the biological holdout on seeds 364–379."
+            )
+        if args.study == "balanced-particle-prior":
+            references.extend(("matched-motion-original-prior-" + arm[1], arm) for arm in paired(trial))
+            trial, scale = balanced_prior(args.gradient_result, trial)
+            calibration.update(relative_particle_gradient_strength=scale, fixed_prior_weight=trial["prior_reg"])
+            independent_seeds = list(range(284, 290))
+            outer_seeds = list(range(380, 396))
+            rule = (
+                "At the fixed movement-matched critic rate, divide the native prior weight 0.1 by the median "
+                "paired increase in its gradient strength relative to the adversarial gradient on the particle "
+                "table. Round to 0.001 and give the same weight and fixed generator, critic and particle rates "
+                "to v12, v11 and EMPF. At 1200 updates v12 must beat every reference on each development cohort "
+                "(22–24, then 251–253), including all three models at weight 0.1 at the original and both "
+                "calibrated critic rates. Fresh seeds 284–289 must also beat both original releases before "
+                "the biological holdout on seeds 380–395."
             )
     else:
         trial = NOISY_PRIOR
@@ -352,6 +389,8 @@ def main():
                         help="paired critic-output measurements used by the critic-motion study")
     parser.add_argument("--motion-check", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_critic_motion_check.json",
                         help="measured response at the first calibrated rate for matched-critic-motion")
+    parser.add_argument("--gradient-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_particle_balance.json",
+                        help="paired particle gradients used by the balanced-particle-prior study")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     if args.second_screen is not None and args.study not in TWO_COHORT_STUDIES:

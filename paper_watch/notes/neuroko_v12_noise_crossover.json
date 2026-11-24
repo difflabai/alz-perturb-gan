@@ -1,0 +1,2166 @@
+{
+  "protocol": {
+    "release": "0.12.0",
+    "recipe": "unified_v12",
+    "trials": [
+      {
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "name": "previous-regularized",
+        "prior_reg": 0.1
+      },
+      {
+        "name": "noise150-prior100",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 1.5,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    "sigmas": [
+      0.025,
+      0.15
+    ],
+    "seeds": [
+      22,
+      23,
+      24
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "additional_draw_seed_bases": [
+      100000,
+      100032,
+      100064,
+      100096,
+      100128,
+      100160,
+      100192,
+      100224
+    ],
+    "updates": 1200,
+    "draws_per_target": 256,
+    "rule": "Replay both release-rate v12 settings with prior weight 0.1 on all nine training pairs. Change only Gaussian sampling noise in each fitted model. Compare the two training widths at each sampling width, and the two sampling widths at each training width. Average over the opposite factor for additive contributions to the diagonal difference. Score original draws and eight additional common sets separately. Diagnostic only."
+  },
+  "canonical": {
+    "means_by_training_and_sampling_sigma": {
+      "0.025": {
+        "0.025": {
+          "mean_energy_distance": 0.9767587775179223,
+          "spread_ratio": 1.1254258786931755,
+          "effective_rank": 17.204691900749435
+        },
+        "0.15": {
+          "mean_energy_distance": 0.9666641936195102,
+          "spread_ratio": 1.1233434992663738,
+          "effective_rank": 17.243858003383593
+        }
+      },
+      "0.15": {
+        "0.025": {
+          "mean_energy_distance": 0.9527492438048071,
+          "spread_ratio": 1.126071500564775,
+          "effective_rank": 17.427139738381637
+        },
+        "0.15": {
+          "mean_energy_distance": 0.9423058649169488,
+          "spread_ratio": 1.1252307032846949,
+          "effective_rank": 17.487657974043366
+        }
+      }
+    },
+    "paired_energy_contrasts": [
+      {
+        "seed": 22,
+        "group": "Screen1_1",
+        "native_change": -0.09988628945548816,
+        "training_at_low": -0.08973533453982951,
+        "training_at_high": -0.08927808879183385,
+        "sampling_after_low": -0.01060820066365431,
+        "sampling_after_high": -0.01015095491565865,
+        "training_contribution": -0.08950671166583168,
+        "sampling_contribution": -0.01037957778965648
+      },
+      {
+        "seed": 22,
+        "group": "Screen1_3",
+        "native_change": -0.0378600098083246,
+        "training_at_low": -0.03240284451372033,
+        "training_at_high": -0.029400485142144772,
+        "sampling_after_low": -0.00845952466617983,
+        "sampling_after_high": -0.0054571652946042715,
+        "training_contribution": -0.03090166482793255,
+        "sampling_contribution": -0.0069583449803920505
+      },
+      {
+        "seed": 22,
+        "group": "Screen1_4",
+        "native_change": -0.06174368588517298,
+        "training_at_low": -0.04985131933534692,
+        "training_at_high": -0.052470268699224665,
+        "sampling_after_low": -0.009273417185948318,
+        "sampling_after_high": -0.011892366549826061,
+        "training_contribution": -0.05116079401728579,
+        "sampling_contribution": -0.01058289186788719
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_1",
+        "native_change": 0.010682235177818411,
+        "training_at_low": 0.02595159057363472,
+        "training_at_high": 0.022897816501581847,
+        "sampling_after_low": -0.012215581323763436,
+        "sampling_after_high": -0.015269355395816309,
+        "training_contribution": 0.024424703537608283,
+        "sampling_contribution": -0.013742468359789872
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_3",
+        "native_change": -0.05872989148347174,
+        "training_at_low": -0.047884301086580816,
+        "training_at_high": -0.050548654632432966,
+        "sampling_after_low": -0.008181236851038776,
+        "sampling_after_high": -0.010845590396890925,
+        "training_contribution": -0.04921647785950689,
+        "sampling_contribution": -0.00951341362396485
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_4",
+        "native_change": -0.048015981515470596,
+        "training_at_low": -0.038134049442978046,
+        "training_at_high": -0.03826838670451349,
+        "sampling_after_low": -0.009747594810957105,
+        "sampling_after_high": -0.00988193207249255,
+        "training_contribution": -0.03820121807374577,
+        "sampling_contribution": -0.009814763441724828
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_1",
+        "native_change": 0.00023482007798092397,
+        "training_at_low": 0.009823540196351344,
+        "training_at_high": 0.013929644667568963,
+        "sampling_after_low": -0.01369482458958804,
+        "sampling_after_high": -0.00958872011837042,
+        "training_contribution": 0.011876592431960153,
+        "sampling_contribution": -0.01164177235397923
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_3",
+        "native_change": 0.021697788901487103,
+        "training_at_low": 0.031323714735299824,
+        "training_at_high": 0.031124772630986897,
+        "sampling_after_low": -0.009426983729499794,
+        "sampling_after_high": -0.00962592583381272,
+        "training_contribution": 0.03122424368314336,
+        "sampling_contribution": -0.009526454781656257
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_4",
+        "native_change": -0.03645519941812014,
+        "training_at_low": -0.025176800004866884,
+        "training_at_high": -0.027211308153040736,
+        "sampling_after_low": -0.009243891265079407,
+        "sampling_after_high": -0.01127839941325326,
+        "training_contribution": -0.02619405407895381,
+        "sampling_contribution": -0.010261145339166333
+      }
+    ],
+    "mean_energy_contrasts": {
+      "native_change": -0.03445291260097353,
+      "training_at_low": -0.02400953371311518,
+      "training_at_high": -0.02435832870256142,
+      "sampling_after_low": -0.010094583898412113,
+      "sampling_after_high": -0.010443378887858352,
+      "training_contribution": -0.0241839312078383,
+      "sampling_contribution": -0.010268981393135233
+    }
+  },
+  "repeated": {
+    "means_by_training_and_sampling_sigma": {
+      "0.025": {
+        "0.025": {
+          "mean_energy_distance": 0.98027910908771,
+          "spread_ratio": 1.125259527136608,
+          "effective_rank": 17.018591723598597
+        },
+        "0.15": {
+          "mean_energy_distance": 0.9707365623369935,
+          "spread_ratio": 1.1231470097999037,
+          "effective_rank": 17.05352620405634
+        }
+      },
+      "0.15": {
+        "0.025": {
+          "mean_energy_distance": 0.9563634854091387,
+          "spread_ratio": 1.1270864647781975,
+          "effective_rank": 17.368709236927423
+        },
+        "0.15": {
+          "mean_energy_distance": 0.9462667466298211,
+          "spread_ratio": 1.1260193595932813,
+          "effective_rank": 17.444837581325068
+        }
+      }
+    },
+    "paired_energy_contrasts": [
+      {
+        "seed": 22,
+        "group": "Screen1_1",
+        "native_change": -0.07857018524046544,
+        "training_at_low": -0.0655564194449989,
+        "training_at_high": -0.06706131282213157,
+        "sampling_after_low": -0.011508872418333871,
+        "sampling_after_high": -0.013013765795466536,
+        "training_contribution": -0.06630886613356524,
+        "sampling_contribution": -0.012261319106900204
+      },
+      {
+        "seed": 22,
+        "group": "Screen1_3",
+        "native_change": -0.01991568914298192,
+        "training_at_low": -0.011952707015759123,
+        "training_at_high": -0.012025068368284764,
+        "sampling_after_low": -0.007890620774697155,
+        "sampling_after_high": -0.007962982127222795,
+        "training_contribution": -0.011988887692021943,
+        "sampling_contribution": -0.007926801450959975
+      },
+      {
+        "seed": 22,
+        "group": "Screen1_4",
+        "native_change": -0.06817229653093171,
+        "training_at_low": -0.05714110077838619,
+        "training_at_high": -0.05794454309658126,
+        "sampling_after_low": -0.01022775343435045,
+        "sampling_after_high": -0.01103119575254552,
+        "training_contribution": -0.057542821937483724,
+        "sampling_contribution": -0.010629474593447985
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_1",
+        "native_change": 0.004633580441532503,
+        "training_at_low": 0.016875108843949382,
+        "training_at_high": 0.014645802350271575,
+        "sampling_after_low": -0.010012221908739072,
+        "sampling_after_high": -0.012241528402416879,
+        "training_contribution": 0.01576045559711048,
+        "sampling_contribution": -0.011126875155577975
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_3",
+        "native_change": -0.06705517116900628,
+        "training_at_low": -0.0597702794988908,
+        "training_at_high": -0.0582037835453032,
+        "sampling_after_low": -0.008851387623703078,
+        "sampling_after_high": -0.007284891670115479,
+        "training_contribution": -0.058987031522097,
+        "sampling_contribution": -0.008068139646909278
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_4",
+        "native_change": -0.012915425138088077,
+        "training_at_low": -0.002586591505199687,
+        "training_at_high": -0.004289573684852943,
+        "sampling_after_low": -0.008625851453235134,
+        "sampling_after_high": -0.01032883363288839,
+        "training_contribution": -0.003438082595026315,
+        "sampling_contribution": -0.009477342543061762
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_1",
+        "native_change": -0.05459867625331971,
+        "training_at_low": -0.04471068493236374,
+        "training_at_high": -0.042627299173451316,
+        "sampling_after_low": -0.011971377079868395,
+        "sampling_after_high": -0.009887991320955969,
+        "training_contribution": -0.04366899205290753,
+        "sampling_contribution": -0.010929684200412182
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_3",
+        "native_change": 0.036646086481570306,
+        "training_at_low": 0.04536009960569587,
+        "training_at_high": 0.044723236957172174,
+        "sampling_after_low": -0.008077150475601869,
+        "sampling_after_high": -0.008714013124125564,
+        "training_contribution": 0.04504166828143402,
+        "sampling_contribution": -0.008395581799863716
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_4",
+        "native_change": -0.04616348556930938,
+        "training_at_low": -0.035758038381188184,
+        "training_at_high": -0.03744579998138997,
+        "sampling_after_low": -0.00871768558791941,
+        "sampling_after_high": -0.010405447188121197,
+        "training_contribution": -0.03660191918128908,
+        "sampling_contribution": -0.009561566388020304
+      }
+    ],
+    "mean_energy_contrasts": {
+      "native_change": -0.034012362457888856,
+      "training_at_low": -0.023915623678571266,
+      "training_at_high": -0.024469815707172365,
+      "sampling_after_low": -0.009542546750716493,
+      "sampling_after_high": -0.010096738779317592,
+      "training_contribution": -0.024192719692871813,
+      "sampling_contribution": -0.009819642765017043
+    }
+  },
+  "cells": [
+    {
+      "seed": 22,
+      "group": "Screen1_1",
+      "visible_devices": "0",
+      "hashes": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96"
+      },
+      "draws": {
+        "0.025": {
+          "0.025": {
+            "122": {
+              "mean_energy_distance": 1.2557108773602497,
+              "spread_ratio": 1.1655610027415078,
+              "effective_rank": 17.912691166717853
+            },
+            "100000": {
+              "mean_energy_distance": 1.2522450471412174,
+              "spread_ratio": 1.1769430262598417,
+              "effective_rank": 17.432670770236417
+            },
+            "100032": {
+              "mean_energy_distance": 1.2547615206674192,
+              "spread_ratio": 1.183266341205829,
+              "effective_rank": 17.525500166710934
+            },
+            "100064": {
+              "mean_energy_distance": 1.2353369891183188,
+              "spread_ratio": 1.1838554016197143,
+              "effective_rank": 17.339050992932318
+            },
+            "100096": {
+              "mean_energy_distance": 1.2351468389730567,
+              "spread_ratio": 1.182618505811406,
+              "effective_rank": 17.02603166542819
+            },
+            "100128": {
+              "mean_energy_distance": 1.2418316836035317,
+              "spread_ratio": 1.174025710790664,
+              "effective_rank": 17.249510301632334
+            },
+            "100160": {
+              "mean_energy_distance": 1.2117280336527807,
+              "spread_ratio": 1.1814364831564548,
+              "effective_rank": 17.37322942615617
+            },
+            "100192": {
+              "mean_energy_distance": 1.2764627925470011,
+              "spread_ratio": 1.1802440512633017,
+              "effective_rank": 17.274402376191848
+            },
+            "100224": {
+              "mean_energy_distance": 1.221046912545021,
+              "spread_ratio": 1.1908621225233462,
+              "effective_rank": 17.18391055285436
+            }
+          },
+          "0.15": {
+            "122": {
+              "mean_energy_distance": 1.2451026766965954,
+              "spread_ratio": 1.1636877378780905,
+              "effective_rank": 17.959563700099274
+            },
+            "100000": {
+              "mean_energy_distance": 1.240258347450353,
+              "spread_ratio": 1.1741973922239262,
+              "effective_rank": 17.439089306041023
+            },
+            "100032": {
+              "mean_energy_distance": 1.243529036413813,
+              "spread_ratio": 1.1809009182184314,
+              "effective_rank": 17.555816379518667
+            },
+            "100064": {
+              "mean_energy_distance": 1.2239561760005466,
+              "spread_ratio": 1.1810540839288177,
+              "effective_rank": 17.357105962891367
+            },
+            "100096": {
+              "mean_energy_distance": 1.2211817164180672,
+              "spread_ratio": 1.1805929331635392,
+              "effective_rank": 17.09005822526235
+            },
+            "100128": {
+              "mean_energy_distance": 1.229248736828669,
+              "spread_ratio": 1.1720209016625787,
+              "effective_rank": 17.28786498325419
+            },
+            "100160": {
+              "mean_energy_distance": 1.202676664570584,
+              "spread_ratio": 1.1787434843120104,
+              "effective_rank": 17.39923347480813
+            },
+            "100192": {
+              "mean_energy_distance": 1.2661458570127364,
+              "spread_ratio": 1.1782858772008127,
+              "effective_rank": 17.285892638335635
+            },
+            "100224": {
+              "mean_energy_distance": 1.2094923042069068,
+              "spread_ratio": 1.1884174971411752,
+              "effective_rank": 17.211094003229356
+            }
+          }
+        },
+        "0.15": {
+          "0.15": {
+            "122": {
+              "mean_energy_distance": 1.1558245879047615,
+              "spread_ratio": 1.1181558156169027,
+              "effective_rank": 17.895847608176197
+            },
+            "100000": {
+              "mean_energy_distance": 1.1702875969636892,
+              "spread_ratio": 1.1358396459844586,
+              "effective_rank": 17.62741504712825
+            },
+            "100032": {
+              "mean_energy_distance": 1.1486088701935955,
+              "spread_ratio": 1.137682953924534,
+              "effective_rank": 17.725580224348732
+            },
+            "100064": {
+              "mean_energy_distance": 1.1539921793214991,
+              "spread_ratio": 1.1499435309316421,
+              "effective_rank": 17.331912497621417
+            },
+            "100096": {
+              "mean_energy_distance": 1.150114148803817,
+              "spread_ratio": 1.1337493272337336,
+              "effective_rank": 17.19246543415939
+            },
+            "100128": {
+              "mean_energy_distance": 1.1594742750499534,
+              "spread_ratio": 1.1320607493195864,
+              "effective_rank": 17.62558050293145
+            },
+            "100160": {
+              "mean_energy_distance": 1.181335435628994,
+              "spread_ratio": 1.1164941449022838,
+              "effective_rank": 18.23414950686863
+            },
+            "100192": {
+              "mean_energy_distance": 1.1926758582661372,
+              "spread_ratio": 1.1091905750264874,
+              "effective_rank": 17.911306615463964
+            },
+            "100224": {
+              "mean_energy_distance": 1.143509972096938,
+              "spread_ratio": 1.1182503058780757,
+              "effective_rank": 17.897050183008567
+            }
+          },
+          "0.025": {
+            "122": {
+              "mean_energy_distance": 1.1659755428204202,
+              "spread_ratio": 1.1186009468834153,
+              "effective_rank": 17.781212304835304
+            },
+            "100000": {
+              "mean_energy_distance": 1.181795447603339,
+              "spread_ratio": 1.135129948362649,
+              "effective_rank": 17.526792194080183
+            },
+            "100032": {
+              "mean_energy_distance": 1.1612808924514761,
+              "spread_ratio": 1.1375234219536574,
+              "effective_rank": 17.655156942250386
+            },
+            "100064": {
+              "mean_energy_distance": 1.168706594156159,
+              "spread_ratio": 1.1488705631567826,
+              "effective_rank": 17.197041982746214
+            },
+            "100096": {
+              "mean_energy_distance": 1.1607575052262908,
+              "spread_ratio": 1.1347694413133287,
+              "effective_rank": 17.09063035849917
+            },
+            "100128": {
+              "mean_energy_distance": 1.1746529947376285,
+              "spread_ratio": 1.132310059031829,
+              "effective_rank": 17.508261242593594
+            },
+            "100160": {
+              "mean_energy_distance": 1.1924237832261202,
+              "spread_ratio": 1.1190188640454555,
+              "effective_rank": 18.135362027149974
+            },
+            "100192": {
+              "mean_energy_distance": 1.2091420653490053,
+              "spread_ratio": 1.109087258182786,
+              "effective_rank": 17.83043391977372
+            },
+            "100224": {
+              "mean_energy_distance": 1.1553491799383362,
+              "spread_ratio": 1.1191292590588975,
+              "effective_rank": 17.809795790190588
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_3",
+      "visible_devices": "1",
+      "hashes": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4"
+      },
+      "draws": {
+        "0.025": {
+          "0.025": {
+            "122": {
+              "mean_energy_distance": 0.6206463785750256,
+              "spread_ratio": 1.2001174607668208,
+              "effective_rank": 17.961637004620776
+            },
+            "100000": {
+              "mean_energy_distance": 0.6208502405143665,
+              "spread_ratio": 1.2085440205628444,
+              "effective_rank": 17.659618634522303
+            },
+            "100032": {
+              "mean_energy_distance": 0.5894032479125997,
+              "spread_ratio": 1.1940080537069222,
+              "effective_rank": 17.81218548149799
+            },
+            "100064": {
+              "mean_energy_distance": 0.6157374762133909,
+              "spread_ratio": 1.1954291169817015,
+              "effective_rank": 17.812946240415044
+            },
+            "100096": {
+              "mean_energy_distance": 0.5882012093114928,
+              "spread_ratio": 1.1871791806194234,
+              "effective_rank": 17.49761190395103
+            },
+            "100128": {
+              "mean_energy_distance": 0.6255131918296475,
+              "spread_ratio": 1.192994175708328,
+              "effective_rank": 17.59102982024107
+            },
+            "100160": {
+              "mean_energy_distance": 0.6373389175616548,
+              "spread_ratio": 1.2009565249871925,
+              "effective_rank": 18.375995173940055
+            },
+            "100192": {
+              "mean_energy_distance": 0.611281035823686,
+              "spread_ratio": 1.187278625013368,
+              "effective_rank": 18.179734462590652
+            },
+            "100224": {
+              "mean_energy_distance": 0.5778341091062382,
+              "spread_ratio": 1.1878488916924599,
+              "effective_rank": 17.99534211016024
+            }
+          },
+          "0.15": {
+            "122": {
+              "mean_energy_distance": 0.6121868539088458,
+              "spread_ratio": 1.197432930311058,
+              "effective_rank": 17.99273074175148
+            },
+            "100000": {
+              "mean_energy_distance": 0.614406336225017,
+              "spread_ratio": 1.206370865404745,
+              "effective_rank": 17.693633851240534
+            },
+            "100032": {
+              "mean_energy_distance": 0.5800209408340711,
+              "spread_ratio": 1.191880781712007,
+              "effective_rank": 17.877345438866207
+            },
+            "100064": {
+              "mean_energy_distance": 0.6056619052533323,
+              "spread_ratio": 1.1939939752835411,
+              "effective_rank": 17.83765842413662
+            },
+            "100096": {
+              "mean_energy_distance": 0.5804885961949517,
+              "spread_ratio": 1.1850146196584723,
+              "effective_rank": 17.539130752820736
+            },
+            "100128": {
+              "mean_energy_distance": 0.6164309594818789,
+              "spread_ratio": 1.1908940178704293,
+              "effective_rank": 17.60976023478436
+            },
+            "100160": {
+              "mean_energy_distance": 0.6307453087542005,
+              "spread_ratio": 1.1982609933693915,
+              "effective_rank": 18.38316753303049
+            },
+            "100192": {
+              "mean_energy_distance": 0.6043110946554153,
+              "spread_ratio": 1.1860740752959897,
+              "effective_rank": 18.16018569381096
+            },
+            "100224": {
+              "mean_energy_distance": 0.570969320676632,
+              "spread_ratio": 1.1869600087187697,
+              "effective_rank": 17.999349547911603
+            }
+          }
+        },
+        "0.15": {
+          "0.15": {
+            "122": {
+              "mean_energy_distance": 0.582786368766701,
+              "spread_ratio": 1.2000691389556954,
+              "effective_rank": 17.741600958798077
+            },
+            "100000": {
+              "mean_energy_distance": 0.5630730010468921,
+              "spread_ratio": 1.2027384885192391,
+              "effective_rank": 17.332549660298934
+            },
+            "100032": {
+              "mean_energy_distance": 0.574254730275064,
+              "spread_ratio": 1.1889789085185747,
+              "effective_rank": 18.20529415356541
+            },
+            "100064": {
+              "mean_energy_distance": 0.6303935065343995,
+              "spread_ratio": 1.2099494243963453,
+              "effective_rank": 17.249287747409557
+            },
+            "100096": {
+              "mean_energy_distance": 0.5943144589813711,
+              "spread_ratio": 1.197051425646693,
+              "effective_rank": 17.525960287903953
+            },
+            "100128": {
+              "mean_energy_distance": 0.5920466493401106,
+              "spread_ratio": 1.18373350993418,
+              "effective_rank": 17.859989351520337
+            },
+            "100160": {
+              "mean_energy_distance": 0.574185613369733,
+              "spread_ratio": 1.1972135187155732,
+              "effective_rank": 17.717284806008742
+            },
+            "100192": {
+              "mean_energy_distance": 0.5891805958345695,
+              "spread_ratio": 1.2086156884623307,
+              "effective_rank": 17.212290236799618
+            },
+            "100224": {
+              "mean_energy_distance": 0.5893853597470813,
+              "spread_ratio": 1.2057371338874516,
+              "effective_rank": 17.404813341002217
+            }
+          },
+          "0.025": {
+            "122": {
+              "mean_energy_distance": 0.5882435340613053,
+              "spread_ratio": 1.2020947099585901,
+              "effective_rank": 17.711555285594844
+            },
+            "100000": {
+              "mean_energy_distance": 0.5729946565850474,
+              "spread_ratio": 1.2044138274542635,
+              "effective_rank": 17.300854392676175
+            },
+            "100032": {
+              "mean_energy_distance": 0.5830579993158238,
+              "spread_ratio": 1.191131843723232,
+              "effective_rank": 18.11116787181252
+            },
+            "100064": {
+              "mean_energy_distance": 0.6371659023236311,
+              "spread_ratio": 1.2112245279794445,
+              "effective_rank": 17.147330018891303
+            },
+            "100096": {
+              "mean_energy_distance": 0.6020501525065207,
+              "spread_ratio": 1.1975221307696429,
+              "effective_rank": 17.459678576915174
+            },
+            "100128": {
+              "mean_energy_distance": 0.5996823499733606,
+              "spread_ratio": 1.184760888209943,
+              "effective_rank": 17.768574763827626
+            },
+            "100160": {
+              "mean_energy_distance": 0.5801797106211732,
+              "spread_ratio": 1.197947610640386,
+              "effective_rank": 17.623847366796667
+            },
+            "100192": {
+              "mean_energy_distance": 0.5982758514263786,
+              "spread_ratio": 1.2101425493195728,
+              "effective_rank": 17.13027947835626
+            },
+            "100224": {
+              "mean_energy_distance": 0.597131149395068,
+              "spread_ratio": 1.207629515916152,
+              "effective_rank": 17.305811629012414
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_4",
+      "visible_devices": "0",
+      "hashes": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "85f4aff48cde6ba1da727b69d794e423e9f4cb879abe43d9899c96b3e19486a8"
+      },
+      "draws": {
+        "0.025": {
+          "0.025": {
+            "122": {
+              "mean_energy_distance": 1.168474087848675,
+              "spread_ratio": 0.9906077043079572,
+              "effective_rank": 17.460248451599476
+            },
+            "100000": {
+              "mean_energy_distance": 1.1984900447271445,
+              "spread_ratio": 0.9881164533210379,
+              "effective_rank": 17.53019222394906
+            },
+            "100032": {
+              "mean_energy_distance": 1.1553250637803025,
+              "spread_ratio": 1.0111881197217722,
+              "effective_rank": 17.146777428741828
+            },
+            "100064": {
+              "mean_energy_distance": 1.1952958741486568,
+              "spread_ratio": 0.9956238962849118,
+              "effective_rank": 17.30159790129706
+            },
+            "100096": {
+              "mean_energy_distance": 1.2057760625782001,
+              "spread_ratio": 0.9834908324595772,
+              "effective_rank": 16.93665920529099
+            },
+            "100128": {
+              "mean_energy_distance": 1.208190038080438,
+              "spread_ratio": 0.9880284417110367,
+              "effective_rank": 16.86610955440854
+            },
+            "100160": {
+              "mean_energy_distance": 1.1868667920753555,
+              "spread_ratio": 0.9767216655652383,
+              "effective_rank": 17.832404158503834
+            },
+            "100192": {
+              "mean_energy_distance": 1.170937922774174,
+              "spread_ratio": 0.9906778111964525,
+              "effective_rank": 17.483104179035355
+            },
+            "100224": {
+              "mean_energy_distance": 1.166577747235964,
+              "spread_ratio": 0.9907702218935581,
+              "effective_rank": 17.41928152959808
+            }
+          },
+          "0.15": {
+            "122": {
+              "mean_energy_distance": 1.1592006706627267,
+              "spread_ratio": 0.9885671936775559,
+              "effective_rank": 17.493949752148538
+            },
+            "100000": {
+              "mean_energy_distance": 1.1892232026705198,
+              "spread_ratio": 0.986583290129712,
+              "effective_rank": 17.57418329717065
+            },
+            "100032": {
+              "mean_energy_distance": 1.1471574873453931,
+              "spread_ratio": 1.008949192826455,
+              "effective_rank": 17.195147412554714
+            },
+            "100064": {
+              "mean_energy_distance": 1.1844885677739498,
+              "spread_ratio": 0.9935991829742037,
+              "effective_rank": 17.33516427618848
+            },
+            "100096": {
+              "mean_energy_distance": 1.1930876384475249,
+              "spread_ratio": 0.9820003716565603,
+              "effective_rank": 16.968464915666015
+            },
+            "100128": {
+              "mean_energy_distance": 1.2012607343017436,
+              "spread_ratio": 0.9871706148708154,
+              "effective_rank": 16.904705741160964
+            },
+            "100160": {
+              "mean_energy_distance": 1.177657359878067,
+              "spread_ratio": 0.9745286550878521,
+              "effective_rank": 17.889986655754225
+            },
+            "100192": {
+              "mean_energy_distance": 1.1553484924302606,
+              "spread_ratio": 0.9891925139636284,
+              "effective_rank": 17.558169840931853
+            },
+            "100224": {
+              "mean_energy_distance": 1.1574140350779711,
+              "spread_ratio": 0.9888895840836716,
+              "effective_rank": 17.4348028063626
+            }
+          }
+        },
+        "0.15": {
+          "0.15": {
+            "122": {
+              "mean_energy_distance": 1.106730401963502,
+              "spread_ratio": 1.009725480960883,
+              "effective_rank": 17.934954670520362
+            },
+            "100000": {
+              "mean_energy_distance": 1.1313537760477423,
+              "spread_ratio": 1.0135284452895015,
+              "effective_rank": 17.981420395248847
+            },
+            "100032": {
+              "mean_energy_distance": 1.1244265182421116,
+              "spread_ratio": 1.0084618040278623,
+              "effective_rank": 18.1109584195239
+            },
+            "100064": {
+              "mean_energy_distance": 1.1319929494933283,
+              "spread_ratio": 1.022134334712016,
+              "effective_rank": 17.78030520235357
+            },
+            "100096": {
+              "mean_energy_distance": 1.1216666634972712,
+              "spread_ratio": 1.016117503126438,
+              "effective_rank": 17.348629471894707
+            },
+            "100128": {
+              "mean_energy_distance": 1.0956179845330565,
+              "spread_ratio": 1.0197789757463165,
+              "effective_rank": 17.569459398273178
+            },
+            "100160": {
+              "mean_energy_distance": 1.0970834859525682,
+              "spread_ratio": 1.0175553251359297,
+              "effective_rank": 17.955768197986202
+            },
+            "100192": {
+              "mean_energy_distance": 1.1192115640345308,
+              "spread_ratio": 1.0218862485744067,
+              "effective_rank": 17.803312605405345
+            },
+            "100224": {
+              "mean_energy_distance": 1.120728231352172,
+              "spread_ratio": 1.0017919446725627,
+              "effective_rank": 18.07462192187289
+            }
+          },
+          "0.025": {
+            "122": {
+              "mean_energy_distance": 1.118622768513328,
+              "spread_ratio": 1.0103113534822197,
+              "effective_rank": 17.87127767011508
+            },
+            "100000": {
+              "mean_energy_distance": 1.140020999041399,
+              "spread_ratio": 1.0147979907976312,
+              "effective_rank": 17.91127110183899
+            },
+            "100032": {
+              "mean_energy_distance": 1.135860567923906,
+              "spread_ratio": 1.010096716866484,
+              "effective_rank": 18.075642470634506
+            },
+            "100064": {
+              "mean_energy_distance": 1.1446811946585607,
+              "spread_ratio": 1.0225707494252354,
+              "effective_rank": 17.69469758917783
+            },
+            "100096": {
+              "mean_energy_distance": 1.1356139920942072,
+              "spread_ratio": 1.0173278433880373,
+              "effective_rank": 17.28462779646658
+            },
+            "100128": {
+              "mean_energy_distance": 1.1077765243636288,
+              "spread_ratio": 1.0204534290861236,
+              "effective_rank": 17.514658507998483
+            },
+            "100160": {
+              "mean_energy_distance": 1.1044346883160072,
+              "spread_ratio": 1.0189652253558863,
+              "effective_rank": 17.906656994747983
+            },
+            "100192": {
+              "mean_energy_distance": 1.12747709686318,
+              "spread_ratio": 1.0231146209552104,
+              "effective_rank": 17.729562899174347
+            },
+            "100224": {
+              "mean_energy_distance": 1.1344656759122553,
+              "spread_ratio": 1.0023676668990067,
+              "effective_rank": 18.034750793208648
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_1",
+      "visible_devices": "1",
+      "hashes": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "c1b421e29d4d935428afccf2b52bb0b12c41f54b927d95ee3c8b4b7fcff3a3eb"
+      },
+      "draws": {
+        "0.025": {
+          "0.025": {
+            "123": {
+              "mean_energy_distance": 1.2263094478020322,
+              "spread_ratio": 1.185420985831671,
+              "effective_rank": 16.992381610914656
+            },
+            "100000": {
+              "mean_energy_distance": 1.2087149947386897,
+              "spread_ratio": 1.178225581009424,
+              "effective_rank": 16.80738238283591
+            },
+            "100032": {
+              "mean_energy_distance": 1.1946991156304774,
+              "spread_ratio": 1.174607527013219,
+              "effective_rank": 16.867995564087117
+            },
+            "100064": {
+              "mean_energy_distance": 1.2463520196735696,
+              "spread_ratio": 1.1857097391270561,
+              "effective_rank": 16.124035374580696
+            },
+            "100096": {
+              "mean_energy_distance": 1.23579854862822,
+              "spread_ratio": 1.2074920965402154,
+              "effective_rank": 16.4065744514376
+            },
+            "100128": {
+              "mean_energy_distance": 1.2137239559340696,
+              "spread_ratio": 1.1866381269654493,
+              "effective_rank": 16.72690255922762
+            },
+            "100160": {
+              "mean_energy_distance": 1.2385753865253608,
+              "spread_ratio": 1.1925783448834382,
+              "effective_rank": 16.784826628514928
+            },
+            "100192": {
+              "mean_energy_distance": 1.211742863595831,
+              "spread_ratio": 1.173918155594494,
+              "effective_rank": 17.05021099438383
+            },
+            "100224": {
+              "mean_energy_distance": 1.2186328365840602,
+              "spread_ratio": 1.1740409176378703,
+              "effective_rank": 16.449300673828652
+            }
+          },
+          "0.15": {
+            "123": {
+              "mean_energy_distance": 1.2140938664782688,
+              "spread_ratio": 1.1835514482067058,
+              "effective_rank": 17.01841289837305
+            },
+            "100000": {
+              "mean_energy_distance": 1.202059880496882,
+              "spread_ratio": 1.1757498472396661,
+              "effective_rank": 16.81697406276279
+            },
+            "100032": {
+              "mean_energy_distance": 1.181924293598305,
+              "spread_ratio": 1.1715818330521692,
+              "effective_rank": 16.91137175959421
+            },
+            "100064": {
+              "mean_energy_distance": 1.2361712804760834,
+              "spread_ratio": 1.1841517946815359,
+              "effective_rank": 16.151689601869954
+            },
+            "100096": {
+              "mean_energy_distance": 1.2252019516562862,
+              "spread_ratio": 1.2044612446978031,
+              "effective_rank": 16.410901934953788
+            },
+            "100128": {
+              "mean_energy_distance": 1.2014237940279062,
+              "spread_ratio": 1.1851066539287247,
+              "effective_rank": 16.758762507832138
+            },
+            "100160": {
+              "mean_energy_distance": 1.2322975393492226,
+              "spread_ratio": 1.1902084216900302,
+              "effective_rank": 16.795771879088317
+            },
+            "100192": {
+              "mean_energy_distance": 1.2013192326970448,
+              "spread_ratio": 1.1716559572343397,
+              "effective_rank": 17.052668047823886
+            },
+            "100224": {
+              "mean_energy_distance": 1.207743973738636,
+              "spread_ratio": 1.1714373055356546,
+              "effective_rank": 16.499362796176314
+            }
+          }
+        },
+        "0.15": {
+          "0.15": {
+            "123": {
+              "mean_energy_distance": 1.2369916829798506,
+              "spread_ratio": 1.2018686184776988,
+              "effective_rank": 16.614263340848066
+            },
+            "100000": {
+              "mean_energy_distance": 1.2070220341163704,
+              "spread_ratio": 1.2021048504356102,
+              "effective_rank": 16.79283938237228
+            },
+            "100032": {
+              "mean_energy_distance": 1.222533224825653,
+              "spread_ratio": 1.2094348366797563,
+              "effective_rank": 16.28752835310493
+            },
+            "100064": {
+              "mean_energy_distance": 1.2197448768439705,
+              "spread_ratio": 1.2052522320132182,
+              "effective_rank": 16.447061891616983
+            },
+            "100096": {
+              "mean_energy_distance": 1.1978639529272144,
+              "spread_ratio": 1.219892195460819,
+              "effective_rank": 16.13015046552428
+            },
+            "100128": {
+              "mean_energy_distance": 1.2155157315552443,
+              "spread_ratio": 1.205237552542687,
+              "effective_rank": 16.14927193106489
+            },
+            "100160": {
+              "mean_energy_distance": 1.2252967825168757,
+              "spread_ratio": 1.1912118466038233,
+              "effective_rank": 17.163396251161302
+            },
+            "100192": {
+              "mean_energy_distance": 1.2690144383702753,
+              "spread_ratio": 1.1771601209278617,
+              "effective_rank": 16.743483244973817
+            },
+            "100224": {
+              "mean_energy_distance": 1.2483173236869356,
+              "spread_ratio": 1.1969208315162105,
+              "effective_rank": 16.273914807311947
+            }
+          },
+          "0.025": {
+            "123": {
+              "mean_energy_distance": 1.252261038375667,
+              "spread_ratio": 1.204234660742895,
+              "effective_rank": 16.541527756600594
+            },
+            "100000": {
+              "mean_energy_distance": 1.2177611061074407,
+              "spread_ratio": 1.2035669098025126,
+              "effective_rank": 16.688881363112838
+            },
+            "100032": {
+              "mean_energy_distance": 1.2336799213629526,
+              "spread_ratio": 1.2093188817267633,
+              "effective_rank": 16.176214568072655
+            },
+            "100064": {
+              "mean_energy_distance": 1.233576462553778,
+              "spread_ratio": 1.2066179251780424,
+              "effective_rank": 16.329991007534918
+            },
+            "100096": {
+              "mean_energy_distance": 1.2130708111688555,
+              "spread_ratio": 1.2224486096738907,
+              "effective_rank": 16.02003878765447
+            },
+            "100128": {
+              "mean_energy_distance": 1.2239770957617537,
+              "spread_ratio": 1.2068486631894777,
+              "effective_rank": 16.046089946289854
+            },
+            "100160": {
+              "mean_energy_distance": 1.237824895384058,
+              "spread_ratio": 1.191163627379813,
+              "effective_rank": 17.12881309937049
+            },
+            "100192": {
+              "mean_energy_distance": 1.2835083711748778,
+              "spread_ratio": 1.1774965519919673,
+              "effective_rank": 16.660515347294144
+            },
+            "100224": {
+              "mean_energy_distance": 1.2598419285481566,
+              "spread_ratio": 1.1982344720250437,
+              "effective_rank": 16.189327075705133
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_3",
+      "visible_devices": "0",
+      "hashes": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "a2c81ac6a8e84563621f19a16aff3340cbf95b95bacc135c80df9b3fd42f7443"
+      },
+      "draws": {
+        "0.025": {
+          "0.025": {
+            "123": {
+              "mean_energy_distance": 0.5963567062495023,
+              "spread_ratio": 1.232157669878359,
+              "effective_rank": 17.116907659595874
+            },
+            "100000": {
+              "mean_energy_distance": 0.6139780037617049,
+              "spread_ratio": 1.2366340230372141,
+              "effective_rank": 16.97696911751302
+            },
+            "100032": {
+              "mean_energy_distance": 0.6225926961263832,
+              "spread_ratio": 1.231266879212716,
+              "effective_rank": 17.044245402690063
+            },
+            "100064": {
+              "mean_energy_distance": 0.6270966308303718,
+              "spread_ratio": 1.250865701697505,
+              "effective_rank": 16.610107127329456
+            },
+            "100096": {
+              "mean_energy_distance": 0.652822144039352,
+              "spread_ratio": 1.250094963169141,
+              "effective_rank": 16.537161809956004
+            },
+            "100128": {
+              "mean_energy_distance": 0.6348737433712768,
+              "spread_ratio": 1.2283626056518593,
+              "effective_rank": 17.129672818470034
+            },
+            "100160": {
+              "mean_energy_distance": 0.6188342651380285,
+              "spread_ratio": 1.244757901481786,
+              "effective_rank": 17.16438073510739
+            },
+            "100192": {
+              "mean_energy_distance": 0.5976497133377874,
+              "spread_ratio": 1.2316158248315974,
+              "effective_rank": 16.882511272507806
+            },
+            "100224": {
+              "mean_energy_distance": 0.6116294048969544,
+              "spread_ratio": 1.2279544921514272,
+              "effective_rank": 16.95525514726727
+            }
+          },
+          "0.15": {
+            "123": {
+              "mean_energy_distance": 0.5881754693984635,
+              "spread_ratio": 1.2287361370911394,
+              "effective_rank": 17.1808159557266
+            },
+            "100000": {
+              "mean_energy_distance": 0.6054107777855475,
+              "spread_ratio": 1.2330946081950254,
+              "effective_rank": 16.996280590561568
+            },
+            "100032": {
+              "mean_energy_distance": 0.6151567590979055,
+              "spread_ratio": 1.2286696824104775,
+              "effective_rank": 17.064008867074957
+            },
+            "100064": {
+              "mean_energy_distance": 0.6177002432103589,
+              "spread_ratio": 1.2481894366804898,
+              "effective_rank": 16.65094741631337
+            },
+            "100096": {
+              "mean_energy_distance": 0.6409562885043607,
+              "spread_ratio": 1.2453193822964215,
+              "effective_rank": 16.6045252308025
+            },
+            "100128": {
+              "mean_energy_distance": 0.6257628026647033,
+              "spread_ratio": 1.2259831631096836,
+              "effective_rank": 17.15941403721787
+            },
+            "100160": {
+              "mean_energy_distance": 0.608749103498631,
+              "spread_ratio": 1.241801485745163,
+              "effective_rank": 17.202614790017343
+            },
+            "100192": {
+              "mean_energy_distance": 0.5898112251347709,
+              "spread_ratio": 1.2285341729390646,
+              "effective_rank": 16.946411129097648
+            },
+            "100224": {
+              "mean_energy_distance": 0.6051183006159568,
+              "spread_ratio": 1.225322261030448,
+              "effective_rank": 17.048352272609606
+            }
+          }
+        },
+        "0.15": {
+          "0.15": {
+            "123": {
+              "mean_energy_distance": 0.5376268147660306,
+              "spread_ratio": 1.184570962356847,
+              "effective_rank": 17.81293926553691
+            },
+            "100000": {
+              "mean_energy_distance": 0.5622445419468458,
+              "spread_ratio": 1.1754285961280158,
+              "effective_rank": 17.82199078664056
+            },
+            "100032": {
+              "mean_energy_distance": 0.5632658382147651,
+              "spread_ratio": 1.1662914285630914,
+              "effective_rank": 18.084548056192283
+            },
+            "100064": {
+              "mean_energy_distance": 0.5743541435478086,
+              "spread_ratio": 1.1931095520524124,
+              "effective_rank": 17.265429200483485
+            },
+            "100096": {
+              "mean_energy_distance": 0.5538534001903668,
+              "spread_ratio": 1.1767037168016201,
+              "effective_rank": 17.876000787826193
+            },
+            "100128": {
+              "mean_energy_distance": 0.5626309996565977,
+              "spread_ratio": 1.1747630361158583,
+              "effective_rank": 18.22183970302492
+            },
+            "100160": {
+              "mean_energy_distance": 0.5297807646160122,
+              "spread_ratio": 1.1787258278072028,
+              "effective_rank": 17.85695727886324
+            },
+            "100192": {
+              "mean_energy_distance": 0.5509006389251945,
+              "spread_ratio": 1.1853736050619628,
+              "effective_rank": 17.61123382110236
+            },
+            "100224": {
+              "mean_energy_distance": 0.5460049050522187,
+              "spread_ratio": 1.1711077372627092,
+              "effective_rank": 17.94571519824052
+            }
+          },
+          "0.025": {
+            "123": {
+              "mean_energy_distance": 0.5484724051629215,
+              "spread_ratio": 1.1851413812651295,
+              "effective_rank": 17.76223303639235
+            },
+            "100000": {
+              "mean_energy_distance": 0.5700849287078804,
+              "spread_ratio": 1.1772236001093968,
+              "effective_rank": 17.72202402886264
+            },
+            "100032": {
+              "mean_energy_distance": 0.569151273964015,
+              "spread_ratio": 1.1677832586978356,
+              "effective_rank": 18.0323198224753
+            },
+            "100064": {
+              "mean_energy_distance": 0.582230981462706,
+              "spread_ratio": 1.194104274247024,
+              "effective_rank": 17.205455732710792
+            },
+            "100096": {
+              "mean_energy_distance": 0.561169070479735,
+              "spread_ratio": 1.178175421399241,
+              "effective_rank": 17.80684766317116
+            },
+            "100128": {
+              "mean_energy_distance": 0.5699892700171543,
+              "spread_ratio": 1.1768090925143577,
+              "effective_rank": 18.176396205878067
+            },
+            "100160": {
+              "mean_energy_distance": 0.5372006633580335,
+              "spread_ratio": 1.1802125960333352,
+              "effective_rank": 17.78568515404844
+            },
+            "100192": {
+              "mean_energy_distance": 0.5589458492055117,
+              "spread_ratio": 1.188080495947116,
+              "effective_rank": 17.53866262968933
+            },
+            "100224": {
+              "mean_energy_distance": 0.5525423283156965,
+              "spread_ratio": 1.1715902669201186,
+              "effective_rank": 17.84667830922536
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_4",
+      "visible_devices": "1",
+      "hashes": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "f0fc24166dc52bf914506e6eccc97cdb2937937bcb548c4ee7f877c9038456c6"
+      },
+      "draws": {
+        "0.025": {
+          "0.025": {
+            "123": {
+              "mean_energy_distance": 1.0961714074809108,
+              "spread_ratio": 0.9927416341535749,
+              "effective_rank": 16.74162795687818
+            },
+            "100000": {
+              "mean_energy_distance": 1.0814932346975232,
+              "spread_ratio": 0.988025974128005,
+              "effective_rank": 16.70653325104798
+            },
+            "100032": {
+              "mean_energy_distance": 1.0868579465724044,
+              "spread_ratio": 0.9888531398654683,
+              "effective_rank": 16.746267918016073
+            },
+            "100064": {
+              "mean_energy_distance": 1.096007033010968,
+              "spread_ratio": 0.9975339782877676,
+              "effective_rank": 16.62020899184345
+            },
+            "100096": {
+              "mean_energy_distance": 1.0480608677467598,
+              "spread_ratio": 1.0054536315912368,
+              "effective_rank": 16.142252962373945
+            },
+            "100128": {
+              "mean_energy_distance": 1.0607812557964338,
+              "spread_ratio": 0.999443371038238,
+              "effective_rank": 16.46696063124219
+            },
+            "100160": {
+              "mean_energy_distance": 1.0807988645351354,
+              "spread_ratio": 0.9914925503315577,
+              "effective_rank": 16.652512510077884
+            },
+            "100192": {
+              "mean_energy_distance": 1.1091146875242888,
+              "spread_ratio": 0.9905475494683003,
+              "effective_rank": 16.616899607445603
+            },
+            "100224": {
+              "mean_energy_distance": 1.0849305915752085,
+              "spread_ratio": 0.9799805681137568,
+              "effective_rank": 16.77786590463571
+            }
+          },
+          "0.15": {
+            "123": {
+              "mean_energy_distance": 1.0864238126699537,
+              "spread_ratio": 0.9911042181958485,
+              "effective_rank": 16.77681452551032
+            },
+            "100000": {
+              "mean_energy_distance": 1.0736925415717273,
+              "spread_ratio": 0.9863166751123227,
+              "effective_rank": 16.740112244495815
+            },
+            "100032": {
+              "mean_energy_distance": 1.080445441809522,
+              "spread_ratio": 0.987367281612355,
+              "effective_rank": 16.782290599366277
+            },
+            "100064": {
+              "mean_energy_distance": 1.0890936663124868,
+              "spread_ratio": 0.9959052016119817,
+              "effective_rank": 16.68060914556081
+            },
+            "100096": {
+              "mean_energy_distance": 1.037989646467137,
+              "spread_ratio": 1.003606486871811,
+              "effective_rank": 16.196290073364153
+            },
+            "100128": {
+              "mean_energy_distance": 1.0527720260380466,
+              "spread_ratio": 0.9981465410024224,
+              "effective_rank": 16.500858021223742
+            },
+            "100160": {
+              "mean_energy_distance": 1.0723960396322008,
+              "spread_ratio": 0.9895926991099337,
+              "effective_rank": 16.6665205565503
+            },
+            "100192": {
+              "mean_energy_distance": 1.0970251062370069,
+              "spread_ratio": 0.9887316235585895,
+              "effective_rank": 16.635665359417445
+            },
+            "100224": {
+              "mean_energy_distance": 1.0756232017647145,
+              "spread_ratio": 0.9785733385504308,
+              "effective_rank": 16.81909090478614
+            }
+          }
+        },
+        "0.15": {
+          "0.15": {
+            "123": {
+              "mean_energy_distance": 1.0481554259654402,
+              "spread_ratio": 0.9866796742189852,
+              "effective_rank": 17.78005090507721
+            },
+            "100000": {
+              "mean_energy_distance": 1.0695115902890722,
+              "spread_ratio": 0.9869473830473148,
+              "effective_rank": 17.961427040011294
+            },
+            "100032": {
+              "mean_energy_distance": 1.0950582301655651,
+              "spread_ratio": 0.9797172196116227,
+              "effective_rank": 17.93596215129328
+            },
+            "100064": {
+              "mean_energy_distance": 1.0742007159614364,
+              "spread_ratio": 0.9854872795387621,
+              "effective_rank": 17.452365630324476
+            },
+            "100096": {
+              "mean_energy_distance": 1.0516938949344719,
+              "spread_ratio": 0.9826538641655418,
+              "effective_rank": 17.54268069751798
+            },
+            "100128": {
+              "mean_energy_distance": 1.0556009304141933,
+              "spread_ratio": 0.9930283248589358,
+              "effective_rank": 17.497277052485618
+            },
+            "100160": {
+              "mean_energy_distance": 1.0670443927490034,
+              "spread_ratio": 0.9916287126912752,
+              "effective_rank": 18.10252069718537
+            },
+            "100192": {
+              "mean_energy_distance": 1.0482188653358597,
+              "spread_ratio": 0.9837228151631723,
+              "effective_rank": 18.101716750370173
+            },
+            "100224": {
+              "mean_energy_distance": 1.083392460504415,
+              "spread_ratio": 0.9787963516030771,
+              "effective_rank": 17.994743794827258
+            }
+          },
+          "0.025": {
+            "123": {
+              "mean_energy_distance": 1.0580373580379328,
+              "spread_ratio": 0.9875020979693072,
+              "effective_rank": 17.696884143045484
+            },
+            "100000": {
+              "mean_energy_distance": 1.0810576029068752,
+              "spread_ratio": 0.9889323800278119,
+              "effective_rank": 17.917457593429475
+            },
+            "100032": {
+              "mean_energy_distance": 1.1029322332488642,
+              "spread_ratio": 0.979837311426482,
+              "effective_rank": 17.92148944545924
+            },
+            "100064": {
+              "mean_energy_distance": 1.0830891375870706,
+              "spread_ratio": 0.9864509927736677,
+              "effective_rank": 17.371504995544925
+            },
+            "100096": {
+              "mean_energy_distance": 1.0650658525627978,
+              "spread_ratio": 0.984050630298333,
+              "effective_rank": 17.421799564514018
+            },
+            "100128": {
+              "mean_energy_distance": 1.0646655437914259,
+              "spread_ratio": 0.9942354591524956,
+              "effective_rank": 17.41746232256467
+            },
+            "100160": {
+              "mean_energy_distance": 1.0772453255173817,
+              "spread_ratio": 0.9924227571830911,
+              "effective_rank": 18.01725235215772
+            },
+            "100192": {
+              "mean_energy_distance": 1.0597148631205364,
+              "spread_ratio": 0.9842939632530947,
+              "effective_rank": 18.037619255506993
+            },
+            "100224": {
+              "mean_energy_distance": 1.0935811906821733,
+              "spread_ratio": 0.9790890362240243,
+              "effective_rank": 17.887395705240476
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_1",
+      "visible_devices": "0",
+      "hashes": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "4c0657cf4e49b6ed9e7ed8cf1529557ec56d518e7f697b464f33e263585ee5e4"
+      },
+      "draws": {
+        "0.025": {
+          "0.025": {
+            "124": {
+              "mean_energy_distance": 1.2054531652524991,
+              "spread_ratio": 1.1794897240113027,
+              "effective_rank": 17.159837816867213
+            },
+            "100000": {
+              "mean_energy_distance": 1.2424485947944768,
+              "spread_ratio": 1.1654280583704804,
+              "effective_rank": 17.173799944252337
+            },
+            "100032": {
+              "mean_energy_distance": 1.2306409942502365,
+              "spread_ratio": 1.1843326901140037,
+              "effective_rank": 17.14822439727564
+            },
+            "100064": {
+              "mean_energy_distance": 1.2363298448630102,
+              "spread_ratio": 1.18567652402256,
+              "effective_rank": 16.24038822747461
+            },
+            "100096": {
+              "mean_energy_distance": 1.2354838562201078,
+              "spread_ratio": 1.1658795402122633,
+              "effective_rank": 16.605344790407088
+            },
+            "100128": {
+              "mean_energy_distance": 1.2591041211716711,
+              "spread_ratio": 1.1725808728652218,
+              "effective_rank": 16.745868368991836
+            },
+            "100160": {
+              "mean_energy_distance": 1.2349931040365638,
+              "spread_ratio": 1.1754671746013727,
+              "effective_rank": 17.22758808490456
+            },
+            "100192": {
+              "mean_energy_distance": 1.220268260562754,
+              "spread_ratio": 1.176856031458235,
+              "effective_rank": 16.860874851886706
+            },
+            "100224": {
+              "mean_energy_distance": 1.268513597497732,
+              "spread_ratio": 1.1723265315346008,
+              "effective_rank": 17.075996247858846
+            }
+          },
+          "0.15": {
+            "124": {
+              "mean_energy_distance": 1.191758340662911,
+              "spread_ratio": 1.1772958166010818,
+              "effective_rank": 17.200622085356088
+            },
+            "100000": {
+              "mean_energy_distance": 1.2287716515817393,
+              "spread_ratio": 1.1632605918623125,
+              "effective_rank": 17.220179161913542
+            },
+            "100032": {
+              "mean_energy_distance": 1.2196654286581001,
+              "spread_ratio": 1.18139115935363,
+              "effective_rank": 17.176038540500926
+            },
+            "100064": {
+              "mean_energy_distance": 1.224931129819361,
+              "spread_ratio": 1.1829507905080177,
+              "effective_rank": 16.291519086469766
+            },
+            "100096": {
+              "mean_energy_distance": 1.2254125688396134,
+              "spread_ratio": 1.164225809718218,
+              "effective_rank": 16.638521684478533
+            },
+            "100128": {
+              "mean_energy_distance": 1.2416471212449258,
+              "spread_ratio": 1.1708838375278718,
+              "effective_rank": 16.775053664469297
+            },
+            "100160": {
+              "mean_energy_distance": 1.2243077906013415,
+              "spread_ratio": 1.1747931190542915,
+              "effective_rank": 17.26245860811371
+            },
+            "100192": {
+              "mean_energy_distance": 1.2126692927572822,
+              "spread_ratio": 1.175026133576376,
+              "effective_rank": 16.879355516210097
+            },
+            "100224": {
+              "mean_energy_distance": 1.2546063732552408,
+              "spread_ratio": 1.1701939753491681,
+              "effective_rank": 17.118929277911732
+            }
+          }
+        },
+        "0.15": {
+          "0.15": {
+            "124": {
+              "mean_energy_distance": 1.20568798533048,
+              "spread_ratio": 1.1836547810760538,
+              "effective_rank": 17.64431769671757
+            },
+            "100000": {
+              "mean_energy_distance": 1.1751895394434746,
+              "spread_ratio": 1.1999052484051338,
+              "effective_rank": 17.59102438842304
+            },
+            "100032": {
+              "mean_energy_distance": 1.1704547854811513,
+              "spread_ratio": 1.1748020550548592,
+              "effective_rank": 17.654814285775082
+            },
+            "100064": {
+              "mean_energy_distance": 1.1535976614867662,
+              "spread_ratio": 1.1931107535079013,
+              "effective_rank": 17.70761247943903
+            },
+            "100096": {
+              "mean_energy_distance": 1.212552072384022,
+              "spread_ratio": 1.1728884835267905,
+              "effective_rank": 17.319507925897536
+            },
+            "100128": {
+              "mean_energy_distance": 1.1735387050659098,
+              "spread_ratio": 1.1820942874277043,
+              "effective_rank": 17.617023776809848
+            },
+            "100160": {
+              "mean_energy_distance": 1.2091633949288658,
+              "spread_ratio": 1.192948392859423,
+              "effective_rank": 17.58875132327481
+            },
+            "100192": {
+              "mean_energy_distance": 1.2372844210877716,
+              "spread_ratio": 1.17040449936384,
+              "effective_rank": 17.437449277839203
+            },
+            "100224": {
+              "mean_energy_distance": 1.1592123834920325,
+              "spread_ratio": 1.192003013827657,
+              "effective_rank": 17.645053401237547
+            }
+          },
+          "0.025": {
+            "124": {
+              "mean_energy_distance": 1.2152767054488505,
+              "spread_ratio": 1.1836655738477981,
+              "effective_rank": 17.598963934133216
+            },
+            "100000": {
+              "mean_energy_distance": 1.1852621506862437,
+              "spread_ratio": 1.200366372006478,
+              "effective_rank": 17.550448642649336
+            },
+            "100032": {
+              "mean_energy_distance": 1.1847993788534232,
+              "spread_ratio": 1.1744682612692674,
+              "effective_rank": 17.556313851323896
+            },
+            "100064": {
+              "mean_energy_distance": 1.1596689497549588,
+              "spread_ratio": 1.1958302576063415,
+              "effective_rank": 17.641617945281062
+            },
+            "100096": {
+              "mean_energy_distance": 1.2198091070625257,
+              "spread_ratio": 1.1725279358600824,
+              "effective_rank": 17.23270210144016
+            },
+            "100128": {
+              "mean_energy_distance": 1.1835767529968988,
+              "spread_ratio": 1.183055366918973,
+              "effective_rank": 17.5255464970855
+            },
+            "100160": {
+              "mean_energy_distance": 1.2193745520535089,
+              "spread_ratio": 1.1939301169479415,
+              "effective_rank": 17.504528477127522
+            },
+            "100192": {
+              "mean_energy_distance": 1.2460338167678002,
+              "spread_ratio": 1.1709780457629568,
+              "effective_rank": 17.382705653588406
+            },
+            "100224": {
+              "mean_energy_distance": 1.1715721857622816,
+              "spread_ratio": 1.1913463851448811,
+              "effective_rank": 17.60565480338012
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_3",
+      "visible_devices": "1",
+      "hashes": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "507c8545718ac1248d187d920f15b7d033dfc06a2e29f3ea052422cf584d5a90"
+      },
+      "draws": {
+        "0.025": {
+          "0.025": {
+            "124": {
+              "mean_energy_distance": 0.5573904453426641,
+              "spread_ratio": 1.2010759785860994,
+              "effective_rank": 17.05512744186374
+            },
+            "100000": {
+              "mean_energy_distance": 0.5438393191296842,
+              "spread_ratio": 1.1779396496622154,
+              "effective_rank": 17.05465553998655
+            },
+            "100032": {
+              "mean_energy_distance": 0.5595637295905951,
+              "spread_ratio": 1.1765185624653043,
+              "effective_rank": 17.102857444700838
+            },
+            "100064": {
+              "mean_energy_distance": 0.5534840789987421,
+              "spread_ratio": 1.173214000371253,
+              "effective_rank": 17.308326969598415
+            },
+            "100096": {
+              "mean_energy_distance": 0.554243935276246,
+              "spread_ratio": 1.1691457017622215,
+              "effective_rank": 16.917499917801898
+            },
+            "100128": {
+              "mean_energy_distance": 0.5648217294171023,
+              "spread_ratio": 1.1723413777787017,
+              "effective_rank": 17.074841734493674
+            },
+            "100160": {
+              "mean_energy_distance": 0.5298084494547664,
+              "spread_ratio": 1.1877295915542647,
+              "effective_rank": 17.368133896580375
+            },
+            "100192": {
+              "mean_energy_distance": 0.5354240172862694,
+              "spread_ratio": 1.1875261473547438,
+              "effective_rank": 17.31067219304451
+            },
+            "100224": {
+              "mean_energy_distance": 0.5565616261148116,
+              "spread_ratio": 1.192037676397423,
+              "effective_rank": 16.91711203165037
+            }
+          },
+          "0.15": {
+            "124": {
+              "mean_energy_distance": 0.5479634616131643,
+              "spread_ratio": 1.1995600912505373,
+              "effective_rank": 17.07131406202771
+            },
+            "100000": {
+              "mean_energy_distance": 0.5370928775034454,
+              "spread_ratio": 1.1748532994594783,
+              "effective_rank": 17.104592483327075
+            },
+            "100032": {
+              "mean_energy_distance": 0.5522734019102169,
+              "spread_ratio": 1.1747281703748476,
+              "effective_rank": 17.15652123356724
+            },
+            "100064": {
+              "mean_energy_distance": 0.5434114815625362,
+              "spread_ratio": 1.1710759204244863,
+              "effective_rank": 17.32236384859513
+            },
+            "100096": {
+              "mean_energy_distance": 0.5452873473643784,
+              "spread_ratio": 1.1672731224235195,
+              "effective_rank": 16.964850518282
+            },
+            "100128": {
+              "mean_energy_distance": 0.5545855779705984,
+              "spread_ratio": 1.169251246939131,
+              "effective_rank": 17.08969501554173
+            },
+            "100160": {
+              "mean_energy_distance": 0.5233722706864807,
+              "spread_ratio": 1.185476962276558,
+              "effective_rank": 17.411922320920983
+            },
+            "100192": {
+              "mean_energy_distance": 0.5260022442206995,
+              "spread_ratio": 1.1850117403907718,
+              "effective_rank": 17.354362856390793
+            },
+            "100224": {
+              "mean_energy_distance": 0.5511044802450471,
+              "spread_ratio": 1.1894549810147395,
+              "effective_rank": 16.946276466016293
+            }
+          }
+        },
+        "0.15": {
+          "0.15": {
+            "124": {
+              "mean_energy_distance": 0.5790882342441512,
+              "spread_ratio": 1.2158920057081901,
+              "effective_rank": 16.79430430621201
+            },
+            "100000": {
+              "mean_energy_distance": 0.5916721764798021,
+              "spread_ratio": 1.1982532896949318,
+              "effective_rank": 17.275595986647037
+            },
+            "100032": {
+              "mean_energy_distance": 0.5793259025210478,
+              "spread_ratio": 1.2118129514323048,
+              "effective_rank": 17.362935067022004
+            },
+            "100064": {
+              "mean_energy_distance": 0.6146685280544166,
+              "spread_ratio": 1.223584376316812,
+              "effective_rank": 16.492850172119233
+            },
+            "100096": {
+              "mean_energy_distance": 0.5975557211427769,
+              "spread_ratio": 1.2016396180879165,
+              "effective_rank": 16.89134281105412
+            },
+            "100128": {
+              "mean_energy_distance": 0.5949492077208045,
+              "spread_ratio": 1.2054493200447878,
+              "effective_rank": 16.920607502065625
+            },
+            "100160": {
+              "mean_energy_distance": 0.5757438185074379,
+              "spread_ratio": 1.2170081396282537,
+              "effective_rank": 17.26044655399025
+            },
+            "100192": {
+              "mean_energy_distance": 0.5787984071749004,
+              "spread_ratio": 1.2022249430983496,
+              "effective_rank": 17.20650224687336
+            },
+            "100224": {
+              "mean_energy_distance": 0.558201815519594,
+              "spread_ratio": 1.202837822780203,
+              "effective_rank": 17.21459473923856
+            }
+          },
+          "0.025": {
+            "124": {
+              "mean_energy_distance": 0.588714160077964,
+              "spread_ratio": 1.2167426680188063,
+              "effective_rank": 16.760040922656362
+            },
+            "100000": {
+              "mean_energy_distance": 0.5997984465504165,
+              "spread_ratio": 1.2005247434557282,
+              "effective_rank": 17.233191961888984
+            },
+            "100032": {
+              "mean_energy_distance": 0.5876338529000182,
+              "spread_ratio": 1.2136847403364228,
+              "effective_rank": 17.287749759282566
+            },
+            "100064": {
+              "mean_energy_distance": 0.6228778706727565,
+              "spread_ratio": 1.2259535256656844,
+              "effective_rank": 16.439664396301872
+            },
+            "100096": {
+              "mean_energy_distance": 0.6044514794753444,
+              "spread_ratio": 1.2029950284734634,
+              "effective_rank": 16.835143609239495
+            },
+            "100128": {
+              "mean_energy_distance": 0.6032567540405678,
+              "spread_ratio": 1.2066859488909474,
+              "effective_rank": 16.903868668027535
+            },
+            "100160": {
+              "mean_energy_distance": 0.5834344782483913,
+              "spread_ratio": 1.2174985407575047,
+              "effective_rank": 17.2207260063612
+            },
+            "100192": {
+              "mean_energy_distance": 0.5894928873352294,
+              "spread_ratio": 1.2032766546516989,
+              "effective_rank": 17.121836691071792
+            },
+            "100224": {
+              "mean_energy_distance": 0.5696819128910602,
+              "spread_ratio": 1.2056581340450607,
+              "effective_rank": 17.13704762977859
+            }
+          }
+        }
+      }
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_4",
+      "visible_devices": "0",
+      "hashes": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "b3ec8669fad397caaf4deb8d3ac9c4b946534ff97ad62350d35bc754d111f1ab"
+      },
+      "draws": {
+        "0.025": {
+          "0.025": {
+            "124": {
+              "mean_energy_distance": 1.0643164817497417,
+              "spread_ratio": 0.9816607479612867,
+              "effective_rank": 16.441767997687144
+            },
+            "100000": {
+              "mean_energy_distance": 1.0660320806620964,
+              "spread_ratio": 0.9967777980539472,
+              "effective_rank": 16.422012664343633
+            },
+            "100032": {
+              "mean_energy_distance": 1.0773944333684606,
+              "spread_ratio": 0.9996645231885541,
+              "effective_rank": 16.84067727090042
+            },
+            "100064": {
+              "mean_energy_distance": 1.054109911790345,
+              "spread_ratio": 0.9878630119963205,
+              "effective_rank": 16.37112901227813
+            },
+            "100096": {
+              "mean_energy_distance": 1.102875513310926,
+              "spread_ratio": 0.9842112794321978,
+              "effective_rank": 16.25032487578968
+            },
+            "100128": {
+              "mean_energy_distance": 1.0437889540343794,
+              "spread_ratio": 0.9929714988269173,
+              "effective_rank": 16.40199712550865
+            },
+            "100160": {
+              "mean_energy_distance": 1.0771677574890282,
+              "spread_ratio": 0.9902181110173822,
+              "effective_rank": 16.804333884620902
+            },
+            "100192": {
+              "mean_energy_distance": 1.072576754108357,
+              "spread_ratio": 0.9913851577670064,
+              "effective_rank": 16.63111355255487
+            },
+            "100224": {
+              "mean_energy_distance": 1.082681594694236,
+              "spread_ratio": 0.9923931261434564,
+              "effective_rank": 16.392900975488537
+            }
+          },
+          "0.15": {
+            "124": {
+              "mean_energy_distance": 1.0550725904846623,
+              "spread_ratio": 0.980155920185346,
+              "effective_rank": 16.500498309459275
+            },
+            "100000": {
+              "mean_energy_distance": 1.0557763670293077,
+              "spread_ratio": 0.9951406960721799,
+              "effective_rank": 16.476857846837127
+            },
+            "100032": {
+              "mean_energy_distance": 1.067455943022574,
+              "spread_ratio": 0.9986560017819709,
+              "effective_rank": 16.887555544163956
+            },
+            "100064": {
+              "mean_energy_distance": 1.0489733708515048,
+              "spread_ratio": 0.9863309644642808,
+              "effective_rank": 16.436230708964562
+            },
+            "100096": {
+              "mean_energy_distance": 1.0923095858637233,
+              "spread_ratio": 0.9829000984296835,
+              "effective_rank": 16.30474774166183
+            },
+            "100128": {
+              "mean_energy_distance": 1.0343196567139588,
+              "spread_ratio": 0.9911838749098731,
+              "effective_rank": 16.45609240014786
+            },
+            "100160": {
+              "mean_energy_distance": 1.0695067524548303,
+              "spread_ratio": 0.9881674510552917,
+              "effective_rank": 16.83835494950523
+            },
+            "100192": {
+              "mean_energy_distance": 1.0654535542601955,
+              "spread_ratio": 0.9899037143728513,
+              "effective_rank": 16.634943757336394
+            },
+            "100224": {
+              "mean_energy_distance": 1.0730902845583803,
+              "spread_ratio": 0.990368115599436,
+              "effective_rank": 16.42795823643795
+            }
+          }
+        },
+        "0.15": {
+          "0.15": {
+            "124": {
+              "mean_energy_distance": 1.0278612823316216,
+              "spread_ratio": 1.0264598521909978,
+              "effective_rank": 17.17064301450387
+            },
+            "100000": {
+              "mean_energy_distance": 1.009196710634102,
+              "spread_ratio": 1.0387599780438999,
+              "effective_rank": 17.31969978751612
+            },
+            "100032": {
+              "mean_energy_distance": 1.0366340561586662,
+              "spread_ratio": 1.027461836893188,
+              "effective_rank": 17.02089455883635
+            },
+            "100064": {
+              "mean_energy_distance": 1.0022236472842156,
+              "spread_ratio": 1.0348841493483294,
+              "effective_rank": 16.731309644178225
+            },
+            "100096": {
+              "mean_energy_distance": 1.0369030026930994,
+              "spread_ratio": 1.0223948924753572,
+              "effective_rank": 17.128189788781636
+            },
+            "100128": {
+              "mean_energy_distance": 1.050819079329908,
+              "spread_ratio": 1.0271417881650269,
+              "effective_rank": 17.129863965856668
+            },
+            "100160": {
+              "mean_energy_distance": 1.0233047531901023,
+              "spread_ratio": 1.0432966348105832,
+              "effective_rank": 17.568380298430696
+            },
+            "100192": {
+              "mean_energy_distance": 1.0435185725729625,
+              "spread_ratio": 1.0353670292638488,
+              "effective_rank": 17.33209360158877
+            },
+            "100224": {
+              "mean_energy_distance": 1.0047192930402984,
+              "spread_ratio": 1.0439365574403654,
+              "effective_rank": 16.674302090392757
+            }
+          },
+          "0.025": {
+            "124": {
+              "mean_energy_distance": 1.0391396817448748,
+              "spread_ratio": 1.0263501129148143,
+              "effective_rank": 17.120562592061507
+            },
+            "100000": {
+              "mean_energy_distance": 1.0191084009762366,
+              "spread_ratio": 1.0403006252611113,
+              "effective_rank": 17.255342323296965
+            },
+            "100032": {
+              "mean_energy_distance": 1.0456860520227425,
+              "spread_ratio": 1.0285364825637016,
+              "effective_rank": 16.958719093935493
+            },
+            "100064": {
+              "mean_energy_distance": 1.0142858218115929,
+              "spread_ratio": 1.0356897322116192,
+              "effective_rank": 16.639962419303245
+            },
+            "100096": {
+              "mean_energy_distance": 1.049409496932013,
+              "spread_ratio": 1.023919030673154,
+              "effective_rank": 17.046893526881494
+            },
+            "100128": {
+              "mean_energy_distance": 1.0609421628035307,
+              "spread_ratio": 1.0281430120207915,
+              "effective_rank": 17.016500980588198
+            },
+            "100160": {
+              "mean_energy_distance": 1.0331791018970016,
+              "spread_ratio": 1.0447247793750025,
+              "effective_rank": 17.470337856055885
+            },
+            "100192": {
+              "mean_energy_distance": 1.0562178352509008,
+              "spread_ratio": 1.0356108473126875,
+              "effective_rank": 17.26085040703401
+            },
+            "100224": {
+              "mean_energy_distance": 1.0117338207143054,
+              "spread_ratio": 1.0452277677521515,
+              "effective_rank": 16.620903073518726
+            }
+          }
+        }
+      }
+    }
+  ]
+}

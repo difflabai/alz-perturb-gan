@@ -1,7 +1,7 @@
 """Compare the native v11 and v12 critic updates on fixed probes from the NeuroKO training cells."""
 import argparse
 from concurrent.futures import ProcessPoolExecutor
-from contextlib import ExitStack
+from contextlib import ExitStack, contextmanager, nullcontext
 from hashlib import sha256
 from importlib.metadata import version
 import json
@@ -19,7 +19,48 @@ STEPS = 64
 RECIPES = ("unified_v11", "unified_v12")
 
 
-def measure(x, labels, probes, seed, recipe, device, critic_lr, *, monitor=True):
+@contextmanager
+def particle_gradients(model):
+    """Observe the two native loss derivatives with respect to the learned particle table."""
+    import torch
+
+    grads = {}
+    trainer = model.trainer
+    original = trainer.loss.g_loss
+
+    def capture(name, value):
+        if value.requires_grad:
+            grad, = torch.autograd.grad(value, model.prior.z, retain_graph=True, allow_unused=True)
+            if grad is not None:
+                if name in grads:
+                    raise ValueError(f"Multiple {name} particle gradients in a generator update")
+                grads[name] = grad.detach().flatten()
+
+    def adversarial(*args, **kwargs):
+        value = original(*args, **kwargs)
+        capture("adversarial", value)
+        return value
+
+    def prior_hook(module, inputs, output):
+        capture("prior", output)
+
+    def read():
+        a = grads.pop("adversarial")
+        p = trainer.recipe.prior_reg * grads.pop("prior")
+        adv_norm, prior_norm = a.norm().item(), p.norm().item()
+        return dict(adversarial=adv_norm, weighted_prior=prior_norm, ratio=prior_norm / adv_norm if adv_norm else None,
+                    cosine=(a @ p).item() / (adv_norm * prior_norm) if adv_norm and prior_norm else None)
+
+    handle = trainer.prior_regularizer.register_forward_hook(prior_hook)
+    trainer.loss.g_loss = adversarial
+    try:
+        yield read
+    finally:
+        handle.remove()
+        trainer.loss.g_loss = original
+
+
+def measure(x, labels, probes, seed, recipe, device, critic_lr, prior_weight, *, monitor=True, measure_gradients=False):
     import torch
     from paper_watch.alztest.harness import ConditionalPGAN, TrainingSettings
     from paper_watch.alztest.neuroko_duration import optimizer_rates
@@ -27,6 +68,7 @@ def measure(x, labels, probes, seed, recipe, device, critic_lr, *, monitor=True)
 
     overrides = {k: v for k, v in NOISY_PRIOR.items() if k not in ("name", "lr")}
     overrides["d_lr_mult"] = critic_lr / NOISY_PRIOR["lr"]
+    overrides["prior_reg"] = prior_weight
     settings = TrainingSettings(**overrides)
     torch.manual_seed(seed)
     with torch.random.fork_rng(devices=[]):
@@ -67,12 +109,14 @@ def measure(x, labels, probes, seed, recipe, device, critic_lr, *, monitor=True)
 
     first = None
     preceding = outputs() if monitor else None
-    centered_rms, raw_rms = [], []
+    centered_rms, raw_rms, loss_gradients = [], [], []
 
     def after(step):
         nonlocal first, preceding
         if optimizer_rates(model) != rates:
             raise ValueError(f"Changed learning rate at step {step}")
+        if read_gradients is not None:
+            loss_gradients.append(read_gradients())
         if monitor:
             current = outputs()
             change = current - preceding
@@ -83,10 +127,15 @@ def measure(x, labels, probes, seed, recipe, device, critic_lr, *, monitor=True)
                 first = centered.flatten().cpu().double().numpy()
             preceding = current
 
-    model.fit(x, labels, steps=STEPS, after_step=after, on_batch=record)
-    return dict(initial_parameters_sha256=initial, final_parameters_sha256=weights_hash(),
-                training_batches_sha256=batches.hexdigest(), rates=rates, steps=model.trainer.completed_steps,
-                centered_rms=centered_rms, raw_rms=raw_rms), first
+    observation = particle_gradients(model) if measure_gradients else nullcontext()
+    with observation as read_gradients:
+        model.fit(x, labels, steps=STEPS, after_step=after, on_batch=record)
+    row = dict(initial_parameters_sha256=initial, final_parameters_sha256=weights_hash(),
+               training_batches_sha256=batches.hexdigest(), rates=rates, steps=model.trainer.completed_steps,
+               centered_rms=centered_rms, raw_rms=raw_rms)
+    if measure_gradients:
+        row["particle_loss_gradients"] = loss_gradients
+    return row, first
 
 
 def run_gpu(args, gpu):
@@ -121,7 +170,9 @@ def run_gpu(args, gpu):
             rows, first = {}, {}
             for recipe in RECIPES:
                 critic_lr = .021 if recipe == "unified_v11" else args.v12_critic_lr
-                row, first[recipe] = measure(x, labels, probes, seed, recipe, device, critic_lr)
+                weight = NOISY_PRIOR["prior_reg"] if recipe == "unified_v11" else args.v12_prior_weight
+                row, first[recipe] = measure(x, labels, probes, seed, recipe, device, critic_lr, weight,
+                                             measure_gradients=args.particle_gradients)
                 path = receipt(args.reference, "validation", "0.12.0", recipe, NOISY_PRIOR, seed, group)
                 ref = json.loads(path.read_text())
                 if (ref["initial_parameters_sha256"] != row["initial_parameters_sha256"]
@@ -131,7 +182,7 @@ def run_gpu(args, gpu):
                         or row["steps"] != STEPS):
                     raise ValueError(f"Probes use a different training configuration from {path}")
                 if seed == REPLICATION_SEEDS[0] and i == 0:
-                    plain, _ = measure(x, labels, probes, seed, recipe, device, critic_lr, monitor=False)
+                    plain, _ = measure(x, labels, probes, seed, recipe, device, critic_lr, weight, monitor=False)
                     for field in ("final_parameters_sha256", "training_batches_sha256"):
                         if plain[field] != row[field]:
                             raise ValueError(f"Measuring critic outputs changed {field}")
@@ -157,9 +208,15 @@ def main():
         parser.add_argument("--" + name, type=Path, required=True)
     parser.add_argument("--window-cells", type=int)
     parser.add_argument("--v12-critic-lr", type=float, default=.021, help="verify the measured movement at a new fixed v12 critic rate")
+    parser.add_argument("--particle-gradients", action="store_true",
+                        help="also record adversarial and weighted prior gradients on the learned particles")
+    parser.add_argument("--v12-prior-weight", type=float, default=NOISY_PRIOR["prior_reg"],
+                        help="verify the effective particle gradient strength at another native prior weight")
     args = parser.parse_args()
     if not isfinite(args.v12_critic_lr) or args.v12_critic_lr <= 0:
         parser.error("--v12-critic-lr must be positive and finite")
+    if not isfinite(args.v12_prior_weight) or args.v12_prior_weight < 0 or (args.particle_gradients and args.v12_prior_weight == 0):
+        parser.error("use a finite nonnegative prior weight; measuring its gradient requires an active prior penalty")
     args.output.mkdir(parents=True, exist_ok=True)
     for var in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
         os.environ[var] = "2"
@@ -171,6 +228,10 @@ def main():
                          "Compare ratios across nine paired fits. These measurements do not select a winner.")
     if args.v12_critic_lr != .021:
         protocol["v12_critic_lr"] = args.v12_critic_lr
+    if args.v12_prior_weight != NOISY_PRIOR["prior_reg"]:
+        protocol["v12_prior_weight"] = args.v12_prior_weight
+    if args.particle_gradients:
+        protocol["particle_gradients"] = "Record the two native loss gradients on all 64 x 16 particle parameters each update."
     write_frozen(args.output / "protocol.json", protocol)
     with ProcessPoolExecutor(2, mp_context=multiprocessing.get_context("spawn")) as pool:
         jobs = [pool.submit(run_gpu, args, gpu) for gpu in (0, 1)]

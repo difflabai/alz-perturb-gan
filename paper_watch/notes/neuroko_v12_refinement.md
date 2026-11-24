@@ -352,6 +352,13 @@ python paper_watch/scripts/neuroko_noise_crossover.py --data "$data" --window-ce
   --wheels "$data/wheels" --reference "$data/v12-rate-noise" --output "$data/v12-noise-crossover"
 ```
 
+Across the nine paired fits and eight additional draw sets, raising both widths lowered mean energy by 0.03401. Training accounted for 0.02419 of that decrease (71%) and sampling accounted for 0.00982 (29%). The training contribution improved seven of nine pairs, and the sampling contribution improved all nine. On the original benchmark draws the corresponding decreases were 0.02418 and 0.01027. Every one of the 18 replays reproduced its original target scores. [Full paired measurements and decomposition](neuroko_v12_noise_crossover.json)
+
+| Training noise | Energy at sampling noise 0.025 ↓ | Energy at sampling noise 0.15 ↓ |
+| ---: | ---: | ---: |
+| 0.025 | 0.98028 | 0.97074 |
+| 0.15 | 0.95636 | 0.94627 |
+
 ### Calibrating the critic learning rate from its measured updates
 
 At generator, critic and particle rates of 0.014, 0.021 and 0.0406, v12's first update moved the critic's scores 5.20 times as far as same-wheel v11's. The median cosine between the changes was 0.996. The optimizer received the same initialized model, training cells, minibatches and loss configuration in each pair. The probes comprised 32 fixed real training cells per condition. We subtracted each condition's mean score change before computing the RMS, so an additive critic offset drops out.
@@ -379,5 +386,42 @@ python paper_watch/scripts/neuroko_rate_noise.py --study critic-motion --data "$
 python paper_watch/scripts/neuroko_rate_noise.py --study matched-critic-motion --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --motion-result "$data/v12-critic-motion/result.json" \
   --motion-check "$data/v12-critic-motion-check/result.json" --output "$data/v12-motion-matched" \
+  --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
+```
+
+At a critic LR of 0.0035, v12's mean energy at 1,200 updates rose from 0.94231 to 0.95185. Four of nine pairs improved. The lower rate helped on average on `Screen1_1` and `Screen1_4` and increased mean energy on `Screen1_3` from 0.5665 to 0.6138. The generated spread ratio rose from 1.125 to 1.200 and the effective covariance dimensions rose from 17.49 to 22.60. The observed cells averaged 17.44 dimensions. The original-rate v12 comparison rules out 0.0035 under this study's criterion.
+
+At 0.0046 with the same prior weight of 0.1, v12 averaged **0.94547** across the nine pairs, compared with **0.94231** at 0.021. It had lower energy at seeds 22 and 23 and higher energy at seed 24 (0.97746 versus 0.93755). Both reduced critic rates missed the original-rate v12 reference at 1,200 updates. [Nine paired scores for each fixed critic rate](neuroko_v12_critic_rate_screen.json)
+
+### Particle gradients under the smaller critic update
+
+The generator objective has an adversarial term and a weighted particle prior penalty. Reducing the critic rate can change the relative strengths of their gradients on the learned 64 × 16 particle table even when the nominal prior weight stays fixed. We recorded both native gradients separately at each of the first 64 updates. The 36 instrumented fits reproduced the earlier final weight hashes and critic traces with the same initialization, data and minibatches.
+
+| Training recipe and critic LR | Median adversarial gradient norm | Median weighted prior gradient norm | Median prior/adversarial norm ratio |
+| --- | ---: | ---: | ---: |
+| V11, 0.021 | 0.02030 | 0.00558 | 0.281 |
+| V12, 0.021 | 0.04236 | 0.00560 | 0.136 |
+| V12, 0.0046 | 0.01726 | 0.00559 | 0.325 |
+
+The table takes a median within each fit, then across the nine seed–group pairs. The particle penalty had **2.41 times** its previous strength relative to the adversarial gradient under the smaller critic rate. This ratio increased on all nine pairs, by factors from 1.99 to 2.53. Dividing the original weight of 0.1 by the median paired factor gives **0.041** to three decimal places. [Paired measurements and weight calculation](neuroko_v12_particle_balance.json)
+
+A second 64-update measurement at weight 0.041 put the median relative strength at **1.009 times** the original v12 value, with a paired range of 0.829–1.054. Critic motion stayed at 0.974 times the v11 reference. The 1,200-update energy score measures whether this also improves the generated cells. [Measured gradient balance at weight 0.041](neuroko_v12_particle_balance_check.json)
+
+The 1,200-update study tests this one weight for v12, v11 and EMPF at fixed generator, critic and particle rates of 0.014, 0.0046 and 0.0406, with latent noise 0.15. The candidate must beat every reference separately on development seeds 22–24 and 251–253, including the three formulations with weight 0.1 at each of the three critic rates. Fresh seeds 284–289 include the original 0.10.0 EMPF and 0.11.1 v11. A qualifying result goes to biological holdout seeds 380–395.
+
+```bash
+for setting in original matched; do
+  if [ "$setting" = original ]; then critic=0.021; else critic=0.0046; fi
+  PYTHONPATH="$data/wheels/0.12.0:." python paper_watch/scripts/neuroko_critic_motion.py \
+    --data "$data" --window-cells 10000 --reference "$data/v12-rate-noise" --particle-gradients \
+    --v12-critic-lr "$critic" --output "$data/v12-particle-gradients-$setting"
+done
+PYTHONPATH="$data/wheels/0.12.0:." python paper_watch/scripts/neuroko_critic_motion.py \
+  --data "$data" --window-cells 10000 --reference "$data/v12-rate-noise" --particle-gradients \
+  --v12-critic-lr 0.0046 --v12-prior-weight 0.041 --output "$data/v12-particle-gradients-check"
+python paper_watch/scripts/neuroko_particle_balance.py --original "$data/v12-particle-gradients-original/result.json" \
+  --calibrated "$data/v12-particle-gradients-matched/result.json" --output "$data/particle-balance.json"
+python paper_watch/scripts/neuroko_rate_noise.py --study balanced-particle-prior --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --gradient-result "$data/particle-balance.json" --output "$data/v12-balanced-particles" \
   --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
 ```
