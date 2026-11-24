@@ -261,6 +261,8 @@ With the prior weight fixed to **0.02 in all three original releases**, v12 aver
 
 At EMPF’s tuned generator, critic and particle rates of 0.020, 0.030 and 0.058 and latent noise 0.025, original v11 scored **0.93442**, v12 **0.96390** and original EMPF **0.96588**. The original and 0.12.0 EMPF runs reproduced one another on every pair. V12 won five of nine against each original release, with a larger mean loss to v11 on the remaining pairs. These comparisons retain each release’s native prior coefficient. [Scores, timing and configuration by release](neuroko_v12_empf_rates_original_releases.json)
 
+At these same rates, fixing the prior coefficient at 0.02 gave original and 0.12.0 EMPF exactly the same nine scores and a mean of 0.98369. The two v11 releases differed at these settings, with original v11 at 0.93442 and 0.12.0 v11 at 0.95311. V12 averaged 0.96390. [Full five-arm results and release recipe equivalence](neuroko_v12_empf_rates_shared_prior.json)
+
 ## Prior penalty at latent noise 0.15
 
 At the release role rates, two individual changes lowered v12's mean energy on earlier training folds. Increasing latent noise to 0.15 moved the mean from 0.9782 to 0.9417. Increasing the native prior penalty weight from 0.02 to 0.1 at the original noise moved it to 0.9641. The follow-up combines those two changes at constant generator, critic and particle rates of 0.014, 0.021 and 0.0406. It tests whether the stronger penalty helps with the higher noise. A training qualification for the preceding rate-and-noise candidate gives its biological holdout priority.

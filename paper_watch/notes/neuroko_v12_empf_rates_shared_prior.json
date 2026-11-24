@@ -1,0 +1,197 @@
+{
+  "prior_equivalence": {
+    "0.12.0": {
+      "unified_v12": {
+        "native_weight": 0.02,
+        "shared_weight": 0.02,
+        "identical_full_recipe": true
+      },
+      "unified_v11": {
+        "native_weight": 0.02,
+        "shared_weight": 0.02,
+        "identical_full_recipe": true
+      },
+      "empf": {
+        "native_weight": 0.01,
+        "shared_weight": 0.02,
+        "identical_full_recipe": false
+      }
+    },
+    "0.11.1": {
+      "unified_v11": {
+        "native_weight": 0.02,
+        "shared_weight": 0.02,
+        "identical_full_recipe": true
+      }
+    },
+    "0.10.0": {
+      "empf": {
+        "native_weight": 0.01,
+        "shared_weight": 0.02,
+        "identical_full_recipe": false
+      }
+    }
+  },
+  "release_comparison_protocol": {
+    "arms": [
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "empf-tuned-prior020",
+          "lr": 0.02,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.02
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "lr": 0.02,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "name": "at-tuned-empf-rates",
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.025
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "lr": 0.02,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "name": "at-tuned-empf-rates",
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.025
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "lr": 0.02,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "name": "at-tuned-empf-rates",
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.025
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "empf-tuned-prior020",
+          "lr": 0.02,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.02
+        }
+      ]
+    ],
+    "seeds": [
+      22,
+      23,
+      24
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "metric": "Mean four-target energy on the same nine training pairs at fixed role rates, latent noise 0.025 and shared prior weight 0.02. Reuse full-equivalent Unified recipes and refit both EMPF releases with the explicit coefficient."
+  },
+  "release_comparison": {
+    "scores": {
+      "0.10.0/empf/empf-tuned-prior020": [
+        1.2038890941041667,
+        0.6643553569874161,
+        1.0969425921301474,
+        1.299447617535053,
+        0.5947512227280829,
+        1.0973908727086072,
+        1.1132545473898956,
+        0.7441635654569698,
+        1.0389816164485433
+      ],
+      "0.11.1/unified_v11/at-tuned-empf-rates": [
+        1.2301461367817237,
+        0.6351895450684959,
+        0.9926285528274754,
+        1.1640589740320646,
+        0.6012756482108934,
+        0.949288833481954,
+        1.1553793016199831,
+        0.6031025555412777,
+        1.078695268810615
+      ],
+      "0.12.0/unified_v12/at-tuned-empf-rates": [
+        1.1945092174686864,
+        0.575524063473452,
+        1.0361002841747315,
+        1.2809475200651377,
+        0.594267413647861,
+        1.1514396545735763,
+        1.1991660285414723,
+        0.5645207040076168,
+        1.078665053943881
+      ],
+      "0.12.0/unified_v11/at-tuned-empf-rates": [
+        1.1566979493447693,
+        0.581871757890873,
+        1.0377435963653587,
+        1.2676086511446754,
+        0.6098577169654038,
+        1.073683144724194,
+        1.2294827637092232,
+        0.6097705312737873,
+        1.0112617198606773
+      ],
+      "0.12.0/empf/empf-tuned-prior020": [
+        1.2038890941041667,
+        0.6643553569874161,
+        1.0969425921301474,
+        1.299447617535053,
+        0.5947512227280829,
+        1.0973908727086072,
+        1.1132545473898956,
+        0.7441635654569698,
+        1.0389816164485433
+      ]
+    },
+    "summaries": {
+      "0.10.0/empf/empf-tuned-prior020": {
+        "energy": 0.9836862761654314,
+        "v12_minus_arm": -0.019781838399163008,
+        "v12_pairs_won": 6
+      },
+      "0.11.1/unified_v11/at-tuned-empf-rates": {
+        "energy": 0.9344183129304982,
+        "v12_minus_arm": 0.029486124835770216,
+        "v12_pairs_won": 5
+      },
+      "0.12.0/unified_v12/at-tuned-empf-rates": {
+        "energy": 0.9639044377662683,
+        "v12_minus_arm": 0.0,
+        "v12_pairs_won": 0
+      },
+      "0.12.0/unified_v11/at-tuned-empf-rates": {
+        "energy": 0.9531086479198847,
+        "v12_minus_arm": 0.010795789846383666,
+        "v12_pairs_won": 5
+      },
+      "0.12.0/empf/empf-tuned-prior020": {
+        "energy": 0.9836862761654314,
+        "v12_minus_arm": -0.019781838399163008,
+        "v12_pairs_won": 6
+      }
+    }
+  }
+}
