@@ -119,6 +119,16 @@ python paper_watch/scripts/neuroko_transport_scale.py --study critic-cap --data 
 
 ## Joint generator, critic and particle learning rates
 
+Four of eight v12 combinations improved on the centered v12 score. The top three were then compared with v11 and EMPF at identical rates. Independently tuned EMPF reached 0.9174, lower than all three v12 scores. The training-only comparison covered 51 distinct fits.
+
+| Generator LR | Critic LR | Particle LR | V12 energy ↓ | Matched v11 | Matched EMPF |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 0.02 | 0.042 | 0.0203 | 0.9433 | 0.9832 | 0.9932 |
+| 0.01 | 0.0105 | 0.0812 | 0.9446 | 0.9444 | 0.9366 |
+| 0.02 | 0.0105 | 0.0203 | 0.9746 | 0.9710 | 0.9682 |
+
+The centered v12 and v11 controls scored 0.9772 and 0.9554. All fits used a fixed latent noise of 0.025. [Screen and per-fold paired results](neuroko_v12_role_factorial_validation.json)
+
 The first fixed-rate search changed one role at a time around the v12 incumbent. To measure interactions, a separate experiment crosses a generator rate of 0.010 or 0.020 with a critic rate of 0.0105 or 0.042 and a particle rate of 0.0203 or 0.0812. All eight combinations use uniform sampling, latent noise 0.025, hollow self-coupling for v12 and v11, relativistic weight 2 and the default critic penalty. Each fit keeps its assigned rates constant through update 1,200.
 
 The three v12 settings with the lowest mean energy at seed 15 face v11 and EMPF at the same three rates and three reference configurations. An eligible setting must beat all five controls. The lowest eligible v12 score advances to independent training seeds 16–18. Holdout seeds 148–163 are reserved for a candidate that beats the matched and previously tuned controls across these nine training fold–seed pairs. [Candidate grid and selection rule](../scripts/neuroko_role_factorial.py)
