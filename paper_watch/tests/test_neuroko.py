@@ -182,7 +182,8 @@ def test_transport_metrics_exclude_slack_row_and_weight_by_matched_mass(monkeypa
     assert (slack.item(), count.item()) == (1., 0.)
 
 
-def test_published_release_comparison_starts_without_prior_run_directory(tmp_path, monkeypatch):
+@pytest.mark.parametrize("smoothing", [None, .001, .0061])
+def test_published_release_comparison_starts_without_prior_run_directory(tmp_path, monkeypatch, smoothing):
     import json
     from types import SimpleNamespace
 
@@ -200,9 +201,15 @@ def test_published_release_comparison_starts_without_prior_run_directory(tmp_pat
         return {study.key(a): [1 + i * .01] * 9 for i, a in enumerate(arms)}
 
     monkeypatch.setattr(study, "evaluate", scores)
-    study.compare_published_rates(args)
+    study.compare_published_rates(args, smoothing=smoothing)
     assert seen == [[22, 23, 24], [251, 252, 253]]
-    arms = json.loads((tmp_path / "comparison_protocol.json").read_text())["arms"]
+    protocol = json.loads((tmp_path / "comparison_protocol.json").read_text())
+    arms = protocol["arms"]
+    if smoothing is not None:
+        assert protocol["matched_optimizer_smoothing"] == smoothing
+        for role, default in (("v12", .0061), ("matched_v11", .0061), ("matched_empf", .001)):
+            assert arms[role][2].get("optimizer_smoothing", default) == smoothing
+        assert all("optimizer_smoothing" not in arms[t][2] for t in ("tuned_v11", "tuned_empf"))
     assert arms["matched_v11"][:2] == arms["tuned_v11"][:2] == ["0.11.1", "unified_v11"]
     assert arms["matched_empf"][:2] == arms["tuned_empf"][:2] == ["0.10.0", "empf"]
     assert arms["v12"][2] == arms["matched_v11"][2]

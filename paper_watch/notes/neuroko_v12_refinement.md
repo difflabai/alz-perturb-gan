@@ -874,3 +874,11 @@ python paper_watch/scripts/neuroko_rate_noise.py --study optimizer-smoothing --d
   --wheels "$data/wheels" --output "$data/v12-optimizer-smoothing" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
+
+The original 0.10.0 EMPF optimizer defaults to smoothing **0.001**. Original v11 and v12 both default to **0.0061**. The earlier rate-matched comparison used each optimizer’s native value. A separate comparison gives all three formulations 0.0061, then gives all three 0.001. Each setting runs on both development cohorts and retains the separately tuned original controls. The runner reuses a native-default fit when its resolved setting already matches. [Implementation and comparison protocol](../scripts/neuroko_rate_noise.py)
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study optimizer-smoothing --stage compare-smoothing-defaults \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-matched-smoothing-defaults" \
+  --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
+```

@@ -347,17 +347,26 @@ def published_original_controls():
     return tuned
 
 
-def compare_published_rates(args):
+def compare_published_rates(args, *, smoothing=None):
     """Reproduce the original releases at the shared and independently tuned settings from a clean checkout."""
     trial, _ = original_v11_critic_rate(args.original_v11_motion)
     v12, v11, empf = paired(trial)
     tuned = published_original_controls()
     arms = {"v12": v12, "matched_v11": ["0.11.1", *v11[1:]], "matched_empf": ["0.10.0", *empf[1:]],
             "tuned_v11": tuned["unified_v11"], "tuned_empf": tuned["empf"]}
+    extra = {}
+    if smoothing is not None:
+        defaults = {"v12": .0061, "matched_v11": .0061, "matched_empf": .001}
+        for role, default in defaults.items():
+            if smoothing != default:
+                release, recipe, settings = arms[role]
+                arms[role] = [release, recipe, dict(settings, name=settings["name"] + f"-smoothing{smoothing}",
+                                                    optimizer_smoothing=smoothing)]
+        extra = dict(matched_optimizer_smoothing=smoothing, original_optimizer_smoothing=defaults)
     cohorts = {"first": REPLICATION_SEEDS, "second": [251, 252, 253]}
     write_frozen(args.output / "comparison_protocol.json", dict(arms=arms, cohorts=cohorts, groups=list(GROUPS),
                  updates=1200, evaluation_draws=256, metric="four-target mean energy distance",
-                 original_control_selection=ORIGINAL_CONTROL_SELECTION))
+                 original_control_selection=ORIGINAL_CONTROL_SELECTION, **extra))
     for cohort, cached in (("first", args.shared_screen), ("second", args.second_screen)):
         local = copy(args)
         local.output = cached or args.output
@@ -1197,7 +1206,7 @@ def main():
                                           "compare-noise-controls", "compare-original-noise-controls",
                                           "replicate-balanced-releases", "replicate-calibrated-critic",
                                           "replicate-loss-weight", "compare-calibrated-second",
-                                          "compare-published-rates"), default="search")
+                                          "compare-published-rates", "compare-smoothing-defaults"), default="search")
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
                         default="rates")
@@ -1228,6 +1237,15 @@ def main():
         if args.study != "original-v11-critic":
             parser.error("--stage compare-published-rates requires --study original-v11-critic")
         compare_published_rates(args)
+        return
+    if args.stage == "compare-smoothing-defaults":
+        if args.study != "optimizer-smoothing":
+            parser.error("--stage compare-smoothing-defaults requires --study optimizer-smoothing")
+        for smoothing in (.0061, .001):
+            local = copy(args)
+            local.output = args.output / f"smoothing-{smoothing}"
+            local.output.mkdir(parents=True, exist_ok=True)
+            compare_published_rates(local, smoothing=smoothing)
         return
     if args.stage == "replicate-loss-weight":
         if args.study != "critic-centroid-weight":
