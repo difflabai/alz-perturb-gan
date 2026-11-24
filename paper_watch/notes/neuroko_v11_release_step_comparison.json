@@ -1,0 +1,136 @@
+{
+  "recipe": "unified_v11",
+  "releases": [
+    "0.11.1",
+    "0.12.0"
+  ],
+  "rates": {
+    "generator": 0.02,
+    "critic": 0.042,
+    "particles": 0.0203
+  },
+  "prior_sigma": 0.025,
+  "prior_weight": 0.02,
+  "equal_resolved_recipe_fields": 179,
+  "method": "Record gradients before each released optimizer step and trainable parameter vectors after the full update for critic, generator and particles. Each relative difference is the L2 norm of the two release vectors\u2019 difference divided by the norm in 0.11.1. An update vector is measured from its own preceding state. Every pair uses the same initialization, real minibatches and physical GPU.",
+  "pairs": [
+    {
+      "group": "Screen1_1",
+      "seed": 22,
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "training_batches_sha256": "19eae3e8b6721185e39160403d029919f0a2bf75b64500103dfd7d9abb9464cf",
+      "rows": {
+        "1": {
+          "critic": {
+            "gradient_relative_difference": 0.0,
+            "update_relative_difference": 0.5352233455274532,
+            "updates_equal": false
+          },
+          "generator": {
+            "gradient_relative_difference": 0.008184720427480491,
+            "update_relative_difference": 0.4048565355536028,
+            "updates_equal": false
+          },
+          "particles": {
+            "gradient_relative_difference": 0.008165765684702418,
+            "update_relative_difference": 0.831140742111006,
+            "updates_equal": false
+          }
+        },
+        "2": {
+          "critic": {
+            "gradient_relative_difference": 0.04627958704993796,
+            "update_relative_difference": 0.5287853729448717,
+            "updates_equal": false
+          },
+          "generator": {
+            "gradient_relative_difference": 0.018679410492949012,
+            "update_relative_difference": 0.36840540794280985,
+            "updates_equal": false
+          },
+          "particles": {
+            "gradient_relative_difference": 0.03879339560207408,
+            "update_relative_difference": 0.8356896895168677,
+            "updates_equal": false
+          }
+        },
+        "3": {
+          "critic": {
+            "gradient_relative_difference": 0.0614296020828055,
+            "update_relative_difference": 0.5478893343078689,
+            "updates_equal": false
+          },
+          "generator": {
+            "gradient_relative_difference": 0.0290308973276455,
+            "update_relative_difference": 0.3483886505788381,
+            "updates_equal": false
+          },
+          "particles": {
+            "gradient_relative_difference": 0.07637370812154165,
+            "update_relative_difference": 0.8410882328900652,
+            "updates_equal": false
+          }
+        }
+      }
+    },
+    {
+      "group": "Screen1_3",
+      "seed": 22,
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "training_batches_sha256": "5caa05d89d07b949d899aa201b3e68d3ebfc17b46d2a5294d393f36cc4e8fbda",
+      "rows": {
+        "1": {
+          "critic": {
+            "gradient_relative_difference": 0.0,
+            "update_relative_difference": 0.520019529662497,
+            "updates_equal": false
+          },
+          "generator": {
+            "gradient_relative_difference": 0.005895396934303371,
+            "update_relative_difference": 0.4079620876358988,
+            "updates_equal": false
+          },
+          "particles": {
+            "gradient_relative_difference": 0.00546047637987282,
+            "update_relative_difference": 0.8190996059295558,
+            "updates_equal": false
+          }
+        },
+        "2": {
+          "critic": {
+            "gradient_relative_difference": 0.044548462949241814,
+            "update_relative_difference": 0.5383079172040268,
+            "updates_equal": false
+          },
+          "generator": {
+            "gradient_relative_difference": 0.020367946704772953,
+            "update_relative_difference": 0.3916870018197494,
+            "updates_equal": false
+          },
+          "particles": {
+            "gradient_relative_difference": 0.03835987778556159,
+            "update_relative_difference": 0.8501194881503111,
+            "updates_equal": false
+          }
+        },
+        "3": {
+          "critic": {
+            "gradient_relative_difference": 0.06591091328452937,
+            "update_relative_difference": 0.5513967603921847,
+            "updates_equal": false
+          },
+          "generator": {
+            "gradient_relative_difference": 0.030527290043314594,
+            "update_relative_difference": 0.3751802871190495,
+            "updates_equal": false
+          },
+          "particles": {
+            "gradient_relative_difference": 0.06151608484525786,
+            "update_relative_difference": 0.8237994678498082,
+            "updates_equal": false
+          }
+        }
+      }
+    }
+  ]
+}

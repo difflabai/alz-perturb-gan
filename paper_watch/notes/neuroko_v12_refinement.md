@@ -232,6 +232,10 @@ python paper_watch/scripts/neuroko_matched_rate_replication.py --stage compare-r
   --output "$data/v12-at-empf-rates"
 ```
 
+At fixed rates 0.020, 0.042 and 0.0203 with noise 0.025 and native prior weights, the original releases changed the ranking. Original 0.11.1 v11 scored **0.94688**, v12 **0.97744**, and original 0.10.0 EMPF **0.98361**. V12 beat original EMPF on seven of nine pairs and original v11 on one. From the 0.12.0 wheel, v11 scored **0.98667**. Both EMPF releases reproduced every per-target score exactly. [Scores and hashes for all five arms](neuroko_v12_matched_rates_original_releases.json)
+
+All 179 fields of the resolved v11 recipe agreed across the two releases at these settings. On two seed-22 training folds we inspected the first three updates. Both v11 releases had identical initial weights and critic gradients on the first step. Their first critic parameter updates differed by 52–54% of the original update's norm. Divergence was already visible in the critic step with the same gradient. [Three-step release comparison](neuroko_v11_release_step_comparison.json)
+
 The rate-matched comparison also has a shared-prior check. At each rate setting, `--stage compare-shared-prior` gives EMPF the same 0.02 prior coefficient as Unified v11 and v12. Before reusing a Unified fit, the driver resolves the complete recipe in the appropriate installed wheel and verifies that explicitly setting the coefficient gives the identical recipe. It refits EMPF from both 0.10.0 and 0.12.0, checks each of the 1,200 learning rates, and compares all five formulation–release combinations on the same nine pairs. Use the commands above with `--stage compare-shared-prior` to reproduce this comparison.
 
 ## Prior penalty at latent noise 0.15
@@ -455,6 +459,16 @@ python paper_watch/scripts/neuroko_rate_noise.py --study balanced-particle-prior
 
 At 1,200 updates the corrected weight of 0.041 scored **0.94752** across all nine pairs. At the same critic LR of 0.0046, weight 0.1 scored 0.94547. With the original critic LR of 0.021 and weight 0.1, v12 scored 0.94231. The correction improved four of nine pairs against each reference. Its largest gain against the original configuration was on `Screen1_4` (1.06092 to 0.95675), while `Screen1_3` worsened (0.56650 to 0.66575). The overall result ends this candidate's qualification. [Paired energy scores, group means, spread and effective dimensions](neuroko_v12_particle_weight_energies.json)
 
+At fixed critic LR 0.0046 and prior weight 0.041, v12 had the lowest matched nine-pair mean. V12 scored **0.94752**, EMPF **0.95963** and v11 **0.96147** in ParticleGAN 0.12.0. V12 won five of nine pairs against EMPF and six against v11. The baseline v12 of 0.94231 and the stronger tuned controls still end the overall qualification. [Matched comparison and complete screening decision](neuroko_v12_balanced_particle_screen.json)
+
+A separate replication checks the original 0.10.0 EMPF and 0.11.1 v11 at these exact settings. If v12 beats all four matched release controls on the original nine pairs, all five arms repeat on six fresh seeds 452–457. This measures the matched formulation effect and preserves the earlier overall decision.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --stage replicate-balanced-releases --study balanced-particle-prior \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --shared-screen "$data/v12-rate-noise" \
+  --output "$data/v12-balanced-particles"
+```
+
 ### Isolating the generator and particle learning rates
 
 The earlier generator-only and particle-only trials used noise 0.025 and the default v12 prior penalty. This comparison repeats a single-role search at noise 0.15, prior weight 0.1 and critic LR 0.021. The reference generator rate is 0.014 and the reference particle rate is 0.0406. Four alternatives bracket each rate by approximately a factor of √2. Two use generator rates 0.010 and 0.020 with particles fixed at 0.0406. Two use particle rates 0.0287 and 0.0574 with the generator fixed at 0.014.
@@ -469,6 +483,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study individual-role-rates -
 
 Lowering only the generator LR to 0.010 raised the nine-pair v12 mean from 0.94231 to **0.95961**. It improved three of nine pairs. The mean difference across the three groups at each seed was −0.00613 at seed 22, +0.00184 at seed 23 and +0.05621 at seed 24. Raising only the generator rate to 0.020 also increased mean energy, to **0.95710**, and improved four of nine pairs. Among these three fixed generator rates, 0.014 had the lowest mean. [Both generator trials and paired reference scores](neuroko_v12_generator_rates_screen.json)
 
+Lowering only the particle learning rate from 0.0406 to **0.0287** raised v12 mean energy from **0.94231 to 0.95057**. Four of nine pairs improved. The lower rate beat the stronger noise-0.25 v11 on three pairs and EMPF on two. [Particle rate trial and paired scores](neuroko_v12_lower_particle_rate.json)
+
 The noise-0.25 controls finished while the individual-rate trials were running. They had lower first-cohort energies than the earlier v11 and EMPF references. An additional comparison fixes these two controls and measures them on seeds 251–253. It reports each of the four rate trials against them on seeds 22–24 once the shortlist exists. If the selected trial has completed the second cohort under its original protocol, it reports the same paired comparison there. Run the command again after the shortlist and any second-cohort fits finish to include those results.
 
 ```bash
@@ -476,6 +492,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --stage compare-noise-controls 
   --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-individual-role-rates" \
   --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
 ```
+
+The stronger noise-0.25 controls repeated their lead on seeds 251–253. EMPF scored **0.90413** and v11 **0.92116**, versus **0.94813** for the noise-0.15 v12 baseline. On seeds 22–24 the corresponding means were 0.92240, 0.92511 and 0.94231. These compare each formulation at its indicated noise width with the same three learning rates and prior weight. [Both development cohorts](neuroko_v12_wide_noise_controls.json)
 
 ### Adjusting the prior's target standard deviation
 
@@ -490,6 +508,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study prior-target-spread --d
   --wheels "$data/wheels" --output "$data/v12-prior-target-spread" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior"
 ```
+
+Changing the target standard deviation to 0.89 reduced mean generated spread from 1.12523 to 1.11539. Mean energy rose from **0.94231 to 0.94883**. Five of nine pairs improved. The baseline energy rules out overall qualification under the recorded criterion. [Paired energies, spread and covariance dimensions](neuroko_v12_target_std_energies.json)
 
 ### Diversity within and between learned particles
 

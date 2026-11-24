@@ -276,6 +276,42 @@ def spread_target(path):
                 prior_reg_target_std=target), average
 
 
+def replicate_balanced_releases(args):
+    if args.study != "balanced-particle-prior":
+        raise ValueError("The matched replication uses the frozen calibrated prior study")
+    search = json.loads((args.output / "search.json").read_text())
+    trial = search["arms"][0][2]
+    arms = paired(trial)
+    if search["arms"][:3] != arms or search["screen_seeds"] != REPLICATION_SEEDS:
+        raise ValueError("The calibrated prior study must contain all three matched formulations")
+    selected = key(arms[0])
+    root = args.output / "matched-releases"
+    root.mkdir(exist_ok=True)
+    fresh = list(range(452, 458))
+    rule = ("Reproduce the calibrated-prior setting on the nine original development pairs with all "
+            "five formulation and release combinations. Only if v12 has the lowest mean across all five, "
+            "repeat all five on six fresh training seeds. This comparison measures the matched formulation "
+            "effect and does not change the original qualification against tuned controls.")
+    write_frozen(root / "protocol.json", dict(arms=arms, original_releases=["0.10.0", "0.11.1"],
+                                               groups=GROUPS, development=REPLICATION_SEEDS, fresh=fresh, rule=rule))
+    screen = json.loads((args.output / "screen.json").read_text())
+    published = {key(arm): screen["scores"][key(arm)] for arm in arms}
+    if any(mean(published[selected]) >= mean(published[key(arm)]) for arm in arms[1:]):
+        raise ValueError("The calibrated v12 must first beat both same-wheel matched controls")
+    for cohort, seeds in (("development", REPLICATION_SEEDS), ("fresh", fresh)):
+        target = root / cohort
+        target.mkdir(exist_ok=True)
+        local = copy(args)
+        local.output = (args.shared_screen or args.output) if cohort == "development" else root
+        summaries = original_release_scores(local, target, arms, seeds, rule,
+                                            published=published if cohort == "development" else None)
+        lowest = all(summaries[selected]["energy"] < summary["energy"]
+                     for name, summary in summaries.items() if name != selected)
+        write_frozen(target / "decision.json", dict(v12_lowest_matched_mean=lowest, summaries=summaries))
+        if not lowest:
+            break
+
+
 def compare_prior_weight(args):
     screen_only = []
     pinned = []
@@ -504,7 +540,8 @@ def main():
         parser.add_argument("--" + field, type=Path, required=True)
     parser.add_argument("--workers-per-gpu", type=int, default=2)
     parser.add_argument("--window-cells", type=int)
-    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-noise-controls"), default="search")
+    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-noise-controls",
+                                          "replicate-balanced-releases"), default="search")
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
                         default="rates")
@@ -526,6 +563,9 @@ def main():
     for field in ("data", "wheels", "output"):
         setattr(args, field, getattr(args, field).resolve())
     args.output.mkdir(parents=True, exist_ok=True)
+    if args.stage == "replicate-balanced-releases":
+        replicate_balanced_releases(args)
+        return
     if args.stage == "compare-noise-controls":
         if args.study != "individual-role-rates":
             parser.error("--stage compare-noise-controls applies to individual-role-rates")

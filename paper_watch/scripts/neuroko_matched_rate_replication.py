@@ -73,6 +73,7 @@ def original_release_scores(args, destination, matches, seeds, metric, *, publis
                                   v12_pairs_won=sum(d < 0 for d in gaps))
     write_frozen(destination / "release_comparison.json", dict(scores=scores, summaries=summaries))
     print("Original-release comparison", summaries, flush=True)
+    return summaries
 
 
 def prior_equivalence(release, arms):
