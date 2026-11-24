@@ -54,6 +54,20 @@ def matched(trial):
     ]
 
 
+def validate_finalist(args, trial, validation_seeds):
+    comparisons, labels = control_arms([trial])
+    kept = ("selected_v12", "matched_v11", "matched_empf", "previous_best_v11", "previous_best_empf",
+            "previous_v12", "tuned_empf", "selected_v12-alternative", "matched_v11-alternative",
+            "matched_empf-alternative")
+    keys = {labels[label] for label in kept}
+    validation = evaluate(args, [arm for arm in comparisons if key(arm) in keys], validation_seeds)
+    means = {name: mean(values) for name, values in validation.items()}
+    chosen = labels["selected_v12"]
+    advances = all(means[chosen] < score for name, score in means.items() if name != chosen)
+    return {"validation": validation, "means": means, "labels": {k: labels[k] for k in kept},
+            "advances": advances, "winner": trial["name"] if advances else None}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for field in ("data", "wheels", "output"):
@@ -94,17 +108,7 @@ def main():
     decision = dict(screen=screen, gaps=gaps, finalist=None, validation={}, means={}, advances=False, winner=None)
     if gaps[finalist][0] < 0:
         trial = trials[finalist]
-        comparisons, labels = control_arms([trial])
-        kept = ("selected_v12", "matched_v11", "matched_empf", "previous_best_v11", "previous_best_empf",
-                "previous_v12", "tuned_empf", "selected_v12-alternative", "matched_v11-alternative",
-                "matched_empf-alternative")
-        keys = {labels[label] for label in kept}
-        validation = evaluate(args, [arm for arm in comparisons if key(arm) in keys], validation_seeds)
-        means = {name: mean(values) for name, values in validation.items()}
-        chosen = labels["selected_v12"]
-        advances = all(means[chosen] < score for name, score in means.items() if name != chosen)
-        decision.update(finalist=finalist, validation=validation, means=means, labels={k: labels[k] for k in kept},
-                        advances=advances, winner=finalist if advances else None)
+        decision.update(finalist=finalist, **validate_finalist(args, trial, validation_seeds))
     # Store lists in the JSON protocol so a deterministic rerun compares equal.
     decision["gaps"] = {name: list(values) for name, values in gaps.items()}
     write_frozen(args.output / "selection.json", decision)

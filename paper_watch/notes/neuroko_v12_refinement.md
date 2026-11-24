@@ -98,3 +98,14 @@ Across 44 native penalty measurements after update 100 on training seed 10, the 
 python paper_watch/scripts/neuroko_transport_scale.py --study critic-cap --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-critic-cap"
 ```
+
+## Joint generator, critic and particle learning rates
+
+The first fixed-rate search changed one role at a time around the v12 incumbent. To measure interactions, a separate experiment crosses a generator rate of 0.010 or 0.020 with a critic rate of 0.0105 or 0.042 and a particle rate of 0.0203 or 0.0812. All eight combinations use uniform sampling, latent noise 0.025, hollow self-coupling for v12 and v11, relativistic weight 2 and the default critic penalty. Each fit keeps its assigned rates constant through update 1,200.
+
+The three v12 settings with the lowest mean energy at seed 15 face v11 and EMPF at the same three rates and three reference configurations. An eligible setting must beat all five controls. The lowest eligible v12 score advances to independent training seeds 16–18. Holdout seeds 148–163 are reserved for a candidate that beats the matched and previously tuned controls across these nine training fold–seed pairs. [Candidate grid and selection rule](../scripts/neuroko_role_factorial.py)
+
+```bash
+python paper_watch/scripts/neuroko_role_factorial.py --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-role-factorial"
+```
