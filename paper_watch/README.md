@@ -134,6 +134,8 @@ A fixed-learning-rate follow-up compared two v12 finalists and matched controls 
 
 The stronger-prior v12 led the screen, then scored 0.9481 on fresh training seeds against 0.9393 for matched EMPF. All matched runs used constant learning rates. Append `--stage compare-releases` to the prior-weight command to repeat the fresh-seed comparison with the original 0.10.0 EMPF and 0.11.1 v11 wheels. [Fresh-seed results and release comparison](notes/neuroko_v12_refinement.md#prior-penalty-at-latent-noise-015)
 
+To continue the search from the same checkout, run the `--study prior-interaction` command. It compares both latent noise levels and prior weights under each of the two fixed learning-rate settings on the same training folds. [Eight configurations and the qualification rule](notes/neuroko_v12_refinement.md#separating-the-effects-of-latent-noise-and-role-rates)
+
 Two earlier replication commands compare the formulations at fixed rates of 0.020, 0.042 and 0.0203, then at EMPF’s tuned rates of 0.020, 0.030 and 0.058. [Paired results and commands](notes/neuroko_v12_refinement.md#replicated-comparison-of-learning-rates-and-latent-noise)
 
 #### Copy-paste prompt for the 1,200-update formulation comparison

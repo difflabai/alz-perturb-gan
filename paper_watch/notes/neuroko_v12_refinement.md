@@ -244,6 +244,14 @@ On fresh training seeds 251–253, v12 averaged 0.94813 and matched 0.12.0 EMPF 
 
 Matched v11 from the 0.12.0 wheel averaged 0.93629. V12 beat it on three of nine pairs and one of the three seed means. Within v12 itself, increasing the penalty from 0.02 to 0.1 also helped on the fresh seeds. Mean energy fell from 0.97650 to 0.94813, an improvement of 2.9%. The higher weight improved seven of nine pairs, all three seed means and each of the four target means.
 
+The prior weight had different effects across formulations at noise 0.15. In both cohorts, weight 0.1 lowered v12 energy and raised v11 energy. Across the 18 fold–seed pairs, the stronger prior improved v12 on 13 and v11 on five. EMPF's mean moved by less than 0.006 in either cohort. On fresh seeds, v11 at its default weight scored 0.91437, 0.03376 below the tuned v12.
+
+| Change in energy from release-default weight to 0.1 | Seeds 22–24 | Seeds 251–253 |
+| --- | ---: | ---: |
+| V12 (default 0.02) | −0.03113 | −0.02837 |
+| V11 from 0.12.0 (default 0.02) | +0.01696 | +0.02192 |
+| EMPF from 0.12.0 (default 0.01) | +0.00570 | −0.00141 |
+
 | Fresh seed, mean over three training folds | V12 energy ↓ | Matched v11 (0.12.0) | Matched EMPF (0.12.0) |
 | --- | ---: | ---: | ---: |
 | 251 | 0.97204 | 0.93236 | 0.93740 |
@@ -271,6 +279,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study matched-prior-weight --
 ```
 
 At these rates, raising the prior weight from 0.02 to 0.1 increased v12's nine-pair mean energy from 0.97744 to 0.98734. The stronger weight improved four of nine pairs and one of three seed means, which rules out independent validation under the screening criterion. All 18 v12 fits verified constant learning rates at every update. At update 1,200, the native generator step gain averaged 0.9190 with weight 0.02 and 0.9289 with weight 0.1.
+
+At weight 0.1, matched EMPF averaged 0.96680, v12 averaged 0.98734 and matched v11 averaged 0.98923. V12 beat v11 on five of nine pairs and EMPF on four. The completed 12-arm screen ended at the training folds. [All 108 paired energies and the screening decision](neuroko_v12_matched_prior_screen.json)
 
 ### Doubling the prior penalty at latent noise 0.15
 
