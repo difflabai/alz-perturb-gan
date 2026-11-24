@@ -2,9 +2,9 @@
   "status": "partial",
   "primary_endpoint": 3600,
   "expected_fits": 90,
-  "completed_fits": 68,
+  "completed_fits": 71,
   "expected_five_way_pairs": 18,
-  "complete_five_way_pairs": 13,
+  "complete_five_way_pairs": 14,
   "protocol": {
     "arms": {
       "v12": [
@@ -175,6 +175,13 @@
         1.031276065084416,
         1.0079313670960488,
         0.9986863326849634
+      ]
+    },
+    "841": {
+      "v12": [
+        0.9009538398027005,
+        0.9687723741248748,
+        0.9077442376084853
       ]
     }
   },
@@ -364,16 +371,30 @@
           1.2455791769363256
         ]
       }
+    },
+    "841": {
+      "v12": {
+        "effective_rank": [
+          22.355173518972457,
+          22.956337541641243,
+          22.403742134795397
+        ],
+        "spread_ratio": [
+          1.1964881714016975,
+          1.2189800854813764,
+          1.2078912510594046
+        ]
+      }
     }
   },
   "available_endpoint_comparisons": {
     "matched_v11": {
-      "completed_pairs": 13,
+      "completed_pairs": 14,
       "v12_wins": 8
     },
     "matched_empf": {
-      "completed_pairs": 13,
-      "v12_wins": 10
+      "completed_pairs": 14,
+      "v12_wins": 11
     },
     "tuned_v11": {
       "completed_pairs": 14,
@@ -797,6 +818,27 @@
     },
     {
       "seed": 841,
+      "group": "Screen1_3",
+      "physical_gpu": 0,
+      "paired_fingerprints": {
+        "data": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "init": "2d9195f2a258a5e8d27c69777a114ab5deb0b6501e8ad6c8a3e7e24a501dc227",
+        "batches": [
+          "6f308d915616c69812886ccb8c1738c8baba9b2142d947bd35e8a67d56222a69",
+          "e70a84471f50dd965643c8cadee2afad05326b57fd27e0cd0f5de84abbddb5cc",
+          "00040bc82a619315bc2fdfa62592db8d939886de3bf5a72651302fea6ab7add9"
+        ]
+      },
+      "energy_by_checkpoint": {
+        "v12": [
+          0.570539059607823,
+          0.6102822224284037,
+          0.5598744477985247
+        ]
+      }
+    },
+    {
+      "seed": 841,
       "group": "Screen1_4",
       "physical_gpu": 1,
       "paired_fingerprints": {
@@ -936,6 +978,16 @@
           1.0262079508994661,
           1.0501587632654874,
           1.0576935677670138
+        ],
+        "matched_v11": [
+          1.0740740033641853,
+          1.0770112920155186,
+          1.022262041749025
+        ],
+        "matched_empf": [
+          1.0289255197132623,
+          1.0737345678144656,
+          1.1752519736885996
         ],
         "tuned_v11": [
           1.0642191765540758,
