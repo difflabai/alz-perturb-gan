@@ -131,7 +131,8 @@ def summarize(output):
             matching = {h: row[h] for h in hashes}
             if paired.setdefault(seed, matching) != matching:
                 raise ValueError(f"{key} has a mismatched data, initialization or minibatch hash at seed {seed}")
-            if (row["updates"] != 1200 or not row["deterministic"] or row["seed"] != seed
+            if (row["updates"] != 1200 or row.get("constant_lr_verified_updates") != 1200
+                    or not row["deterministic"] or row["seed"] != seed
                     or row["visible_devices"] != str(seed % 2) or row["particlegan"] != release
                     or row["recipe"] != recipe or row["name"] != name
                     or row["score_groups"] != ["Screen1_0"] or row["fit_groups"] != list(GROUPS)
@@ -191,6 +192,7 @@ def main():
         parser.add_argument("--" + flag, type=Path, required=True)
     parser.add_argument("--window-cells", type=int, help="use 10000 for the original public H5ADs")
     parser.add_argument("--workers-per-gpu", type=int, default=2)
+    parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     args.data, args.wheels, args.output = (p.resolve() for p in (args.data, args.wheels, args.output))
     args.output.mkdir(parents=True, exist_ok=True)

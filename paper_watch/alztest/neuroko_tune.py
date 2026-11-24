@@ -88,7 +88,7 @@ def main():
     parser.add_argument("--trial", action="append", type=json.loads, required=True,
                         help='JSON object, e.g. {"name":"v11","lr":0.028,"batch_size":256}')
     parser.add_argument("--require-constant-lr", action="store_true",
-                        help="require unit network and particle schedule multipliers and verify live optimizer rates")
+                        help="check network and particle learning rates on every update (automatic for v12)")
     parser.add_argument("--trace-every", type=int, help="also score validation or holdout at this update interval")
     parser.add_argument("--evaluation-seeds", type=int, nargs="+", metavar="BASE",
                         help="also evaluate each fitted model with these sampling seeds plus the condition index")
@@ -103,6 +103,7 @@ def main():
     parser.add_argument("--self-plan", choices=("observe", "exclude-same-id", "opposite-halves", "discount-same-id"),
                         help="trace the v11 solver or run an explicit self-pairing counterfactual")
     args = parser.parse_args()
+    args.require_constant_lr = args.require_constant_lr or args.recipe == "unified_v12"
     if args.self_plan and args.recipe != "unified_v11":
         parser.error("the self-plan diagnostic requires unified_v11")
     if args.trace_every is not None and not 0 < args.trace_every <= 1200:
