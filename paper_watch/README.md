@@ -174,6 +174,8 @@ python paper_watch/scripts/neuroko_convergence.py --shared-smoothing-from "$data
   --output "$data/v12-smoothing-0.001-3600/pilot"
 ```
 
+In the completed two-seed, three-group pilot, v12 had the lowest 3,600-update mean energy among the matched releases at each smoothing value. V12 scored 0.93547 at 0.001 and 0.93564 at 0.0061. Independently tuned original v11 averaged 0.93140. [All six paired results and both five-way means](notes/neuroko_v12_reciprocal_smoothing_3600.json)
+
 Once the six-seed original-release comparison finishes, use its results to decide whether to evaluate Screen1_0. The command verifies the 90 training records and checks that v12 beat every control on mean energy distance at 3,600 updates. If it did, all five configurations train on the three development groups and score Screen1_0 using seeds 844–859. The report includes each target and a paired 95% interval across training seeds for each comparison.
 
 ```bash
