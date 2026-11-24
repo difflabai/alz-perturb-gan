@@ -62,7 +62,7 @@
       }
     }
   },
-  "completed_pairs": 2,
+  "completed_pairs": 3,
   "expected_pairs": 18,
   "cells": [
     {
@@ -253,6 +253,102 @@
             "SLC2A4RG": 1.0789518721954439,
             "PLEKHA1": 1.219447646678125,
             "MAMSTR": 1.2181320443511714
+          }
+        }
+      }
+    },
+    {
+      "seed": 839,
+      "group": "Screen1_4",
+      "gpu": 1,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.047280697129381,
+            "spread_ratio": 1.0452870118915893,
+            "effective_rank": 22.085517015739953
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.0833753410348728,
+            "spread_ratio": 1.0647264415971338,
+            "effective_rank": 23.015275798708448
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.01270534258141,
+            "spread_ratio": 1.0785760160628703,
+            "effective_rank": 22.780154167126298
+          }
+        ],
+        "same_wheel_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.0170720523599557,
+            "spread_ratio": 1.0062585999913691,
+            "effective_rank": 21.25799321673002
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.9870940155060337,
+            "spread_ratio": 1.0694295505331135,
+            "effective_rank": 21.993472845297013
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.9935453831936227,
+            "spread_ratio": 1.0757711919764983,
+            "effective_rank": 22.56259464408714
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initialization": "cd8ff571d460a5101595aaa3774996f0becf871670b4094327303d8d43bc510b",
+        "training_batches": [
+          "d85d3eab0c58999cab7d12ff1a6d6dacbaf16b3f85e9b36809515d29af159eea",
+          "803f505459d1d222444554468bb1aa7c45f7df11bb8d545c37f61d32920e2480",
+          "5f5860428ed21a748f206e712c8e928e750efc84b8e620cbaeff14c7c637e6da"
+        ]
+      },
+      "training": {
+        "v12": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v12_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 369.66847340017557,
+          "endpoint_target_energy": {
+            "GLCCI1": 1.0564738114219345,
+            "SLC2A4RG": 1.1222376795505546,
+            "PLEKHA1": 0.9060271767755657,
+            "MAMSTR": 0.9660827025775856
+          }
+        },
+        "same_wheel_v11": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v11_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 324.71172704175115,
+          "endpoint_target_energy": {
+            "GLCCI1": 1.0286762709775994,
+            "SLC2A4RG": 1.0129098849873106,
+            "PLEKHA1": 0.9055813903527756,
+            "MAMSTR": 1.0270139864568053
           }
         }
       }
