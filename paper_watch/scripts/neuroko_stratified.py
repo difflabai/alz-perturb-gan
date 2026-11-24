@@ -30,13 +30,15 @@ def key(arm):
     return "/".join([arm[0], arm[1], arm[2]["name"]])
 
 
-def evaluate(args, arms, seeds):
+def evaluate(args, arms, seeds, *, groups_by_seed=None):
     tasks = []
     paths = {}
     requested = {key(arm): arm for arm in arms}
     for arm in arms:
         for seed in seeds:
-            for i, group in enumerate(GROUPS):
+            groups = GROUPS if groups_by_seed is None else groups_by_seed[seed]
+            for group in groups:
+                i = GROUPS.index(group)
                 path = receipt(args.output, "validation", *arm, seed, group)
                 paths[key(arm), seed, group] = path
                 if not path.is_file():
@@ -137,8 +139,13 @@ def validation_controls(finalists):
     return arms, references, mapping
 
 
-def confirm_candidate(args, selection, chosen, seeds, *, compare_historical_empf=False, previous_transport=None):
+def confirm_candidate(args, selection, chosen, seeds, *, compare_historical_empf=False, previous_transport=None,
+                      noise_reference=None):
     arms, labels = control_arms([chosen])
+    if noise_reference is not None:
+        arm = [RELEASE, V12, noise_reference]
+        arms.append(arm)
+        labels["same-rates-noise-reference"] = key(arm)
     if previous_transport is not None:
         for recipe in (V12, "unified_v11"):
             arm = [RELEASE, recipe, previous_transport]

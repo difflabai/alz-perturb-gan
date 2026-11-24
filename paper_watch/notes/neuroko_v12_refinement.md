@@ -127,3 +127,14 @@ The three v12 settings with the lowest mean energy at seed 15 face v11 and EMPF 
 python paper_watch/scripts/neuroko_role_factorial.py --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-role-factorial"
 ```
+
+## Replicated comparison of learning rates and latent noise
+
+The two lowest seed-15 v12 scores came from different rate combinations. The first used generator 0.020, critic 0.042 and particles 0.0203. The second used 0.010, 0.0105 and 0.0812. Independently tuned EMPF scored 0.9174 on this seed, below both v12 scores. A follow-up tests each combination with Gaussian latent noise 0.075 or 0.15. All three formulations receive the same noise and rates within each comparison.
+
+The screen uses six paired training fold–seed combinations. Each of three biological groups and each of seeds 19–21 occurs twice. The candidate with the lowest mean difference from its strongest competitor advances to three fresh seeds regardless of its screening rank relative to EMPF. This allows a promising setting to be assessed across seeds when one seed favors a control. The independent nine-pair validation compares the selected candidate with matched and established controls, including v12 at the same rates and its original noise of 0.025. Only a candidate below all these on validation goes to the held-out biological group on seeds 164–179. [Rate combinations, exact folds and ranking rule](../scripts/neuroko_rate_noise.py)
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-rate-noise"
+```

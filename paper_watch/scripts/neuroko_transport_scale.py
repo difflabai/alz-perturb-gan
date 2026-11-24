@@ -54,13 +54,19 @@ def matched(trial):
     ]
 
 
-def validate_finalist(args, trial, validation_seeds):
+def validate_finalist(args, trial, validation_seeds, *, noise_reference=None):
     comparisons, labels = control_arms([trial])
     kept = ("selected_v12", "matched_v11", "matched_empf", "previous_best_v11", "previous_best_empf",
             "previous_v12", "tuned_empf", "selected_v12-alternative", "matched_v11-alternative",
             "matched_empf-alternative")
     keys = {labels[label] for label in kept}
-    validation = evaluate(args, [arm for arm in comparisons if key(arm) in keys], validation_seeds)
+    arms = [arm for arm in comparisons if key(arm) in keys]
+    if noise_reference is not None:
+        arm = [RELEASE, V12, noise_reference]
+        arms.append(arm)
+        labels["same-rates-noise-reference"] = key(arm)
+        kept += ("same-rates-noise-reference",)
+    validation = evaluate(args, arms, validation_seeds)
     means = {name: mean(values) for name, values in validation.items()}
     chosen = labels["selected_v12"]
     advances = all(means[chosen] < score for name, score in means.items() if name != chosen)
