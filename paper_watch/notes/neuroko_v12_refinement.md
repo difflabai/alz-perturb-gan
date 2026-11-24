@@ -58,6 +58,8 @@ Original v11 reversed the ordering on the second cohort at the same fixed rates.
 
 The first cohort also qualified for the predeclared six-seed replication at the shared rates. All five release/formulation combinations completed. V11 from the 0.12.0 wheel scored 0.95051, and EMPF from that wheel reproduced the 0.10.0 energy in every pair. The replicate uses seeds 524–529 on the same three biological groups. [Five-way comparison and replication decision](neuroko_v12_fixed_critic_matched_development.json)
 
+On seeds 251–253 both v11 implementations led v12 at the shared settings. Their mean energies were 0.91419 from the 0.12.0 wheel and 0.92569 from the original v11 wheel, compared with 0.93939 for v12. EMPF gave identical energies from both wheels, averaging 1.00870. [Second-cohort five-way comparison](neuroko_v12_fixed_critic_second_originals.json)
+
 At its independently tuned settings, original 0.10.0 EMPF also reproduced the corresponding 0.12.0 EMPF score on every first-cohort pair. Raising the critic rate from 0.0049 to 0.021 and latent noise from 0.15 to 0.25 together lowered its mean energy from 0.99652 to 0.92240. V12 at the calibrated rates averaged 0.92850 and won four of nine pairs against tuned original EMPF. [Matched inputs, energy and original wheel comparison](neuroko_v12_tuned_original_empf_first.json)
 
 Original tuned EMPF repeated its lead on seeds 251–253. It averaged **0.90413**, compared with **0.93939** for calibrated v12 and **1.00870** for original EMPF at v12's matched rates and noise. The two EMPF wheels again produced identical per-pair energies. Across both cohorts, calibrated v12 beat matched original EMPF on 15 of 18 pairs and all six seed means. Against tuned original EMPF it won seven of 18 pairs and one of six seed means. [Second-cohort scores, settings and input hashes](neuroko_v12_tuned_original_empf_second.json)
@@ -692,6 +694,8 @@ With the same calibrated rates and training settings across the three original r
 
 The two additional controls from the 0.12.0 wheel scored 0.93681 for weight-0.5 v11 and 0.99652 for EMPF. V12 won seven of nine pairs against each at the shared learning rates. [Five matched release and formulation results](neuroko_v12_half_weight_original_first.json)
 
+Weight 0.5 also reversed its ordering against v11 on the second cohort. V12 scored 0.94349, original v11 scored 0.94086, and v11 from the 0.12.0 wheel scored 0.92396. V12 beat original v11 on four of nine pairs and beat matched original EMPF on all nine. [Second-cohort weight-0.5 comparison](neuroko_v12_half_weight_original_second.json)
+
 Across the three seeds per biological group, weight-0.5 v12 trailed tuned EMPF on `Screen1_1` (1.18560 versus 1.10810). It scored lower on `Screen1_3` (0.58842 versus 0.63317) and `Screen1_4` (0.99564 versus 1.02594). To check whether the effect repeats, add `--stage replicate-loss-weight` to the weight-0.5 command. This stage repeats the fixed-weight comparison on seeds 251–253 and measures the original releases at the candidate’s rates, noise and loss settings on each development cohort. EMPF has no relativistic term and uses its existing fits at the same three rates, latent noise and prior coefficient.
 
 The next experiment tests one further reduction to 0.25 at the same constant rates. Its first nine fits must beat weight 0.5 and both tuned controls. Further comparisons include original and same-wheel matched controls, then fresh training seeds 596–601. The biological holdout uses seeds 602–617 only if the candidate qualifies. To reproduce, change the last command to `--study critic-quarter-weight` and `--output "$data/v12-critic-quarter-weight"`.
@@ -751,6 +755,8 @@ On seeds 22–24, the middle particle rate **0.0406** had the lowest mean energy
 | --- | ---: | ---: | ---: |
 | 0.0049 | 0.94237 | **0.92850** | 0.93732 |
 | 0.0210 | 0.95057 | **0.94231** | 0.95789 |
+
+On seeds 251–253 with critic LR 0.0049, the lower particle rate 0.0287 scored **0.92690**, improving five of nine pairs relative to 0.0406 at **0.93939**. The higher rate 0.0574 scored **0.94052**. Of the two alternatives, 0.0287 had the smaller worst-cohort gap to tuned EMPF, but still trailed by 0.01997 and 0.02277 in the two cohorts. Neither particle rate qualified. [Both cohorts and selection decision](neuroko_v12_calibrated_particle_rates.json)
 
 ### Critic scores and entropy in the transport loss
 

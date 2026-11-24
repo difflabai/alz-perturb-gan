@@ -1,0 +1,169 @@
+{
+  "protocol": {
+    "arms": [
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "seeds": [
+      251,
+      252,
+      253
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "metric": "Repeat the original-release fixed-critic comparison on development seeds 251\u2013253. Use identical rates, latent noise 0.15 and prior weight 0.1 for all five arms."
+  },
+  "result": {
+    "scores": {
+      "0.10.0/empf/original-v11-critic-49": [
+        1.2178591190828363,
+        0.753468302803721,
+        1.0508637302242403,
+        1.2750817920794217,
+        0.7010548361127142,
+        1.0843754937893737,
+        1.1812706601674314,
+        0.6774728916220092,
+        1.1368742224188437
+      ],
+      "0.11.1/unified_v11/original-v11-critic-49": [
+        1.2157097729130006,
+        0.5851068954193852,
+        1.045318250471831,
+        1.0746161102943679,
+        0.6165317400579864,
+        1.0683459921260137,
+        1.1278220528164498,
+        0.6053642852177834,
+        0.9923590035202352
+      ],
+      "0.12.0/unified_v12/original-v11-critic-49": [
+        1.1412954010469378,
+        0.633696660494178,
+        1.0131135530000601,
+        1.2306572823088493,
+        0.6138221992773936,
+        1.0325482063250722,
+        1.0808511714939395,
+        0.6675814603899681,
+        1.0409889928206046
+      ],
+      "0.12.0/unified_v11/original-v11-critic-49": [
+        1.2249290798774957,
+        0.600091302725775,
+        0.9821297791942794,
+        1.1838880659743987,
+        0.5526813727170592,
+        1.0030147517693653,
+        1.1034750002250462,
+        0.6212817480307704,
+        0.9562343432908698
+      ],
+      "0.12.0/empf/original-v11-critic-49": [
+        1.2178591190828363,
+        0.753468302803721,
+        1.0508637302242403,
+        1.2750817920794217,
+        0.7010548361127142,
+        1.0843754937893737,
+        1.1812706601674314,
+        0.6774728916220092,
+        1.1368742224188437
+      ]
+    },
+    "summaries": {
+      "0.10.0/empf/original-v11-critic-49": {
+        "energy": 1.0087023387000658,
+        "v12_minus_arm": -0.06930734679373203,
+        "v12_pairs_won": 9
+      },
+      "0.11.1/unified_v11/original-v11-critic-49": {
+        "energy": 0.9256860114263392,
+        "v12_minus_arm": 0.013708980479994458,
+        "v12_pairs_won": 5
+      },
+      "0.12.0/unified_v12/original-v11-critic-49": {
+        "energy": 0.9393949919063337,
+        "v12_minus_arm": 0.0,
+        "v12_pairs_won": 0
+      },
+      "0.12.0/unified_v11/original-v11-critic-49": {
+        "energy": 0.9141917159783399,
+        "v12_minus_arm": 0.02520327592799375,
+        "v12_pairs_won": 2
+      },
+      "0.12.0/empf/original-v11-critic-49": {
+        "energy": 1.0087023387000658,
+        "v12_minus_arm": -0.06930734679373203,
+        "v12_pairs_won": 9
+      }
+    }
+  }
+}

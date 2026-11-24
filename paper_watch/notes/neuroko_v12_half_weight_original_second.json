@@ -1,0 +1,169 @@
+{
+  "protocol": {
+    "arms": [
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49-rel5",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 0.5,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49-rel5",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 0.5,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49-rel5",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 0.5,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "seeds": [
+      251,
+      252,
+      253
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "metric": "Repeat the first-cohort loss-weight comparison on seeds 251\u2013253. Compare all three original releases and same-wheel controls at the matched weight, rates, noise and prior on each cohort. Report this development replication independently of the frozen candidate selection."
+  },
+  "result": {
+    "scores": {
+      "0.10.0/empf/original-v11-critic-49": [
+        1.2178591190828363,
+        0.753468302803721,
+        1.0508637302242403,
+        1.2750817920794217,
+        0.7010548361127142,
+        1.0843754937893737,
+        1.1812706601674314,
+        0.6774728916220092,
+        1.1368742224188437
+      ],
+      "0.11.1/unified_v11/original-v11-critic-49-rel5": [
+        1.271718226588949,
+        0.5635922574641976,
+        1.0372417868462076,
+        1.1496497149346085,
+        0.5785464950970685,
+        1.0943125409464771,
+        1.155028726099221,
+        0.6143541342294798,
+        1.0033348741415822
+      ],
+      "0.12.0/unified_v12/original-v11-critic-49-rel5": [
+        1.2125133070913205,
+        0.597003548867993,
+        1.0175194653123814,
+        1.1815173378981785,
+        0.6238118774981396,
+        1.0644963620516545,
+        1.1590839943171785,
+        0.6041801222824574,
+        1.0312870901954336
+      ],
+      "0.12.0/unified_v11/original-v11-critic-49-rel5": [
+        1.2221390681347168,
+        0.5713895130083066,
+        1.0055523940790516,
+        1.132216041845967,
+        0.5707303750297201,
+        1.1410210294073198,
+        1.149717234476979,
+        0.5601226216302273,
+        0.9627498035975608
+      ],
+      "0.12.0/empf/original-v11-critic-49": [
+        1.2178591190828363,
+        0.753468302803721,
+        1.0508637302242403,
+        1.2750817920794217,
+        0.7010548361127142,
+        1.0843754937893737,
+        1.1812706601674314,
+        0.6774728916220092,
+        1.1368742224188437
+      ]
+    },
+    "summaries": {
+      "0.10.0/empf/original-v11-critic-49": {
+        "energy": 1.0087023387000658,
+        "v12_minus_arm": -0.06521199364287272,
+        "v12_pairs_won": 9
+      },
+      "0.11.1/unified_v11/original-v11-critic-49-rel5": {
+        "energy": 0.9408643062608657,
+        "v12_minus_arm": 0.002626038796327304,
+        "v12_pairs_won": 4
+      },
+      "0.12.0/unified_v12/original-v11-critic-49-rel5": {
+        "energy": 0.943490345057193,
+        "v12_minus_arm": 0.0,
+        "v12_pairs_won": 0
+      },
+      "0.12.0/unified_v11/original-v11-critic-49-rel5": {
+        "energy": 0.9239597868010944,
+        "v12_minus_arm": 0.019530558256098656,
+        "v12_pairs_won": 2
+      },
+      "0.12.0/empf/original-v11-critic-49": {
+        "energy": 1.0087023387000658,
+        "v12_minus_arm": -0.06521199364287272,
+        "v12_pairs_won": 9
+      }
+    }
+  }
+}
