@@ -75,6 +75,12 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
     points, fingerprints, targets = {}, {}, {}
     source = getattr(args, "same_wheel_from", None)
     smoothing_source = getattr(args, "shared_smoothing_from", None)
+    smoothing_replication = getattr(args, "smoothing_replication", None)
+    training = args
+    if holdout and smoothing_replication:
+        # The native and matched-smoothing confirmations share four identical fit files.
+        training = copy(args)
+        training.output = args.output.parent
     if smoothing_source and steps == LONG_STEPS:
         pilot = json.loads((args.smoothing_pilot / f"curves-{seed}-{group}.json").read_text())
         if ((pilot["seed"], pilot["group"], pilot["gpu"]) != (seed, group, gpu)
@@ -84,13 +90,13 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
         if role not in arms:
             continue
         arm = arms[role]
-        origin = args.output
+        origin = training.output
         if source and role == "v12":
             origin = source
         elif smoothing_source and role != "matched_empf":
             origin = smoothing_source
-        if not read_only and origin == args.output:
-            fit(args, stage, seed, group, gpu, [arm], options=("--updates", str(endpoint), "--trace-every", "1200"))
+        if not read_only and origin == training.output:
+            fit(training, stage, seed, group, gpu, [arm], options=("--updates", str(endpoint), "--trace-every", "1200"))
         base = receipt(origin, stage, *arm, seed, group)
         row = json.loads(base.with_stem(base.stem + f"-u{endpoint}-trace1200").read_text())
         trace = row["trace"]
@@ -120,7 +126,7 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
                 paired_settings = row["settings"]
             elif row["settings"] != paired_settings:
                 raise ValueError(f"Training settings differ between the two optimizers for seed {seed}, {group}")
-        if smoothing_source:
+        if smoothing_source or smoothing_replication:
             prior = args.smoothing_inputs.get((seed, group))
             if prior and (hashes["data"], hashes["initialization"], hashes["training_batches"][0], str(gpu)) != (
                     prior["projected_data_sha256"], prior["initial_parameters_sha256"],
@@ -181,11 +187,16 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
 def heldout_qualification(args, arms):
     fresh = copy(args)
     fresh.output = args.confirm_from.resolve()
+    replication = getattr(args, "smoothing_replication", None)
+    if replication:
+        fresh.shared_smoothing_from = fresh.output
+        fresh.output = replication.resolve()
     fresh.checkpoints = STEPS
     plan = json.loads((fresh.output / "protocol.json").read_text())
     seeds = list(range(838, 844))
     if (plan["seeds"] != seeds or plan["groups"] != list(GROUPS) or plan["checkpoints"] != list(STEPS)
-            or plan["arms"] != arms):
+            or plan["arms"] != arms
+            or plan.get("matched_optimizer_smoothing") != (SMOOTHING if replication else None)):
         raise ValueError("Biological confirmation requires the frozen six-seed development comparison")
     report = json.loads((fresh.output / "comparison.json").read_text())
     cells = [run_fold(fresh, arms, seed, group, None, read_only=True) for seed in seeds for group in GROUPS]
@@ -217,8 +228,12 @@ def main():
                       help="compare the original releases with matched optimizer smoothing at the source endpoint")
     parser.add_argument("--smoothing-pilot", type=Path, metavar="PILOT_DIR",
                         help="3,600-update shared-smoothing pilot to verify when extending it to 40,000")
+    parser.add_argument("--smoothing-replication", type=Path, metavar="SHARED_FRESH_DIR",
+                        help="qualify the matched-smoothing replication alongside the original --confirm-from directory")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
+    if args.smoothing_replication and not args.confirm_from:
+        parser.error("--smoothing-replication requires --confirm-from with the original six-seed run")
     args.data, args.wheels, args.output = (p.resolve() for p in (args.data, args.wheels, args.output))
     args.output.mkdir(parents=True, exist_ok=True)
     sources = [json.loads((NOTES / f"neuroko_v12_original_control_benchmark_{cohort}.json").read_text())
@@ -298,6 +313,19 @@ def main():
     elif args.confirm_from:
         if args.output == args.confirm_from.resolve():
             parser.error("use a distinct output directory for biological confirmation")
+        if args.smoothing_replication:
+            native = json.loads((args.confirm_from / "protocol.json").read_text())
+            if (native["arms"] != arms or native["seeds"] != list(range(838, 844))
+                    or native["groups"] != list(GROUPS) or native["checkpoints"] != list(STEPS)):
+                raise ValueError("Expected the original six-seed convergence comparison")
+            shared_output = args.output / f"smoothing-{SMOOTHING}"
+            if (args.output == args.smoothing_replication.resolve()
+                    or shared_output.resolve() in (args.confirm_from.resolve(), args.smoothing_replication.resolve())):
+                parser.error("use a distinct output directory for biological confirmation")
+            arms, args.smoothing_inputs = shared_smoothing_pilot(arms, anchors)
+            extra_protocol["matched_optimizer_smoothing"] = SMOOTHING
+            args.output = shared_output
+            args.output.mkdir(exist_ok=True)
         qualification = heldout_qualification(args, arms)
         write_frozen(args.output / "qualification.json", qualification)
         if not qualification["qualifies"]:
@@ -309,6 +337,8 @@ def main():
                 "development comparison, train every frozen configuration on Screen1_1, Screen1_3 and "
                 "Screen1_4. Score Screen1_0 at 3,600 updates for seeds 844–859. Report all paired endpoints, "
                 "target scores and seed-level 95% t intervals. The 1,200 and 2,400 checkpoints are descriptive.")
+        if args.smoothing_replication:
+            rule += " Use shared optimizer smoothing of 0.0061 for the three rate-matched formulations at both stages."
     elif args.forty_thousand:
         groups = GROUPS[:1]
         seeds = [22, 251]

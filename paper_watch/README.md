@@ -173,6 +173,14 @@ python paper_watch/scripts/neuroko_convergence.py --confirm-from "$data/v12-conv
   --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-convergence-3600/heldout-844-859"
 ```
 
+To test the same holdout at shared smoothing, pass the completed matched-smoothing replication as well. V12 must beat all four controls in that replication to qualify. Use the same output directory so the two comparisons can reuse the 64 identical fits across the 16 holdout seeds. The matched-smoothing decision and results are in its `smoothing-0.0061/` subdirectory.
+
+```bash
+python paper_watch/scripts/neuroko_convergence.py --confirm-from "$data/v12-convergence-3600/fresh-838-843" \
+  --smoothing-replication "$data/v12-smoothing-3600/fresh-838-843" --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-convergence-3600/heldout-844-859"
+```
+
 #### Follow v12 and the four original controls to 40,000 updates
 
 > Use the same checkout, NeuroKO data and pinned wheels. Run the five configurations on the first development group, Screen1_1, using pilot seeds 22 and 251 on separate GPUs. Compare energy distance at 40,000 updates and the average over the final 10,000 updates. Check whether spread and effective covariance rank move closer to the observed cells. Keep the learning rates constant and report each seed as well as the two-seed mean.
