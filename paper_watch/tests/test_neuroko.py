@@ -246,54 +246,80 @@ def test_biological_confirmation_depends_on_complete_fresh_result(tmp_path, monk
         assert scored == [] and not (outer / "comparison.json").exists()
 
 
-def test_long_duration_matches_pilot_and_integrates_uneven_final_interval(tmp_path, monkeypatch):
+@pytest.mark.parametrize("same_wheel", (False, True))
+def test_long_duration_matches_pilot_and_integrates_uneven_final_interval(tmp_path, monkeypatch, same_wheel):
     import json
     import sys
 
     monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
     import neuroko_convergence as study
 
-    def fake_fit(args, stage, seed, group, gpu, requested, *, options):
-        arm, = requested
+    native = json.loads((study.NOTES / "neuroko_v12_convergence_3600_tuned_empf.json").read_text())
+    plan = json.loads((study.NOTES / "neuroko_v12_optimizer_3600_pilot.json").read_text()) if same_wheel else native
+    families = {"v12": "unified_v12_equil", "same_wheel_v11": "unified_v11_equil"}
+    source = tmp_path / "original"
+    output = tmp_path / "output"
+    corrupt = False
+
+    def make_record(directory, seed, group, gpu, arm, anchor):
         version, recipe, trial = arm
         role = next(r for r, a in plan["arms"].items() if a == arm)
-        anchor = args.pilot_anchors[seed, group]
-        prefix = (anchor["curves"] | anchor["other_control_curves"])[role]
+        prefix = (anchor["curves"] | anchor.get("other_control_curves", {}))[role]
         hashes = anchor["fingerprints"]
-        assert options == ("--updates", "40000", "--trace-every", "1200")
         trace = [dict(p, training_batches_sha256=h) for p, h in zip(prefix, hashes["training_batches"], strict=True)]
         for step in study.LONG_STEPS[len(prefix):]:
             energy = 1.2 if step == 40000 and role == "v12" else 1.
             trace.append(dict(updates=step, mean_energy_distance=energy, spread_ratio=1., effective_rank=18.,
                               training_batches_sha256=str(step)))
-        if corrupt and role == "v12":
+        if corrupt and role == ("same_wheel_v11" if same_wheel else "v12"):
             trace[1]["mean_energy_distance"] += .01
         rates = dict(generator=trial["lr"], critic=trial["lr"] * trial["d_lr_mult"],
                      particles=trial["lr"] * trial["prior_lr_mult"])
         row = dict(updates=40000, constant_lr_verified_updates=40000, particlegan=version, recipe=recipe,
                    settings={k: v for k, v in trial.items() if k not in ("name", "lr")},
-                   stage=stage, name=trial["name"], lr=trial["lr"],
+                   stage="validation", name=trial["name"], lr=trial["lr"], optimizer_family=families.get(role),
                    seed=seed, deterministic=True, score_groups=[group], fit_groups=study.GROUPS[1:],
                    fixed_lr_optimizer_steps=dict(generator_and_particles=40000, critic=40000),
                    initial_rates=rates, final_rates=rates, visible_devices=str(gpu), trace=trace,
                    means=dict(energy_distance=trace[-1]["mean_energy_distance"]), projected_data_sha256=hashes["projected_data"],
                    initial_parameters_sha256=hashes["initial_parameters"], training_batches_sha256="40000")
-        base = study.receipt(args.output, stage, *arm, seed, group)
+        base = study.receipt(directory, "validation", *arm, seed, group)
         base.parent.mkdir(parents=True, exist_ok=True)
         base.with_stem(base.stem + "-u40000-trace1200").write_text(json.dumps(row))
 
-    plan = json.loads((study.NOTES / "neuroko_v12_convergence_3600_tuned_empf.json").read_text())
+    mode = ["--forty-thousand"]
+    if same_wheel:
+        source.mkdir()
+        protocol = dict(arms=native["arms"], seeds=[22, 251], groups=study.GROUPS[:1], checkpoints=study.LONG_STEPS)
+        (source / "protocol.json").write_text(json.dumps(protocol))
+        mode = ["--same-wheel-from", str(source)]
+        monkeypatch.setattr(study, "optimizer_difference", lambda *a: {"optimizer_family": families})
+        for cell in plan["cells"]:
+            if cell["group"] == "Screen1_1":
+                make_record(source, cell["seed"], cell["group"], cell["gpu"], plan["arms"]["v12"], cell)
+
+    def fake_fit(args, stage, seed, group, gpu, requested, *, options):
+        arm, = requested
+        assert options == ("--updates", "40000", "--trace-every", "1200")
+        assert stage == "validation" and group == "Screen1_1" and gpu == seed % 2
+        if same_wheel:
+            assert arm == plan["arms"]["same_wheel_v11"] and args.same_wheel_from == source
+        make_record(args.output, seed, group, gpu, arm, args.pilot_anchors[seed, group])
+
     monkeypatch.setattr(study, "fit", fake_fit)
-    monkeypatch.setattr(sys, "argv", ["study", "--forty-thousand", "--output", str(tmp_path),
+    monkeypatch.setattr(sys, "argv", ["study", *mode, "--output", str(output),
                                        "--data", str(tmp_path), "--wheels", str(tmp_path)])
-    corrupt = False
     study.main()
-    protocol = json.loads((tmp_path / "protocol.json").read_text())
-    result = json.loads((tmp_path / "comparison.json").read_text())
+    protocol = json.loads((output / "protocol.json").read_text())
+    result = json.loads((output / "comparison.json").read_text())
     assert protocol["groups"] == ["Screen1_1"] and protocol["seeds"] == [22, 251]
     assert protocol["checkpoints"][-2:] == [39600, 40000]
     assert result["mean_energy_30000_to_40000"]["v12"] == pytest.approx(1.004)
     assert result["endpoint_means"]["v12"] == 1.2 and len(result["cells"]) == 2
+    if same_wheel:
+        assert protocol["arms"] == plan["arms"]
+        assert result["mean_energy_30000_to_40000"]["same_wheel_v11"] == 1.
+        assert result["endpoint_comparisons"]["same_wheel_v11"]["pairs_won"] == 0
     corrupt = True
     with pytest.raises(ValueError, match="published 3,600-update pilot"):
         study.main()

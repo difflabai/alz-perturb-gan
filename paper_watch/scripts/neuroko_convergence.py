@@ -87,7 +87,7 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
             anchor = args.pilot_anchors[seed, group]
             prefix = [dict(updates=p["updates"], **{m: p[m] for m in METRICS}) for p in trace[:len(STEPS)]]
             prior = anchor["fingerprints"]
-            if (prefix != (anchor["curves"] | anchor["other_control_curves"])[role]
+            if (prefix != (anchor["curves"] | anchor.get("other_control_curves", {}))[role]
                     or hashes["data"] != prior["projected_data"] or hashes["initialization"] != prior["initial_parameters"]
                     or hashes["training_batches"][:len(STEPS)] != prior["training_batches"]):
                 raise ValueError(f"The long run differs from its published 3,600-update pilot for {role}, seed {seed}, {group}")
@@ -148,7 +148,7 @@ def main():
     mode.add_argument("--confirm-from", type=Path, metavar="FRESH_DIR",
                       help="verify the completed six-seed replication and conditionally evaluate Screen1_0")
     mode.add_argument("--same-wheel-from", type=Path, metavar="CONVERGENCE_DIR",
-                      help="compare the v12 and v11 optimizers at 3,600 updates inside release 0.12.0")
+                      help="compare the v12 and v11 optimizers inside release 0.12.0 at the source run's endpoint")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     args.data, args.wheels, args.output = (p.resolve() for p in (args.data, args.wheels, args.output))
@@ -172,9 +172,15 @@ def main():
             parser.error("use a distinct output directory for the optimizer comparison")
         plan = json.loads((args.same_wheel_from / "protocol.json").read_text())
         seeds = plan["seeds"]
-        if (plan["arms"] != arms or plan["groups"] != list(groups) or plan["checkpoints"] != list(STEPS)
-                or seeds not in ([22, 251], list(range(838, 844)))):
-            raise ValueError("Expected an original five-arm NeuroKO 3,600-update comparison")
+        if plan["checkpoints"] == list(LONG_STEPS):
+            args.checkpoints = LONG_STEPS
+            groups = GROUPS[:1]
+            valid_seeds = seeds == [22, 251]
+        else:
+            valid_seeds = seeds in ([22, 251], list(range(838, 844)))
+        if (plan["arms"] != arms or plan["groups"] != list(groups)
+                or plan["checkpoints"] != list(args.checkpoints) or not valid_seeds):
+            raise ValueError("Expected a frozen five-arm NeuroKO convergence comparison")
         v12 = arms["v12"]
         arms = dict(v12=v12, same_wheel_v11=[v12[0], "unified_v11", v12[2]])
         args.recipe_differences = optimizer_difference(args.wheels, v12[2])
@@ -193,6 +199,11 @@ def main():
                 "cells, weights, batches and fixed rates. Compare their paired mean energy at 3,600 updates "
                 "and show the 1,200 and 2,400 checkpoints. Use both pilot seeds and replicate on seeds "
                 "838–843 regardless of the pilot ordering.")
+        if args.checkpoints == LONG_STEPS:
+            rule = ("Reuse the 40,000-update v12 fits and train v11 from the same wheel on Screen1_1 for "
+                    "both pilot seeds irrespective of earlier scores. Match cells, initialization, minibatches "
+                    "and fixed learning rates. Replay the first three published checkpoints for each optimizer. "
+                    "Report paired endpoint energies and the time-weighted mean from 30,000 to 40,000 updates.")
     elif args.confirm_from:
         if args.output == args.confirm_from.resolve():
             parser.error("use a distinct output directory for biological confirmation")
@@ -210,11 +221,6 @@ def main():
     elif args.forty_thousand:
         groups = GROUPS[:1]
         seeds = [22, 251]
-        pilot = json.loads((NOTES / "neuroko_v12_convergence_3600_tuned_empf.json").read_text())
-        args.pilot_anchors = {(cell["seed"], cell["group"]): cell for cell in pilot["cells"] if cell["group"] in groups}
-        if (pilot["arms"] != arms or set(args.pilot_anchors) != {(s, g) for s in seeds for g in groups}
-                or any(set(c["curves"] | c["other_control_curves"]) != set(arms) for c in args.pilot_anchors.values())):
-            raise ValueError("The long run needs a published pilot curve for every arm and seed")
         rule = ("Run all five frozen configurations on the first listed development group Screen1_1 "
                 "and both pilot seeds through 40,000 optimizer updates. Reproduce the first three "
                 "published checkpoints and their minibatch hashes. Compare the two-seed mean energy "
@@ -231,6 +237,16 @@ def main():
         rule = ("Run all five arms through 3,600 updates on every pair regardless of intermediate scores. "
                 "Reproduce the published 1,200-update value and match data, weights and minibatches. "
                 "Assess whether v12 beats all four controls at 3,600 updates on each seed.")
+    if args.checkpoints == LONG_STEPS:
+        archive = ("neuroko_v12_optimizer_3600_pilot.json" if args.same_wheel_from
+                   else "neuroko_v12_convergence_3600_tuned_empf.json")
+        pilot = json.loads((NOTES / archive).read_text())
+        selected = [cell for cell in pilot["cells"] if cell["group"] in groups]
+        args.pilot_anchors = {(cell["seed"], cell["group"]): cell for cell in selected}
+        if (pilot["arms"] != arms or len(selected) != len(seeds) * len(groups)
+                or set(args.pilot_anchors) != {(s, g) for s in seeds for g in groups}
+                or any(set(c["curves"] | c.get("other_control_curves", {})) != set(arms) for c in selected)):
+            raise ValueError("The long run needs a published pilot curve for every arm and seed")
     write_frozen(args.output / "protocol.json", dict(arms=arms, seeds=seeds, groups=list(groups),
                  checkpoints=args.checkpoints, metric="four-target mean energy distance", rule=rule, **extra_protocol))
     with ThreadPoolExecutor(1) as first, ThreadPoolExecutor(1) as second:
@@ -271,7 +287,7 @@ def main():
         result["leads_all_controls_on_average"] = all(row["mean_v12_minus_control"] < 0 for row in summary.values())
     else:
         result["leads_both_seeds"] = all(max(row["v12_minus_control"].values()) < 0 for row in endpoint)
-    if args.forty_thousand:
+    if args.checkpoints == LONG_STEPS:
         late = {}
         for role in arms:
             seed_means = []

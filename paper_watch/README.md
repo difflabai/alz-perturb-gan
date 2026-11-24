@@ -177,6 +177,13 @@ python paper_watch/scripts/neuroko_convergence.py --forty-thousand --data "$data
 
 The run scores every 1,200 updates and again at 40,000. It checks each arm against its published 1,200-, 2,400- and 3,600-update scores and minibatch fingerprints. The last interval is 400 updates. The late-training mean uses linear interpolation between checkpoints to account for the shorter interval. [Observed cell ranks by group and target](notes/neuroko_v12_tuned_empf_geometry.json)
 
+Once the two 40,000-update v12 fits have finished, use them to compare the v12 and v11 optimizers in release 0.12.0 on the same hardware, initialization and batches. This command trains two additional v11 fits and checks both optimizers against their published 3,600-update trajectories. The report includes the 40,000-update endpoint for each seed and the average energy over the final 10,000 updates.
+
+```bash
+python paper_watch/scripts/neuroko_convergence.py --same-wheel-from "$data/v12-convergence-40000" \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-optimizer-40000"
+```
+
 #### Copy-paste prompt for the stronger-prior v12 comparison
 
 > Clone `https://github.com/difflabai/alz-perturb-gan` on branch `paper-watch/neuroko-revival` and record the commit. Follow the NeuroKO GPU setup in `paper_watch/README.md`, including the data checksums, and install the pinned 0.12.0 wheel as shown in `paper_watch/notes/neuroko_v12_1200.md`. Use both GPUs. Run the “Prior penalty at latent noise 0.15” command in `paper_watch/notes/neuroko_v12_refinement.md`. Compare v12, v11 and EMPF at 1,200 updates with 64 particles, 16 latent dimensions, batch size 64, noise 0.15 and native prior penalty weight 0.1 for all three. Keep the generator LR at 0.014, critic LR at 0.021 and particle LR at 0.0406. Verify the flat learning rates and paired input hashes. Report the four-target mean energy, paired wins, spread ratio and fit time against the matched and tuned controls. Report the screening and independent training results separately. Run the biological holdout with `--stage confirm` if the selection qualifies.
