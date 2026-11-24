@@ -152,6 +152,17 @@ On seed 251, effective covariance rank fell from 22.21 at 3,600 to 16.42 at 40,0
 
 The first completed 40,000-update comparison against an original control used seed 251. V12 scored **1.14060** and rate-matched original EMPF **1.23949**, a difference of **0.09889** in v12’s favor. The final 10,000 updates averaged 1.10308 for v12 and 1.25794 for EMPF. V12 had lower energy at all 34 measured checkpoints and on three of four targets at the endpoint. EMPF’s endpoint covariance rank was 18.03, closer to the observed 18.23 than v12’s 16.42. EMPF took 79.0 minutes and v12 took 57.6 minutes under different shared GPU loads. Both used fixed generator, critic and particle rates of 0.014, 0.0049 and 0.0406, the same network and the same 34 minibatch fingerprints. Each optimizer used its release’s native smoothing, 0.001 for EMPF and 0.0061 for v12. [Paired checkpoints, per-target scores and optimizer-step verification](neuroko_v12_convergence_40000.json)
 
+The 40,000-update comparison on Screen1_1, seed 251, now includes both EMPF configurations and rate-matched original v11. All four fits used identical projected cells, initialization and minibatches. Each row averages the same four targets.
+
+| Configuration | Energy at 40,000 ↓ | Mean energy, 30,000–40,000 ↓ | Effective rank at 40,000 | Training minutes |
+| --- | ---: | ---: | ---: | ---: |
+| V12 | 1.14060 | 1.10308 | 16.42 | 57.6 |
+| Tuned original EMPF | 1.17641 | 1.22515 | 18.68 | 83.1 |
+| Rate-matched original v11 | 1.20880 | 1.20443 | 18.88 | 78.2 |
+| Rate-matched original EMPF | 1.23949 | 1.25794 | 18.03 | 79.0 |
+
+V12 had lower energy than tuned EMPF at all 34 checkpoints and lower energy than matched v11 at 33. Matched v11 led at 3,600. At the endpoint v12 won two of four targets against tuned EMPF and three against matched v11. The four runs had different concurrent GPU loads. Tuned original v11 is still training on this seed. [Checkpoint curves, target scores and fixed-rate checks](neuroko_v12_convergence_40000.json)
+
 The long shared-smoothing comparison repeats the two original EMPF fits at 0.0061 on seeds 22 and 251. V12 and original v11 already use 0.0061. It keeps the independent tuned controls, pairs all inputs, and checks each trajectory against its 3,600-update shared-smoothing pilot. The endpoint and the mean over updates 30,000–40,000 use the same criteria as the native-smoothing comparison. [Two-GPU reproduction command](../README.md#follow-v12-and-the-four-original-controls-to-40000-updates)
 
 ![V12 and rate-matched original EMPF energy distance and effective covariance rank on Screen1_1, seed 251](neuroko_v12_convergence_40000_seed251.png)
@@ -956,6 +967,8 @@ At shared smoothing **0.0061** on the nine 1,200-update development pairs for se
 On the second nine pairs (seeds 251–253), v12 averaged **0.93939**, matched original v11 **0.92569**, and matched original EMPF **0.97937**. V12 beat matched EMPF on six of nine pairs in each cohort, for 12 of 18 overall. The mean ordering against matched v11 reversed between cohorts. Independently tuned EMPF averaged 0.90413 on the second cohort and led v12 on both cohort means. [Both cohorts at fixed rates and shared smoothing](neuroko_v12_shared_optimizer_smoothing.json)
 
 Giving all three matched releases EMPF’s default smoothing of **0.001** changed the 1,200-update ranking on seeds 22–24. Original v11 averaged **0.93238**, v12 **0.95609** and matched original EMPF **0.99652**. Lowering smoothing raised v12’s mean energy by 0.02759 and reduced original v11’s by 0.01641. V12 led EMPF at either shared value, while the lead between v11 and v12 depended on the value. [Paired results at both smoothing settings](neuroko_v12_shared_optimizer_smoothing.json)
+
+The reciprocal smoothing comparison finished all 18 development pairs. On the second cohort at 0.001, v12 averaged **0.92533**, original v11 **0.92696** and original EMPF **1.00870**. Across both cohorts, the 0.001 means were **0.94071**, **0.92967** and **1.00261**, respectively. At shared 0.0061, the corresponding means were **0.93395**, **0.93723** and **0.96990**. V12 beat matched EMPF on 14 of 18 pairs at 0.001 and 12 of 18 at 0.0061. It had the lowest pooled matched mean at 0.0061. Independently tuned original EMPF averaged 0.91327. [All pairs, seed groups and measured optimizer settings](neuroko_v12_shared_optimizer_smoothing.json)
 
 The 3,600-update follow-up gives the three matched formulations the same 0.0061 smoothing throughout training. Only the original EMPF matched fit changes. Its two optimizers must report 0.0061 and reproduce the published 1,200-update pilot energy and minibatch fingerprint. The comparison keeps both independently tuned original controls and uses the same six pilot and 18 fresh group–seed pairs. [Two-GPU reproduction command](../README.md#check-whether-v12-closes-the-gap-by-3600-updates)
 
