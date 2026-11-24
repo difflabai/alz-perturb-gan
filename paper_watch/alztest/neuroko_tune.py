@@ -204,6 +204,11 @@ def main():
             for opt in (model.trainer.opt_g, model.trainer.opt_d)
         ):
             raise RuntimeError("both optimizers must use the released v12 implementation")
+        if settings.reg_kappa is not None:
+            threshold = model.trainer.penalty.regularizer.kappa
+            if threshold != settings.reg_kappa:
+                raise RuntimeError(f"critic penalty threshold is {threshold}, expected {settings.reg_kappa}")
+            config["critic_penalty_threshold"] = threshold
         if args.require_constant_lr:
             verify_fixed_schedule(recipe, config["updates"])
         rates = optimizer_rates(model)

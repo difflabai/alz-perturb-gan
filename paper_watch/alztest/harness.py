@@ -75,6 +75,7 @@ class TrainingSettings:
     prior_reg: float | None = None
     prior_reg_target_std: float | None = None
     reg_coeff: float | None = None
+    reg_kappa: float | None = None
     rhbi_eps: float | None = None
     rhbi_iters: int | None = None
     rhbi_rho: float | None = None

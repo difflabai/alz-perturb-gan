@@ -137,8 +137,13 @@ def validation_controls(finalists):
     return arms, references, mapping
 
 
-def confirm_candidate(args, selection, chosen, seeds, *, compare_historical_empf=False):
+def confirm_candidate(args, selection, chosen, seeds, *, compare_historical_empf=False, previous_transport=None):
     arms, labels = control_arms([chosen])
+    if previous_transport is not None:
+        for recipe in (V12, "unified_v11"):
+            arm = [RELEASE, recipe, previous_transport]
+            arms.append(arm)
+            labels["previous-transport-" + recipe] = key(arm)
     if compare_historical_empf:
         matched = next(arm[2] for arm in arms if key(arm) == labels["matched_empf"])
         historical = [
