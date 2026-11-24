@@ -187,3 +187,18 @@ The original matched-rate finalist moved the critic rate above and the particle 
 python paper_watch/scripts/neuroko_matched_rate_replication.py --rates empf --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-at-empf-rates" --shared-validation "$data/v12-rate-noise"
 ```
+
+## Prior penalty at latent noise 0.15
+
+At the release role rates, two individual changes lowered v12's mean energy on earlier training folds. Increasing latent noise to 0.15 moved the mean from 0.9782 to 0.9417. Increasing the native prior penalty weight from 0.02 to 0.1 at the original noise moved it to 0.9641. The follow-up combines those two changes at constant generator, critic and particle rates of 0.014, 0.021 and 0.0406. It tests whether the stronger penalty helps with the higher noise. A training qualification for the preceding rate-and-noise candidate gives its biological holdout priority.
+
+A 32-update CUDA check on the 30-dimensional neuronal projection verified that the released v12 training loss actually applies this coefficient. At noise 0.15 and rates 0.020, 0.042 and 0.0203, the gradient arriving at the native prior penalty equaled its configured weight on every update in both runs. The models started from identical weights, saw the same minibatches and finished with different parameter hashes. [Measured gradients and input hashes](neuroko_v12_prior_weight_diagnostic.json)
+
+V12, v11 and EMPF all receive weight 0.1 in the matched arms. The release-default reference arms retain each recipe’s own weight (0.02 for v12 and v11, 0.01 for EMPF). On all three training groups at seeds 22–24, v12 must beat both weight-matched controls and v12 at the same noise and rates with weight 0.02. A passing configuration goes to three new training seeds, 251–253. Only a lower mean than every reference there qualifies for the biological holdout on seeds 212–227. [Fixed settings and selection rule](../scripts/neuroko_rate_noise.py)
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study prior-weight --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-noise-prior" --shared-screen "$data/v12-rate-noise"
+```
+
+Add `--stage confirm` after a qualifying independent result.
