@@ -829,6 +829,8 @@ After rho 1.5 worsened every paired fit, the next trial doubles rho from 3 to 6 
 
 At rho 6, the measured unmatched mass fraction fell to 1.12e-11. The effective number of real matches per matched row was nearly identical (34.064 at rho 3 and 34.061 at rho 6). All baseline and high-entropy reference medians reproduced exactly in the same nine fits. [Higher-rho transport measurements](neuroko_v12_transport_rho_high_plans.json)
 
+The full nine-pair mean at rho 6 was **0.94890**, above **0.92850** at the default rho 3 and below **1.00441** at rho 1.5. Rho 6 improved four of nine pairs against rho 3. Across the three seeds it lowered energy by 0.01685 on Screen1_3, and raised it by 0.04644 on Screen1_1 and 0.03162 on Screen1_4. Tuned EMPF remained lower at 0.92240. [Scores, optimizer checks and matched fingerprints](neuroko_v12_transport_rho_high_energy.json)
+
 ### Combining critic LR 0.0071 with relativistic weight 0.5
 
 Calibrated v12 produced variation in more covariance dimensions than tuned original EMPF on both seed cohorts. V12 averaged 22.24 and 22.51 effective dimensions, tuned EMPF averaged 16.31 and 16.43, and the observed cells averaged 17.44. Tuned EMPF had lower mean absolute rank error on all 18 pairs and lower absolute log spread error on 17. [Target-averaged rank, spread, energy and conditional shift on both cohorts](neuroko_v12_tuned_empf_geometry.json)
