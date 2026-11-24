@@ -32,7 +32,7 @@ def inspect_plans(model, settings, trace):
     loss = model.trainer.loss
     coupling = loss.t1c
     generator_loss, native_plan = loss.g_loss, coupling._sinkhorn_slack
-    if (coupling.tau, coupling.eps, coupling.rho, coupling.self_coupling) != (2., .1, 3., "hollow"):
+    if (coupling.tau, coupling.eps, coupling.rho, coupling.self_coupling, coupling.rapidity_screening) != (2., .1, 3., "hollow", False):
         raise ValueError("Expected the calibrated hollow baseline")
     in_generator = False
 

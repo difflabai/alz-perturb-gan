@@ -809,7 +809,7 @@ PYTHONPATH="$data/wheels/0.12.0:$PWD:$PWD/paper_watch" python paper_watch/script
 
 ### Cost of leaving transport mass unmatched
 
-The released Unified recipes set `rhbi_rho` to 3. Halving it to 1.5 keeps entropy at 0.1 and changes both the cost of unmatched mass and the transformation applied to real-match distances. Across the same 64 updates in each of nine baseline fits, this raised the median fraction of generated mass left unmatched from **0.00375% to 6.08%**. The effective number of real matches per matched row moved from **34.06 to 33.24** out of 64. By comparison, raising entropy alone to 0.2 gave 3.73% unmatched mass and 53.10 effective matches. All nine baseline parameter and training-batch fingerprints were reproduced. [Matched transport plans](neuroko_v12_transport_rho_plans.json)
+The released Unified recipes set `rhbi_rho` to 3. Halving it to 1.5 changes the penalty on unmatched mass while keeping entropy at 0.1. The released v12 recipe disables rapidity screening, so all three rho values retain the same real-match cost matrix when evaluated on the same inputs. Across the same 64 updates in each of nine baseline fits, this raised the median fraction of generated mass left unmatched from **0.00375% to 6.08%**. The effective number of real matches per matched row moved from **34.06 to 33.24** out of 64. By comparison, raising entropy alone to 0.2 gave 3.73% unmatched mass and 53.10 effective matches. All nine baseline parameter and training-batch fingerprints were reproduced. [Matched transport plans](neuroko_v12_transport_rho_plans.json)
 
 The energy comparison changes only rho from the calibrated v12 setting. Its first evaluation uses 1,200 updates on all three groups at seeds 22–24. A qualifying candidate faces the matched and independently tuned original releases on both development cohorts, followed by fresh seeds 794–799 and biological holdout seeds 800–815.
 
@@ -823,7 +823,7 @@ Halving rho raised v12 mean energy from **0.92850 to 1.00441** on seeds 22–24.
 
 After rho 1.5 worsened every paired fit, the next trial doubles rho from 3 to 6 while keeping epsilon at 0.1. It uses the same first-cohort selection rule. A passing setting faces the two original formulations at matched and separately tuned settings on both development cohorts and fresh seeds 816–821 before biological holdout seeds 822–837. Reproduce it with the preceding command using `--study transport-rho-high` and `--output "$data/v12-transport-rho-high"`.
 
-At rho 6, the measured unmatched mass fraction fell to 1.12e-11. The effective number of real matches per matched row fell from 34.06 to 34.06. All baseline and high-entropy reference medians reproduced exactly in the same nine fits. [Higher-rho transport measurements](neuroko_v12_transport_rho_high_plans.json)
+At rho 6, the measured unmatched mass fraction fell to 1.12e-11. The effective number of real matches per matched row was nearly identical (34.064 at rho 3 and 34.061 at rho 6). All baseline and high-entropy reference medians reproduced exactly in the same nine fits. [Higher-rho transport measurements](neuroko_v12_transport_rho_high_plans.json)
 
 ### Combining critic LR 0.0071 with relativistic weight 0.5
 
