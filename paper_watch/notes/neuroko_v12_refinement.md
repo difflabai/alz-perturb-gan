@@ -51,10 +51,12 @@ At fixed rates 0.014/0.0049/0.0406 and shared latent noise 0.15, v12 also beat o
 
 Original v11 reversed the ordering on the second cohort at the same fixed rates. V12 led v11 by 0.02029 on seeds 22–24, then trailed v11 by 0.01371 on seeds 251–253. Of the six seed means, three favored each formulation. [Both original releases, all 18 matched pairs and per-seed differences](neuroko_v12_fixed_critic_original_release_replication.json)
 
-| Training seeds | v12 (0.12.0) | v11 (0.11.1) | EMPF (0.10.0) | V12 wins over v11 | V12 wins over EMPF |
+The matched columns share v12's rates and latent noise. The tuned columns use each original release's lowest measured first-cohort setting.
+
+| Training seeds | Calibrated v12 | Matched v11 (0.11.1) | Matched EMPF (0.10.0) | Tuned v11 (0.11.1) | Tuned EMPF (0.10.0) |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 22–24 | **0.92850** | 0.94878 | 0.99652 | 6/9 | 6/9 |
-| 251–253 | 0.93939 | **0.92569** | 1.00870 | 5/9 | 9/9 |
+| 22–24 | 0.92850 | 0.94878 | 0.99652 | 0.92547 | **0.92240** |
+| 251–253 | 0.93939 | 0.92569 | 1.00870 | 0.93033 | **0.90413** |
 
 The first cohort also qualified for the predeclared six-seed replication at the shared rates. All five release/formulation combinations completed. V11 from the 0.12.0 wheel scored 0.95051, and EMPF from that wheel reproduced the 0.10.0 energy in every pair. The replicate uses seeds 524–529 on the same three biological groups. [Five-way comparison and replication decision](neuroko_v12_fixed_critic_matched_development.json)
 
@@ -67,6 +69,10 @@ Original tuned EMPF repeated its lead on seeds 251–253. It averaged **0.90413*
 The settings that transfer between releases depend on the formulation. At critic LR 0.021 and latent noise 0.25, v11 scored 0.92511 from the 0.12.0 wheel and 0.95564 from its original 0.11.1 wheel on the same nine pairs. EMPF scored 0.92240 from both wheels. [All five configurations at the wider noise setting](neuroko_v12_wide_noise_original_first.json)
 
 Selecting the lowest mean on seeds 22–24 separately for each original release gave v11 **0.92547** (critic 0.0046, latent noise 0.15, prior coefficient 0.041) and EMPF **0.92240** (critic 0.021, noise 0.25, prior coefficient 0.1). Seven v11 and eight EMPF configurations had all nine verified scores in the shared development directory. At its calibrated rates v12 averaged 0.92850, trailing the two selected original controls by 0.00303 and 0.00610. The particle rate was 0.0406 and the generator rate was 0.014 for all three. [Original control selection](neuroko_original_control_selection.json) · [Five-way first-cohort comparison](neuroko_v12_original_control_benchmark_first.json)
+
+On seeds 251–253 the selected original v11 scored 0.93033, below calibrated v12 by 0.00906. Calibrated v12 won five of nine pairs against it in each cohort, while four of the six seeds favored original v11 after averaging over the three groups. Tuned original EMPF had the lowest mean in both cohorts. [Five-way second-cohort comparison](neuroko_v12_original_control_benchmark_second.json)
+
+A clean checkout reproduced both cohort reports using the published command, the downloaded pilot data and the pinned wheels. It reused 89 verified fits and trained the remaining v12 fit on GPU 1. That fit reproduced the original energy distance of 0.6114014145359561.
 
 ## Six configurations on the same nine training pairs
 

@@ -1,0 +1,182 @@
+{
+  "protocol": {
+    "arms": {
+      "v12": [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "matched_v11": [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "matched_empf": [
+        "0.10.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      "tuned_v11": [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.041,
+          "rhbi_relativistic_weight": 2.0,
+          "rhbi_self_coupling": "hollow"
+        }
+      ],
+      "tuned_empf": [
+        "0.10.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ]
+    },
+    "cohorts": {
+      "first": [
+        22,
+        23,
+        24
+      ],
+      "second": [
+        251,
+        252,
+        253
+      ]
+    },
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "updates": 1200,
+    "evaluation_draws": 256,
+    "metric": "four-target mean energy distance",
+    "original_control_selection": "paper_watch/notes/neuroko_original_control_selection.json"
+  },
+  "result": {
+    "seeds": [
+      251,
+      252,
+      253
+    ],
+    "scores": {
+      "v12": [
+        1.1412954010469378,
+        0.633696660494178,
+        1.0131135530000601,
+        1.2306572823088493,
+        0.6138221992773936,
+        1.0325482063250722,
+        1.0808511714939395,
+        0.6675814603899681,
+        1.0409889928206046
+      ],
+      "matched_v11": [
+        1.2157097729130006,
+        0.5851068954193852,
+        1.045318250471831,
+        1.0746161102943679,
+        0.6165317400579864,
+        1.0683459921260137,
+        1.1278220528164498,
+        0.6053642852177834,
+        0.9923590035202352
+      ],
+      "matched_empf": [
+        1.2178591190828363,
+        0.753468302803721,
+        1.0508637302242403,
+        1.2750817920794217,
+        0.7010548361127142,
+        1.0843754937893737,
+        1.1812706601674314,
+        0.6774728916220092,
+        1.1368742224188437
+      ],
+      "tuned_v11": [
+        1.2471203081930413,
+        0.5731604694655941,
+        0.9655771799355235,
+        1.097044337627287,
+        0.6450300617387121,
+        1.0388312073600556,
+        1.1320638241626846,
+        0.6221521148586688,
+        1.0520159917939265
+      ],
+      "tuned_empf": [
+        1.1566485332439562,
+        0.6206967452030661,
+        0.9820954604564001,
+        1.0777784378935291,
+        0.6172634586043444,
+        0.9421862293921406,
+        1.1361177669356388,
+        0.575229532762398,
+        1.0291768706489963
+      ]
+    },
+    "means": {
+      "v12": 0.9393949919063337,
+      "matched_v11": 0.9256860114263392,
+      "matched_empf": 1.0087023387000658,
+      "tuned_v11": 0.9303328327928326,
+      "tuned_empf": 0.9041325594600522
+    },
+    "comparisons": {
+      "matched_v11": {
+        "mean_v12_minus_control": 0.013708980479994458,
+        "pairs_won": 5
+      },
+      "matched_empf": {
+        "mean_v12_minus_control": -0.06930734679373203,
+        "pairs_won": 9
+      },
+      "tuned_v11": {
+        "mean_v12_minus_control": 0.009062159113501092,
+        "pairs_won": 5
+      },
+      "tuned_empf": {
+        "mean_v12_minus_control": 0.03526243244628153,
+        "pairs_won": 3
+      }
+    }
+  }
+}
