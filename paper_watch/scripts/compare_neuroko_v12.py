@@ -14,6 +14,17 @@ from uuid import uuid4
 GROUPS = ("Screen1_1", "Screen1_3", "Screen1_4")
 OUTER_SEEDS = range(72, 84)
 HOLLOW = {"rhbi_self_coupling": "hollow", "rhbi_relativistic_weight": 2.0}
+NATIVE_OPTIMIZER_SMOOTHING = {"v12": .0061, "matched_v11": .0061, "matched_empf": .001}
+
+
+def with_shared_smoothing(arms, smoothing):
+    adjusted = dict(arms)
+    for role, default in NATIVE_OPTIMIZER_SMOOTHING.items():
+        if smoothing != default:
+            release, recipe, trial = arms[role]
+            adjusted[role] = [release, recipe, dict(trial, name=f"{trial['name']}-smoothing{smoothing}",
+                                                     optimizer_smoothing=smoothing)]
+    return adjusted
 
 
 def rates(name, generator, critic, particles, **settings):

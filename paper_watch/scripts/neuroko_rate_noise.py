@@ -6,7 +6,9 @@ from math import exp, isfinite, log, sqrt
 from pathlib import Path
 from statistics import mean, median
 
-from compare_neuroko_v12 import GROUPS, ROOT, receipt, reusable_fit, write_frozen
+from compare_neuroko_v12 import (
+    GROUPS, NATIVE_OPTIMIZER_SMOOTHING, ROOT, receipt, reusable_fit, with_shared_smoothing, write_frozen,
+)
 from neuroko_matched_rate_replication import (
     SEEDS as REPLICATION_SEEDS, TRIAL as MATCHED_RATE_TRIAL, comparison, original_release_scores,
 )
@@ -382,13 +384,8 @@ def compare_published_rates(args, *, smoothing=None):
             "tuned_v11": tuned["unified_v11"], "tuned_empf": tuned["empf"]}
     extra = {}
     if smoothing is not None:
-        defaults = {"v12": .0061, "matched_v11": .0061, "matched_empf": .001}
-        for role, default in defaults.items():
-            if smoothing != default:
-                release, recipe, settings = arms[role]
-                arms[role] = [release, recipe, dict(settings, name=settings["name"] + f"-smoothing{smoothing}",
-                                                    optimizer_smoothing=smoothing)]
-        extra = dict(matched_optimizer_smoothing=smoothing, original_optimizer_smoothing=defaults)
+        arms = with_shared_smoothing(arms, smoothing)
+        extra = dict(matched_optimizer_smoothing=smoothing, original_optimizer_smoothing=NATIVE_OPTIMIZER_SMOOTHING)
     cohorts = {"first": REPLICATION_SEEDS, "second": [251, 252, 253]}
     write_frozen(args.output / "comparison_protocol.json", dict(arms=arms, cohorts=cohorts, groups=list(GROUPS),
                  updates=1200, evaluation_draws=256, metric="four-target mean energy distance",

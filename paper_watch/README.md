@@ -166,6 +166,14 @@ python paper_watch/scripts/neuroko_convergence.py --shared-smoothing-from "$data
   --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-smoothing-3600/pilot"
 ```
 
+To compare at EMPF’s native smoothing instead, use `--matched-smoothing 0.001` and a separate output directory. This trains v12 and original v11 at 0.001 and reuses original EMPF and the independently tuned controls.
+
+```bash
+python paper_watch/scripts/neuroko_convergence.py --shared-smoothing-from "$data/v12-convergence-3600" \
+  --matched-smoothing 0.001 --data "$data" --window-cells 10000 --wheels "$data/wheels" \
+  --output "$data/v12-smoothing-0.001-3600/pilot"
+```
+
 Once the six-seed original-release comparison finishes, use its results to decide whether to evaluate Screen1_0. The command verifies the 90 training records and checks that v12 beat every control on mean energy distance at 3,600 updates. If it did, all five configurations train on the three development groups and score Screen1_0 using seeds 844–859. The report includes each target and a paired 95% interval across training seeds for each comparison.
 
 ```bash
@@ -183,14 +191,14 @@ python paper_watch/scripts/neuroko_convergence.py --confirm-from "$data/v12-conv
 
 #### Follow v12 and the four original controls to 40,000 updates
 
-> Use the same checkout, NeuroKO data and pinned wheels. Run the five configurations on the first development group, Screen1_1, using pilot seeds 22 and 251 on separate GPUs. Compare energy distance at 40,000 updates and the average over the final 10,000 updates. Check whether spread and effective covariance rank move closer to the observed cells. Keep the learning rates constant and report each seed as well as the two-seed mean.
+> Clone `https://github.com/difflabai/alz-perturb-gan` on branch `paper-watch/neuroko-revival` and record the commit. Follow the NeuroKO GPU setup in `paper_watch/README.md` to fetch and verify both H5ADs and install ParticleGAN 0.10.0, 0.11.1 and 0.12.0 in separate directories. Use two CUDA GPUs. Run the 3,600-update original-release pilot, its shared-smoothing pilot, the 40,000-update original-release comparison and then the 40,000-update shared-smoothing comparison. Use the frozen configurations with constant generator, critic and particle learning rates. For Screen1_1 seeds 22 and 251, report energy at 40,000, mean energy over the final 10,000 updates, effective covariance rank, spread and training time. Show each seed and the two-seed mean for v12, both matched original releases at smoothing 0.0061 and both independently tuned controls.
 
 ```bash
 python paper_watch/scripts/neuroko_convergence.py --forty-thousand --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-convergence-40000"
 ```
 
-The v12 generator, critic and particles use fixed learning rates of 0.014, 0.0049 and 0.0406. The released recipe sets both floors of its `cosine` schedule to 1.0, so the rates stay flat. The runner stops if a parameter group's learning rate changes at any optimizer step. [Per-step checks on both GPUs](notes/neuroko_v12_convergence_40000.json)
+The v12 generator, critic and particles use fixed learning rates of 0.014, 0.0049 and 0.0406. The released recipe sets both floors of its `cosine` schedule to 1.0, so the rates stay flat. The runner stops if a parameter group's learning rate changes at any optimizer step. The calibrated run uses latent sampling noise 0.15, prior penalty 0.1, hollow self-coupling and relativistic weight 2. All five configurations use the same network, 64 learned 16-dimensional particles and batch size 64. [Frozen configurations and per-step checks on both GPUs](notes/neuroko_v12_convergence_40000.json)
 
 The run scores every 1,200 updates and again at 40,000. It checks each arm against its published 1,200-, 2,400- and 3,600-update scores and minibatch fingerprints. The last interval is 400 updates. The late-training mean uses linear interpolation between checkpoints to account for the shorter interval. [40,000-update results and training curves](notes/neuroko_v12_refinement.md#comparing-the-formulations-at-40000-updates) · [Observed cell ranks by group and target](notes/neuroko_v12_tuned_empf_geometry.json)
 

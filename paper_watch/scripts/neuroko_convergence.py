@@ -7,13 +7,15 @@ from math import sqrt
 from pathlib import Path
 from statistics import mean, stdev
 
-from compare_neuroko_v12 import GROUPS, ROOT, fit, receipt, write_frozen
+from compare_neuroko_v12 import (
+    GROUPS, NATIVE_OPTIMIZER_SMOOTHING, ROOT, fit, receipt, with_shared_smoothing, write_frozen,
+)
 
 STEPS = (1200, 2400, 3600)
 LONG_STEPS = (*range(1200, 40000, 1200), 40000)
 NOTES = ROOT / "paper_watch/notes"
 METRICS = ("mean_energy_distance", "spread_ratio", "effective_rank")
-SMOOTHING = 0.0061
+SMOOTHING = NATIVE_OPTIMIZER_SMOOTHING["v12"]
 
 
 def optimizer_difference(wheels, trial):
@@ -39,16 +41,13 @@ def optimizer_difference(wheels, trial):
     return changes
 
 
-def shared_smoothing_pilot(arms, anchors):
+def shared_smoothing_pilot(arms, anchors, smoothing=SMOOTHING):
     archive = json.loads((NOTES / "neuroko_v12_shared_optimizer_smoothing.json").read_text())
-    study = archive["settings"][str(SMOOTHING)]
-    release, recipe, trial = arms["matched_empf"]
-    adjusted = dict(trial, name=trial["name"] + f"-smoothing{SMOOTHING}", optimizer_smoothing=SMOOTHING)
-    expected = dict(arms, matched_empf=[release, recipe, adjusted])
+    study = archive["settings"][str(smoothing)]
+    expected = with_shared_smoothing(arms, smoothing)
     if study["protocol"]["arms"] != expected:
-        raise ValueError("Expected the published single change to original EMPF's optimizer smoothing")
-    factory = {role: dict(generator_and_particles=SMOOTHING, critic=SMOOTHING)
-               for role in ("v12", "matched_v11", "matched_empf")}
+        raise ValueError("Expected the published release configurations at the requested optimizer smoothing")
+    factory = {role: dict(generator_and_particles=smoothing, critic=smoothing) for role in NATIVE_OPTIMIZER_SMOOTHING}
     if study["matched_optimizer_smoothing_from_native_factories"] != factory:
         raise ValueError("The matched release optimizers must share both smoothing values")
     inputs = {}
@@ -56,7 +55,7 @@ def shared_smoothing_pilot(arms, anchors):
         for row in cohort["rows"]:
             pair = row["seed"], row["group"]
             if pair in anchors:
-                if any(row["energy"][k] != anchors[pair][k] for k in arms if k != "matched_empf"):
+                if any(row["energy"][k] != anchors[pair][k] for k in arms if expected[k] == arms[k]):
                     raise ValueError("Published original-release energies differ between studies")
                 anchors[pair] = row["energy"]
                 inputs[pair] = row["hashes"]
@@ -76,9 +75,10 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
     source = getattr(args, "same_wheel_from", None)
     smoothing_source = getattr(args, "shared_smoothing_from", None)
     smoothing_replication = getattr(args, "smoothing_replication", None)
+    smoothing = getattr(args, "matched_smoothing", SMOOTHING)
     training = args
     if holdout and smoothing_replication:
-        # The native and matched-smoothing confirmations share four identical fit files.
+        # Unmodified configurations use the same deterministic fit in both confirmations.
         training = copy(args)
         training.output = args.output.parent
     if smoothing_source and steps == LONG_STEPS:
@@ -93,7 +93,7 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
         origin = training.output
         if source and role == "v12":
             origin = source
-        elif smoothing_source and role != "matched_empf":
+        elif smoothing_source and (role not in NATIVE_OPTIMIZER_SMOOTHING or NATIVE_OPTIMIZER_SMOOTHING[role] == smoothing):
             origin = smoothing_source
         if not read_only and origin == training.output:
             fit(training, stage, seed, group, gpu, [arm], options=("--updates", str(endpoint), "--trace-every", "1200"))
@@ -132,13 +132,13 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
                     prior["projected_data_sha256"], prior["initial_parameters_sha256"],
                     prior["training_batches_sha256"], prior["visible_devices"]):
                 raise ValueError(f"Inputs differ from the published smoothing comparison for seed {seed}, {group}")
-            if role in ("v12", "matched_v11", "matched_empf"):
+            if role in NATIVE_OPTIMIZER_SMOOTHING:
                 settings = row["settings"]
-                expected = SMOOTHING if role == "matched_empf" else None
+                expected = None if smoothing == NATIVE_OPTIMIZER_SMOOTHING[role] else smoothing
                 must_check_objects = expected is not None or "optimizer_smoothing" in row
                 actual = row.get("optimizer_smoothing")
                 if settings["optimizer_smoothing"] != expected or (must_check_objects and actual != {
-                        "generator_and_particles": SMOOTHING, "critic": SMOOTHING}):
+                        "generator_and_particles": smoothing, "critic": smoothing}):
                     raise ValueError(f"Optimizer smoothing mismatch for {role}, seed {seed}, {group}")
                 # EMPF has its own objective. The two transport parameters apply only to the Unified loss.
                 shared = {k: v for k, v in settings.items()
@@ -196,7 +196,7 @@ def heldout_qualification(args, arms):
     seeds = list(range(838, 844))
     if (plan["seeds"] != seeds or plan["groups"] != list(GROUPS) or plan["checkpoints"] != list(STEPS)
             or plan["arms"] != arms
-            or plan.get("matched_optimizer_smoothing") != (SMOOTHING if replication else None)):
+            or plan.get("matched_optimizer_smoothing") != (getattr(args, "matched_smoothing", SMOOTHING) if replication else None)):
         raise ValueError("Biological confirmation requires the frozen six-seed development comparison")
     report = json.loads((fresh.output / "comparison.json").read_text())
     cells = [run_fold(fresh, arms, seed, group, None, read_only=True) for seed in seeds for group in GROUPS]
@@ -230,10 +230,16 @@ def main():
                         help="3,600-update shared-smoothing pilot to verify when extending it to 40,000")
     parser.add_argument("--smoothing-replication", type=Path, metavar="SHARED_FRESH_DIR",
                         help="qualify the matched-smoothing replication alongside the original --confirm-from directory")
+    parser.add_argument("--matched-smoothing", type=float, choices=sorted(set(NATIVE_OPTIMIZER_SMOOTHING.values())),
+                        help="use this release smoothing value for all three matched models (default 0.0061)")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     if args.smoothing_replication and not args.confirm_from:
         parser.error("--smoothing-replication requires --confirm-from with the original six-seed run")
+    if args.matched_smoothing is not None and not (args.shared_smoothing_from or args.smoothing_replication):
+        parser.error("--matched-smoothing requires a shared-smoothing comparison or confirmation")
+    if args.matched_smoothing is None:
+        args.matched_smoothing = SMOOTHING
     args.data, args.wheels, args.output = (p.resolve() for p in (args.data, args.wheels, args.output))
     args.output.mkdir(parents=True, exist_ok=True)
     sources = [json.loads((NOTES / f"neuroko_v12_original_control_benchmark_{cohort}.json").read_text())
@@ -268,21 +274,26 @@ def main():
         parser.error("--smoothing-pilot is required specifically for the 40,000-update shared-smoothing comparison")
     if args.shared_smoothing_from:
         args.shared_smoothing_from = args.shared_smoothing_from.resolve()
-        arms, args.smoothing_inputs = shared_smoothing_pilot(arms, anchors)
-        extra_protocol["matched_optimizer_smoothing"] = SMOOTHING
-        rule = ("Give v12, matched original v11 and matched original EMPF optimizer smoothing 0.0061. "
-                "Reuse the four original unchanged fits and train matched EMPF on identical cells, initial "
+        smoothing = args.matched_smoothing
+        arms, args.smoothing_inputs = shared_smoothing_pilot(arms, anchors, smoothing)
+        extra_protocol["matched_optimizer_smoothing"] = smoothing
+        reuse = ("Reuse the four original unchanged fits and train matched EMPF" if smoothing == SMOOTHING else
+                 "Reuse original EMPF and the independently tuned controls and train matched v12 and original v11")
+        rule = (f"Give v12, matched original v11 and matched original EMPF optimizer smoothing {smoothing}. "
+                f"{reuse} on identical cells, initial "
                 "weights and minibatches with fixed learning rates. Report the paired 3,600-update "
                 "endpoint and the two earlier checkpoints on the pilot and fresh seeds.")
         if args.smoothing_pilot:
             args.smoothing_pilot = args.smoothing_pilot.resolve()
             pilot = json.loads((args.smoothing_pilot / "protocol.json").read_text())
             if (pilot["arms"] != arms or pilot["groups"] != list(GROUPS) or pilot["seeds"] != seeds
-                    or pilot["checkpoints"] != list(STEPS) or pilot["matched_optimizer_smoothing"] != SMOOTHING):
+                    or pilot["checkpoints"] != list(STEPS) or pilot["matched_optimizer_smoothing"] != smoothing):
                 raise ValueError("Expected the 3,600-update pilot with the same matched optimizer smoothing")
+            adjusted_fits = ("the adjusted EMPF fits, reuse the other four configurations" if smoothing == SMOOTHING else
+                             "the adjusted v12 and original v11 fits, reuse the other three configurations")
             rule = ("Compare the original releases through 40,000 updates on Screen1_1 for seeds 22 and 251. "
-                    "Set both optimizers' smoothing to 0.0061 for the three matched formulations. Train only "
-                    "the adjusted EMPF fits, reuse the other four configurations and replay all five pilot "
+                    f"Set both optimizers' smoothing to {smoothing} for the three matched formulations. Train only "
+                    f"{adjusted_fits} and replay all five pilot "
                     "curves through 3,600 on identical inputs. Compare the paired endpoints and the "
                     "time-weighted mean from 30,000 to 40,000 updates regardless of earlier rankings.")
     elif args.same_wheel_from:
@@ -318,12 +329,12 @@ def main():
             if (native["arms"] != arms or native["seeds"] != list(range(838, 844))
                     or native["groups"] != list(GROUPS) or native["checkpoints"] != list(STEPS)):
                 raise ValueError("Expected the original six-seed convergence comparison")
-            shared_output = args.output / f"smoothing-{SMOOTHING}"
+            shared_output = args.output / f"smoothing-{args.matched_smoothing}"
             if (args.output == args.smoothing_replication.resolve()
                     or shared_output.resolve() in (args.confirm_from.resolve(), args.smoothing_replication.resolve())):
                 parser.error("use a distinct output directory for biological confirmation")
-            arms, args.smoothing_inputs = shared_smoothing_pilot(arms, anchors)
-            extra_protocol["matched_optimizer_smoothing"] = SMOOTHING
+            arms, args.smoothing_inputs = shared_smoothing_pilot(arms, anchors, args.matched_smoothing)
+            extra_protocol["matched_optimizer_smoothing"] = args.matched_smoothing
             args.output = shared_output
             args.output.mkdir(exist_ok=True)
         qualification = heldout_qualification(args, arms)
@@ -338,7 +349,7 @@ def main():
                 "Screen1_4. Score Screen1_0 at 3,600 updates for seeds 844–859. Report all paired endpoints, "
                 "target scores and seed-level 95% t intervals. The 1,200 and 2,400 checkpoints are descriptive.")
         if args.smoothing_replication:
-            rule += " Use shared optimizer smoothing of 0.0061 for the three rate-matched formulations at both stages."
+            rule += f" Use shared optimizer smoothing of {args.matched_smoothing} for the three rate-matched formulations at both stages."
     elif args.forty_thousand:
         groups = GROUPS[:1]
         seeds = [22, 251]

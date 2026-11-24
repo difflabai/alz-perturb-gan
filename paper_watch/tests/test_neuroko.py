@@ -120,7 +120,8 @@ def test_fresh_duration_reports_all_pairs_at_fixed_endpoint(tmp_path, monkeypatc
     assert not result["leads_all_controls_on_average"]
 
 
-def test_shared_smoothing_duration_reuses_four_arms_and_audits_new_empf(tmp_path, monkeypatch):
+@pytest.mark.parametrize("smoothing", (.0061, .001))
+def test_shared_smoothing_duration_reuses_native_fits_and_audits_changed_optimizers(tmp_path, monkeypatch, smoothing):
     import json
     import sys
 
@@ -134,8 +135,10 @@ def test_shared_smoothing_duration_reuses_four_arms_and_audits_new_empf(tmp_path
     original = pilot["arms"]
     plan = dict(arms=original, seeds=[22, 251], groups=list(study.GROUPS), checkpoints=study.STEPS)
     (source / "protocol.json").write_text(json.dumps(plan))
-    shared = json.loads((study.NOTES / "neuroko_v12_shared_optimizer_smoothing.json").read_text())["settings"]["0.0061"]
+    shared = json.loads((study.NOTES / "neuroko_v12_shared_optimizer_smoothing.json").read_text())["settings"][str(smoothing)]
     arms = shared["protocol"]["arms"]
+    changed_roles = ["matched_empf"] if smoothing == .0061 else ["matched_v11", "v12"]
+    option = [] if smoothing == .0061 else ["--matched-smoothing", str(smoothing)]
     anchors = {(row["seed"], row["group"]): row for cohort in shared["cohorts"].values() for row in cohort["rows"]}
     trained = []
     wrong_smoothing = False
@@ -159,8 +162,8 @@ def test_shared_smoothing_duration_reuses_four_arms_and_audits_new_empf(tmp_path
                     constant_lr_verified_updates=endpoint, fixed_lr_optimizer_steps=dict(generator_and_particles=endpoint, critic=endpoint),
                     means=dict(energy_distance=energy), trace=trace)
         data["training_batches_sha256"] = str(endpoint)
-        if role == "matched_empf":
-            data["optimizer_smoothing"] = dict(generator_and_particles=.0061, critic=.001 if wrong_smoothing else .0061)
+        if role in changed_roles:
+            data["optimizer_smoothing"] = dict(generator_and_particles=smoothing, critic=-1. if wrong_smoothing else smoothing)
         base = study.receipt(directory, "validation", *arm, seed, group)
         base.parent.mkdir(parents=True, exist_ok=True)
         base.with_stem(base.stem + f"-u{endpoint}-trace1200").write_text(json.dumps(data))
@@ -168,23 +171,24 @@ def test_shared_smoothing_duration_reuses_four_arms_and_audits_new_empf(tmp_path
     for seed in plan["seeds"]:
         for group in study.GROUPS:
             for role in arms:
-                if role != "matched_empf":
+                if role not in changed_roles:
                     write_receipt(source, role, seed, group)
 
-    def fit_empf(args, stage, seed, group, gpu, requested, *, options):
-        assert requested == [arms["matched_empf"]] and args.output == output and stage == "validation"
+    def fit_changed(args, stage, seed, group, gpu, requested, *, options):
+        role = next(r for r in changed_roles if requested == [arms[r]])
+        assert args.output == output and stage == "validation"
         assert args.require_constant_lr and options == ("--updates", str(endpoint), "--trace-every", "1200")
-        trained.append((seed, group))
-        write_receipt(output, "matched_empf", seed, group)
+        trained.append((seed, group, role))
+        write_receipt(output, role, seed, group)
 
-    monkeypatch.setattr(study, "fit", fit_empf)
-    monkeypatch.setattr(sys, "argv", ["study", "--shared-smoothing-from", str(source), "--output", str(output),
+    monkeypatch.setattr(study, "fit", fit_changed)
+    monkeypatch.setattr(sys, "argv", ["study", *option, "--shared-smoothing-from", str(source), "--output", str(output),
                                       "--data", str(tmp_path), "--wheels", str(tmp_path)])
     study.main()
-    assert sorted(trained) == [(s, g) for s in plan["seeds"] for g in study.GROUPS]
+    assert sorted(trained) == [(s, g, r) for s in plan["seeds"] for g in study.GROUPS for r in changed_roles]
     result = json.loads((output / "comparison.json").read_text())
     assert set(result["endpoint_means"]) == set(arms) and len(result["cells"]) == 6
-    assert json.loads((output / "protocol.json").read_text())["matched_optimizer_smoothing"] == .0061
+    assert json.loads((output / "protocol.json").read_text())["matched_optimizer_smoothing"] == smoothing
     wrong_smoothing = True
     with pytest.raises(ValueError, match="Optimizer smoothing mismatch"):
         study.main()
@@ -200,12 +204,12 @@ def test_shared_smoothing_duration_reuses_four_arms_and_audits_new_empf(tmp_path
     (source / "protocol.json").write_text(json.dumps(dict(plan, groups=study.GROUPS[:1], checkpoints=steps)))
     for seed in plan["seeds"]:
         for role in arms:
-            if role != "matched_empf":
+            if role not in changed_roles:
                 write_receipt(source, role, seed, study.GROUPS[0])
-    monkeypatch.setattr(sys, "argv", ["study", "--shared-smoothing-from", str(source), "--smoothing-pilot", str(short),
+    monkeypatch.setattr(sys, "argv", ["study", *option, "--shared-smoothing-from", str(source), "--smoothing-pilot", str(short),
                                       "--output", str(output), "--data", str(tmp_path), "--wheels", str(tmp_path)])
     study.main()
-    assert sorted(trained) == [(s, study.GROUPS[0]) for s in plan["seeds"]]
+    assert sorted(trained) == [(s, study.GROUPS[0], r) for s in plan["seeds"] for r in changed_roles]
     result = json.loads((output / "comparison.json").read_text())
     assert result["mean_energy_30000_to_40000"] == pytest.approx(result["endpoint_means"])
     curve = short / "curves-22-Screen1_1.json"
@@ -342,8 +346,9 @@ def test_biological_confirmation_depends_on_complete_fresh_result(tmp_path, monk
         assert scored == [] and not (outer / "comparison.json").exists()
 
 
+@pytest.mark.parametrize("smoothing", (.0061, .001))
 @pytest.mark.parametrize("shared_passes", (False, True))
-def test_shared_smoothing_holdout_qualifies_independently_and_reuses_native_fits(tmp_path, monkeypatch, shared_passes):
+def test_shared_smoothing_holdout_qualifies_independently_and_reuses_native_fits(tmp_path, monkeypatch, shared_passes, smoothing):
     import json
     import sys
 
@@ -360,19 +365,21 @@ def test_shared_smoothing_holdout_qualifies_independently_and_reuses_native_fits
         path = path.with_stem(path.stem + "-u3600-trace1200")
         if path.exists():
             return
-        adjusted = trial.get("optimizer_smoothing") == study.SMOOTHING
+        adjusted = trial.get("optimizer_smoothing") == smoothing
         if stage == "heldout":
             assert args.output == outer and group == "Screen1_0" and gpu == seed % 2
             fitted.append((seed, adjusted))
         energy = .8 if recipe == "unified_v12" else 1.
-        if adjusted:
+        if adjusted and recipe == "empf":
             energy = .9 if shared_passes else .7
+        if adjusted and recipe == "unified_v12":
+            energy = .75 if shared_passes else 1.1
         rates = dict(generator=trial["lr"], critic=trial["lr"] * trial["d_lr_mult"],
                      particles=trial["lr"] * trial["prior_lr_mult"])
         settings = {"optimizer_smoothing": None, **{k: v for k, v in trial.items() if k not in ("lr", "name")}}
         trace = [dict(updates=n, mean_energy_distance=energy, spread_ratio=1., effective_rank=18.,
                       training_batches_sha256=str(n)) for n in study.STEPS]
-        actual = study.SMOOTHING if recipe != "empf" or adjusted else .001
+        actual = trial.get("optimizer_smoothing", .001 if recipe == "empf" else .0061)
         row = dict(initial_rates=rates, final_rates=rates, name=trial["name"], lr=trial["lr"], seed=seed,
                    stage=stage, score_groups=[group], fit_groups=[g for g in study.GROUPS if g != group],
                    updates=3600, particlegan=release, recipe=recipe, deterministic=True, settings=settings,
@@ -391,30 +398,33 @@ def test_shared_smoothing_holdout_qualifies_independently_and_reuses_native_fits
         monkeypatch.setattr(sys, "argv", ["study", *mode, "--output", str(output), *common])
         study.main()
 
+    option = [] if smoothing == .0061 else ["--matched-smoothing", str(smoothing)]
     run(native, "--fresh")
-    run(shared, "--shared-smoothing-from", str(native))
+    run(shared, "--shared-smoothing-from", str(native), *option)
     run(outer, "--confirm-from", str(native))
     native_result = (outer / "comparison.json").read_bytes()
     assert len(fitted) == 80
     fitted.clear()
-    run(outer, "--confirm-from", str(native), "--smoothing-replication", str(shared))
+    run(outer, "--confirm-from", str(native), "--smoothing-replication", str(shared), *option)
     assert (outer / "comparison.json").read_bytes() == native_result
-    result_dir = outer / "smoothing-0.0061"
+    result_dir = outer / f"smoothing-{smoothing}"
     decision = json.loads((result_dir / "qualification.json").read_text())
     assert decision["qualifies"] is shared_passes
     if shared_passes:
-        assert sorted(fitted) == [(seed, True) for seed in range(844, 860)]
+        new_arms = 1 if smoothing == .0061 else 2
+        assert sorted(fitted) == [(seed, True) for seed in range(844, 860) for _ in range(new_arms)]
         report = json.loads((result_dir / "comparison.json").read_text())
-        assert len(report["cells"]) == 16 and report["endpoint_means"]["matched_empf"] == .9
-        assert json.loads((result_dir / "protocol.json").read_text())["matched_optimizer_smoothing"] == .0061
+        assert len(report["cells"]) == 16 and report["endpoint_means"]["matched_empf"] == (.9 if smoothing == .0061 else 1.)
+        assert json.loads((result_dir / "protocol.json").read_text())["matched_optimizer_smoothing"] == smoothing
     else:
         assert not fitted and not (result_dir / "comparison.json").exists()
-    adjusted_file = next((shared / "validation" / "empf-0.10.0").glob("*-trace1200.json"))
+    release = "empf-0.10.0" if smoothing == .0061 else "unified_v12-0.12.0"
+    adjusted_file = next((shared / "validation" / release).glob("*-trace1200.json"))
     bad = json.loads(adjusted_file.read_text())
-    bad["optimizer_smoothing"]["critic"] = .001
+    bad["optimizer_smoothing"]["critic"] = -1.
     adjusted_file.write_text(json.dumps(bad))
     with pytest.raises(ValueError, match="Optimizer smoothing mismatch"):
-        run(outer, "--confirm-from", str(native), "--smoothing-replication", str(shared))
+        run(outer, "--confirm-from", str(native), "--smoothing-replication", str(shared), *option)
 
 
 @pytest.mark.parametrize("same_wheel", (False, True))
