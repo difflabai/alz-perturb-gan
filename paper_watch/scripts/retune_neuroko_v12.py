@@ -2,6 +2,7 @@
 import argparse
 from concurrent.futures import ThreadPoolExecutor
 import json
+import os
 from pathlib import Path
 from statistics import mean, median, stdev
 from compare_neuroko_v12 import GROUPS, fit, receipt, write_frozen
@@ -168,7 +169,7 @@ def summarize(args, freeze):
     result = {"search": json.loads((args.output / "search.json").read_text()), "freeze": freeze,
               "seed_hashes": hashes, "summaries": summaries}
     path = args.output / "result.json"
-    temporary = path.with_suffix(".tmp")
+    temporary = path.with_suffix(f".{os.getpid()}.tmp")
     temporary.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     temporary.replace(path)
 

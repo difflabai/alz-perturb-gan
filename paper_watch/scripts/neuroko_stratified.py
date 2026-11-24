@@ -33,6 +33,7 @@ def key(arm):
 def evaluate(args, arms, seeds):
     tasks = []
     paths = {}
+    requested = {key(arm): arm for arm in arms}
     for arm in arms:
         for seed in seeds:
             for i, group in enumerate(GROUPS):
@@ -53,12 +54,18 @@ def evaluate(args, arms, seeds):
     results = {}
     for (name, seed, group), path in paths.items():
         d = json.loads(path.read_text())
+        version, recipe, trial = requested[name]
         signature = tuple(
             d[k] for k in ("projected_data_sha256", "training_batches_sha256", "initial_parameters_sha256")
         )
         if (
             d["updates"] != 1200
             or d["seed"] != seed
+            or not d["deterministic"]
+            or (d["particlegan"], d["recipe"], d["name"]) != (version, recipe, trial["name"])
+            or d["lr"] != trial["lr"]
+            or any(d["settings"][k] != v for k, v in trial.items() if k not in ("lr", "name"))
+            or [row["update"] for row in d["rate_trace"]] != [300, 600, 900, 1200]
             or d["score_groups"] != [group]
             or set(d["fit_groups"]) != set(GROUPS) - {group}
             or not constant_rates(d)
@@ -92,6 +99,36 @@ def control_arms(candidates):
         arms.append(arm)
         labels[trial["name"]] = key(arm)
     return arms, labels
+
+
+def validation_controls(finalists):
+    arms = []
+    mapping = {}
+    shared = {}
+    for n in finalists:
+        local, labels = controls([TRIALS[n]])
+        selected_labels = (
+            "selected_v12",
+            "matched_v11",
+            "matched_empf",
+            "previous_best_v11",
+            "previous_best_empf",
+            "tuned_empf",
+        )
+        by_key = {key(a): a for a in local}
+        mapping[n] = {}
+        for label in selected_labels:
+            ar = by_key[labels[label]]
+            params = {k: v for k, v in ar[2].items() if k != "name"}
+            identity = json.dumps([ar[0], ar[1], params], sort_keys=True)
+            if identity not in shared:
+                name = n if label == "selected_v12" else f"{label}-{n}"
+                ar = [ar[0], ar[1], {"name": name, **params}]
+                shared[identity] = key(ar)
+                arms.append(ar)
+            mapping[n][label] = shared[identity]
+    references = [[RELEASE, V12, PLAIN], [RELEASE, V12, NOISY]]
+    return arms, references, mapping
 
 
 def main():
@@ -144,32 +181,7 @@ def main():
     candidates = [[RELEASE, V12, t] for t in [*TRIALS.values(), PLAIN, NOISY]]
     first = evaluate(args, candidates, [3])
     finalists = sorted(TRIALS, key=lambda n: (mean(first[key([RELEASE, V12, TRIALS[n]])]), n))[:2]
-    arms = []
-    mapping = {}
-    shared = {}
-    for n in finalists:
-        local, labels = controls([TRIALS[n]])
-        selected_labels = (
-            "selected_v12",
-            "matched_v11",
-            "matched_empf",
-            "previous_best_v11",
-            "previous_best_empf",
-            "tuned_empf",
-        )
-        by_key = {key(a): a for a in local}
-        mapping[n] = {}
-        for label in selected_labels:
-            ar = by_key[labels[label]]
-            params = {k: v for k, v in ar[2].items() if k != "name"}
-            identity = json.dumps([ar[0], ar[1], params], sort_keys=True)
-            if identity not in shared:
-                name = n if label == "selected_v12" else f"{label}-{n}"
-                ar = [ar[0], ar[1], {"name": name, **params}]
-                shared[identity] = key(ar)
-                arms.append(ar)
-            mapping[n][label] = shared[identity]
-    references = [[RELEASE, V12, PLAIN], [RELEASE, V12, NOISY]]
+    arms, references, mapping = validation_controls(finalists)
     scores = evaluate(args, [*arms, *references], [3, 4, 5])
     means = {arm: mean(values) for arm, values in scores.items()}
     passed = []

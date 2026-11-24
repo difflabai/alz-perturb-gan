@@ -126,6 +126,8 @@ The fixed-network formulation comparison also pins the particle table, batch siz
 
 The ParticleGAN 0.12.0 comparison tunes the generator, critic and particle rates and the transport settings on three training groups. It compares the frozen choice with same-wheel v11, v11 from 0.11.1, and EMPF on twelve paired seeds. [v12 benchmark and two-GPU reproduction](notes/neuroko_v12_1200.md)
 
+A fixed-learning-rate follow-up compared two v12 finalists and matched controls at 1,200 updates. On 16 paired seeds the training-selected v12 scored 1.3665, matched v11 scored 1.3584 and matched EMPF scored 1.3531 (lower is better). [Full comparison and reproduction commands](notes/neuroko_v12_refinement.md)
+
 #### Copy-paste prompt for the 1,200-update formulation comparison
 
 > Clone `https://github.com/difflabai/alz-perturb-gan` on branch `paper-watch/neuroko-revival` and record the commit. Follow the NeuroKO GPU setup in `paper_watch/README.md`, then the two-GPU commands in `paper_watch/notes/neuroko_formulation_1200.md`. Compare Unified v11 and EMPF after exactly 1,200 updates on the fixed network, 64 particles, 16 latent dimensions and batch size 64. Verify each pair’s initialization, data and minibatch hashes. Report lower-is-better held-out energy per seed, the paired mean difference, the spread ratio and timing. Identify the release and the actual generator, critic and particle learning rates for every arm.
