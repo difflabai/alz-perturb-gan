@@ -902,3 +902,15 @@ python paper_watch/scripts/neuroko_rate_noise.py --study optimizer-smoothing --s
   --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-matched-smoothing-defaults" \
   --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
+
+### Interpolating the particle prior coefficient
+
+At critic LR 0.021, the nine-pair v12 means were 0.97344, 0.94231 and 0.98036 for prior coefficients 0.02, 0.1 and 0.2. A quadratic through those three means as a function of log coefficient has its minimum at 0.06037. The next test transfers a coefficient of **0.060** to the calibrated critic LR of 0.0049. The interpolated value is a candidate for training. Its performance at the calibrated rate requires measurement. [Original nine-pair scores at each weight](neuroko_v12_double_prior_screen.json)
+
+The first screen trains v12, original v11 and original EMPF at the same 0.060 prior coefficient for 1,200 updates on seeds 22–24 and all three groups. All share generator LR 0.014, critic LR 0.0049, particle LR 0.0406, latent noise 0.15, architecture, cells and initialization. It also scores each independently tuned original control and v12 at prior coefficient 0.1 on these pairs. A candidate that beats all initial controls proceeds to both development cohorts and then to fresh seeds 882–887 before the biological holdout.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study interpolated-prior --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-interpolated-prior" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
+```

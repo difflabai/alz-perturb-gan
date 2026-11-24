@@ -156,6 +156,32 @@ def test_long_duration_matches_pilot_and_integrates_uneven_final_interval(tmp_pa
         study.main()
 
 
+def test_interpolated_prior_screens_all_matched_originals_before_stopping(tmp_path, monkeypatch):
+    import json
+    import sys
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_rate_noise as study
+
+    def tied_scores(args, arms, seeds):
+        candidates = [a for a in arms if a[2].get("prior_reg") == .06]
+        assert list(seeds) == [22, 23, 24]
+        assert {tuple(a[:2]) for a in candidates} == {
+            ("0.12.0", "unified_v12"), ("0.11.1", "unified_v11"), ("0.10.0", "empf")}
+        for _, _, trial in candidates:
+            assert trial["lr"] * trial["d_lr_mult"] == .0049 and trial["lr"] * trial["prior_lr_mult"] == .0406
+            assert trial["prior_sigma"] == .15
+        return {study.key(arm): [1.] * 9 for arm in arms}
+
+    monkeypatch.setattr(study, "evaluate", tied_scores)
+    monkeypatch.setattr(sys, "argv", ["study", "--study", "interpolated-prior", "--output", str(tmp_path),
+                                       "--data", str(tmp_path), "--wheels", str(tmp_path)])
+    study.main()
+    calibration = json.loads((tmp_path / "prior_interpolation.json").read_text())
+    assert calibration["interpolated_minimum"] == pytest.approx(.06036654237)
+    assert not json.loads((tmp_path / "selection.json").read_text())["advances"]
+
+
 @pytest.mark.parametrize("beats_empf", [False, True])
 def test_smoothing_uses_original_controls_and_matches_empf(tmp_path, monkeypatch, beats_empf):
     from types import SimpleNamespace

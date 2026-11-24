@@ -30,7 +30,7 @@ RHO_STUDIES = {"transport-rho": (1.5, 794), "transport-rho-high": (6., 816)}
 CENTROID_WEIGHTS = (.5, 1., 2., 4.)
 CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight", "critic-mid-weight",
                     "generator-motion", "lower-generator")
-PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise",
+PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise", "interpolated-prior",
                        "release-loss", *RHO_STUDIES, *CENTROID_STUDIES)
 TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "critic-interval", "loss-factorial",
                       "calibrated-particles", "transport-grid", "critic-weight-interaction", "optimizer-smoothing",
@@ -345,6 +345,32 @@ def published_original_controls():
         if best["arm"] != tuned[recipe]:
             raise ValueError(f"Published {recipe} control differs from the lowest measured original-release mean")
     return tuned
+
+
+def interpolated_prior():
+    """Locate the minimum of the quadratic through the three measured log-weight means."""
+    source = "paper_watch/notes/neuroko_v12_double_prior_screen.json"
+    screening = json.loads((ROOT / source).read_text())["screening"]
+    weights = (.02, .1, .2)
+    names = ("plain-noise", "noise150-prior100", "noise150-prior200")
+    means = []
+    for name in names:
+        arm = f"{RELEASE}/{V12}/{name}"
+        values = screening["scores"][arm]
+        if len(values) != 9 or mean(values) != screening["means"][arm]:
+            raise ValueError("Expected the published nine training energies at each prior weight")
+        means.append(mean(values))
+    x0, x1, x2 = map(log, weights)
+    left = (means[1] - means[0]) / (x1 - x0)
+    right = (means[2] - means[1]) / (x2 - x1)
+    curvature = (right - left) / (x2 - x0)
+    if curvature <= 0:
+        raise ValueError("The measured prior-weight energies do not have a convex interpolation")
+    minimum = exp((x0 + x1) / 2 - left / (2 * curvature))
+    if not weights[0] < minimum < weights[-1]:
+        raise ValueError("The interpolated minimum falls outside the measured prior weights")
+    return dict(source=source, source_critic_lr=.021, weights=weights, mean_energies=means,
+                interpolated_minimum=minimum, trial_weight=round(minimum, 3))
 
 
 def compare_published_rates(args, *, smoothing=None):
@@ -805,7 +831,7 @@ def compare_prior_weight(args):
                 "On seeds 22–24 first require a lower v12 mean than baseline v12 and both noise-0.25 controls. "
                 "If it passes, compare against all matched and previously tuned controls on 22–24 and 251–253. "
                 "Reserve fresh seeds 480–485 including original releases, then biological holdout seeds 486–501.")
-    elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "release-loss",
+    elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "release-loss", "interpolated-prior",
                         "loss-factorial", "calibrated-particles", "transport-grid", "critic-weight-interaction", "optimizer-smoothing",
                         *RHO_STUDIES, *CENTROID_STUDIES):
         baseline = NOISY_PRIOR
@@ -916,6 +942,24 @@ def compare_prior_weight(args):
                     "Then beat every matched and tuned control, including the originals, on both development "
                     f"cohorts and six fresh seeds {independent_seeds[0]}–{independent_seeds[-1]} before biological "
                     f"holdout seeds {outer_seeds[0]}–{outer_seeds[-1]}.")
+        elif args.study == "interpolated-prior":
+            baseline = trial
+            interpolation = interpolated_prior()
+            write_frozen(args.output / "prior_interpolation.json", interpolation)
+            weight = interpolation["trial_weight"]
+            trial = dict(baseline, name=baseline["name"] + f"-prior{round(weight * 1000):03d}", prior_reg=weight)
+            references.append(("same-critic-prior100", paired(baseline)[0]))
+            references.extend(("panel-selected-" + role, arm) for role, arm in published_original_controls().items())
+            for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
+                references.append(("original-interpolated-prior-" + arm[1], [release, *arm[1:]]))
+            independent_seeds, outer_seeds = list(range(882, 888)), list(range(888, 904))
+            rule = ("Fit a quadratic to the published mean energies at log prior weights 0.02, 0.1 and 0.2 "
+                    "at critic LR 0.021. Transfer its interior minimum rounded to 0.001 to critic LR 0.0049. "
+                    "Always evaluate original v11 and EMPF at that same prior coefficient on seeds 22–24. "
+                    "At 1,200 updates first beat those matched originals, unchanged v12, the two tuned "
+                    "same-wheel controls and both tuned original controls. Beat each matched and tuned "
+                    "control on mean energy on each development cohort, "
+                    "then six fresh seeds before the biological holdout.")
         elif args.study == "optimizer-smoothing":
             baseline = trial
             trial, grid = smoothing_screen(args, baseline)
@@ -1156,6 +1200,9 @@ def compare_prior_weight(args):
         screen_args.output = args.shared_screen.resolve()
     if args.study in PRELIMINARY_STUDIES:
         preliminary = [matches[0], [RELEASE, V12, baseline], *paired(WIDE_NOISY_PRIOR)[1:]]
+        if args.study == "interpolated-prior":
+            preliminary.extend(published_original_controls().values())
+            preliminary.extend([[release, *arm[1:]] for release, arm in zip(("0.11.1", "0.10.0"), matches[1:], strict=True)])
         initial_scores = evaluate(screen_args, preliminary, REPLICATION_SEEDS)
         initial_means = {k: mean(v) for k, v in initial_scores.items()}
         own = key(matches[0])
