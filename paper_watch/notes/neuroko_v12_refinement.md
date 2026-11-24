@@ -90,6 +90,15 @@ A diagnostic replay checked whether the generator's adaptive gain could explain 
 
 ## Critic gradient penalty threshold
 
+Neither threshold qualified on training seed 11. At 0.75, v12 edged v11 and lost to EMPF. At 1.25, it scored above v11. All 18 fits used the intended native threshold and fixed learning rates.
+
+| Critic threshold | V12 energy ↓ | Matched v11 | Matched EMPF |
+| ---: | ---: | ---: | ---: |
+| 0.75 | 1.0013 | 1.0043 | 0.9934 |
+| 1.25 | 1.0193 | 0.9495 | 0.9805 |
+
+[Per-fold energies and training decision](neuroko_v12_critic_cap_validation.json)
+
 The transport-scale finalist scored 0.9864 across the nine independent training fold–seed pairs. Its matched v11 control scored 0.9594. This rules it out under the selection criterion. A separate fixed-rate experiment changes the native critic penalty threshold (`reg_kappa`), which sets the gradient norm above which the critic incurs a larger penalty. Both matched controls receive the same threshold.
 
 Across 44 native penalty measurements after update 100 on training seed 10, the median reported norm was 0.835 for v12 and 0.718 for v11 under a common threshold of 1.0. This measurement used `Screen1_3` for validation and the default distance quantile 0.25. The new experiment compares thresholds 0.75 and 1.25 while keeping the quantile, latent noise, model, data and all three learning rates fixed. Seed 11 screens on three training folds. A setting that leads both matched controls must repeat against the matched and established controls on training seeds 12–14 to qualify for holdout seeds 132–147. [Native measurements and input hashes](neuroko_v12_critic_cap_diagnostic.json) · [Paired selection rule](../scripts/neuroko_transport_scale.py)
