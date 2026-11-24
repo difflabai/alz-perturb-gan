@@ -459,6 +459,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study individual-role-rates -
   --second-screen "$data/v12-noise-prior"
 ```
 
+Lowering only the generator LR to 0.010 raised the nine-pair v12 mean from 0.94231 to **0.95961**. It improved three of nine pairs. The mean difference across the three groups at each seed was −0.00613 at seed 22, +0.00184 at seed 23 and +0.05621 at seed 24.
+
 The noise-0.25 controls finished while the individual-rate trials were running. They had lower first-cohort energies than the earlier v11 and EMPF references. An additional comparison fixes these two controls and measures them on seeds 251–253. It reports each of the four rate trials against them on seeds 22–24 once the shortlist exists. If the selected trial has completed the second cohort under its original protocol, it reports the same paired comparison there. Run the command again after the shortlist and any second-cohort fits finish to include those results.
 
 ```bash
