@@ -237,3 +237,5 @@ python paper_watch/scripts/neuroko_rate_noise.py --study prior-weight --data "$d
 ```
 
 Add `--stage confirm` after a qualifying independent result.
+
+For the comparison with the original releases, run the same prior-weight command with `--stage compare-releases` after the screen passes. It fits EMPF from ParticleGAN 0.10.0 and Unified v11 from 0.11.1 at the exact candidate rates, noise and penalty weight on seeds 251–253. It also scores those recipes and v12 from the 0.12.0 wheel on the same nine pairs. The results go to `release_comparison.json`. The independent training qualification still uses the controls in the frozen prior-weight study.

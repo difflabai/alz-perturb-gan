@@ -5,10 +5,10 @@ import json
 from pathlib import Path
 from statistics import mean
 
-from compare_neuroko_v12 import GROUPS, write_frozen
+from compare_neuroko_v12 import GROUPS, receipt, write_frozen
 from neuroko_matched_rate_replication import SEEDS as REPLICATION_SEEDS, comparison
 from neuroko_role_factorial import REFERENCES, TRIALS as RATES, paired
-from neuroko_stratified import NOISY, confirm_candidate, evaluate, key
+from neuroko_stratified import NOISY, confirm_candidate, control_arms, evaluate, key
 from neuroko_transport_scale import TRIALS as TRANSPORT, validate_finalist
 from retune_neuroko_v12 import RELEASE, V12
 
@@ -36,10 +36,44 @@ def original_noise(trial):
     return dict(trial, name="same-rates-sigma025", prior_sigma=0.025)
 
 
+def compare_releases(args, trial, seeds):
+    screen = json.loads((args.output / "screen.json").read_text())
+    plan = json.loads((args.output / "search.json").read_text())
+    if plan["arms"][0] != [RELEASE, V12, trial] or plan["independent_seeds"] != seeds:
+        raise ValueError("the frozen study has a different candidate or independent seeds")
+    if not screen["passes"]:
+        raise ValueError("the prior-weight trial must qualify for fresh training seeds")
+    arms, labels = control_arms([trial])
+    by_key = {key(arm): arm for arm in arms}
+    v12, v11, empf = (by_key[labels[n]] for n in ("selected_v12", "matched_v11", "matched_empf"))
+    pinned = [["0.10.0", *empf[1:]], ["0.11.1", *v11[1:]]]
+    comparisons = [*pinned, v12, v11, empf]
+    write_frozen(args.output / "release_comparison_protocol.json",
+                 dict(arms=comparisons, seeds=seeds, groups=list(GROUPS),
+                      metric="Mean four-target energy at 1200 fixed-rate updates on the independent training folds."))
+    scores = evaluate(args, comparisons, seeds)
+    own = scores[key(v12)]
+    summaries = {}
+    for arm in comparisons:
+        values = scores[key(arm)]
+        rows = [json.loads(receipt(args.output, "validation", *arm, seed, group).read_text())
+                for seed in seeds for group in GROUPS]
+        if any(row.get("constant_lr_verified_updates") != 1200 for row in rows):
+            raise ValueError(f"missing a full per-update learning-rate check for {key(arm)}")
+        gaps = [x - y for x, y in zip(own, values, strict=True)]
+        summaries[key(arm)] = dict(energy=mean(values), v12_minus_arm=mean(gaps),
+                                  v12_pairs_won=sum(d < 0 for d in gaps))
+    write_frozen(args.output / "release_comparison.json", dict(scores=scores, summaries=summaries))
+    print("Original-release comparison", summaries, flush=True)
+
+
 def compare_prior_weight(args):
     trial = dict(NOISY, name="noise150-prior100", d_lr_mult=1.5, prior_lr_mult=2.9, prior_reg=0.1)
     independent_seeds = [251, 252, 253]
     outer_seeds = list(range(212, 228))
+    if args.stage == "compare-releases":
+        compare_releases(args, trial, independent_seeds)
+        return
     if args.stage == "confirm":
         decision = json.loads((args.output / "selection.json").read_text())
         if not decision["advances"]:
@@ -81,7 +115,7 @@ def main():
         parser.add_argument("--" + field, type=Path, required=True)
     parser.add_argument("--workers-per-gpu", type=int, default=2)
     parser.add_argument("--window-cells", type=int)
-    parser.add_argument("--stage", choices=("search", "confirm"), default="search")
+    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases"), default="search")
     parser.add_argument("--study", choices=("rates", "prior-weight"), default="rates")
     parser.add_argument("--shared-screen", type=Path,
                         help="reuse the seed 22–24 reference receipts for the prior-weight comparison")
@@ -93,6 +127,8 @@ def main():
     if args.study == "prior-weight":
         compare_prior_weight(args)
         return
+    if args.stage == "compare-releases":
+        parser.error("--stage compare-releases applies to --study prior-weight")
     if args.shared_screen is not None:
         parser.error("--shared-screen applies to --study prior-weight")
 
