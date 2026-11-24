@@ -1,0 +1,380 @@
+{
+  "arms": {
+    "empf": [
+      "0.10.0",
+      "empf",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.1
+      }
+    ],
+    "unified_v11": [
+      "0.11.1",
+      "unified_v11",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    "unified_v12": [
+      "0.12.0",
+      "unified_v12",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ]
+  },
+  "seeds": [
+    524,
+    525,
+    526,
+    527,
+    528,
+    529
+  ],
+  "groups": [
+    "Screen1_1",
+    "Screen1_3",
+    "Screen1_4"
+  ],
+  "updates": 1200,
+  "method": "Predeclared fresh training seeds, three development groups, five-way replication subset using each original release. All three formulations share generator, critic and particle rates, noise, prior penalty, architecture and data. This compares formulations at the v12 settings.",
+  "means": {
+    "empf": 0.9774342587619917,
+    "unified_v11": 0.9329083087860376,
+    "unified_v12": 0.9546567101157832
+  },
+  "means_by_seed": {
+    "524": {
+      "empf": 0.9678249319654465,
+      "unified_v11": 0.9301355880535923,
+      "unified_v12": 0.9740708113184251
+    },
+    "525": {
+      "empf": 0.9416043019385972,
+      "unified_v11": 0.948314602236057,
+      "unified_v12": 0.9246512804504657
+    },
+    "526": {
+      "empf": 0.9821313816019487,
+      "unified_v11": 0.9273560285744612,
+      "unified_v12": 0.9490699832756979
+    },
+    "527": {
+      "empf": 0.9690964515980077,
+      "unified_v11": 0.928057214604488,
+      "unified_v12": 0.9824813924282897
+    },
+    "528": {
+      "empf": 0.9910914766978028,
+      "unified_v11": 0.9610636716582811,
+      "unified_v12": 0.9781161117429632
+    },
+    "529": {
+      "empf": 1.0128570087701474,
+      "unified_v11": 0.9025227475893459,
+      "unified_v12": 0.9195506814788575
+    }
+  },
+  "v12_comparisons": {
+    "empf": {
+      "v12_minus_control": -0.022777548646208512,
+      "wins_pairs": 10,
+      "wins_seeds": 4
+    },
+    "unified_v11": {
+      "v12_minus_control": 0.021748401329745648,
+      "wins_pairs": 5,
+      "wins_seeds": 1
+    }
+  },
+  "cells": [
+    {
+      "seed": 524,
+      "group": "Screen1_1",
+      "energies": {
+        "empf": 1.2867200682684257,
+        "unified_v11": 1.1581381558375952,
+        "unified_v12": 1.2041319317611279
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "6cdf69850f3417cdad28ac95c8d325cb445cb0241d167d090fcf26505edddee0",
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "training_batches_sha256": "f2192850745f35f1cf4f8d13bde6e239df646acd0af589edbc48ab60cf457cbe",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 524,
+      "group": "Screen1_3",
+      "energies": {
+        "empf": 0.7183463341060627,
+        "unified_v11": 0.6233301153588044,
+        "unified_v12": 0.6820696199963578
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "6cdf69850f3417cdad28ac95c8d325cb445cb0241d167d090fcf26505edddee0",
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "training_batches_sha256": "4dcd82ce0fc6eee4ab90d21d85d45599866c3a96879e86b05bd2e2fd19e2895a",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 524,
+      "group": "Screen1_4",
+      "energies": {
+        "empf": 0.8984083935218512,
+        "unified_v11": 1.0089384929643772,
+        "unified_v12": 1.0360108821977896
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "6cdf69850f3417cdad28ac95c8d325cb445cb0241d167d090fcf26505edddee0",
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "training_batches_sha256": "5c517577872fd38281c3e70eab277582f4b8951d32ff799f3cc8e95273afee05",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 525,
+      "group": "Screen1_1",
+      "energies": {
+        "empf": 1.1375549224645012,
+        "unified_v11": 1.18244851712895,
+        "unified_v12": 1.1486535007206247
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "41be103e1e0588b463b8447c453085718a4314d5da8a7bf3ee3198ee74b1c2d5",
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "training_batches_sha256": "0bcdb39fc7b8c07a18f700a99c26514b5f56b2def750ced770d3d2c9e0412cd2",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 525,
+      "group": "Screen1_3",
+      "energies": {
+        "empf": 0.6343896821508772,
+        "unified_v11": 0.6431350287117501,
+        "unified_v12": 0.6100146737893632
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "41be103e1e0588b463b8447c453085718a4314d5da8a7bf3ee3198ee74b1c2d5",
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "training_batches_sha256": "71cada3cd3f437ddd87902288de7e72b9d3bd137efbd933b6aa89f82b8c4b734",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 525,
+      "group": "Screen1_4",
+      "energies": {
+        "empf": 1.0528683012004134,
+        "unified_v11": 1.0193602608674708,
+        "unified_v12": 1.0152856668414094
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "41be103e1e0588b463b8447c453085718a4314d5da8a7bf3ee3198ee74b1c2d5",
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "training_batches_sha256": "f2cdcac850940edc2bc100741ecd21035596719295812c4712e806afdcd8b573",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 526,
+      "group": "Screen1_1",
+      "energies": {
+        "empf": 1.294887124822955,
+        "unified_v11": 1.1932246520165728,
+        "unified_v12": 1.1481959481791784
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "d1c4d6d979eec0e898494af15b6016e451f7bc0fd02d307deebd7d13483f3695",
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "training_batches_sha256": "de6667a5480b4e1bc336c47b4621b909c536afc31b9f7c38e1fe01ddc1532a13",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 526,
+      "group": "Screen1_3",
+      "energies": {
+        "empf": 0.6631504182739498,
+        "unified_v11": 0.6010732458546957,
+        "unified_v12": 0.638847290446424
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "d1c4d6d979eec0e898494af15b6016e451f7bc0fd02d307deebd7d13483f3695",
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "training_batches_sha256": "e68eb918257b6db14e13fa18eaf60c39f757967c0004e9c203d437be9f4773d5",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 526,
+      "group": "Screen1_4",
+      "energies": {
+        "empf": 0.9883566017089414,
+        "unified_v11": 0.9877701878521152,
+        "unified_v12": 1.0601667112014914
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "d1c4d6d979eec0e898494af15b6016e451f7bc0fd02d307deebd7d13483f3695",
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "training_batches_sha256": "2dcf4e4bd9be5d45467ba5091199a3a163fdd9fc6422265e7b7999274089ebc0",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 527,
+      "group": "Screen1_1",
+      "energies": {
+        "empf": 1.1669575978407212,
+        "unified_v11": 1.153926666557031,
+        "unified_v12": 1.2299395610420154
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "13f3de11377e349a63bcc03ed80c168e3b728b8de66c4fc61d0800285e7811b5",
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "training_batches_sha256": "7bdb3424aa4a8991859d0770a783447a19fcd93d1bb1622377f1cf2bcc631aae",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 527,
+      "group": "Screen1_3",
+      "energies": {
+        "empf": 0.6390500450018053,
+        "unified_v11": 0.5760148445411064,
+        "unified_v12": 0.6543746376694237
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "13f3de11377e349a63bcc03ed80c168e3b728b8de66c4fc61d0800285e7811b5",
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "training_batches_sha256": "969d0560f9d89bf87848c28402e0a5e961c842431ef5b4f258ccb116573a2a27",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 527,
+      "group": "Screen1_4",
+      "energies": {
+        "empf": 1.1012817119514968,
+        "unified_v11": 1.0542301327153265,
+        "unified_v12": 1.06312997857343
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "13f3de11377e349a63bcc03ed80c168e3b728b8de66c4fc61d0800285e7811b5",
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "training_batches_sha256": "202f28fafe0bff6ab11efe8ef0fc9680c6c8aeddc88defe6ffbf166d7308563d",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 528,
+      "group": "Screen1_1",
+      "energies": {
+        "empf": 1.1635192195302935,
+        "unified_v11": 1.162272045176594,
+        "unified_v12": 1.205002379801762
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "ba01bf3e211d2a515d4a66a7856d40b0a2e4b140f55e88fa8014e1660197e717",
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "training_batches_sha256": "b2c00e94a51f8f4e26688f50135eadcfe956975c27e7890849726ca9098e15ac",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 528,
+      "group": "Screen1_3",
+      "energies": {
+        "empf": 0.6369638004783942,
+        "unified_v11": 0.6510421836611795,
+        "unified_v12": 0.6503286448423913
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "ba01bf3e211d2a515d4a66a7856d40b0a2e4b140f55e88fa8014e1660197e717",
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "training_batches_sha256": "be9fd4fe39f52084d85d25e456958eb75175a3a802c4a867dd83ca9e6a6a1a03",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 528,
+      "group": "Screen1_4",
+      "energies": {
+        "empf": 1.1727914100847208,
+        "unified_v11": 1.06987678613707,
+        "unified_v12": 1.0790173105847365
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "ba01bf3e211d2a515d4a66a7856d40b0a2e4b140f55e88fa8014e1660197e717",
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "training_batches_sha256": "dbeb4eaaafc8dcf1db8b40fa573112afa3235f91b3afc196cbb3726991c2acba",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 529,
+      "group": "Screen1_1",
+      "energies": {
+        "empf": 1.0590570428289197,
+        "unified_v11": 1.1050617666267881,
+        "unified_v12": 1.1169496407522184
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "43bcb23aa11bc4970c2ba3289ac00ac965568279b09da83155b8f33c9aa75caa",
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "training_batches_sha256": "d3f00b02227e430123718e16b933b9a34de41e757668139fbe2bef59e9d79ccd",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 529,
+      "group": "Screen1_3",
+      "energies": {
+        "empf": 0.7653135403058515,
+        "unified_v11": 0.6046894127238989,
+        "unified_v12": 0.6146119195653004
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "43bcb23aa11bc4970c2ba3289ac00ac965568279b09da83155b8f33c9aa75caa",
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "training_batches_sha256": "bd545b894305b188262aadce2a85b8b478d74d40b480e610196c8d2cab0c160e",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 529,
+      "group": "Screen1_4",
+      "energies": {
+        "empf": 1.2142004431756708,
+        "unified_v11": 0.9978170634173509,
+        "unified_v12": 1.027090484119054
+      },
+      "fingerprints": {
+        "initial_parameters_sha256": "43bcb23aa11bc4970c2ba3289ac00ac965568279b09da83155b8f33c9aa75caa",
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "training_batches_sha256": "581af2f2daaf3e1add3e0eac3649bd892ec75922ea44ef890ba7ebf530a7a3ac",
+        "visible_devices": "1"
+      }
+    }
+  ]
+}
