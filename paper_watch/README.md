@@ -182,6 +182,8 @@ python paper_watch/scripts/neuroko_convergence.py --forty-thousand --data "$data
   --wheels "$data/wheels" --output "$data/v12-convergence-40000"
 ```
 
+The v12 generator, critic and particles use fixed learning rates of 0.014, 0.0049 and 0.0406. The released recipe labels its schedule `cosine`, but both floors are 1.0, so the rates stay flat. The runner stops if a parameter group's learning rate changes at any optimizer step. [Per-step checks on both GPUs](notes/neuroko_v12_convergence_40000.json)
+
 The run scores every 1,200 updates and again at 40,000. It checks each arm against its published 1,200-, 2,400- and 3,600-update scores and minibatch fingerprints. The last interval is 400 updates. The late-training mean uses linear interpolation between checkpoints to account for the shorter interval. [Observed cell ranks by group and target](notes/neuroko_v12_tuned_empf_geometry.json)
 
 Once the two 40,000-update v12 fits have finished, use them to compare the v12 and v11 optimizers in release 0.12.0 on the same hardware, initialization and batches. This command trains two additional v11 fits and checks both optimizers against their published 3,600-update trajectories. The report includes the 40,000-update endpoint for each seed and the average energy over the final 10,000 updates.
