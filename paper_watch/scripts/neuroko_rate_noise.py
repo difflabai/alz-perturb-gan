@@ -301,14 +301,14 @@ def spread_target(path):
                 prior_reg_target_std=target), average
 
 
-def replicate_balanced_releases(args):
-    if args.study != "balanced-particle-prior":
-        raise ValueError("The matched replication uses the frozen calibrated prior study")
+def replicate_calibrated_releases(args):
+    if args.study not in ("balanced-particle-prior", "original-v11-critic"):
+        raise ValueError("The matched replication requires a calibrated prior or critic study")
     search = json.loads((args.output / "search.json").read_text())
     trial = search["arms"][0][2]
     arms = paired(trial)
     if search["arms"][:3] != arms or search["screen_seeds"] != REPLICATION_SEEDS:
-        raise ValueError("The calibrated prior study must contain all three matched formulations")
+        raise ValueError("The calibrated study must contain all three matched formulations")
     selected = key(arms[0])
     root = args.output / "matched-releases"
     root.mkdir(exist_ok=True)
@@ -317,12 +317,24 @@ def replicate_balanced_releases(args):
             "five formulation and release combinations. Only if v12 has the lowest mean across all five, "
             "repeat all five on six fresh training seeds. This comparison measures the matched formulation "
             "effect and does not change the original qualification against tuned controls.")
+    if args.study == "original-v11-critic":
+        fresh = list(range(524, 530))
+        rule = ("At the fixed critic rate calibrated against original v11, check every release at identical "
+                "rates, noise 0.15 and prior weight 0.1 on the nine development pairs. The preceding v12 "
+                "run must have improved over its original critic rate. Replicate all five on six fresh "
+                "training seeds only if v12 leads every release at these shared settings.")
     write_frozen(root / "protocol.json", dict(arms=arms, original_releases=["0.10.0", "0.11.1"],
                                                groups=GROUPS, development=REPLICATION_SEEDS, fresh=fresh, rule=rule))
-    screen = json.loads((args.output / "screen.json").read_text())
-    published = {key(arm): screen["scores"][key(arm)] for arm in arms}
-    if any(mean(published[selected]) >= mean(published[key(arm)]) for arm in arms[1:]):
-        raise ValueError("The calibrated v12 must first beat both same-wheel matched controls")
+    if args.study == "original-v11-critic":
+        screen = json.loads((args.output / "preliminary.json").read_text())["scores"]
+        if mean(screen[selected]) >= mean(screen[key(paired(NOISY_PRIOR)[0])]):
+            raise ValueError("The calibrated v12 must first improve on its original critic rate")
+        published = {selected: screen[selected]}
+    else:
+        screen = json.loads((args.output / "screen.json").read_text())["scores"]
+        published = {key(arm): screen[key(arm)] for arm in arms}
+        if any(mean(published[selected]) >= mean(published[key(arm)]) for arm in arms[1:]):
+            raise ValueError("The calibrated v12 must first beat both same-wheel matched controls")
     for cohort, seeds in (("development", REPLICATION_SEEDS), ("fresh", fresh)):
         target = root / cohort
         target.mkdir(exist_ok=True)
@@ -646,7 +658,7 @@ def main():
     parser.add_argument("--workers-per-gpu", type=int, default=2)
     parser.add_argument("--window-cells", type=int)
     parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-noise-controls",
-                                          "replicate-balanced-releases"), default="search")
+                                          "replicate-balanced-releases", "replicate-calibrated-critic"), default="search")
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
                         default="rates")
@@ -670,8 +682,12 @@ def main():
     for field in ("data", "wheels", "output"):
         setattr(args, field, getattr(args, field).resolve())
     args.output.mkdir(parents=True, exist_ok=True)
-    if args.stage == "replicate-balanced-releases":
-        replicate_balanced_releases(args)
+    replication = {"replicate-balanced-releases": "balanced-particle-prior",
+                   "replicate-calibrated-critic": "original-v11-critic"}
+    if args.stage in replication:
+        if args.study != replication[args.stage]:
+            parser.error(f"--stage {args.stage} requires --study {replication[args.stage]}")
+        replicate_calibrated_releases(args)
         return
     if args.stage == "compare-noise-controls":
         if args.study != "individual-role-rates":

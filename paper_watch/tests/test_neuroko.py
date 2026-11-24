@@ -30,31 +30,39 @@ def test_prior_spread_target_is_shared_through_qualification(monkeypatch):
 
 
 @pytest.mark.parametrize("original_v11_energy,expected_cohorts", [(.8, 1), (1.2, 2)])
+@pytest.mark.parametrize("study_name", ["balanced-particle-prior", "original-v11-critic"])
 def test_native_release_ranking_gates_the_fresh_matched_replication(tmp_path, monkeypatch,
-                                                                    original_v11_energy, expected_cohorts):
+                                                                    original_v11_energy, expected_cohorts, study_name):
     import json
     from types import SimpleNamespace
     monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
     import neuroko_rate_noise as study
 
     trial = dict(study.NOISY_PRIOR, name="motion-critic-46-prior41", prior_reg=.041, d_lr_mult=.0046/.014)
+    if study_name == "original-v11-critic":
+        trial = dict(study.NOISY_PRIOR, name="original-v11-critic-49", d_lr_mult=.0049/.014)
     arms = study.paired(trial)
     study.write_frozen(tmp_path / "search.json", dict(arms=arms, screen_seeds=[22, 23, 24]))
     scores = {study.key(arm): [1.0 + i / 10] * 9 for i, arm in enumerate(arms)}
     study.write_frozen(tmp_path / "screen.json", dict(scores=scores, passes=False))
+    initial = {study.key(arms[0]): scores[study.key(arms[0])]}
+    study.write_frozen(tmp_path / "preliminary.json",
+                       dict(scores={**initial, study.key(study.paired(study.NOISY_PRIOR)[0]): [1.1] * 9}))
     cohorts = []
 
     def compare(args, destination, matches, seeds, rule, *, published):
         assert matches == arms
-        assert published == (scores if not cohorts else None)
+        source = initial if study_name == "original-v11-critic" else scores
+        assert published == (source if not cohorts else None)
         cohorts.append((destination.name, seeds))
         return {**{n: {"energy": v[0]} for n, v in scores.items()},
                 "0.11.1/v11": {"energy": original_v11_energy}, "0.10.0/empf": {"energy": 1.1}}
 
     monkeypatch.setattr(study, "original_release_scores", compare)
-    args = SimpleNamespace(output=tmp_path, shared_screen=None, study="balanced-particle-prior")
-    study.replicate_balanced_releases(args)
-    assert cohorts == [("development", [22, 23, 24]), ("fresh", list(range(452, 458)))][:expected_cohorts]
+    args = SimpleNamespace(output=tmp_path, shared_screen=None, study=study_name)
+    study.replicate_calibrated_releases(args)
+    start = 524 if study_name == "original-v11-critic" else 452
+    assert cohorts == [("development", [22, 23, 24]), ("fresh", list(range(start, start + 6)))][:expected_cohorts]
     assert json.loads((tmp_path / "screen.json").read_text())["passes"] is False
 
 

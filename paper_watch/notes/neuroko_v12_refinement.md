@@ -550,6 +550,14 @@ The v12 release uses a cosine schedule with both learning-rate floors set to 1.0
 
 The follow-up changes only v12 latent noise from 0.15 to 0.25 at the fixed 0.0049 critic rate. It uses the preceding 0.92850 result and both tuned controls as its first threshold. Further checks include exact matches for all three formulations on both development cohorts and the two historical releases on six fresh training seeds. The same command runs this experiment with `--study original-v11-critic-wide-noise` and `--output "$data/v12-original-critic-wide-noise"`.
 
+A separate matched comparison assigns the 0.0049 critic rate and latent noise 0.15 to all five formulation and release combinations. Its development comparison must reproduce the published nine v12 scores. If v12 leads all four matched controls, all five arms repeat on fresh training seeds 524–529. The earlier comparison against independently tuned controls retains its reported result.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study original-v11-critic --stage replicate-calibrated-critic \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-original-v11-critic-rate" \
+  --shared-screen "$data/v12-rate-noise"
+```
+
 ### Testing noise on generator outputs during training
 
 Across the 12 target-by-group measurements in the baseline v12 particle panel, the mean generated variance exceeded the observed variance by 0.12249 per projected coordinate. Taking the square root and rounding to two decimal places gives a Gaussian noise standard deviation of 0.35. The experiment adds that noise to generator outputs during training to test whether the generator learns a narrower clean distribution. Latent noise stays at 0.15, prior weight at 0.1, and generator, critic and particle learning rates stay at 0.014, 0.021 and 0.0406. Each primary score uses the usual 256 clean draws per target. [Variance measurements](neuroko_v12_particle_spread.json)
