@@ -1,0 +1,169 @@
+{
+  "protocol": {
+    "arms": [
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "seeds": [
+      22,
+      23,
+      24
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "metric": "Check the development ranking of the prior-weight setting on the original releases. The already completed independent comparison uses seeds 251\u2013253."
+  },
+  "result": {
+    "scores": {
+      "0.10.0/empf/noise150-prior100": [
+        1.2535926404500655,
+        0.6929577582446813,
+        1.0428423936342026,
+        1.1664357412532864,
+        0.6048908571528739,
+        1.0293422191940769,
+        1.151284089197896,
+        0.7036477171570692,
+        0.9214661064221081
+      ],
+      "0.11.1/unified_v11/noise150-prior100": [
+        1.1992387640929598,
+        0.6457104589903748,
+        1.076304883673175,
+        1.1472771498003447,
+        0.5624965489926328,
+        1.046035500243838,
+        1.294402618729367,
+        0.621714293848117,
+        0.9958507408939574
+      ],
+      "0.12.0/unified_v12/noise150-prior100": [
+        1.1558245879047615,
+        0.582786368766701,
+        1.106730401963502,
+        1.2369916829798506,
+        0.5376268147660306,
+        1.0481554259654402,
+        1.20568798533048,
+        0.5790882342441512,
+        1.0278612823316216
+      ],
+      "0.12.0/unified_v11/noise150-prior100": [
+        1.2634637985084134,
+        0.653527497220239,
+        1.0509979184250189,
+        1.171171714028166,
+        0.6169335825509652,
+        1.0299508505671373,
+        1.2466149387027703,
+        0.6147466833478679,
+        1.060181409239661
+      ],
+      "0.12.0/empf/noise150-prior100": [
+        1.2535926404500655,
+        0.6929577582446813,
+        1.0428423936342026,
+        1.1664357412532864,
+        0.6048908571528739,
+        1.0293422191940769,
+        1.151284089197896,
+        0.7036477171570692,
+        0.9214661064221081
+      ]
+    },
+    "summaries": {
+      "0.10.0/empf/noise150-prior100": {
+        "energy": 0.9518288358562511,
+        "v12_minus_arm": -0.009522970939302346,
+        "v12_pairs_won": 4
+      },
+      "0.11.1/unified_v11/noise150-prior100": {
+        "energy": 0.9543367732516407,
+        "v12_minus_arm": -0.012030908334691967,
+        "v12_pairs_won": 5
+      },
+      "0.12.0/unified_v12/noise150-prior100": {
+        "energy": 0.9423058649169488,
+        "v12_minus_arm": 0.0,
+        "v12_pairs_won": 0
+      },
+      "0.12.0/unified_v11/noise150-prior100": {
+        "energy": 0.9675098213989155,
+        "v12_minus_arm": -0.025203956481966702,
+        "v12_pairs_won": 6
+      },
+      "0.12.0/empf/noise150-prior100": {
+        "energy": 0.9518288358562511,
+        "v12_minus_arm": -0.009522970939302346,
+        "v12_pairs_won": 4
+      }
+    }
+  }
+}

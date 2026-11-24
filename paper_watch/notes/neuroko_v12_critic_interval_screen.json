@@ -1,0 +1,235 @@
+{
+  "protocol": {
+    "trials": [
+      {
+        "name": "interval-critic-101",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.7214285714285714,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      },
+      {
+        "name": "interval-critic-71",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.5071428571428571,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      },
+      {
+        "name": "interval-critic-146",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 1.042857142857143,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    "references": [
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.25,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "seeds": [
+      22,
+      23,
+      24
+    ],
+    "second": [
+      251,
+      252,
+      253
+    ],
+    "fresh": [
+      530,
+      531,
+      532,
+      533,
+      534,
+      535
+    ],
+    "outer": [
+      536,
+      537,
+      538,
+      539,
+      540,
+      541,
+      542,
+      543,
+      544,
+      545,
+      546,
+      547,
+      548,
+      549,
+      550,
+      551
+    ],
+    "rule": "Check the calibrated v12 on the second development cohort. On the first cohort test the three interior log-quartiles between the calibrated and release critic rates. Select the lowest nine-pair v12 mean, breaking ties by name. Advance only if it beats both endpoints and both independently tuned wide-noise controls. Then require the same winner to beat every matched and established reference on both development cohorts and on fresh training seeds including the original releases before scoring the biological holdout."
+  },
+  "result": {
+    "scores": {
+      "0.12.0/unified_v12/interval-critic-101": [
+        1.220737987893024,
+        0.5667415224441414,
+        1.050716838915687,
+        1.2556956767346403,
+        0.5744452135648916,
+        1.0617822098878509,
+        1.2149929105084716,
+        0.6084544884816812,
+        1.0134726064260628
+      ],
+      "0.12.0/unified_v12/interval-critic-71": [
+        1.1539107499640375,
+        0.617550122721775,
+        0.954848304984198,
+        1.2086063023775233,
+        0.621285020245502,
+        0.9674980874265653,
+        1.2036347106627445,
+        0.6279266132422225,
+        1.001482452558683
+      ],
+      "0.12.0/unified_v12/interval-critic-146": [
+        1.1738490091765226,
+        0.6127157473475309,
+        1.0485474287367371,
+        1.1525989012822873,
+        0.546644028357876,
+        1.158127208167991,
+        1.2285357210413768,
+        0.5899111671258348,
+        1.045790349489735
+      ],
+      "0.12.0/unified_v12/original-v11-critic-49": [
+        1.1263494186235306,
+        0.6114014145359561,
+        0.9871477581704231,
+        1.126615089377189,
+        0.6207189273353579,
+        1.0181744368803536,
+        1.2100226375749439,
+        0.6698091226184917,
+        0.9862425746570376
+      ],
+      "0.12.0/unified_v12/noise150-prior100": [
+        1.1558245879047615,
+        0.582786368766701,
+        1.106730401963502,
+        1.2369916829798506,
+        0.5376268147660306,
+        1.0481554259654402,
+        1.20568798533048,
+        0.5790882342441512,
+        1.0278612823316216
+      ],
+      "0.12.0/unified_v11/noise250-prior100": [
+        1.131282990474319,
+        0.5628406631049345,
+        1.0125469102079956,
+        1.2338240039674975,
+        0.6142560943939468,
+        1.016504427475284,
+        1.1170219582473204,
+        0.5905625402012029,
+        1.047187460033994
+      ],
+      "0.12.0/empf/noise250-prior100": [
+        1.1223464943750359,
+        0.5731292339540484,
+        1.0525022939435076,
+        1.0745143236963988,
+        0.6302151424050741,
+        1.0015550178129418,
+        1.1274244217063474,
+        0.696174307530145,
+        1.0237620003620436
+      ]
+    },
+    "means": {
+      "0.12.0/unified_v12/interval-critic-101": 0.9518932727618279,
+      "0.12.0/unified_v12/interval-critic-71": 0.9285269293536946,
+      "0.12.0/unified_v12/interval-critic-146": 0.9507466178584324,
+      "0.12.0/unified_v12/original-v11-critic-49": 0.9284979310859204,
+      "0.12.0/unified_v12/noise150-prior100": 0.9423058649169488,
+      "0.12.0/unified_v11/noise250-prior100": 0.9251141164562772,
+      "0.12.0/empf/noise250-prior100": 0.9224025817539492
+    },
+    "trial": {
+      "name": "interval-critic-71",
+      "lr": 0.014,
+      "rhbi_self_coupling": "hollow",
+      "rhbi_relativistic_weight": 2.0,
+      "prior_sigma": 0.15,
+      "d_lr_mult": 0.5071428571428571,
+      "prior_lr_mult": 2.9,
+      "prior_reg": 0.1
+    },
+    "passes": false
+  }
+}

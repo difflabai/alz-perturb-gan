@@ -24,10 +24,11 @@ ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
 ROLE_OUTER_SEEDS = list(range(396, 412))
 CRITIC_NOISE_STUDIES = ("original-v11-critic-wide-noise", "original-v11-critic-narrow-noise")
 CENTROID_WEIGHTS = (.5, 1., 2., 4.)
-CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight", "critic-mid-weight", "generator-motion")
+CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight", "critic-mid-weight",
+                    "generator-motion", "lower-generator")
 PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise",
                        "release-loss", *CENTROID_STUDIES)
-TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "critic-interval",
+TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "critic-interval", "loss-factorial",
                       *PRELIMINARY_STUDIES, *MOTION_STUDIES)
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
@@ -578,6 +579,44 @@ def generator_motion_trial(path, baseline):
                 d_lr_mult=plan["fixed_rates"]["critic"] / lr, prior_lr_mult=plan["fixed_rates"]["particles"] / lr)
 
 
+def loss_factorial(args, hollow2):
+    name = hollow2["name"]
+    native = {k: v for k, v in hollow2.items() if k not in ("rhbi_relativistic_weight", "rhbi_self_coupling")}
+    trials = dict(feydy0=dict(native, name=name + "-release-loss"), hollow2=hollow2,
+                  hollow0=dict(hollow2, name=name + "-hollow0", rhbi_relativistic_weight=0.),
+                  feydy2=dict(native, name=name + "-feydy2", rhbi_relativistic_weight=2.))
+    arms = {role: paired(trial)[0] for role, trial in trials.items()}
+    half = paired(dict(hollow2, name=name + "-rel5", rhbi_relativistic_weight=.5))[0]
+    refs = [half, *paired(WIDE_NOISY_PRIOR)[1:]]
+    plan = dict(arms=arms, references=refs, seeds=REPLICATION_SEEDS, groups=GROUPS,
+                rule="Cross the two released self-coupling options with relativistic weight 0 or 2. "
+                     "Only the two previously unmeasured combinations can advance. Choose the lower "
+                     "nine-pair mean and require it to beat both known corners, hollow weight 0.5 and "
+                     "both tuned controls. Report the weight effect within each coupling and their difference.")
+    write_frozen(args.output / "loss_factorial.json", plan)
+    if args.stage == "search":
+        local = copy(args)
+        local.output = args.shared_screen or args.output
+        scores = evaluate(local, [*arms.values(), *refs], REPLICATION_SEEDS)
+        means = {k: mean(s) for k, s in scores.items()}
+        effects = {}
+        for coupling in ("feydy", "hollow"):
+            active, inactive = (scores[key(arms[coupling + w])] for w in ("2", "0"))
+            effects[coupling] = [a - b for a, b in zip(active, inactive, strict=True)]
+        interaction = [h - f for h, f in zip(effects["hollow"], effects["feydy"], strict=True)]
+        choice = min(("hollow0", "feydy2"), key=lambda role: (means[key(arms[role])], role))
+        passes = all(means[key(arms[choice])] < means[key(ref)] for ref in [arms["feydy0"], arms["hollow2"], *refs])
+        write_frozen(args.output / "factorial_scores.json", dict(scores=scores, means=means, weight_effect=effects,
+                     interaction=interaction, trial=trials[choice], passes=passes))
+    result = json.loads((args.output / "factorial_scores.json").read_text())
+    if result["passes"]:
+        return result["trial"]
+    if args.stage != "search":
+        raise ValueError("Neither new loss combination passed the first cohort")
+    write_frozen(args.output / "selection.json", dict(advances=False, winner=None, screen=result))
+    return None
+
+
 def compare_prior_weight(args):
     screen_only = []
     pinned = []
@@ -645,7 +684,8 @@ def compare_prior_weight(args):
                 "On seeds 22–24 first require a lower v12 mean than baseline v12 and both noise-0.25 controls. "
                 "If it passes, compare against all matched and previously tuned controls on 22–24 and 251–253. "
                 "Reserve fresh seeds 480–485 including original releases, then biological holdout seeds 486–501.")
-    elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "release-loss", *CENTROID_STUDIES):
+    elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "release-loss",
+                        "loss-factorial", *CENTROID_STUDIES):
         baseline = NOISY_PRIOR
         trial, ratios = original_v11_critic_rate(args.original_v11_motion)
         write_frozen(args.output / "original_critic_calibration.json",
@@ -703,7 +743,7 @@ def compare_prior_weight(args):
                     label = "original-mid-weight-"
                 for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
                     references.append((label + arm[1], [release, *arm[1:]]))
-            elif args.study == "generator-motion":
+            elif args.study in ("generator-motion", "lower-generator"):
                 baseline = trial
                 references.append(("calibrated-weight05", paired(baseline)[0]))
                 trial = generator_motion_trial(args.generator_motion, baseline)
@@ -718,8 +758,38 @@ def compare_prior_weight(args):
                         "and both tuned wide-noise controls, then all matched and tuned references, including "
                         "the original releases, on each development cohort and fresh seeds 618–623. Only a "
                         "qualifying candidate goes to the biological holdout on seeds 624–639.")
+                if args.study == "lower-generator":
+                    energy = json.loads(args.generator_energy.read_text())
+                    scores = energy["result"]["scores"]
+                    a, b = scores[key(paired(trial)[0])], scores[key(paired(baseline)[0])]
+                    if (energy["protocol"]["arms"][0] != paired(trial)[0] or len(a) != 9 or len(b) != 9
+                            or trial["lr"] <= baseline["lr"] or mean(a) <= mean(b)
+                            or sum(x > y for x, y in zip(a, b, strict=True)) < 6):
+                        raise ValueError("Expected the higher generator rate to worsen energy on at least six pairs and on average")
+                    lr = round(baseline["lr"] ** 2 / trial["lr"], 4)
+                    trial = dict(baseline, name=baseline["name"] + f"-g{round(lr * 10000)}", lr=lr,
+                                 d_lr_mult=baseline["lr"] * baseline["d_lr_mult"] / lr,
+                                 prior_lr_mult=baseline["lr"] * baseline["prior_lr_mult"] / lr)
+                    independent_seeds, outer_seeds = list(range(684, 690)), list(range(690, 706))
+                    rule = ("Move the fixed generator rate below baseline by the same multiplicative factor "
+                            "as the higher-rate experiment. First beat the baseline and both tuned controls. "
+                            "Then beat every matched and tuned reference separately on both development cohorts "
+                            "and fresh seeds 684–689 before biological holdout seeds 690–705.")
                 for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
                     references.append(("original-generator-rate-" + arm[1], [release, *arm[1:]]))
+        elif args.study == "loss-factorial":
+            baseline = trial
+            trial = loss_factorial(args, baseline)
+            if trial is None:
+                return
+            grid = json.loads((args.output / "loss_factorial.json").read_text())
+            references.extend((label, arm) for label, arm in grid["arms"].items() if arm != paired(trial)[0])
+            references.append(("calibrated-hollow-weight05", grid["references"][0]))
+            for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
+                references.append(("original-loss-factorial-" + arm[1], [release, *arm[1:]]))
+            independent_seeds, outer_seeds = list(range(706, 712)), list(range(712, 728))
+            rule = (grid["rule"] + " Require a win over all matched and tuned references on both development "
+                    "cohorts, then on fresh seeds 706–711 before biological holdout seeds 712–727.")
         elif args.study == "release-loss":
             baseline = trial
             trial = {k: v for k, v in baseline.items() if k not in ("rhbi_self_coupling", "rhbi_relativistic_weight")}
@@ -765,7 +835,7 @@ def compare_prior_weight(args):
                         "and tuned wide-noise controls. Then compare all matched and established arms, including "
                         "original tuned releases, on both development cohorts. Qualify on fresh training seeds "
                         "552–557 with the original releases before the biological holdout on 558–573.")
-        if args.study in ("original-v11-critic-narrow-noise", "critic-interval", "release-loss", *CENTROID_STUDIES):
+        if args.study in ("original-v11-critic-narrow-noise", "critic-interval", "release-loss", "loss-factorial", *CENTROID_STUDIES):
             for arm, release in zip(paired(WIDE_NOISY_PRIOR)[1:], ("0.11.1", "0.10.0"), strict=True):
                 references.append(("original-tuned-" + arm[1], [release, *arm[1:]]))
     elif args.study == "prior-target-spread":
@@ -966,6 +1036,7 @@ def main():
     parser.add_argument("--particle-spread-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_particle_spread.json")
     parser.add_argument("--centroid-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_centroid_gradient.json")
     parser.add_argument("--generator-motion", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_generator_motion.json")
+    parser.add_argument("--generator-energy", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_generator_motion_energy.json")
     parser.add_argument("--original-v11-motion", type=Path, default=ROOT / "paper_watch/notes/neuroko_original_v11_critic_motion.json")
     parser.add_argument("--spread-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_prior_weight_geometry.json")
     parser.add_argument("--shared-screen", type=Path,

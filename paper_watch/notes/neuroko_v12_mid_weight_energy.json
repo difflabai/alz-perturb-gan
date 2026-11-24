@@ -1,0 +1,524 @@
+{
+  "protocol": {
+    "rule": "Test the geometric midpoint of relativistic weights 0.5 and 2 at the fixed role rates. First beat weight 0.5 and both tuned controls on seeds 22\u201324. Then beat the matched and tuned references, including the original releases, on each development cohort and fresh seeds 640\u2013645 before biological holdout seeds 646\u2013661.",
+    "arms": [
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49-rel1",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 1.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49-rel1",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 1.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49-rel1",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "plain-noise",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "matched-v11-alternative",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "matched-empf-alternative",
+          "lr": 0.014,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "v11-incumbent",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "empf-mid",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "empf-tuned",
+          "lr": 0.02,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "hollow-active2",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.25,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.25,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "motion-critic-35",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.25,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "motion-critic-35",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.25,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "motion-critic-35",
+          "lr": 0.014,
+          "d_lr_mult": 0.25,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "motion-critic-46",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "motion-critic-46",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "motion-critic-46",
+          "lr": 0.014,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.041
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.041
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.041
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49-rel5",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 0.5,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49-rel1",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 1.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49-rel1",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.25,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "screen_seeds": [
+      22,
+      23,
+      24
+    ],
+    "independent_seeds": [
+      640,
+      641,
+      642,
+      643,
+      644,
+      645
+    ],
+    "outer_seeds": [
+      646,
+      647,
+      648,
+      649,
+      650,
+      651,
+      652,
+      653,
+      654,
+      655,
+      656,
+      657,
+      658,
+      659,
+      660,
+      661
+    ],
+    "second_screen_seeds": [
+      251,
+      252,
+      253
+    ],
+    "pinned_independent_arms": [
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "matched-v11",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 1.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "matched-empf",
+          "lr": 0.014,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ]
+    ]
+  },
+  "result": {
+    "scores": {
+      "0.12.0/unified_v12/original-v11-critic-49-rel1": [
+        1.179173839451266,
+        0.6181031125191705,
+        0.9942891772262554,
+        1.1113464048265218,
+        0.6108592377792972,
+        0.9765789813386112,
+        1.1889955570468853,
+        0.6195534733919099,
+        1.0570245908431442
+      ],
+      "0.12.0/unified_v12/original-v11-critic-49-rel5": [
+        1.1679777730923204,
+        0.5871318289116323,
+        1.0151189309117918,
+        1.185847770530606,
+        0.5807045927746839,
+        0.9998654230303163,
+        1.2029809198607138,
+        0.5974216721024133,
+        0.9719408448200284
+      ],
+      "0.12.0/unified_v11/noise250-prior100": [
+        1.131282990474319,
+        0.5628406631049345,
+        1.0125469102079956,
+        1.2338240039674975,
+        0.6142560943939468,
+        1.016504427475284,
+        1.1170219582473204,
+        0.5905625402012029,
+        1.047187460033994
+      ],
+      "0.12.0/empf/noise250-prior100": [
+        1.1223464943750359,
+        0.5731292339540484,
+        1.0525022939435076,
+        1.0745143236963988,
+        0.6302151424050741,
+        1.0015550178129418,
+        1.1274244217063474,
+        0.696174307530145,
+        1.0237620003620436
+      ]
+    },
+    "means": {
+      "0.12.0/unified_v12/original-v11-critic-49-rel1": 0.9284360416025624,
+      "0.12.0/unified_v12/original-v11-critic-49-rel5": 0.9232210840038341,
+      "0.12.0/unified_v11/noise250-prior100": 0.9251141164562772,
+      "0.12.0/empf/noise250-prior100": 0.9224025817539492
+    },
+    "passes": false
+  }
+}
