@@ -410,9 +410,13 @@ python paper_watch/scripts/neuroko_rate_noise.py --study matched-critic-motion -
   --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
 ```
 
-At a critic LR of 0.0035, v12's mean energy at 1,200 updates rose from 0.94231 to 0.95185. Four of nine pairs improved. The lower rate helped on average on `Screen1_1` and `Screen1_4` and increased mean energy on `Screen1_3` from 0.5665 to 0.6138. The generated spread ratio rose from 1.125 to 1.200 and the effective covariance dimensions rose from 17.49 to 22.60. The observed cells averaged 17.44 dimensions. The original-rate v12 comparison rules out 0.0035 under this study's criterion.
+At a critic LR of 0.0035, v12's mean energy at 1,200 updates rose from 0.94231 to 0.95185. Four of nine pairs improved. The lower rate helped on average on `Screen1_1` and `Screen1_4` and increased mean energy on `Screen1_3` from 0.5665 to 0.6138. The generated spread ratio rose from 1.125 to 1.200 and the effective covariance dimensions rose from 17.49 to 22.60. The observed cells averaged 17.44 dimensions. The original-rate v12 comparison rules out 0.0035 under this study's criterion. The completed matched controls at 0.0035 scored **0.93381 for v11**, **0.95185 for v12** and **0.96689 for EMPF**. V12 beat EMPF on six of nine pairs and v11 on four. [Matched results and qualification decision](neuroko_v12_calibrated_critic_validation.json)
 
 At 0.0046 with the same prior weight of 0.1, v12 averaged **0.94547** across the nine pairs, compared with **0.94231** at 0.021. It had lower energy at seeds 22 and 23 and higher energy at seed 24 (0.97746 versus 0.93755). Both reduced critic rates missed the original-rate v12 reference at 1,200 updates. [Nine paired scores for each fixed critic rate](neuroko_v12_critic_rate_screen.json)
+
+### Passing the discrete target to the released critic
+
+The benchmark draws a single condition per minibatch and concatenates its one-hot vector to every critic input. An integration check supplied that same category as an explicit integer argument so the ParticleGAN hooks could also read it. The network received the same features and one-hot values in both cases. On seed 22, we repeated the first 64 updates for v12, v11 and EMPF on each of two training groups, one per GPU. All six comparisons produced identical final parameter hashes. The hooks captured the explicit category, and the continuous-condition path stayed inactive. Both Unified models also reproduced the previously recorded initialization, minibatch and final parameter hashes. The check covers the first 64 updates. [Per-model hashes, probe counts and condition capture](neuroko_v12_discrete_condition_check.json)
 
 ### Particle gradients under the smaller critic update
 

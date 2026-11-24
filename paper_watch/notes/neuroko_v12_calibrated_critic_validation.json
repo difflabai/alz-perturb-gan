@@ -1,0 +1,401 @@
+{
+  "protocol": {
+    "rule": "Divide the release critic LR 0.021 by the median v12-to-v11 centered critic displacement ratio across nine paired 64-update training probes, rounding to 0.0001. Keep this single rate fixed for all 1200 updates. Keep generator 0.014, particles 0.0406, noise 0.15 and prior weight 0.1. Give v11 and EMPF the same calibrated critic LR. Require v12 to beat every reference, including all three original-rate models, separately on development seeds 22\u201324 and 251\u2013253, then on six fresh seeds 272\u2013277 including the original v11 and EMPF. Only then score the frozen candidate on outer seeds 348\u2013363.",
+    "arms": [
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "motion-critic-35",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.25,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "motion-critic-35",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.25,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "motion-critic-35",
+          "lr": 0.014,
+          "d_lr_mult": 0.25,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "plain-noise",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "matched-v11-alternative",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "matched-empf-alternative",
+          "lr": 0.014,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "v11-incumbent",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "empf-mid",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "empf-tuned",
+          "lr": 0.02,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "hollow-active2",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "noise150-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "screen_seeds": [
+      22,
+      23,
+      24
+    ],
+    "independent_seeds": [
+      272,
+      273,
+      274,
+      275,
+      276,
+      277
+    ],
+    "outer_seeds": [
+      348,
+      349,
+      350,
+      351,
+      352,
+      353,
+      354,
+      355,
+      356,
+      357,
+      358,
+      359,
+      360,
+      361,
+      362,
+      363
+    ],
+    "second_screen_seeds": [
+      251,
+      252,
+      253
+    ],
+    "pinned_independent_arms": [
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "matched-v11",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.25,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "matched-empf",
+          "lr": 0.014,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.25,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "critic_calibration": {
+      "measured_median_ratio": 6.060085927704044,
+      "reference_critic_lr": 0.021,
+      "fixed_critic_lr": 0.0035
+    }
+  },
+  "decision": {
+    "screening": {
+      "scores": {
+        "0.12.0/unified_v12/motion-critic-35": [
+          1.1358800179834165,
+          0.631057289723929,
+          1.0598160725747487,
+          1.2039170874366016,
+          0.6172819648713324,
+          1.0424255942469165,
+          1.2088046938775718,
+          0.5931025274643145,
+          1.0743613642560563
+        ],
+        "0.12.0/unified_v11/motion-critic-35": [
+          1.1979437273934146,
+          0.5868122850320976,
+          0.9978676521928451,
+          1.2052649668140933,
+          0.617208855328633,
+          0.964596072795262,
+          1.234766947675049,
+          0.6027876603453464,
+          0.9970833406551025
+        ],
+        "0.12.0/empf/motion-critic-35": [
+          1.294930216178793,
+          0.7103686612538165,
+          1.005292147542807,
+          1.247212865375543,
+          0.7121049028307556,
+          0.9234321869631621,
+          1.0647364512758601,
+          0.6118845391576011,
+          1.1320335322983586
+        ],
+        "0.12.0/unified_v12/plain-noise": [
+          1.17884786519768,
+          0.5648771282767884,
+          1.0329962388034866,
+          1.2275611745330945,
+          0.5815057461639714,
+          1.12278160112735,
+          1.2461855369115213,
+          0.6945613220125326,
+          1.1116334124158014
+        ],
+        "0.12.0/unified_v11/matched-v11-alternative": [
+          1.1330670040148803,
+          0.6077507236637376,
+          1.0292283667157296,
+          1.2448219975013224,
+          0.5814439092257706,
+          1.0862559617269276,
+          1.2174422498832596,
+          0.6138942721075602,
+          1.041059824820531
+        ],
+        "0.12.0/empf/matched-empf-alternative": [
+          1.149941466775527,
+          0.6476141158032427,
+          1.0234849964719444,
+          1.169228626139106,
+          0.6694431762719462,
+          0.9696531092917879,
+          1.245671787709307,
+          0.6402961249498051,
+          0.9998133341233455
+        ],
+        "0.12.0/unified_v11/v11-incumbent": [
+          1.1389971164824169,
+          0.6016461934139661,
+          1.0128671365111015,
+          1.2238445507370959,
+          0.5925522123970821,
+          1.1029358644430127,
+          1.2033830113073747,
+          0.6063102507802844,
+          1.0336669174991528
+        ],
+        "0.12.0/empf/empf-mid": [
+          1.1663399590133035,
+          0.6666319626888468,
+          1.0315221926324754,
+          1.1746786209872662,
+          0.6909557335511292,
+          1.0846422744570807,
+          1.215052223927393,
+          0.6630796911001664,
+          1.0566455769978547
+        ],
+        "0.12.0/empf/empf-tuned": [
+          1.169102290242516,
+          0.6771855243785505,
+          1.0395135064196268,
+          1.179315984257672,
+          0.6896813070881846,
+          1.0224795026570435,
+          1.1935871811228234,
+          0.5729527500692384,
+          1.1490780535893907
+        ],
+        "0.12.0/unified_v12/hollow-active2": [
+          1.22305246191491,
+          0.5813974604523715,
+          1.092569140456169,
+          1.2209104271151088,
+          0.6026240725837977,
+          1.1187960188995034,
+          1.2740923218744633,
+          0.5527630999808795,
+          1.0903032500502159
+        ],
+        "0.12.0/unified_v12/noise150-prior100": [
+          1.1558245879047615,
+          0.582786368766701,
+          1.106730401963502,
+          1.2369916829798506,
+          0.5376268147660306,
+          1.0481554259654402,
+          1.20568798533048,
+          0.5790882342441512,
+          1.0278612823316216
+        ],
+        "0.12.0/unified_v11/noise150-prior100": [
+          1.2634637985084134,
+          0.653527497220239,
+          1.0509979184250189,
+          1.171171714028166,
+          0.6169335825509652,
+          1.0299508505671373,
+          1.2466149387027703,
+          0.6147466833478679,
+          1.060181409239661
+        ],
+        "0.12.0/empf/noise150-prior100": [
+          1.2535926404500655,
+          0.6929577582446813,
+          1.0428423936342026,
+          1.1664357412532864,
+          0.6048908571528739,
+          1.0293422191940769,
+          1.151284089197896,
+          0.7036477171570692,
+          0.9214661064221081
+        ]
+      },
+      "means": {
+        "0.12.0/unified_v12/motion-critic-35": 0.9518496236038764,
+        "0.12.0/unified_v11/motion-critic-35": 0.9338146120257604,
+        "0.12.0/empf/motion-critic-35": 0.9668883892085218,
+        "0.12.0/unified_v12/plain-noise": 0.9734388917158029,
+        "0.12.0/unified_v11/matched-v11-alternative": 0.950551589962191,
+        "0.12.0/empf/matched-empf-alternative": 0.9461274152817791,
+        "0.12.0/unified_v11/v11-incumbent": 0.9462448059523875,
+        "0.12.0/empf/empf-mid": 0.9721720261506128,
+        "0.12.0/empf/empf-tuned": 0.9658773444250051,
+        "0.12.0/unified_v12/hollow-active2": 0.9729453614808243,
+        "0.12.0/unified_v12/noise150-prior100": 0.9423058649169488,
+        "0.12.0/unified_v11/noise150-prior100": 0.9675098213989155,
+        "0.12.0/empf/noise150-prior100": 0.9518288358562511
+      },
+      "passes": false
+    },
+    "advances": false,
+    "winner": null
+  }
+}

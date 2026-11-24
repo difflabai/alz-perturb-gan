@@ -1,0 +1,181 @@
+{
+  "release": "0.12.0",
+  "generator_lr": 0.014,
+  "critic_lr": 0.021,
+  "particle_lr": 0.0406,
+  "noise_sigma": 0.15,
+  "prior_weight": 0.1,
+  "seed": 22,
+  "steps": 64,
+  "method": "For the buffered condition, call the original critic. For the explicit integer condition, supply the batch condition index as the second positional argument in a forward pre-hook and reconstruct the same one-hot inside the critic. Leave GANTrainer, its loss and optimizers, the network parameters, the generator condition buffer, and the real minibatches unchanged. For each pair compare initial, final and minibatch hashes, check rates after every update, verify the critic logits against the original one-hot computation, and inspect the release hooks for category capture.",
+  "cells": [
+    {
+      "seed": 22,
+      "group": "Screen1_1",
+      "physical_gpu": "0",
+      "steps": 64,
+      "data_hash": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "results": {
+        "unified_v12": {
+          "buffer": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "f851122f99e415b5cafd86931755891ae718d1fbd36532cb4334ce9ded0486fc",
+            "batches": "fa4b1c369a070f880fbd750f0483c7e0cacf863732841e8807a4b69d13761a2a",
+            "g_probes": 64,
+            "d_probes": 0,
+            "categorical_captured": false,
+            "continuous_fiber": false,
+            "loss_class": "UnifiedV11GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "integer_arg": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "f851122f99e415b5cafd86931755891ae718d1fbd36532cb4334ce9ded0486fc",
+            "batches": "fa4b1c369a070f880fbd750f0483c7e0cacf863732841e8807a4b69d13761a2a",
+            "g_probes": 64,
+            "d_probes": 0,
+            "categorical_captured": true,
+            "continuous_fiber": false,
+            "loss_class": "UnifiedV11GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "parameters_equal": true
+        },
+        "unified_v11": {
+          "buffer": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "cd1cb74514c0d825772d9956633573965a688cf3b46f832e98022c88e50f78eb",
+            "batches": "fa4b1c369a070f880fbd750f0483c7e0cacf863732841e8807a4b69d13761a2a",
+            "g_probes": 64,
+            "d_probes": 64,
+            "categorical_captured": false,
+            "continuous_fiber": false,
+            "loss_class": "UnifiedV11GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "integer_arg": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "cd1cb74514c0d825772d9956633573965a688cf3b46f832e98022c88e50f78eb",
+            "batches": "fa4b1c369a070f880fbd750f0483c7e0cacf863732841e8807a4b69d13761a2a",
+            "g_probes": 64,
+            "d_probes": 0,
+            "categorical_captured": true,
+            "continuous_fiber": false,
+            "loss_class": "UnifiedV11GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "parameters_equal": true
+        },
+        "empf": {
+          "buffer": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "1b397c95435280fd6d32933e953b8ae6af0af7c2b2d26f199610cbdeb0689611",
+            "batches": "fa4b1c369a070f880fbd750f0483c7e0cacf863732841e8807a4b69d13761a2a",
+            "g_probes": null,
+            "d_probes": null,
+            "categorical_captured": false,
+            "continuous_fiber": false,
+            "loss_class": "GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "integer_arg": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "1b397c95435280fd6d32933e953b8ae6af0af7c2b2d26f199610cbdeb0689611",
+            "batches": "fa4b1c369a070f880fbd750f0483c7e0cacf863732841e8807a4b69d13761a2a",
+            "g_probes": null,
+            "d_probes": null,
+            "categorical_captured": true,
+            "continuous_fiber": false,
+            "loss_class": "GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "parameters_equal": true
+        }
+      }
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_3",
+      "physical_gpu": "1",
+      "steps": 64,
+      "data_hash": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "results": {
+        "unified_v12": {
+          "buffer": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "b0b55dc5998a6b9c751baec09c1a71b2d7975de5534583429d1dbe88b991be20",
+            "batches": "a74bcc8ec8a72977119c23263e889a82db38a15115b54d17b525d363ec39dc4c",
+            "g_probes": 64,
+            "d_probes": 0,
+            "categorical_captured": false,
+            "continuous_fiber": false,
+            "loss_class": "UnifiedV11GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "integer_arg": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "b0b55dc5998a6b9c751baec09c1a71b2d7975de5534583429d1dbe88b991be20",
+            "batches": "a74bcc8ec8a72977119c23263e889a82db38a15115b54d17b525d363ec39dc4c",
+            "g_probes": 64,
+            "d_probes": 0,
+            "categorical_captured": true,
+            "continuous_fiber": false,
+            "loss_class": "UnifiedV11GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "parameters_equal": true
+        },
+        "unified_v11": {
+          "buffer": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "3c748805349ed67fa83e51d7e3f8615a89de9150d249305f41955b22f60bf8c0",
+            "batches": "a74bcc8ec8a72977119c23263e889a82db38a15115b54d17b525d363ec39dc4c",
+            "g_probes": 64,
+            "d_probes": 64,
+            "categorical_captured": false,
+            "continuous_fiber": false,
+            "loss_class": "UnifiedV11GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "integer_arg": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "3c748805349ed67fa83e51d7e3f8615a89de9150d249305f41955b22f60bf8c0",
+            "batches": "a74bcc8ec8a72977119c23263e889a82db38a15115b54d17b525d363ec39dc4c",
+            "g_probes": 64,
+            "d_probes": 0,
+            "categorical_captured": true,
+            "continuous_fiber": false,
+            "loss_class": "UnifiedV11GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "parameters_equal": true
+        },
+        "empf": {
+          "buffer": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "530ac02676566a4c6e051f97a741733edf4b9486638fd679b035f614cf3edcd1",
+            "batches": "a74bcc8ec8a72977119c23263e889a82db38a15115b54d17b525d363ec39dc4c",
+            "g_probes": null,
+            "d_probes": null,
+            "categorical_captured": false,
+            "continuous_fiber": false,
+            "loss_class": "GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "integer_arg": {
+            "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+            "final": "530ac02676566a4c6e051f97a741733edf4b9486638fd679b035f614cf3edcd1",
+            "batches": "a74bcc8ec8a72977119c23263e889a82db38a15115b54d17b525d363ec39dc4c",
+            "g_probes": null,
+            "d_probes": null,
+            "categorical_captured": true,
+            "continuous_fiber": false,
+            "loss_class": "GANLoss",
+            "loss_name": "non_saturating"
+          },
+          "parameters_equal": true
+        }
+      }
+    }
+  ]
+}
