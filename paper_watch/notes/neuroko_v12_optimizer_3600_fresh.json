@@ -62,7 +62,7 @@
       }
     }
   },
-  "completed_pairs": 3,
+  "completed_pairs": 6,
   "expected_pairs": 18,
   "cells": [
     {
@@ -349,6 +349,294 @@
             "SLC2A4RG": 1.0129098849873106,
             "PLEKHA1": 0.9055813903527756,
             "MAMSTR": 1.0270139864568053
+          }
+        }
+      }
+    },
+    {
+      "seed": 840,
+      "group": "Screen1_3",
+      "gpu": 1,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6334458270503409,
+            "spread_ratio": 1.2740101864234752,
+            "effective_rank": 22.31720965319346
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6612255197204497,
+            "spread_ratio": 1.3556799467025245,
+            "effective_rank": 22.60448437952566
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6610394906397272,
+            "spread_ratio": 1.3553390196647352,
+            "effective_rank": 22.61306484068106
+          }
+        ],
+        "same_wheel_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.603993570539975,
+            "spread_ratio": 1.2523537142255308,
+            "effective_rank": 20.980405066287037
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6247948153105491,
+            "spread_ratio": 1.301977210705027,
+            "effective_rank": 21.72030201068489
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6240723507695864,
+            "spread_ratio": 1.3782955061263205,
+            "effective_rank": 17.75258921304594
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initialization": "93f1b759f4b43c9ca477581f345ee5daee71887202ee559951318d5b98603e06",
+        "training_batches": [
+          "ae94f88e128fa259ade7f7d3b3c869e77491764fe2e2e2e22ca5c400776f1aeb",
+          "622d2c48ef008466b0e4c6e2196872ee630713b6ec11dcc68eda5efc6842fd3f",
+          "0f97a7b09f10726bac90329f79f35fc878a3b284c59ad63feb17e33136ca2b61"
+        ]
+      },
+      "training": {
+        "v12": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v12_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 257.03087723301724,
+          "endpoint_target_energy": {
+            "GLCCI1": 0.6907681549770031,
+            "SLC2A4RG": 0.6511321559321557,
+            "PLEKHA1": 0.6700537029704332,
+            "MAMSTR": 0.632203948679317
+          }
+        },
+        "same_wheel_v11": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v11_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 346.60735303605907,
+          "endpoint_target_energy": {
+            "GLCCI1": 0.6484809608973139,
+            "SLC2A4RG": 0.6212897223091618,
+            "PLEKHA1": 0.6388110739483865,
+            "MAMSTR": 0.5877076459234836
+          }
+        }
+      }
+    },
+    {
+      "seed": 841,
+      "group": "Screen1_1",
+      "gpu": 1,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1213530106927219,
+            "spread_ratio": 1.274509816654072,
+            "effective_rank": 22.43402843069358
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.203835288860734,
+            "spread_ratio": 1.2857438098554679,
+            "effective_rank": 23.088673182115098
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.1327825226726158,
+            "spread_ratio": 1.2527918137625642,
+            "effective_rank": 21.949729870477082
+          }
+        ],
+        "same_wheel_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1436948365098343,
+            "spread_ratio": 1.2441675357587838,
+            "effective_rank": 21.86339821516109
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.1183171598940431,
+            "spread_ratio": 1.2636499695788195,
+            "effective_rank": 21.764928087157628
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.1506967867136666,
+            "spread_ratio": 1.2893535933895302,
+            "effective_rank": 22.199086939359034
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initialization": "2d9195f2a258a5e8d27c69777a114ab5deb0b6501e8ad6c8a3e7e24a501dc227",
+        "training_batches": [
+          "f8d1618200b3ceb636e1c3c5e4367453a89da487d4fbfd78ad6bacbba581c8aa",
+          "e8c0724bae4e8e966ee036d3a85c585894bd524a776350d64a0fcd5cfb08fc3b",
+          "4e8b6dd3e53c3c13f54e5c08351c430e0d0694b993d1567b0449f2d38172580a"
+        ]
+      },
+      "training": {
+        "v12": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v12_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 314.12886565201916,
+          "endpoint_target_energy": {
+            "GLCCI1": 1.2526991101327223,
+            "SLC2A4RG": 1.0145965904252625,
+            "PLEKHA1": 1.1705181308018213,
+            "MAMSTR": 1.0933162593306571
+          }
+        },
+        "same_wheel_v11": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v11_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 431.0593178810086,
+          "endpoint_target_energy": {
+            "GLCCI1": 1.2140145784791443,
+            "SLC2A4RG": 1.0953473044984445,
+            "PLEKHA1": 1.252652086153252,
+            "MAMSTR": 1.0407731777238256
+          }
+        }
+      }
+    },
+    {
+      "seed": 841,
+      "group": "Screen1_4",
+      "gpu": 1,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.0109694491075567,
+            "spread_ratio": 1.0409111064566212,
+            "effective_rank": 22.41323730312508
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.0921996110854868,
+            "spread_ratio": 1.0601987984165444,
+            "effective_rank": 22.86740739472907
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.0305757423543154,
+            "spread_ratio": 1.055754865468795,
+            "effective_rank": 22.260736510545687
+          }
+        ],
+        "same_wheel_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.9863931760130256,
+            "spread_ratio": 1.020280809986826,
+            "effective_rank": 21.852039522109088
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.03440582802882,
+            "spread_ratio": 1.0769545940636043,
+            "effective_rank": 22.247019122361998
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.9773506455572865,
+            "spread_ratio": 1.0602881185188533,
+            "effective_rank": 22.275915834574192
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initialization": "2d9195f2a258a5e8d27c69777a114ab5deb0b6501e8ad6c8a3e7e24a501dc227",
+        "training_batches": [
+          "8d702dfae016943c3b7db31fa8cac1a70718b149f6e3e76906af26c64c519a49",
+          "bc364b60083306b221d37a5bf23617d1abb2a087487bccf03e7e467256d7295a",
+          "a6f3aa50cabc0ee35fa1267330844d546c8d02eef526993d87a1bc1183f7a610"
+        ]
+      },
+      "training": {
+        "v12": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v12_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 321.1400455981493,
+          "endpoint_target_energy": {
+            "GLCCI1": 1.0055381727802528,
+            "SLC2A4RG": 1.1084345718187123,
+            "PLEKHA1": 0.955012130796888,
+            "MAMSTR": 1.0533180940214084
+          }
+        },
+        "same_wheel_v11": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v11_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 468.4834391048644,
+          "endpoint_target_energy": {
+            "GLCCI1": 0.9555710432967564,
+            "SLC2A4RG": 1.017239938263458,
+            "PLEKHA1": 0.9146471454897434,
+            "MAMSTR": 1.021944455179188
           }
         }
       }
