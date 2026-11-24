@@ -801,6 +801,8 @@ Calibrated v12 produced variation in more covariance dimensions than tuned origi
 
 On seeds 22–24, increasing the v12 critic LR from 0.0049 to 0.0071 at weight 2 reduced mean absolute rank error from 4.80 to 3.74 with nearly identical energy (0.92850 and 0.92853). Separately, lowering the weight to 0.5 at critic LR 0.0049 reduced energy to 0.92322 and absolute log spread error from 0.180 to 0.141. The study combines the two changes and measures their interaction on both development cohorts. It holds the generator LR at 0.014, particle LR at 0.0406, latent noise at 0.15 and prior coefficient at 0.1.
 
+On seeds 22–24 the combined setting scored 0.95105. Lowering the relativistic weight from 2 to 0.5 improved mean energy by 0.00528 at critic LR 0.0049 and worsened it by 0.02252 at critic LR 0.0071. The two changes therefore failed the first-cohort qualification rule. Tuned original EMPF scored 0.92240. [First-cohort means and per-pair interaction](neuroko_v12_critic_weight_first.json)
+
 The combined setting must beat the three other combinations and the controls tuned on each wheel on both cohorts. A qualifying candidate proceeds to fresh seeds 772–777 and then to biological holdout seeds 778–793 if it still leads.
 
 ```bash
