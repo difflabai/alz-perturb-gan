@@ -1,7 +1,7 @@
 {
   "status": "partial",
   "expected_pairs": 18,
-  "completed_pairs": 16,
+  "completed_pairs": 17,
   "protocol": {
     "arms": {
       "v12": [
@@ -2197,6 +2197,156 @@
       "new_fit_seconds": 337.0138644450344
     },
     {
+      "seed": 842,
+      "group": "Screen1_4",
+      "gpu": 0,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.034405891051812,
+            "spread_ratio": 1.059846939660406,
+            "effective_rank": 22.962826780648
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.0348386089056725,
+            "spread_ratio": 1.1212833441082921,
+            "effective_rank": 22.45424481600924
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.0348893417735052,
+            "spread_ratio": 1.1210831327043098,
+            "effective_rank": 22.458963664337162
+          }
+        ],
+        "tuned_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.9690075705318217,
+            "spread_ratio": 1.0014453773097645,
+            "effective_rank": 16.879777788839643
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.0654205635560248,
+            "spread_ratio": 1.0355180097048882,
+            "effective_rank": 17.728830168982917
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.0354493611110833,
+            "spread_ratio": 1.162767280844724,
+            "effective_rank": 16.49901652718149
+          }
+        ],
+        "tuned_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.9841007301790952,
+            "spread_ratio": 0.9949013590897477,
+            "effective_rank": 22.863017622945506
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.9704888251007706,
+            "spread_ratio": 1.0297044159299045,
+            "effective_rank": 21.98343659474303
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.0132578697530927,
+            "spread_ratio": 1.0252783781834391,
+            "effective_rank": 21.1990773118287
+          }
+        ],
+        "matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.0969348646417445,
+            "spread_ratio": 1.0042639409153091,
+            "effective_rank": 8.04631015615682
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.9067139124469634,
+            "spread_ratio": 1.07997742898915,
+            "effective_rank": 14.30174580392373
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.9015787037770671,
+            "spread_ratio": 1.0969406150211434,
+            "effective_rank": 16.347724175157328
+          }
+        ],
+        "matched_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.9770226102862993,
+            "spread_ratio": 1.0124506409430996,
+            "effective_rank": 22.47378197221305
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.0467503328124075,
+            "spread_ratio": 1.0180605296764054,
+            "effective_rank": 22.33281532562691
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.0419542707941967,
+            "spread_ratio": 1.0117966825476947,
+            "effective_rank": 20.135134419261213
+          }
+        ],
+        "native_matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.989134503595108,
+            "spread_ratio": 1.0621688857005671,
+            "effective_rank": 14.22379746609684
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.1191931681918221,
+            "spread_ratio": 1.1022238479345143,
+            "effective_rank": 17.057135094113395
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.0557939202535829,
+            "spread_ratio": 1.086344569517276,
+            "effective_rank": 18.125428765710573
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initialization": "e5c9efd0e21ca1b6d74754ec7e233294f7023937d6131613cec054834bb0b1a3",
+        "training_batches": [
+          "f04aa86adb2dbfa2621c4531aff8f447ba0776caf21bdd5b02d7870d4f727a5b",
+          "720a04ca76182d91e14ea306a845993a89d01e3ee8e99105b1ea99e2334d715a",
+          "18715cd9200e159c3633a07147b921deeaf90b899667953fce1c585b8b2a8e04"
+        ]
+      },
+      "measured_empf_smoothing": {
+        "generator_and_particles": 0.0061,
+        "critic": 0.0061
+      },
+      "rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "verified_new_optimizer_steps": {
+        "generator_and_particles": 3600,
+        "critic": 3600
+      },
+      "new_fit_seconds": 492.4304448638577
+    },
+    {
       "seed": 843,
       "group": "Screen1_1",
       "gpu": 1,
@@ -2667,6 +2817,18 @@
       }
     },
     {
+      "seed": 842,
+      "group": "Screen1_4",
+      "gpu": 0,
+      "fit_seconds": {
+        "v12": 466.3316540250089,
+        "tuned_empf": 447.78104581008665,
+        "tuned_v11": 534.190678270068,
+        "matched_empf": 492.4304448638577,
+        "matched_v11": 525.0952368832659
+      }
+    },
+    {
       "seed": 843,
       "group": "Screen1_1",
       "gpu": 1,
@@ -2818,6 +2980,38 @@
         0.9782604062306661,
         0.9854567865057664,
         1.030971348642618
+      ]
+    },
+    "842": {
+      "v12": [
+        0.9670683148833805,
+        0.9313372781706916,
+        0.9195815922202165
+      ],
+      "tuned_empf": [
+        0.9099111888259583,
+        0.9818706286529717,
+        0.9659699965451413
+      ],
+      "tuned_v11": [
+        0.9307701660343155,
+        0.94613959220157,
+        0.9337155575964243
+      ],
+      "matched_empf": [
+        1.0280754925115207,
+        0.9229372606196209,
+        0.947464816611736
+      ],
+      "matched_v11": [
+        0.9478536770781711,
+        0.9769957135561425,
+        0.9748398291899495
+      ],
+      "native_matched_empf": [
+        0.9416695570727883,
+        1.0370171645483572,
+        1.0203395095588474
       ]
     }
   }

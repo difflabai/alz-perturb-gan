@@ -229,6 +229,8 @@ python paper_watch/scripts/neuroko_convergence.py --shared-smoothing-from "$data
   --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-smoothing-0.001-40000"
 ```
 
+On the two completed v12 seeds, smoothing 0.001 gave a lower mean energy at 40,000 (1.13787 versus 1.15122 at 0.0061). Smoothing 0.0061 gave a lower mean across the final 10,000 updates on both seeds and an endpoint covariance rank closer to the observed 18.23 (16.55 versus 11.78). [Per-seed smoothing comparison](notes/neuroko_v12_smoothing_sensitivity_40000.json)
+
 Append `--report-completed` to a convergence command to inspect its finished group–seed pairs during or after training. It reads and verifies the saved fits and prints JSON. Each pair includes checkpoint energies, per-target endpoint scores, fixed learning rates, optimizer step counts and training time in seconds on the recorded GPU. For 40,000-update runs it also reports the time-weighted late mean for each fit. The overall means appear once all planned pairs are available.
 
 #### Copy-paste prompt for the stronger-prior v12 comparison
