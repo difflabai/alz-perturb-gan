@@ -1,0 +1,381 @@
+{
+  "method": "Measured elapsed wall time inside the training loop of 18 independently reserved group\u2013seed pairs per release, CUDA synchronized before and after fitting. Data setup and final evaluation are outside the timer. The three formulations used the same physical A6000 per pair and ran under concurrent GPU workloads at different times. Ratios are calculated within each pair. These timings describe the realized runs.",
+  "seeds": [
+    524,
+    525,
+    526,
+    527,
+    528,
+    529
+  ],
+  "groups": [
+    "Screen1_1",
+    "Screen1_3",
+    "Screen1_4"
+  ],
+  "updates": 1200,
+  "arms": {
+    "0.10.0_empf": [
+      "0.10.0",
+      "empf",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.1
+      }
+    ],
+    "0.11.1_unified_v11": [
+      "0.11.1",
+      "unified_v11",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    "0.12.0_unified_v12": [
+      "0.12.0",
+      "unified_v12",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ]
+  },
+  "summary": {
+    "0.10.0_empf": {
+      "median_seconds": 196.83548773743678,
+      "median_updates_per_second": 6.532517332830402,
+      "median_paired_time_over_v12": 1.750795471989955,
+      "pairs_slower_than_v12": 16,
+      "median_seconds_by_gpu": {
+        "0": 326.16745106014423,
+        "1": 98.89057495887391
+      }
+    },
+    "0.11.1_unified_v11": {
+      "median_seconds": 172.9544231304899,
+      "median_updates_per_second": 7.425442784967711,
+      "median_paired_time_over_v12": 1.5091676255323296,
+      "pairs_slower_than_v12": 18,
+      "median_seconds_by_gpu": {
+        "0": 231.13421269715764,
+        "1": 106.31374222505838
+      }
+    },
+    "0.12.0_unified_v12": {
+      "median_seconds": 108.6969559234567,
+      "median_updates_per_second": 11.452485988642444,
+      "median_paired_time_over_v12": 1.0,
+      "pairs_slower_than_v12": 0,
+      "median_seconds_by_gpu": {
+        "0": 140.9453646459151,
+        "1": 83.82111969590187
+      }
+    }
+  },
+  "pairs": [
+    {
+      "seed": 524,
+      "group": "Screen1_1",
+      "inputs": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "6cdf69850f3417cdad28ac95c8d325cb445cb0241d167d090fcf26505edddee0",
+        "training_batches_sha256": "f2192850745f35f1cf4f8d13bde6e239df646acd0af589edbc48ab60cf457cbe",
+        "visible_devices": "0",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 284.4882062380202,
+        "0.11.1_unified_v11": 226.82529055792838,
+        "0.12.0_unified_v12": 161.5974196959287
+      }
+    },
+    {
+      "seed": 524,
+      "group": "Screen1_3",
+      "inputs": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "6cdf69850f3417cdad28ac95c8d325cb445cb0241d167d090fcf26505edddee0",
+        "training_batches_sha256": "4dcd82ce0fc6eee4ab90d21d85d45599866c3a96879e86b05bd2e2fd19e2895a",
+        "visible_devices": "1",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 84.67509707901627,
+        "0.11.1_unified_v11": 128.6523995550815,
+        "0.12.0_unified_v12": 82.07377192890272
+      }
+    },
+    {
+      "seed": 524,
+      "group": "Screen1_4",
+      "inputs": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "6cdf69850f3417cdad28ac95c8d325cb445cb0241d167d090fcf26505edddee0",
+        "training_batches_sha256": "5c517577872fd38281c3e70eab277582f4b8951d32ff799f3cc8e95273afee05",
+        "visible_devices": "0",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 311.91568573913537,
+        "0.11.1_unified_v11": 241.54543502582237,
+        "0.12.0_unified_v12": 143.09743897407316
+      }
+    },
+    {
+      "seed": 525,
+      "group": "Screen1_1",
+      "inputs": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "41be103e1e0588b463b8447c453085718a4314d5da8a7bf3ee3198ee74b1c2d5",
+        "training_batches_sha256": "0bcdb39fc7b8c07a18f700a99c26514b5f56b2def750ced770d3d2c9e0412cd2",
+        "visible_devices": "1",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 83.44044807809405,
+        "0.11.1_unified_v11": 106.31374222505838,
+        "0.12.0_unified_v12": 81.71493519889191
+      }
+    },
+    {
+      "seed": 525,
+      "group": "Screen1_3",
+      "inputs": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "41be103e1e0588b463b8447c453085718a4314d5da8a7bf3ee3198ee74b1c2d5",
+        "training_batches_sha256": "71cada3cd3f437ddd87902288de7e72b9d3bd137efbd933b6aa89f82b8c4b734",
+        "visible_devices": "0",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 343.36875553498976,
+        "0.11.1_unified_v11": 227.9934344519861,
+        "0.12.0_unified_v12": 142.07858568709344
+      }
+    },
+    {
+      "seed": 525,
+      "group": "Screen1_4",
+      "inputs": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "41be103e1e0588b463b8447c453085718a4314d5da8a7bf3ee3198ee74b1c2d5",
+        "training_batches_sha256": "f2cdcac850940edc2bc100741ecd21035596719295812c4712e806afdcd8b573",
+        "visible_devices": "1",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 82.03691398096271,
+        "0.11.1_unified_v11": 97.9416703209281,
+        "0.12.0_unified_v12": 83.82111969590187
+      }
+    },
+    {
+      "seed": 526,
+      "group": "Screen1_1",
+      "inputs": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "d1c4d6d979eec0e898494af15b6016e451f7bc0fd02d307deebd7d13483f3695",
+        "training_batches_sha256": "de6667a5480b4e1bc336c47b4621b909c536afc31b9f7c38e1fe01ddc1532a13",
+        "visible_devices": "0",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 367.8216172689572,
+        "0.11.1_unified_v11": 231.13421269715764,
+        "0.12.0_unified_v12": 140.9453646459151
+      }
+    },
+    {
+      "seed": 526,
+      "group": "Screen1_3",
+      "inputs": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "d1c4d6d979eec0e898494af15b6016e451f7bc0fd02d307deebd7d13483f3695",
+        "training_batches_sha256": "e68eb918257b6db14e13fa18eaf60c39f757967c0004e9c203d437be9f4773d5",
+        "visible_devices": "1",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 87.85011498210952,
+        "0.11.1_unified_v11": 99.51138845901005,
+        "0.12.0_unified_v12": 88.06493375077844
+      }
+    },
+    {
+      "seed": 526,
+      "group": "Screen1_4",
+      "inputs": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "d1c4d6d979eec0e898494af15b6016e451f7bc0fd02d307deebd7d13483f3695",
+        "training_batches_sha256": "2dcf4e4bd9be5d45467ba5091199a3a163fdd9fc6422265e7b7999274089ebc0",
+        "visible_devices": "0",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 373.3312185117975,
+        "0.11.1_unified_v11": 231.1943556109909,
+        "0.12.0_unified_v12": 129.32897809613496
+      }
+    },
+    {
+      "seed": 527,
+      "group": "Screen1_1",
+      "inputs": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "13f3de11377e349a63bcc03ed80c168e3b728b8de66c4fc61d0800285e7811b5",
+        "training_batches_sha256": "7bdb3424aa4a8991859d0770a783447a19fcd93d1bb1622377f1cf2bcc631aae",
+        "visible_devices": "1",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 98.89057495887391,
+        "0.11.1_unified_v11": 90.93893934902735,
+        "0.12.0_unified_v12": 84.80545444996096
+      }
+    },
+    {
+      "seed": 527,
+      "group": "Screen1_3",
+      "inputs": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "13f3de11377e349a63bcc03ed80c168e3b728b8de66c4fc61d0800285e7811b5",
+        "training_batches_sha256": "969d0560f9d89bf87848c28402e0a5e961c842431ef5b4f258ccb116573a2a27",
+        "visible_devices": "0",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 357.46589143783785,
+        "0.11.1_unified_v11": 231.88385797501542,
+        "0.12.0_unified_v12": 139.44610009994358
+      }
+    },
+    {
+      "seed": 527,
+      "group": "Screen1_4",
+      "inputs": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "13f3de11377e349a63bcc03ed80c168e3b728b8de66c4fc61d0800285e7811b5",
+        "training_batches_sha256": "202f28fafe0bff6ab11efe8ef0fc9680c6c8aeddc88defe6ffbf166d7308563d",
+        "visible_devices": "1",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 112.13472826592624,
+        "0.11.1_unified_v11": 100.90080081811175,
+        "0.12.0_unified_v12": 85.30014378996566
+      }
+    },
+    {
+      "seed": 528,
+      "group": "Screen1_1",
+      "inputs": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "ba01bf3e211d2a515d4a66a7856d40b0a2e4b140f55e88fa8014e1660197e717",
+        "training_batches_sha256": "b2c00e94a51f8f4e26688f50135eadcfe956975c27e7890849726ca9098e15ac",
+        "visible_devices": "0",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 326.16745106014423,
+        "0.11.1_unified_v11": 232.47663937998004,
+        "0.12.0_unified_v12": 137.0569090130739
+      }
+    },
+    {
+      "seed": 528,
+      "group": "Screen1_3",
+      "inputs": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "ba01bf3e211d2a515d4a66a7856d40b0a2e4b140f55e88fa8014e1660197e717",
+        "training_batches_sha256": "be9fd4fe39f52084d85d25e456958eb75175a3a802c4a867dd83ca9e6a6a1a03",
+        "visible_devices": "1",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 130.99361934605986,
+        "0.11.1_unified_v11": 116.88100168202072,
+        "0.12.0_unified_v12": 82.56954667391255
+      }
+    },
+    {
+      "seed": 528,
+      "group": "Screen1_4",
+      "inputs": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "ba01bf3e211d2a515d4a66a7856d40b0a2e4b140f55e88fa8014e1660197e717",
+        "training_batches_sha256": "dbeb4eaaafc8dcf1db8b40fa573112afa3235f91b3afc196cbb3726991c2acba",
+        "visible_devices": "0",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 247.69053902686574,
+        "0.11.1_unified_v11": 219.88385435706005,
+        "0.12.0_unified_v12": 143.02971777296625
+      }
+    },
+    {
+      "seed": 529,
+      "group": "Screen1_1",
+      "inputs": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "43bcb23aa11bc4970c2ba3289ac00ac965568279b09da83155b8f33c9aa75caa",
+        "training_batches_sha256": "d3f00b02227e430123718e16b933b9a34de41e757668139fbe2bef59e9d79ccd",
+        "visible_devices": "1",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 135.68262340291403,
+        "0.11.1_unified_v11": 108.76750669209287,
+        "0.12.0_unified_v12": 73.44166773790494
+      }
+    },
+    {
+      "seed": 529,
+      "group": "Screen1_3",
+      "inputs": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "43bcb23aa11bc4970c2ba3289ac00ac965568279b09da83155b8f33c9aa75caa",
+        "training_batches_sha256": "bd545b894305b188262aadce2a85b8b478d74d40b480e610196c8d2cab0c160e",
+        "visible_devices": "0",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 285.75899249804206,
+        "0.11.1_unified_v11": 217.25644670589827,
+        "0.12.0_unified_v12": 138.10643378202803
+      }
+    },
+    {
+      "seed": 529,
+      "group": "Screen1_4",
+      "inputs": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "43bcb23aa11bc4970c2ba3289ac00ac965568279b09da83155b8f33c9aa75caa",
+        "training_batches_sha256": "581af2f2daaf3e1add3e0eac3649bd892ec75922ea44ef890ba7ebf530a7a3ac",
+        "visible_devices": "1",
+        "gpu": "NVIDIA RTX A6000"
+      },
+      "fit_seconds": {
+        "0.10.0_empf": 145.98043644800782,
+        "0.11.1_unified_v11": 111.15147278481163,
+        "0.12.0_unified_v12": 83.84302673302591
+      }
+    }
+  ]
+}

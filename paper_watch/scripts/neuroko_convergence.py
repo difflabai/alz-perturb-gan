@@ -15,6 +15,29 @@ NOTES = ROOT / "paper_watch/notes"
 METRICS = ("mean_energy_distance", "spread_ratio", "effective_rank")
 
 
+def optimizer_difference(wheels, trial):
+    """Resolve both recipes against the same installed 0.12.0 wheel."""
+    from dataclasses import asdict
+    from importlib.metadata import version
+    import sys
+
+    wheel = (wheels / "0.12.0").resolve()
+    sys.path[:0] = [p for p in (str(wheel), str(ROOT / "paper_watch")) if p not in sys.path]
+    import particlegan
+    from alztest.harness import TrainingSettings
+
+    if Path(particlegan.__file__).resolve().parent != wheel / "particlegan" or version("particlegan") != "0.12.0":
+        raise ValueError("The optimizer comparison requires the supplied 0.12.0 installation")
+    settings = TrainingSettings(**{k: v for k, v in trial.items() if k not in ("name", "lr")})
+    recipes = [asdict(particlegan.get_recipe(name, lr=trial["lr"], **settings.recipe_overrides()))
+               for name in ("unified_v12", "unified_v11")]
+    v12, v11 = recipes
+    changes = {k: dict(v12=v12[k], same_wheel_v11=v11[k]) for k in v12 if v12[k] != v11[k]}
+    if set(changes) != {"name", "optimizer_family"}:
+        raise ValueError(f"Unexpected differences between the two resolved recipes: {list(changes)}")
+    return changes
+
+
 def run_fold(args, arms, seed, group, original, *, read_only=False):
     holdout = group == "Screen1_0"
     stage = "heldout" if holdout else "validation"
@@ -23,11 +46,15 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
     steps = getattr(args, "checkpoints", STEPS)
     endpoint = steps[-1]
     points, fingerprints, targets = {}, {}, {}
-    for role in ("v12", "tuned_empf", "tuned_v11", "matched_empf", "matched_v11"):
+    source = getattr(args, "same_wheel_from", None)
+    for role in ("v12", "tuned_empf", "tuned_v11", "matched_empf", "matched_v11", "same_wheel_v11"):
+        if role not in arms:
+            continue
         arm = arms[role]
-        if not read_only:
+        reuse_v12 = source is not None and role == "v12"
+        if not read_only and not reuse_v12:
             fit(args, stage, seed, group, gpu, [arm], options=("--updates", str(endpoint), "--trace-every", "1200"))
-        base = receipt(args.output, stage, *arm, seed, group)
+        base = receipt(source if reuse_v12 else args.output, stage, *arm, seed, group)
         row = json.loads(base.with_stem(base.stem + f"-u{endpoint}-trace1200").read_text())
         trace = row["trace"]
         rates = row["initial_rates"]
@@ -49,6 +76,13 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
             raise ValueError(f"Invalid fixed-rate curve or 1,200-update replay for {role}, seed {seed}, {group}")
         hashes = dict(data=row["projected_data_sha256"], initialization=row["initial_parameters_sha256"],
                       training_batches=[p["training_batches_sha256"] for p in trace])
+        if source is not None:
+            if row["optimizer_family"] != args.recipe_differences["optimizer_family"][role]:
+                raise ValueError(f"Unexpected optimizer in {role}, seed {seed}, {group}")
+            if reuse_v12:
+                paired_settings = row["settings"]
+            elif row["settings"] != paired_settings:
+                raise ValueError(f"Training settings differ between the two optimizers for seed {seed}, {group}")
         if endpoint == LONG_STEPS[-1]:
             anchor = args.pilot_anchors[seed, group]
             prefix = [dict(updates=p["updates"], **{m: p[m] for m in METRICS}) for p in trace[:len(STEPS)]]
@@ -113,6 +147,8 @@ def main():
     mode.add_argument("--forty-thousand", action="store_true", help="extend all five pilot arms on Screen1_1 to 40,000 updates")
     mode.add_argument("--confirm-from", type=Path, metavar="FRESH_DIR",
                       help="verify the completed six-seed replication and conditionally evaluate Screen1_0")
+    mode.add_argument("--same-wheel-from", type=Path, metavar="CONVERGENCE_DIR",
+                      help="compare the v12 and v11 optimizers at 3,600 updates inside release 0.12.0")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     args.data, args.wheels, args.output = (p.resolve() for p in (args.data, args.wheels, args.output))
@@ -129,7 +165,35 @@ def main():
             anchors[seed, group] = {role: source["result"]["scores"][role][i] for role in arms}
     args.checkpoints = LONG_STEPS if args.forty_thousand else STEPS
     groups = GROUPS
-    if args.confirm_from:
+    extra_protocol = {}
+    if args.same_wheel_from:
+        args.same_wheel_from = args.same_wheel_from.resolve()
+        if args.output == args.same_wheel_from:
+            parser.error("use a distinct output directory for the optimizer comparison")
+        plan = json.loads((args.same_wheel_from / "protocol.json").read_text())
+        seeds = plan["seeds"]
+        if (plan["arms"] != arms or plan["groups"] != list(groups) or plan["checkpoints"] != list(STEPS)
+                or seeds not in ([22, 251], list(range(838, 844)))):
+            raise ValueError("Expected an original five-arm NeuroKO 3,600-update comparison")
+        v12 = arms["v12"]
+        arms = dict(v12=v12, same_wheel_v11=[v12[0], "unified_v11", v12[2]])
+        args.recipe_differences = optimizer_difference(args.wheels, v12[2])
+        extra_protocol["resolved_recipe_differences"] = args.recipe_differences
+        if seeds == [22, 251]:
+            for seed, file, section in ((22, "fixed_critic_matched_development", "comparison"),
+                                        (251, "fixed_critic_second_originals", "result")):
+                published = json.loads((NOTES / f"neuroko_v12_{file}.json").read_text())
+                name = f"{v12[0]}/unified_v11/{v12[2]['name']}"
+                scores = published[section]["scores"][name]
+                if published["protocol"].get("seeds", published["protocol"].get("development"))[0] != seed:
+                    raise ValueError("Unexpected published 1,200-update optimizer comparison")
+                for i, group in enumerate(groups):
+                    anchors[seed, group]["same_wheel_v11"] = scores[i]
+        rule = ("Reuse the original v12 fits and train the v11 optimizer from the same wheel on identical "
+                "cells, weights, batches and fixed rates. Compare their paired mean energy at 3,600 updates "
+                "and show the 1,200 and 2,400 checkpoints. Use both pilot seeds and replicate on seeds "
+                "838–843 regardless of the pilot ordering.")
+    elif args.confirm_from:
         if args.output == args.confirm_from.resolve():
             parser.error("use a distinct output directory for biological confirmation")
         qualification = heldout_qualification(args, arms)
@@ -168,7 +232,7 @@ def main():
                 "Reproduce the published 1,200-update value and match data, weights and minibatches. "
                 "Assess whether v12 beats all four controls at 3,600 updates on each seed.")
     write_frozen(args.output / "protocol.json", dict(arms=arms, seeds=seeds, groups=list(groups),
-                 checkpoints=args.checkpoints, metric="four-target mean energy distance", rule=rule))
+                 checkpoints=args.checkpoints, metric="four-target mean energy distance", rule=rule, **extra_protocol))
     with ThreadPoolExecutor(1) as first, ThreadPoolExecutor(1) as second:
         jobs = []
         for seed in seeds:
@@ -187,17 +251,19 @@ def main():
             comparisons.append(dict(seed=seed, updates=step, means=means, v12_minus_control=gaps))
     endpoint = [row for row in comparisons if row["updates"] == args.checkpoints[-1]]
     result = dict(cells=cells, comparisons=comparisons)
-    if args.fresh or args.forty_thousand or args.confirm_from:
+    if args.fresh or args.forty_thousand or args.confirm_from or args.same_wheel_from:
         result["endpoint_means"] = {role: mean(row["means"][role]["mean_energy_distance"] for row in endpoint)
                                     for role in arms}
         summary = {}
-        for role in ("tuned_empf", "tuned_v11", "matched_empf", "matched_v11"):
+        for role in arms:
+            if role == "v12":
+                continue
             gaps = [row["v12_minus_control"][role] for row in endpoint]
             wins = sum(cell["curves"]["v12"][-1]["mean_energy_distance"] < cell["curves"][role][-1]["mean_energy_distance"]
                        for cell in cells)
             summary[role] = dict(mean_v12_minus_control=mean(gaps), pairs_won=wins,
                                  seed_means_won=sum(gap < 0 for gap in gaps))
-            if args.confirm_from:
+            if args.confirm_from or (args.same_wheel_from and len(seeds) > 2):
                 from scipy.stats import t
                 margin = float(t.ppf(.975, len(gaps) - 1)) * stdev(gaps) / sqrt(len(gaps))
                 summary[role]["paired_95_t_interval"] = [mean(gaps) - margin, mean(gaps) + margin]

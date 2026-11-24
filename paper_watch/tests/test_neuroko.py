@@ -120,6 +120,76 @@ def test_fresh_duration_reports_all_pairs_at_fixed_endpoint(tmp_path, monkeypatc
     assert not result["leads_all_controls_on_average"]
 
 
+def test_same_wheel_duration_reuses_only_v12_and_checks_optimizer_and_anchors(tmp_path, monkeypatch):
+    import json
+    import sys
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_convergence as study
+
+    source = tmp_path / "source"
+    source.mkdir()
+    output = tmp_path / "same-wheel"
+    benchmark = json.loads((study.NOTES / "neuroko_v12_original_control_benchmark_first.json").read_text())
+    arms = benchmark["protocol"]["arms"]
+    (source / "protocol.json").write_text(json.dumps(dict(seeds=[22, 251], arms=arms, groups=study.GROUPS,
+                                                         checkpoints=study.STEPS)))
+    trial = arms["v12"][2]
+    families = {"v12": "unified_v12_equil", "same_wheel_v11": "unified_v11_equil"}
+    monkeypatch.setattr(study, "optimizer_difference", lambda *a: {"optimizer_family": families})
+    trained = []
+    bad = None
+
+    def make_row(path, arm, seed, group, gpu, score):
+        version, recipe, t = arm
+        role = "v12" if recipe == "unified_v12" else "same_wheel_v11"
+        rates = dict(generator=t["lr"], critic=t["lr"] * t["d_lr_mult"], particles=t["lr"] * t["prior_lr_mult"])
+        settings = {k: v for k, v in t.items() if k not in ("name", "lr")}
+        settings["z_dim"] = 20 if bad == "settings" and role == "same_wheel_v11" else 16
+        family = "wrong" if bad == "family" and role == "same_wheel_v11" else families[role]
+        trace = [dict(updates=n, mean_energy_distance=score, spread_ratio=1., effective_rank=18.,
+                      training_batches_sha256=str(n)) for n in study.STEPS]
+        row = dict(stage="validation", seed=seed, lr=t["lr"], name=t["name"], recipe=recipe, particlegan=version,
+                   settings=settings, optimizer_family=family, initial_rates=rates, final_rates=rates, deterministic=True,
+                   visible_devices=str(gpu), score_groups=[group], fit_groups=[g for g in study.GROUPS if g != group],
+                   updates=3600, constant_lr_verified_updates=3600, fixed_lr_optimizer_steps=dict(generator_and_particles=3600, critic=3600),
+                   projected_data_sha256=group, initial_parameters_sha256=str(seed), training_batches_sha256="3600",
+                   means=dict(energy_distance=score), trace=trace)
+        f = study.receipt(path, "validation", *arm, seed, group)
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.with_stem(f.stem + "-u3600-trace1200").write_text(json.dumps(row))
+
+    name = f"0.12.0/unified_v11/{trial['name']}"
+    v11_scores = {}
+    for seed, cohort, file, section in [(22, "first", "fixed_critic_matched_development", "comparison"),
+                                        (251, "second", "fixed_critic_second_originals", "result")]:
+        base = json.loads((study.NOTES / f"neuroko_v12_original_control_benchmark_{cohort}.json").read_text())
+        v11 = json.loads((study.NOTES / f"neuroko_v12_{file}.json").read_text())
+        for i, group in enumerate(study.GROUPS):
+            make_row(source, arms["v12"], seed, group, (i+seed) % 2, base["result"]["scores"]["v12"][i])
+            v11_scores[seed, group] = v11[section]["scores"][name][i]
+
+    def fake_fit(args, stage, seed, group, gpu, requested, *, options):
+        arm, = requested
+        assert arm == ["0.12.0", "unified_v11", trial] and args.output == output
+        trained.append((seed, group))
+        score = v11_scores[seed, group] + (.1 if bad == "anchor" else 0.)
+        make_row(output, arm, seed, group, gpu, score)
+
+    monkeypatch.setattr(study, "fit", fake_fit)
+    monkeypatch.setattr(sys, "argv", ["study", "--same-wheel-from", str(source), "--output", str(output),
+                                       "--data", str(tmp_path), "--wheels", str(tmp_path)])
+    study.main()
+    assert sorted(trained) == sorted(v11_scores)
+    report = json.loads((output / "comparison.json").read_text())
+    assert len(report["cells"]) == 6 and list(report["endpoint_comparisons"]) == ["same_wheel_v11"]
+    assert list((source / "validation").iterdir()) == [source / "validation/unified_v12-0.12.0"]
+    for bad, message in (("anchor", "1,200-update replay"), ("settings", "Training settings differ"),
+                         ("family", "Unexpected optimizer")):
+        with pytest.raises(ValueError, match=message):
+            study.main()
+
+
 @pytest.mark.parametrize("outcome", ("qualifies", "tie", "stale"))
 def test_biological_confirmation_depends_on_complete_fresh_result(tmp_path, monkeypatch, outcome):
     import json

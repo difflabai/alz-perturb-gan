@@ -152,7 +152,14 @@ python paper_watch/scripts/neuroko_convergence.py --data "$data" --window-cells 
 
 The script checks the learning rates at every optimizer step, runs all three development groups, and writes the full comparison to `comparison.json` in the output directory. The 3,600-update endpoint is fixed before training. To run the same five configurations on six fresh seeds, add `--fresh` and use a separate output directory such as `"$data/v12-convergence-3600/fresh-838-843"`. This produces 18 paired group–seed comparisons and reports the mean difference against each original control at 3,600 updates.
 
-Once the six-seed comparison finishes, use its results to decide whether to evaluate Screen1_0. The command verifies the 90 training records and checks that v12 beat every control on mean energy distance at 3,600 updates. If it did, all five configurations train on the three development groups and score Screen1_0 using seeds 844–859. The report includes each target and a paired 95% interval across training seeds for each comparison.
+To isolate the optimizer, compare v12 and v11 inside release 0.12.0. The following command reuses the pilot v12 fits and trains six matched v11 fits. For the six-seed replication, set the source to `"$data/v12-convergence-3600/fresh-838-843"` and choose a separate output directory. Run the replication whatever the pilot ranking. Both comparisons check the resolved wheel settings and pair the cells, initialization and minibatches at all three checkpoints.
+
+```bash
+python paper_watch/scripts/neuroko_convergence.py --same-wheel-from "$data/v12-convergence-3600" \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-optimizer-3600/pilot"
+```
+
+Once the six-seed original-release comparison finishes, use its results to decide whether to evaluate Screen1_0. The command verifies the 90 training records and checks that v12 beat every control on mean energy distance at 3,600 updates. If it did, all five configurations train on the three development groups and score Screen1_0 using seeds 844–859. The report includes each target and a paired 95% interval across training seeds for each comparison.
 
 ```bash
 python paper_watch/scripts/neuroko_convergence.py --confirm-from "$data/v12-convergence-3600/fresh-838-843" \

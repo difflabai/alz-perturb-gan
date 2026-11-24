@@ -1,0 +1,343 @@
+{
+  "method": "First development cohort at 1,200 constant-rate updates. Compare the interpolated 0.060 prior coefficient with calibrated v12 at 0.1 and independently tuned original controls on identical data, initial weights and minibatches. Original releases at the new shared 0.060 coefficient are scored separately by the full study.",
+  "arms": {
+    "v12": [
+      "0.12.0",
+      "unified_v12",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    "tuned_v11": [
+      "0.11.1",
+      "unified_v11",
+      {
+        "name": "motion-critic-46-prior41",
+        "lr": 0.014,
+        "d_lr_mult": 0.32857142857142857,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.041,
+        "rhbi_relativistic_weight": 2.0,
+        "rhbi_self_coupling": "hollow"
+      }
+    ],
+    "tuned_empf": [
+      "0.10.0",
+      "empf",
+      {
+        "name": "noise250-prior100",
+        "lr": 0.014,
+        "d_lr_mult": 1.5,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.25,
+        "prior_reg": 0.1
+      }
+    ],
+    "prior060": [
+      "0.12.0",
+      "unified_v12",
+      {
+        "name": "original-v11-critic-49-prior060",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.06
+      }
+    ]
+  },
+  "curvature_source": {
+    "source": "paper_watch/notes/neuroko_v12_double_prior_screen.json",
+    "source_critic_lr": 0.021,
+    "weights": [
+      0.02,
+      0.1,
+      0.2
+    ],
+    "mean_energies": [
+      0.9734388917158029,
+      0.9423058649169488,
+      0.9803564988678145
+    ],
+    "interpolated_minimum": 0.060366542372936156,
+    "trial_weight": 0.06
+  },
+  "means": {
+    "v12": {
+      "energy": 0.9284979310859204,
+      "spread_ratio": 1.2016231096272134
+    },
+    "tuned_v11": {
+      "energy": 0.9254714736446986,
+      "spread_ratio": 1.146147740819155
+    },
+    "tuned_empf": {
+      "energy": 0.9224025817539492,
+      "spread_ratio": 1.1672938586288037
+    },
+    "prior060": {
+      "energy": 0.9446260183902819,
+      "spread_ratio": 1.2204883454195692
+    }
+  },
+  "prior060_energy_wins": {
+    "v12": 2,
+    "tuned_v11": 3,
+    "tuned_empf": 5
+  },
+  "cells": [
+    {
+      "seed": 22,
+      "group": "Screen1_1",
+      "inputs": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96"
+      },
+      "arms": {
+        "v12": {
+          "energy": 1.1263494186235306,
+          "spread_ratio": 1.2574142164189075
+        },
+        "tuned_v11": {
+          "energy": 1.1660039904749095,
+          "spread_ratio": 1.1961299314248635
+        },
+        "tuned_empf": {
+          "energy": 1.1223464943750359,
+          "spread_ratio": 1.2319534275764945
+        },
+        "prior060": {
+          "energy": 1.139485712873196,
+          "spread_ratio": 1.271752837917152
+        }
+      }
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_3",
+      "inputs": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4"
+      },
+      "arms": {
+        "v12": {
+          "energy": 0.6114014145359561,
+          "spread_ratio": 1.3028938668726433
+        },
+        "tuned_v11": {
+          "energy": 0.5815572646608409,
+          "spread_ratio": 1.2259194953725698
+        },
+        "tuned_empf": {
+          "energy": 0.5731292339540484,
+          "spread_ratio": 1.2283444375584893
+        },
+        "prior060": {
+          "energy": 0.6468900059191753,
+          "spread_ratio": 1.313928468901212
+        }
+      }
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_4",
+      "inputs": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "85f4aff48cde6ba1da727b69d794e423e9f4cb879abe43d9899c96b3e19486a8"
+      },
+      "arms": {
+        "v12": {
+          "energy": 0.9871477581704231,
+          "spread_ratio": 1.0576265643739278
+        },
+        "tuned_v11": {
+          "energy": 1.0262047123882294,
+          "spread_ratio": 1.007825610021976
+        },
+        "tuned_empf": {
+          "energy": 1.0525022939435076,
+          "spread_ratio": 1.0159460598569405
+        },
+        "prior060": {
+          "energy": 0.9956513796403597,
+          "spread_ratio": 1.0848910438172574
+        }
+      }
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_1",
+      "inputs": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "c1b421e29d4d935428afccf2b52bb0b12c41f54b927d95ee3c8b4b7fcff3a3eb"
+      },
+      "arms": {
+        "v12": {
+          "energy": 1.126615089377189,
+          "spread_ratio": 1.2517812262520964
+        },
+        "tuned_v11": {
+          "energy": 1.1302163250471386,
+          "spread_ratio": 1.2085446723837319
+        },
+        "tuned_empf": {
+          "energy": 1.0745143236963988,
+          "spread_ratio": 1.2413890491050834
+        },
+        "prior060": {
+          "energy": 1.1915657197846947,
+          "spread_ratio": 1.2768483317539825
+        }
+      }
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_3",
+      "inputs": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "a2c81ac6a8e84563621f19a16aff3340cbf95b95bacc135c80df9b3fd42f7443"
+      },
+      "arms": {
+        "v12": {
+          "energy": 0.6207189273353579,
+          "spread_ratio": 1.2660288836955078
+        },
+        "tuned_v11": {
+          "energy": 0.6063413993942424,
+          "spread_ratio": 1.204348835345627
+        },
+        "tuned_empf": {
+          "energy": 0.6302151424050741,
+          "spread_ratio": 1.254468500171857
+        },
+        "prior060": {
+          "energy": 0.6284202659874356,
+          "spread_ratio": 1.2824495613166351
+        }
+      }
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_4",
+      "inputs": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "f0fc24166dc52bf914506e6eccc97cdb2937937bcb548c4ee7f877c9038456c6"
+      },
+      "arms": {
+        "v12": {
+          "energy": 1.0181744368803536,
+          "spread_ratio": 1.0570566062100002
+        },
+        "tuned_v11": {
+          "energy": 0.9753285648951739,
+          "spread_ratio": 1.0082259141303256
+        },
+        "tuned_empf": {
+          "energy": 1.0015550178129418,
+          "spread_ratio": 1.0237717665328638
+        },
+        "prior060": {
+          "energy": 0.9895688044073565,
+          "spread_ratio": 1.0679615808416663
+        }
+      }
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_1",
+      "inputs": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "4c0657cf4e49b6ed9e7ed8cf1529557ec56d518e7f697b464f33e263585ee5e4"
+      },
+      "arms": {
+        "v12": {
+          "energy": 1.2100226375749439,
+          "spread_ratio": 1.270379460073419
+        },
+        "tuned_v11": {
+          "energy": 1.2290656243941946,
+          "spread_ratio": 1.232684550292789
+        },
+        "tuned_empf": {
+          "energy": 1.1274244217063474,
+          "spread_ratio": 1.232642783059402
+        },
+        "prior060": {
+          "energy": 1.2509724358820995,
+          "spread_ratio": 1.2950917910339013
+        }
+      }
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_3",
+      "inputs": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "507c8545718ac1248d187d920f15b7d033dfc06a2e29f3ea052422cf584d5a90"
+      },
+      "arms": {
+        "v12": {
+          "energy": 0.6698091226184917,
+          "spread_ratio": 1.2822015461895409
+        },
+        "tuned_v11": {
+          "energy": 0.578552254257154,
+          "spread_ratio": 1.2270603017295612
+        },
+        "tuned_empf": {
+          "energy": 0.696174307530145,
+          "spread_ratio": 1.256591309437638
+        },
+        "prior060": {
+          "energy": 0.6846434672357566,
+          "spread_ratio": 1.3038018404393048
+        }
+      }
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_4",
+      "inputs": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "b3ec8669fad397caaf4deb8d3ac9c4b946534ff97ad62350d35bc754d111f1ab"
+      },
+      "arms": {
+        "v12": {
+          "energy": 0.9862425746570376,
+          "spread_ratio": 1.0692256165588776
+        },
+        "tuned_v11": {
+          "energy": 1.0359731272904045,
+          "spread_ratio": 1.0045903566709498
+        },
+        "tuned_empf": {
+          "energy": 1.0237620003620436,
+          "spread_ratio": 1.0205373943604648
+        },
+        "prior060": {
+          "energy": 0.9744363737824633,
+          "spread_ratio": 1.0876696527550103
+        }
+      }
+    }
+  ]
+}
