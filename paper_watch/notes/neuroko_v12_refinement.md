@@ -142,6 +142,17 @@ python paper_watch/scripts/neuroko_role_factorial.py --data "$data" --window-cel
 
 The two lowest seed-15 v12 scores came from different rate combinations. The first used generator 0.020, critic 0.042 and particles 0.0203. The second used 0.010, 0.0105 and 0.0812. Independently tuned EMPF scored 0.9174 on this seed, below both v12 scores. A follow-up tests each combination with Gaussian latent noise 0.075 or 0.15. All three formulations receive the same noise and rates within each comparison.
 
+Across the six screening pairs on seeds 19–21, v12 at latent noise 0.15 and fixed generator, critic and particle rates of 0.020, 0.042 and 0.0203 scored 0.9466. It beat matched EMPF on five pairs and independently tuned EMPF on four. V11 at the reference rates of 0.014, 0.021 and 0.0406 had the lowest mean, 0.9339. The frozen ranking rule selected the 0.9466 v12 configuration for independent training validation on seeds 22–24. [All 84 fit scores and the selection](neuroko_v12_rate_noise_screen.json)
+
+| Generator LR | Critic LR | Particle LR | Latent noise | V12 energy ↓ | Matched v11 | Matched EMPF |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 0.020 | 0.042 | 0.0203 | 0.075 | 0.9735 | 1.0015 | 1.0053 |
+| 0.020 | 0.042 | 0.0203 | 0.150 | 0.9466 | 0.9654 | 1.0125 |
+| 0.010 | 0.0105 | 0.0812 | 0.075 | 0.9700 | 0.9734 | 0.9940 |
+| 0.010 | 0.0105 | 0.0812 | 0.150 | 0.9785 | 0.9792 | 0.9774 |
+
+Independently tuned EMPF scored 0.9605 on the same six pairs at rates of 0.020, 0.030 and 0.058 with latent noise 0.025. In the direct formulation comparisons, every model in a row had identical learning rates and noise.
+
 The screen uses six paired training fold–seed combinations. Each of three biological groups and each of seeds 19–21 occurs twice. The candidate with the lowest mean difference from its strongest competitor advances to three fresh seeds regardless of its screening rank relative to EMPF. This allows a promising setting to be assessed across seeds when one seed favors a control. The independent nine-pair validation compares the selected candidate with matched and established controls, including v12 at the same rates and its original noise of 0.025. Only a candidate below all these on validation goes to the held-out biological group on seeds 164–179. [Rate combinations, exact folds and ranking rule](../scripts/neuroko_rate_noise.py)
 
 ```bash
