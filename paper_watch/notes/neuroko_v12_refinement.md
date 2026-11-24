@@ -280,3 +280,16 @@ At noise 0.15 and generator, critic and particle rates of 0.014, 0.021 and 0.040
 python paper_watch/scripts/neuroko_rate_noise.py --study double-prior-weight --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-double-prior" --shared-screen "$data/v12-rate-noise"
 ```
+
+Across all nine screening pairs, doubling the weight from 0.1 to 0.2 raised v12's mean energy from 0.94231 to 0.98036. The higher weight improved one pair and increased energy in each of the three seed means. This fails the comparison with the weight-0.1 predecessor.
+
+### Separating the effects of latent noise and role rates
+
+Weight 0.1 helped v12 at noise 0.15 and release rates. It hurt at noise 0.025 and the higher critic rate. Both noise and rates changed between those comparisons. To measure the dependence on each, the next study fills the two missing v12 combinations in a grid of two rate settings, two noise levels (0.025 and 0.15) and two weights (0.02 and 0.1). Each combination uses the same nine seed–group pairs and verifies all 1,200 learning rates.
+
+The one new candidate for independent validation uses rates 0.020, 0.042 and 0.0203, noise 0.15 and weight 0.1. To advance, it must beat its lower-weight counterpart and all v11 and EMPF controls in the screen. Because the ranking changed between earlier three-seed cohorts, this study reserves six fresh training seeds (260–265) for 18 paired comparisons, then outer seeds 316–331 for a qualifying result. The low-noise, release-rate corner completes the comparison of training settings.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study prior-interaction --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-prior-interaction" --shared-screen "$data/v12-rate-noise"
+```
