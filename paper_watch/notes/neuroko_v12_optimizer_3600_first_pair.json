@@ -1,0 +1,248 @@
+{
+  "description": "First pilot pair with both optimizer-only curves, chosen as the first protocol group on the available GPU 1 slot. All six arms share cells, initial weights and minibatches. The same-wheel comparison shares every training setting and both recipes differ only in name and optimizer family. Every optimizer step verified constant rates. The pilot has six group\u2013seed pairs; the fresh optimizer comparison has 18.",
+  "seed": 251,
+  "group": "Screen1_1",
+  "gpu": 1,
+  "updates": [
+    1200,
+    2400,
+    3600
+  ],
+  "arms": {
+    "v12": [
+      "0.12.0",
+      "unified_v12",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    "matched_v11": [
+      "0.11.1",
+      "unified_v11",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    "matched_empf": [
+      "0.10.0",
+      "empf",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.1
+      }
+    ],
+    "tuned_v11": [
+      "0.11.1",
+      "unified_v11",
+      {
+        "name": "motion-critic-46-prior41",
+        "lr": 0.014,
+        "d_lr_mult": 0.32857142857142857,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.041,
+        "rhbi_relativistic_weight": 2.0,
+        "rhbi_self_coupling": "hollow"
+      }
+    ],
+    "tuned_empf": [
+      "0.10.0",
+      "empf",
+      {
+        "name": "noise250-prior100",
+        "lr": 0.014,
+        "d_lr_mult": 1.5,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.25,
+        "prior_reg": 0.1
+      }
+    ],
+    "same_wheel_v11": [
+      "0.12.0",
+      "unified_v11",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ]
+  },
+  "fingerprints": {
+    "data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+    "initialization": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+    "training_batches": [
+      "dde3a72737ee81577630c4da56ae2dda3deaf70c92b040bce2b82b2bad93b798",
+      "3635babcb4a6a52a2d347d4aac288dbc4b8793488cd5dd71ec84b8135aca2e19",
+      "a1d8a822fffdfe5e32cd371677f1a8b3c97298d5544fa97583a7cef37697667f"
+    ]
+  },
+  "scores": {
+    "v12": {
+      "energies": [
+        1.1412954010469378,
+        1.1372993309113304,
+        1.156311922419513
+      ],
+      "spread": [
+        1.2601342261165183,
+        1.2781478136405917,
+        1.299293552096168
+      ],
+      "rank": [
+        21.686512836529523,
+        23.051495341665564,
+        22.208474283884087
+      ],
+      "fit_seconds": 205.94042022689246,
+      "targets": {
+        "GLCCI1": 1.2136907529573815,
+        "SLC2A4RG": 1.005463345440532,
+        "PLEKHA1": 1.2429437007653963,
+        "MAMSTR": 1.1631498905147426
+      }
+    },
+    "matched_v11": {
+      "energies": [
+        1.2157097729130006,
+        1.1648645477062753,
+        1.155681963839161
+      ],
+      "spread": [
+        1.2006579176305896,
+        1.2256422224886672,
+        1.2231697145506182
+      ],
+      "rank": [
+        22.636085526493034,
+        21.982915515391127,
+        20.156744361563298
+      ],
+      "fit_seconds": 320.3919302432332,
+      "targets": {
+        "GLCCI1": 1.1085742543891968,
+        "SLC2A4RG": 1.148651031507261,
+        "PLEKHA1": 1.202999324116746,
+        "MAMSTR": 1.1625032453434407
+      }
+    },
+    "matched_empf": {
+      "energies": [
+        1.2178591190828363,
+        1.2960938911905895,
+        1.3278155746912528
+      ],
+      "spread": [
+        1.2384950002363913,
+        1.3033588766080777,
+        1.3243993269360044
+      ],
+      "rank": [
+        14.770351944154532,
+        16.282856975811217,
+        17.676715174262753
+      ],
+      "fit_seconds": 194.05292744608596,
+      "targets": {
+        "GLCCI1": 1.3260155565009795,
+        "SLC2A4RG": 1.2603175207537758,
+        "PLEKHA1": 1.3626860479086744,
+        "MAMSTR": 1.3622431736015814
+      }
+    },
+    "tuned_v11": {
+      "energies": [
+        1.2471203081930413,
+        1.1301584181034536,
+        1.1328383555547399
+      ],
+      "spread": [
+        1.2011782454915156,
+        1.2303468753660796,
+        1.2375197110337488
+      ],
+      "rank": [
+        22.11001866726241,
+        22.0202194915369,
+        20.266828633258168
+      ],
+      "fit_seconds": 325.6391297010705,
+      "targets": {
+        "GLCCI1": 1.115922724975741,
+        "SLC2A4RG": 1.070746555645445,
+        "PLEKHA1": 1.169146997495389,
+        "MAMSTR": 1.1755371441023845
+      }
+    },
+    "tuned_empf": {
+      "energies": [
+        1.1566485332439562,
+        1.1868525565645427,
+        1.207094197662136
+      ],
+      "spread": [
+        1.2391277685750284,
+        1.2634438426181456,
+        1.3670373729974872
+      ],
+      "rank": [
+        15.683669287643013,
+        17.24289709232779,
+        17.541434265723954
+      ],
+      "fit_seconds": 197.95598155912012,
+      "targets": {
+        "GLCCI1": 1.1948564591276005,
+        "SLC2A4RG": 1.1725487530245529,
+        "PLEKHA1": 1.2250989664371374,
+        "MAMSTR": 1.2358726120592536
+      }
+    },
+    "same_wheel_v11": {
+      "energies": [
+        1.2249290798774957,
+        1.1632160623627792,
+        1.168681291165877
+      ],
+      "spread": [
+        1.2242267957742674,
+        1.266952522650365,
+        1.2925210856549327
+      ],
+      "rank": [
+        21.134055565992384,
+        22.453247765011394,
+        21.642141885110902
+      ],
+      "fit_seconds": 393.98237528000027,
+      "targets": {
+        "GLCCI1": 1.1987008401470085,
+        "SLC2A4RG": 1.0804994579805873,
+        "PLEKHA1": 1.1854736625317255,
+        "MAMSTR": 1.2100512040041869
+      }
+    }
+  }
+}
