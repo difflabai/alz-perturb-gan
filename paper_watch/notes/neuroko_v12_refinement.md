@@ -339,6 +339,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study strong-prior-noise --da
   --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
 ```
 
+Increasing noise from 0.15 to 0.25 raised v12's mean energy from 0.94231 to 0.94988 on the first development cohort. Four of nine pairs improved. The candidate scored above the earlier EMPF reference at 0.94613 and failed the comparison with its lower-noise predecessor.
+
 ### Separating training noise from sampling noise
 
 The native Gaussian noise affects both the training updates and the generated samples used for scoring. To distinguish their contributions to the 0.97676 to 0.94231 change in v12 energy, replay the 18 fits at the release rates and prior weight 0.1. For each of the nine seed–group pairs, train once at noise 0.025 and once at 0.15. Score each fitted generator at both sampling widths with identical particle and Gaussian draws. The original samples must reproduce exactly after restoring the native width. The diagnostic checks every original target score and input hash.
@@ -348,4 +350,26 @@ At a fixed sampling width, the energy difference measures the effect of training
 ```bash
 python paper_watch/scripts/neuroko_noise_crossover.py --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --reference "$data/v12-rate-noise" --output "$data/v12-noise-crossover"
+```
+
+### Calibrating the critic learning rate from its measured updates
+
+At generator, critic and particle rates of 0.014, 0.021 and 0.0406, v12's first update moved the critic's scores 5.20 times as far as same-wheel v11's. The median cosine between the changes was 0.996. The optimizer received the same initialized model, training cells, minibatches and loss configuration in each pair. The probes comprised 32 fixed real training cells per condition. We subtracted each condition's mean score change before computing the RMS, so an additive critic offset drops out.
+
+Across the first 64 updates, the median v12-to-v11 ratio was 6.06. It ranged from 5.52 to 6.40 across the nine seed–group pairs. Each ratio compares the median size of an update in that run. The trajectories diverge after the first update. Replaying both formulations without the probes on one pair reproduced their final weight hashes. [Per-update movements, paired hashes and probe settings](neuroko_v12_critic_motion.json)
+
+The released optimizers transform dense critic gradients differently. V12's fast path scales a normalized gradient using the matrix dimensions. V11 applies a five-step matrix orthogonalization. The installed source files for both optimizers were byte-identical to the tagged GitHub source. The sixfold ratio is a measurement on this network and these training cells. [V12 dense critic path](https://github.com/HyperGAN/ParticleGAN/blob/3256a05867688ab7ec0e5b4f50354c14d6972e6f/particlegan/_unified_v12/optimizer.py#L917-L943) · [V11 dense matrix update](https://github.com/HyperGAN/ParticleGAN/blob/3256a05867688ab7ec0e5b4f50354c14d6972e6f/particlegan/_unified_v11/optimizer.py#L1112-L1139)
+
+Dividing 0.021 by the measured ratio and rounding to four decimal places gives a critic LR of **0.0035**. The 1,200-update study gives that fixed rate to all three matched formulations, with generator 0.014, particles 0.0406, latent noise 0.15 and prior weight 0.1. It retains the original-rate controls. The candidate must beat the controls separately on development seeds 22–24 and 251–253, then on fresh seeds 272–277 including the two original releases. A qualifying result goes to the biological holdout on seeds 348–363. A short repeat measures the actual critic movement at the new rate.
+
+```bash
+PYTHONPATH="$data/wheels/0.12.0:." python paper_watch/scripts/neuroko_critic_motion.py \
+  --data "$data" --window-cells 10000 --reference "$data/v12-rate-noise" --output "$data/v12-critic-motion"
+PYTHONPATH="$data/wheels/0.12.0:." python paper_watch/scripts/neuroko_critic_motion.py \
+  --data "$data" --window-cells 10000 --reference "$data/v12-rate-noise" \
+  --output "$data/v12-critic-motion-check" --v12-critic-lr 0.0035
+python paper_watch/scripts/neuroko_rate_noise.py --study critic-motion --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --motion-result "$data/v12-critic-motion/result.json" \
+  --output "$data/v12-motion-calibrated" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior"
 ```
