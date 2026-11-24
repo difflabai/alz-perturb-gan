@@ -77,6 +77,15 @@ If `selection.json` records a qualifying candidate, add `--stage confirm` to run
 
 ## Transport distance scale with uniform particle sampling
 
+The 0.75 quantile with latent noise 0.025 led both matched controls on the three seed-6 folds. The result reversed on independent seeds 7–9. Across nine fold–seed pairs, v12 scored 0.9864, matched v11 scored 0.9594, and matched EMPF scored 0.9803. V12 won four of the nine fold–seed pairs against each matched control. Independently tuned EMPF scored 0.9503. The equivalent EMPF controls with explicit and default noise 0.025 reproduced all per-target scores exactly on all nine pairs. The study ended after 120 training fits. [Complete screening and independent validation](neuroko_v12_transport_scale_validation.json)
+
+| Seed-6 distance quantile | Latent noise | V12 energy ↓ | Matched v11 | Matched EMPF |
+| ---: | ---: | ---: | ---: | ---: |
+| 75% | 0.025 | 0.9598 | 0.9842 | 0.9866 |
+| 75% | 0.15 | 0.9575 | 0.9314 | 0.9480 |
+| 95% | 0.025 | 0.9995 | 0.9356 | 0.9866 |
+| 95% | 0.15 | 0.9483 | 0.9781 | 0.9480 |
+
 In the stratified screen the higher nearest-neighbor distance quantile improved v12 across the three seed-3 folds. A separate experiment keeps uniform sampling, crosses quantile 0.75 or 0.95 with Gaussian latent noise 0.025 or 0.15, and ranks the four v12 settings by their difference from the better matched v11 or EMPF control. Each fit uses the same 1,200 updates and constant role rates. Seed 6 screens on the three training folds. The candidate with the largest advantage must then beat the matched controls and the previous uniform-sampling references on separate training seeds 7–9 before a new holdout comparison on seeds 116–131. [Selection rule and comparison arms](../scripts/neuroko_transport_scale.py)
 
 ```bash
