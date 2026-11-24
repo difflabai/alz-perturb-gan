@@ -2,9 +2,9 @@
   "status": "partial",
   "primary_endpoint": 3600,
   "expected_fits": 90,
-  "completed_fits": 43,
+  "completed_fits": 56,
   "expected_five_way_pairs": 18,
-  "complete_five_way_pairs": 8,
+  "complete_five_way_pairs": 11,
   "protocol": {
     "arms": {
       "v12": [
@@ -279,20 +279,20 @@
   },
   "available_endpoint_comparisons": {
     "matched_v11": {
-      "completed_pairs": 8,
-      "v12_wins": 6
+      "completed_pairs": 11,
+      "v12_wins": 8
     },
     "matched_empf": {
-      "completed_pairs": 8,
-      "v12_wins": 7
+      "completed_pairs": 11,
+      "v12_wins": 10
     },
     "tuned_v11": {
-      "completed_pairs": 9,
-      "v12_wins": 6
+      "completed_pairs": 11,
+      "v12_wins": 8
     },
     "tuned_empf": {
-      "completed_pairs": 9,
-      "v12_wins": 8
+      "completed_pairs": 11,
+      "v12_wins": 10
     }
   },
   "checked_cells": [
@@ -544,6 +544,47 @@
     },
     {
       "seed": 840,
+      "group": "Screen1_1",
+      "physical_gpu": 0,
+      "paired_fingerprints": {
+        "data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "init": "93f1b759f4b43c9ca477581f345ee5daee71887202ee559951318d5b98603e06",
+        "batches": [
+          "041206bfe61326a8956e903ae96f4f46e16877bdaad92a40481d83f4332b7f56",
+          "4f0e025ecc60eac9e213de20bb362a14732eb459aa70880d5f334612866195ad",
+          "06816ed415cd0f46186a8529fb3c20ac076fa095d42fc8e64341cce874d9a238"
+        ]
+      },
+      "energy_by_checkpoint": {
+        "v12": [
+          1.1902387846949882,
+          1.1398769260109345,
+          1.177977126996577
+        ],
+        "matched_v11": [
+          1.2084678982546029,
+          1.186965801523619,
+          1.213368008876315
+        ],
+        "matched_empf": [
+          1.2521011858826518,
+          1.2704812248179906,
+          1.2584780430930895
+        ],
+        "tuned_v11": [
+          1.2004931200557358,
+          1.1444696075397651,
+          1.2283726970669386
+        ],
+        "tuned_empf": [
+          1.2808725086295272,
+          1.2364731961176252,
+          1.213278930478292
+        ]
+      }
+    },
+    {
+      "seed": 840,
       "group": "Screen1_3",
       "physical_gpu": 1,
       "paired_fingerprints": {
@@ -643,6 +684,16 @@
           1.0921996110854868,
           1.0305757423543154
         ],
+        "matched_v11": [
+          0.9972011709012594,
+          1.0457490508897982,
+          1.027419781930871
+        ],
+        "matched_empf": [
+          1.0690849189612142,
+          0.9844001328220919,
+          1.1237859822088923
+        ],
         "tuned_v11": [
           1.0375069629684768,
           1.0213752481962313,
@@ -652,6 +703,68 @@
           1.075087860754208,
           1.048175635268472,
           1.0406887384576324
+        ]
+      }
+    },
+    {
+      "seed": 842,
+      "group": "Screen1_3",
+      "physical_gpu": 1,
+      "paired_fingerprints": {
+        "data": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "init": "e5c9efd0e21ca1b6d74754ec7e233294f7023937d6131613cec054834bb0b1a3",
+        "batches": [
+          "c28aa70ec4efb8ab1a56b32027617c505d304de85578c0d708b07cadfd5cd1dd",
+          "30783f3deffe923d7a63d34b7e4e99bb37f85a9f0af5304eab76d192554ecc83",
+          "af9693ca3704065fcae4c97be6e360e18918d89964097f2d966986c397e97fa9"
+        ]
+      },
+      "energy_by_checkpoint": {
+        "v12": [
+          0.693180322891958,
+          0.6301753308012572,
+          0.5818683808142331
+        ],
+        "matched_v11": [
+          0.6420522621087847,
+          0.63102807131513,
+          0.6149663541883972
+        ],
+        "matched_empf": [
+          0.686489101422497,
+          0.6203538371776354,
+          0.6871414146593973
+        ],
+        "tuned_v11": [
+          0.6036856646635345,
+          0.6602457233110741,
+          0.5963793759967697
+        ],
+        "tuned_empf": [
+          0.690883455446033,
+          0.6525368849275444,
+          0.6841799835109106
+        ]
+      }
+    },
+    {
+      "seed": 843,
+      "group": "Screen1_1",
+      "physical_gpu": 1,
+      "paired_fingerprints": {
+        "data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "init": "e8f1e356ef55d540ccd50dc1a6d5c67e4daec04c4f8842e7c406fe103b0e2353",
+        "batches": [
+          "e3eed2ef3d8a1a7ef8a0e1021fce3e01817e477d8aba997ca375e124ac8a1809",
+          "8a2d87e00145783147cf5302dc131c4023048fea3fff89026f701a4bbe7701fa",
+          "d5e8b76810def675dd38822715014ec366ef7d5b569bde83446c54544b7a38f3"
+        ]
+      },
+      "energy_by_checkpoint": {
+        "v12": [
+          1.159024428338119,
+          1.1968202962868255,
+          1.2295102882428752
         ]
       }
     }
