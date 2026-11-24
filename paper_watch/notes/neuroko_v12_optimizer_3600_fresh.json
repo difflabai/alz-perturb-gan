@@ -1,0 +1,261 @@
+{
+  "status": "partial",
+  "protocol": {
+    "arms": {
+      "v12": [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "same_wheel_v11": [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ]
+    },
+    "seeds": [
+      838,
+      839,
+      840,
+      841,
+      842,
+      843
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "checkpoints": [
+      1200,
+      2400,
+      3600
+    ],
+    "metric": "four-target mean energy distance",
+    "rule": "Reuse the original v12 fits and train the v11 optimizer from the same wheel on identical cells, weights, batches and fixed rates. Compare their paired mean energy at 3,600 updates and show the 1,200 and 2,400 checkpoints. Use both pilot seeds and replicate on seeds 838\u2013843 regardless of the pilot ordering.",
+    "resolved_recipe_differences": {
+      "name": {
+        "v12": "unified_v12",
+        "same_wheel_v11": "unified_v11"
+      },
+      "optimizer_family": {
+        "v12": "unified_v12_equil",
+        "same_wheel_v11": "unified_v11_equil"
+      }
+    }
+  },
+  "completed_pairs": 2,
+  "expected_pairs": 18,
+  "cells": [
+    {
+      "seed": 838,
+      "group": "Screen1_3",
+      "gpu": 1,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.676134325721607,
+            "spread_ratio": 1.3383059956969183,
+            "effective_rank": 21.432464825697593
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6240714383494168,
+            "spread_ratio": 1.3032906324886806,
+            "effective_rank": 23.658132498778187
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.5905244374384555,
+            "spread_ratio": 1.2830687034438992,
+            "effective_rank": 23.188347577920034
+          }
+        ],
+        "same_wheel_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6351129426838877,
+            "spread_ratio": 1.3018068989726017,
+            "effective_rank": 21.257531494309504
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6491755947902635,
+            "spread_ratio": 1.2969337315461753,
+            "effective_rank": 22.296522472779422
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.646206133660757,
+            "spread_ratio": 1.307255577945683,
+            "effective_rank": 22.299498459535624
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initialization": "c7b8637789f02467640f3babf4fadd71be526fcfe15bfa77ea82433dd799feaf",
+        "training_batches": [
+          "84f4170031ba10157cee271967722b62b75818ed96612ad85b7f451d1c008f22",
+          "b8650dd0660b7f6c1ec227920c48ddb85a8959d0d9c5f09d43a708aa733db078",
+          "8f8b8cd84b034012b46827b19735fc26d31473bb7a91f5d63cf60259c0894fd3"
+        ]
+      },
+      "training": {
+        "v12": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v12_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 296.5106490969192,
+          "endpoint_target_energy": {
+            "GLCCI1": 0.5822200618138709,
+            "SLC2A4RG": 0.5425439170071753,
+            "PLEKHA1": 0.6452809270608499,
+            "MAMSTR": 0.5920528438719259
+          }
+        },
+        "same_wheel_v11": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v11_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 363.8912472210359,
+          "endpoint_target_energy": {
+            "GLCCI1": 0.6394215747910605,
+            "SLC2A4RG": 0.6191092513592888,
+            "PLEKHA1": 0.7240630788528382,
+            "MAMSTR": 0.6022306296398403
+          }
+        }
+      }
+    },
+    {
+      "seed": 839,
+      "group": "Screen1_1",
+      "gpu": 1,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1784095997556672,
+            "spread_ratio": 1.2712679210067328,
+            "effective_rank": 22.089231028223445
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.1952169844980807,
+            "spread_ratio": 1.3177250687037878,
+            "effective_rank": 21.808228471219564
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.1264659620166162,
+            "spread_ratio": 1.2883794898790502,
+            "effective_rank": 22.251752928351372
+          }
+        ],
+        "same_wheel_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.234211210950741,
+            "spread_ratio": 1.252353164029908,
+            "effective_rank": 20.6553819321178
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.173544518284386,
+            "spread_ratio": 1.282703801329089,
+            "effective_rank": 22.396268267512625
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.1647499973049307,
+            "spread_ratio": 1.2859013260238343,
+            "effective_rank": 21.767600698048675
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initialization": "cd8ff571d460a5101595aaa3774996f0becf871670b4094327303d8d43bc510b",
+        "training_batches": [
+          "1bd004fd56b36f8752894c4b36e20c5a788feb4d748fd0289dc3d80ba2ec16c4",
+          "ed8694821e346a8769018330f32bd35870e6d916cfe26c8a88ac2b15af95572d",
+          "b289577d898bb8c6cb9164a3912bf137d55d331ddbd9f7dd843c2f77469a726b"
+        ]
+      },
+      "training": {
+        "v12": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v12_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 249.5090522740502,
+          "endpoint_target_energy": {
+            "GLCCI1": 1.1535445683728245,
+            "SLC2A4RG": 1.0230341090871002,
+            "PLEKHA1": 1.1967555905572507,
+            "MAMSTR": 1.1325295800492894
+          }
+        },
+        "same_wheel_v11": {
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "optimizer_family": "unified_v11_equil",
+          "verified_optimizer_steps": {
+            "generator_and_particles": 3600,
+            "critic": 3600
+          },
+          "seconds": 345.2498228980694,
+          "endpoint_target_energy": {
+            "GLCCI1": 1.1424684259949824,
+            "SLC2A4RG": 1.0789518721954439,
+            "PLEKHA1": 1.219447646678125,
+            "MAMSTR": 1.2181320443511714
+          }
+        }
+      }
+    }
+  ]
+}
