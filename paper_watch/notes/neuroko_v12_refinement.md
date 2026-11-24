@@ -4,6 +4,8 @@ The comparison uses the published 1,200-update neuronal benchmark with the same 
 
 Every v12 run in the fixed-rate comparison uses **no learning-rate decay**. Both schedule multipliers stayed at 1.0 through update 40,000. Two 1,200-update GPU replays of the lower-critic-rate configuration checked the actual optimizer rates on every step. ParticleGAN’s native generator gain can still adjust an individual step in response to the model. [Optimizer rates and gain traces on both cards](neuroko_v12_optimizer_step_rates.json)
 
+Hollow self-coupling and weight 2 are benchmark tuning choices. The released `unified_v12` and original `unified_v11` presets use `feydy_discrete` self-coupling and relativistic weight 0. Omitting the two loss overrides at the calibrated critic rate produced precisely the same full recipes as setting these defaults explicitly. [Resolved release settings](neuroko_v12_fixed_critic_native_loss.json)
+
 ## Results at 1,200 updates
 
 On 16 paired seeds (84–99), EMPF with the same latent noise and learning rates had the lowest mean held-out energy, 1.3531. Matched v11 averaged 1.3584 and the selected v12 averaged 1.3665. V12 scored lower on 6 of 16 seeds against each matched control. Its mean difference from EMPF was +0.0134 with a paired 95% interval of −0.0257 to +0.0525. This cohort leaves the direction of the formulation effect uncertain.
@@ -39,6 +41,7 @@ Each row uses the same nine training-group and seed pairs (22–24), architectur
 | 0.020 / 0.030 / 0.0580 | 0.025 | Release default | 0.96390 | **0.93442** | 0.96588 |
 | 0.020 / 0.030 / 0.0580 | 0.025 | Shared 0.02 | 0.96390 | **0.93442** | 0.98369 |
 | 0.014 / 0.0046 / 0.0406 | 0.150 | Shared 0.041 | 0.94752 | **0.92547** | 0.95963 |
+| 0.014 / 0.0049 / 0.0406 | 0.150 | Shared 0.1 | **0.92850** | 0.94878 | 0.99652 |
 
 The default prior coefficient is 0.02 for v12 and v11 and 0.01 for EMPF. Within each rate setting, the default and shared-0.02 rows use the same Unified fits. At EMPF’s tuned rates with a shared prior of 0.02, v12 beat original EMPF on six of nine pairs. Original v11 had the lowest mean. [First rate setting](neuroko_v12_matched_rates_original_releases.json) · [First setting with shared prior](neuroko_v12_matched_rates_shared_prior.json) · [EMPF’s tuned rates](neuroko_v12_empf_rates_original_releases.json) · [EMPF’s rates with shared prior](neuroko_empf_rates_originals_shared_prior_002.json) · [Shared prior 0.041](neuroko_v12_balanced_matched_releases.json)
 
@@ -614,7 +617,7 @@ python paper_watch/scripts/neuroko_rate_noise.py --study critic-interval --data 
 
 The calibrated 0.0049 critic improved v12 again on seeds 251–253, from **0.94813 to 0.93939**. Five of the nine pairs improved, as in the first cohort. Tuned v11 scored **0.92116** and tuned EMPF **0.90413** on those same pairs. Across the two cohorts, four of the six three-fold seed means favored 0.0049 over 0.021. [All 18 paired scores and the predefined comparison](neuroko_v12_calibrated_critic_replication.json)
 
-At the exact rates 0.014/0.0049/0.0406, prior weight 0.1 and latent noise 0.15, **original 0.10.0 EMPF averaged 0.99652** on seeds 22–24. V12 averaged **0.92850** and won six of nine matched pairs. Every pair shared the GPU, initial parameters, projected cells and real minibatches. EMPF in the 0.12.0 wheel with its stronger noise-0.25 setting at critic rate 0.021 scored **0.92240** on the same pairs.
+At the exact rates 0.014/0.0049/0.0406, prior weight 0.1 and latent noise 0.15, **v12 averaged 0.92850**, original v11 (0.11.1) averaged **0.94878** and original EMPF (0.10.0) averaged **0.99652** on seeds 22–24. V12 beat each original on six of nine matched pairs. The two Unified models used hollow coupling and relativistic weight 2. Averaging the three folds per seed, v12 beat original EMPF at all three seeds and original v11 at two. Every pair shared the GPU, initial parameters, projected cells and real minibatches. EMPF in the 0.12.0 wheel at its stronger noise-0.25 setting and critic rate 0.021 scored **0.92240**. The matched release comparison repeats on seeds 251–253 with `--study original-v11-critic --stage compare-calibrated-second` and the two shared training directories. [All nine original-release comparisons](neuroko_v12_calibrated_critic_originals.json)
 
 To check how the stronger noise-0.25 controls transfer across releases, the role-rate driver also accepts `--study individual-role-rates --stage compare-original-noise-controls` with the same two shared training directories and the original `v12-individual-role-rates` output directory. It compares all three original releases and the 0.12.0 controls at a common noise width, prior weight and set of rates on each development cohort.
 
@@ -651,4 +654,28 @@ python paper_watch/scripts/neuroko_rate_noise.py --study critic-centroid-weight 
 
 At 1,200 updates, reducing the relativistic weight from 2 to 0.5 lowered v12 mean energy from **0.92850 to 0.92322**. Six of nine pairs improved. On the same pairs, tuned v11 in the 0.12.0 wheel scored **0.92511**, and tuned EMPF scored **0.92240**. V12 won five of nine individual pairs against EMPF and finished 0.00082 higher on the prespecified mean. The weight-0.5 candidate stopped at this stage. [Paired energies and screening rule](neuroko_v12_centroid_weight_energy.json)
 
+Across the three seeds per biological group, weight-0.5 v12 trailed tuned EMPF on `Screen1_1` (1.18560 versus 1.10810). It scored lower on `Screen1_3` (0.58842 versus 0.63317) and `Screen1_4` (0.99564 versus 1.02594). To check whether the effect repeats, add `--stage replicate-loss-weight` to the weight-0.5 command. This stage repeats the fixed-weight comparison on seeds 251–253 and measures the original releases at the candidate’s rates, noise and loss settings on each development cohort. EMPF has no relativistic term and uses its existing fits at the same three rates, latent noise and prior coefficient.
+
 The next experiment tests one further reduction to 0.25 at the same constant rates. Its first nine fits must beat weight 0.5 and both tuned controls. Further comparisons include original and same-wheel matched controls, then fresh training seeds 596–601. The biological holdout uses seeds 602–617 only if the candidate qualifies. To reproduce, change the last command to `--study critic-quarter-weight` and `--output "$data/v12-critic-quarter-weight"`.
+
+On the second development cohort, lowering the weight from 2 to 0.5 raised v12 mean energy from **0.93939 to 0.94349**. Four of nine paired fits improved. Tuned v11 averaged **0.92116** and tuned EMPF **0.90413**. Compared with weight 2, weight 0.5 again helped `Screen1_3` and hurt `Screen1_1`. V12 at 0.5 won one of nine pairs against tuned EMPF in this cohort. [Nine paired scores on seeds 251–253](neuroko_v12_half_weight_second_cohort.json)
+
+On the first cohort, reducing the weight from 0.5 to 0.25 raised energy from **0.92322 to 0.94224**. All three seed means worsened. The next fixed-weight comparison tests 1, the geometric midpoint of 0.5 and 2, against the 0.5 baseline and both tuned controls. It uses `--study critic-mid-weight` and `--output "$data/v12-critic-mid-weight"`. A candidate that wins both development cohorts must repeat the result on fresh training seeds 640–645 before the biological holdout on seeds 646–661. [Weight-0.25 scores and screening decision](neuroko_v12_quarter_weight_energy.json)
+
+A separate run restores the released loss defaults at the same tuned rates, noise and prior. The trial omits both Unified loss overrides. It uses `--study release-loss` and `--output "$data/v12-fixed-critic-release-loss"` with the same data and shared training directories. Its first nine runs must beat hollow weight 2 and both tuned controls. The later comparisons include hollow weight 0.5, both original releases, fresh training seeds 662–667 and, on qualification, biological holdout seeds 668–683.
+
+### Measuring the generator's output movement at fixed learning rates
+
+At relativistic weight 0.5, original v11 (0.11.1) and v12 (0.12.0) train with generator LR 0.014, critic LR 0.0049, particle LR 0.0406, latent noise 0.15 and prior weight 0.1. Before training, we freeze the 64 initial latent rows with one independently seeded noise draw per row. After each of 64 updates, we evaluate the generator at these same latent values for all four targets. The RMS change across targets, rows and output coordinates measures the movement of the generator itself. We also measure mean translation and movement around the target mean. Each instrumented fit is repeated with observation disabled and must reproduce its final parameters and minibatch hash.
+
+We compare the median movement per fit on nine seed–group pairs. If at least seven v12/v11 ratios fall on the same side of one, we divide 0.014 by their median and round to four decimal places. The measured ratio must move closer to one in a second v12 run with the proposed fixed generator LR. A qualifying rate can then be tested on the primary 1,200-update energy comparison, with the critic and particles still at 0.0049 and 0.0406. The rate is fixed throughout each fit. Subsequent validation uses both development cohorts and fresh training seeds 618–623 before the biological holdout on seeds 624–639.
+
+```bash
+python paper_watch/scripts/neuroko_generator_motion.py --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-generator-motion"
+python paper_watch/scripts/neuroko_rate_noise.py --study generator-motion --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-generator-motion-energy" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior" --generator-motion "$data/v12-generator-motion/result.json"
+```
+
+At generator LR 0.014, all nine v12 fits moved the generator outputs less per step than original v11. The median v12/v11 ratio was **0.93963** (range 0.92890–0.95140). The median ratio for target mean translation was 0.99660, and for movement around the target means it was 0.93036. Raising only the v12 generator LR to **0.0149** brought the overall median ratio to **1.01186**. Every observed fit reproduced the final parameter hash of its unobserved replay. The 1,200-update study tests the effect on energy. [Measurements at both generator rates and matched input hashes](neuroko_v12_generator_motion.json)

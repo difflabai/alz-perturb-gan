@@ -24,8 +24,9 @@ ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
 ROLE_OUTER_SEEDS = list(range(396, 412))
 CRITIC_NOISE_STUDIES = ("original-v11-critic-wide-noise", "original-v11-critic-narrow-noise")
 CENTROID_WEIGHTS = (.5, 1., 2., 4.)
-CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight")
-PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise", *CENTROID_STUDIES)
+CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight", "critic-mid-weight", "generator-motion")
+PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise",
+                       "release-loss", *CENTROID_STUDIES)
 TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "critic-interval",
                       *PRELIMINARY_STUDIES, *MOTION_STUDIES)
 TRIALS = {
@@ -188,6 +189,46 @@ def compare_prior_screen_releases(args):
                             "Check the development ranking of the prior-weight setting on the original releases. "
                             "The already completed independent comparison uses seeds 251–253.",
                             published={key(a): screen["scores"][key(a)] for a in matches})
+
+
+def replicate_centroid_weight(args):
+    plan = json.loads((args.output / "search.json").read_text())
+    first = json.loads((args.output / "preliminary.json").read_text())
+    baseline, _ = original_v11_critic_rate(args.original_v11_motion)
+    candidate = centroid_weight_trial(args.centroid_result, baseline)
+    if candidate is None or candidate["rhbi_relativistic_weight"] != .5:
+        raise ValueError("Expected the published weight-0.5 candidate")
+    matches = paired(candidate)
+    if (plan["arms"][:3] != matches or plan["screen_seeds"] != REPLICATION_SEEDS
+            or plan["second_screen_seeds"] != [251, 252, 253]):
+        raise ValueError("Expected the two original development cohorts")
+    baseline_matches = paired(baseline)
+    # This weight affects only Unified. Reuse the identically configured EMPF runs on each wheel.
+    if dict(matches[2][2], name=baseline["name"]) != baseline_matches[2][2]:
+        raise ValueError("EMPF settings changed beyond the trial name")
+    matches[2] = baseline_matches[2]
+    references = [matches[0], baseline_matches[0], *paired(WIDE_NOISY_PRIOR)[1:]]
+    if (set(first["scores"]) != {key(a) for a in references}
+            or any(len(v) != 9 for v in first["scores"].values())):
+        raise ValueError("The weight replication needs the complete first-cohort comparison")
+    root = args.output / "replication"
+    root.mkdir(exist_ok=True)
+    rule = ("Repeat the first-cohort loss-weight comparison on seeds 251–253. Compare all three original "
+            "releases and same-wheel controls at the matched weight, rates, noise and prior on each cohort. "
+            "Report this development replication independently of the frozen candidate selection.")
+    write_frozen(root / "protocol.json", dict(rule=rule, cohorts=[plan["screen_seeds"], plan["second_screen_seeds"]],
+                                             groups=list(GROUPS), matched=matches, references=references))
+    local = copy(args)
+    local.output = args.second_screen or args.output
+    scores = evaluate(local, references, plan["second_screen_seeds"])
+    write_frozen(root / "second_weight_energy.json",
+                 dict(scores=scores, means={k: mean(v) for k, v in scores.items()}))
+    for name, seeds, shared, results in (("first", plan["screen_seeds"], args.shared_screen, first["scores"]),
+                                         ("second", plan["second_screen_seeds"], args.second_screen, scores)):
+        destination = root / name
+        destination.mkdir(exist_ok=True)
+        local.output = shared or args.output
+        original_release_scores(local, destination, matches, seeds, rule, published={key(matches[0]): results[key(matches[0])]})
 
 
 def individual_rates(args):
@@ -377,7 +418,7 @@ def spread_target(path):
                 prior_reg_target_std=target), average
 
 
-def replicate_calibrated_releases(args):
+def replicate_calibrated_releases(args, *, second_cohort=False):
     if args.study not in ("balanced-particle-prior", "original-v11-critic"):
         raise ValueError("The matched replication requires a calibrated prior or critic study")
     search = json.loads((args.output / "search.json").read_text())
@@ -388,6 +429,22 @@ def replicate_calibrated_releases(args):
     selected = key(arms[0])
     root = args.output / "matched-releases"
     root.mkdir(exist_ok=True)
+    if second_cohort:
+        if trial != original_v11_critic_rate(args.original_v11_motion)[0] or search["second_screen_seeds"] != [251, 252, 253]:
+            raise ValueError("Expected the original fixed-critic calibration and second development cohort")
+        originals = [arms[0], ["0.11.1", *arms[1][1:]], ["0.10.0", *arms[2][1:]]]
+        local = copy(args)
+        local.output = args.shared_screen or args.output
+        first = evaluate(local, originals, REPLICATION_SEEDS)
+        if any(mean(first[selected]) >= mean(first[key(a)]) for a in originals[1:]):
+            raise ValueError("Expected v12 to lead both original releases at this setting on the first cohort")
+        destination = root / "second-development"
+        destination.mkdir(exist_ok=True)
+        local.output = args.second_screen or args.output
+        original_release_scores(local, destination, arms, search["second_screen_seeds"],
+                                "Repeat the original-release fixed-critic comparison on development seeds 251–253. "
+                                "Use identical rates, latent noise 0.15 and prior weight 0.1 for all five arms.")
+        return
     fresh = list(range(452, 458))
     rule = ("Reproduce the calibrated-prior setting on the nine original development pairs with all "
             "five formulation and release combinations. Only if v12 has the lowest mean across all five, "
@@ -480,6 +537,47 @@ def centroid_weight_trial(path, baseline):
     return dict(baseline, name=baseline["name"] + f"-rel{round(selected * 10)}", rhbi_relativistic_weight=selected)
 
 
+def generator_motion_trial(path, baseline):
+    data = json.loads(path.read_text())
+    plan = data["protocol"]
+    old = baseline["lr"]
+    if (plan["fixed_rates"] != dict(generator=old, critic=old * baseline["d_lr_mult"],
+                                    particles=old * baseline["prior_lr_mult"])
+            or (plan["relativistic_weight"], plan["prior_sigma"], plan["prior_reg"]) !=
+               (baseline["rhbi_relativistic_weight"], baseline["prior_sigma"], baseline["prior_reg"])
+            or plan["releases"] != {"0.11.1": "unified_v11", "0.12.0": V12}
+            or plan["steps"] != 64 or plan["seeds"] != REPLICATION_SEEDS or plan["groups"] != list(GROUPS)):
+        raise ValueError("Generator calibration needs both original releases on the nine matched training pairs")
+
+    def ratios(check, lr):
+        rows = check["pairs"]
+        if (check["generator_lr"] != lr or [(r["seed"], r["group"]) for r in rows] !=
+                [(s, g) for s in REPLICATION_SEEDS for g in GROUPS]):
+            raise ValueError("Generator motion is missing a paired measurement or uses a different rate")
+        values = [r["motion"]["0.12.0"]["rms"] / r["motion"]["0.11.1"]["rms"] for r in rows]
+        if (any(not isfinite(v) or v <= 0 for v in values) or values != [r["ratio"] for r in rows]
+                or median(values) != check["median_ratio"]):
+            raise ValueError("The generator rate does not reproduce from the measured output changes")
+        return values
+
+    first = ratios(data["initial"], old)
+    initial = median(first)
+    lr = round(old / initial, 4)
+    agree = sum((v - 1) * (initial - 1) > 0 for v in first)
+    if lr != data["candidate_lr"] or agree != data["agreeing_pairs"]:
+        raise ValueError("The proposed generator rate differs from the paired result")
+    testable = agree >= 7 and lr > 0 and lr != old
+    if (data["checked"] is not None) != testable:
+        raise ValueError("The proposed generator rate needs the prescribed replay")
+    qualifies = testable and abs(log(median(ratios(data["checked"], lr)))) < abs(log(initial))
+    if qualifies != data["qualifies"]:
+        raise ValueError("The recorded generator calibration decision disagrees with the replay")
+    if not qualifies:
+        return None
+    return dict(baseline, name=baseline["name"] + f"-g{round(lr * 10000)}", lr=lr,
+                d_lr_mult=plan["fixed_rates"]["critic"] / lr, prior_lr_mult=plan["fixed_rates"]["particles"] / lr)
+
+
 def compare_prior_weight(args):
     screen_only = []
     pinned = []
@@ -547,7 +645,7 @@ def compare_prior_weight(args):
                 "On seeds 22–24 first require a lower v12 mean than baseline v12 and both noise-0.25 controls. "
                 "If it passes, compare against all matched and previously tuned controls on 22–24 and 251–253. "
                 "Reserve fresh seeds 480–485 including original releases, then biological holdout seeds 486–501.")
-    elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", *CENTROID_STUDIES):
+    elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "release-loss", *CENTROID_STUDIES):
         baseline = NOISY_PRIOR
         trial, ratios = original_v11_critic_rate(args.original_v11_motion)
         write_frozen(args.output / "original_critic_calibration.json",
@@ -580,20 +678,62 @@ def compare_prior_weight(args):
                     "identical for EMPF. V12 must first beat the weight-2 baseline and both tuned noise-0.25 "
                     "controls. Check all matched and established arms on both development cohorts, then on "
                     "fresh seeds 574–579 with the original releases before biological holdout seeds 580–595.")
-            if args.study == "critic-quarter-weight":
+            if args.study in ("critic-quarter-weight", "critic-mid-weight"):
                 if trial["rhbi_relativistic_weight"] != .5:
                     raise ValueError("The preceding NeuroKO loss-weight experiment must select weight 0.5")
                 baseline = trial
                 references.append(("calibrated-weight05", paired(baseline)[0]))
-                trial = dict(trial, name=trial["name"].removesuffix("-rel5") + "-rel025", rhbi_relativistic_weight=.25)
-                independent_seeds, outer_seeds = list(range(596, 602)), list(range(602, 618))
-                rule = ("Halve the relativistic weight from 0.5 to 0.25 at the same fixed rates. "
-                        "First beat weight 0.5 and both tuned noise-0.25 controls on seeds 22–24. "
-                        "Then beat every matched and tuned reference, including the original releases, "
-                        "on 22–24 and 251–253 separately and on fresh seeds 596–601. "
-                        "Only a qualifying candidate goes to the biological holdout on seeds 602–617.")
+                if args.study == "critic-quarter-weight":
+                    trial = dict(trial, name=trial["name"].removesuffix("-rel5") + "-rel025", rhbi_relativistic_weight=.25)
+                    independent_seeds, outer_seeds = list(range(596, 602)), list(range(602, 618))
+                    rule = ("Halve the relativistic weight from 0.5 to 0.25 at the same fixed rates. "
+                            "First beat weight 0.5 and both tuned noise-0.25 controls on seeds 22–24. "
+                            "Then beat every matched and tuned reference, including the original releases, "
+                            "on 22–24 and 251–253 separately and on fresh seeds 596–601. "
+                            "Only a qualifying candidate goes to the biological holdout on seeds 602–617.")
+                    label = "original-quarter-weight-"
+                else:
+                    weight = sqrt(.5 * 2.)
+                    trial = dict(baseline, name=baseline["name"].removesuffix("-rel5") + "-rel1", rhbi_relativistic_weight=weight)
+                    independent_seeds, outer_seeds = list(range(640, 646)), list(range(646, 662))
+                    rule = ("Test the geometric midpoint of relativistic weights 0.5 and 2 at the fixed role rates. "
+                            "First beat weight 0.5 and both tuned controls on seeds 22–24. Then beat the matched "
+                            "and tuned references, including the original releases, on each development cohort "
+                            "and fresh seeds 640–645 before biological holdout seeds 646–661.")
+                    label = "original-mid-weight-"
                 for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
-                    references.append(("original-quarter-weight-" + arm[1], [release, *arm[1:]]))
+                    references.append((label + arm[1], [release, *arm[1:]]))
+            elif args.study == "generator-motion":
+                baseline = trial
+                references.append(("calibrated-weight05", paired(baseline)[0]))
+                trial = generator_motion_trial(args.generator_motion, baseline)
+                if trial is None:
+                    if args.stage != "search":
+                        raise ValueError("No fixed generator rate qualified in the paired motion replay")
+                    write_frozen(args.output / "selection.json", dict(advances=False, winner=None, reason="generator motion"))
+                    return
+                independent_seeds, outer_seeds = list(range(618, 624)), list(range(624, 640))
+                rule = ("Use the fixed generator rate verified against original v11 generator motion at loss "
+                        "weight 0.5. Keep critic and particle rates fixed. First beat the weight-0.5 baseline "
+                        "and both tuned wide-noise controls, then all matched and tuned references, including "
+                        "the original releases, on each development cohort and fresh seeds 618–623. Only a "
+                        "qualifying candidate goes to the biological holdout on seeds 624–639.")
+                for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
+                    references.append(("original-generator-rate-" + arm[1], [release, *arm[1:]]))
+        elif args.study == "release-loss":
+            baseline = trial
+            trial = {k: v for k, v in baseline.items() if k not in ("rhbi_self_coupling", "rhbi_relativistic_weight")}
+            trial["name"] += "-release-loss"
+            references.append(("calibrated-hollow-weight2", paired(baseline)[0]))
+            half = dict(baseline, name=baseline["name"] + "-rel5", rhbi_relativistic_weight=.5)
+            references.append(("calibrated-hollow-weight05", paired(half)[0]))
+            independent_seeds, outer_seeds = list(range(662, 668)), list(range(668, 684))
+            rule = ("At the calibrated fixed critic rate restore the released Unified coupling and relativistic "
+                    "weight by omitting both loss overrides. Compare with hollow coupling at weight 2 and both "
+                    "tuned controls, then all matched and established references on each development cohort. "
+                    "Fresh seeds 662–667 must beat both original releases before biological holdout seeds 668–683.")
+            for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
+                references.append(("original-release-loss-" + arm[1], [release, *arm[1:]]))
         elif args.study == "critic-interval":
             baseline = trial
             trial, interval = critic_interval(args, baseline)
@@ -625,7 +765,7 @@ def compare_prior_weight(args):
                         "and tuned wide-noise controls. Then compare all matched and established arms, including "
                         "original tuned releases, on both development cohorts. Qualify on fresh training seeds "
                         "552–557 with the original releases before the biological holdout on 558–573.")
-        if args.study in ("original-v11-critic-narrow-noise", "critic-interval", *CENTROID_STUDIES):
+        if args.study in ("original-v11-critic-narrow-noise", "critic-interval", "release-loss", *CENTROID_STUDIES):
             for arm, release in zip(paired(WIDE_NOISY_PRIOR)[1:], ("0.11.1", "0.10.0"), strict=True):
                 references.append(("original-tuned-" + arm[1], [release, *arm[1:]]))
     elif args.study == "prior-target-spread":
@@ -818,12 +958,14 @@ def main():
     parser.add_argument("--window-cells", type=int)
     parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-prior-screen-releases",
                                           "compare-noise-controls", "compare-original-noise-controls",
-                                          "replicate-balanced-releases", "replicate-calibrated-critic"), default="search")
+                                          "replicate-balanced-releases", "replicate-calibrated-critic",
+                                          "replicate-loss-weight", "compare-calibrated-second"), default="search")
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
                         default="rates")
     parser.add_argument("--particle-spread-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_particle_spread.json")
     parser.add_argument("--centroid-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_centroid_gradient.json")
+    parser.add_argument("--generator-motion", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_generator_motion.json")
     parser.add_argument("--original-v11-motion", type=Path, default=ROOT / "paper_watch/notes/neuroko_original_v11_critic_motion.json")
     parser.add_argument("--spread-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_prior_weight_geometry.json")
     parser.add_argument("--shared-screen", type=Path,
@@ -843,17 +985,23 @@ def main():
     for field in ("data", "wheels", "output"):
         setattr(args, field, getattr(args, field).resolve())
     args.output.mkdir(parents=True, exist_ok=True)
+    if args.stage == "replicate-loss-weight":
+        if args.study != "critic-centroid-weight":
+            parser.error("--stage replicate-loss-weight requires --study critic-centroid-weight")
+        replicate_centroid_weight(args)
+        return
     if args.stage == "compare-prior-screen-releases":
         if args.study != "prior-weight":
             parser.error("--stage compare-prior-screen-releases requires --study prior-weight")
         compare_prior_screen_releases(args)
         return
     replication = {"replicate-balanced-releases": "balanced-particle-prior",
+                   "compare-calibrated-second": "original-v11-critic",
                    "replicate-calibrated-critic": "original-v11-critic"}
     if args.stage in replication:
         if args.study != replication[args.stage]:
             parser.error(f"--stage {args.stage} requires --study {replication[args.stage]}")
-        replicate_calibrated_releases(args)
+        replicate_calibrated_releases(args, second_cohort=args.stage == "compare-calibrated-second")
         return
     if args.stage in ("compare-noise-controls", "compare-original-noise-controls"):
         if args.study != "individual-role-rates":

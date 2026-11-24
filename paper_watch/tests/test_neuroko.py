@@ -229,6 +229,38 @@ def test_centroid_probe_averages_targets_and_requires_paired_support(tmp_path, m
         centroid_weight_trial(path, baseline)
 
 
+def test_generator_calibration_requires_improved_replay_and_preserves_other_rates(tmp_path, monkeypatch):
+    import json
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    from neuroko_rate_noise import GROUPS, NOISY_PRIOR, REPLICATION_SEEDS, generator_motion_trial
+
+    baseline = dict(NOISY_PRIOR, d_lr_mult=.35, rhbi_relativistic_weight=.5)
+    plan = dict(fixed_rates=dict(generator=.014, critic=.0049, particles=.0406), steps=64,
+                releases={"0.11.1": "unified_v11", "0.12.0": "unified_v12"}, seeds=REPLICATION_SEEDS,
+                groups=list(GROUPS), prior_reg=.1, prior_sigma=.15, relativistic_weight=.5)
+
+    def check(lr, ratio):
+        motion = {"0.12.0": {"rms": ratio}, "0.11.1": {"rms": 1.}}
+        pairs = [dict(seed=s, group=g, ratio=ratio, motion=motion) for s in REPLICATION_SEEDS for g in GROUPS]
+        return dict(generator_lr=lr, median_ratio=ratio, pairs=pairs)
+
+    result = dict(protocol=plan, initial=check(.014, 1.4), checked=check(.01, .98), candidate_lr=.01,
+                  agreeing_pairs=9, qualifies=True)
+    source = tmp_path / "motion.json"
+    source.write_text(json.dumps(result))
+    trial = generator_motion_trial(source, baseline)
+    assert trial["lr"] == .01
+    assert [trial["lr"] * trial[k] for k in ("d_lr_mult", "prior_lr_mult")] == pytest.approx([.0049, .0406])
+    result["checked"] = check(.01, 1.6)
+    source.write_text(json.dumps(result))
+    with pytest.raises(ValueError, match="decision disagrees"):
+        generator_motion_trial(source, baseline)
+    result["qualifies"] = False
+    source.write_text(json.dumps(result))
+    assert generator_motion_trial(source, baseline) is None
+
+
 @pytest.mark.parametrize("wins", (True, False))
 def test_individual_role_rate_shortlist_preserves_other_rates(tmp_path, monkeypatch, wins):
     from types import SimpleNamespace

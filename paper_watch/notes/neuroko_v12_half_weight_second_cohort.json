@@ -1,0 +1,174 @@
+{
+  "protocol": {
+    "rule": "Repeat the first-cohort loss-weight comparison on seeds 251\u2013253. Compare all three original releases and same-wheel controls at the matched weight, rates, noise and prior on each cohort. Report this development replication independently of the frozen candidate selection.",
+    "cohorts": [
+      [
+        22,
+        23,
+        24
+      ],
+      [
+        251,
+        252,
+        253
+      ]
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "matched": [
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49-rel5",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 0.5,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49-rel5",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 0.5,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "references": [
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49-rel5",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 0.5,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.25,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ]
+    ]
+  },
+  "result": {
+    "scores": {
+      "0.12.0/unified_v12/original-v11-critic-49-rel5": [
+        1.2125133070913205,
+        0.597003548867993,
+        1.0175194653123814,
+        1.1815173378981785,
+        0.6238118774981396,
+        1.0644963620516545,
+        1.1590839943171785,
+        0.6041801222824574,
+        1.0312870901954336
+      ],
+      "0.12.0/unified_v12/original-v11-critic-49": [
+        1.1412954010469378,
+        0.633696660494178,
+        1.0131135530000601,
+        1.2306572823088493,
+        0.6138221992773936,
+        1.0325482063250722,
+        1.0808511714939395,
+        0.6675814603899681,
+        1.0409889928206046
+      ],
+      "0.12.0/unified_v11/noise250-prior100": [
+        1.2046290732651421,
+        0.6431797824682548,
+        0.9896809202041645,
+        1.1478956308991257,
+        0.582432076583989,
+        1.0698143847223107,
+        0.983078207528687,
+        0.6216809812535689,
+        1.048058851417851
+      ],
+      "0.12.0/empf/noise250-prior100": [
+        1.1566485332439562,
+        0.6206967452030661,
+        0.9820954604564001,
+        1.0777784378935291,
+        0.6172634586043444,
+        0.9421862293921406,
+        1.1361177669356388,
+        0.575229532762398,
+        1.0291768706489963
+      ]
+    },
+    "means": {
+      "0.12.0/unified_v12/original-v11-critic-49-rel5": 0.943490345057193,
+      "0.12.0/unified_v12/original-v11-critic-49": 0.9393949919063337,
+      "0.12.0/unified_v11/noise250-prior100": 0.9211611009270104,
+      "0.12.0/empf/noise250-prior100": 0.9041325594600522
+    }
+  }
+}

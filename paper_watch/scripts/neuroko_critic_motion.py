@@ -61,24 +61,27 @@ def particle_gradients(model):
 
 
 def measure(x, labels, probes, seed, recipe, device, critic_lr, prior_weight, *, monitor=True, measure_gradients=False,
-            steps=STEPS, fit_context=None):
+            steps=STEPS, fit_context=None, generator_lr=.014, relativistic_weight=2.):
     import torch
     from paper_watch.alztest.harness import ConditionalPGAN, TrainingSettings
     from paper_watch.alztest.neuroko_duration import optimizer_rates
     from paper_watch.alztest.neuroko_tune import verify_fixed_schedule
 
     overrides = {k: v for k, v in NOISY_PRIOR.items() if k not in ("name", "lr")}
-    overrides["d_lr_mult"] = critic_lr / NOISY_PRIOR["lr"]
+    overrides["d_lr_mult"] = critic_lr / generator_lr
+    overrides["prior_lr_mult"] = .0406 / generator_lr
+    overrides["rhbi_relativistic_weight"] = relativistic_weight
     overrides["prior_reg"] = prior_weight
     settings = TrainingSettings(**overrides)
     torch.manual_seed(seed)
     with torch.random.fork_rng(devices=[]):
         torch.default_generator.manual_seed(seed)
         model = ConditionalPGAN(x.shape[1], len(probes), seed=seed, recipe_name=recipe, device=device,
-                                learning_rate=NOISY_PRIOR["lr"], settings=settings)
+                                learning_rate=generator_lr, settings=settings)
     verify_fixed_schedule(model.trainer.recipe, steps)
     rates = optimizer_rates(model)
-    if rates != {"generator": .014, "critic": critic_lr, "particles": .0406}:
+    if rates != {"generator": generator_lr, "critic": generator_lr * overrides["d_lr_mult"],
+                 "particles": generator_lr * overrides["prior_lr_mult"]}:
         raise ValueError(f"Unexpected initial rates {rates}")
 
     def weights_hash():
@@ -116,6 +119,8 @@ def measure(x, labels, probes, seed, recipe, device, critic_lr, prior_weight, *,
         nonlocal first, preceding
         if optimizer_rates(model) != rates:
             raise ValueError(f"Changed learning rate at step {step}")
+        if observe_update is not None:
+            observe_update(step)
         if read_gradients is not None:
             loss_gradients.append(read_gradients())
         if monitor:
@@ -131,8 +136,7 @@ def measure(x, labels, probes, seed, recipe, device, critic_lr, prior_weight, *,
     observation = particle_gradients(model) if measure_gradients else nullcontext()
     with ExitStack() as stack:
         read_gradients = stack.enter_context(observation)
-        if fit_context is not None:
-            stack.enter_context(fit_context(model))
+        observe_update = stack.enter_context(fit_context(model)) if fit_context is not None else None
         model.fit(x, labels, steps=steps, after_step=after, on_batch=record)
     row = dict(initial_parameters_sha256=initial, final_parameters_sha256=weights_hash(),
                training_batches_sha256=batches.hexdigest(), rates=rates, steps=model.trainer.completed_steps,
