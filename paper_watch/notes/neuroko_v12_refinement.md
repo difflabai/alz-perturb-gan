@@ -244,7 +244,7 @@ On fresh training seeds 251–253, v12 averaged 0.94813 and matched 0.12.0 EMPF 
 
 Matched v11 from the 0.12.0 wheel averaged 0.93629. V12 beat it on three of nine pairs and one of the three seed means. Within v12 itself, increasing the penalty from 0.02 to 0.1 also helped on the fresh seeds. Mean energy fell from 0.97650 to 0.94813, an improvement of 2.9%. The higher weight improved seven of nine pairs, all three seed means and each of the four target means.
 
-The prior weight had different effects across formulations at noise 0.15. In both cohorts, weight 0.1 lowered v12 energy and raised v11 energy. Across the 18 fold–seed pairs, the stronger prior improved v12 on 13 and v11 on five. EMPF's mean moved by less than 0.006 in either cohort. On fresh seeds, v11 at its default weight scored 0.91437, 0.03376 below the tuned v12.
+The prior weight had different effects across formulations at noise 0.15. In both cohorts, weight 0.1 lowered v12 energy and raised v11 energy. Across the 18 fold–seed pairs, the stronger prior improved v12 on 13 and v11 on five. EMPF's mean moved by less than 0.006 in either cohort. On fresh seeds, v11 at its default weight scored 0.91437, the lowest of the ten arms and 0.03376 below the tuned v12. [All 90 independent scores and the qualification decision](neuroko_v12_prior_weight_validation.json)
 
 | Change in energy from release-default weight to 0.1 | Seeds 22–24 | Seeds 251–253 |
 | --- | ---: | ---: |
@@ -315,3 +315,14 @@ The one new candidate for independent validation uses rates 0.020, 0.042 and 0.0
 python paper_watch/scripts/neuroko_rate_noise.py --study prior-interaction --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-prior-interaction" --shared-screen "$data/v12-rate-noise"
 ```
+
+Across the 72 v12 fits, increasing the prior weight from 0.02 to 0.1 raised mean energy slightly at noise 0.025 and lowered it at noise 0.15 under both rate settings. The change in the effect of weight between the two noise levels was −0.03495 at the release rates and −0.03575 at the higher critic rate. At both settings the stronger weight improved six of nine pairs with higher noise and four of nine with lower noise. [Paired contrasts for all eight combinations](neuroko_v12_prior_effects.json)
+
+| Generator / critic / particle LR | Latent noise | V12 at weight 0.02 | V12 at weight 0.1 | Change in energy ↓ |
+| --- | ---: | ---: | ---: | ---: |
+| 0.014 / 0.021 / 0.0406 | 0.025 | 0.97295 | 0.97676 | +0.00381 |
+| 0.014 / 0.021 / 0.0406 | 0.150 | 0.97344 | 0.94231 | −0.03113 |
+| 0.020 / 0.042 / 0.0203 | 0.025 | 0.97744 | 0.98734 | +0.00990 |
+| 0.020 / 0.042 / 0.0203 | 0.150 | 0.97967 | 0.95381 | −0.02586 |
+
+The higher-critic candidate at noise 0.15 and weight 0.1 scored 0.95381. An EMPF reference already scored 0.94613 on these nine pairs, ruling the candidate out under the published criterion.

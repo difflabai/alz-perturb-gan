@@ -38,6 +38,42 @@ def original_noise(trial):
     return dict(trial, name="same-rates-sigma025", prior_sigma=0.025)
 
 
+def prior_effects(arms, scores, seeds):
+    grid = {}
+    for arm in arms:
+        if arm[1] != V12:
+            continue
+        trial = arm[2]
+        generator = trial["lr"]
+        rates = (generator, generator * trial.get("d_lr_mult", 1.5), generator * trial.get("prior_lr_mult", 2.9))
+        cell = (rates, trial.get("prior_sigma", 0.025), trial.get("prior_reg", 0.02))
+        values = scores[key(arm)]
+        if cell in grid or len(values) != len(seeds) * len(GROUPS):
+            raise ValueError(f"Duplicate or incomplete v12 comparison at {cell}")
+        grid[cell] = values
+    rate_sets = sorted({cell[0] for cell in grid})
+    sigmas = (0.025, 0.15)
+    weights = (0.02, 0.1)
+    if len(rate_sets) != 2 or set(grid) != {
+        (rates, sigma, weight) for rates in rate_sets for sigma in sigmas for weight in weights
+    }:
+        raise ValueError("Expected two rate settings crossed with two noise levels and two prior weights")
+    result = []
+    for rates in rate_sets:
+        noise_levels = []
+        for sigma in sigmas:
+            weak, strong = (grid[rates, sigma, weight] for weight in weights)
+            delta = [x - y for x, y in zip(strong, weak, strict=True)]
+            noise_levels.append(dict(sigma=sigma, mean_energy_by_weight={"0.02": mean(weak), "0.1": mean(strong)},
+                                     strong_minus_default=mean(delta), paired_differences=delta,
+                                     pairs_improved=sum(d < 0 for d in delta)))
+        low, high = (level["paired_differences"] for level in noise_levels)
+        interaction = [x - y for x, y in zip(high, low, strict=True)]
+        result.append(dict(rates=dict(zip(("generator", "critic", "particles"), rates)), noise_levels=noise_levels,
+                           noise_by_weight=mean(interaction), paired_interactions=interaction))
+    return dict(seeds=seeds, groups=list(GROUPS), rate_settings=result)
+
+
 def compare_releases(args, trial, seeds):
     screen = json.loads((args.output / "screen.json").read_text())
     plan = json.loads((args.output / "search.json").read_text())
@@ -164,6 +200,8 @@ def compare_prior_weight(args):
     passes = all(means[own] < means[control] for control in required)
     screened = dict(scores=scores, means=means, passes=passes)
     write_frozen(args.output / "screen.json", screened)
+    if args.study == "prior-interaction":
+        write_frozen(args.output / "prior_effects.json", prior_effects(arms, scores, REPLICATION_SEEDS))
     decision = dict(screening=screened, advances=False, winner=None)
     if passes:
         decision.update(validate_finalist(args, trial, independent_seeds, reference_arms=references))
