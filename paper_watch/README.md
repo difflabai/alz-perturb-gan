@@ -217,6 +217,8 @@ python paper_watch/scripts/neuroko_convergence.py --shared-smoothing-from "$data
   --wheels "$data/wheels" --output "$data/v12-smoothing-40000"
 ```
 
+The published two-seed mean energy at 40,000 was **1.15122** for v12, **1.20192** for matched original v11 and **1.20712** for matched original EMPF. V12 led on both Screen1_1 seeds. [Reference scores, input hashes and training times](notes/neuroko_v12_matched_originals_40000.json) · [Energy and diversity curves](notes/neuroko_v12_matched_originals_40000.png)
+
 To repeat the 40,000-update comparison at EMPF’s native smoothing of **0.001**, run the 0.001 pilot above and use its directory below. This trains v12 and original v11 on each of the same two seeds, reuses original EMPF and the two tuned controls, and verifies the first three checkpoints against the 0.001 pilot. In each output directory, `comparison.json` contains the two-seed endpoint means and the mean energy over updates 30,000–40,000.
 
 ```bash

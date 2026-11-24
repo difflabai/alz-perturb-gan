@@ -1,0 +1,1734 @@
+{
+  "protocol": {
+    "arms": {
+      "v12": [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "matched_v11": [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "matched_empf": [
+        "0.10.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49-smoothing0.0061",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1,
+          "optimizer_smoothing": 0.0061
+        }
+      ],
+      "tuned_v11": [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.041,
+          "rhbi_relativistic_weight": 2.0,
+          "rhbi_self_coupling": "hollow"
+        }
+      ],
+      "tuned_empf": [
+        "0.10.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ]
+    },
+    "seeds": [
+      22,
+      251
+    ],
+    "groups": [
+      "Screen1_1"
+    ],
+    "checkpoints": [
+      1200,
+      2400,
+      3600,
+      4800,
+      6000,
+      7200,
+      8400,
+      9600,
+      10800,
+      12000,
+      13200,
+      14400,
+      15600,
+      16800,
+      18000,
+      19200,
+      20400,
+      21600,
+      22800,
+      24000,
+      25200,
+      26400,
+      27600,
+      28800,
+      30000,
+      31200,
+      32400,
+      33600,
+      34800,
+      36000,
+      37200,
+      38400,
+      39600,
+      40000
+    ],
+    "metric": "four-target mean energy distance",
+    "rule": "Compare the original releases through 40,000 updates on Screen1_1 for seeds 22 and 251. Set both optimizers' smoothing to 0.0061 for the three matched formulations. Train only the adjusted EMPF fits, reuse the other four configurations and replay all five pilot curves through 3,600 on identical inputs. Compare the paired endpoints and the time-weighted mean from 30,000 to 40,000 updates regardless of earlier rankings.",
+    "matched_optimizer_smoothing": 0.0061
+  },
+  "roles": [
+    "v12",
+    "matched_v11",
+    "matched_empf"
+  ],
+  "cells": [
+    {
+      "seed": 22,
+      "group": "Screen1_1",
+      "gpu": 0,
+      "fingerprints": {
+        "projected_data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches": [
+          "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96",
+          "e85ce36b00e872c786196e3f428274c40f6c4612c7cac7fdeb35968eab8fc054",
+          "4d073c3e5bf6e5b5e86103d2867f6bf4950d3b2194f1b1c9ff69ee46d0d42c96",
+          "1b4dd7e893fa93db493a0fadb9663fb4dffa109466601bc1f99fa9c3d1d7692e",
+          "cfc9733ffa014a2e1668d7c64e839b0eaa1f3c99d058bb4787c4f586f7be7b52",
+          "af923e5127b4ccf4b402f9ecd7e4921af90065f32f54ed03478afcb9d24af360",
+          "f51b4423b1b8b527a3b523e1052b0bdc39508f10e79d86f95abb65b72a058532",
+          "355a9313a43b4a63543559f9bc9bfa3070bf4b5de4cbd562079427ad9a8e033f",
+          "52afc7068f7b7199a975e358f193fdf1d80f4731c4ec1256726f1e61eba2ac20",
+          "259add0ca9ff9ecca3a610b700261b5e0f141bcb69c32e1a1878536c4795f62e",
+          "b3bee02c166c8c7716822a49ac5503135bb86a9fbd3634d34c53f37019978e31",
+          "852e34e616667d3c50ad6cca176eab428989d4d1245762b1103b4240350890f4",
+          "b8193b1fbe5e7b6090b2e07b3fef1ef6cf668569690a4d9033cade55cc722ea4",
+          "033780aa50fd30edf582f44703df74aba0a3991f9773c300521b405f7e39a814",
+          "73096a3387e7d15e7a441b0d6449fa3dac17c4147308617c9dcc207760ac8c9f",
+          "133a014c8ce771fd5cbb618277b7f6318fa0a41e46c7dae4de9dd438395cb4cc",
+          "b25c700f51a19c60f47f642fc82eb8e43f2331a09c9a50a5027ac1315ab0f7c3",
+          "ab8526fc387a0f239823034235cde8cc0fbadb928743e613a60a5c05c3e53fb9",
+          "62dabbb829bdeb221e714867e57f5db22166a3335408a34ec3fbd0503a2b2599",
+          "95435079a051e6b240345cb690160eb3fadc0ab73807ad3f50d8dcf78702a8fe",
+          "7ca049177b96b9b55d3cd46148e39b6921fb4bc38ee6e68fae2465f2587a3135",
+          "eeb689f3ce22fea2244ede84bae1e84658dfd496d7bff4ff5b307c54b494a6cc",
+          "b5d9ade5cd44c2365f3f49af03cf82c12556906a9c920007eab0ef788e84f7dd",
+          "f84d73aab061c0693d61865171f8756132c36175d43bae4c3d765af606983e2d",
+          "0a9d9e8c82c46d33492ee3332a6da872013f18cec751e6c507d791122cc2f841",
+          "9b4d80db5de2a6af1a268fbd76a87ad56d3aa669fafb1373882a4cfea94b03b9",
+          "18e333276ebd51815a6a1a86da8de67cf8651cb3e3dc8556550b313af1a4d844",
+          "65f6a249c33b07f0b9a410cb048fb1198ad9723f221b16b196ff2d2434b46c4e",
+          "ad87f6180b4151aa4552624c5e01f9e5a3d6712babb6f9ea5fbce432b636e261",
+          "8e196966396253d5c715ed9f992e2f6c9271511b238a1776997c81e3e1c22baf",
+          "85f7c9611b5f6d6414b8a8b24c12b34d66754d18467448162a0a657c0df60d84",
+          "2e5c8d7c1de890efc48b76228a4607b1d2c12861adb81b85d42e4d9f96684419",
+          "c698b6814076d77621e10c3ea106e040c548d8d58f514782b562d53bc10edf3d",
+          "287b336a6c65b18637a05451781c6de382d7520024cec3d569d066496fac2975"
+        ]
+      },
+      "arms": {
+        "v12": {
+          "curve": [
+            {
+              "updates": 1200,
+              "mean_energy_distance": 1.1263494186235306,
+              "spread_ratio": 1.2574142164189075,
+              "effective_rank": 22.504541000754635
+            },
+            {
+              "updates": 2400,
+              "mean_energy_distance": 1.176632832040468,
+              "spread_ratio": 1.349845250788661,
+              "effective_rank": 21.623435010813388
+            },
+            {
+              "updates": 3600,
+              "mean_energy_distance": 1.1721157915488747,
+              "spread_ratio": 1.331757806159366,
+              "effective_rank": 19.53714346647075
+            },
+            {
+              "updates": 4800,
+              "mean_energy_distance": 1.2327158888072707,
+              "spread_ratio": 1.2742379186257433,
+              "effective_rank": 22.36864672245014
+            },
+            {
+              "updates": 6000,
+              "mean_energy_distance": 1.234570266769868,
+              "spread_ratio": 1.334045352269424,
+              "effective_rank": 21.252067739593855
+            },
+            {
+              "updates": 7200,
+              "mean_energy_distance": 1.1843561472368236,
+              "spread_ratio": 1.2614416616592419,
+              "effective_rank": 21.93051459358211
+            },
+            {
+              "updates": 8400,
+              "mean_energy_distance": 1.1989892706218994,
+              "spread_ratio": 1.3155017574870858,
+              "effective_rank": 20.724287033061955
+            },
+            {
+              "updates": 9600,
+              "mean_energy_distance": 1.162789749957656,
+              "spread_ratio": 1.3220972726204958,
+              "effective_rank": 20.151660626961828
+            },
+            {
+              "updates": 10800,
+              "mean_energy_distance": 1.1616860853422548,
+              "spread_ratio": 1.3669115368829188,
+              "effective_rank": 18.12475076525875
+            },
+            {
+              "updates": 12000,
+              "mean_energy_distance": 1.1499881732976835,
+              "spread_ratio": 1.3692667247652233,
+              "effective_rank": 17.872912901658694
+            },
+            {
+              "updates": 13200,
+              "mean_energy_distance": 1.1717372480211798,
+              "spread_ratio": 1.3738200887655716,
+              "effective_rank": 17.77117512619193
+            },
+            {
+              "updates": 14400,
+              "mean_energy_distance": 1.1684292637221987,
+              "spread_ratio": 1.385796228380604,
+              "effective_rank": 17.556076720823768
+            },
+            {
+              "updates": 15600,
+              "mean_energy_distance": 1.1682581114854413,
+              "spread_ratio": 1.3855731612988382,
+              "effective_rank": 17.559323407728957
+            },
+            {
+              "updates": 16800,
+              "mean_energy_distance": 1.1515599273881807,
+              "spread_ratio": 1.3815700026015991,
+              "effective_rank": 17.70959733947544
+            },
+            {
+              "updates": 18000,
+              "mean_energy_distance": 1.151650449089852,
+              "spread_ratio": 1.3810671735585491,
+              "effective_rank": 17.71406254547673
+            },
+            {
+              "updates": 19200,
+              "mean_energy_distance": 1.1614176839312362,
+              "spread_ratio": 1.3842914909661277,
+              "effective_rank": 17.61367649230649
+            },
+            {
+              "updates": 20400,
+              "mean_energy_distance": 1.1465041266864269,
+              "spread_ratio": 1.381481470864954,
+              "effective_rank": 17.712353815872923
+            },
+            {
+              "updates": 21600,
+              "mean_energy_distance": 1.1539995042112345,
+              "spread_ratio": 1.3860364063092478,
+              "effective_rank": 17.12195422247735
+            },
+            {
+              "updates": 22800,
+              "mean_energy_distance": 1.1507814924482156,
+              "spread_ratio": 1.3849849675153023,
+              "effective_rank": 17.0501235688687
+            },
+            {
+              "updates": 24000,
+              "mean_energy_distance": 1.1638625878960718,
+              "spread_ratio": 1.3989934662632508,
+              "effective_rank": 16.58951762130483
+            },
+            {
+              "updates": 25200,
+              "mean_energy_distance": 1.1635503976351291,
+              "spread_ratio": 1.3987391220253378,
+              "effective_rank": 16.594255568094482
+            },
+            {
+              "updates": 26400,
+              "mean_energy_distance": 1.1635039167988288,
+              "spread_ratio": 1.3985477962519335,
+              "effective_rank": 16.601465601633926
+            },
+            {
+              "updates": 27600,
+              "mean_energy_distance": 1.1634190002209985,
+              "spread_ratio": 1.3983641052388607,
+              "effective_rank": 16.60745712667574
+            },
+            {
+              "updates": 28800,
+              "mean_energy_distance": 1.1633226178373308,
+              "spread_ratio": 1.3981717453590894,
+              "effective_rank": 16.613611023922665
+            },
+            {
+              "updates": 30000,
+              "mean_energy_distance": 1.1632534378798192,
+              "spread_ratio": 1.3979953694614202,
+              "effective_rank": 16.61946555533283
+            },
+            {
+              "updates": 31200,
+              "mean_energy_distance": 1.163177066046025,
+              "spread_ratio": 1.3978035616882774,
+              "effective_rank": 16.625891664416212
+            },
+            {
+              "updates": 32400,
+              "mean_energy_distance": 1.1630986831971557,
+              "spread_ratio": 1.3976171587259678,
+              "effective_rank": 16.63200384888687
+            },
+            {
+              "updates": 33600,
+              "mean_energy_distance": 1.1630290152568046,
+              "spread_ratio": 1.3974285956249892,
+              "effective_rank": 16.637790644589693
+            },
+            {
+              "updates": 34800,
+              "mean_energy_distance": 1.1626890359375757,
+              "spread_ratio": 1.397128174096994,
+              "effective_rank": 16.6476634168361
+            },
+            {
+              "updates": 36000,
+              "mean_energy_distance": 1.1620290419416408,
+              "spread_ratio": 1.3966468200464384,
+              "effective_rank": 16.65565389451288
+            },
+            {
+              "updates": 37200,
+              "mean_energy_distance": 1.1619756618430042,
+              "spread_ratio": 1.3964824606538984,
+              "effective_rank": 16.660662451785747
+            },
+            {
+              "updates": 38400,
+              "mean_energy_distance": 1.161931307104937,
+              "spread_ratio": 1.3963035944605193,
+              "effective_rank": 16.666191968455177
+            },
+            {
+              "updates": 39600,
+              "mean_energy_distance": 1.1618618324159138,
+              "spread_ratio": 1.396123032233763,
+              "effective_rank": 16.671739631286368
+            },
+            {
+              "updates": 40000,
+              "mean_energy_distance": 1.1618524245725315,
+              "spread_ratio": 1.3960631401684616,
+              "effective_rank": 16.673606622985943
+            }
+          ],
+          "endpoint_targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2267258782135713,
+              "shift_cosine": -0.015333383861755564,
+              "spread_ratio": 1.3255812200999275
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0303572780356811,
+              "shift_cosine": 0.031337306421387295,
+              "spread_ratio": 1.456627762123017
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.2031565773018382,
+              "shift_cosine": -0.055548224285178534,
+              "spread_ratio": 1.3822382143884657
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1871699647390352,
+              "shift_cosine": 0.297432575484226,
+              "spread_ratio": 1.4198053640624364
+            }
+          },
+          "target_rank": {
+            "GLCCI1": 17.48799738635824,
+            "SLC2A4RG": 15.87430143413786,
+            "PLEKHA1": 16.22326939203123,
+            "MAMSTR": 17.108858279416435
+          },
+          "fit_seconds": 5269.980895550223,
+          "late_mean": 1.16253277871677,
+          "fixed_rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "verified_optimizer_steps": {
+            "generator_and_particles": 40000,
+            "critic": 40000
+          },
+          "resolved_optimizer_smoothing": 0.0061
+        },
+        "matched_v11": {
+          "curve": [
+            {
+              "updates": 1200,
+              "mean_energy_distance": 1.2084226033954382,
+              "spread_ratio": 1.2012916422394564,
+              "effective_rank": 22.52817363444499
+            },
+            {
+              "updates": 2400,
+              "mean_energy_distance": 1.1748723855905676,
+              "spread_ratio": 1.2374154404476312,
+              "effective_rank": 22.181640276551637
+            },
+            {
+              "updates": 3600,
+              "mean_energy_distance": 1.164249132194625,
+              "spread_ratio": 1.218955843410735,
+              "effective_rank": 18.571374353614768
+            },
+            {
+              "updates": 4800,
+              "mean_energy_distance": 1.1361727091046394,
+              "spread_ratio": 1.2270313666322694,
+              "effective_rank": 19.832308001346533
+            },
+            {
+              "updates": 6000,
+              "mean_energy_distance": 1.2422948934814504,
+              "spread_ratio": 1.2853487384447724,
+              "effective_rank": 17.73447353759697
+            },
+            {
+              "updates": 7200,
+              "mean_energy_distance": 1.273389273670244,
+              "spread_ratio": 1.221562021257584,
+              "effective_rank": 18.574948789092012
+            },
+            {
+              "updates": 8400,
+              "mean_energy_distance": 1.2319866807590851,
+              "spread_ratio": 1.2557948309527958,
+              "effective_rank": 18.31142275302893
+            },
+            {
+              "updates": 9600,
+              "mean_energy_distance": 1.239190570100545,
+              "spread_ratio": 1.2878088673246537,
+              "effective_rank": 18.97818417965163
+            },
+            {
+              "updates": 10800,
+              "mean_energy_distance": 1.2494847209636557,
+              "spread_ratio": 1.3098298415477445,
+              "effective_rank": 18.729173490599603
+            },
+            {
+              "updates": 12000,
+              "mean_energy_distance": 1.206156732696148,
+              "spread_ratio": 1.2774194787668554,
+              "effective_rank": 18.98910612419963
+            },
+            {
+              "updates": 13200,
+              "mean_energy_distance": 1.2365937690756694,
+              "spread_ratio": 1.3061966157986382,
+              "effective_rank": 18.530456075597133
+            },
+            {
+              "updates": 14400,
+              "mean_energy_distance": 1.1827028114696403,
+              "spread_ratio": 1.310445636652247,
+              "effective_rank": 18.725568933891058
+            },
+            {
+              "updates": 15600,
+              "mean_energy_distance": 1.2619167954141923,
+              "spread_ratio": 1.303392779784393,
+              "effective_rank": 18.62940445485377
+            },
+            {
+              "updates": 16800,
+              "mean_energy_distance": 1.2401036070518132,
+              "spread_ratio": 1.3032902800257444,
+              "effective_rank": 18.843261576886164
+            },
+            {
+              "updates": 18000,
+              "mean_energy_distance": 1.2160429500927181,
+              "spread_ratio": 1.288368940126307,
+              "effective_rank": 18.92022093864506
+            },
+            {
+              "updates": 19200,
+              "mean_energy_distance": 1.2289219847992332,
+              "spread_ratio": 1.3123319744518458,
+              "effective_rank": 19.58329925729249
+            },
+            {
+              "updates": 20400,
+              "mean_energy_distance": 1.228257334485313,
+              "spread_ratio": 1.30306005801939,
+              "effective_rank": 19.735034216265166
+            },
+            {
+              "updates": 21600,
+              "mean_energy_distance": 1.213169074275402,
+              "spread_ratio": 1.29369835430295,
+              "effective_rank": 19.947989494408816
+            },
+            {
+              "updates": 22800,
+              "mean_energy_distance": 1.1971279241342374,
+              "spread_ratio": 1.3015065401239547,
+              "effective_rank": 19.415206009169985
+            },
+            {
+              "updates": 24000,
+              "mean_energy_distance": 1.2210405705153264,
+              "spread_ratio": 1.307083380743101,
+              "effective_rank": 18.76777201488089
+            },
+            {
+              "updates": 25200,
+              "mean_energy_distance": 1.2154954658262664,
+              "spread_ratio": 1.3187380759771898,
+              "effective_rank": 18.60260191133342
+            },
+            {
+              "updates": 26400,
+              "mean_energy_distance": 1.2172162326360598,
+              "spread_ratio": 1.3010176314332038,
+              "effective_rank": 18.507619390003946
+            },
+            {
+              "updates": 27600,
+              "mean_energy_distance": 1.1822617330570295,
+              "spread_ratio": 1.3293765542962266,
+              "effective_rank": 19.122168018259714
+            },
+            {
+              "updates": 28800,
+              "mean_energy_distance": 1.181039929467339,
+              "spread_ratio": 1.296758779572763,
+              "effective_rank": 19.229233717778026
+            },
+            {
+              "updates": 30000,
+              "mean_energy_distance": 1.2168263345103525,
+              "spread_ratio": 1.3306264503640444,
+              "effective_rank": 18.347782133934913
+            },
+            {
+              "updates": 31200,
+              "mean_energy_distance": 1.2292568020568049,
+              "spread_ratio": 1.3113041545974191,
+              "effective_rank": 19.512374085830942
+            },
+            {
+              "updates": 32400,
+              "mean_energy_distance": 1.2029674052721089,
+              "spread_ratio": 1.3092263996613043,
+              "effective_rank": 19.43844432400668
+            },
+            {
+              "updates": 33600,
+              "mean_energy_distance": 1.2234711703960635,
+              "spread_ratio": 1.3121422472484676,
+              "effective_rank": 19.33391115211261
+            },
+            {
+              "updates": 34800,
+              "mean_energy_distance": 1.1966973864771904,
+              "spread_ratio": 1.3340376522575013,
+              "effective_rank": 19.214022759338963
+            },
+            {
+              "updates": 36000,
+              "mean_energy_distance": 1.1899529343796766,
+              "spread_ratio": 1.3080022507786901,
+              "effective_rank": 19.345673052104033
+            },
+            {
+              "updates": 37200,
+              "mean_energy_distance": 1.2090822338871428,
+              "spread_ratio": 1.2947981924902403,
+              "effective_rank": 19.515811448842484
+            },
+            {
+              "updates": 38400,
+              "mean_energy_distance": 1.1955832790457188,
+              "spread_ratio": 1.3140846893288947,
+              "effective_rank": 19.494681861730818
+            },
+            {
+              "updates": 39600,
+              "mean_energy_distance": 1.2306615660971605,
+              "spread_ratio": 1.3156057864548132,
+              "effective_rank": 19.409812279223353
+            },
+            {
+              "updates": 40000,
+              "mean_energy_distance": 1.1950471098016526,
+              "spread_ratio": 1.3222765403128944,
+              "effective_rank": 19.696518285184396
+            }
+          ],
+          "endpoint_targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2111321806794795,
+              "shift_cosine": -0.15126626717475233,
+              "spread_ratio": 1.2857116734854077
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0847703992650946,
+              "shift_cosine": 0.026856734427863748,
+              "spread_ratio": 1.3139518149600016
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.2620484558744707,
+              "shift_cosine": -0.013519620808628157,
+              "spread_ratio": 1.3645877696228512
+            },
+            "MAMSTR": {
+              "energy_distance": 1.2222374033875658,
+              "shift_cosine": -0.2243907813289323,
+              "spread_ratio": 1.324854903183317
+            }
+          },
+          "target_rank": {
+            "GLCCI1": 19.76855019543947,
+            "SLC2A4RG": 19.73433040082976,
+            "PLEKHA1": 19.53553061272541,
+            "MAMSTR": 19.747661931742954
+          },
+          "fit_seconds": 7376.6844485048205,
+          "late_mean": 1.2090047929361918,
+          "fixed_rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "verified_optimizer_steps": {
+            "generator_and_particles": 40000,
+            "critic": 40000
+          },
+          "resolved_optimizer_smoothing": 0.0061
+        },
+        "matched_empf": {
+          "curve": [
+            {
+              "updates": 1200,
+              "mean_energy_distance": 1.3064390998044728,
+              "spread_ratio": 1.2042297128243908,
+              "effective_rank": 9.181660968533619
+            },
+            {
+              "updates": 2400,
+              "mean_energy_distance": 1.2494841114186428,
+              "spread_ratio": 1.2499007727047524,
+              "effective_rank": 15.034210365097188
+            },
+            {
+              "updates": 3600,
+              "mean_energy_distance": 1.2686398691569305,
+              "spread_ratio": 1.345558289117995,
+              "effective_rank": 16.38089887713306
+            },
+            {
+              "updates": 4800,
+              "mean_energy_distance": 1.3099087388959543,
+              "spread_ratio": 1.315491203082473,
+              "effective_rank": 18.23305947094548
+            },
+            {
+              "updates": 6000,
+              "mean_energy_distance": 1.1366719003234214,
+              "spread_ratio": 1.321315253834106,
+              "effective_rank": 18.85498097488481
+            },
+            {
+              "updates": 7200,
+              "mean_energy_distance": 1.4102590179320404,
+              "spread_ratio": 1.3519736254914965,
+              "effective_rank": 18.23324928706214
+            },
+            {
+              "updates": 8400,
+              "mean_energy_distance": 1.2582410165280242,
+              "spread_ratio": 1.302544573226237,
+              "effective_rank": 18.639967058492225
+            },
+            {
+              "updates": 9600,
+              "mean_energy_distance": 1.306063523239225,
+              "spread_ratio": 1.3928019068868285,
+              "effective_rank": 17.547727673133146
+            },
+            {
+              "updates": 10800,
+              "mean_energy_distance": 1.2633828688330622,
+              "spread_ratio": 1.3440078759805225,
+              "effective_rank": 18.514276565020857
+            },
+            {
+              "updates": 12000,
+              "mean_energy_distance": 1.2191899447561407,
+              "spread_ratio": 1.3255510618047277,
+              "effective_rank": 18.74388602094902
+            },
+            {
+              "updates": 13200,
+              "mean_energy_distance": 1.2936661157232785,
+              "spread_ratio": 1.3381907844860814,
+              "effective_rank": 19.073360860367345
+            },
+            {
+              "updates": 14400,
+              "mean_energy_distance": 1.201139614419779,
+              "spread_ratio": 1.314875280160699,
+              "effective_rank": 18.431857125570573
+            },
+            {
+              "updates": 15600,
+              "mean_energy_distance": 1.194627108497915,
+              "spread_ratio": 1.3043575684427773,
+              "effective_rank": 18.572832411042487
+            },
+            {
+              "updates": 16800,
+              "mean_energy_distance": 1.2004962007645743,
+              "spread_ratio": 1.3268960345931449,
+              "effective_rank": 18.725403741234274
+            },
+            {
+              "updates": 18000,
+              "mean_energy_distance": 1.2335487275748909,
+              "spread_ratio": 1.300403255362828,
+              "effective_rank": 18.237982566815994
+            },
+            {
+              "updates": 19200,
+              "mean_energy_distance": 1.225834619563088,
+              "spread_ratio": 1.3086697210910052,
+              "effective_rank": 17.903137957620483
+            },
+            {
+              "updates": 20400,
+              "mean_energy_distance": 1.2128828738311979,
+              "spread_ratio": 1.3337906131102109,
+              "effective_rank": 18.501346328509783
+            },
+            {
+              "updates": 21600,
+              "mean_energy_distance": 1.2392399788234567,
+              "spread_ratio": 1.3251954694900947,
+              "effective_rank": 18.583705329722797
+            },
+            {
+              "updates": 22800,
+              "mean_energy_distance": 1.193372997875092,
+              "spread_ratio": 1.330841779948452,
+              "effective_rank": 18.182837875321184
+            },
+            {
+              "updates": 24000,
+              "mean_energy_distance": 1.2669519622384997,
+              "spread_ratio": 1.301702422315227,
+              "effective_rank": 18.361108488516166
+            },
+            {
+              "updates": 25200,
+              "mean_energy_distance": 1.224076551241016,
+              "spread_ratio": 1.290194455521097,
+              "effective_rank": 18.59108498304539
+            },
+            {
+              "updates": 26400,
+              "mean_energy_distance": 1.257648884715662,
+              "spread_ratio": 1.288248562139266,
+              "effective_rank": 18.22982254855157
+            },
+            {
+              "updates": 27600,
+              "mean_energy_distance": 1.21678109031367,
+              "spread_ratio": 1.3167755858585823,
+              "effective_rank": 18.257384919301977
+            },
+            {
+              "updates": 28800,
+              "mean_energy_distance": 1.2158800834836245,
+              "spread_ratio": 1.3084023492207437,
+              "effective_rank": 19.037750872846285
+            },
+            {
+              "updates": 30000,
+              "mean_energy_distance": 1.2091837990371654,
+              "spread_ratio": 1.3110352558516536,
+              "effective_rank": 18.56291803362845
+            },
+            {
+              "updates": 31200,
+              "mean_energy_distance": 1.235416955296025,
+              "spread_ratio": 1.2827753004301208,
+              "effective_rank": 18.075502615949627
+            },
+            {
+              "updates": 32400,
+              "mean_energy_distance": 1.2571631443646925,
+              "spread_ratio": 1.295068182947413,
+              "effective_rank": 18.833208978127594
+            },
+            {
+              "updates": 33600,
+              "mean_energy_distance": 1.26475841984413,
+              "spread_ratio": 1.2895315776582885,
+              "effective_rank": 18.341861520462995
+            },
+            {
+              "updates": 34800,
+              "mean_energy_distance": 1.265539916083021,
+              "spread_ratio": 1.2903714948643106,
+              "effective_rank": 18.50384120875554
+            },
+            {
+              "updates": 36000,
+              "mean_energy_distance": 1.2131202150172913,
+              "spread_ratio": 1.3084448628441625,
+              "effective_rank": 18.89644725026096
+            },
+            {
+              "updates": 37200,
+              "mean_energy_distance": 1.20195038214208,
+              "spread_ratio": 1.2664997649547804,
+              "effective_rank": 19.025450938423496
+            },
+            {
+              "updates": 38400,
+              "mean_energy_distance": 1.2701963370735945,
+              "spread_ratio": 1.3052560724342541,
+              "effective_rank": 18.615180921360306
+            },
+            {
+              "updates": 39600,
+              "mean_energy_distance": 1.2484971761342711,
+              "spread_ratio": 1.2924833151824295,
+              "effective_rank": 19.298478956324992
+            },
+            {
+              "updates": 40000,
+              "mean_energy_distance": 1.2032004188617842,
+              "spread_ratio": 1.2928106089562013,
+              "effective_rank": 18.811336642156974
+            }
+          ],
+          "endpoint_targets": {
+            "GLCCI1": {
+              "energy_distance": 1.1274809929278522,
+              "shift_cosine": 0.09879352417499805,
+              "spread_ratio": 1.3049671120960042
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.2471883989813026,
+              "shift_cosine": 0.06667706902653586,
+              "spread_ratio": 1.2877317031575282
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.299751314627116,
+              "shift_cosine": 0.08005520159570882,
+              "spread_ratio": 1.2741224985584123
+            },
+            "MAMSTR": {
+              "energy_distance": 1.138380968910866,
+              "shift_cosine": 0.31599626348954646,
+              "spread_ratio": 1.3044211220128608
+            }
+          },
+          "target_rank": {
+            "GLCCI1": 17.58053688831338,
+            "SLC2A4RG": 19.41775327312875,
+            "PLEKHA1": 19.15446192780375,
+            "MAMSTR": 19.092594479382022
+          },
+          "fit_seconds": 7629.308871696005,
+          "late_mean": 1.2414722547887074,
+          "fixed_rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "verified_optimizer_steps": {
+            "generator_and_particles": 40000,
+            "critic": 40000
+          },
+          "resolved_optimizer_smoothing": 0.0061,
+          "measured_optimizer_smoothing": {
+            "generator_and_particles": 0.0061,
+            "critic": 0.0061
+          }
+        }
+      },
+      "checkpoint_wins": {
+        "matched_v11": 31,
+        "matched_empf": 33
+      }
+    },
+    {
+      "seed": 251,
+      "group": "Screen1_1",
+      "gpu": 1,
+      "fingerprints": {
+        "projected_data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+        "training_batches": [
+          "dde3a72737ee81577630c4da56ae2dda3deaf70c92b040bce2b82b2bad93b798",
+          "3635babcb4a6a52a2d347d4aac288dbc4b8793488cd5dd71ec84b8135aca2e19",
+          "a1d8a822fffdfe5e32cd371677f1a8b3c97298d5544fa97583a7cef37697667f",
+          "363996bfb6a3b3c108e9ba36e34119b0bf290f6b597cf827b95e0664adb68d4c",
+          "b0a9a2496abf0807cf516cef913d5475e894b5c69852deed0bf09fe483dc4f77",
+          "43a7d7391e8e2b234c0dc9c50d8adada96f2373e887f628d25757f7bd1e122cd",
+          "8c5c68e204e8dc44382873b76477b4f6aad28ffb97e31d0f515656cc8847065c",
+          "dd440e2bee8f5ef767125fede02c4469f97dae030a5f82079f7b76edba8dcc3a",
+          "5debee09581f3e505104ebdd91af926d089f04034981f4ce132af7b7be59dfb5",
+          "352824423499b01e325757cac83e1b455292984c91cb7c898e041f00de2627c7",
+          "f3c9fbdbd9084562fc41d70265db28de201752f00a3570dd857b23e73fb2e619",
+          "b5e4351cedc9577b6ad8eb0711607a6d8bf8c9d0098f2a30ded72ee07ca61d8b",
+          "26a48114346e2a81b0d98c1599296ea71fdedc0506cca6012d99375c4a4cfa8b",
+          "212c354104c3bed6a0b9bf0015cfdd87c0dd5a191563a14ce9df176abc516893",
+          "87778e80cfbbddf01f4046a02f6088764a0198711611b78d760a094b7209ba8e",
+          "ee1dafbd249b6d7fbb75a9f580418c1530331ad4164453d9f70d630359247f81",
+          "899336ab5b48629c311812c5da69f2c92016e7b63d4ae0bebfc2682a23e140aa",
+          "ca125879d888da8364e35bfd29b3fd2002c0ccc81db6f0f5efee524afbc24eaa",
+          "bd72ee72431c875ffd5cd0c2f9a16b4f5065b43b36b6ebbd971d06cc8e4c34e0",
+          "d915ba38256bad425e835191be0f7e1337c10d0b0320b9ed2ff88bfa03fcf000",
+          "52329dbba7d1e36e4e871179e9e614cd474e628a06e0b6e2e7b2808dac9a20d0",
+          "bfc89db7632d3030f77a4141480c86e096ad6da0029e4a11ba2329ba46d068b0",
+          "a67bc08790a750a9f6d574405a5394e86e2c2c858ae61181182faa791c9cbdae",
+          "31627fac947b9a3a9674dc1b90b1edbeba1138bd041702a22338eb823a5390f6",
+          "9b084a132e79561113c0834abc3296ceef7cfd41432656cd0c5201ebf43761e3",
+          "9c08a956f584103a1b8f36d5bdde4c727d550955c9394c254b7e8d2351fbd845",
+          "983aab9fa34a7d45da47f62031f9d2f42003474627c30216970b69d0844ee596",
+          "71562c2b3fe6ff947f4b620c28d11b62a6e8818b6006877b511c71e13cbf2502",
+          "58a1969372ee258279b1eac868de335d8fe88bf74b0546204412a90e4eb29ee0",
+          "13a7b9968dbb11cc267dbb2b5c7bb2873a5455e22ec5363ed1cdc61253da9c42",
+          "9b68a8b99949a44815e3f4a6c1320fa0e4a03ea0d5bdcbefd22549fb9cf54fe1",
+          "a672e61e0959969643e9ced5831cc60f07013c26f5a96defb24555a163665ea5",
+          "ac1d9d8ce57d2a67a5d04f92d95e87198bde1dbf4bd52a9730dc7bb797699d0a",
+          "ddcca37106ebf09425d80d3b314bf94102bea41ca17fa49c2869660e8720645e"
+        ]
+      },
+      "arms": {
+        "v12": {
+          "curve": [
+            {
+              "updates": 1200,
+              "mean_energy_distance": 1.1412954010469378,
+              "spread_ratio": 1.2601342261165183,
+              "effective_rank": 21.686512836529523
+            },
+            {
+              "updates": 2400,
+              "mean_energy_distance": 1.1372993309113304,
+              "spread_ratio": 1.2781478136405917,
+              "effective_rank": 23.051495341665564
+            },
+            {
+              "updates": 3600,
+              "mean_energy_distance": 1.156311922419513,
+              "spread_ratio": 1.299293552096168,
+              "effective_rank": 22.208474283884087
+            },
+            {
+              "updates": 4800,
+              "mean_energy_distance": 1.1199672053274137,
+              "spread_ratio": 1.3143971192210757,
+              "effective_rank": 22.156930822070812
+            },
+            {
+              "updates": 6000,
+              "mean_energy_distance": 1.1366926275171063,
+              "spread_ratio": 1.293231447040729,
+              "effective_rank": 20.822379079039482
+            },
+            {
+              "updates": 7200,
+              "mean_energy_distance": 1.1267151738860561,
+              "spread_ratio": 1.28773192294881,
+              "effective_rank": 21.309711179472576
+            },
+            {
+              "updates": 8400,
+              "mean_energy_distance": 1.087202877371428,
+              "spread_ratio": 1.2742945568344304,
+              "effective_rank": 21.620276410554773
+            },
+            {
+              "updates": 9600,
+              "mean_energy_distance": 1.097909472555597,
+              "spread_ratio": 1.2949285206199048,
+              "effective_rank": 22.265256065259607
+            },
+            {
+              "updates": 10800,
+              "mean_energy_distance": 1.107796772617419,
+              "spread_ratio": 1.3073955176623682,
+              "effective_rank": 22.13123465511323
+            },
+            {
+              "updates": 12000,
+              "mean_energy_distance": 1.097963595976437,
+              "spread_ratio": 1.3242281952433888,
+              "effective_rank": 21.853047139313826
+            },
+            {
+              "updates": 13200,
+              "mean_energy_distance": 1.137490135198634,
+              "spread_ratio": 1.3503254204303055,
+              "effective_rank": 18.550358034102416
+            },
+            {
+              "updates": 14400,
+              "mean_energy_distance": 1.1468104679829205,
+              "spread_ratio": 1.3377920839069364,
+              "effective_rank": 19.923673939397837
+            },
+            {
+              "updates": 15600,
+              "mean_energy_distance": 1.1472388730159275,
+              "spread_ratio": 1.3134926624533065,
+              "effective_rank": 21.322849844434494
+            },
+            {
+              "updates": 16800,
+              "mean_energy_distance": 1.118021307109648,
+              "spread_ratio": 1.3374447028298948,
+              "effective_rank": 20.703652311006614
+            },
+            {
+              "updates": 18000,
+              "mean_energy_distance": 1.1185030897084975,
+              "spread_ratio": 1.3364422334636512,
+              "effective_rank": 20.734269059622655
+            },
+            {
+              "updates": 19200,
+              "mean_energy_distance": 1.1160685076830785,
+              "spread_ratio": 1.3348760280697296,
+              "effective_rank": 20.718122992623893
+            },
+            {
+              "updates": 20400,
+              "mean_energy_distance": 1.1239952612013608,
+              "spread_ratio": 1.339973639056673,
+              "effective_rank": 20.754990606593864
+            },
+            {
+              "updates": 21600,
+              "mean_energy_distance": 1.126282948354555,
+              "spread_ratio": 1.360312342541977,
+              "effective_rank": 20.039598621651777
+            },
+            {
+              "updates": 22800,
+              "mean_energy_distance": 1.1147211451273205,
+              "spread_ratio": 1.3616052845820639,
+              "effective_rank": 19.5888255513504
+            },
+            {
+              "updates": 24000,
+              "mean_energy_distance": 1.1087191405555457,
+              "spread_ratio": 1.3773964096238687,
+              "effective_rank": 18.748936373006703
+            },
+            {
+              "updates": 25200,
+              "mean_energy_distance": 1.0966653094802328,
+              "spread_ratio": 1.3969995711120915,
+              "effective_rank": 17.626887232621446
+            },
+            {
+              "updates": 26400,
+              "mean_energy_distance": 1.0968126304890438,
+              "spread_ratio": 1.38502508408116,
+              "effective_rank": 17.65554056095334
+            },
+            {
+              "updates": 27600,
+              "mean_energy_distance": 1.0946580903949992,
+              "spread_ratio": 1.3828326047974338,
+              "effective_rank": 17.85165965593061
+            },
+            {
+              "updates": 28800,
+              "mean_energy_distance": 1.1018932743243581,
+              "spread_ratio": 1.3915094940188233,
+              "effective_rank": 17.567238803040745
+            },
+            {
+              "updates": 30000,
+              "mean_energy_distance": 1.1013996866180253,
+              "spread_ratio": 1.4165894630547768,
+              "effective_rank": 17.05462461801593
+            },
+            {
+              "updates": 31200,
+              "mean_energy_distance": 1.0968026186008162,
+              "spread_ratio": 1.412360043805197,
+              "effective_rank": 16.98667679860298
+            },
+            {
+              "updates": 32400,
+              "mean_energy_distance": 1.0946504347979944,
+              "spread_ratio": 1.3952011768309216,
+              "effective_rank": 17.232319906008303
+            },
+            {
+              "updates": 33600,
+              "mean_energy_distance": 1.095529934523742,
+              "spread_ratio": 1.397331658822099,
+              "effective_rank": 17.19549904281542
+            },
+            {
+              "updates": 34800,
+              "mean_energy_distance": 1.0954962899334284,
+              "spread_ratio": 1.397382411894832,
+              "effective_rank": 17.23601745447491
+            },
+            {
+              "updates": 36000,
+              "mean_energy_distance": 1.0973154911164242,
+              "spread_ratio": 1.3969606749827888,
+              "effective_rank": 17.08929709305066
+            },
+            {
+              "updates": 37200,
+              "mean_energy_distance": 1.1146196944559024,
+              "spread_ratio": 1.4253165029510675,
+              "effective_rank": 16.711324702441306
+            },
+            {
+              "updates": 38400,
+              "mean_energy_distance": 1.114320266029097,
+              "spread_ratio": 1.4247615924327819,
+              "effective_rank": 16.705246627018774
+            },
+            {
+              "updates": 39600,
+              "mean_energy_distance": 1.1141368437397272,
+              "spread_ratio": 1.4244343379048745,
+              "effective_rank": 16.710423488044935
+            },
+            {
+              "updates": 40000,
+              "mean_energy_distance": 1.1405955437911202,
+              "spread_ratio": 1.4539030127334551,
+              "effective_rank": 16.420881903469052
+            }
+          ],
+          "endpoint_targets": {
+            "GLCCI1": {
+              "energy_distance": 1.1877177605002425,
+              "shift_cosine": -0.31170300492374065,
+              "spread_ratio": 1.4220130094204042
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0273217364825475,
+              "shift_cosine": -0.07567685838183738,
+              "spread_ratio": 1.476364614878115
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1869177918973142,
+              "shift_cosine": -0.23573480701956095,
+              "spread_ratio": 1.4775060390227974
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1604248862843765,
+              "shift_cosine": 0.20355985986619995,
+              "spread_ratio": 1.4397283876125035
+            }
+          },
+          "target_rank": {
+            "GLCCI1": 15.454505710429581,
+            "SLC2A4RG": 15.931908485609146,
+            "PLEKHA1": 17.214709531803695,
+            "MAMSTR": 17.08240388603378
+          },
+          "fit_seconds": 3453.593319541076,
+          "late_mean": 1.1030750071069708,
+          "fixed_rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "verified_optimizer_steps": {
+            "generator_and_particles": 40000,
+            "critic": 40000
+          },
+          "resolved_optimizer_smoothing": 0.0061
+        },
+        "matched_v11": {
+          "curve": [
+            {
+              "updates": 1200,
+              "mean_energy_distance": 1.2157097729130006,
+              "spread_ratio": 1.2006579176305896,
+              "effective_rank": 22.636085526493034
+            },
+            {
+              "updates": 2400,
+              "mean_energy_distance": 1.1648645477062753,
+              "spread_ratio": 1.2256422224886672,
+              "effective_rank": 21.982915515391127
+            },
+            {
+              "updates": 3600,
+              "mean_energy_distance": 1.155681963839161,
+              "spread_ratio": 1.2231697145506182,
+              "effective_rank": 20.156744361563298
+            },
+            {
+              "updates": 4800,
+              "mean_energy_distance": 1.1978939382307812,
+              "spread_ratio": 1.2180537988918934,
+              "effective_rank": 19.089975582973235
+            },
+            {
+              "updates": 6000,
+              "mean_energy_distance": 1.1662430507344428,
+              "spread_ratio": 1.227649719563083,
+              "effective_rank": 18.502894139498633
+            },
+            {
+              "updates": 7200,
+              "mean_energy_distance": 1.1741637239335065,
+              "spread_ratio": 1.2298979574268654,
+              "effective_rank": 18.295729622250516
+            },
+            {
+              "updates": 8400,
+              "mean_energy_distance": 1.2019825014659777,
+              "spread_ratio": 1.301393597762377,
+              "effective_rank": 18.39972820207571
+            },
+            {
+              "updates": 9600,
+              "mean_energy_distance": 1.1998568095140567,
+              "spread_ratio": 1.298973135763598,
+              "effective_rank": 18.40233000070406
+            },
+            {
+              "updates": 10800,
+              "mean_energy_distance": 1.1740312414797913,
+              "spread_ratio": 1.297007309770125,
+              "effective_rank": 18.003615177615714
+            },
+            {
+              "updates": 12000,
+              "mean_energy_distance": 1.2195767893815457,
+              "spread_ratio": 1.303293665421948,
+              "effective_rank": 17.89586180163305
+            },
+            {
+              "updates": 13200,
+              "mean_energy_distance": 1.2084027949953613,
+              "spread_ratio": 1.3102805736370122,
+              "effective_rank": 18.67653213424388
+            },
+            {
+              "updates": 14400,
+              "mean_energy_distance": 1.1984089282924664,
+              "spread_ratio": 1.306794739487532,
+              "effective_rank": 18.77188838658362
+            },
+            {
+              "updates": 15600,
+              "mean_energy_distance": 1.1623493667230174,
+              "spread_ratio": 1.2691641206544642,
+              "effective_rank": 17.91242873370978
+            },
+            {
+              "updates": 16800,
+              "mean_energy_distance": 1.1888632440753026,
+              "spread_ratio": 1.2856040406556843,
+              "effective_rank": 19.252171299664322
+            },
+            {
+              "updates": 18000,
+              "mean_energy_distance": 1.181178679975745,
+              "spread_ratio": 1.295926317815597,
+              "effective_rank": 18.12179121039466
+            },
+            {
+              "updates": 19200,
+              "mean_energy_distance": 1.2041823158579403,
+              "spread_ratio": 1.3033167593415391,
+              "effective_rank": 18.539878877682586
+            },
+            {
+              "updates": 20400,
+              "mean_energy_distance": 1.2241647495311145,
+              "spread_ratio": 1.3132368423896128,
+              "effective_rank": 18.822611739312997
+            },
+            {
+              "updates": 21600,
+              "mean_energy_distance": 1.1937145862004446,
+              "spread_ratio": 1.2986970672273133,
+              "effective_rank": 18.5767527092676
+            },
+            {
+              "updates": 22800,
+              "mean_energy_distance": 1.1750292889909928,
+              "spread_ratio": 1.2890911511772805,
+              "effective_rank": 18.511777189332328
+            },
+            {
+              "updates": 24000,
+              "mean_energy_distance": 1.1863311298243049,
+              "spread_ratio": 1.300278638820993,
+              "effective_rank": 18.19008951891412
+            },
+            {
+              "updates": 25200,
+              "mean_energy_distance": 1.2025811952477807,
+              "spread_ratio": 1.3118201775071625,
+              "effective_rank": 18.483973444724434
+            },
+            {
+              "updates": 26400,
+              "mean_energy_distance": 1.2125205462953226,
+              "spread_ratio": 1.287324267174971,
+              "effective_rank": 18.144770519183158
+            },
+            {
+              "updates": 27600,
+              "mean_energy_distance": 1.2111502651181358,
+              "spread_ratio": 1.2912857390496424,
+              "effective_rank": 19.669311611024682
+            },
+            {
+              "updates": 28800,
+              "mean_energy_distance": 1.2152926582270451,
+              "spread_ratio": 1.3094621900447274,
+              "effective_rank": 18.197495617521753
+            },
+            {
+              "updates": 30000,
+              "mean_energy_distance": 1.1918148878915478,
+              "spread_ratio": 1.3060119469080533,
+              "effective_rank": 18.552908018591157
+            },
+            {
+              "updates": 31200,
+              "mean_energy_distance": 1.2037152521382617,
+              "spread_ratio": 1.3138907020258033,
+              "effective_rank": 19.047520961163926
+            },
+            {
+              "updates": 32400,
+              "mean_energy_distance": 1.201907477316542,
+              "spread_ratio": 1.2947502165599347,
+              "effective_rank": 18.86643625186651
+            },
+            {
+              "updates": 33600,
+              "mean_energy_distance": 1.2498584126744188,
+              "spread_ratio": 1.2953078540574372,
+              "effective_rank": 18.363982286293076
+            },
+            {
+              "updates": 34800,
+              "mean_energy_distance": 1.159956948172522,
+              "spread_ratio": 1.290089036023826,
+              "effective_rank": 18.84144630596709
+            },
+            {
+              "updates": 36000,
+              "mean_energy_distance": 1.2630186132272612,
+              "spread_ratio": 1.2699475680305967,
+              "effective_rank": 19.530537283373278
+            },
+            {
+              "updates": 37200,
+              "mean_energy_distance": 1.180333137779646,
+              "spread_ratio": 1.3133700072190198,
+              "effective_rank": 18.79346452392018
+            },
+            {
+              "updates": 38400,
+              "mean_energy_distance": 1.1911514289717364,
+              "spread_ratio": 1.3091049960563756,
+              "effective_rank": 18.469923919717118
+            },
+            {
+              "updates": 39600,
+              "mean_energy_distance": 1.1844259915850874,
+              "spread_ratio": 1.3077530688153696,
+              "effective_rank": 18.56886985639481
+            },
+            {
+              "updates": 40000,
+              "mean_energy_distance": 1.208798981948879,
+              "spread_ratio": 1.291188598190243,
+              "effective_rank": 18.875831182308332
+            }
+          ],
+          "endpoint_targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2172190806278396,
+              "shift_cosine": -0.3168557176699753,
+              "spread_ratio": 1.2715079136037573
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.2382998702188193,
+              "shift_cosine": 0.053646814261566644,
+              "spread_ratio": 1.3261868214922123
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.149707925237685,
+              "shift_cosine": -0.21926812811530907,
+              "spread_ratio": 1.258080828156335
+            },
+            "MAMSTR": {
+              "energy_distance": 1.2299690517111719,
+              "shift_cosine": 0.1409067582306792,
+              "spread_ratio": 1.3089788295086673
+            }
+          },
+          "target_rank": {
+            "GLCCI1": 17.5981000283622,
+            "SLC2A4RG": 17.659113639712942,
+            "PLEKHA1": 20.353592221186616,
+            "MAMSTR": 19.89251883997156
+          },
+          "fit_seconds": 4694.36756664468,
+          "late_mean": 1.204431904672924,
+          "fixed_rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "verified_optimizer_steps": {
+            "generator_and_particles": 40000,
+            "critic": 40000
+          },
+          "resolved_optimizer_smoothing": 0.0061
+        },
+        "matched_empf": {
+          "curve": [
+            {
+              "updates": 1200,
+              "mean_energy_distance": 1.2429002958451372,
+              "spread_ratio": 1.155714832886212,
+              "effective_rank": 9.905559975158694
+            },
+            {
+              "updates": 2400,
+              "mean_energy_distance": 1.2428524200379,
+              "spread_ratio": 1.2339097034163824,
+              "effective_rank": 15.461546844940761
+            },
+            {
+              "updates": 3600,
+              "mean_energy_distance": 1.175826853775892,
+              "spread_ratio": 1.2940985475990288,
+              "effective_rank": 16.935677173207395
+            },
+            {
+              "updates": 4800,
+              "mean_energy_distance": 1.301600332117756,
+              "spread_ratio": 1.2665648737295498,
+              "effective_rank": 17.784843291761405
+            },
+            {
+              "updates": 6000,
+              "mean_energy_distance": 1.3574600225430715,
+              "spread_ratio": 1.3653738715767023,
+              "effective_rank": 16.70989761871541
+            },
+            {
+              "updates": 7200,
+              "mean_energy_distance": 1.150665081493568,
+              "spread_ratio": 1.3444021153708683,
+              "effective_rank": 17.597407019729523
+            },
+            {
+              "updates": 8400,
+              "mean_energy_distance": 1.236182313951087,
+              "spread_ratio": 1.296218757069189,
+              "effective_rank": 17.338176223905926
+            },
+            {
+              "updates": 9600,
+              "mean_energy_distance": 1.222243160830398,
+              "spread_ratio": 1.3280786778562463,
+              "effective_rank": 18.11892627404684
+            },
+            {
+              "updates": 10800,
+              "mean_energy_distance": 1.2422678415015596,
+              "spread_ratio": 1.2998328913230703,
+              "effective_rank": 18.558143626033626
+            },
+            {
+              "updates": 12000,
+              "mean_energy_distance": 1.2552867466415307,
+              "spread_ratio": 1.3153938186958123,
+              "effective_rank": 18.34579675410027
+            },
+            {
+              "updates": 13200,
+              "mean_energy_distance": 1.2707069921739842,
+              "spread_ratio": 1.3326450923314819,
+              "effective_rank": 18.134716262541186
+            },
+            {
+              "updates": 14400,
+              "mean_energy_distance": 1.2036129683342938,
+              "spread_ratio": 1.31757360191119,
+              "effective_rank": 18.203898362498673
+            },
+            {
+              "updates": 15600,
+              "mean_energy_distance": 1.1934347662173608,
+              "spread_ratio": 1.2726096304817123,
+              "effective_rank": 18.051339230613134
+            },
+            {
+              "updates": 16800,
+              "mean_energy_distance": 1.253969302447746,
+              "spread_ratio": 1.2764025494193223,
+              "effective_rank": 18.196635002355475
+            },
+            {
+              "updates": 18000,
+              "mean_energy_distance": 1.2759346705465884,
+              "spread_ratio": 1.3299761839349784,
+              "effective_rank": 18.233467139814028
+            },
+            {
+              "updates": 19200,
+              "mean_energy_distance": 1.2215894729395174,
+              "spread_ratio": 1.3155996062401492,
+              "effective_rank": 18.13507015772268
+            },
+            {
+              "updates": 20400,
+              "mean_energy_distance": 1.2033016533874843,
+              "spread_ratio": 1.3001855023733955,
+              "effective_rank": 18.67147981971339
+            },
+            {
+              "updates": 21600,
+              "mean_energy_distance": 1.2378023800820832,
+              "spread_ratio": 1.3092857132802609,
+              "effective_rank": 18.216338362003803
+            },
+            {
+              "updates": 22800,
+              "mean_energy_distance": 1.2192269707537475,
+              "spread_ratio": 1.2945879336638866,
+              "effective_rank": 18.6876217292156
+            },
+            {
+              "updates": 24000,
+              "mean_energy_distance": 1.2066902849195627,
+              "spread_ratio": 1.3166459826056283,
+              "effective_rank": 18.341900325428323
+            },
+            {
+              "updates": 25200,
+              "mean_energy_distance": 1.210069590865946,
+              "spread_ratio": 1.303581297665365,
+              "effective_rank": 18.114653254775256
+            },
+            {
+              "updates": 26400,
+              "mean_energy_distance": 1.2285196403475103,
+              "spread_ratio": 1.3134457885764683,
+              "effective_rank": 17.480442888293776
+            },
+            {
+              "updates": 27600,
+              "mean_energy_distance": 1.2733325051361568,
+              "spread_ratio": 1.3282573794552994,
+              "effective_rank": 18.523485583838333
+            },
+            {
+              "updates": 28800,
+              "mean_energy_distance": 1.1833919235274488,
+              "spread_ratio": 1.2914998555554398,
+              "effective_rank": 18.235333389515105
+            },
+            {
+              "updates": 30000,
+              "mean_energy_distance": 1.2583441933602768,
+              "spread_ratio": 1.2890772566282926,
+              "effective_rank": 18.626900802825055
+            },
+            {
+              "updates": 31200,
+              "mean_energy_distance": 1.189752881370648,
+              "spread_ratio": 1.3188171662778028,
+              "effective_rank": 18.199232687285118
+            },
+            {
+              "updates": 32400,
+              "mean_energy_distance": 1.189459446155015,
+              "spread_ratio": 1.2934747384308647,
+              "effective_rank": 18.356719357904126
+            },
+            {
+              "updates": 33600,
+              "mean_energy_distance": 1.2169458396114095,
+              "spread_ratio": 1.2935545590621778,
+              "effective_rank": 18.747657982388723
+            },
+            {
+              "updates": 34800,
+              "mean_energy_distance": 1.2471738018974476,
+              "spread_ratio": 1.2862050954212867,
+              "effective_rank": 18.905100052252067
+            },
+            {
+              "updates": 36000,
+              "mean_energy_distance": 1.2264010414006605,
+              "spread_ratio": 1.2875104098726706,
+              "effective_rank": 18.374415479068254
+            },
+            {
+              "updates": 37200,
+              "mean_energy_distance": 1.2188336880399488,
+              "spread_ratio": 1.3009242389476743,
+              "effective_rank": 18.469205756139253
+            },
+            {
+              "updates": 38400,
+              "mean_energy_distance": 1.2484590188959952,
+              "spread_ratio": 1.2874351358565175,
+              "effective_rank": 18.613853495043994
+            },
+            {
+              "updates": 39600,
+              "mean_energy_distance": 1.2732443324108924,
+              "spread_ratio": 1.2995613247520075,
+              "effective_rank": 18.473621275339713
+            },
+            {
+              "updates": 40000,
+              "mean_energy_distance": 1.2110298086136906,
+              "spread_ratio": 1.3015978358023776,
+              "effective_rank": 18.58039227460969
+            }
+          ],
+          "endpoint_targets": {
+            "GLCCI1": {
+              "energy_distance": 1.295483102150179,
+              "shift_cosine": -0.04241242960136553,
+              "spread_ratio": 1.3171171493362372
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1514077986566145,
+              "shift_cosine": -0.07328037837518295,
+              "spread_ratio": 1.3239538416517505
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.2133288030593787,
+              "shift_cosine": -0.4537930545151313,
+              "spread_ratio": 1.2689146502056274
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1838995305885902,
+              "shift_cosine": -0.040921133510423306,
+              "spread_ratio": 1.296405702015895
+            }
+          },
+          "target_rank": {
+            "GLCCI1": 17.920466269372586,
+            "SLC2A4RG": 18.31388653226319,
+            "PLEKHA1": 19.3981447553427,
+            "MAMSTR": 18.68907154146028
+          },
+          "fit_seconds": 5173.374554400565,
+          "late_mean": 1.2260238804512966,
+          "fixed_rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "verified_optimizer_steps": {
+            "generator_and_particles": 40000,
+            "critic": 40000
+          },
+          "resolved_optimizer_smoothing": 0.0061,
+          "measured_optimizer_smoothing": {
+            "generator_and_particles": 0.0061,
+            "critic": 0.0061
+          }
+        }
+      },
+      "checkpoint_wins": {
+        "matched_v11": 33,
+        "matched_empf": 34
+      }
+    }
+  ],
+  "endpoint_means": {
+    "v12": 1.1512239841818257,
+    "matched_v11": 1.2019230458752657,
+    "matched_empf": 1.2071151137377374
+  },
+  "mean_energy_30000_to_40000": {
+    "v12": 1.1328038929118704,
+    "matched_v11": 1.2067183488045579,
+    "matched_empf": 1.2337480676200019
+  }
+}
