@@ -76,6 +76,10 @@ On seeds 251–253 the selected original v11 scored 0.93033, below calibrated v1
 
 A clean checkout reproduced both cohort reports using the published command, the downloaded pilot data and the pinned wheels. It reused 89 verified fits and trained the remaining v12 fit on GPU 1. That fit reproduced the original energy distance of 0.6114014145359561.
 
+### Following the same fits through 3,600 updates
+
+The extended runs preserve the calibrated epsilon-0.1 v12 setting and repeat the five original-release configurations on all three development groups at seeds 22 and 251. The first completed v12 versus tuned original EMPF pair was seed 22 on Screen1_3. V12 scored 0.61140, 0.62988 and 0.62045 at 1,200, 2,400 and 3,600 updates. Tuned original EMPF scored 0.57313, 0.67515 and 0.67953. On this pair v12 first led at the 2,400 checkpoint. Both ended above their own 1,200-update scores. V12's effective covariance dimensions rose from 22.67 to 23.46 and EMPF's from 16.17 to 17.62. [Completed paired trajectories](neuroko_v12_convergence_3600_tuned_empf.json) · [Two-GPU reproduction command](../README.md#check-whether-v12-closes-the-gap-by-3600-updates)
+
 ## Six configurations on the same nine training pairs
 
 The stronger-prior v12 had the lowest mean energy of all 18 entries below on screening seeds 22–24. Its 0.9423 was 0.0038 below the lowest EMPF mean and 0.0039 below the lowest v11 mean. At penalty weight 0.1 it beat matched EMPF on four of nine pairs and matched v11 on six. Only seed 22 favored v12 when the three groups were averaged within each seed against matched EMPF. The setting qualified for independent training seeds 251–253. [All six configurations, paired energies, timings and input hashes](neuroko_v12_six_settings_1200.json) · [Prior-weight screening decision](neuroko_v12_prior_weight_screen.json)
@@ -814,6 +818,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study transport-rho --data "$
   --wheels "$data/wheels" --output "$data/v12-transport-rho" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
+
+Halving rho raised v12 mean energy from **0.92850 to 1.00441** on seeds 22–24. All nine paired fits worsened. Tuned EMPF scored 0.92240. The new setting stopped at the first cohort. [Paired energy, data fingerprints and constant learning rates](neuroko_v12_transport_rho_energy.json)
 
 ### Combining critic LR 0.0071 with relativistic weight 0.5
 
