@@ -238,7 +238,7 @@ All 179 fields of the resolved v11 recipe agreed across the two releases at thes
 
 The rate-matched comparison also has a shared-prior check. At each rate setting, `--stage compare-shared-prior` gives EMPF the same 0.02 prior coefficient as Unified v11 and v12. Before reusing a Unified fit, the driver resolves the complete recipe in the appropriate installed wheel and verifies that explicitly setting the coefficient gives the identical recipe. It refits EMPF from both 0.10.0 and 0.12.0, checks each of the 1,200 learning rates, and compares all five formulation–release combinations on the same nine pairs. Use the commands above with `--stage compare-shared-prior` to reproduce this comparison.
 
-With the prior weight fixed to **0.02 in all three original releases**, v12 averaged **0.97744**, EMPF **1.00727** and v11 **0.94688**. V12 beat EMPF on six of nine training pairs and v11 on one. The advantage over original EMPF at this rate setting survives equalizing the prior coefficient. [Equal-prior scores for the three original releases](neuroko_original_releases_shared_prior_002.json)
+With the prior weight fixed to **0.02 in all three original releases**, v12 averaged **0.97744**, EMPF **1.00727** and v11 **0.94688**. V12 beat EMPF on six of nine training pairs and v11 on one. The advantage over original EMPF at this rate setting survives equalizing the prior coefficient. The complete five-arm comparison gave identical EMPF scores in 0.10.0 and 0.12.0 at this shared prior weight. [All five matched arms](neuroko_v12_matched_rates_shared_prior.json) [Equal-prior scores for the three original releases](neuroko_original_releases_shared_prior_002.json)
 
 ## Prior penalty at latent noise 0.15
 
@@ -544,6 +544,10 @@ python paper_watch/scripts/neuroko_rate_noise.py --study original-v11-critic --d
 
 At fixed critic LR 0.0049, v12 scored **0.92850** across the nine pairs, down from **0.94231** at 0.021. Five pairs improved. Tuned noise-0.25 v11 scored **0.92511** and EMPF **0.92240**. V12 won four pairs against each. Matching the first 64 critic steps closely improved the nine-pair energy mean, but both tuned controls still led. [Results and fixed-rate calibration](neuroko_v12_original_critic_energy.json)
 
+An empirical sampler drawing 256 real training neurons per condition with replacement scored **0.92818** on these nine pairs. On seeds 251–253 it scored **0.93083**, compared with baseline v12 at 0.94813 and tuned EMPF at 0.90413. This uses the same projected data and scoring function as the GPU fits. Sampling real training rows gives a reference for the difference between biological groups and for variation in a 256-draw score. [Scores and data hashes on both cohorts](neuroko_empirical_training_reference.json)
+
+The v12 release uses a cosine schedule with both learning-rate floors set to 1.0. We evaluated its schedule at every update from zero through 40,000 and both scales stayed at 1.0. Two GPU replays of the calibrated run checked every optimizer parameter group at the instant of each generator/particle and critic step. Across 1,200 updates on each card, generator stayed at 0.014, critic at 0.0049 and particles at 0.0406. Both replays reproduced all primary target scores and the original adaptive-gain traces. The optimizer's separate generator gain ranged from 0.92282 to 1.0 at the last checkpoint across all nine original fits. [Step checks on both GPUs](neuroko_v12_optimizer_step_rates.json) · [Released recipe](https://github.com/HyperGAN/ParticleGAN/blob/3256a05867688ab7ec0e5b4f50354c14d6972e6f/particlegan/recipes.py#L2446-L2456)
+
 The follow-up changes only v12 latent noise from 0.15 to 0.25 at the fixed 0.0049 critic rate. It uses the preceding 0.92850 result and both tuned controls as its first threshold. Further checks include exact matches for all three formulations on both development cohorts and the two historical releases on six fresh training seeds. The same command runs this experiment with `--study original-v11-critic-wide-noise` and `--output "$data/v12-original-critic-wide-noise"`.
 
 ### Testing noise on generator outputs during training
@@ -559,3 +563,5 @@ python paper_watch/scripts/neuroko_rate_noise.py --study generator-output-noise 
   --wheels "$data/wheels" --output "$data/v12-output-noise" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior"
 ```
+
+Adding fixed output noise 0.35 during training raised v12 mean energy from **0.94231 to 0.96369**. 4 of the nine paired fits improved. This setting fell behind both tuned controls and stopped at the first development comparison. [Scores for all nine pairs and the selection rule](neuroko_v12_generator_output_noise_energy.json)

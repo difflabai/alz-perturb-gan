@@ -189,6 +189,26 @@ def test_fixed_rate_benchmark_rejects_delayed_staircase_decay():
         verify_fixed_schedule(recipe, 1200)
 
 
+def test_fixed_rate_audit_catches_a_temporary_change_at_optimizer_step():
+    from contextlib import ExitStack
+    from paper_watch.alztest.neuroko_tune import audit_optimizer_steps
+
+    model = ConditionalPGAN(3, 2, seed=4, recipe_name="empf")
+    critic = model.trainer.opt_d
+    rate = critic.param_groups[0]["lr"]
+    with ExitStack() as hooks:
+        counts = audit_optimizer_steps(model.trainer, hooks)
+        labels = np.repeat([0, 1], BATCH)
+        model.fit(np.random.default_rng(9).normal(size=(len(labels), 3)), labels, steps=2)
+        assert counts == {"generator_and_particles": 2, "critic": 2}
+        critic.param_groups[0]["lr"] = rate / 2
+        try:
+            with pytest.raises(RuntimeError, match="critic LR changed at optimizer step 3"):
+                critic.step()
+        finally:
+            critic.param_groups[0]["lr"] = rate
+
+
 def test_v12_gain_diagnostic_reads_the_released_optimizer_state():
     from paper_watch.alztest.neuroko_duration import function_space_gains
 

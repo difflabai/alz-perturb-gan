@@ -1,0 +1,944 @@
+{
+  "method": "Use the existing NeuroKO LR benchmark empirical resampling rule on the same two training folds for each validation group and seed. Use a single NumPy default_rng per seed and draw 256 training rows with replacement per condition in canonical order. All input hashes match the corresponding fixed-rate GPU fits.",
+  "cell_type": "iNeurons",
+  "cohorts": {
+    "v12-rate-noise": {
+      "mean_empirical_energy": 0.9281799305356178,
+      "rows": [
+        {
+          "seed": 22,
+          "group": "Screen1_1",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "empirical": {
+            "energy_distance": 1.1926002418779424,
+            "shift_cosine": -0.00943890355174951,
+            "spread_ratio": 1.350058692964287
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 1.247426158179728,
+              "shift_cosine": -0.2322553993342913,
+              "spread_ratio": 1.2844459171696319
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0613893666969512,
+              "shift_cosine": 0.07385540257268815,
+              "spread_ratio": 1.3436797489992471
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1945680389306137,
+              "shift_cosine": -0.18129109567103577,
+              "spread_ratio": 1.371979393029629
+            },
+            "MAMSTR": {
+              "energy_distance": 1.267017403704477,
+              "shift_cosine": 0.3019354782256409,
+              "spread_ratio": 1.4001297126586403
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.1558245879047615,
+              "shift_cosine": 0.12508702037267663,
+              "spread_ratio": 1.1181558156169027
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 1.131282990474319,
+              "shift_cosine": 0.07374789540536124,
+              "spread_ratio": 1.229765985363071
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 1.1223464943750359,
+              "shift_cosine": -0.0014237260143620508,
+              "spread_ratio": 1.2319534275764945
+            },
+            "0.12.0/unified_v12/original-v11-critic-49": {
+              "energy_distance": 1.1263494186235306,
+              "shift_cosine": 0.10488809485915515,
+              "spread_ratio": 1.2574142164189075
+            }
+          }
+        },
+        {
+          "seed": 23,
+          "group": "Screen1_1",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "empirical": {
+            "energy_distance": 1.19998487399935,
+            "shift_cosine": -0.11234456056415594,
+            "spread_ratio": 1.3352972284322389
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 1.233913097465404,
+              "shift_cosine": -0.02507411166292037,
+              "spread_ratio": 1.3396787541759234
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1551485795844112,
+              "shift_cosine": -0.1536312428502775,
+              "spread_ratio": 1.3280001593359412
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.2345914089337073,
+              "shift_cosine": -0.3172124594002423,
+              "spread_ratio": 1.2929678030380305
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1762864100138772,
+              "shift_cosine": 0.04653957165681637,
+              "spread_ratio": 1.3805421971790601
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.2369916829798506,
+              "shift_cosine": -0.0323344465573125,
+              "spread_ratio": 1.2018686184776988
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 1.2338240039674975,
+              "shift_cosine": -0.03056642894277964,
+              "spread_ratio": 1.216598423225002
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 1.0745143236963988,
+              "shift_cosine": 0.1592580788186776,
+              "spread_ratio": 1.2413890491050834
+            },
+            "0.12.0/unified_v12/original-v11-critic-49": {
+              "energy_distance": 1.126615089377189,
+              "shift_cosine": 0.011774975922218857,
+              "spread_ratio": 1.2517812262520964
+            }
+          }
+        },
+        {
+          "seed": 24,
+          "group": "Screen1_1",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "empirical": {
+            "energy_distance": 1.1392602171300303,
+            "shift_cosine": -0.11054065958315502,
+            "spread_ratio": 1.3651784135275773
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 1.15800575516647,
+              "shift_cosine": -0.2611496047874299,
+              "spread_ratio": 1.3161101271295181
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0688039789696502,
+              "shift_cosine": -0.18292505012740196,
+              "spread_ratio": 1.3490345793627587
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1797242932556227,
+              "shift_cosine": -0.14509157760896677,
+              "spread_ratio": 1.3674859725998647
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1505068411283785,
+              "shift_cosine": 0.1470035941911785,
+              "spread_ratio": 1.4280829750181678
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.20568798533048,
+              "shift_cosine": -0.043835547556567565,
+              "spread_ratio": 1.1836547810760538
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 1.1170219582473204,
+              "shift_cosine": 0.09171785283629659,
+              "spread_ratio": 1.2105470852333176
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 1.1274244217063474,
+              "shift_cosine": 0.01209709693250446,
+              "spread_ratio": 1.232642783059402
+            },
+            "0.12.0/unified_v12/original-v11-critic-49": {
+              "energy_distance": 1.2100226375749439,
+              "shift_cosine": -0.08786361979085795,
+              "spread_ratio": 1.270379460073419
+            }
+          }
+        },
+        {
+          "seed": 22,
+          "group": "Screen1_3",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "empirical": {
+            "energy_distance": 0.6180319778861114,
+            "shift_cosine": 0.09942838573158723,
+            "spread_ratio": 1.3620544068162437
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 0.6619135889420669,
+              "shift_cosine": -0.07396801760195743,
+              "spread_ratio": 1.3533401579753805
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5323608165259621,
+              "shift_cosine": 0.28611534077799816,
+              "spread_ratio": 1.3400423167103923
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6268681359117911,
+              "shift_cosine": 0.21038259625264114,
+              "spread_ratio": 1.4270630400321533
+            },
+            "MAMSTR": {
+              "energy_distance": 0.6509853701646255,
+              "shift_cosine": -0.024816376502332954,
+              "spread_ratio": 1.3277721125470485
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 0.582786368766701,
+              "shift_cosine": 0.06945945140124668,
+              "spread_ratio": 1.2000691389556954
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 0.5628406631049345,
+              "shift_cosine": 0.08127438642377491,
+              "spread_ratio": 1.244094284545174
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 0.5731292339540484,
+              "shift_cosine": 0.04419246622390889,
+              "spread_ratio": 1.2283444375584893
+            },
+            "0.12.0/unified_v12/original-v11-critic-49": {
+              "energy_distance": 0.6114014145359561,
+              "shift_cosine": -0.088320452151841,
+              "spread_ratio": 1.3028938668726433
+            }
+          }
+        },
+        {
+          "seed": 23,
+          "group": "Screen1_3",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "empirical": {
+            "energy_distance": 0.6214963469726957,
+            "shift_cosine": 0.18066702415539743,
+            "spread_ratio": 1.3606045591157694
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 0.6424490352845558,
+              "shift_cosine": 0.07582381127160484,
+              "spread_ratio": 1.4060197667373537
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5267443255176962,
+              "shift_cosine": 0.3712721456170522,
+              "spread_ratio": 1.3144689044349582
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6029418124242456,
+              "shift_cosine": 0.3428085301768281,
+              "spread_ratio": 1.4090233295456625
+            },
+            "MAMSTR": {
+              "energy_distance": 0.7138502146642853,
+              "shift_cosine": -0.06723639044389546,
+              "spread_ratio": 1.3129062357451033
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 0.5376268147660306,
+              "shift_cosine": -0.022322060332801687,
+              "spread_ratio": 1.184570962356847
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 0.6142560943939468,
+              "shift_cosine": -0.018442133936471306,
+              "spread_ratio": 1.2266366539462172
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 0.6302151424050741,
+              "shift_cosine": 0.0425509092773812,
+              "spread_ratio": 1.254468500171857
+            },
+            "0.12.0/unified_v12/original-v11-critic-49": {
+              "energy_distance": 0.6207189273353579,
+              "shift_cosine": 0.04752108184322987,
+              "spread_ratio": 1.2660288836955078
+            }
+          }
+        },
+        {
+          "seed": 24,
+          "group": "Screen1_3",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "empirical": {
+            "energy_distance": 0.6370257010342748,
+            "shift_cosine": 0.13851565321841164,
+            "spread_ratio": 1.3831362140588632
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 0.6632446199326738,
+              "shift_cosine": 0.15804656292814925,
+              "spread_ratio": 1.413777523204151
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.57760047303693,
+              "shift_cosine": 0.1796049175087197,
+              "spread_ratio": 1.3607353069321817
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6642441257071772,
+              "shift_cosine": 0.2443519321498649,
+              "spread_ratio": 1.4403473948689647
+            },
+            "MAMSTR": {
+              "energy_distance": 0.6430135854603183,
+              "shift_cosine": -0.027940799713087314,
+              "spread_ratio": 1.3176846312301558
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 0.5790882342441512,
+              "shift_cosine": 0.13491794996061637,
+              "spread_ratio": 1.2158920057081901
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 0.5905625402012029,
+              "shift_cosine": 0.12237865234912186,
+              "spread_ratio": 1.2752338536523848
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 0.696174307530145,
+              "shift_cosine": -0.03323249155697918,
+              "spread_ratio": 1.256591309437638
+            },
+            "0.12.0/unified_v12/original-v11-critic-49": {
+              "energy_distance": 0.6698091226184917,
+              "shift_cosine": 0.12388296844254923,
+              "spread_ratio": 1.2822015461895409
+            }
+          }
+        },
+        {
+          "seed": 22,
+          "group": "Screen1_4",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "empirical": {
+            "energy_distance": 0.9855280210243438,
+            "shift_cosine": 0.09829090954055632,
+            "spread_ratio": 1.1291721876434178
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 1.0075554016097703,
+              "shift_cosine": 0.22081996843907495,
+              "spread_ratio": 1.111840513347484
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0701885832901379,
+              "shift_cosine": 0.3791110487263544,
+              "spread_ratio": 1.0987351690364313
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.8742385424093442,
+              "shift_cosine": -0.15635189599133728,
+              "spread_ratio": 1.09924559788948
+            },
+            "MAMSTR": {
+              "energy_distance": 0.9901295567881228,
+              "shift_cosine": -0.0504154830118668,
+              "spread_ratio": 1.2068674703002755
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.106730401963502,
+              "shift_cosine": 0.12073702637207122,
+              "spread_ratio": 1.009725480960883
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 1.0125469102079956,
+              "shift_cosine": -0.1946591159568154,
+              "spread_ratio": 1.0060943816141052
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 1.0525022939435076,
+              "shift_cosine": 0.04969228602326761,
+              "spread_ratio": 1.0159460598569405
+            },
+            "0.12.0/unified_v12/original-v11-critic-49": {
+              "energy_distance": 0.9871477581704231,
+              "shift_cosine": -0.00749093769110578,
+              "spread_ratio": 1.0576265643739278
+            }
+          }
+        },
+        {
+          "seed": 23,
+          "group": "Screen1_4",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "empirical": {
+            "energy_distance": 0.9853873513074094,
+            "shift_cosine": -0.023778770826278606,
+            "spread_ratio": 1.1254273098618373
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 1.0275199287253853,
+              "shift_cosine": -0.14599402183916468,
+              "spread_ratio": 1.0887796722755163
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0029989907259296,
+              "shift_cosine": 0.13091472004043267,
+              "spread_ratio": 1.0991430696313869
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.8896525119574559,
+              "shift_cosine": -0.04289205481942533,
+              "spread_ratio": 1.1373241288148688
+            },
+            "MAMSTR": {
+              "energy_distance": 1.0213779738208668,
+              "shift_cosine": -0.03714372668695707,
+              "spread_ratio": 1.176462368725577
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.0481554259654402,
+              "shift_cosine": -0.13485485894396593,
+              "spread_ratio": 0.9866796742189852
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 1.016504427475284,
+              "shift_cosine": -0.1299826310708654,
+              "spread_ratio": 1.00139554211592
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 1.0015550178129418,
+              "shift_cosine": -0.024769690354564118,
+              "spread_ratio": 1.0237717665328638
+            },
+            "0.12.0/unified_v12/original-v11-critic-49": {
+              "energy_distance": 1.0181744368803536,
+              "shift_cosine": 0.07014859868935555,
+              "spread_ratio": 1.0570566062100002
+            }
+          }
+        },
+        {
+          "seed": 24,
+          "group": "Screen1_4",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "empirical": {
+            "energy_distance": 0.9743046435884017,
+            "shift_cosine": -0.034878160513179435,
+            "spread_ratio": 1.1337270022372472
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 0.9757977374580129,
+              "shift_cosine": -0.03227719376801146,
+              "spread_ratio": 1.0793967222316143
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0546425200645189,
+              "shift_cosine": 0.22375031030593767,
+              "spread_ratio": 1.1536022760885207
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.8740905155855021,
+              "shift_cosine": -0.30257100108979096,
+              "spread_ratio": 1.1407581490758862
+            },
+            "MAMSTR": {
+              "energy_distance": 0.9926878012455731,
+              "shift_cosine": -0.028414757500853,
+              "spread_ratio": 1.161150861552967
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.0278612823316216,
+              "shift_cosine": 0.09147426743257704,
+              "spread_ratio": 1.0264598521909978
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 1.047187460033994,
+              "shift_cosine": -0.08363860014157404,
+              "spread_ratio": 1.0287066930971114
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 1.0237620003620436,
+              "shift_cosine": 0.24308511550024134,
+              "spread_ratio": 1.0205373943604648
+            },
+            "0.12.0/unified_v12/original-v11-critic-49": {
+              "energy_distance": 0.9862425746570376,
+              "shift_cosine": 0.023848492486087596,
+              "spread_ratio": 1.0692256165588776
+            }
+          }
+        }
+      ]
+    },
+    "v12-noise-prior": {
+      "mean_empirical_energy": 0.9308284842306678,
+      "rows": [
+        {
+          "seed": 251,
+          "group": "Screen1_1",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "empirical": {
+            "energy_distance": 1.1806028317074353,
+            "shift_cosine": -0.11778899897129329,
+            "spread_ratio": 1.3716984021261256
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 1.2144000596063327,
+              "shift_cosine": -0.29461595423282694,
+              "spread_ratio": 1.354648128282745
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.119745757718409,
+              "shift_cosine": -0.1273685102719408,
+              "spread_ratio": 1.3371667179581512
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.234459242180419,
+              "shift_cosine": -0.181909762070042,
+              "spread_ratio": 1.3804634569454768
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1538062673245806,
+              "shift_cosine": 0.13273823068963658,
+              "spread_ratio": 1.4145153053181296
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.2416175990552027,
+              "shift_cosine": 0.08905810333761423,
+              "spread_ratio": 1.1663795232908178
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 1.2046290732651421,
+              "shift_cosine": 0.16354783702748998,
+              "spread_ratio": 1.21878768336871
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 1.1566485332439562,
+              "shift_cosine": 0.03517881627616708,
+              "spread_ratio": 1.2391277685750284
+            }
+          }
+        },
+        {
+          "seed": 252,
+          "group": "Screen1_1",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "empirical": {
+            "energy_distance": 1.1980307794292508,
+            "shift_cosine": -0.042769473860144486,
+            "spread_ratio": 1.3650139279358737
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 1.255214360943274,
+              "shift_cosine": -0.21216523634255957,
+              "spread_ratio": 1.3103293345960096
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0719992257627107,
+              "shift_cosine": -0.024563975045046357,
+              "spread_ratio": 1.3770219468081906
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.2809079044856837,
+              "shift_cosine": -0.17466625258375162,
+              "spread_ratio": 1.3647583800103498
+            },
+            "MAMSTR": {
+              "energy_distance": 1.184001626525335,
+              "shift_cosine": 0.2403175685307796,
+              "spread_ratio": 1.4079460503289452
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.0948545996209305,
+              "shift_cosine": 0.13912300013202758,
+              "spread_ratio": 1.2047814953500167
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 1.1478956308991257,
+              "shift_cosine": 0.020694791685009907,
+              "spread_ratio": 1.2211504973409528
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 1.0777784378935291,
+              "shift_cosine": 0.26365996257968266,
+              "spread_ratio": 1.2755111884012065
+            }
+          }
+        },
+        {
+          "seed": 253,
+          "group": "Screen1_1",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "empirical": {
+            "energy_distance": 1.1962608353260147,
+            "shift_cosine": -0.017041509696058513,
+            "spread_ratio": 1.369827973613409
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 1.2342462591752819,
+              "shift_cosine": -0.02609885612038405,
+              "spread_ratio": 1.3325937333020033
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1084008001420829,
+              "shift_cosine": 0.16780799328370635,
+              "spread_ratio": 1.3392550363545788
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.225496633689028,
+              "shift_cosine": -0.1852872907975086,
+              "spread_ratio": 1.3836536018960184
+            },
+            "MAMSTR": {
+              "energy_distance": 1.216899648297666,
+              "shift_cosine": -0.02458788515004774,
+              "spread_ratio": 1.4238095229010357
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.179260337919627,
+              "shift_cosine": -0.13820183940004632,
+              "spread_ratio": 1.1918249931310971
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 0.983078207528687,
+              "shift_cosine": 0.05795831000731219,
+              "spread_ratio": 1.2169666641468668
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 1.1361177669356388,
+              "shift_cosine": 0.06967194612279512,
+              "spread_ratio": 1.268473008622435
+            }
+          }
+        },
+        {
+          "seed": 251,
+          "group": "Screen1_3",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "empirical": {
+            "energy_distance": 0.6259025490954266,
+            "shift_cosine": 0.15855376080351477,
+            "spread_ratio": 1.3771453187171991
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 0.6146561165617896,
+              "shift_cosine": 0.1855946971067998,
+              "spread_ratio": 1.4041894248578302
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.6147223763510832,
+              "shift_cosine": 0.11173044987252811,
+              "spread_ratio": 1.398843377954178
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6620582820410199,
+              "shift_cosine": 0.17531394784472173,
+              "spread_ratio": 1.4262662229680232
+            },
+            "MAMSTR": {
+              "energy_distance": 0.6121734214278138,
+              "shift_cosine": 0.1615759483900094,
+              "spread_ratio": 1.2792822490887654
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 0.6164895345613126,
+              "shift_cosine": 0.05719429350750198,
+              "spread_ratio": 1.1934695767147516
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 0.6431797824682548,
+              "shift_cosine": -0.1769607658306676,
+              "spread_ratio": 1.2044379761661805
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 0.6206967452030661,
+              "shift_cosine": 0.1860244600921395,
+              "spread_ratio": 1.2731249885308074
+            }
+          }
+        },
+        {
+          "seed": 252,
+          "group": "Screen1_3",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "empirical": {
+            "energy_distance": 0.6267377714400193,
+            "shift_cosine": 0.019628903104558816,
+            "spread_ratio": 1.3697552218764648
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 0.6781928805636319,
+              "shift_cosine": 0.05709046612351292,
+              "spread_ratio": 1.3932712486091714
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.6181338116332276,
+              "shift_cosine": -0.14749405793109766,
+              "spread_ratio": 1.3935953982773284
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.5897224439800777,
+              "shift_cosine": 0.2737282170629311,
+              "spread_ratio": 1.4001024845221277
+            },
+            "MAMSTR": {
+              "energy_distance": 0.62090194958314,
+              "shift_cosine": -0.1048090128371111,
+              "spread_ratio": 1.292051756097232
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 0.5953818442191594,
+              "shift_cosine": -0.054355356601360344,
+              "spread_ratio": 1.2096427333261952
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 0.582432076583989,
+              "shift_cosine": 0.011630596395396492,
+              "spread_ratio": 1.2283955243700626
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 0.6172634586043444,
+              "shift_cosine": 0.06641596778430474,
+              "spread_ratio": 1.20707913551373
+            }
+          }
+        },
+        {
+          "seed": 253,
+          "group": "Screen1_3",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "empirical": {
+            "energy_distance": 0.646297809535217,
+            "shift_cosine": -0.04004996769783772,
+            "spread_ratio": 1.3688378679097688
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 0.6742760874667182,
+              "shift_cosine": -0.06841716566734557,
+              "spread_ratio": 1.4237292724206652
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5395757782887216,
+              "shift_cosine": 0.019404934373768185,
+              "spread_ratio": 1.3342292464072825
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6929404551341429,
+              "shift_cosine": -0.1210173931224135,
+              "spread_ratio": 1.3950983658290772
+            },
+            "MAMSTR": {
+              "energy_distance": 0.6783989172512852,
+              "shift_cosine": 0.00982975362464002,
+              "spread_ratio": 1.3222945869820502
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 0.5642726022381039,
+              "shift_cosine": 0.14322081100432682,
+              "spread_ratio": 1.2129938570206893
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 0.6216809812535689,
+              "shift_cosine": 0.05979514920532485,
+              "spread_ratio": 1.2278567912846496
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 0.575229532762398,
+              "shift_cosine": 0.1347638109072634,
+              "spread_ratio": 1.2343531213554284
+            }
+          }
+        },
+        {
+          "seed": 251,
+          "group": "Screen1_4",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "empirical": {
+            "energy_distance": 0.9641920875323653,
+            "shift_cosine": 0.14999282558813207,
+            "spread_ratio": 1.1329699479172963
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 0.9342148820280132,
+              "shift_cosine": 0.15048948954760816,
+              "spread_ratio": 1.1336187144192196
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0371248981816716,
+              "shift_cosine": 0.24330457556535706,
+              "spread_ratio": 1.1585578102094898
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.8862349529476408,
+              "shift_cosine": -0.0888129386407583,
+              "spread_ratio": 1.1060396273022568
+            },
+            "MAMSTR": {
+              "energy_distance": 0.9991936169721356,
+              "shift_cosine": 0.29499017588032134,
+              "spread_ratio": 1.133663639738219
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.0580231282066397,
+              "shift_cosine": 0.13701188623877156,
+              "spread_ratio": 0.987449566555002
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 0.9896809202041645,
+              "shift_cosine": -0.15669451009018218,
+              "spread_ratio": 1.0289005067357624
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 0.9820954604564001,
+              "shift_cosine": 0.17968164947480686,
+              "spread_ratio": 1.0126308516341649
+            }
+          }
+        },
+        {
+          "seed": 252,
+          "group": "Screen1_4",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "empirical": {
+            "energy_distance": 0.9766664193298655,
+            "shift_cosine": -0.16987883664351014,
+            "spread_ratio": 1.128634267332877
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 0.9803192686723312,
+              "shift_cosine": -0.30378376401865353,
+              "spread_ratio": 1.11624194282513
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0903562585885638,
+              "shift_cosine": 0.046337489990723575,
+              "spread_ratio": 1.1716884201023692
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.8867573862003795,
+              "shift_cosine": -0.41081668741686633,
+              "spread_ratio": 1.1057212245314156
+            },
+            "MAMSTR": {
+              "energy_distance": 0.9492327638581877,
+              "shift_cosine": -0.011252385129244246,
+              "spread_ratio": 1.1208854818725935
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.1077428637219089,
+              "shift_cosine": -0.27363685631854373,
+              "spread_ratio": 0.9840878580482585
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 1.0698143847223107,
+              "shift_cosine": -0.007295014415139604,
+              "spread_ratio": 1.004523664815216
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 0.9421862293921406,
+              "shift_cosine": 0.10012373279536715,
+              "spread_ratio": 0.9992493073182359
+            }
+          }
+        },
+        {
+          "seed": 253,
+          "group": "Screen1_4",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "empirical": {
+            "energy_distance": 0.9627652746804152,
+            "shift_cosine": -0.15312117906051587,
+            "spread_ratio": 1.1311007245906828
+          },
+          "per_target": {
+            "GLCCI1": {
+              "energy_distance": 1.0138549072366958,
+              "shift_cosine": -0.303987129948235,
+              "spread_ratio": 1.1431324593241015
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.9984931509496047,
+              "shift_cosine": 0.10144312891113878,
+              "spread_ratio": 1.1382861804609106
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.8782184618187721,
+              "shift_cosine": -0.37510761143299975,
+              "spread_ratio": 1.103203988314306
+            },
+            "MAMSTR": {
+              "energy_distance": 0.9604945787165882,
+              "shift_cosine": -0.03483310377196743,
+              "spread_ratio": 1.1397802702634132
+            }
+          },
+          "trained": {
+            "0.12.0/unified_v12/noise150-prior100": {
+              "energy_distance": 1.0755465393014312,
+              "shift_cosine": -0.13321798039559707,
+              "spread_ratio": 0.9976112291605963
+            },
+            "0.12.0/unified_v11/noise250-prior100": {
+              "energy_distance": 1.048058851417851,
+              "shift_cosine": 0.15049007110291676,
+              "spread_ratio": 1.0227364200752558
+            },
+            "0.12.0/empf/noise250-prior100": {
+              "energy_distance": 1.0291768706489963,
+              "shift_cosine": -0.06011170148213285,
+              "spread_ratio": 1.0329872131303757
+            }
+          }
+        }
+      ]
+    }
+  },
+  "explanation": "The empirical sampler draws from observed training-fold neurons for each condition. It is a descriptive reference for the same score and has finite-draw variation."
+}

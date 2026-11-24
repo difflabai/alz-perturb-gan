@@ -1,0 +1,199 @@
+{
+  "prior_equivalence": {
+    "0.12.0": {
+      "unified_v12": {
+        "native_weight": 0.02,
+        "shared_weight": 0.02,
+        "identical_full_recipe": true
+      },
+      "unified_v11": {
+        "native_weight": 0.02,
+        "shared_weight": 0.02,
+        "identical_full_recipe": true
+      },
+      "empf": {
+        "native_weight": 0.01,
+        "shared_weight": 0.02,
+        "identical_full_recipe": false
+      }
+    },
+    "0.11.1": {
+      "unified_v11": {
+        "native_weight": 0.02,
+        "shared_weight": 0.02,
+        "identical_full_recipe": true
+      }
+    },
+    "0.10.0": {
+      "empf": {
+        "native_weight": 0.01,
+        "shared_weight": 0.02,
+        "identical_full_recipe": false
+      }
+    }
+  },
+  "release_comparison_protocol": {
+    "arms": [
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "seed15-matched-leader-prior020",
+          "lr": 0.02,
+          "d_lr_mult": 2.1,
+          "prior_lr_mult": 1.015,
+          "prior_sigma": 0.025,
+          "prior_reg": 0.02
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "lr": 0.02,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "name": "seed15-matched-leader",
+          "d_lr_mult": 2.1,
+          "prior_lr_mult": 1.015,
+          "prior_sigma": 0.025
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "lr": 0.02,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "name": "seed15-matched-leader",
+          "d_lr_mult": 2.1,
+          "prior_lr_mult": 1.015,
+          "prior_sigma": 0.025
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "lr": 0.02,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "name": "seed15-matched-leader",
+          "d_lr_mult": 2.1,
+          "prior_lr_mult": 1.015,
+          "prior_sigma": 0.025
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "seed15-matched-leader-prior020",
+          "lr": 0.02,
+          "d_lr_mult": 2.1,
+          "prior_lr_mult": 1.015,
+          "prior_sigma": 0.025,
+          "prior_reg": 0.02
+        }
+      ]
+    ],
+    "seeds": [
+      22,
+      23,
+      24
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "metric": "Mean four-target energy on the same nine training pairs at fixed role rates, latent noise 0.025 and shared prior weight 0.02. Reuse full-equivalent Unified recipes and refit both EMPF releases with the explicit coefficient."
+  },
+  "release_comparison": {
+    "scores": {
+      "0.10.0/empf/seed15-matched-leader-prior020": [
+        1.2511153207294765,
+        0.6756545522601201,
+        1.1131190546143475,
+        1.2379855379888753,
+        0.6470362211296234,
+        1.0451223885353957,
+        1.3029866654940905,
+        0.7456382146901395,
+        1.0467830844068866
+      ],
+      "0.11.1/unified_v11/seed15-matched-leader": [
+        1.153958947101604,
+        0.6203655127728103,
+        1.0400852237763853,
+        1.211111936325903,
+        0.5839685626067028,
+        1.0156397102311245,
+        1.2557124629882048,
+        0.5960023545405995,
+        1.0451052610472178
+      ],
+      "0.12.0/unified_v12/seed15-matched-leader": [
+        1.1423770857120157,
+        0.6439867031270874,
+        1.0463390002338278,
+        1.2516130440478404,
+        0.642097125976439,
+        1.0648595213710594,
+        1.299525653134795,
+        0.6434862475542267,
+        1.0626834722128313
+      ],
+      "0.12.0/unified_v11/seed15-matched-leader": [
+        1.2284017427850842,
+        0.6466281555056084,
+        1.1405016852172256,
+        1.2089077205722816,
+        0.5979083052229368,
+        1.1092076003393305,
+        1.268200567105644,
+        0.6491208164901521,
+        1.0311655432856797
+      ],
+      "0.12.0/empf/seed15-matched-leader-prior020": [
+        1.2511153207294765,
+        0.6756545522601201,
+        1.1131190546143475,
+        1.2379855379888753,
+        0.6470362211296234,
+        1.0451223885353957,
+        1.3029866654940905,
+        0.7456382146901395,
+        1.0467830844068866
+      ]
+    },
+    "summaries": {
+      "0.10.0/empf/seed15-matched-leader-prior020": {
+        "energy": 1.007271226649884,
+        "v12_minus_arm": -0.02983035405320362,
+        "v12_pairs_won": 6
+      },
+      "0.11.1/unified_v11/seed15-matched-leader": {
+        "energy": 0.9468833301545058,
+        "v12_minus_arm": 0.03055754244217448,
+        "v12_pairs_won": 1
+      },
+      "0.12.0/unified_v12/seed15-matched-leader": {
+        "energy": 0.9774408725966803,
+        "v12_minus_arm": 0.0,
+        "v12_pairs_won": 0
+      },
+      "0.12.0/unified_v11/seed15-matched-leader": {
+        "energy": 0.9866713485026604,
+        "v12_minus_arm": -0.009230475905980029,
+        "v12_pairs_won": 5
+      },
+      "0.12.0/empf/seed15-matched-leader-prior020": {
+        "energy": 1.007271226649884,
+        "v12_minus_arm": -0.02983035405320362,
+        "v12_pairs_won": 6
+      }
+    }
+  }
+}

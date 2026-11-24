@@ -1,0 +1,179 @@
+{
+  "method": "Require every group learning rate at entry to every generator/particle and critic optimizer step to match its initialization, in addition to scheduled and post-update checks. Repeat two deterministic 1200-update fits on the original physical GPUs and compare all original primary target scores and adaptive gain traces.",
+  "cells": [
+    {
+      "particlegan": "0.12.0",
+      "recipe": "unified_v12",
+      "name": "original-v11-critic-49",
+      "seed": 22,
+      "score_groups": [
+        "Screen1_1"
+      ],
+      "visible_devices": "0",
+      "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "fixed_lr_optimizer_steps": {
+        "generator_and_particles": 1200,
+        "critic": 1200
+      },
+      "constant_lr_verified_updates": 1200,
+      "initial_rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "final_rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "means": {
+        "energy_distance": 1.1263494186235306,
+        "shift_cosine": 0.10488809485915515,
+        "spread_ratio": 1.2574142164189075
+      },
+      "function_space_gain_trace": [
+        {
+          "update": 300,
+          "generator": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 300
+          },
+          "critic": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 0
+          }
+        },
+        {
+          "update": 600,
+          "generator": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 600
+          },
+          "critic": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 0
+          }
+        },
+        {
+          "update": 900,
+          "generator": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 900
+          },
+          "critic": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 0
+          }
+        },
+        {
+          "update": 1200,
+          "generator": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 1200
+          },
+          "critic": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 0
+          }
+        }
+      ]
+    },
+    {
+      "particlegan": "0.12.0",
+      "recipe": "unified_v12",
+      "name": "original-v11-critic-49",
+      "seed": 22,
+      "score_groups": [
+        "Screen1_3"
+      ],
+      "visible_devices": "1",
+      "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "training_batches_sha256": "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "fixed_lr_optimizer_steps": {
+        "generator_and_particles": 1200,
+        "critic": 1200
+      },
+      "constant_lr_verified_updates": 1200,
+      "initial_rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "final_rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "means": {
+        "energy_distance": 0.6114014145359561,
+        "shift_cosine": -0.088320452151841,
+        "spread_ratio": 1.3028938668726433
+      },
+      "function_space_gain_trace": [
+        {
+          "update": 300,
+          "generator": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 300
+          },
+          "critic": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 0
+          }
+        },
+        {
+          "update": 600,
+          "generator": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 600
+          },
+          "critic": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 0
+          }
+        },
+        {
+          "update": 900,
+          "generator": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 900
+          },
+          "critic": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 0
+          }
+        },
+        {
+          "update": 1200,
+          "generator": {
+            "ema_func_gain": 0.9946934885921124,
+            "last_step_gain": 0.9823116286403747,
+            "probe_consumptions": 1200
+          },
+          "critic": {
+            "ema_func_gain": 1.0,
+            "last_step_gain": 1.0,
+            "probe_consumptions": 0
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -46,6 +46,27 @@ def verify_fixed_schedule(recipe, updates):
             raise ValueError(f"{recipe.name} changes network or particle LR at update {step}: {scales}")
 
 
+def audit_optimizer_steps(trainer, hooks):
+    optimizers = {trainer.opt_g: "generator_and_particles", trainer.opt_d: "critic"}
+    expected = {opt: tuple(float(g["lr"]) for g in opt.param_groups) for opt in optimizers}
+    counts = {role: 0 for role in optimizers.values()}
+
+    def check(opt, args, kwargs):
+        role = optimizers[opt]
+        update = trainer.completed_steps + 1
+        rates = tuple(float(g["lr"]) for g in opt.param_groups)
+        if rates != expected[opt]:
+            raise RuntimeError(f"{role} LR changed at optimizer step {update}: {expected[opt]} -> {rates}")
+        # EMPF also invokes this hook when its generator optimizer delegates to its parent.
+        if update != counts[role] and update != counts[role] + 1:
+            raise RuntimeError(f"Missing {role} optimizer rate check before update {update}")
+        counts[role] = update
+
+    for opt in optimizers:
+        hooks.callback(opt.register_step_pre_hook(check).remove)
+    return counts
+
+
 def optimizer_momentum(trainer):
     """Read the state that each released optimizer uses to calculate its step."""
     result = {}
@@ -356,7 +377,14 @@ def main():
                     gain_trace.append({"update": step, **gains})
                 print(f"{name} completed {step}/1200", flush=True)
 
-        model.fit(x, labels, steps=1200, after_step=progress, on_batch=record_batch)
+        with ExitStack() as hooks:
+            if args.require_constant_lr:
+                step_counts = audit_optimizer_steps(model.trainer, hooks)
+            model.fit(x, labels, steps=1200, after_step=progress, on_batch=record_batch)
+            if args.require_constant_lr:
+                if any(n != config["updates"] for n in step_counts.values()):
+                    raise RuntimeError(f"Unexpected number of optimizer steps: {step_counts}")
+                config["fixed_lr_optimizer_steps"] = step_counts
         torch.cuda.synchronize(device)
         seconds = perf_counter() - start - scoring_seconds
         if model.trainer.completed_steps != 1200:
