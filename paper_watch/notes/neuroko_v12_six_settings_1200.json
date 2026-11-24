@@ -1,0 +1,618 @@
+{
+  "release": "0.12.0",
+  "stage": "training-group validation",
+  "seeds": [
+    22,
+    23,
+    24
+  ],
+  "groups": [
+    "Screen1_1",
+    "Screen1_3",
+    "Screen1_4"
+  ],
+  "paired_inputs": [
+    {
+      "seed": 22,
+      "group": "Screen1_1",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96",
+      "visible_devices": "0"
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_3",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "training_batches_sha256": "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4",
+      "visible_devices": "1"
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_4",
+      "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "training_batches_sha256": "85f4aff48cde6ba1da727b69d794e423e9f4cb879abe43d9899c96b3e19486a8",
+      "visible_devices": "0"
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_1",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+      "training_batches_sha256": "c1b421e29d4d935428afccf2b52bb0b12c41f54b927d95ee3c8b4b7fcff3a3eb",
+      "visible_devices": "1"
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_3",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+      "training_batches_sha256": "a2c81ac6a8e84563621f19a16aff3340cbf95b95bacc135c80df9b3fd42f7443",
+      "visible_devices": "0"
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_4",
+      "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+      "training_batches_sha256": "f0fc24166dc52bf914506e6eccc97cdb2937937bcb548c4ee7f877c9038456c6",
+      "visible_devices": "1"
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_1",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+      "training_batches_sha256": "4c0657cf4e49b6ed9e7ed8cf1529557ec56d518e7f697b464f33e263585ee5e4",
+      "visible_devices": "0"
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_3",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+      "training_batches_sha256": "507c8545718ac1248d187d920f15b7d033dfc06a2e29f3ea052422cf584d5a90",
+      "visible_devices": "1"
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_4",
+      "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+      "training_batches_sha256": "b3ec8669fad397caaf4deb8d3ac9c4b946534ff97ad62350d35bc754d111f1ab",
+      "visible_devices": "0"
+    }
+  ],
+  "updates": 1200,
+  "release_default_prior_weights": {
+    "unified_v12": 0.02,
+    "unified_v11": 0.02,
+    "empf": 0.01
+  },
+  "configurations": [
+    {
+      "configuration": {
+        "rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "latent_noise": 0.025,
+        "prior_weight": "release default"
+      },
+      "formulations": {
+        "unified_v12": {
+          "arm": "0.12.0/unified_v12/hollow-active2",
+          "energy": 0.9729453614808243,
+          "paired_energies": [
+            1.22305246191491,
+            0.5813974604523715,
+            1.092569140456169,
+            1.2209104271151088,
+            0.6026240725837977,
+            1.1187960188995034,
+            1.2740923218744633,
+            0.5527630999808795,
+            1.0903032500502159
+          ],
+          "mean_spread_ratio": 1.1263343232049596,
+          "mean_effective_dimensions": 16.8909615218204,
+          "median_seconds": 166.25346194184385
+        },
+        "unified_v11": {
+          "arm": "0.12.0/unified_v11/v11-incumbent",
+          "energy": 0.9462448059523875,
+          "paired_energies": [
+            1.1389971164824169,
+            0.6016461934139661,
+            1.0128671365111015,
+            1.2238445507370959,
+            0.5925522123970821,
+            1.1029358644430127,
+            1.2033830113073747,
+            0.6063102507802844,
+            1.0336669174991528
+          ],
+          "mean_spread_ratio": 1.1343342671760759,
+          "mean_effective_dimensions": 17.640182153860476,
+          "median_seconds": 175.82192384288646
+        },
+        "empf": {
+          "arm": "0.12.0/empf/empf-mid",
+          "energy": 0.9721720261506128,
+          "paired_energies": [
+            1.1663399590133035,
+            0.6666319626888468,
+            1.0315221926324754,
+            1.1746786209872662,
+            0.6909557335511292,
+            1.0846422744570807,
+            1.215052223927393,
+            0.6630796911001664,
+            1.0566455769978547
+          ],
+          "mean_spread_ratio": 1.180096279193173,
+          "mean_effective_dimensions": 16.03803154871692,
+          "median_seconds": 314.6215407180134
+        }
+      },
+      "v12_minus_comparator": {
+        "unified_v11": {
+          "mean": 0.02670055552843688,
+          "pairs_won": 3,
+          "by_seed": {
+            "22": 0.04783620547198867,
+            "23": 0.0076659636737397285,
+            "24": 0.02459949743958223
+          }
+        },
+        "empf": {
+          "mean": 0.0007733353302114616,
+          "pairs_won": 3,
+          "by_seed": {
+            "22": 0.010841649496274938,
+            "23": -0.002648703465688721,
+            "24": -0.005872940039951831
+          }
+        }
+      }
+    },
+    {
+      "configuration": {
+        "rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "latent_noise": 0.15,
+        "prior_weight": "release default"
+      },
+      "formulations": {
+        "unified_v12": {
+          "arm": "0.12.0/unified_v12/plain-noise",
+          "energy": 0.9734388917158029,
+          "paired_energies": [
+            1.17884786519768,
+            0.5648771282767884,
+            1.0329962388034866,
+            1.2275611745330945,
+            0.5815057461639714,
+            1.12278160112735,
+            1.2461855369115213,
+            0.6945613220125326,
+            1.1116334124158014
+          ],
+          "mean_spread_ratio": 1.1261625752662048,
+          "mean_effective_dimensions": 17.587848094732916,
+          "median_seconds": 149.76166623202153
+        },
+        "unified_v11": {
+          "arm": "0.12.0/unified_v11/matched-v11-alternative",
+          "energy": 0.950551589962191,
+          "paired_energies": [
+            1.1330670040148803,
+            0.6077507236637376,
+            1.0292283667157296,
+            1.2448219975013224,
+            0.5814439092257706,
+            1.0862559617269276,
+            1.2174422498832596,
+            0.6138942721075602,
+            1.041059824820531
+          ],
+          "mean_spread_ratio": 1.130975878166181,
+          "mean_effective_dimensions": 18.07752971602351,
+          "median_seconds": 163.96152398898266
+        },
+        "empf": {
+          "arm": "0.12.0/empf/matched-empf-alternative",
+          "energy": 0.9461274152817791,
+          "paired_energies": [
+            1.149941466775527,
+            0.6476141158032427,
+            1.0234849964719444,
+            1.169228626139106,
+            0.6694431762719462,
+            0.9696531092917879,
+            1.245671787709307,
+            0.6402961249498051,
+            0.9998133341233455
+          ],
+          "mean_spread_ratio": 1.1669882081316139,
+          "mean_effective_dimensions": 15.562164455610793,
+          "median_seconds": 322.3458750299178
+        }
+      },
+      "v12_minus_comparator": {
+        "unified_v11": {
+          "mean": 0.02288730175361193,
+          "pairs_won": 2,
+          "by_seed": {
+            "22": 0.002225045961202469,
+            "23": 0.006442217790131766,
+            "24": 0.059994641509501546
+          }
+        },
+        "empf": {
+          "mean": 0.0273114764340238,
+          "pairs_won": 2,
+          "by_seed": {
+            "22": -0.014773115590919724,
+            "23": 0.04117453670719192,
+            "24": 0.055533008185799204
+          }
+        }
+      }
+    },
+    {
+      "configuration": {
+        "rates": {
+          "generator": 0.014,
+          "critic": 0.021,
+          "particles": 0.0406
+        },
+        "latent_noise": 0.15,
+        "prior_weight": 0.1
+      },
+      "formulations": {
+        "unified_v12": {
+          "arm": "0.12.0/unified_v12/noise150-prior100",
+          "energy": 0.9423058649169488,
+          "paired_energies": [
+            1.1558245879047615,
+            0.582786368766701,
+            1.106730401963502,
+            1.2369916829798506,
+            0.5376268147660306,
+            1.0481554259654402,
+            1.20568798533048,
+            0.5790882342441512,
+            1.0278612823316216
+          ],
+          "mean_spread_ratio": 1.1252307032846949,
+          "mean_effective_dimensions": 17.487657974043366,
+          "median_seconds": 140.03349259193055
+        },
+        "unified_v11": {
+          "arm": "0.12.0/unified_v11/noise150-prior100",
+          "energy": 0.9675098213989155,
+          "paired_energies": [
+            1.2634637985084134,
+            0.653527497220239,
+            1.0509979184250189,
+            1.171171714028166,
+            0.6169335825509652,
+            1.0299508505671373,
+            1.2466149387027703,
+            0.6147466833478679,
+            1.060181409239661
+          ],
+          "mean_spread_ratio": 1.1506825400842187,
+          "mean_effective_dimensions": 17.961378707440605,
+          "median_seconds": 166.89453864190727
+        },
+        "empf": {
+          "arm": "0.12.0/empf/noise150-prior100",
+          "energy": 0.9518288358562511,
+          "paired_energies": [
+            1.2535926404500655,
+            0.6929577582446813,
+            1.0428423936342026,
+            1.1664357412532864,
+            0.6048908571528739,
+            1.0293422191940769,
+            1.151284089197896,
+            0.7036477171570692,
+            0.9214661064221081
+          ],
+          "mean_spread_ratio": 1.1641641120584452,
+          "mean_effective_dimensions": 16.08707335454007,
+          "median_seconds": 306.65662026195787
+        }
+      },
+      "v12_minus_comparator": {
+        "unified_v11": {
+          "mean": -0.025203956481966702,
+          "pairs_won": 6,
+          "by_seed": {
+            "22": -0.04088261850623557,
+            "23": 0.0015725921883509297,
+            "24": -0.03630184312801547
+          }
+        },
+        "empf": {
+          "mean": -0.009522970939302346,
+          "pairs_won": 4,
+          "by_seed": {
+            "22": -0.04801714456466163,
+            "23": 0.007368368703694728,
+            "24": 0.012079863043059857
+          }
+        }
+      }
+    },
+    {
+      "configuration": {
+        "rates": {
+          "generator": 0.02,
+          "critic": 0.042,
+          "particles": 0.0203
+        },
+        "latent_noise": 0.025,
+        "prior_weight": "release default"
+      },
+      "formulations": {
+        "unified_v12": {
+          "arm": "0.12.0/unified_v12/seed15-matched-leader",
+          "energy": 0.9774408725966803,
+          "paired_energies": [
+            1.1423770857120157,
+            0.6439867031270874,
+            1.0463390002338278,
+            1.2516130440478404,
+            0.642097125976439,
+            1.0648595213710594,
+            1.299525653134795,
+            0.6434862475542267,
+            1.0626834722128313
+          ],
+          "mean_spread_ratio": 1.1213600777919173,
+          "mean_effective_dimensions": 16.88519444734956,
+          "median_seconds": 145.6851103019435
+        },
+        "unified_v11": {
+          "arm": "0.12.0/unified_v11/seed15-matched-leader",
+          "energy": 0.9866713485026604,
+          "paired_energies": [
+            1.2284017427850842,
+            0.6466281555056084,
+            1.1405016852172256,
+            1.2089077205722816,
+            0.5979083052229368,
+            1.1092076003393305,
+            1.268200567105644,
+            0.6491208164901521,
+            1.0311655432856797
+          ],
+          "mean_spread_ratio": 1.1273235270816289,
+          "mean_effective_dimensions": 16.38537223938817,
+          "median_seconds": 163.54686186113395
+        },
+        "empf": {
+          "arm": "0.12.0/empf/seed15-matched-leader",
+          "energy": 0.9836101509585038,
+          "paired_energies": [
+            1.1449579372115333,
+            0.6564513932787521,
+            1.1305491286961085,
+            1.1911295733423888,
+            0.6968920785603219,
+            1.0652011012469582,
+            1.1559017123933137,
+            0.7458692790666865,
+            1.065539154830471
+          ],
+          "mean_spread_ratio": 1.1716102634316319,
+          "mean_effective_dimensions": 15.420634085307805,
+          "median_seconds": 303.9776649461128
+        }
+      },
+      "v12_minus_comparator": {
+        "unified_v11": {
+          "mean": -0.009230475905980029,
+          "pairs_won": 5,
+          "by_seed": {
+            "22": -0.06094293147832911,
+            "23": 0.014182021753596619,
+            "24": 0.01906948200679241
+          }
+        },
+        "empf": {
+          "mean": -0.006169278361823485,
+          "pairs_won": 7,
+          "by_seed": {
+            "22": -0.03308522337115435,
+            "23": 0.0017823127485566321,
+            "24": 0.012795075537127257
+          }
+        }
+      }
+    },
+    {
+      "configuration": {
+        "rates": {
+          "generator": 0.02,
+          "critic": 0.042,
+          "particles": 0.0203
+        },
+        "latent_noise": 0.15,
+        "prior_weight": "release default"
+      },
+      "formulations": {
+        "unified_v12": {
+          "arm": "0.12.0/unified_v12/g-high-d-high-p-low-sigma150",
+          "energy": 0.9796653416090088,
+          "paired_energies": [
+            1.1142537213518555,
+            0.5920611638269073,
+            1.1034275764596815,
+            1.257689144909425,
+            0.6769151611362765,
+            1.0513999029337964,
+            1.2851795513318383,
+            0.6526038207840317,
+            1.0834580317472668
+          ],
+          "mean_spread_ratio": 1.1344876282331384,
+          "mean_effective_dimensions": 17.424748605623115,
+          "median_seconds": 160.47538293106481
+        },
+        "unified_v11": {
+          "arm": "0.12.0/unified_v11/matched-v11",
+          "energy": 0.9777585527302403,
+          "paired_energies": [
+            1.169628394328893,
+            0.6310793249318518,
+            1.1270777261248508,
+            1.2548579656026029,
+            0.6116722078769008,
+            1.0172696201582343,
+            1.2808557216842233,
+            0.5894532205712579,
+            1.1179327932933472
+          ],
+          "mean_spread_ratio": 1.1514824731886324,
+          "mean_effective_dimensions": 17.052670068722563,
+          "median_seconds": 172.99624618305825
+        },
+        "empf": {
+          "arm": "0.12.0/empf/matched-empf",
+          "energy": 0.989954060598456,
+          "paired_energies": [
+            1.105544971703958,
+            0.6549547329959016,
+            1.1238731346455075,
+            1.2063084799980819,
+            0.7037994089787085,
+            1.0586658453168512,
+            1.260908292675433,
+            0.7499512532648385,
+            1.0455804258068244
+          ],
+          "mean_spread_ratio": 1.1623651892991094,
+          "mean_effective_dimensions": 14.938752530006196,
+          "median_seconds": 325.23384336405434
+        }
+      },
+      "v12_minus_comparator": {
+        "unified_v11": {
+          "mean": 0.0019067888787685444,
+          "pairs_won": 4,
+          "by_seed": {
+            "22": -0.039347661249050425,
+            "23": 0.03406813844725328,
+            "24": 0.01099988943810278
+          }
+        },
+        "empf": {
+          "mean": -0.010288718989447289,
+          "pairs_won": 5,
+          "by_seed": {
+            "22": -0.024876792568974276,
+            "23": 0.005743491561952085,
+            "24": -0.011732855961319677
+          }
+        }
+      }
+    },
+    {
+      "configuration": {
+        "rates": {
+          "generator": 0.02,
+          "critic": 0.03,
+          "particles": 0.057999999999999996
+        },
+        "latent_noise": 0.025,
+        "prior_weight": "release default"
+      },
+      "formulations": {
+        "unified_v12": {
+          "arm": "0.12.0/unified_v12/at-tuned-empf-rates",
+          "energy": 0.9639044377662683,
+          "paired_energies": [
+            1.1945092174686864,
+            0.575524063473452,
+            1.0361002841747315,
+            1.2809475200651377,
+            0.594267413647861,
+            1.1514396545735763,
+            1.1991660285414723,
+            0.5645207040076168,
+            1.078665053943881
+          ],
+          "mean_spread_ratio": 1.1183452324599115,
+          "mean_effective_dimensions": 17.50389137022207,
+          "median_seconds": 152.30783950095065
+        },
+        "unified_v11": {
+          "arm": "0.12.0/unified_v11/at-tuned-empf-rates",
+          "energy": 0.9531086479198847,
+          "paired_energies": [
+            1.1566979493447693,
+            0.581871757890873,
+            1.0377435963653587,
+            1.2676086511446754,
+            0.6098577169654038,
+            1.073683144724194,
+            1.2294827637092232,
+            0.6097705312737873,
+            1.0112617198606773
+          ],
+          "mean_spread_ratio": 1.145531578156114,
+          "mean_effective_dimensions": 18.003349666743695,
+          "median_seconds": 160.84684891300276
+        },
+        "empf": {
+          "arm": "0.12.0/empf/empf-tuned",
+          "energy": 0.9658773444250051,
+          "paired_energies": [
+            1.169102290242516,
+            0.6771855243785505,
+            1.0395135064196268,
+            1.179315984257672,
+            0.6896813070881846,
+            1.0224795026570435,
+            1.1935871811228234,
+            0.5729527500692384,
+            1.1490780535893907
+          ],
+          "mean_spread_ratio": 1.1736511941401804,
+          "mean_effective_dimensions": 17.164327724926434,
+          "median_seconds": 309.99805509485304
+        }
+      },
+      "v12_minus_comparator": {
+        "unified_v11": {
+          "mean": 0.010795789846383666,
+          "pairs_won": 5,
+          "by_seed": {
+            "22": 0.009940087171956305,
+            "23": 0.025168358484100633,
+            "24": -0.002721076116905937
+          }
+        },
+        "empf": {
+          "mean": -0.00197290665873679,
+          "pairs_won": 5,
+          "by_seed": {
+            "22": -0.02655591864127449,
+            "23": 0.04505926476122498,
+            "24": -0.02442206609616086
+          }
+        }
+      }
+    }
+  ]
+}

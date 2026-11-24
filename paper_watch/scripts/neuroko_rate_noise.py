@@ -72,7 +72,7 @@ def compare_prior_weight(args):
     if passes:
         decision.update(validate_finalist(args, trial, independent_seeds))
     write_frozen(args.output / "selection.json", decision)
-    print("Noise and prior weight", "screen", passes, "independent", decision["advances"], flush=True)
+    print("Prior-weight screen passed", passes, "qualified for holdout", decision["advances"], flush=True)
 
 
 def main():

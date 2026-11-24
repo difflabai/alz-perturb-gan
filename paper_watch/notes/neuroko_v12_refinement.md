@@ -26,6 +26,21 @@ All 208 held-out fits passed the constant-rate and matched-input checks. The pri
 | V12, previous v11 role rates | 1.3826 | 1.080 | 127 s | -0.0161 [-0.0469, +0.0146] |
 | V12, release defaults at fixed capacity | 1.7905 | 0.649 | 123 s | -0.4240 [-0.4594, -0.3887] |
 
+## Six configurations on the same nine training pairs
+
+The stronger-prior v12 had the lowest mean energy of all 18 entries below on screening seeds 22–24. Its 0.9423 was 0.0038 below the lowest EMPF mean and 0.0039 below the lowest v11 mean. At penalty weight 0.1 it beat matched EMPF on four of nine pairs and matched v11 on six. Only seed 22 favored v12 when the three groups were averaged within each seed against matched EMPF. The setting qualified for independent training seeds 251–253. [All six configurations, paired energies, timings and input hashes](neuroko_v12_six_settings_1200.json) · [Prior-weight screening decision](neuroko_v12_prior_weight_screen.json)
+
+| Generator / critic / particle LR | Latent noise | Prior weight | V12 energy ↓ | V11 | EMPF |
+| --- | ---: | --- | ---: | ---: | ---: |
+| 0.014 / 0.021 / 0.0406 | 0.025 | Release default | 0.9729 | 0.9462 | 0.9722 |
+| 0.014 / 0.021 / 0.0406 | 0.150 | Release default | 0.9734 | 0.9506 | 0.9461 |
+| 0.014 / 0.021 / 0.0406 | 0.150 | 0.1 for all | **0.9423** | 0.9675 | 0.9518 |
+| 0.020 / 0.042 / 0.0203 | 0.025 | Release default | 0.9774 | 0.9867 | 0.9836 |
+| 0.020 / 0.042 / 0.0203 | 0.150 | Release default | 0.9797 | 0.9778 | 0.9900 |
+| 0.020 / 0.030 / 0.0580 | 0.025 | Release default | 0.9639 | 0.9531 | 0.9659 |
+
+Every entry covers nine 1,200-update runs on the three training groups. The three formulations share the learning rates, noise, network size, initial parameters and real minibatches in each row. All rates stayed constant at every update. The released prior weights are 0.02 for v12 and v11 and 0.01 for EMPF. Shared control fits appear once in this table. [Earlier finalist with exact rates](neuroko_v12_matched_rate_replication_validation.json) · [All controls at EMPF’s tuned rates](neuroko_v12_at_empf_rates_validation.json)
+
 ## Selection and confirmation
 
 All eligible fits use constant generator, critic and particle learning rates throughout. The training search compares the incumbent with 16 alternatives. Six trials vary the constant rate of just one role while holding the other two fixed. Other trials vary optimizer momentum and smoothing, transport entropy and mass relaxation, active-pair critic weight, critic penalty and prior penalty. Each held-out receipt verifies the actual rates at initialization and at updates 300, 600, 900 and 1,200. The fixed-rate drivers also check the released scheduler at every update before each new fit and compare live optimizer group rates after each update. Cached receipts are checked against their recorded optimizer rates.
