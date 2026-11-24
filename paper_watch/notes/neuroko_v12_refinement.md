@@ -487,6 +487,8 @@ Lowering only the generator LR to 0.010 raised the nine-pair v12 mean from 0.942
 
 Lowering only the particle learning rate from 0.0406 to **0.0287** raised v12 mean energy from **0.94231 to 0.95057**. Four of nine pairs improved. The lower rate beat the stronger noise-0.25 v11 on three pairs and EMPF on two. [Particle rate trial and paired scores](neuroko_v12_lower_particle_rate.json)
 
+Raising the particle rate to **0.0574** also increased mean energy, to **0.95789**, with four of nine pairs improved. All four single-role alternatives finished above 0.94231, so the rate search stopped on its first development cohort. [Complete fixed generator and particle rate grid](neuroko_v12_role_rate_grid.json)
+
 The noise-0.25 controls finished while the individual-rate trials were running. They had lower first-cohort energies than the earlier v11 and EMPF references. An additional comparison fixes these two controls and measures them on seeds 251–253. It reports each of the four rate trials against them on seeds 22–24 once the shortlist exists. If the selected trial has completed the second cohort under its original protocol, it reports the same paired comparison there. Run the command again after the shortlist and any second-cohort fits finish to include those results.
 
 ```bash
