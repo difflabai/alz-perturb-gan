@@ -839,7 +839,28 @@
           }
         ]
       },
-      "other_control_curves": {},
+      "other_control_curves": {
+        "tuned_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.5731604694655941,
+            "spread_ratio": 1.2053290486039137,
+            "effective_rank": 21.49350364464639
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6243859865349821,
+            "spread_ratio": 1.2471657890399355,
+            "effective_rank": 22.5360053713776
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6737232437017524,
+            "spread_ratio": 1.261914699216031,
+            "effective_rank": 21.21542089450245
+          }
+        ]
+      },
       "endpoint_geometry": {
         "v12": {
           "observed_mean_effective_rank": 15.90207062226983,
@@ -850,6 +871,11 @@
           "observed_mean_effective_rank": 15.90207062226983,
           "generated_mean_effective_rank": 18.16151986969735,
           "mean_absolute_target_rank_error": 2.259449247427521
+        },
+        "tuned_v11": {
+          "observed_mean_effective_rank": 15.90207062226983,
+          "generated_mean_effective_rank": 21.21542089450245,
+          "mean_absolute_target_rank_error": 5.313350272232619
         }
       },
       "endpoint_target_energies": {
@@ -864,6 +890,12 @@
           "SLC2A4RG": 0.6136328462885592,
           "PLEKHA1": 0.6909029514287246,
           "MAMSTR": 0.5173777233971188
+        },
+        "tuned_v11": {
+          "GLCCI1": 0.7107569746238065,
+          "SLC2A4RG": 0.6568319085212933,
+          "PLEKHA1": 0.6815657835127764,
+          "MAMSTR": 0.6457383081491335
         }
       },
       "fingerprints": {
@@ -1101,6 +1133,77 @@
         "tuned_empf": 0.9714774911272562
       },
       "v12_pair_wins": 5
+    }
+  },
+  "tuned_original_comparison": {
+    "1200": {
+      "means": {
+        "v12": 0.9188340343118476,
+        "tuned_v11": 0.9266039875196898,
+        "tuned_empf": 0.9179031268626691
+      },
+      "seed_means": {
+        "22": {
+          "v12": 0.9082995304433032,
+          "tuned_v11": 0.9245886558413267,
+          "tuned_empf": 0.9159926740908639
+        },
+        "251": {
+          "v12": 0.929368538180392,
+          "tuned_v11": 0.928619319198053,
+          "tuned_empf": 0.9198135796344741
+        }
+      },
+      "v12_pair_wins": {
+        "tuned_v11": 3,
+        "tuned_empf": 2
+      }
+    },
+    "2400": {
+      "means": {
+        "v12": 0.9479747618675926,
+        "tuned_v11": 0.933512044801809,
+        "tuned_empf": 0.9491177356532984
+      },
+      "seed_means": {
+        "22": {
+          "v12": 0.9600630508781481,
+          "tuned_v11": 0.9487061551465461,
+          "tuned_empf": 0.9698634281266197
+        },
+        "251": {
+          "v12": 0.9358864728570369,
+          "tuned_v11": 0.9183179344570719,
+          "tuned_empf": 0.9283720431799771
+        }
+      },
+      "v12_pair_wins": {
+        "tuned_v11": 1,
+        "tuned_empf": 4
+      }
+    },
+    "3600": {
+      "means": {
+        "v12": 0.9356414307899489,
+        "tuned_v11": 0.931395188077008,
+        "tuned_empf": 0.9714774911272562
+      },
+      "seed_means": {
+        "22": {
+          "v12": 0.9304563952742917,
+          "tuned_v11": 0.9162741087684423,
+          "tuned_empf": 0.976449377395423
+        },
+        "251": {
+          "v12": 0.9408264663056062,
+          "tuned_v11": 0.9465162673855739,
+          "tuned_empf": 0.9665056048590895
+        }
+      },
+      "v12_pair_wins": {
+        "tuned_v11": 2,
+        "tuned_empf": 5
+      }
     }
   }
 }

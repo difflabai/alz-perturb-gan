@@ -98,6 +98,14 @@ The exception at 3,600 was seed 251 on Screen1_3, where EMPF scored 0.61242 and 
 
 Across the six pilot pairs, tuned original EMPF's mean energy rose from 0.91790 at 1,200 to 0.97148 at 3,600. Its generated samples also grew wider on all six pairs. Mean generated-to-observed spread rose from 1.167 to 1.248, and effective covariance rank rose on five pairs, averaging 16.35 then 17.62. V12 averaged 22.48 then 22.00 effective dimensions. [Spread, effective rank and energy on each trajectory](neuroko_v12_convergence_3600_tuned_empf.json)
 
+The complete comparison with the two independently tuned original releases split by seed. At 3,600 updates, v12 beat both on seed 251 (0.94083 versus 0.94652 for v11 and 0.96651 for EMPF). Across both seeds, v11 led v12 by 0.00425 and v12 led EMPF by 0.03584. V12 beat v11 on two of six group–seed pairs and 13 of 24 target scores. [Individual runs and pooled means at each checkpoint](neuroko_v12_convergence_3600_tuned_empf.json)
+
+| Updates | V12 | Tuned original v11 | Tuned original EMPF |
+| ---: | ---: | ---: | ---: |
+| 1,200 | 0.91883 | 0.92660 | 0.91790 |
+| 2,400 | 0.94797 | 0.93351 | 0.94912 |
+| 3,600 | 0.93564 | 0.93140 | 0.97148 |
+
 After five of the pilot pairs, six fresh training seeds (838–843) were reserved to test the same five configurations if v12 led tuned original EMPF on both complete pilot seed means at 3,600. Both seed means passed, and the fresh runs started on both GPUs. The 18 fresh pairs use the same fixed endpoint with evaluations at 1,200 and 2,400. Their primary comparison is the mean across all 18 pairs against each original control.
 
 The biological follow-up uses a single decision at 3,600 updates. If v12 has lower mean energy than all four controls across the 18 fresh pairs, train all five configurations on the three development groups and score the reserved group Screen1_0 with seeds 844–859. Record the four target scores and the paired 95% t interval across training seeds for each control. The intervals describe training-seed variation on this group. The decision was fixed after the first three fresh comparisons against the tuned controls and before the six-seed result. [Command and verification](../README.md#check-whether-v12-closes-the-gap-by-3600-updates)
