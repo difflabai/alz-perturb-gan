@@ -142,3 +142,18 @@ def test_rate_refinement_brackets_an_upper_bound_winner():
 
     records = [{"base_rate": rate, "mean_energy_distance": 1 / rate} for rate in RATES]
     assert finer_rates(records) == (0.0792, 0.224)
+
+
+def test_fixed_rate_fit_reuses_only_a_fully_verified_receipt(tmp_path):
+    import json
+    from paper_watch.scripts.compare_neuroko_v12 import reusable_fit
+
+    path = tmp_path / "fit.json"
+    assert not reusable_fit(path, True)
+    cached = {"updates": 1200, "rate_trace": [{"update": 1200, "generator": 0.014}]}
+    path.write_text(json.dumps(cached))
+    assert reusable_fit(path, False)
+    assert not reusable_fit(path, True)
+    for count in (1199, 1200):
+        path.write_text(json.dumps(dict(cached, constant_lr_verified_updates=count)))
+        assert reusable_fit(path, True) == (count == 1200)

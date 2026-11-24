@@ -168,15 +168,18 @@ def main():
             previous["settings"] = asdict(TrainingSettings(**previous["settings"]))
             if any(previous[k] != v for k, v in config.items()):
                 raise ValueError(f"incompatible cached run at {path}")
-            if args.require_constant_lr:
-                from particlegan import get_recipe
+            if not args.require_constant_lr:
+                continue
+            from particlegan import get_recipe
 
-                verify_fixed_schedule(get_recipe(args.recipe, lr=lr, **settings.recipe_overrides()), config["updates"])
-                rates = previous["initial_rates"]
-                trace = previous.get("rate_trace", [])
-                if previous["final_rates"] != rates or any(row[k] != value for row in trace for k, value in rates.items()):
-                    raise ValueError(f"cached optimizer rates changed at {path}")
-            continue
+            verify_fixed_schedule(get_recipe(args.recipe, lr=lr, **settings.recipe_overrides()), config["updates"])
+            rates = previous["initial_rates"]
+            trace = previous.get("rate_trace", [])
+            if previous["final_rates"] != rates or any(row[k] != value for row in trace for k, value in rates.items()):
+                raise ValueError(f"cached optimizer rates changed at {path}")
+            if previous.get("constant_lr_verified_updates") == config["updates"]:
+                continue
+            # Replay older fits that only recorded the rates every 300 updates.
         with torch.random.fork_rng(devices=[]):
             torch.default_generator.manual_seed(args.seed)
             model = ConditionalPGAN(x.shape[1], len(conditions), seed=args.seed, device=device,

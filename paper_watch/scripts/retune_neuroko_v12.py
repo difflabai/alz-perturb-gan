@@ -5,7 +5,7 @@ import json
 import os
 from pathlib import Path
 from statistics import mean, median, stdev
-from compare_neuroko_v12 import GROUPS, fit, receipt, write_frozen
+from compare_neuroko_v12 import GROUPS, fit, receipt, reusable_fit, write_frozen
 
 
 RELEASE = "0.12.0"
@@ -52,9 +52,9 @@ def validation(args, candidates, names, seeds):
                 trial = candidates[name]
                 path = receipt(args.output, "validation", RELEASE, V12, trial, seed, group)
                 old = receipt(args.previous, "validation", RELEASE, V12, trial, seed, group)
-                if name == "hollow-active2" and old.is_file():
+                if name == "hollow-active2" and reusable_fit(old, args.require_constant_lr):
                     path = old
-                elif not path.is_file():
+                elif not reusable_fit(path, args.require_constant_lr):
                     gpu = (i + g + seed) % 2
                     jobs.append((gpu, seed, group, [(RELEASE, V12, trial)]))
                 paths[name, seed, group] = path

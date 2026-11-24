@@ -239,3 +239,22 @@ python paper_watch/scripts/neuroko_rate_noise.py --study prior-weight --data "$d
 Add `--stage confirm` after a qualifying independent result.
 
 For the comparison with the original releases, run the same prior-weight command with `--stage compare-releases` after the screen passes. It fits EMPF from ParticleGAN 0.10.0 and Unified v11 from 0.11.1 at the exact candidate rates, noise and penalty weight on seeds 251–253. It also scores those recipes and v12 from the 0.12.0 wheel on the same nine pairs. The results go to `release_comparison.json`. The independent training qualification still uses the controls in the frozen prior-weight study.
+
+On fresh training seeds 251–253, v12 averaged 0.94813 and matched 0.12.0 EMPF averaged 0.93927. V12 won three of nine pairs and one of three seed means. The largest gap was on `Screen1_4`, where EMPF won at each seed. V12 led on `Screen1_3` by 0.0320 in the three-seed mean. These results rule out the stronger-prior candidate at noise 0.15 under its predefined biological holdout criterion.
+
+| Fresh seed, mean over three training folds | V12 energy ↓ | Matched EMPF |
+| --- | ---: | ---: |
+| 251 | 0.97204 | 0.93740 |
+| 252 | 0.93266 | 0.97112 |
+| 253 | 0.93969 | 0.90930 |
+
+The generator, critic and particle rates held at 0.014, 0.021 and 0.0406 on every update in all 18 fits. V12's generator and critic adaptive gains also read 1.0 at each of the 36 logged checkpoints per role. For fixed-rate comparisons, the runner replays older cached fits that lack the per-update verification count.
+
+### Stronger prior at the replicated matched rates
+
+At generator 0.020, critic 0.042, particles 0.0203 and latent noise 0.025, v12 had lower mean energy than both matched formulations on seed 15 and again on seeds 22–24. We froze a single change to that configuration, increasing the prior weight to 0.1 and giving both controls the same coefficient. On seeds 22–24, v12 must score below both controls and its own previous weight of 0.02. A passing setting must then beat all references on fresh seeds 254–256, including the preceding v12 settings at both noise levels, before a biological holdout comparison on seeds 228–243. All runs keep the original network, particle table, draws and 1,200 constant-rate updates.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study matched-prior-weight --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-matched-prior" --shared-screen "$data/v12-rate-noise"
+```

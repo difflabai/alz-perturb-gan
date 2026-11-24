@@ -60,6 +60,15 @@ def receipt(output, stage, release, recipe, trial, seed, group):
     return output / stage / f"{recipe}-{release}" / f"{stage}-{trial['name']}-s{seed}{suffix}-deterministic.json"
 
 
+def reusable_fit(path, require_constant_lr):
+    if not path.is_file():
+        return False
+    if not require_constant_lr:
+        return True
+    row = json.loads(path.read_text())
+    return row.get("constant_lr_verified_updates") == row.get("updates") == 1200
+
+
 def fit(args, stage, seed, group, gpu, arms):
     for release, recipe, trial in arms:
         target = receipt(args.output, stage, release, recipe, trial, seed, group)

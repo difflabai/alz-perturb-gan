@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from statistics import mean
 
-from compare_neuroko_v12 import GROUPS, fit, receipt, write_frozen
+from compare_neuroko_v12 import GROUPS, fit, receipt, reusable_fit, write_frozen
 from retune_neuroko_v12 import BASE, RELEASE, V12, constant_rates, controls, summarize
 
 
@@ -41,7 +41,7 @@ def evaluate(args, arms, seeds, *, groups_by_seed=None):
                 i = GROUPS.index(group)
                 path = receipt(args.output, "validation", *arm, seed, group)
                 paths[key(arm), seed, group] = path
-                if not path.is_file():
+                if not reusable_fit(path, getattr(args, "require_constant_lr", False)):
                     tasks.append(((i + seed) % 2, seed, group, [arm]))
     # Keep all arms for a given fold and seed on the same physical card.
     with ThreadPoolExecutor(args.workers_per_gpu) as a, ThreadPoolExecutor(args.workers_per_gpu) as b:
@@ -140,8 +140,12 @@ def validation_controls(finalists):
 
 
 def confirm_candidate(args, selection, chosen, seeds, *, compare_historical_empf=False, previous_transport=None,
-                      noise_reference=None):
+                      noise_reference=None, v12_references=()):
     arms, labels = control_arms([chosen])
+    for reference in v12_references:
+        arm = [RELEASE, V12, reference]
+        arms.append(arm)
+        labels[reference["name"]] = key(arm)
     if noise_reference is not None:
         arm = [RELEASE, V12, noise_reference]
         arms.append(arm)
