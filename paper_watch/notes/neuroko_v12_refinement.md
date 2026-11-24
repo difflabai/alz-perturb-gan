@@ -196,7 +196,7 @@ The nine v12 fits at the original noise on seeds 22–24 held their generator, c
 
 ### Effect of increasing latent noise on fresh training seeds
 
-At the fixed rates of 0.020, 0.042 and 0.0203, raising the latent noise from 0.025 to 0.15 changed mean v12 energy from 0.9774 to 0.9797 on seeds 22–24. The higher noise improved energy on four of nine pairs. V11 at its original rates and noise 0.15 scored 0.9506 and led v12 when averaged within each of the three seeds. This rules the higher-noise v12 candidate out of its planned biological holdout.
+At the fixed rates of 0.020, 0.042 and 0.0203, raising the latent noise from 0.025 to 0.15 changed mean v12 energy from 0.9774 to 0.9797 on seeds 22–24. The higher noise improved energy on four of nine pairs. V11 at its original rates and noise 0.15 scored 0.9506 and led v12 when averaged within each of the three seeds. At identical rates and noise, matched v11 averaged 0.9778 and matched EMPF 0.9900. The full 11-arm validation ended before the biological holdout. The nine low-noise v12 replays reproduced every original per-target score exactly. [Independent decision and all 99 scores](neuroko_v12_rate_noise_validation.json)
 
 The extra noise increased the mean number of effective covariance dimensions from 16.89 to 17.42, with an increase on seven of nine pairs. The same target groups in the observed data averaged 17.44. The generated-to-observed spread ratio rose from 1.121 to 1.134. Thus the model used more covariance directions while producing slightly more total spread than the observed cells. [Paired target energies and effective dimensions](neuroko_v12_noise_ablation_1200.json)
 
