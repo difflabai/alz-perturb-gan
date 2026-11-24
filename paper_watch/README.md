@@ -128,9 +128,11 @@ The ParticleGAN 0.12.0 comparison tunes the generator, critic and particle rates
 
 A fixed-learning-rate follow-up compared two v12 finalists and matched controls at 1,200 updates. On 16 paired seeds the training-selected v12 scored 1.3665, matched v11 scored 1.3584 and matched EMPF scored 1.3531 (lower is better). [Full comparison and reproduction commands](notes/neuroko_v12_refinement.md)
 
-#### Copy-paste prompt for v12 with constant learning rates
+#### Copy-paste prompt for the stronger-prior v12 comparison
 
-> Clone `https://github.com/difflabai/alz-perturb-gan` on branch `paper-watch/neuroko-revival` and record the commit. Follow the NeuroKO GPU setup in `paper_watch/README.md` and install the pinned ParticleGAN 0.12.0 wheel using `paper_watch/notes/neuroko_v12_1200.md`. Use both GPUs. Run the two matched-rate replication commands in `paper_watch/notes/neuroko_v12_refinement.md` on the three training groups for seeds 22–24. Keep the network, particle table, noise and batches matched. Compare v12, v11 and EMPF at 1,200 updates, first with fixed generator, critic and particle learning rates of 0.020, 0.042 and 0.0203, then at EMPF’s tuned rates of 0.020, 0.030 and 0.058. Verify all three rates at every update and report mean energy distance and paired wins. Report the matched-rate and independently tuned EMPF comparisons separately. Use each study’s frozen rule for proceeding to its held-out evaluation.
+> Clone `https://github.com/difflabai/alz-perturb-gan` on branch `paper-watch/neuroko-revival` and record the commit. Follow the NeuroKO GPU setup in `paper_watch/README.md`, including the data checksums, and install the pinned 0.12.0 wheel as shown in `paper_watch/notes/neuroko_v12_1200.md`. Use both GPUs. Run the “Prior penalty at latent noise 0.15” command in `paper_watch/notes/neuroko_v12_refinement.md`. Compare v12, v11 and EMPF at 1,200 updates with 64 particles, 16 latent dimensions, batch size 64, noise 0.15 and native prior penalty weight 0.1 for all three. Keep the generator LR at 0.014, critic LR at 0.021 and particle LR at 0.0406. Verify the flat learning rates and paired input hashes. Report the four-target mean energy, paired wins, spread ratio and fit time against the matched and tuned controls. Report the screening and independent training results separately. Run the biological holdout with `--stage confirm` if the selection qualifies.
+
+Two earlier replication commands compare the formulations at fixed rates of 0.020, 0.042 and 0.0203, then at EMPF’s tuned rates of 0.020, 0.030 and 0.058. [Paired results and commands](notes/neuroko_v12_refinement.md#replicated-comparison-of-learning-rates-and-latent-noise)
 
 #### Copy-paste prompt for the 1,200-update formulation comparison
 
