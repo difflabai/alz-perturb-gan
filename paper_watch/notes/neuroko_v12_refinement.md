@@ -778,6 +778,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study transport-grid --data "
   --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
 
+The eight alternatives completed both screening seeds. The two finalists were tau 2 with epsilon 0.2 and tau 1 with epsilon 0.1. The second finalist scored 0.91331 and 0.92428. Its gaps above the strongest reference were 0.01108 and 0.00446 on the two seeds. Both finalists run the same four additional development seeds. [Scores and ranking for all eight alternatives](neuroko_v12_transport_grid_shortlist.json)
+
 At the default tau of 2, doubling epsilon to 0.2 reduced v12's 1,200-update mean energy on both screening seeds. The learning rates, network, batches, initial weights and sampling budget were held fixed. The baseline column uses epsilon 0.1. The v11 and EMPF columns use the settings selected separately on their original releases.
 
 | Training seed | V12 baseline | V12 epsilon 0.2 | Tuned v11 (0.11.1) | Tuned EMPF (0.10.0) | V12 group wins vs tuned EMPF |
