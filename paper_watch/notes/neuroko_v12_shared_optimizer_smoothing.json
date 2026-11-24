@@ -470,6 +470,300 @@
           ]
         }
       }
+    },
+    "0.001": {
+      "protocol": {
+        "arms": {
+          "v12": [
+            "0.12.0",
+            "unified_v12",
+            {
+              "name": "original-v11-critic-49-smoothing0.001",
+              "lr": 0.014,
+              "rhbi_self_coupling": "hollow",
+              "rhbi_relativistic_weight": 2.0,
+              "prior_sigma": 0.15,
+              "d_lr_mult": 0.35,
+              "prior_lr_mult": 2.9,
+              "prior_reg": 0.1,
+              "optimizer_smoothing": 0.001
+            }
+          ],
+          "matched_v11": [
+            "0.11.1",
+            "unified_v11",
+            {
+              "name": "original-v11-critic-49-smoothing0.001",
+              "lr": 0.014,
+              "rhbi_self_coupling": "hollow",
+              "rhbi_relativistic_weight": 2.0,
+              "prior_sigma": 0.15,
+              "d_lr_mult": 0.35,
+              "prior_lr_mult": 2.9,
+              "prior_reg": 0.1,
+              "optimizer_smoothing": 0.001
+            }
+          ],
+          "matched_empf": [
+            "0.10.0",
+            "empf",
+            {
+              "name": "original-v11-critic-49",
+              "lr": 0.014,
+              "d_lr_mult": 0.35,
+              "prior_lr_mult": 2.9,
+              "prior_sigma": 0.15,
+              "prior_reg": 0.1
+            }
+          ],
+          "tuned_v11": [
+            "0.11.1",
+            "unified_v11",
+            {
+              "name": "motion-critic-46-prior41",
+              "lr": 0.014,
+              "d_lr_mult": 0.32857142857142857,
+              "prior_lr_mult": 2.9,
+              "prior_sigma": 0.15,
+              "prior_reg": 0.041,
+              "rhbi_relativistic_weight": 2.0,
+              "rhbi_self_coupling": "hollow"
+            }
+          ],
+          "tuned_empf": [
+            "0.10.0",
+            "empf",
+            {
+              "name": "noise250-prior100",
+              "lr": 0.014,
+              "d_lr_mult": 1.5,
+              "prior_lr_mult": 2.9,
+              "prior_sigma": 0.25,
+              "prior_reg": 0.1
+            }
+          ]
+        },
+        "cohorts": {
+          "first": [
+            22,
+            23,
+            24
+          ],
+          "second": [
+            251,
+            252,
+            253
+          ]
+        },
+        "groups": [
+          "Screen1_1",
+          "Screen1_3",
+          "Screen1_4"
+        ],
+        "updates": 1200,
+        "evaluation_draws": 256,
+        "metric": "four-target mean energy distance",
+        "original_control_selection": "paper_watch/notes/neuroko_original_control_selection.json",
+        "matched_optimizer_smoothing": 0.001,
+        "original_optimizer_smoothing": {
+          "v12": 0.0061,
+          "matched_v11": 0.0061,
+          "matched_empf": 0.001
+        }
+      },
+      "matched_optimizer_smoothing_from_native_factories": {
+        "v12": {
+          "generator_and_particles": 0.001,
+          "critic": 0.001
+        },
+        "matched_v11": {
+          "generator_and_particles": 0.001,
+          "critic": 0.001
+        },
+        "matched_empf": {
+          "generator_and_particles": 0.001,
+          "critic": 0.001
+        }
+      },
+      "cohorts": {
+        "first": {
+          "seeds": [
+            22,
+            23,
+            24
+          ],
+          "means": {
+            "v12": 0.9560914407275569,
+            "matched_v11": 0.9323759659268416,
+            "matched_empf": 0.9965210770068422,
+            "tuned_v11": 0.9254714736446986,
+            "tuned_empf": 0.9224025817539492
+          },
+          "v12_wins": {
+            "matched_v11": 2,
+            "matched_empf": 6,
+            "tuned_v11": 3,
+            "tuned_empf": 4
+          },
+          "empf_mean_at_native_smoothing": 0.9965210770068422,
+          "matched_empf_change": 0.0,
+          "rows": [
+            {
+              "seed": 22,
+              "group": "Screen1_1",
+              "hashes": {
+                "visible_devices": "0",
+                "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+                "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+                "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96"
+              },
+              "energy": {
+                "v12": 1.2423146986143745,
+                "matched_v11": 1.1684376718627962,
+                "matched_empf": 1.115794115205545,
+                "tuned_v11": 1.1660039904749095,
+                "tuned_empf": 1.1223464943750359
+              }
+            },
+            {
+              "seed": 22,
+              "group": "Screen1_3",
+              "hashes": {
+                "visible_devices": "1",
+                "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+                "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+                "training_batches_sha256": "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4"
+              },
+              "energy": {
+                "v12": 0.655711308607468,
+                "matched_v11": 0.6066342599826045,
+                "matched_empf": 0.6069872397044966,
+                "tuned_v11": 0.5815572646608409,
+                "tuned_empf": 0.5731292339540484
+              }
+            },
+            {
+              "seed": 22,
+              "group": "Screen1_4",
+              "hashes": {
+                "visible_devices": "0",
+                "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+                "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+                "training_batches_sha256": "85f4aff48cde6ba1da727b69d794e423e9f4cb879abe43d9899c96b3e19486a8"
+              },
+              "energy": {
+                "v12": 1.0254047178471164,
+                "matched_v11": 0.991380006444661,
+                "matched_empf": 1.0819989154854617,
+                "tuned_v11": 1.0262047123882294,
+                "tuned_empf": 1.0525022939435076
+              }
+            },
+            {
+              "seed": 23,
+              "group": "Screen1_1",
+              "hashes": {
+                "visible_devices": "1",
+                "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+                "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+                "training_batches_sha256": "c1b421e29d4d935428afccf2b52bb0b12c41f54b927d95ee3c8b4b7fcff3a3eb"
+              },
+              "energy": {
+                "v12": 1.2216295988590125,
+                "matched_v11": 1.1631255451553943,
+                "matched_empf": 1.1774788731335057,
+                "tuned_v11": 1.1302163250471386,
+                "tuned_empf": 1.0745143236963988
+              }
+            },
+            {
+              "seed": 23,
+              "group": "Screen1_3",
+              "hashes": {
+                "visible_devices": "0",
+                "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+                "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+                "training_batches_sha256": "a2c81ac6a8e84563621f19a16aff3340cbf95b95bacc135c80df9b3fd42f7443"
+              },
+              "energy": {
+                "v12": 0.6048335376072083,
+                "matched_v11": 0.5908101612833818,
+                "matched_empf": 0.6815404198820101,
+                "tuned_v11": 0.6063413993942424,
+                "tuned_empf": 0.6302151424050741
+              }
+            },
+            {
+              "seed": 23,
+              "group": "Screen1_4",
+              "hashes": {
+                "visible_devices": "1",
+                "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+                "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+                "training_batches_sha256": "f0fc24166dc52bf914506e6eccc97cdb2937937bcb548c4ee7f877c9038456c6"
+              },
+              "energy": {
+                "v12": 0.9872543394811832,
+                "matched_v11": 0.9977504275519486,
+                "matched_empf": 1.1294651630174053,
+                "tuned_v11": 0.9753285648951739,
+                "tuned_empf": 1.0015550178129418
+              }
+            },
+            {
+              "seed": 24,
+              "group": "Screen1_1",
+              "hashes": {
+                "visible_devices": "0",
+                "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+                "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+                "training_batches_sha256": "4c0657cf4e49b6ed9e7ed8cf1529557ec56d518e7f697b464f33e263585ee5e4"
+              },
+              "energy": {
+                "v12": 1.250505547712729,
+                "matched_v11": 1.2450431435879246,
+                "matched_empf": 1.2860412168547701,
+                "tuned_v11": 1.2290656243941946,
+                "tuned_empf": 1.1274244217063474
+              }
+            },
+            {
+              "seed": 24,
+              "group": "Screen1_3",
+              "hashes": {
+                "visible_devices": "1",
+                "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+                "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+                "training_batches_sha256": "507c8545718ac1248d187d920f15b7d033dfc06a2e29f3ea052422cf584d5a90"
+              },
+              "energy": {
+                "v12": 0.5821252383504376,
+                "matched_v11": 0.6119279403477196,
+                "matched_empf": 0.6610876937779475,
+                "tuned_v11": 0.578552254257154,
+                "tuned_empf": 0.696174307530145
+              }
+            },
+            {
+              "seed": 24,
+              "group": "Screen1_4",
+              "hashes": {
+                "visible_devices": "0",
+                "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+                "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+                "training_batches_sha256": "b3ec8669fad397caaf4deb8d3ac9c4b946534ff97ad62350d35bc754d111f1ab"
+              },
+              "energy": {
+                "v12": 1.0350439794684834,
+                "matched_v11": 1.0162745371251438,
+                "matched_empf": 1.2282960560004375,
+                "tuned_v11": 1.0359731272904045,
+                "tuned_empf": 1.0237620003620436
+              }
+            }
+          ]
+        }
+      }
     }
   }
 }

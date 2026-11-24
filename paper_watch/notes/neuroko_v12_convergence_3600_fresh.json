@@ -2,7 +2,7 @@
   "status": "partial",
   "primary_endpoint": 3600,
   "expected_fits": 90,
-  "completed_fits": 30,
+  "completed_fits": 35,
   "expected_five_way_pairs": 18,
   "complete_five_way_pairs": 6,
   "protocol": {
@@ -122,6 +122,18 @@
         0.9484502321558195,
         1.0445704225504118
       ]
+    },
+    "839": {
+      "v12": [
+        0.9597116875736001,
+        0.9971558313958659,
+        0.9506670835774425
+      ],
+      "tuned_empf": [
+        0.94971187543361,
+        0.9816502580891279,
+        0.9769305892668102
+      ]
     }
   },
   "complete_seed_diversity": {
@@ -186,6 +198,32 @@
           1.2666552653202545
         ]
       }
+    },
+    "839": {
+      "v12": {
+        "effective_rank": [
+          22.332402594609,
+          22.52718809012945,
+          22.59871015453352
+        ],
+        "spread_ratio": [
+          1.2017757423380446,
+          1.2522298366936848,
+          1.2469925267292867
+        ]
+      },
+      "tuned_empf": {
+        "effective_rank": [
+          16.727792716503902,
+          17.409327352694714,
+          17.532398830566716
+        ],
+        "spread_ratio": [
+          1.1544274494905462,
+          1.2399309751837537,
+          1.2471079437861408
+        ]
+      }
     }
   },
   "available_endpoint_comparisons": {
@@ -198,12 +236,12 @@
       "v12_wins": 6
     },
     "tuned_v11": {
-      "completed_pairs": 6,
-      "v12_wins": 5
+      "completed_pairs": 7,
+      "v12_wins": 6
     },
     "tuned_empf": {
-      "completed_pairs": 6,
-      "v12_wins": 6
+      "completed_pairs": 8,
+      "v12_wins": 7
     }
   },
   "checked_cells": [
@@ -373,6 +411,32 @@
     },
     {
       "seed": 839,
+      "group": "Screen1_3",
+      "physical_gpu": 0,
+      "paired_fingerprints": {
+        "data": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "init": "cd8ff571d460a5101595aaa3774996f0becf871670b4094327303d8d43bc510b",
+        "batches": [
+          "a48f8aad6407f34abaea242409f21c7a684d85e63430c13c75d0b2c8f44b2fb3",
+          "c0a3a5c86ab6733eb20c3082d3aaf6392ad0162a0ca512778198d6accb80264b",
+          "820dbff9d4c21450042fd5e6edc4f54c08755eb49f2f23a1a5e29536c4727115"
+        ]
+      },
+      "energy_by_checkpoint": {
+        "v12": [
+          0.6534447658357521,
+          0.7128751686546444,
+          0.7128299461343011
+        ],
+        "tuned_empf": [
+          0.6218501478951619,
+          0.6893654514073326,
+          0.678531737358482
+        ]
+      }
+    },
+    {
+      "seed": 839,
       "group": "Screen1_4",
       "physical_gpu": 1,
       "paired_fingerprints": {
@@ -450,6 +514,37 @@
           0.6293787405210067,
           0.6818397507603824,
           0.7349632809450202
+        ]
+      }
+    },
+    {
+      "seed": 841,
+      "group": "Screen1_1",
+      "physical_gpu": 1,
+      "paired_fingerprints": {
+        "data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "init": "2d9195f2a258a5e8d27c69777a114ab5deb0b6501e8ad6c8a3e7e24a501dc227",
+        "batches": [
+          "f8d1618200b3ceb636e1c3c5e4367453a89da487d4fbfd78ad6bacbba581c8aa",
+          "e8c0724bae4e8e966ee036d3a85c585894bd524a776350d64a0fcd5cfb08fc3b",
+          "4e8b6dd3e53c3c13f54e5c08351c430e0d0694b993d1567b0449f2d38172580a"
+        ]
+      },
+      "energy_by_checkpoint": {
+        "v12": [
+          1.1213530106927219,
+          1.203835288860734,
+          1.1327825226726158
+        ],
+        "tuned_v11": [
+          1.1128823810092514,
+          1.164902003681866,
+          1.156196273310708
+        ],
+        "tuned_empf": [
+          1.1328517837840018,
+          1.1744905892545785,
+          1.1440808080030265
         ]
       }
     }
