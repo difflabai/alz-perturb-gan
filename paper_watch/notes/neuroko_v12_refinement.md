@@ -621,6 +621,15 @@ The calibrated 0.0049 critic improved v12 again on seeds 251–253, from **0.948
 
 At the exact rates 0.014/0.0049/0.0406, prior weight 0.1 and latent noise 0.15, **v12 averaged 0.92850**, original v11 (0.11.1) averaged **0.94878** and original EMPF (0.10.0) averaged **0.99652** on seeds 22–24. V12 beat each original on six of nine matched pairs. The two Unified models used hollow coupling and relativistic weight 2. Averaging the three folds per seed, v12 beat original EMPF at all three seeds and original v11 at two. Every pair shared the GPU, initial parameters, projected cells and real minibatches. EMPF in the 0.12.0 wheel at its stronger noise-0.25 setting and critic rate 0.021 scored **0.92240**. The matched release comparison repeats on seeds 251–253 with `--study original-v11-critic --stage compare-calibrated-second` and the two shared training directories. [All nine original-release comparisons](neuroko_v12_calibrated_critic_originals.json)
 
+The original-release comparison also measures diversity on the same 256 primary draws per target. V12 generated variation across 22.24 effective covariance dimensions, compared with 15.61 for EMPF, 22.64 for v11 and 17.44 for the observed cells. V12 exceeded EMPF’s effective rank on all nine pairs. EMPF came closest to the observed rank, and v11 came closest to the observed total spread. V12 had the lowest energy at these matched settings. [Per-target diversity, energy and observed cell counts](neuroko_v12_fixed_critic_original_diversity.json)
+
+| Original release | Mean energy ↓ | Effective covariance dimensions | Generated / observed spread |
+| --- | ---: | ---: | ---: |
+| Unified v12 | 0.92850 | 22.24 | 1.202 |
+| Unified v11 | 0.94878 | 22.64 | 1.151 |
+| EMPF | 0.99652 | 15.61 | 1.189 |
+| Observed cells | — | 17.44 | 1.000 |
+
 To check how the stronger noise-0.25 controls transfer across releases, the role-rate driver also accepts `--study individual-role-rates --stage compare-original-noise-controls` with the same two shared training directories and the original `v12-individual-role-rates` output directory. It compares all three original releases and the 0.12.0 controls at a common noise width, prior weight and set of rates on each development cohort.
 
 A separate experiment keeps the 0.0049 critic rate and tests **latent noise 0.09**. This is one multiplicative step below 0.15, using the same factor as the increase from 0.15 to 0.25. It tests whether reducing noise helps with the excess generated spread. The first nine v12 runs must beat the 0.15 reference and both tuned controls. The subsequent stages reserve fresh training seeds 552–557 and biological holdout seeds 558–573. Run the same command with `--study original-v11-critic-narrow-noise` and `--output "$data/v12-original-critic-narrow-noise"`.
