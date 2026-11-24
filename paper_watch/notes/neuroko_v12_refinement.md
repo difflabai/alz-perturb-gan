@@ -4,7 +4,9 @@ The comparison uses the published 1,200-update neuronal benchmark with the same 
 
 ## Selection and confirmation
 
-The training search compares the incumbent with 15 alternatives. It varies when cosine learning-rate decay begins and which parameter groups decay, initial learning rate, optimizer momentum and smoothing, transport entropy and mass relaxation, active-pair critic weight, critic penalty and prior penalty. The rate trace records the optimizer's actual per-role rates at updates 300, 600, 900 and 1,200 whenever decay is enabled.
+All eligible fits use constant generator, critic and particle learning rates throughout. The training search compares the incumbent with 16 alternatives. Six trials vary the constant rate of just one role while holding the other two fixed. Other trials vary optimizer momentum and smoothing, transport entropy and mass relaxation, active-pair critic weight, critic penalty and prior penalty. Each held-out receipt verifies the actual rates at initialization and at updates 300, 600, 900 and 1,200.
+
+An initial screen started before the fixed-rate requirement. Five decay configurations were removed from the protocol before finalist selection. Only fixed-rate measurements enter the results. The superseded screen has a separate output directory.
 
 A second search varies one quantity, the standard deviation of Gaussian noise around each sampled latent particle. The original value is 0.025. The four alternatives are 0.15, 0.4, 0.8 and 1.6. The released prior applies the specified value during both training and generation. The particle table has the same size and the same initialization. The matched v11 and EMPF controls receive the same noise as their v12 candidate.
 
@@ -19,10 +21,10 @@ Use the [NeuroKO setup and 0.12.0 wheel installation](neuroko_v12_1200.md#reprod
 ```bash
 data=paper_watch/data/neuroko
 base=(--data "$data" --window-cells 10000 --wheels "$data/wheels" --previous "$data/v12-1200")
-python paper_watch/scripts/retune_neuroko_v12.py "${base[@]}" --study training --output "$data/v12-refine"
+python paper_watch/scripts/retune_neuroko_v12.py "${base[@]}" --study training --output "$data/v12-fixed"
 python paper_watch/scripts/retune_neuroko_v12.py "${base[@]}" --study latent-noise --output "$data/v12-latent-noise"
 python paper_watch/scripts/retune_neuroko_v12.py "${base[@]}" --stage confirm \
-  --output "$data/v12-refine" --companion "$data/v12-latent-noise"
+  --output "$data/v12-fixed" --companion "$data/v12-latent-noise"
 ```
 
 For a previously extracted pilot, pass its directory as `--data` and omit `--window-cells`. If the previous v12 run directory is absent, the search computes the incumbent afresh. The joint output directory contains `freeze.json` with the selected parameters and controls, `heldout/` with individual receipts, and `result.json` with paired scores.

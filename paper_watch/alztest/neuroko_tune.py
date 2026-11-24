@@ -214,8 +214,7 @@ def main():
                 print(f"{name} update {step} energy {energy:.6f}", flush=True)
                 scoring_seconds += perf_counter() - tick
             if step % 300 == 0:
-                if settings.total_steps is not None:
-                    rate_trace.append({"update": step, **optimizer_rates(model)})
+                rate_trace.append({"update": step, **optimizer_rates(model)})
                 print(f"{name} completed {step}/1200", flush=True)
 
         model.fit(x, labels, steps=1200, after_step=progress, on_batch=record_batch)

@@ -10,15 +10,14 @@ from compare_neuroko_v12 import GROUPS, fit, receipt, write_frozen
 RELEASE = "0.12.0"
 V12 = "unified_v12"
 BASE = dict(lr=.014, rhbi_self_coupling="hollow", rhbi_relativistic_weight=2.)
-LATE = dict(total_steps=1200, lr_anneal_start=.6, lr_floor=.05, network_lr_floor=.05)
-EARLY = dict(total_steps=1200, lr_anneal_start=.15, lr_floor=.05, network_lr_floor=.05)
 SETTINGS = {
     "hollow-active2": {},
-    "late-cosine": LATE,
-    "early-cosine": EARLY,
-    "network-cosine": {**EARLY, "lr_floor": 1.},
-    "prior-cosine": {**EARLY, "network_lr_floor": 1.},
-    "high-start-cosine": {**EARLY, "lr": .028},
+    "g-low-fixed": {"lr": .010, "d_lr_mult": .021 / .010, "prior_lr_mult": .0406 / .010},
+    "g-high-fixed": {"lr": .020, "d_lr_mult": .021 / .020, "prior_lr_mult": .0406 / .020},
+    "d-low-fixed": {"d_lr_mult": .0075 / .014},
+    "d-high-fixed": {"d_lr_mult": .042 / .014},
+    "p-low-fixed": {"prior_lr_mult": .0125 / .014},
+    "p-high-fixed": {"prior_lr_mult": .0812 / .014},
     "momentum-half": {"betas": [.5, .999]},
     "momentum-nine": {"betas": [.9, .999]},
     "smooth-low": {"optimizer_smoothing": .0006},
@@ -32,6 +31,15 @@ SETTINGS = {
 }
 NOISE = {"hollow-active2": {}, **{f"noise-{n}": {"prior_sigma": sigma}
                                  for n, sigma in (("015", .15), ("04", .4), ("08", .8), ("16", 1.6))}}
+
+
+def constant_rates(row):
+    initial = row["initial_rates"]
+    return (row["final_rates"] == initial
+            and all(all(step[role] == value for role, value in initial.items())
+                    for step in row.get("rate_trace", []))
+            and row["settings"].get("lr_floor") in (None, 1.)
+            and row["settings"].get("network_lr_floor") in (None, 1.))
 
 
 def validation(args, candidates, names, seeds):
@@ -61,7 +69,8 @@ def validation(args, candidates, names, seeds):
         wanted = candidates[name]
         if (row["updates"] != 1200 or row["recipe"] != V12 or row["particlegan"] != RELEASE
                 or row["score_groups"] != [group] or set(row["fit_groups"]) != set(GROUPS) - {group}
-                or row["seed"] != seed or not row["deterministic"] or row["lr"] != wanted["lr"]
+                or row["seed"] != seed or not row["deterministic"] or not constant_rates(row)
+                or row["lr"] != wanted["lr"]
                 or any(row["settings"][k] != v for k, v in wanted.items() if k not in ("lr", "name"))):
             raise ValueError(f"Incompatible validation receipt at {path}")
         fingerprint = tuple(row[k] for k in ("initial_parameters_sha256", "projected_data_sha256",
@@ -122,7 +131,8 @@ def summarize(args, freeze):
             if (row["seed"] != seed or row["updates"] != 1200 or row["visible_devices"] != str(seed % 2)
                     or row["fit_groups"] != list(GROUPS) or row["score_groups"] != ["Screen1_0"]
                     or row["recipe"] != recipe or row["particlegan"] != version or not row["deterministic"]
-                    or row["lr"] != trial["lr"] or row["name"] != trial["name"]
+                    or row["lr"] != trial["lr"] or row["name"] != trial["name"] or not constant_rates(row)
+                    or [x["update"] for x in row.get("rate_trace", [])] != [300, 600, 900, 1200]
                     or any(row["settings"][k] != v for k, v in trial.items() if k not in ("lr", "name"))
                     or any(row["settings"][k] != v for k, v in {"batch_size": 64, "z_dim": 16, "num_particles": 64}.items())):
                 raise ValueError(f"Unmatched confirmation protocol at {path}")
