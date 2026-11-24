@@ -550,6 +550,8 @@ The v12 release uses a cosine schedule with both learning-rate floors set to 1.0
 
 The follow-up changes only v12 latent noise from 0.15 to 0.25 at the fixed 0.0049 critic rate. It uses the preceding 0.92850 result and both tuned controls as its first threshold. Further checks include exact matches for all three formulations on both development cohorts and the two historical releases on six fresh training seeds. The same command runs this experiment with `--study original-v11-critic-wide-noise` and `--output "$data/v12-original-critic-wide-noise"`.
 
+At the fixed 0.0049 critic rate, raising latent noise from 0.15 to 0.25 increased mean v12 energy from **0.92850 to 0.94607** across nine pairs. The wider noise improved 4 pairs. The run stopped at the development threshold. [Paired scores with both tuned controls](neuroko_v12_original_critic_wide_noise_energy.json)
+
 A separate matched comparison assigns the 0.0049 critic rate and latent noise 0.15 to all five formulation and release combinations. Its development comparison must reproduce the published nine v12 scores. If v12 leads all four matched controls, all five arms repeat on fresh training seeds 524–529. The earlier comparison against independently tuned controls retains its reported result.
 
 ```bash
