@@ -15,6 +15,46 @@
         "prior_reg": 0.1
       }
     ],
+    "matched_v11": [
+      "0.11.1",
+      "unified_v11",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    "matched_empf": [
+      "0.10.0",
+      "empf",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.1
+      }
+    ],
+    "tuned_v11": [
+      "0.11.1",
+      "unified_v11",
+      {
+        "name": "motion-critic-46-prior41",
+        "lr": 0.014,
+        "d_lr_mult": 0.32857142857142857,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.041,
+        "rhbi_relativistic_weight": 2.0,
+        "rhbi_self_coupling": "hollow"
+      }
+    ],
     "tuned_empf": [
       "0.10.0",
       "empf",
@@ -88,6 +128,28 @@
             "mean_energy_distance": 0.679530304056613,
             "spread_ratio": 1.2998841262985894,
             "effective_rank": 17.623215019450473
+          }
+        ]
+      },
+      "other_control_curves": {
+        "tuned_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.5815572646608409,
+            "spread_ratio": 1.2259194953725698,
+            "effective_rank": 22.76492975795343
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.5930331321420637,
+            "spread_ratio": 1.2558381558908227,
+            "effective_rank": 22.698429369656466
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.575883772429834,
+            "spread_ratio": 1.2460596792612564,
+            "effective_rank": 21.163926348861565
           }
         ]
       },
