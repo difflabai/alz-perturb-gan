@@ -1,5 +1,5 @@
 {
-  "method": "First development cohort at 1,200 constant-rate updates. Compare the interpolated 0.060 prior coefficient with calibrated v12 at 0.1 and independently tuned original controls on identical data, initial weights and minibatches. Original releases at the new shared 0.060 coefficient are scored separately by the full study.",
+  "method": "At 1,200 fixed-rate updates, compare the 0.060 prior coefficient in all three original releases. All 27 matched fits use identical rates and architecture and pair the projected data, initial weights and minibatches by seed and group. The screen also scores calibrated v12 at 0.1 and the tuned controls.",
   "arms": {
     "v12": [
       "0.12.0",
@@ -54,6 +54,32 @@
         "prior_lr_mult": 2.9,
         "prior_reg": 0.06
       }
+    ],
+    "matched_v11_prior060": [
+      "0.11.1",
+      "unified_v11",
+      {
+        "name": "original-v11-critic-49-prior060",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.06
+      }
+    ],
+    "matched_empf_prior060": [
+      "0.10.0",
+      "empf",
+      {
+        "name": "original-v11-critic-49-prior060",
+        "lr": 0.014,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.06
+      }
     ]
   },
   "curvature_source": {
@@ -88,12 +114,22 @@
     "prior060": {
       "energy": 0.9446260183902819,
       "spread_ratio": 1.2204883454195692
+    },
+    "matched_v11_prior060": {
+      "energy": 0.9378479787176395,
+      "spread_ratio": 1.1476260681052222
+    },
+    "matched_empf_prior060": {
+      "energy": 0.9798668440539601,
+      "spread_ratio": 1.1913819727534054
     }
   },
   "prior060_energy_wins": {
     "v12": 2,
     "tuned_v11": 3,
-    "tuned_empf": 5
+    "tuned_empf": 5,
+    "matched_v11_prior060": 4,
+    "matched_empf_prior060": 4
   },
   "cells": [
     {
@@ -120,6 +156,14 @@
         "prior060": {
           "energy": 1.139485712873196,
           "spread_ratio": 1.271752837917152
+        },
+        "matched_v11_prior060": {
+          "energy": 1.1982807383898861,
+          "spread_ratio": 1.1883266413553175
+        },
+        "matched_empf_prior060": {
+          "energy": 1.2604971060263015,
+          "spread_ratio": 1.2729906338464199
         }
       }
     },
@@ -147,6 +191,14 @@
         "prior060": {
           "energy": 0.6468900059191753,
           "spread_ratio": 1.313928468901212
+        },
+        "matched_v11_prior060": {
+          "energy": 0.5871413235407597,
+          "spread_ratio": 1.2222175431031426
+        },
+        "matched_empf_prior060": {
+          "energy": 0.6206126493756714,
+          "spread_ratio": 1.2402196041123295
         }
       }
     },
@@ -174,6 +226,14 @@
         "prior060": {
           "energy": 0.9956513796403597,
           "spread_ratio": 1.0848910438172574
+        },
+        "matched_v11_prior060": {
+          "energy": 1.0245290934500415,
+          "spread_ratio": 1.0096264755874305
+        },
+        "matched_empf_prior060": {
+          "energy": 1.0937327737236064,
+          "spread_ratio": 1.0302411912268525
         }
       }
     },
@@ -201,6 +261,14 @@
         "prior060": {
           "energy": 1.1915657197846947,
           "spread_ratio": 1.2768483317539825
+        },
+        "matched_v11_prior060": {
+          "energy": 1.209130388570748,
+          "spread_ratio": 1.2017843328624556
+        },
+        "matched_empf_prior060": {
+          "energy": 1.189852784246219,
+          "spread_ratio": 1.2723755243070491
         }
       }
     },
@@ -228,6 +296,14 @@
         "prior060": {
           "energy": 0.6284202659874356,
           "spread_ratio": 1.2824495613166351
+        },
+        "matched_v11_prior060": {
+          "energy": 0.5716134819677898,
+          "spread_ratio": 1.2106262187147947
+        },
+        "matched_empf_prior060": {
+          "energy": 0.6268142864878894,
+          "spread_ratio": 1.2390988672550747
         }
       }
     },
@@ -255,6 +331,14 @@
         "prior060": {
           "energy": 0.9895688044073565,
           "spread_ratio": 1.0679615808416663
+        },
+        "matched_v11_prior060": {
+          "energy": 0.9873899332031677,
+          "spread_ratio": 0.997066806262627
+        },
+        "matched_empf_prior060": {
+          "energy": 0.9821789319613246,
+          "spread_ratio": 1.035298638019419
         }
       }
     },
@@ -282,6 +366,14 @@
         "prior060": {
           "energy": 1.2509724358820995,
           "spread_ratio": 1.2950917910339013
+        },
+        "matched_v11_prior060": {
+          "energy": 1.2105020730907246,
+          "spread_ratio": 1.2346904697457144
+        },
+        "matched_empf_prior060": {
+          "energy": 1.2428356001742842,
+          "spread_ratio": 1.2595711797302478
         }
       }
     },
@@ -309,6 +401,14 @@
         "prior060": {
           "energy": 0.6846434672357566,
           "spread_ratio": 1.3038018404393048
+        },
+        "matched_v11_prior060": {
+          "energy": 0.6436293755524132,
+          "spread_ratio": 1.2445443377718792
+        },
+        "matched_empf_prior060": {
+          "energy": 0.7782843453114827,
+          "spread_ratio": 1.3158439303744114
         }
       }
     },
@@ -336,8 +436,48 @@
         "prior060": {
           "energy": 0.9744363737824633,
           "spread_ratio": 1.0876696527550103
+        },
+        "matched_v11_prior060": {
+          "energy": 1.0084154006932244,
+          "spread_ratio": 1.0197517875436373
+        },
+        "matched_empf_prior060": {
+          "energy": 1.0239931191788614,
+          "spread_ratio": 1.056798185908844
         }
       }
     }
-  ]
+  ],
+  "screen_decision": {
+    "advances": false,
+    "all_preliminary_means": {
+      "0.12.0/unified_v12/original-v11-critic-49-prior060": 0.9446260183902819,
+      "0.12.0/unified_v12/original-v11-critic-49": 0.9284979310859204,
+      "0.12.0/unified_v11/noise250-prior100": 0.9251141164562772,
+      "0.12.0/empf/noise250-prior100": 0.9224025817539492,
+      "0.11.1/unified_v11/motion-critic-46-prior41": 0.9254714736446986,
+      "0.10.0/empf/noise250-prior100": 0.9224025817539492,
+      "0.11.1/unified_v11/original-v11-critic-49-prior060": 0.9378479787176395,
+      "0.10.0/empf/original-v11-critic-49-prior060": 0.9798668440539601
+    },
+    "seeds": [
+      22,
+      23,
+      24
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "verified_optimizer_steps_per_matched_fit": {
+      "generator_and_particles": 1200,
+      "critic": 1200
+    },
+    "matched_rates": {
+      "generator": 0.014,
+      "critic": 0.0049,
+      "particles": 0.0406
+    }
+  }
 }
