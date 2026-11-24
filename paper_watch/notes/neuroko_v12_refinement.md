@@ -179,6 +179,12 @@ The observed neurons averaged 17.44 effective dimensions on these groups, calcul
 
 The nine v12 fits at the original noise on seeds 22–24 held their generator, critic and particle rates at 0.020, 0.042 and 0.0203 through every one of the 1,200 updates. The optimizer also measures each generator step and can adjust its size in response. Its recorded `last_step_gain` was 1.0 on all nine fits at updates 300 and 600, and ranged from 0.856 to 0.996 at update 1,200. This adaptive gain is part of the released optimizer. [Per-update learning-rate check](../alztest/neuroko_tune.py#L249-L253) · [Upstream gain calculation and application](https://github.com/HyperGAN/ParticleGAN/blob/3256a05867688ab7ec0e5b4f50354c14d6972e6f/particlegan/_unified_v12/optimizer.py#L1205-L1228)
 
+### Effect of increasing latent noise on fresh training seeds
+
+At the fixed rates of 0.020, 0.042 and 0.0203, raising the latent noise from 0.025 to 0.15 changed mean v12 energy from 0.9774 to 0.9797 on seeds 22–24. The higher noise improved energy on four of nine pairs. V11 at its original rates and noise 0.15 scored 0.9506 and led v12 when averaged within each of the three seeds. This rules the higher-noise v12 candidate out of its planned biological holdout.
+
+The extra noise increased the mean number of effective covariance dimensions from 16.89 to 17.42, with an increase on seven of nine pairs. The same target groups in the observed data averaged 17.44. The generated-to-observed spread ratio rose from 1.121 to 1.134. Thus the model used more covariance directions while producing slightly more total spread than the observed cells. [Paired target energies and effective dimensions](neuroko_v12_noise_ablation_1200.json)
+
 ### All three formulations at EMPF’s tuned rates
 
 The original matched-rate finalist moved the critic rate above and the particle rate below the tuned EMPF values. A second fixed comparison assigns all three models EMPF’s previously tuned rates of 0.020, 0.030 and 0.058. The v12 and v11 arms keep hollow coupling and relativistic weight 2. All models use latent noise 0.025. This comparison shares the exact tuned EMPF receipts with the other validation on seeds 22–24. The same selection threshold applies to the nine independent fold–seed pairs, with outer seeds 196–211 reserved in advance. [Comparison arms and decision rule](../scripts/neuroko_matched_rate_replication.py)
@@ -187,6 +193,16 @@ The original matched-rate finalist moved the critic rate above and the particle 
 python paper_watch/scripts/neuroko_matched_rate_replication.py --rates empf --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-at-empf-rates" --shared-validation "$data/v12-rate-noise"
 ```
+
+At EMPF’s tuned rates, v12 averaged 0.9639 and EMPF averaged 0.9659 on the same nine pairs. V12 won five of nine by energy and two of three when averaged within seed. V11 had the lowest mean energy at 0.9531, which rules out this setting under its training qualification. [Paired scores, diversity, timings and input hashes](neuroko_v12_at_empf_rates_1200.json)
+
+| Formulation at rates 0.020 / 0.030 / 0.058 | Mean energy ↓ | Spread ratio (ideal 1) | Effective dimensions | Median fit time |
+| --- | ---: | ---: | ---: | ---: |
+| V11 | 0.9531 | 1.146 | 18.00 | 161 s |
+| V12 | 0.9639 | 1.118 | 17.50 | 152 s |
+| EMPF | 0.9659 | 1.174 | 17.16 | 310 s |
+
+At noise 0.025, moving from the earlier rates of 0.020, 0.042 and 0.0203 to these rates improved v12’s mean by 0.0135 and v11’s by 0.0336 on the same seed–group pairs. This larger change in v11 reversed their ranking. The higher-noise v12 finalist at the earlier rates scored 0.9797 against this independently tuned EMPF reference of 0.9659.
 
 ## Prior penalty at latent noise 0.15
 
