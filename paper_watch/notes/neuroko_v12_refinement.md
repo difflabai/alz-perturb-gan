@@ -49,6 +49,13 @@ The default prior coefficient is 0.02 for v12 and v11 and 0.01 for EMPF. Within 
 
 At fixed rates 0.014/0.0049/0.0406 and shared latent noise 0.15, v12 also beat original EMPF on the second cohort. V12 and EMPF averaged **0.93939 and 1.00870** on seeds 251–253, compared with **0.92850 and 0.99652** on seeds 22–24. The v12 advantage was 0.06802 and 0.06931 in the two cohorts. V12 won 15 of 18 fold–seed pairs, including all nine on the second cohort, and all six seed means. Both cohorts evaluate the same three biological groups. Tuned EMPF in the 0.12.0 wheel, with critic LR 0.021 and noise 0.25, scored 0.92240 and 0.90413 respectively. [Constant-rate receipts, matched hashes and per-seed differences](neuroko_v12_fixed_critic_original_empf_replication.json)
 
+Original v11 reversed the ordering on the second cohort at the same fixed rates. V12 led v11 by 0.02029 on seeds 22–24, then trailed v11 by 0.01371 on seeds 251–253. Of the six seed means, three favored each formulation. [Both original releases, all 18 matched pairs and per-seed differences](neuroko_v12_fixed_critic_original_release_replication.json)
+
+| Training seeds | v12 (0.12.0) | v11 (0.11.1) | EMPF (0.10.0) | V12 wins over v11 | V12 wins over EMPF |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 22–24 | **0.92850** | 0.94878 | 0.99652 | 6/9 | 6/9 |
+| 251–253 | 0.93939 | **0.92569** | 1.00870 | 5/9 | 9/9 |
+
 ## Six configurations on the same nine training pairs
 
 The stronger-prior v12 had the lowest mean energy of all 18 entries below on screening seeds 22–24. Its 0.9423 was 0.0038 below the lowest EMPF mean and 0.0039 below the lowest v11 mean. At penalty weight 0.1 it beat matched EMPF on four of nine pairs and matched v11 on six. Only seed 22 favored v12 when the three groups were averaged within each seed against matched EMPF. The setting qualified for independent training seeds 251–253. [All six configurations, paired energies, timings and input hashes](neuroko_v12_six_settings_1200.json) · [Prior-weight screening decision](neuroko_v12_prior_weight_screen.json)

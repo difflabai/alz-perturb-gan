@@ -1,0 +1,355 @@
+{
+  "arms": [
+    [
+      "0.12.0",
+      "unified_v12",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    [
+      "0.11.1",
+      "unified_v11",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    [
+      "0.10.0",
+      "empf",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.1
+      }
+    ]
+  ],
+  "updates": 1200,
+  "constant_lr_verified_updates_per_fit": 1200,
+  "groups": [
+    "Screen1_1",
+    "Screen1_3",
+    "Screen1_4"
+  ],
+  "cohorts": {
+    "first": {
+      "seeds": [
+        22,
+        23,
+        24
+      ],
+      "means": {
+        "0.12.0/unified_v12/original-v11-critic-49": 0.9284979310859204,
+        "0.11.1/unified_v11/original-v11-critic-49": 0.9487836565947668,
+        "0.10.0/empf/original-v11-critic-49": 0.9965210770068422
+      },
+      "comparisons": {
+        "0.11.1/unified_v11/original-v11-critic-49": {
+          "v12_minus_reference": -0.020285725508846466,
+          "pairs_won": 6,
+          "within_seed": [
+            -0.04763884182167444,
+            0.00349531745562374,
+            -0.0167136521604887
+          ]
+        },
+        "0.10.0/empf/original-v11-critic-49": {
+          "v12_minus_reference": -0.0680231459209218,
+          "pairs_won": 6,
+          "within_seed": [
+            -0.026627226355197875,
+            -0.07432533414667357,
+            -0.10311687726089398
+          ]
+        }
+      },
+      "cells": [
+        {
+          "seed": 22,
+          "group": "Screen1_1",
+          "gpu": "0",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96",
+          "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 1.1263494186235306,
+            "0.11.1/unified_v11/original-v11-critic-49": 1.2084226033954382,
+            "0.10.0/empf/original-v11-critic-49": 1.115794115205545
+          }
+        },
+        {
+          "seed": 22,
+          "group": "Screen1_3",
+          "gpu": "1",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "training_batches_sha256": "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4",
+          "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 0.6114014145359561,
+            "0.11.1/unified_v11/original-v11-critic-49": 0.6169509422632742,
+            "0.10.0/empf/original-v11-critic-49": 0.6069872397044966
+          }
+        },
+        {
+          "seed": 22,
+          "group": "Screen1_4",
+          "gpu": "0",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "training_batches_sha256": "85f4aff48cde6ba1da727b69d794e423e9f4cb879abe43d9899c96b3e19486a8",
+          "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 0.9871477581704231,
+            "0.11.1/unified_v11/original-v11-critic-49": 1.0424415711362207,
+            "0.10.0/empf/original-v11-critic-49": 1.0819989154854617
+          }
+        },
+        {
+          "seed": 23,
+          "group": "Screen1_1",
+          "gpu": "1",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "training_batches_sha256": "c1b421e29d4d935428afccf2b52bb0b12c41f54b927d95ee3c8b4b7fcff3a3eb",
+          "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 1.126615089377189,
+            "0.11.1/unified_v11/original-v11-critic-49": 1.172398187896117,
+            "0.10.0/empf/original-v11-critic-49": 1.1774788731335057
+          }
+        },
+        {
+          "seed": 23,
+          "group": "Screen1_3",
+          "gpu": "0",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "training_batches_sha256": "a2c81ac6a8e84563621f19a16aff3340cbf95b95bacc135c80df9b3fd42f7443",
+          "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 0.6207189273353579,
+            "0.11.1/unified_v11/original-v11-critic-49": 0.5976069012868783,
+            "0.10.0/empf/original-v11-critic-49": 0.6815404198820101
+          }
+        },
+        {
+          "seed": 23,
+          "group": "Screen1_4",
+          "gpu": "1",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "training_batches_sha256": "f0fc24166dc52bf914506e6eccc97cdb2937937bcb548c4ee7f877c9038456c6",
+          "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 1.0181744368803536,
+            "0.11.1/unified_v11/original-v11-critic-49": 0.985017412043034,
+            "0.10.0/empf/original-v11-critic-49": 1.1294651630174053
+          }
+        },
+        {
+          "seed": 24,
+          "group": "Screen1_1",
+          "gpu": "0",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "training_batches_sha256": "4c0657cf4e49b6ed9e7ed8cf1529557ec56d518e7f697b464f33e263585ee5e4",
+          "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 1.2100226375749439,
+            "0.11.1/unified_v11/original-v11-critic-49": 1.2590956909378466,
+            "0.10.0/empf/original-v11-critic-49": 1.2860412168547701
+          }
+        },
+        {
+          "seed": 24,
+          "group": "Screen1_3",
+          "gpu": "1",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "training_batches_sha256": "507c8545718ac1248d187d920f15b7d033dfc06a2e29f3ea052422cf584d5a90",
+          "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 0.6698091226184917,
+            "0.11.1/unified_v11/original-v11-critic-49": 0.630987608525684,
+            "0.10.0/empf/original-v11-critic-49": 0.6610876937779475
+          }
+        },
+        {
+          "seed": 24,
+          "group": "Screen1_4",
+          "gpu": "0",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "training_batches_sha256": "b3ec8669fad397caaf4deb8d3ac9c4b946534ff97ad62350d35bc754d111f1ab",
+          "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 0.9862425746570376,
+            "0.11.1/unified_v11/original-v11-critic-49": 1.0261319918684086,
+            "0.10.0/empf/original-v11-critic-49": 1.2282960560004375
+          }
+        }
+      ]
+    },
+    "second": {
+      "seeds": [
+        251,
+        252,
+        253
+      ],
+      "means": {
+        "0.12.0/unified_v12/original-v11-critic-49": 0.9393949919063337,
+        "0.11.1/unified_v11/original-v11-critic-49": 0.9256860114263392,
+        "0.10.0/empf/original-v11-critic-49": 1.0087023387000658
+      },
+      "comparisons": {
+        "0.11.1/unified_v11/original-v11-critic-49": {
+          "v12_minus_reference": 0.013708980479994458,
+          "pairs_won": 5,
+          "within_seed": [
+            -0.019343101421013625,
+            0.03917794847764903,
+            0.021292094383347965
+          ]
+        },
+        "0.10.0/empf/original-v11-critic-49": {
+          "v12_minus_reference": -0.06930734679373203,
+          "pairs_won": 9,
+          "within_seed": [
+            -0.0780285125232072,
+            -0.06116147802339822,
+            -0.06873204983459069
+          ]
+        }
+      },
+      "cells": [
+        {
+          "seed": 251,
+          "group": "Screen1_1",
+          "gpu": "1",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "training_batches_sha256": "dde3a72737ee81577630c4da56ae2dda3deaf70c92b040bce2b82b2bad93b798",
+          "initial_parameters_sha256": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 1.1412954010469378,
+            "0.11.1/unified_v11/original-v11-critic-49": 1.2157097729130006,
+            "0.10.0/empf/original-v11-critic-49": 1.2178591190828363
+          }
+        },
+        {
+          "seed": 251,
+          "group": "Screen1_3",
+          "gpu": "0",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "training_batches_sha256": "fce0d152e0171eb434dec3ab059d4c0f6522a7353d2ea60d3dd23dbafd3de8dd",
+          "initial_parameters_sha256": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 0.633696660494178,
+            "0.11.1/unified_v11/original-v11-critic-49": 0.5851068954193852,
+            "0.10.0/empf/original-v11-critic-49": 0.753468302803721
+          }
+        },
+        {
+          "seed": 251,
+          "group": "Screen1_4",
+          "gpu": "1",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "training_batches_sha256": "b09e7ed029a1a57ca608f5e7221125703ccd251c0a71c30d120250ff5b906017",
+          "initial_parameters_sha256": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 1.0131135530000601,
+            "0.11.1/unified_v11/original-v11-critic-49": 1.045318250471831,
+            "0.10.0/empf/original-v11-critic-49": 1.0508637302242403
+          }
+        },
+        {
+          "seed": 252,
+          "group": "Screen1_1",
+          "gpu": "0",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "training_batches_sha256": "8d0bf3fddf0be37947a89ba4d6724dcbaa80727608258900a8b757619ab62205",
+          "initial_parameters_sha256": "3ad24a61fcf8c521119ac4120a98493804afe62c7b396431157945ba95fcb6e8",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 1.2306572823088493,
+            "0.11.1/unified_v11/original-v11-critic-49": 1.0746161102943679,
+            "0.10.0/empf/original-v11-critic-49": 1.2750817920794217
+          }
+        },
+        {
+          "seed": 252,
+          "group": "Screen1_3",
+          "gpu": "1",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "training_batches_sha256": "d7708476357b653925372cc5946922581eb1505c06ee1ec6ce5498521d04d8c5",
+          "initial_parameters_sha256": "3ad24a61fcf8c521119ac4120a98493804afe62c7b396431157945ba95fcb6e8",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 0.6138221992773936,
+            "0.11.1/unified_v11/original-v11-critic-49": 0.6165317400579864,
+            "0.10.0/empf/original-v11-critic-49": 0.7010548361127142
+          }
+        },
+        {
+          "seed": 252,
+          "group": "Screen1_4",
+          "gpu": "0",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "training_batches_sha256": "2998e270704a0803f7506f62e14da9481f228c8f07f8192eccc6b10b754b57bc",
+          "initial_parameters_sha256": "3ad24a61fcf8c521119ac4120a98493804afe62c7b396431157945ba95fcb6e8",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 1.0325482063250722,
+            "0.11.1/unified_v11/original-v11-critic-49": 1.0683459921260137,
+            "0.10.0/empf/original-v11-critic-49": 1.0843754937893737
+          }
+        },
+        {
+          "seed": 253,
+          "group": "Screen1_1",
+          "gpu": "1",
+          "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+          "training_batches_sha256": "0d7e0388610a199b73f5b4e9c3ae924f2e35e133052b59e26fc463073be48639",
+          "initial_parameters_sha256": "dff75aafac51b66bf4af10a5ebd544631bc91405c3b3b33bb98f7c0ce42d25b7",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 1.0808511714939395,
+            "0.11.1/unified_v11/original-v11-critic-49": 1.1278220528164498,
+            "0.10.0/empf/original-v11-critic-49": 1.1812706601674314
+          }
+        },
+        {
+          "seed": 253,
+          "group": "Screen1_3",
+          "gpu": "0",
+          "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+          "training_batches_sha256": "d430b3b285f0a4df8745a19dbc03e129a3c6ca7141e31d64b97ead13a3be9ab4",
+          "initial_parameters_sha256": "dff75aafac51b66bf4af10a5ebd544631bc91405c3b3b33bb98f7c0ce42d25b7",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 0.6675814603899681,
+            "0.11.1/unified_v11/original-v11-critic-49": 0.6053642852177834,
+            "0.10.0/empf/original-v11-critic-49": 0.6774728916220092
+          }
+        },
+        {
+          "seed": 253,
+          "group": "Screen1_4",
+          "gpu": "1",
+          "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+          "training_batches_sha256": "bf6e4b56e1034060daf6794263f512e0ee510bfef1a5f9c5262a5918bc237abc",
+          "initial_parameters_sha256": "dff75aafac51b66bf4af10a5ebd544631bc91405c3b3b33bb98f7c0ce42d25b7",
+          "energy": {
+            "0.12.0/unified_v12/original-v11-critic-49": 1.0409889928206046,
+            "0.11.1/unified_v11/original-v11-critic-49": 0.9923590035202352,
+            "0.10.0/empf/original-v11-critic-49": 1.1368742224188437
+          }
+        }
+      ]
+    }
+  }
+}
