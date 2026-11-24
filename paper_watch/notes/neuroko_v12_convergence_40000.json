@@ -1,0 +1,466 @@
+{
+  "status": "partial",
+  "completed_fits": 1,
+  "expected_fits": 10,
+  "protocol": {
+    "arms": {
+      "v12": [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "matched_v11": [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      "matched_empf": [
+        "0.10.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ],
+      "tuned_v11": [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.041,
+          "rhbi_relativistic_weight": 2.0,
+          "rhbi_self_coupling": "hollow"
+        }
+      ],
+      "tuned_empf": [
+        "0.10.0",
+        "empf",
+        {
+          "name": "noise250-prior100",
+          "lr": 0.014,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.25,
+          "prior_reg": 0.1
+        }
+      ]
+    },
+    "seeds": [
+      22,
+      251
+    ],
+    "groups": [
+      "Screen1_1"
+    ],
+    "checkpoints": [
+      1200,
+      2400,
+      3600,
+      4800,
+      6000,
+      7200,
+      8400,
+      9600,
+      10800,
+      12000,
+      13200,
+      14400,
+      15600,
+      16800,
+      18000,
+      19200,
+      20400,
+      21600,
+      22800,
+      24000,
+      25200,
+      26400,
+      27600,
+      28800,
+      30000,
+      31200,
+      32400,
+      33600,
+      34800,
+      36000,
+      37200,
+      38400,
+      39600,
+      40000
+    ],
+    "metric": "four-target mean energy distance",
+    "rule": "Run all five frozen configurations on the first listed development group Screen1_1 and both pilot seeds through 40,000 optimizer updates. Reproduce the first three published checkpoints and their minibatch hashes. Compare the two-seed mean energy at 40,000 with each control and report the time-weighted mean energy over updates 30,000 through 40,000 using linear interpolation between checkpoints."
+  },
+  "cells": [
+    {
+      "seed": 251,
+      "group": "Screen1_1",
+      "gpu": 1,
+      "fingerprints": {
+        "projected_data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters": "37c1b6f1e5b44bb6727ee2b3eceba6da89f185c637b4bb5a1a241d99e09468a4",
+        "training_batches": [
+          "dde3a72737ee81577630c4da56ae2dda3deaf70c92b040bce2b82b2bad93b798",
+          "3635babcb4a6a52a2d347d4aac288dbc4b8793488cd5dd71ec84b8135aca2e19",
+          "a1d8a822fffdfe5e32cd371677f1a8b3c97298d5544fa97583a7cef37697667f",
+          "363996bfb6a3b3c108e9ba36e34119b0bf290f6b597cf827b95e0664adb68d4c",
+          "b0a9a2496abf0807cf516cef913d5475e894b5c69852deed0bf09fe483dc4f77",
+          "43a7d7391e8e2b234c0dc9c50d8adada96f2373e887f628d25757f7bd1e122cd",
+          "8c5c68e204e8dc44382873b76477b4f6aad28ffb97e31d0f515656cc8847065c",
+          "dd440e2bee8f5ef767125fede02c4469f97dae030a5f82079f7b76edba8dcc3a",
+          "5debee09581f3e505104ebdd91af926d089f04034981f4ce132af7b7be59dfb5",
+          "352824423499b01e325757cac83e1b455292984c91cb7c898e041f00de2627c7",
+          "f3c9fbdbd9084562fc41d70265db28de201752f00a3570dd857b23e73fb2e619",
+          "b5e4351cedc9577b6ad8eb0711607a6d8bf8c9d0098f2a30ded72ee07ca61d8b",
+          "26a48114346e2a81b0d98c1599296ea71fdedc0506cca6012d99375c4a4cfa8b",
+          "212c354104c3bed6a0b9bf0015cfdd87c0dd5a191563a14ce9df176abc516893",
+          "87778e80cfbbddf01f4046a02f6088764a0198711611b78d760a094b7209ba8e",
+          "ee1dafbd249b6d7fbb75a9f580418c1530331ad4164453d9f70d630359247f81",
+          "899336ab5b48629c311812c5da69f2c92016e7b63d4ae0bebfc2682a23e140aa",
+          "ca125879d888da8364e35bfd29b3fd2002c0ccc81db6f0f5efee524afbc24eaa",
+          "bd72ee72431c875ffd5cd0c2f9a16b4f5065b43b36b6ebbd971d06cc8e4c34e0",
+          "d915ba38256bad425e835191be0f7e1337c10d0b0320b9ed2ff88bfa03fcf000",
+          "52329dbba7d1e36e4e871179e9e614cd474e628a06e0b6e2e7b2808dac9a20d0",
+          "bfc89db7632d3030f77a4141480c86e096ad6da0029e4a11ba2329ba46d068b0",
+          "a67bc08790a750a9f6d574405a5394e86e2c2c858ae61181182faa791c9cbdae",
+          "31627fac947b9a3a9674dc1b90b1edbeba1138bd041702a22338eb823a5390f6",
+          "9b084a132e79561113c0834abc3296ceef7cfd41432656cd0c5201ebf43761e3",
+          "9c08a956f584103a1b8f36d5bdde4c727d550955c9394c254b7e8d2351fbd845",
+          "983aab9fa34a7d45da47f62031f9d2f42003474627c30216970b69d0844ee596",
+          "71562c2b3fe6ff947f4b620c28d11b62a6e8818b6006877b511c71e13cbf2502",
+          "58a1969372ee258279b1eac868de335d8fe88bf74b0546204412a90e4eb29ee0",
+          "13a7b9968dbb11cc267dbb2b5c7bb2873a5455e22ec5363ed1cdc61253da9c42",
+          "9b68a8b99949a44815e3f4a6c1320fa0e4a03ea0d5bdcbefd22549fb9cf54fe1",
+          "a672e61e0959969643e9ced5831cc60f07013c26f5a96defb24555a163665ea5",
+          "ac1d9d8ce57d2a67a5d04f92d95e87198bde1dbf4bd52a9730dc7bb797699d0a",
+          "ddcca37106ebf09425d80d3b314bf94102bea41ca17fa49c2869660e8720645e"
+        ]
+      },
+      "arms": {
+        "v12": {
+          "curve": [
+            {
+              "updates": 1200,
+              "mean_energy_distance": 1.1412954010469378,
+              "spread_ratio": 1.2601342261165183,
+              "effective_rank": 21.686512836529523
+            },
+            {
+              "updates": 2400,
+              "mean_energy_distance": 1.1372993309113304,
+              "spread_ratio": 1.2781478136405917,
+              "effective_rank": 23.051495341665564
+            },
+            {
+              "updates": 3600,
+              "mean_energy_distance": 1.156311922419513,
+              "spread_ratio": 1.299293552096168,
+              "effective_rank": 22.208474283884087
+            },
+            {
+              "updates": 4800,
+              "mean_energy_distance": 1.1199672053274137,
+              "spread_ratio": 1.3143971192210757,
+              "effective_rank": 22.156930822070812
+            },
+            {
+              "updates": 6000,
+              "mean_energy_distance": 1.1366926275171063,
+              "spread_ratio": 1.293231447040729,
+              "effective_rank": 20.822379079039482
+            },
+            {
+              "updates": 7200,
+              "mean_energy_distance": 1.1267151738860561,
+              "spread_ratio": 1.28773192294881,
+              "effective_rank": 21.309711179472576
+            },
+            {
+              "updates": 8400,
+              "mean_energy_distance": 1.087202877371428,
+              "spread_ratio": 1.2742945568344304,
+              "effective_rank": 21.620276410554773
+            },
+            {
+              "updates": 9600,
+              "mean_energy_distance": 1.097909472555597,
+              "spread_ratio": 1.2949285206199048,
+              "effective_rank": 22.265256065259607
+            },
+            {
+              "updates": 10800,
+              "mean_energy_distance": 1.107796772617419,
+              "spread_ratio": 1.3073955176623682,
+              "effective_rank": 22.13123465511323
+            },
+            {
+              "updates": 12000,
+              "mean_energy_distance": 1.097963595976437,
+              "spread_ratio": 1.3242281952433888,
+              "effective_rank": 21.853047139313826
+            },
+            {
+              "updates": 13200,
+              "mean_energy_distance": 1.137490135198634,
+              "spread_ratio": 1.3503254204303055,
+              "effective_rank": 18.550358034102416
+            },
+            {
+              "updates": 14400,
+              "mean_energy_distance": 1.1468104679829205,
+              "spread_ratio": 1.3377920839069364,
+              "effective_rank": 19.923673939397837
+            },
+            {
+              "updates": 15600,
+              "mean_energy_distance": 1.1472388730159275,
+              "spread_ratio": 1.3134926624533065,
+              "effective_rank": 21.322849844434494
+            },
+            {
+              "updates": 16800,
+              "mean_energy_distance": 1.118021307109648,
+              "spread_ratio": 1.3374447028298948,
+              "effective_rank": 20.703652311006614
+            },
+            {
+              "updates": 18000,
+              "mean_energy_distance": 1.1185030897084975,
+              "spread_ratio": 1.3364422334636512,
+              "effective_rank": 20.734269059622655
+            },
+            {
+              "updates": 19200,
+              "mean_energy_distance": 1.1160685076830785,
+              "spread_ratio": 1.3348760280697296,
+              "effective_rank": 20.718122992623893
+            },
+            {
+              "updates": 20400,
+              "mean_energy_distance": 1.1239952612013608,
+              "spread_ratio": 1.339973639056673,
+              "effective_rank": 20.754990606593864
+            },
+            {
+              "updates": 21600,
+              "mean_energy_distance": 1.126282948354555,
+              "spread_ratio": 1.360312342541977,
+              "effective_rank": 20.039598621651777
+            },
+            {
+              "updates": 22800,
+              "mean_energy_distance": 1.1147211451273205,
+              "spread_ratio": 1.3616052845820639,
+              "effective_rank": 19.5888255513504
+            },
+            {
+              "updates": 24000,
+              "mean_energy_distance": 1.1087191405555457,
+              "spread_ratio": 1.3773964096238687,
+              "effective_rank": 18.748936373006703
+            },
+            {
+              "updates": 25200,
+              "mean_energy_distance": 1.0966653094802328,
+              "spread_ratio": 1.3969995711120915,
+              "effective_rank": 17.626887232621446
+            },
+            {
+              "updates": 26400,
+              "mean_energy_distance": 1.0968126304890438,
+              "spread_ratio": 1.38502508408116,
+              "effective_rank": 17.65554056095334
+            },
+            {
+              "updates": 27600,
+              "mean_energy_distance": 1.0946580903949992,
+              "spread_ratio": 1.3828326047974338,
+              "effective_rank": 17.85165965593061
+            },
+            {
+              "updates": 28800,
+              "mean_energy_distance": 1.1018932743243581,
+              "spread_ratio": 1.3915094940188233,
+              "effective_rank": 17.567238803040745
+            },
+            {
+              "updates": 30000,
+              "mean_energy_distance": 1.1013996866180253,
+              "spread_ratio": 1.4165894630547768,
+              "effective_rank": 17.05462461801593
+            },
+            {
+              "updates": 31200,
+              "mean_energy_distance": 1.0968026186008162,
+              "spread_ratio": 1.412360043805197,
+              "effective_rank": 16.98667679860298
+            },
+            {
+              "updates": 32400,
+              "mean_energy_distance": 1.0946504347979944,
+              "spread_ratio": 1.3952011768309216,
+              "effective_rank": 17.232319906008303
+            },
+            {
+              "updates": 33600,
+              "mean_energy_distance": 1.095529934523742,
+              "spread_ratio": 1.397331658822099,
+              "effective_rank": 17.19549904281542
+            },
+            {
+              "updates": 34800,
+              "mean_energy_distance": 1.0954962899334284,
+              "spread_ratio": 1.397382411894832,
+              "effective_rank": 17.23601745447491
+            },
+            {
+              "updates": 36000,
+              "mean_energy_distance": 1.0973154911164242,
+              "spread_ratio": 1.3969606749827888,
+              "effective_rank": 17.08929709305066
+            },
+            {
+              "updates": 37200,
+              "mean_energy_distance": 1.1146196944559024,
+              "spread_ratio": 1.4253165029510675,
+              "effective_rank": 16.711324702441306
+            },
+            {
+              "updates": 38400,
+              "mean_energy_distance": 1.114320266029097,
+              "spread_ratio": 1.4247615924327819,
+              "effective_rank": 16.705246627018774
+            },
+            {
+              "updates": 39600,
+              "mean_energy_distance": 1.1141368437397272,
+              "spread_ratio": 1.4244343379048745,
+              "effective_rank": 16.710423488044935
+            },
+            {
+              "updates": 40000,
+              "mean_energy_distance": 1.1405955437911202,
+              "spread_ratio": 1.4539030127334551,
+              "effective_rank": 16.420881903469052
+            }
+          ],
+          "late_mean_energy": 1.1030750071069708,
+          "endpoint_targets": {
+            "GLCCI1": {
+              "energy_distance": 1.1877177605002425,
+              "shift_cosine": -0.31170300492374065,
+              "spread_ratio": 1.4220130094204042
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0273217364825475,
+              "shift_cosine": -0.07567685838183738,
+              "spread_ratio": 1.476364614878115
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1869177918973142,
+              "shift_cosine": -0.23573480701956095,
+              "spread_ratio": 1.4775060390227974
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1604248862843765,
+              "shift_cosine": 0.20355985986619995,
+              "spread_ratio": 1.4397283876125035
+            }
+          },
+          "endpoint_effective_ranks": {
+            "GLCCI1": 15.454505710429581,
+            "SLC2A4RG": 15.931908485609146,
+            "PLEKHA1": 17.214709531803695,
+            "MAMSTR": 17.08240388603378
+          },
+          "initial_and_final_rates": {
+            "generator": 0.014,
+            "critic": 0.0049,
+            "particles": 0.0406
+          },
+          "verified_optimizer_steps": {
+            "generator_and_particles": 40000,
+            "critic": 40000
+          },
+          "fit_seconds": 3453.593319541076
+        }
+      }
+    }
+  ],
+  "sampled_optimizer_gains": {
+    "251": {
+      "v12": {
+        "samples": 133,
+        "minimum_sampled_generator_ema": 0.37076117693131644,
+        "selected_checkpoints": [
+          {
+            "update": 1200,
+            "generator_ema": 0.9680840449560784,
+            "last_step_gain": 1.0
+          },
+          {
+            "update": 3600,
+            "generator_ema": 0.5124683292597627,
+            "last_step_gain": 1.0
+          },
+          {
+            "update": 8400,
+            "generator_ema": 0.4433042431088641,
+            "last_step_gain": 1.0
+          },
+          {
+            "update": 12000,
+            "generator_ema": 0.37859222408092125,
+            "last_step_gain": 1.0
+          },
+          {
+            "update": 24000,
+            "generator_ema": 0.37577750402218263,
+            "last_step_gain": 1.0
+          },
+          {
+            "update": 30000,
+            "generator_ema": 0.39484092428142814,
+            "last_step_gain": 1.0
+          },
+          {
+            "update": 36000,
+            "generator_ema": 0.4026609625014483,
+            "last_step_gain": 1.0
+          },
+          {
+            "update": 39900,
+            "generator_ema": 0.38138179438322906,
+            "last_step_gain": 1.0
+          }
+        ]
+      }
+    }
+  }
+}

@@ -126,11 +126,23 @@ All four original controls have now finished on these same three pairs. At 2,400
 
 Seed 838 is the first fresh seed with v12 and tuned original EMPF complete on all three groups. Their mean energies were **0.97973 and 0.91879** at 1,200, **0.90562 and 0.94845** at 2,400, and **0.92131 and 1.04457** at 3,600. V12 beat tuned EMPF on all three groups at the endpoint, including Screen1_4 (1.00142 versus 1.09453). Its own mean rose after 2,400. On Screen1_4 at seed 839 the endpoint comparison with tuned v11 was close, **1.01271** for v12 and **1.01311** for v11. [Fresh checkpoint scores, completed seed means, pair counts and verified hashes](neuroko_v12_convergence_3600_fresh.json)
 
+Tuned original v11 subsequently finished all three groups on seed 838 with mean energy **0.93936** at 3,600. V12 finished lower on each group, including Screen1_4 by 0.00082. On this seed, v12 went from the highest of the three means at 1,200 to the lowest at both 2,400 and 3,600. [Checkpoint means for all three formulations](neuroko_v12_convergence_3600_fresh.json)
+
+Screen1_4 at seed 839 became the fourth fresh pair with all five fits complete. V12 also finished below matched v11 (1.07054), matched EMPF (1.05173) and tuned EMPF (1.06071). All three development groups appear in the four complete pairs. [Paired results in the fresh comparison](neuroko_v12_convergence_3600_fresh.json)
+
+On seed 838, tuned EMPF's effective covariance rank rose on all three groups, averaging **16.41 to 17.54** between 1,200 and 3,600. Its generated-to-observed spread widened from **1.164 to 1.267**. V12's mean rank moved from **21.93 to 22.25** and its spread ratio narrowed from **1.239 to 1.224**. EMPF's worsening energy coincided with increasing rank and spread. [Diversity across all three groups](neuroko_v12_convergence_3600_fresh.json)
+
 We will also compare the v11 and v12 optimizers inside the 0.12.0 wheel at 3,600 updates. At the calibrated settings, the resolved recipes differ in name and optimizer family alone. Reuse the v12 trajectories and train same-wheel v11 on identical minibatches at fixed rates, first on all six pilot pairs and then on all 18 fresh pairs regardless of the pilot result. The primary outcome is their paired mean energy difference at 3,600 updates. [Two-GPU reproduction command](../README.md#check-whether-v12-closes-the-gap-by-3600-updates)
 
 On the first pilot pair in that optimizer comparison (seed 251, Screen1_1), v12 scored **1.15631** at 3,600 and same-wheel v11 scored **1.16868**. V12 also led at 1,200 and 2,400. The original 0.11.1 v11 scored **1.15568** at the matched rates and **1.13284** at its tuned settings on exactly these inputs. The identity of the v11 release changed the ordering on this pair. [Six paired trajectories and endpoint scores for all four targets](neuroko_v12_optimizer_3600_first_pair.json)
 
 A longer run follows all five configurations to 40,000 updates on Screen1_1, the first development group in the protocol, with seeds 22 and 251. V12 trailed tuned original v11 on this group at 3,600 on both pilot seeds. The primary outcome is mean energy at 40,000. A secondary outcome averages energy over updates 30,000–40,000 using the elapsed number of updates between measurements. Every fit replays the published checkpoints through 3,600 and checks the generator, critic and particle rates at every optimizer step. [Two-GPU command and checkpoint schedule](../README.md#follow-v12-and-the-four-original-controls-to-40000-updates)
+
+The first 40,000-update fit was v12 on seed 251. Energy was **1.14130 at 1,200**, **1.15631 at 3,600** and **1.14060 at 40,000**. The lowest of the 34 recorded checkpoints was 1.08720 at 8,400. The time-weighted mean across the final 10,000 updates was 1.10308, with a rebound from 1.09732 at 36,000 to 1.14060 at the endpoint. The fit took 57.6 minutes on the shared A6000. Its pilot scores and minibatch hashes reproduced exactly, and both optimizers verified all 40,000 updates. The other seed and the original controls are pending. [Long-run scores, target metrics, timings and paired hashes](neuroko_v12_convergence_40000.json)
+
+Effective covariance rank fell from 22.21 at 3,600 to 16.42 at 40,000. The observed rank averaged 18.23, and all four generated targets had lower rank than their observed counterparts at 40,000. Meanwhile, the generated-to-observed spread ratio increased from 1.299 to 1.454. The late samples occupied fewer effective directions while spanning a wider distribution. [Real-cell target ranks](neuroko_v12_tuned_empf_geometry.json) · [Generated target ranks and spread](neuroko_v12_convergence_40000.json)
+
+![V12 energy distance and effective covariance rank on Screen1_1, seed 251, with the final 10,000 updates shaded](neuroko_v12_convergence_40000_seed251.png)
 
 ## Six configurations on the same nine training pairs
 
@@ -926,6 +938,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study optimizer-smoothing --s
   --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-matched-smoothing-defaults" \
   --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
+
+At shared smoothing **0.0061** on the nine 1,200-update development pairs for seeds 22–24, v12 averaged **0.92850**, original v11 **0.94878**, and original EMPF **0.96044**. V12 won six of nine individual comparisons against each matched control. Matching smoothing improved EMPF from its native-default score of 0.99652. The independently tuned controls still led v12, averaging 0.92547 for v11 and 0.92240 for EMPF. Both optimizer objects in each matched formulation resolved to 0.0061. [Matched settings, paired inputs and individual scores](neuroko_v12_shared_optimizer_smoothing.json)
 
 ### Interpolating the particle prior coefficient
 
