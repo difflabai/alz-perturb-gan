@@ -1,7 +1,7 @@
 {
   "status": "partial",
   "expected_pairs": 18,
-  "completed_pairs": 5,
+  "completed_pairs": 8,
   "protocol": {
     "arms": {
       "v12": [
@@ -698,6 +698,156 @@
     },
     {
       "seed": 839,
+      "group": "Screen1_3",
+      "gpu": 0,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6534447658357521,
+            "spread_ratio": 1.2887722941158115,
+            "effective_rank": 22.822459739863607
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.7128751686546444,
+            "spread_ratio": 1.374237999780133,
+            "effective_rank": 22.758060000460333
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.7128299461343011,
+            "spread_ratio": 1.3740220742459395,
+            "effective_rank": 22.764223368122888
+          }
+        ],
+        "tuned_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6218501478951619,
+            "spread_ratio": 1.2081013792172968,
+            "effective_rank": 17.05680913661147
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6893654514073326,
+            "spread_ratio": 1.2980709213916048,
+            "effective_rank": 17.902427659242615
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.678531737358482,
+            "spread_ratio": 1.3186078806772648,
+            "effective_rank": 17.60358767953356
+          }
+        ],
+        "tuned_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.5968595561782131,
+            "spread_ratio": 1.205877431696726,
+            "effective_rank": 23.049161973862365
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6562861868381313,
+            "spread_ratio": 1.2580611934481083,
+            "effective_rank": 23.314392648424207
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.5663657385279126,
+            "spread_ratio": 1.2294863460974963,
+            "effective_rank": 21.629636748373144
+          }
+        ],
+        "matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.7420033497233285,
+            "spread_ratio": 1.3133628056617521,
+            "effective_rank": 10.356281612583038
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.7323975149697175,
+            "spread_ratio": 1.2486284350728747,
+            "effective_rank": 15.429065470080369
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6283621942996485,
+            "spread_ratio": 1.272089715411347,
+            "effective_rank": 16.301922238172057
+          }
+        ],
+        "matched_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.5710277607323364,
+            "spread_ratio": 1.2198369590035412,
+            "effective_rank": 23.08429975812211
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6447713060652411,
+            "spread_ratio": 1.2769244877191375,
+            "effective_rank": 22.795083118817406
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.5553580903083666,
+            "spread_ratio": 1.23526591941147,
+            "effective_rank": 20.9142189260652
+          }
+        ],
+        "native_matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6841080344342756,
+            "spread_ratio": 1.2506708535598157,
+            "effective_rank": 15.426395023142708
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.7234180807752322,
+            "spread_ratio": 1.2833692922372228,
+            "effective_rank": 16.807626649826847
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.706651687111592,
+            "spread_ratio": 1.29885170873119,
+            "effective_rank": 17.455233291989042
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initialization": "cd8ff571d460a5101595aaa3774996f0becf871670b4094327303d8d43bc510b",
+        "training_batches": [
+          "a48f8aad6407f34abaea242409f21c7a684d85e63430c13c75d0b2c8f44b2fb3",
+          "c0a3a5c86ab6733eb20c3082d3aaf6392ad0162a0ca512778198d6accb80264b",
+          "820dbff9d4c21450042fd5e6edc4f54c08755eb49f2f23a1a5e29536c4727115"
+        ]
+      },
+      "measured_empf_smoothing": {
+        "generator_and_particles": 0.0061,
+        "critic": 0.0061
+      },
+      "rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "verified_new_optimizer_steps": {
+        "generator_and_particles": 3600,
+        "critic": 3600
+      },
+      "new_fit_seconds": 773.5239673389588
+    },
+    {
+      "seed": 839,
       "group": "Screen1_4",
       "gpu": 1,
       "curves": {
@@ -845,6 +995,306 @@
         "critic": 3600
       },
       "new_fit_seconds": 416.4595964830369
+    },
+    {
+      "seed": 840,
+      "group": "Screen1_3",
+      "gpu": 1,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6334458270503409,
+            "spread_ratio": 1.2740101864234752,
+            "effective_rank": 22.31720965319346
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6612255197204497,
+            "spread_ratio": 1.3556799467025245,
+            "effective_rank": 22.60448437952566
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6610394906397272,
+            "spread_ratio": 1.3553390196647352,
+            "effective_rank": 22.61306484068106
+          }
+        ],
+        "tuned_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6293787405210067,
+            "spread_ratio": 1.21524483119437,
+            "effective_rank": 17.360636390795012
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6818397507603824,
+            "spread_ratio": 1.3142699034058336,
+            "effective_rank": 17.748929262741356
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.7349632809450202,
+            "spread_ratio": 1.333585727185506,
+            "effective_rank": 17.690035581026898
+          }
+        ],
+        "tuned_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.616216372897735,
+            "spread_ratio": 1.2202012454720466,
+            "effective_rank": 22.307780810137697
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.5677985063156976,
+            "spread_ratio": 1.2409705426366184,
+            "effective_rank": 22.201984030678663
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.62494315817613,
+            "spread_ratio": 1.2610109037056032,
+            "effective_rank": 21.450839161214333
+          }
+        ],
+        "matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.7545327580798962,
+            "spread_ratio": 1.2337040582981533,
+            "effective_rank": 9.998561248930937
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.674496842700653,
+            "spread_ratio": 1.2125622023568432,
+            "effective_rank": 15.022322784103608
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6363973300234385,
+            "spread_ratio": 1.2618664194788571,
+            "effective_rank": 17.763816768707247
+          }
+        ],
+        "matched_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6136207391152482,
+            "spread_ratio": 1.214663061651908,
+            "effective_rank": 22.7900970861668
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6215955428420503,
+            "spread_ratio": 1.2374402567169167,
+            "effective_rank": 22.266118109652712
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6339499546390734,
+            "spread_ratio": 1.2807796413486128,
+            "effective_rank": 20.632405623103846
+          }
+        ],
+        "native_matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6329195729233983,
+            "spread_ratio": 1.2406842227854011,
+            "effective_rank": 15.431737802931622
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6926490760433603,
+            "spread_ratio": 1.3054764134226773,
+            "effective_rank": 16.84635436756811
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.7269175305442386,
+            "spread_ratio": 1.3485885076764998,
+            "effective_rank": 18.16899853390965
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initialization": "93f1b759f4b43c9ca477581f345ee5daee71887202ee559951318d5b98603e06",
+        "training_batches": [
+          "ae94f88e128fa259ade7f7d3b3c869e77491764fe2e2e2e22ca5c400776f1aeb",
+          "622d2c48ef008466b0e4c6e2196872ee630713b6ec11dcc68eda5efc6842fd3f",
+          "0f97a7b09f10726bac90329f79f35fc878a3b284c59ad63feb17e33136ca2b61"
+        ]
+      },
+      "measured_empf_smoothing": {
+        "generator_and_particles": 0.0061,
+        "critic": 0.0061
+      },
+      "rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "verified_new_optimizer_steps": {
+        "generator_and_particles": 3600,
+        "critic": 3600
+      },
+      "new_fit_seconds": 446.2067606090568
+    },
+    {
+      "seed": 841,
+      "group": "Screen1_1",
+      "gpu": 1,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1213530106927219,
+            "spread_ratio": 1.274509816654072,
+            "effective_rank": 22.43402843069358
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.203835288860734,
+            "spread_ratio": 1.2857438098554679,
+            "effective_rank": 23.088673182115098
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.1327825226726158,
+            "spread_ratio": 1.2527918137625642,
+            "effective_rank": 21.949729870477082
+          }
+        ],
+        "tuned_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1328517837840018,
+            "spread_ratio": 1.2745168292264855,
+            "effective_rank": 15.827639216607428
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.1744905892545785,
+            "spread_ratio": 1.2727006179042573,
+            "effective_rank": 17.047912115740733
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.1440808080030265,
+            "spread_ratio": 1.3192213699045974,
+            "effective_rank": 17.69740139549017
+          }
+        ],
+        "tuned_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1128823810092514,
+            "spread_ratio": 1.1967094445081559,
+            "effective_rank": 22.479186585676416
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.164902003681866,
+            "spread_ratio": 1.2494101796255048,
+            "effective_rank": 21.11557036158923
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.156196273310708,
+            "spread_ratio": 1.255550258199116,
+            "effective_rank": 21.098498670759206
+          }
+        ],
+        "matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.26198716175824,
+            "spread_ratio": 1.2083803235183825,
+            "effective_rank": 9.642494120874872
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.1788666462830486,
+            "spread_ratio": 1.2647148996275615,
+            "effective_rank": 16.388591492349136
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.203665207443818,
+            "spread_ratio": 1.316634462493764,
+            "effective_rank": 16.200523514070614
+          }
+        ],
+        "matched_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.147750562703438,
+            "spread_ratio": 1.2153738901974775,
+            "effective_rank": 22.208249930695633
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.1969775818501982,
+            "spread_ratio": 1.2378630395699155,
+            "effective_rank": 20.860996213981736
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.155930394186078,
+            "spread_ratio": 1.2417163033168375,
+            "effective_rank": 19.56622287030155
+          }
+        ],
+        "native_matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.2022554275905564,
+            "spread_ratio": 1.2053511393664296,
+            "effective_rank": 14.70718918721411
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.292056681449566,
+            "spread_ratio": 1.2730759005199321,
+            "effective_rank": 17.047868770684
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.1991972201492689,
+            "spread_ratio": 1.3056136176455384,
+            "effective_rank": 16.833295027656547
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initialization": "2d9195f2a258a5e8d27c69777a114ab5deb0b6501e8ad6c8a3e7e24a501dc227",
+        "training_batches": [
+          "f8d1618200b3ceb636e1c3c5e4367453a89da487d4fbfd78ad6bacbba581c8aa",
+          "e8c0724bae4e8e966ee036d3a85c585894bd524a776350d64a0fcd5cfb08fc3b",
+          "4e8b6dd3e53c3c13f54e5c08351c430e0d0694b993d1567b0449f2d38172580a"
+        ]
+      },
+      "measured_empf_smoothing": {
+        "generator_and_particles": 0.0061,
+        "critic": 0.0061
+      },
+      "rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "verified_new_optimizer_steps": {
+        "generator_and_particles": 3600,
+        "critic": 3600
+      },
+      "new_fit_seconds": 445.4366024262272
     }
   ],
   "complete_seed_means": {
@@ -878,6 +1328,38 @@
         1.0379180711285338,
         0.9659372204401099,
         0.9892886483066822
+      ]
+    },
+    "839": {
+      "v12": [
+        0.9597116875736001,
+        0.9971558313958659,
+        0.9506670835774425
+      ],
+      "tuned_empf": [
+        0.94971187543361,
+        0.9816502580891279,
+        0.9769305892668102
+      ],
+      "tuned_v11": [
+        0.9497809890826943,
+        0.9909449841946429,
+        0.9193570740473366
+      ],
+      "matched_empf": [
+        1.0045804709251271,
+        1.0217555861237781,
+        0.9769227796872044
+      ],
+      "matched_v11": [
+        0.9450955506076418,
+        0.9571331921758602,
+        0.9247465127208236
+      ],
+      "native_matched_empf": [
+        1.0393555448950784,
+        0.9859788405107529,
+        0.9830189785828367
       ]
     }
   }
