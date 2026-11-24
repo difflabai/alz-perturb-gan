@@ -240,6 +240,8 @@ The rate-matched comparison also has a shared-prior check. At each rate setting,
 
 With the prior weight fixed to **0.02 in all three original releases**, v12 averaged **0.97744**, EMPF **1.00727** and v11 **0.94688**. V12 beat EMPF on six of nine training pairs and v11 on one. The advantage over original EMPF at this rate setting survives equalizing the prior coefficient. The complete five-arm comparison gave identical EMPF scores in 0.10.0 and 0.12.0 at this shared prior weight. [All five matched arms](neuroko_v12_matched_rates_shared_prior.json) [Equal-prior scores for the three original releases](neuroko_original_releases_shared_prior_002.json)
 
+At EMPF’s tuned generator, critic and particle rates of 0.020, 0.030 and 0.058 and latent noise 0.025, original v11 scored **0.93442**, v12 **0.96390** and original EMPF **0.96588**. The original and 0.12.0 EMPF runs reproduced one another on every pair. V12 won five of nine against each original release, with a larger mean loss to v11 on the remaining pairs. These comparisons retain each release’s native prior coefficient. [Scores, timing and configuration by release](neuroko_v12_empf_rates_original_releases.json)
+
 ## Prior penalty at latent noise 0.15
 
 At the release role rates, two individual changes lowered v12's mean energy on earlier training folds. Increasing latent noise to 0.15 moved the mean from 0.9782 to 0.9417. Increasing the native prior penalty weight from 0.02 to 0.1 at the original noise moved it to 0.9641. The follow-up combines those two changes at constant generator, critic and particle rates of 0.014, 0.021 and 0.0406. It tests whether the stronger penalty helps with the higher noise. A training qualification for the preceding rate-and-noise candidate gives its biological holdout priority.
@@ -471,6 +473,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --stage replicate-balanced-rele
   --output "$data/v12-balanced-particles"
 ```
 
+The original-release check at critic rate 0.0046 and prior weight 0.041 reversed the ranking against v11. V12 beat both controls from the 0.12.0 wheel. With the same noise, prior and rates, **original v11 scored 0.92547, v12 0.94752 and original EMPF 0.95963**. V12 beat original v11 on three of nine pairs and EMPF on five. This result closed the matched comparison before fresh seeds. [All five releases and formulations on identical inputs](neuroko_v12_balanced_matched_releases.json)
+
 ### Isolating the generator and particle learning rates
 
 The earlier generator-only and particle-only trials used noise 0.025 and the default v12 prior penalty. This comparison repeats a single-role search at noise 0.15, prior weight 0.1 and critic LR 0.021. The reference generator rate is 0.014 and the reference particle rate is 0.0406. Four alternatives bracket each rate by approximately a factor of √2. Two use generator rates 0.010 and 0.020 with particles fixed at 0.0406. Two use particle rates 0.0287 and 0.0574 with the generator fixed at 0.014.
@@ -514,6 +518,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study prior-target-spread --d
 ```
 
 Changing the target standard deviation to 0.89 reduced mean generated spread from 1.12523 to 1.11539. Mean energy rose from **0.94231 to 0.94883**. Five of nine pairs improved. The baseline energy rules out overall qualification under the recorded criterion. [Paired energies, spread and covariance dimensions](neuroko_v12_target_std_energies.json)
+
+With the shared prior target standard deviation of 0.89, the completed nine-pair matched comparison scored **0.94456 for v11**, **0.94883 for v12** and **0.95739 for EMPF** in the 0.12.0 wheel. V12 won three pairs against v11 and five against EMPF. [Matched comparison and decision](neuroko_v12_prior_target_screen.json)
 
 ### Diversity within and between learned particles
 
@@ -575,3 +581,44 @@ python paper_watch/scripts/neuroko_rate_noise.py --study generator-output-noise 
 ```
 
 Adding fixed output noise 0.35 during training raised v12 mean energy from **0.94231 to 0.96369**. 4 of the nine paired fits improved. This setting fell behind both tuned controls and stopped at the first development comparison. [Scores for all nine pairs and the selection rule](neuroko_v12_generator_output_noise_energy.json)
+
+### Replicating the lower critic rate and testing the interval above it
+
+Lowering only the critic rate from 0.021 to 0.0049 reduced mean energy on `Screen1_1` (1.19950 to 1.15433) and `Screen1_4` (1.06092 to 0.99719). On `Screen1_3`, energy rose from 0.56650 to 0.63398. Generated spread increased in all nine pairs. Its mean ratio to observed spread increased from 1.12523 to 1.20162, and mean effective covariance dimensions rose from 17.49 to 22.24. Widening latent noise from 0.15 to 0.25 at the calibrated rate increased the spread ratio again to 1.26545. [Per-pair scores, spread, covariance dimensions and matched data hashes](neuroko_v12_calibrated_critic_spread.json)
+
+The critic-rate study first repeats the exact 0.0049 v12 configuration on training seeds 251–253 and compares it with the 0.021 v12 baseline and both tuned noise-0.25 controls. On seeds 22–24 it tests the three interior quartiles of the interval from 0.0049 to 0.021 on a logarithmic scale, rounded to four decimal places. The rates are **0.0071, 0.0101 and 0.0146**. Only critic LR varies. Each candidate uses nine 1,200-update runs with generator LR 0.014, particle LR 0.0406, prior weight 0.1 and latent noise 0.15. The candidate with the lowest nine-pair mean must beat both endpoints and both tuned controls before further testing. Later qualification compares identical settings and tuned settings, including the original releases, on both development cohorts and six fresh training seeds 530–535. A qualifying candidate goes to the biological holdout on seeds 536–551.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study critic-interval --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-critic-interval" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior"
+```
+
+A separate experiment keeps the 0.0049 critic rate and tests **latent noise 0.09**. This is one multiplicative step below 0.15, using the same factor as the increase from 0.15 to 0.25. It tests whether reducing noise helps with the excess generated spread. The first nine v12 runs must beat the 0.15 reference and both tuned controls. The subsequent stages reserve fresh training seeds 552–557 and biological holdout seeds 558–573. Run the same command with `--study original-v11-critic-narrow-noise` and `--output "$data/v12-original-critic-narrow-noise"`.
+
+### Relativistic loss weight and conditional mean error
+
+The final bias in the benchmark generator translates all 30 output coordinates. For each of 64 training updates at critic rate 0.0049 we compared the gradient on this bias with the generated minibatch mean minus the full training mean for that condition. A positive cosine means a descent step on the bias would move the generated mean toward the training mean. The diagnostic uses the same trajectory trained at relativistic weight 2 to measure how the direction would change at weights 0.5, 1, 2 and 4. Each target contributes equally, and the control condition is excluded from the score.
+
+We first tested the instrumentation on seed 22, `Screen1_3`, then used the same four positive weights on all nine training pairs. The nine instrumented runs reproduced every original per-step critic movement and final parameter hash. Direct first-update evaluations of each alternative weight agreed with the gradients calculated from the derivative with respect to the loss weight. The largest relative difference across 27 direct checks was 0.000000154.
+
+| Relativistic weight | Mean cosine with training centroid error |
+| ---: | ---: |
+| 0.5 | 0.62514 |
+| 1 | 0.54623 |
+| 2 | 0.40701 |
+| 4 | 0.25166 |
+
+Weight 0.5 improved the alignment versus weight 2 on all nine pairs. This statistic measures a single parameter group along the original trajectory. The 1,200-update experiment measures the change in energy after training the whole model at the selected weight. V12 and v11 share the new loss weight. EMPF uses its native objective with the same rates, network, training inputs, noise and prior coefficient. The first nine comparisons use the existing v12 reference and the two tuned controls. Further qualification includes both development cohorts, six fresh training seeds 574–579 and, on qualification, biological holdout seeds 580–595. [Nine paired gradient measurements](neuroko_v12_centroid_gradient.json)
+
+```bash
+PYTHONPATH="$data/wheels/0.12.0:." python paper_watch/scripts/neuroko_critic_motion.py \
+  --data "$data" --window-cells 10000 --reference "$data/v12-rate-noise" --v12-critic-lr 0.0049 \
+  --output "$data/v12-original-critic-rate-check"
+PYTHONPATH="$data/wheels/0.12.0:." python paper_watch/scripts/neuroko_centroid_gradient.py \
+  --data "$data" --window-cells 10000 --reference "$data/v12-original-critic-rate-check" \
+  --output "$data/v12-centroid-gradient"
+python paper_watch/scripts/neuroko_rate_noise.py --study critic-centroid-weight --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-critic-centroid-weight" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior" --centroid-result "$data/v12-centroid-gradient/result.json"
+```

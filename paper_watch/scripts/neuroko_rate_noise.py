@@ -22,8 +22,11 @@ MATCHED_PRIOR = dict(MATCHED_RATE_TRIAL, name="matched-rates-prior100", prior_re
 MOTION_STUDIES = ("critic-motion", "matched-critic-motion", "balanced-particle-prior")
 ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
 ROLE_OUTER_SEEDS = list(range(396, 412))
-PRELIMINARY_STUDIES = ("original-v11-critic", "original-v11-critic-wide-noise", "generator-output-noise")
-TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", *PRELIMINARY_STUDIES, *MOTION_STUDIES)
+CRITIC_NOISE_STUDIES = ("original-v11-critic-wide-noise", "original-v11-critic-narrow-noise")
+CENTROID_WEIGHTS = (.5, 1., 2., 4.)
+PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise", "critic-centroid-weight")
+TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "critic-interval",
+                      *PRELIMINARY_STUDIES, *MOTION_STUDIES)
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
     for name in RATE_NAMES for sigma in (75, 150)
@@ -284,6 +287,45 @@ def critic_references(args):
     return [(ref["name"] + "-" + arm[1], arm) for ref in (lower, middle, balanced) for arm in paired(ref)]
 
 
+def critic_interval(args, calibrated):
+    low = calibrated["lr"] * calibrated["d_lr_mult"]
+    high = NOISY_PRIOR["lr"] * NOISY_PRIOR["d_lr_mult"]
+    trials = []
+    for fraction in (.5, .25, .75):
+        rate = round(low * (high / low) ** fraction, 4)
+        trials.append(dict(calibrated, name=f"interval-critic-{round(rate * 10000)}", d_lr_mult=rate / calibrated["lr"]))
+    references = [paired(calibrated)[0], paired(NOISY_PRIOR)[0], *paired(WIDE_NOISY_PRIOR)[1:]]
+    plan = dict(trials=trials, references=references, groups=GROUPS, seeds=REPLICATION_SEEDS,
+                second=[251, 252, 253], fresh=list(range(530, 536)), outer=list(range(536, 552)),
+                rule="Check the calibrated v12 on the second development cohort. On the first cohort test the "
+                     "three interior log-quartiles between the calibrated and release critic rates. "
+                     "Select the lowest nine-pair v12 mean, breaking ties by name. Advance only if it beats "
+                     "both endpoints and both independently tuned wide-noise controls. Then require the same "
+                     "winner to beat every matched and established reference on both development cohorts and "
+                     "on fresh training seeds including the original releases before scoring the biological holdout.")
+    write_frozen(args.output / "critic_interval.json", plan)
+    if args.stage == "search":
+        local = copy(args)
+        local.output = args.second_screen or args.output
+        second = evaluate(local, references, plan["second"])
+        write_frozen(args.output / "calibrated_second_cohort.json",
+                     dict(scores=second, means={k: mean(v) for k, v in second.items()}))
+        local.output = args.shared_screen or args.output
+        candidates = [paired(trial)[0] for trial in trials]
+        first = evaluate(local, [*candidates, *references], plan["seeds"])
+        means = {k: mean(v) for k, v in first.items()}
+        winner = min(candidates, key=lambda arm: (means[key(arm)], key(arm)))
+        passes = all(means[key(winner)] < means[key(ref)] for ref in references)
+        write_frozen(args.output / "critic_shortlist.json", dict(scores=first, means=means, trial=winner[2], passes=passes))
+    selected = json.loads((args.output / "critic_shortlist.json").read_text())
+    if selected["passes"]:
+        return selected["trial"], plan
+    if args.stage != "search":
+        raise ValueError("No interior critic rate passed the first development cohort")
+    write_frozen(args.output / "selection.json", dict(shortlist=selected, advances=False, winner=None))
+    return None, plan
+
+
 def spread_target(path):
     measurement = json.loads(path.read_text())
     name = key([RELEASE, V12, NOISY_PRIOR])
@@ -373,6 +415,37 @@ def calibrated_output_noise(path):
     return dict(NOISY_PRIOR, name=f"noise150-prior100-output{round(sigma * 100)}", output_noise_std=sigma), variance
 
 
+def centroid_weight_summary(cells):
+    scores = {str(w): mean(c["mean_cosine"][str(w)] for c in cells) for w in CENTROID_WEIGHTS}
+    best = min(CENTROID_WEIGHTS, key=lambda w: (-scores[str(w)], w != 2., w))
+    improved = sum(c["mean_cosine"][str(best)] > c["mean_cosine"]["2.0"] for c in cells)
+    return dict(scores=scores, best_weight=best, pairs_improved=improved,
+                selected_weight=best if best != 2. and improved >= 6 else None)
+
+
+def centroid_weight_trial(path, baseline):
+    result = json.loads(path.read_text())
+    plan, cells = result["protocol"], result["cells"]
+    if (plan["weights"] != list(CENTROID_WEIGHTS) or plan["steps"] != 64
+            or plan["rates"] != {"generator": baseline["lr"], "critic": baseline["lr"] * baseline["d_lr_mult"],
+                                 "particles": baseline["lr"] * baseline["prior_lr_mult"]}
+            or (plan["prior_sigma"], plan["prior_reg"]) != (baseline["prior_sigma"], baseline["prior_reg"])
+            or [(c["seed"], c["group"]) for c in cells] != [(s, g) for s in REPLICATION_SEEDS for g in GROUPS]):
+        raise ValueError("The gradient measurements must cover the calibrated configuration and nine training pairs")
+    for c in cells:
+        errors = c["first_step_relative_errors"]
+        if (set(errors) != {"0.5", "1.0", "4.0"} or not all(0 <= e < 2e-4 for e in errors.values())
+                or not all(-1 <= c["mean_cosine"][str(w)] <= 1 for w in CENTROID_WEIGHTS)):
+            raise ValueError("Invalid direct gradient check or centroid alignment")
+    summary = centroid_weight_summary(cells)
+    if any(result[k] != v for k, v in summary.items()):
+        raise ValueError("The selected loss weight does not reproduce from the paired gradients")
+    selected = summary["selected_weight"]
+    if selected is None:
+        return None
+    return dict(baseline, name=baseline["name"] + f"-rel{round(selected * 10)}", rhbi_relativistic_weight=selected)
+
+
 def compare_prior_weight(args):
     screen_only = []
     pinned = []
@@ -440,7 +513,7 @@ def compare_prior_weight(args):
                 "On seeds 22–24 first require a lower v12 mean than baseline v12 and both noise-0.25 controls. "
                 "If it passes, compare against all matched and previously tuned controls on 22–24 and 251–253. "
                 "Reserve fresh seeds 480–485 including original releases, then biological holdout seeds 486–501.")
-    elif args.study in ("original-v11-critic", "original-v11-critic-wide-noise"):
+    elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "critic-centroid-weight"):
         baseline = NOISY_PRIOR
         trial, ratios = original_v11_critic_rate(args.original_v11_motion)
         write_frozen(args.output / "original_critic_calibration.json",
@@ -457,10 +530,32 @@ def compare_prior_weight(args):
                 "a lower mean than all three, fit the matched controls and test all established arms on "
                 "22–24 and 251–253 separately. Fresh seeds 458–463 include the two original releases. "
                 "Reserve biological holdout seeds 464–479 for a passing candidate.")
-        if args.study == "original-v11-critic-wide-noise":
+        if args.study == "critic-centroid-weight":
+            baseline = trial
+            trial = centroid_weight_trial(args.centroid_result, baseline)
+            if trial is None:
+                write_frozen(args.output / "selection.json", dict(advances=False, winner=None, reason="gradient comparison"))
+                return
+            references.append(("calibrated-weight2", paired(baseline)[0]))
+            independent_seeds = list(range(574, 580))
+            outer_seeds = list(range(580, 596))
+            rule = ("At critic rate 0.0049 give Unified v12 and v11 the positive relativistic loss weight "
+                    "selected by the training-centroid gradient probe. Keep all formulation-independent settings "
+                    "identical for EMPF. V12 must first beat the weight-2 baseline and both tuned noise-0.25 "
+                    "controls. Check all matched and established arms on both development cohorts, then on "
+                    "fresh seeds 574–579 with the original releases before biological holdout seeds 580–595.")
+        elif args.study == "critic-interval":
+            baseline = trial
+            trial, interval = critic_interval(args, baseline)
+            if trial is None:
+                return
+            references.append(("original-calibrated-v12", paired(baseline)[0]))
+            independent_seeds, outer_seeds, rule = interval["fresh"], interval["outer"], interval["rule"]
+        elif args.study in CRITIC_NOISE_STUDIES:
             baseline = trial
             references.append(("same-critic-noise150", [RELEASE, V12, baseline]))
-            trial = dict(baseline, name=baseline["name"] + "-sigma250", prior_sigma=WIDE_NOISY_PRIOR["prior_sigma"])
+            wide_sigma = WIDE_NOISY_PRIOR["prior_sigma"]
+            trial = dict(baseline, name=baseline["name"] + "-sigma250", prior_sigma=wide_sigma)
             independent_seeds = list(range(502, 508))
             outer_seeds = list(range(508, 524))
             rule = ("At the original-v11 calibrated fixed critic rate change latent noise from 0.15 to 0.25. "
@@ -469,6 +564,20 @@ def compare_prior_weight(args):
                     "tuned noise-0.25 controls at the release rates. Then compare all matched and established "
                     "arms separately on 22–24 and 251–253. If it passes, replicate on seeds 502–507 including "
                     "both original releases before assessing biological holdout seeds 508–523.")
+            if args.study == "original-v11-critic-narrow-noise":
+                references.append(("same-critic-noise250", paired(trial)[0]))
+                sigma = round(baseline["prior_sigma"] ** 2 / wide_sigma, 3)
+                trial = dict(baseline, name=baseline["name"] + f"-sigma{round(sigma * 1000):03d}", prior_sigma=sigma)
+                independent_seeds = list(range(552, 558))
+                outer_seeds = list(range(558, 574))
+                rule = ("At the calibrated critic rate test a latent noise width one multiplicative step below "
+                        "0.15, using the preceding ratio from 0.15 to 0.25. First beat the nine-pair 0.15 v12 "
+                        "and tuned wide-noise controls. Then compare all matched and established arms, including "
+                        "original tuned releases, on both development cohorts. Qualify on fresh training seeds "
+                        "552–557 with the original releases before the biological holdout on 558–573.")
+        if args.study in ("original-v11-critic-narrow-noise", "critic-interval", "critic-centroid-weight"):
+            for arm, release in zip(paired(WIDE_NOISY_PRIOR)[1:], ("0.11.1", "0.10.0"), strict=True):
+                references.append(("original-tuned-" + arm[1], [release, *arm[1:]]))
     elif args.study == "prior-target-spread":
         baseline = NOISY_PRIOR
         trial, spread = spread_target(args.spread_result)
@@ -663,6 +772,7 @@ def main():
                                             "prior-interaction", *TWO_COHORT_STUDIES),
                         default="rates")
     parser.add_argument("--particle-spread-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_particle_spread.json")
+    parser.add_argument("--centroid-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_centroid_gradient.json")
     parser.add_argument("--original-v11-motion", type=Path, default=ROOT / "paper_watch/notes/neuroko_original_v11_critic_motion.json")
     parser.add_argument("--spread-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_prior_weight_geometry.json")
     parser.add_argument("--shared-screen", type=Path,

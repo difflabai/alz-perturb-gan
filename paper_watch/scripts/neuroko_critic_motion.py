@@ -60,7 +60,8 @@ def particle_gradients(model):
         trainer.loss.g_loss = original
 
 
-def measure(x, labels, probes, seed, recipe, device, critic_lr, prior_weight, *, monitor=True, measure_gradients=False):
+def measure(x, labels, probes, seed, recipe, device, critic_lr, prior_weight, *, monitor=True, measure_gradients=False,
+            steps=STEPS, fit_context=None):
     import torch
     from paper_watch.alztest.harness import ConditionalPGAN, TrainingSettings
     from paper_watch.alztest.neuroko_duration import optimizer_rates
@@ -75,7 +76,7 @@ def measure(x, labels, probes, seed, recipe, device, critic_lr, prior_weight, *,
         torch.default_generator.manual_seed(seed)
         model = ConditionalPGAN(x.shape[1], len(probes), seed=seed, recipe_name=recipe, device=device,
                                 learning_rate=NOISY_PRIOR["lr"], settings=settings)
-    verify_fixed_schedule(model.trainer.recipe, STEPS)
+    verify_fixed_schedule(model.trainer.recipe, steps)
     rates = optimizer_rates(model)
     if rates != {"generator": .014, "critic": critic_lr, "particles": .0406}:
         raise ValueError(f"Unexpected initial rates {rates}")
@@ -128,8 +129,11 @@ def measure(x, labels, probes, seed, recipe, device, critic_lr, prior_weight, *,
             preceding = current
 
     observation = particle_gradients(model) if measure_gradients else nullcontext()
-    with observation as read_gradients:
-        model.fit(x, labels, steps=STEPS, after_step=after, on_batch=record)
+    with ExitStack() as stack:
+        read_gradients = stack.enter_context(observation)
+        if fit_context is not None:
+            stack.enter_context(fit_context(model))
+        model.fit(x, labels, steps=steps, after_step=after, on_batch=record)
     row = dict(initial_parameters_sha256=initial, final_parameters_sha256=weights_hash(),
                training_batches_sha256=batches.hexdigest(), rates=rates, steps=model.trainer.completed_steps,
                centered_rms=centered_rms, raw_rms=raw_rms)

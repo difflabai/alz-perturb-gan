@@ -81,8 +81,10 @@ def test_calibrated_output_noise_reaches_all_matched_arms(monkeypatch):
             assert (arm[2]["output_noise_std"], arm[2]["prior_sigma"], arm[2]["prior_reg"]) == (.35, .15, .1)
 
 
-@pytest.mark.parametrize("study_name", ["original-v11-critic", "original-v11-critic-wide-noise"])
-def test_original_critic_probe_gates_expensive_controls_on_training_energy(tmp_path, monkeypatch, study_name):
+@pytest.mark.parametrize("study_name,sigma", [("original-v11-critic", .15),
+                                              ("original-v11-critic-wide-noise", .25),
+                                              ("original-v11-critic-narrow-noise", .09)])
+def test_original_critic_probe_gates_expensive_controls_on_training_energy(tmp_path, monkeypatch, study_name, sigma):
     import json
     from types import SimpleNamespace
     root = Path(__file__).resolve().parents[1]
@@ -100,9 +102,8 @@ def test_original_critic_probe_gates_expensive_controls_on_training_energy(tmp_p
 
     def screen(config, arms, seeds):
         assert [a[1] for a in arms] == ["unified_v12", "unified_v12", "unified_v11", "empf"]
-        wide = study_name == "original-v11-critic-wide-noise"
-        assert [a[2]["prior_sigma"] for a in arms] == [.25 if wide else .15, .15, .25, .25]
-        expected_critics = [.0049, .0049 if wide else .021, .021, .021]
+        assert [a[2]["prior_sigma"] for a in arms] == [sigma, .15, .25, .25]
+        expected_critics = [.0049, .021 if sigma == .15 else .0049, .021, .021]
         assert [a[2]["lr"] * a[2]["d_lr_mult"] for a in arms] == pytest.approx(expected_critics)
         return {study.key(arm): [1.0 - i / 100] * 9 for i, arm in enumerate(arms)}
 
@@ -132,6 +133,46 @@ def test_critic_rate_interpolation_checks_the_same_v11_reference(tmp_path, monke
         calibrated_critic(baseline, incompatible)
 
 
+@pytest.mark.parametrize("passes", [True, False])
+def test_critic_interval_gates_on_endpoints_and_tuned_controls(tmp_path, monkeypatch, passes):
+    from types import SimpleNamespace
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_rate_noise as study
+
+    calibrated = dict(study.NOISY_PRIOR, name="original-v11-critic-49", d_lr_mult=.0049/.014)
+    args = SimpleNamespace(output=tmp_path, stage="search", second_screen=tmp_path / "second",
+                           shared_screen=tmp_path / "first")
+    observed = []
+
+    def evaluate(config, arms, seeds):
+        observed.append((config.output, seeds))
+        if seeds == [251, 252, 253]:
+            assert [arm[1] for arm in arms] == ["unified_v12", "unified_v12", "unified_v11", "empf"]
+            assert [arm[2]["prior_sigma"] for arm in arms] == [.15, .15, .25, .25]
+            values = [1.] * 4
+        else:
+            rates = [arm[2]["lr"] * arm[2]["d_lr_mult"] for arm in arms[:3]]
+            assert rates == pytest.approx([.0101, .0071, .0146])
+            assert all(dict(t, name=calibrated["name"], d_lr_mult=calibrated["d_lr_mult"]) == calibrated
+                       for _, _, t in arms[:3])
+            values = [1., .90, .95, .94, .96, .93, .92 if passes else .89]
+        return {study.key(arm): [v] * 9 for arm, v in zip(arms, values, strict=True)}
+
+    monkeypatch.setattr(study, "evaluate", evaluate)
+    chosen, plan = study.critic_interval(args, calibrated)
+    assert observed == [(args.second_screen, plan["second"]), (args.shared_screen, plan["seeds"])]
+    assert (chosen and chosen["name"]) == ("interval-critic-71" if passes else None)
+    assert (args.output / "selection.json").exists() == (not passes)
+    args.stage = "confirm"
+    if passes:
+        assert study.critic_interval(args, calibrated) == (chosen, plan)
+    else:
+        with pytest.raises(ValueError, match="No interior critic rate"):
+            study.critic_interval(args, calibrated)
+    assert len(observed) == 2
+
+
 def test_prior_weight_uses_the_paired_particle_gradient_change(tmp_path, monkeypatch):
     import json
 
@@ -150,6 +191,42 @@ def test_prior_weight_uses_the_paired_particle_gradient_change(tmp_path, monkeyp
     partial.write_text(json.dumps(bad))
     with pytest.raises(ValueError, match="Incomplete paired particle gradients"):
         balanced_prior(partial, trial)
+
+
+def test_centroid_probe_averages_targets_and_requires_paired_support(tmp_path, monkeypatch):
+    import json
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    from neuroko_centroid_gradient import score_trace
+    from neuroko_rate_noise import (CENTROID_WEIGHTS, GROUPS, NOISY_PRIOR, REPLICATION_SEEDS,
+                                   centroid_weight_summary, centroid_weight_trial, paired)
+
+    trace = [{"condition": label, "cosines": {str(w): float(label == 1) for w in CENTROID_WEIGHTS}}
+             for label in (0, 1, 1, 2, 3, 4)]
+    assert all(score == .25 for score in score_trace(trace).values())
+    baseline = dict(NOISY_PRIOR, name="original-v11-critic-49", d_lr_mult=.0049/.014)
+    plan = dict(weights=list(CENTROID_WEIGHTS), steps=64, rates=dict(generator=.014, critic=.0049, particles=.0406),
+                prior_sigma=.15, prior_reg=.1)
+    cells = [dict(seed=s, group=g, mean_cosine={str(w): 0. for w in CENTROID_WEIGHTS},
+                  first_step_relative_errors={"0.5": 0., "1.0": 0., "4.0": 0.})
+             for s in REPLICATION_SEEDS for g in GROUPS]
+    assert centroid_weight_summary(cells)["best_weight"] == 2.
+    for c in cells[:5]:
+        c["mean_cosine"]["0.5"] = .5
+    assert centroid_weight_summary(cells)["selected_weight"] is None
+    cells[5]["mean_cosine"]["0.5"] = .5
+    result = dict(protocol=plan, cells=cells, **centroid_weight_summary(cells))
+    path = tmp_path / "gradient.json"
+    path.write_text(json.dumps(result))
+    trial = centroid_weight_trial(path, baseline)
+    v12, v11, empf = paired(trial)
+    assert v12[2]["rhbi_relativistic_weight"] == v11[2]["rhbi_relativistic_weight"] == .5
+    assert "rhbi_relativistic_weight" not in empf[2]
+    assert all(a[2]["lr"] * a[2]["d_lr_mult"] == .0049 for a in (v12, v11, empf))
+    cells[0]["first_step_relative_errors"]["0.5"] = .2
+    path.write_text(json.dumps(result))
+    with pytest.raises(ValueError, match="direct gradient check"):
+        centroid_weight_trial(path, baseline)
 
 
 @pytest.mark.parametrize("wins", (True, False))

@@ -1,0 +1,2097 @@
+{
+  "protocol": {
+    "arms": [
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "empf-tuned",
+          "lr": 0.02,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "lr": 0.02,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "name": "at-tuned-empf-rates",
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.025
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "lr": 0.02,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "name": "at-tuned-empf-rates",
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.025
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "lr": 0.02,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "name": "at-tuned-empf-rates",
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.025
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "empf-tuned",
+          "lr": 0.02,
+          "d_lr_mult": 1.5,
+          "prior_lr_mult": 2.9
+        }
+      ]
+    ],
+    "seeds": [
+      22,
+      23,
+      24
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "metric": "Mean four-target energy after 1200 fixed-rate updates on the original nine training pairs at this rate setting. This release check does not select a candidate."
+  },
+  "scores": {
+    "0.10.0/empf/empf-tuned": [
+      1.169102290242516,
+      0.6771855243785505,
+      1.0395135064196268,
+      1.179315984257672,
+      0.6896813070881846,
+      1.0224795026570435,
+      1.1935871811228234,
+      0.5729527500692384,
+      1.1490780535893907
+    ],
+    "0.11.1/unified_v11/at-tuned-empf-rates": [
+      1.2301461367817237,
+      0.6351895450684959,
+      0.9926285528274754,
+      1.1640589740320646,
+      0.6012756482108934,
+      0.949288833481954,
+      1.1553793016199831,
+      0.6031025555412777,
+      1.078695268810615
+    ],
+    "0.12.0/unified_v12/at-tuned-empf-rates": [
+      1.1945092174686864,
+      0.575524063473452,
+      1.0361002841747315,
+      1.2809475200651377,
+      0.594267413647861,
+      1.1514396545735763,
+      1.1991660285414723,
+      0.5645207040076168,
+      1.078665053943881
+    ],
+    "0.12.0/unified_v11/at-tuned-empf-rates": [
+      1.1566979493447693,
+      0.581871757890873,
+      1.0377435963653587,
+      1.2676086511446754,
+      0.6098577169654038,
+      1.073683144724194,
+      1.2294827637092232,
+      0.6097705312737873,
+      1.0112617198606773
+    ],
+    "0.12.0/empf/empf-tuned": [
+      1.169102290242516,
+      0.6771855243785505,
+      1.0395135064196268,
+      1.179315984257672,
+      0.6896813070881846,
+      1.0224795026570435,
+      1.1935871811228234,
+      0.5729527500692384,
+      1.1490780535893907
+    ]
+  },
+  "summaries": {
+    "0.10.0/empf/empf-tuned": {
+      "energy": 0.9658773444250051,
+      "v12_minus_arm": -0.00197290665873679,
+      "v12_pairs_won": 5
+    },
+    "0.11.1/unified_v11/at-tuned-empf-rates": {
+      "energy": 0.9344183129304982,
+      "v12_minus_arm": 0.029486124835770216,
+      "v12_pairs_won": 5
+    },
+    "0.12.0/unified_v12/at-tuned-empf-rates": {
+      "energy": 0.9639044377662683,
+      "v12_minus_arm": 0.0,
+      "v12_pairs_won": 0
+    },
+    "0.12.0/unified_v11/at-tuned-empf-rates": {
+      "energy": 0.9531086479198847,
+      "v12_minus_arm": 0.010795789846383666,
+      "v12_pairs_won": 5
+    },
+    "0.12.0/empf/empf-tuned": {
+      "energy": 0.9658773444250051,
+      "v12_minus_arm": -0.00197290665873679,
+      "v12_pairs_won": 5
+    }
+  },
+  "pairs": [
+    {
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96",
+      "visible_devices": "0",
+      "seed": 22,
+      "group": "Screen1_1",
+      "arms": {
+        "0.10.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.1707748196963443,
+              "shift_cosine": 0.4381470615138005,
+              "spread_ratio": 1.2231320505653505
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1447366431062536,
+              "shift_cosine": 0.0010412657468667056,
+              "spread_ratio": 1.28753306629531
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1783765991846922,
+              "shift_cosine": 0.08101902855027547,
+              "spread_ratio": 1.2540092464915131
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1825210989827744,
+              "shift_cosine": -0.10585616809189864,
+              "spread_ratio": 1.2470826140622717
+            }
+          },
+          "means": {
+            "energy_distance": 1.169102290242516,
+            "shift_cosine": 0.10358779692976101,
+            "spread_ratio": 1.2529392443536114
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 298.22449294896796
+        },
+        "0.11.1/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2145863318983876,
+              "shift_cosine": -0.25178552181162084,
+              "spread_ratio": 1.1694388753867127
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1895038757868663,
+              "shift_cosine": 0.15865275459482292,
+              "spread_ratio": 1.204858212717467
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.2620569665709311,
+              "shift_cosine": -0.12974419604806717,
+              "spread_ratio": 1.2165229441196073
+            },
+            "MAMSTR": {
+              "energy_distance": 1.2544373728707097,
+              "shift_cosine": -0.28052449014805675,
+              "spread_ratio": 1.1755525584455735
+            }
+          },
+          "means": {
+            "energy_distance": 1.2301461367817237,
+            "shift_cosine": -0.12585036335323047,
+            "spread_ratio": 1.19159314766734
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 250.36599365388975
+        },
+        "0.12.0/unified_v12/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.1578113358831477,
+              "shift_cosine": -0.4054807405495573,
+              "spread_ratio": 1.1063023306171378
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1431231260001278,
+              "shift_cosine": -0.22987661092811426,
+              "spread_ratio": 1.1763501227235857
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.312894893932171,
+              "shift_cosine": -0.2782459096981068,
+              "spread_ratio": 1.195359943892543
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1642075140592993,
+              "shift_cosine": 0.044421563150446576,
+              "spread_ratio": 1.2083332026568252
+            }
+          },
+          "means": {
+            "energy_distance": 1.1945092174686864,
+            "shift_cosine": -0.21729542450633293,
+            "spread_ratio": 1.171586399972523
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 160.48453290807083
+        },
+        "0.12.0/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.229748898338749,
+              "shift_cosine": -0.135320543467621,
+              "spread_ratio": 1.1809221673135153
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0126545209292477,
+              "shift_cosine": 0.08994589792779252,
+              "spread_ratio": 1.242762458458603
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1861110758132947,
+              "shift_cosine": 0.0880626604885513,
+              "spread_ratio": 1.2211779994818106
+            },
+            "MAMSTR": {
+              "energy_distance": 1.198277302297786,
+              "shift_cosine": -0.033663778894014486,
+              "spread_ratio": 1.2176043288929141
+            }
+          },
+          "means": {
+            "energy_distance": 1.1566979493447693,
+            "shift_cosine": 0.00225605901367708,
+            "spread_ratio": 1.2156167385367107
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 207.97688727802597
+        },
+        "0.12.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.1707748196963443,
+              "shift_cosine": 0.4381470615138005,
+              "spread_ratio": 1.2231320505653505
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1447366431062536,
+              "shift_cosine": 0.0010412657468667056,
+              "spread_ratio": 1.28753306629531
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1783765991846922,
+              "shift_cosine": 0.08101902855027547,
+              "spread_ratio": 1.2540092464915131
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1825210989827744,
+              "shift_cosine": -0.10585616809189864,
+              "spread_ratio": 1.2470826140622717
+            }
+          },
+          "means": {
+            "energy_distance": 1.169102290242516,
+            "shift_cosine": 0.10358779692976101,
+            "spread_ratio": 1.2529392443536114
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 309.99805509485304
+        }
+      }
+    },
+    {
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "training_batches_sha256": "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4",
+      "visible_devices": "1",
+      "seed": 22,
+      "group": "Screen1_3",
+      "arms": {
+        "0.10.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.7443439896525232,
+              "shift_cosine": -0.3021864517835632,
+              "spread_ratio": 1.2453130983019336
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.6366741131433189,
+              "shift_cosine": -0.2942633453713461,
+              "spread_ratio": 1.2299480225098225
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6497950860967068,
+              "shift_cosine": -0.3309863264418481,
+              "spread_ratio": 1.2347837685421799
+            },
+            "MAMSTR": {
+              "energy_distance": 0.6779289086216531,
+              "shift_cosine": -0.2257838285753785,
+              "spread_ratio": 1.2048352256855577
+            }
+          },
+          "means": {
+            "energy_distance": 0.6771855243785505,
+            "shift_cosine": -0.28830498804303395,
+            "spread_ratio": 1.2287200287598734
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 111.38224431499839
+        },
+        "0.11.1/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.6338136173398956,
+              "shift_cosine": 0.11607333955502339,
+              "spread_ratio": 1.1999359282302973
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5919205167427029,
+              "shift_cosine": -0.22729900034223474,
+              "spread_ratio": 1.1943032151405852
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.7295692245446395,
+              "shift_cosine": -0.023508298181083423,
+              "spread_ratio": 1.2318509387853727
+            },
+            "MAMSTR": {
+              "energy_distance": 0.5854548216467457,
+              "shift_cosine": -0.37791480104542774,
+              "spread_ratio": 1.1398402648336736
+            }
+          },
+          "means": {
+            "energy_distance": 0.6351895450684959,
+            "shift_cosine": -0.12816219000343063,
+            "spread_ratio": 1.1914825867474823
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 89.7162908159662
+        },
+        "0.12.0/unified_v12/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.5855285380409727,
+              "shift_cosine": -0.09840210077812199,
+              "spread_ratio": 1.1783828726217496
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5472957672427468,
+              "shift_cosine": 0.0007311822425957834,
+              "spread_ratio": 1.2195209019760356
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6141968317715643,
+              "shift_cosine": 0.015933091937613785,
+              "spread_ratio": 1.2252333040604741
+            },
+            "MAMSTR": {
+              "energy_distance": 0.5550751168385242,
+              "shift_cosine": -0.24990670364566883,
+              "spread_ratio": 1.156996301079763
+            }
+          },
+          "means": {
+            "energy_distance": 0.575524063473452,
+            "shift_cosine": -0.08291113256089531,
+            "spread_ratio": 1.1950333449345056
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 91.82456197100691
+        },
+        "0.12.0/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.6375539135043526,
+              "shift_cosine": -0.21331354945332037,
+              "spread_ratio": 1.2473951563335437
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.505604019557758,
+              "shift_cosine": 0.2381167912043656,
+              "spread_ratio": 1.2151946745061668
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6164618262918182,
+              "shift_cosine": 0.1096049284719576,
+              "spread_ratio": 1.2113204398774853
+            },
+            "MAMSTR": {
+              "energy_distance": 0.567867272209563,
+              "shift_cosine": -0.09425256513009635,
+              "spread_ratio": 1.1707938934040596
+            }
+          },
+          "means": {
+            "energy_distance": 0.581871757890873,
+            "shift_cosine": 0.010038901273226621,
+            "spread_ratio": 1.2111760410303138
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 102.19551474507898
+        },
+        "0.12.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.7443439896525232,
+              "shift_cosine": -0.3021864517835632,
+              "spread_ratio": 1.2453130983019336
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.6366741131433189,
+              "shift_cosine": -0.2942633453713461,
+              "spread_ratio": 1.2299480225098225
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6497950860967068,
+              "shift_cosine": -0.3309863264418481,
+              "spread_ratio": 1.2347837685421799
+            },
+            "MAMSTR": {
+              "energy_distance": 0.6779289086216531,
+              "shift_cosine": -0.2257838285753785,
+              "spread_ratio": 1.2048352256855577
+            }
+          },
+          "means": {
+            "energy_distance": 0.6771855243785505,
+            "shift_cosine": -0.28830498804303395,
+            "spread_ratio": 1.2287200287598734
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 229.34547303896397
+        }
+      }
+    },
+    {
+      "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+      "training_batches_sha256": "85f4aff48cde6ba1da727b69d794e423e9f4cb879abe43d9899c96b3e19486a8",
+      "visible_devices": "0",
+      "seed": 22,
+      "group": "Screen1_4",
+      "arms": {
+        "0.10.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.9476228603233432,
+              "shift_cosine": -0.1489773140891874,
+              "spread_ratio": 1.0585112761498863
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.059461256971714,
+              "shift_cosine": -0.28959750506588344,
+              "spread_ratio": 1.0907957921907319
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.0016943360350101,
+              "shift_cosine": 0.18858363065551578,
+              "spread_ratio": 1.0713998766724222
+            },
+            "MAMSTR": {
+              "energy_distance": 1.14927557234844,
+              "shift_cosine": -0.04303364318145422,
+              "spread_ratio": 1.0695129414700575
+            }
+          },
+          "means": {
+            "energy_distance": 1.0395135064196268,
+            "shift_cosine": -0.07325620792025232,
+            "spread_ratio": 1.0725549716207745
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 336.5636570719071
+        },
+        "0.11.1/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.9787292907727574,
+              "shift_cosine": -0.5114085797636176,
+              "spread_ratio": 0.950749609185914
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1146653141029725,
+              "shift_cosine": -0.1368434643951309,
+              "spread_ratio": 0.9592198057504459
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.8628022916469238,
+              "shift_cosine": 0.10687017758356765,
+              "spread_ratio": 0.9456349268674443
+            },
+            "MAMSTR": {
+              "energy_distance": 1.014317314787248,
+              "shift_cosine": -0.37616234367708123,
+              "spread_ratio": 0.9728219714929055
+            }
+          },
+          "means": {
+            "energy_distance": 0.9926285528274754,
+            "shift_cosine": -0.22938605256306555,
+            "spread_ratio": 0.9571065783241774
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 235.68411207501777
+        },
+        "0.12.0/unified_v12/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.000028500684098,
+              "shift_cosine": -0.05636510840315133,
+              "spread_ratio": 0.9791000255627923
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0674746053725181,
+              "shift_cosine": 0.09045562517846942,
+              "spread_ratio": 1.0437143751515563
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.9408890686037861,
+              "shift_cosine": -0.17886104354404803,
+              "spread_ratio": 1.0316595762271388
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1360089620385239,
+              "shift_cosine": 0.2409911991601239,
+              "spread_ratio": 1.0190631486796518
+            }
+          },
+          "means": {
+            "energy_distance": 1.0361002841747315,
+            "shift_cosine": 0.02405516809784849,
+            "spread_ratio": 1.0183842814052848
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 165.57609980297275
+        },
+        "0.12.0/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.033995232173079,
+              "shift_cosine": 0.22247097199846394,
+              "spread_ratio": 1.005669299160264
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1038687951125912,
+              "shift_cosine": 0.23845417002046101,
+              "spread_ratio": 1.0398530949669866
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.9274200025419832,
+              "shift_cosine": 0.12217994994249491,
+              "spread_ratio": 1.02504903437888
+            },
+            "MAMSTR": {
+              "energy_distance": 1.0856903556337816,
+              "shift_cosine": 0.29422462547371997,
+              "spread_ratio": 1.0092544871236269
+            }
+          },
+          "means": {
+            "energy_distance": 1.0377435963653587,
+            "shift_cosine": 0.21933242935878497,
+            "spread_ratio": 1.0199564789074393
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 257.46045065601356
+        },
+        "0.12.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.9476228603233432,
+              "shift_cosine": -0.1489773140891874,
+              "spread_ratio": 1.0585112761498863
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.059461256971714,
+              "shift_cosine": -0.28959750506588344,
+              "spread_ratio": 1.0907957921907319
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.0016943360350101,
+              "shift_cosine": 0.18858363065551578,
+              "spread_ratio": 1.0713998766724222
+            },
+            "MAMSTR": {
+              "energy_distance": 1.14927557234844,
+              "shift_cosine": -0.04303364318145422,
+              "spread_ratio": 1.0695129414700575
+            }
+          },
+          "means": {
+            "energy_distance": 1.0395135064196268,
+            "shift_cosine": -0.07325620792025232,
+            "spread_ratio": 1.0725549716207745
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 405.47261397494003
+        }
+      }
+    },
+    {
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+      "training_batches_sha256": "c1b421e29d4d935428afccf2b52bb0b12c41f54b927d95ee3c8b4b7fcff3a3eb",
+      "visible_devices": "1",
+      "seed": 23,
+      "group": "Screen1_1",
+      "arms": {
+        "0.10.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2224630248375377,
+              "shift_cosine": 0.10504927506569979,
+              "spread_ratio": 1.2194176165606792
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.109514015887064,
+              "shift_cosine": 0.038357855035699634,
+              "spread_ratio": 1.204334267550093
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.260263786437105,
+              "shift_cosine": -0.11725429161942325,
+              "spread_ratio": 1.2695549966683086
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1250231098689811,
+              "shift_cosine": 0.09259716044819952,
+              "spread_ratio": 1.2213422594452323
+            }
+          },
+          "means": {
+            "energy_distance": 1.179315984257672,
+            "shift_cosine": 0.029687499732543924,
+            "spread_ratio": 1.2286622850560782
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 109.17144149402156
+        },
+        "0.11.1/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2072568058833006,
+              "shift_cosine": 0.05438263955764503,
+              "spread_ratio": 1.1814529085273817
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0682269439821122,
+              "shift_cosine": 0.0558393560912396,
+              "spread_ratio": 1.2088015051393486
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1988162592859473,
+              "shift_cosine": -0.14867901924364,
+              "spread_ratio": 1.2271197453375529
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1819358869768983,
+              "shift_cosine": 0.07930501056609396,
+              "spread_ratio": 1.220381122476087
+            }
+          },
+          "means": {
+            "energy_distance": 1.1640589740320646,
+            "shift_cosine": 0.010211996742834649,
+            "spread_ratio": 1.2094388203700925
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 99.240451854188
+        },
+        "0.12.0/unified_v12/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.4141569571465578,
+              "shift_cosine": -0.04912454950846226,
+              "spread_ratio": 1.132913282678183
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.2044020098562642,
+              "shift_cosine": -0.05511891478230277,
+              "spread_ratio": 1.144849810736056
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.218491544264837,
+              "shift_cosine": -0.046461960347588864,
+              "spread_ratio": 1.1749307897045194
+            },
+            "MAMSTR": {
+              "energy_distance": 1.2867395689928918,
+              "shift_cosine": 0.11109609621583996,
+              "spread_ratio": 1.162768658802507
+            }
+          },
+          "means": {
+            "energy_distance": 1.2809475200651377,
+            "shift_cosine": -0.009902332105628483,
+            "spread_ratio": 1.1538656354803163
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 87.72820325102657
+        },
+        "0.12.0/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2893948906497883,
+              "shift_cosine": 0.1565171033765672,
+              "spread_ratio": 1.151925778132832
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.0934558235486795,
+              "shift_cosine": -0.07035343476199844,
+              "spread_ratio": 1.225516772500981
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.2470261440415102,
+              "shift_cosine": -0.06868429968777931,
+              "spread_ratio": 1.2055583812727069
+            },
+            "MAMSTR": {
+              "energy_distance": 1.4405577463387234,
+              "shift_cosine": 0.20748549337625471,
+              "spread_ratio": 1.2078106496383807
+            }
+          },
+          "means": {
+            "energy_distance": 1.2676086511446754,
+            "shift_cosine": 0.05624121557576105,
+            "spread_ratio": 1.1977028953862252
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 98.88107961090282
+        },
+        "0.12.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2224630248375377,
+              "shift_cosine": 0.10504927506569979,
+              "spread_ratio": 1.2194176165606792
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.109514015887064,
+              "shift_cosine": 0.038357855035699634,
+              "spread_ratio": 1.204334267550093
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.260263786437105,
+              "shift_cosine": -0.11725429161942325,
+              "spread_ratio": 1.2695549966683086
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1250231098689811,
+              "shift_cosine": 0.09259716044819952,
+              "spread_ratio": 1.2213422594452323
+            }
+          },
+          "means": {
+            "energy_distance": 1.179315984257672,
+            "shift_cosine": 0.029687499732543924,
+            "spread_ratio": 1.2286622850560782
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 239.92778657190502
+        }
+      }
+    },
+    {
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+      "training_batches_sha256": "a2c81ac6a8e84563621f19a16aff3340cbf95b95bacc135c80df9b3fd42f7443",
+      "visible_devices": "0",
+      "seed": 23,
+      "group": "Screen1_3",
+      "arms": {
+        "0.10.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.7199950813203229,
+              "shift_cosine": 0.038257629927576475,
+              "spread_ratio": 1.239227886445127
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.6747227030565925,
+              "shift_cosine": -0.3801112086025503,
+              "spread_ratio": 1.2298262671708358
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.693604739039416,
+              "shift_cosine": -0.014104775222259383,
+              "spread_ratio": 1.2497653386148686
+            },
+            "MAMSTR": {
+              "energy_distance": 0.6704027049364072,
+              "shift_cosine": -0.4572334994503179,
+              "spread_ratio": 1.1614229485114782
+            }
+          },
+          "means": {
+            "energy_distance": 0.6896813070881846,
+            "shift_cosine": -0.20329796333688777,
+            "spread_ratio": 1.2200606101855773
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 326.03077886393294
+        },
+        "0.11.1/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.6368481556895711,
+              "shift_cosine": -0.0023291143237562134,
+              "spread_ratio": 1.218420502465316
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5435423158397947,
+              "shift_cosine": 0.23837500512593995,
+              "spread_ratio": 1.20949815408521
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6336350987743735,
+              "shift_cosine": 0.06670150976982403,
+              "spread_ratio": 1.262515478050565
+            },
+            "MAMSTR": {
+              "energy_distance": 0.5910770225398343,
+              "shift_cosine": 0.318525659009699,
+              "spread_ratio": 1.1633788349069007
+            }
+          },
+          "means": {
+            "energy_distance": 0.6012756482108934,
+            "shift_cosine": 0.1553182648954267,
+            "spread_ratio": 1.213453242376998
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 253.5933594580274
+        },
+        "0.12.0/unified_v12/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.6324182880151392,
+              "shift_cosine": 0.14197535489879223,
+              "spread_ratio": 1.232122186787632
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.515155049888727,
+              "shift_cosine": -0.05979398812447322,
+              "spread_ratio": 1.232750191406113
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6075212855495229,
+              "shift_cosine": 0.25514780753263855,
+              "spread_ratio": 1.2203563460632323
+            },
+            "MAMSTR": {
+              "energy_distance": 0.6219750311380547,
+              "shift_cosine": 0.01458444152239229,
+              "spread_ratio": 1.191927686608654
+            }
+          },
+          "means": {
+            "energy_distance": 0.594267413647861,
+            "shift_cosine": 0.08797840395733746,
+            "spread_ratio": 1.2192891027164077
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 157.49585529509932
+        },
+        "0.12.0/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.6679210649374125,
+              "shift_cosine": -0.006459524352634205,
+              "spread_ratio": 1.2317167229560013
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5631757066889564,
+              "shift_cosine": 0.09764900270685249,
+              "spread_ratio": 1.2368574943731616
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6206235425186835,
+              "shift_cosine": 0.25636066336576396,
+              "spread_ratio": 1.2303061698940336
+            },
+            "MAMSTR": {
+              "energy_distance": 0.5877105537165628,
+              "shift_cosine": -0.059793133862967224,
+              "spread_ratio": 1.195107575304202
+            }
+          },
+          "means": {
+            "energy_distance": 0.6098577169654038,
+            "shift_cosine": 0.07193925196425376,
+            "spread_ratio": 1.2234969906318496
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 171.7523136679083
+        },
+        "0.12.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.7199950813203229,
+              "shift_cosine": 0.038257629927576475,
+              "spread_ratio": 1.239227886445127
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.6747227030565925,
+              "shift_cosine": -0.3801112086025503,
+              "spread_ratio": 1.2298262671708358
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.693604739039416,
+              "shift_cosine": -0.014104775222259383,
+              "spread_ratio": 1.2497653386148686
+            },
+            "MAMSTR": {
+              "energy_distance": 0.6704027049364072,
+              "shift_cosine": -0.4572334994503179,
+              "spread_ratio": 1.1614229485114782
+            }
+          },
+          "means": {
+            "energy_distance": 0.6896813070881846,
+            "shift_cosine": -0.20329796333688777,
+            "spread_ratio": 1.2200606101855773
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 326.66523375199176
+        }
+      }
+    },
+    {
+      "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+      "training_batches_sha256": "f0fc24166dc52bf914506e6eccc97cdb2937937bcb548c4ee7f877c9038456c6",
+      "visible_devices": "1",
+      "seed": 23,
+      "group": "Screen1_4",
+      "arms": {
+        "0.10.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.0449890854119204,
+              "shift_cosine": 0.25407427981377845,
+              "spread_ratio": 1.001863933237415
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.9905608100658423,
+              "shift_cosine": -0.05691070107016943,
+              "spread_ratio": 1.0259395260079245
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.9218737414434877,
+              "shift_cosine": 0.40286233432801355,
+              "spread_ratio": 0.9960451880095863
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1324943737069235,
+              "shift_cosine": 0.051607555332429896,
+              "spread_ratio": 1.0213305101690842
+            }
+          },
+          "means": {
+            "energy_distance": 1.0224795026570435,
+            "shift_cosine": 0.1629083671010131,
+            "spread_ratio": 1.0112947893560025
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 171.91797624505125
+        },
+        "0.11.1/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.937900064175385,
+              "shift_cosine": 0.08087002635299466,
+              "spread_ratio": 0.969724107036142
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.9700085242854719,
+              "shift_cosine": 0.17298284010563533,
+              "spread_ratio": 1.0038618278558022
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.8791817344266972,
+              "shift_cosine": 0.15025432319101226,
+              "spread_ratio": 1.0001348017457967
+            },
+            "MAMSTR": {
+              "energy_distance": 1.010065011040262,
+              "shift_cosine": -0.03458670905690997,
+              "spread_ratio": 1.024512877491038
+            }
+          },
+          "means": {
+            "energy_distance": 0.949288833481954,
+            "shift_cosine": 0.09238012014818307,
+            "spread_ratio": 0.9995584035321947
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 98.09751881589182
+        },
+        "0.12.0/unified_v12/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.1884814370007861,
+              "shift_cosine": 0.04207354861697933,
+              "spread_ratio": 0.9536232114587104
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1731775959755932,
+              "shift_cosine": -0.02093470962703065,
+              "spread_ratio": 0.9697170904189427
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.0160386905548142,
+              "shift_cosine": -0.20528517519603914,
+              "spread_ratio": 1.0011010106772342
+            },
+            "MAMSTR": {
+              "energy_distance": 1.2280608947631118,
+              "shift_cosine": 0.2608648955626881,
+              "spread_ratio": 0.9611074043255475
+            }
+          },
+          "means": {
+            "energy_distance": 1.1514396545735763,
+            "shift_cosine": 0.01917963983914941,
+            "spread_ratio": 0.9713871792201088
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 88.4204093310982
+        },
+        "0.12.0/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.05843133333559,
+              "shift_cosine": 0.04326377594053634,
+              "spread_ratio": 0.9966508818638319
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1193968905047376,
+              "shift_cosine": -0.00801553581740557,
+              "spread_ratio": 1.0307881531019392
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.9729265001866381,
+              "shift_cosine": -0.39506265127226836,
+              "spread_ratio": 1.02533589247398
+            },
+            "MAMSTR": {
+              "energy_distance": 1.14397785486981,
+              "shift_cosine": -0.1786893626023918,
+              "spread_ratio": 1.0386655504116569
+            }
+          },
+          "means": {
+            "energy_distance": 1.073683144724194,
+            "shift_cosine": -0.13462594343788234,
+            "spread_ratio": 1.022860119462852
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 101.56207847618498
+        },
+        "0.12.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.0449890854119204,
+              "shift_cosine": 0.25407427981377845,
+              "spread_ratio": 1.001863933237415
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.9905608100658423,
+              "shift_cosine": -0.05691070107016943,
+              "spread_ratio": 1.0259395260079245
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.9218737414434877,
+              "shift_cosine": 0.40286233432801355,
+              "spread_ratio": 0.9960451880095863
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1324943737069235,
+              "shift_cosine": 0.051607555332429896,
+              "spread_ratio": 1.0213305101690842
+            }
+          },
+          "means": {
+            "energy_distance": 1.0224795026570435,
+            "shift_cosine": 0.1629083671010131,
+            "spread_ratio": 1.0112947893560025
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 138.9898936401587
+        }
+      }
+    },
+    {
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+      "training_batches_sha256": "4c0657cf4e49b6ed9e7ed8cf1529557ec56d518e7f697b464f33e263585ee5e4",
+      "visible_devices": "0",
+      "seed": 24,
+      "group": "Screen1_1",
+      "arms": {
+        "0.10.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2728327718555983,
+              "shift_cosine": -0.256880778051801,
+              "spread_ratio": 1.306096446826148
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1437508759125343,
+              "shift_cosine": 0.17271155001084196,
+              "spread_ratio": 1.3012802949248634
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1931935785424042,
+              "shift_cosine": -0.09730293726548361,
+              "spread_ratio": 1.332735607885059
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1645714981807567,
+              "shift_cosine": -0.05820758899176046,
+              "spread_ratio": 1.3183076374728202
+            }
+          },
+          "means": {
+            "energy_distance": 1.1935871811228234,
+            "shift_cosine": -0.059919938574550774,
+            "spread_ratio": 1.3146049967772226
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 322.6412510580849
+        },
+        "0.11.1/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.172144715102192,
+              "shift_cosine": -0.023419529922935924,
+              "spread_ratio": 1.2048114765614528
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.042614809584026,
+              "shift_cosine": 0.26812495581683765,
+              "spread_ratio": 1.2285736874616309
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1931854804084452,
+              "shift_cosine": 0.03047936712477727,
+              "spread_ratio": 1.2319939638272972
+            },
+            "MAMSTR": {
+              "energy_distance": 1.2135722013852694,
+              "shift_cosine": 0.021393068253156334,
+              "spread_ratio": 1.1989435574715204
+            }
+          },
+          "means": {
+            "energy_distance": 1.1553793016199831,
+            "shift_cosine": 0.07414446531795883,
+            "spread_ratio": 1.2160806713304753
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 243.80904584703967
+        },
+        "0.12.0/unified_v12/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.3007170892914974,
+              "shift_cosine": -0.19424735414468164,
+              "spread_ratio": 1.159761294067287
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1506512383919967,
+              "shift_cosine": -0.23699493037987973,
+              "spread_ratio": 1.1879988666375325
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1985340387571695,
+              "shift_cosine": 0.21701018543434503,
+              "spread_ratio": 1.2049633275568727
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1467617477252254,
+              "shift_cosine": -0.013700516722357073,
+              "spread_ratio": 1.2144528326732311
+            }
+          },
+          "means": {
+            "energy_distance": 1.1991660285414723,
+            "shift_cosine": -0.05698315395314335,
+            "spread_ratio": 1.1917940802337308
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 152.30783950095065
+        },
+        "0.12.0/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2743083038146583,
+              "shift_cosine": 0.05153815815445799,
+              "spread_ratio": 1.1714072706966812
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1016069254257514,
+              "shift_cosine": 0.13025608372998676,
+              "spread_ratio": 1.201338936768635
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.2785415802746831,
+              "shift_cosine": -0.09850790555460837,
+              "spread_ratio": 1.1904137700608912
+            },
+            "MAMSTR": {
+              "energy_distance": 1.2634742453217997,
+              "shift_cosine": 0.38137856243790325,
+              "spread_ratio": 1.223655970517042
+            }
+          },
+          "means": {
+            "energy_distance": 1.2294827637092232,
+            "shift_cosine": 0.11616622469193491,
+            "spread_ratio": 1.1967039870108123
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 160.84684891300276
+        },
+        "0.12.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.2728327718555983,
+              "shift_cosine": -0.256880778051801,
+              "spread_ratio": 1.306096446826148
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1437508759125343,
+              "shift_cosine": 0.17271155001084196,
+              "spread_ratio": 1.3012802949248634
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.1931935785424042,
+              "shift_cosine": -0.09730293726548361,
+              "spread_ratio": 1.332735607885059
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1645714981807567,
+              "shift_cosine": -0.05820758899176046,
+              "spread_ratio": 1.3183076374728202
+            }
+          },
+          "means": {
+            "energy_distance": 1.1935871811228234,
+            "shift_cosine": -0.059919938574550774,
+            "spread_ratio": 1.3146049967772226
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 340.71958998194896
+        }
+      }
+    },
+    {
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+      "training_batches_sha256": "507c8545718ac1248d187d920f15b7d033dfc06a2e29f3ea052422cf584d5a90",
+      "visible_devices": "1",
+      "seed": 24,
+      "group": "Screen1_3",
+      "arms": {
+        "0.10.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.6165035478008427,
+              "shift_cosine": -0.32242711075258296,
+              "spread_ratio": 1.2349198629062157
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5558317281075489,
+              "shift_cosine": -0.23154085163276178,
+              "spread_ratio": 1.2321263268667266
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6298034365322538,
+              "shift_cosine": -0.43526682287638824,
+              "spread_ratio": 1.218062229695011
+            },
+            "MAMSTR": {
+              "energy_distance": 0.48967228783630823,
+              "shift_cosine": -0.18094218779525265,
+              "spread_ratio": 1.161710537674301
+            }
+          },
+          "means": {
+            "energy_distance": 0.5729527500692384,
+            "shift_cosine": -0.2925442432642464,
+            "spread_ratio": 1.2117047392855635
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 143.2514504790306
+        },
+        "0.11.1/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.6507109297045615,
+              "shift_cosine": -0.2550614680893881,
+              "spread_ratio": 1.2221390203718623
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5149860754976707,
+              "shift_cosine": 0.026411543020988883,
+              "spread_ratio": 1.2038047994552814
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6766060624980978,
+              "shift_cosine": -0.2033409448520369,
+              "spread_ratio": 1.220508971496957
+            },
+            "MAMSTR": {
+              "energy_distance": 0.5701071544647807,
+              "shift_cosine": -0.2141370913833321,
+              "spread_ratio": 1.1609418470378472
+            }
+          },
+          "means": {
+            "energy_distance": 0.6031025555412777,
+            "shift_cosine": -0.16153199032594207,
+            "spread_ratio": 1.201848659590487
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 99.93007261306047
+        },
+        "0.12.0/unified_v12/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.6229882432152207,
+              "shift_cosine": -0.018942869026632208,
+              "spread_ratio": 1.1903472897241667
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5316340780413107,
+              "shift_cosine": 0.0899230391915188,
+              "spread_ratio": 1.1785297393514358
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.5839525954706639,
+              "shift_cosine": 0.1312801358449666,
+              "spread_ratio": 1.1730896211607376
+            },
+            "MAMSTR": {
+              "energy_distance": 0.5195078993032718,
+              "shift_cosine": 0.07575493108008707,
+              "spread_ratio": 1.1126379120928125
+            }
+          },
+          "means": {
+            "energy_distance": 0.5645207040076168,
+            "shift_cosine": 0.06950380927248506,
+            "spread_ratio": 1.1636511405822882
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 90.30297517310828
+        },
+        "0.12.0/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.6292148296188387,
+              "shift_cosine": -0.09131966111822463,
+              "spread_ratio": 1.2122782011371391
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.556201382581694,
+              "shift_cosine": 0.30213116934156564,
+              "spread_ratio": 1.1875394560553716
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.657972085124892,
+              "shift_cosine": -0.030054584587309866,
+              "spread_ratio": 1.2361697722040415
+            },
+            "MAMSTR": {
+              "energy_distance": 0.5956938277697246,
+              "shift_cosine": -0.14532067371225907,
+              "spread_ratio": 1.1751734128260602
+            }
+          },
+          "means": {
+            "energy_distance": 0.6097705312737873,
+            "shift_cosine": 0.008859062480943019,
+            "spread_ratio": 1.2027902105556532
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 102.19909701985307
+        },
+        "0.12.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 0.6165035478008427,
+              "shift_cosine": -0.32242711075258296,
+              "spread_ratio": 1.2349198629062157
+            },
+            "SLC2A4RG": {
+              "energy_distance": 0.5558317281075489,
+              "shift_cosine": -0.23154085163276178,
+              "spread_ratio": 1.2321263268667266
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.6298034365322538,
+              "shift_cosine": -0.43526682287638824,
+              "spread_ratio": 1.218062229695011
+            },
+            "MAMSTR": {
+              "energy_distance": 0.48967228783630823,
+              "shift_cosine": -0.18094218779525265,
+              "spread_ratio": 1.161710537674301
+            }
+          },
+          "means": {
+            "energy_distance": 0.5729527500692384,
+            "shift_cosine": -0.2925442432642464,
+            "spread_ratio": 1.2117047392855635
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 142.33746845507994
+        }
+      }
+    },
+    {
+      "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+      "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+      "training_batches_sha256": "b3ec8669fad397caaf4deb8d3ac9c4b946534ff97ad62350d35bc754d111f1ab",
+      "visible_devices": "0",
+      "seed": 24,
+      "group": "Screen1_4",
+      "arms": {
+        "0.10.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.1332874915554436,
+              "shift_cosine": 0.0977090982011108,
+              "spread_ratio": 1.007398895364015
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1720163714883753,
+              "shift_cosine": 0.038338917719820724,
+              "spread_ratio": 1.0468417782411537
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.0613031839103932,
+              "shift_cosine": 0.1473001733618871,
+              "spread_ratio": 1.0068454514017917
+            },
+            "MAMSTR": {
+              "energy_distance": 1.2297051674033508,
+              "shift_cosine": 0.01593857354088582,
+              "spread_ratio": 1.0281902024607175
+            }
+          },
+          "means": {
+            "energy_distance": 1.1490780535893907,
+            "shift_cosine": 0.07482169070592612,
+            "spread_ratio": 1.0223190818669194
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 328.55427898000926
+        },
+        "0.11.1/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.067851980271202,
+              "shift_cosine": 0.1616641068655831,
+              "spread_ratio": 1.003461888355757
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.056934607806622,
+              "shift_cosine": 0.29858212866260386,
+              "spread_ratio": 1.0153142912971385
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.0625531134364685,
+              "shift_cosine": 0.27921980068104524,
+              "spread_ratio": 0.9941069839810653
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1274413737281677,
+              "shift_cosine": 0.021336090015091142,
+              "spread_ratio": 1.0308611463303714
+            }
+          },
+          "means": {
+            "energy_distance": 1.078695268810615,
+            "shift_cosine": 0.19020053155608083,
+            "spread_ratio": 1.010936077491083
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 249.46026771399193
+        },
+        "0.12.0/unified_v12/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.0849333978444262,
+              "shift_cosine": -0.32702690835076487,
+              "spread_ratio": 0.9555057222184246
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1011488524162099,
+              "shift_cosine": -0.18737735736205643,
+              "spread_ratio": 0.9920355707121764
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.9446911140740504,
+              "shift_cosine": -0.1432631149027954,
+              "spread_ratio": 0.9828259840737738
+            },
+            "MAMSTR": {
+              "energy_distance": 1.1838868514408372,
+              "shift_cosine": -0.11867997960597505,
+              "spread_ratio": 0.9900964333717754
+            }
+          },
+          "means": {
+            "energy_distance": 1.078665053943881,
+            "shift_cosine": -0.19408684005539795,
+            "spread_ratio": 0.9801159275940375
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 158.44734311616048
+        },
+        "0.12.0/unified_v11/at-tuned-empf-rates": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.0215059028799676,
+              "shift_cosine": -0.015533899967978727,
+              "spread_ratio": 0.9884879747402473
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1155418239174981,
+              "shift_cosine": 0.06281408928560098,
+              "spread_ratio": 1.0405035691283704
+            },
+            "PLEKHA1": {
+              "energy_distance": 0.8866316681401836,
+              "shift_cosine": 0.04324089193071309,
+              "spread_ratio": 1.01139645798508
+            },
+            "MAMSTR": {
+              "energy_distance": 1.0213674845050598,
+              "shift_cosine": 0.08796165713187422,
+              "spread_ratio": 1.0375349656789825
+            }
+          },
+          "means": {
+            "energy_distance": 1.0112617198606773,
+            "shift_cosine": 0.04462068459505239,
+            "spread_ratio": 1.0194807418831702
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 169.46839826693758
+        },
+        "0.12.0/empf/empf-tuned": {
+          "targets": {
+            "GLCCI1": {
+              "energy_distance": 1.1332874915554436,
+              "shift_cosine": 0.0977090982011108,
+              "spread_ratio": 1.007398895364015
+            },
+            "SLC2A4RG": {
+              "energy_distance": 1.1720163714883753,
+              "shift_cosine": 0.038338917719820724,
+              "spread_ratio": 1.0468417782411537
+            },
+            "PLEKHA1": {
+              "energy_distance": 1.0613031839103932,
+              "shift_cosine": 0.1473001733618871,
+              "spread_ratio": 1.0068454514017917
+            },
+            "MAMSTR": {
+              "energy_distance": 1.2297051674033508,
+              "shift_cosine": 0.01593857354088582,
+              "spread_ratio": 1.0281902024607175
+            }
+          },
+          "means": {
+            "energy_distance": 1.1490780535893907,
+            "shift_cosine": 0.07482169070592612,
+            "spread_ratio": 1.0223190818669194
+          },
+          "initial_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "final_rates": {
+            "generator": 0.02,
+            "critic": 0.03,
+            "particles": 0.057999999999999996
+          },
+          "constant_lr_verified_updates": 1200,
+          "seconds": 372.0024266229011
+        }
+      }
+    }
+  ]
+}

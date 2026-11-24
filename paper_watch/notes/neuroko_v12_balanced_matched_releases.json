@@ -1,0 +1,170 @@
+{
+  "protocol": {
+    "arms": [
+      [
+        "0.10.0",
+        "empf",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.041
+        }
+      ],
+      [
+        "0.11.1",
+        "unified_v11",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.041
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.041
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.041
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "motion-critic-46-prior41",
+          "lr": 0.014,
+          "d_lr_mult": 0.32857142857142857,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.041
+        }
+      ]
+    ],
+    "seeds": [
+      22,
+      23,
+      24
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "metric": "Reproduce the calibrated-prior setting on the nine original development pairs with all five formulation and release combinations. Only if v12 has the lowest mean across all five, repeat all five on six fresh training seeds. This comparison measures the matched formulation effect and does not change the original qualification against tuned controls."
+  },
+  "decision": {
+    "v12_lowest_matched_mean": false,
+    "summaries": {
+      "0.10.0/empf/motion-critic-46-prior41": {
+        "energy": 0.959631906385307,
+        "v12_minus_arm": -0.012114772952166552,
+        "v12_pairs_won": 5
+      },
+      "0.11.1/unified_v11/motion-critic-46-prior41": {
+        "energy": 0.9254714736446986,
+        "v12_minus_arm": 0.022045659788441824,
+        "v12_pairs_won": 3
+      },
+      "0.12.0/unified_v12/motion-critic-46-prior41": {
+        "energy": 0.9475171334331405,
+        "v12_minus_arm": 0.0,
+        "v12_pairs_won": 0
+      },
+      "0.12.0/unified_v11/motion-critic-46-prior41": {
+        "energy": 0.961465011805571,
+        "v12_minus_arm": -0.013947878372430451,
+        "v12_pairs_won": 6
+      },
+      "0.12.0/empf/motion-critic-46-prior41": {
+        "energy": 0.959631906385307,
+        "v12_minus_arm": -0.012114772952166552,
+        "v12_pairs_won": 5
+      }
+    }
+  },
+  "scores": {
+    "0.10.0/empf/motion-critic-46-prior41": [
+      1.0656297237042187,
+      0.6372018999245332,
+      1.0185031335456478,
+      1.1940411010280023,
+      0.6752623559374809,
+      1.0101896689332919,
+      1.1988815621727618,
+      0.795471620172217,
+      1.0415060920496098
+    ],
+    "0.11.1/unified_v11/motion-critic-46-prior41": [
+      1.1660039904749095,
+      0.5815572646608409,
+      1.0262047123882294,
+      1.1302163250471386,
+      0.6063413993942424,
+      0.9753285648951739,
+      1.2290656243941946,
+      0.578552254257154,
+      1.0359731272904045
+    ],
+    "0.12.0/unified_v12/motion-critic-46-prior41": [
+      1.1776788241335234,
+      0.6906951928425895,
+      0.9484128867954911,
+      1.2011364780928424,
+      0.6534612813892644,
+      0.963598755957042,
+      1.2813323890098647,
+      0.6531081631456388,
+      0.958230229532008
+    ],
+    "0.12.0/unified_v11/motion-critic-46-prior41": [
+      1.219759839202138,
+      0.6578786619596391,
+      1.0160577664109276,
+      1.2157463714637637,
+      0.6458867166818798,
+      0.9839236602876087,
+      1.283107463291974,
+      0.5934845547524545,
+      1.037340072199753
+    ],
+    "0.12.0/empf/motion-critic-46-prior41": [
+      1.0656297237042187,
+      0.6372018999245332,
+      1.0185031335456478,
+      1.1940411010280023,
+      0.6752623559374809,
+      1.0101896689332919,
+      1.1988815621727618,
+      0.795471620172217,
+      1.0415060920496098
+    ]
+  }
+}
