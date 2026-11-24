@@ -799,6 +799,8 @@ On development seeds 23 and 24, the same candidate averaged **0.96582**, versus 
 
 On seeds 251–253, epsilon 0.2 improved the v12 mean from 0.93939 to **0.93001**, while tuned original EMPF scored **0.90413** and original tuned v11 scored 0.93033. Across the two cohorts, changing epsilon moved the v12 mean from 0.93395 to 0.93389. Tuned EMPF averaged 0.91327 and won all four follow-up seed means (23, 24, 252 and 253). With shared rates and latent noise, v12 beat original EMPF on 15 of 18 pairs. [Full second cohort and paired measurements](neuroko_v12_entropy020_development_second.json)
 
+The other finalist, tau 1 with epsilon 0.1, scored **0.93255 and 0.94162** on the two full cohorts. The best of the two finalists by the published rule was tau 2 with epsilon 0.2, with a worst follow-up gap of +0.04399 against the strongest reference. Both finalists missed the threshold for fresh-seed and biological holdout testing. [Finalist energies, four comparisons and selection decision](neuroko_v12_transport_grid_finalists.json)
+
 On the same generated and real minibatches from 64 updates of nine baseline fits, reducing epsilon from 0.1 to 0.05 concentrated the real matches. At tau 2, a generated row had **34.06 effective real matches** at epsilon 0.1, **14.55** at 0.05 and **53.10** at 0.2 out of 64 possible. At epsilon 0.2, 3.73% of the generated mass went unmatched, compared with 0.00375% at 0.1. Varying tau from 1 to 4 moved the median effective match count by less than 0.10 in every fit at each epsilon. These measurements describe the transport plan during early training. The 1,200-update runs score generated samples. [All nine settings, statistics and matched trajectory hashes](neuroko_v12_transport_plans.json)
 
 ```bash
