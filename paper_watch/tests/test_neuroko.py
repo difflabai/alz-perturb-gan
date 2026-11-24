@@ -58,6 +58,19 @@ def test_transport_grid_selects_using_remaining_seeds(tmp_path, monkeypatch):
     assert all(v == baseline[k] for k, v in winner.items() if k not in ("name", "rhbi_eps", "rhbi_tau"))
 
 
+def test_transport_metrics_exclude_slack_row_and_weight_by_matched_mass(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    from neuroko_transport_plans import plan_metrics
+
+    plan = torch.tensor([[1., 1., 2.], [4., 0., 0.], [0., 0., 9.]])
+    slack, count = plan_metrics(plan)
+    assert slack.item() == pytest.approx(2 / 8)
+    assert count.item() == pytest.approx((2 * 2 + 4 * 1) / 6)
+    plan[:2, :2] = 0
+    slack, count = plan_metrics(plan)
+    assert (slack.item(), count.item()) == (1., 0.)
+
+
 def test_prior_spread_target_is_shared_through_qualification(monkeypatch):
     root = Path(__file__).resolve().parents[1]
     monkeypatch.syspath_prepend(str(root / "scripts"))

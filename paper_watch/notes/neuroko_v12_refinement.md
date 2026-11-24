@@ -739,6 +739,13 @@ python paper_watch/scripts/neuroko_rate_noise.py --study calibrated-particles --
   --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
 
+On seeds 22–24, the middle particle rate **0.0406** had the lowest mean energy at both critic rates. At critic LR 0.0049, each alternative improved three of nine pairs. Both missed the tuned EMPF mean of 0.92240 on this cohort, which rules them out under the two-cohort criterion. [Complete six-setting grid and paired differences](neuroko_v12_critic_particle_grid_first.json)
+
+| Fixed critic LR | Particle LR 0.0287 | Particle LR 0.0406 | Particle LR 0.0574 |
+| --- | ---: | ---: | ---: |
+| 0.0049 | 0.94237 | **0.92850** | 0.93732 |
+| 0.0210 | 0.95057 | **0.94231** | 0.95789 |
+
 ### Critic scores and entropy in the transport loss
 
 In the released coupling, `rhbi_tau` scales the critic scores in the cost assigned to unmatched mass, and `rhbi_eps` controls how sharply the transport plan allocates mass. The default pair is 2 and 0.1. This study crosses tau 1, 2 and 4 with epsilon 0.05, 0.1 and 0.2 at fixed rates of 0.014/0.0049/0.0406, hollow coupling and relativistic weight 2. The same eight alternative pairs resolve in the native loss on both Unified releases. [Released transport implementation](https://github.com/HyperGAN/ParticleGAN/blob/v0.12.0/particlegan/_t1_coupling/primitive.py)
@@ -749,4 +756,12 @@ Each alternative runs for 1,200 updates on three groups at seeds 22 and 251. For
 python paper_watch/scripts/neuroko_rate_noise.py --study transport-grid --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-transport-grid" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
+```
+
+On the same generated and real minibatches from 64 updates of nine baseline fits, reducing epsilon from 0.1 to 0.05 concentrated the real matches. At tau 2, a generated row had **34.06 effective real matches** at epsilon 0.1, **14.55** at 0.05 and **53.10** at 0.2 out of 64 possible. At epsilon 0.2, 3.73% of the generated mass went unmatched, compared with 0.00375% at 0.1. Varying tau from 1 to 4 moved the median effective match count by less than 0.10 in every fit at each epsilon. These measurements describe the transport plan during early training. The 1,200-update runs score generated samples. [All nine settings, statistics and matched trajectory hashes](neuroko_v12_transport_plans.json)
+
+```bash
+PYTHONPATH="$data/wheels/0.12.0:$PWD:$PWD/paper_watch" python paper_watch/scripts/neuroko_transport_plans.py \
+  --data "$data" --window-cells 10000 --grid "$data/v12-transport-grid/transport_grid.json" \
+  --reference "$data/v12-original-critic-rate-check" --output "$data/v12-transport-plans"
 ```
