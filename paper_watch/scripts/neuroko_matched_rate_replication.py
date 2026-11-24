@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from statistics import mean
 
-from compare_neuroko_v12 import GROUPS, write_frozen
+from compare_neuroko_v12 import GROUPS, receipt, write_frozen
 from neuroko_role_factorial import TRIALS, paired
 from neuroko_stratified import confirm_candidate, control_arms, evaluate, key
 from neuroko_transport_scale import TRIALS as TRANSPORT
@@ -47,6 +47,31 @@ def comparison(trial, at_empf_rates):
     return matches, list(arms.values())
 
 
+def original_release_scores(args, destination, matches, seeds, metric, *, published=None):
+    v12, v11, empf = matches
+    pinned = [["0.10.0", *empf[1:]], ["0.11.1", *v11[1:]]]
+    comparisons = [*pinned, v12, v11, empf]
+    write_frozen(destination / "release_comparison_protocol.json",
+                 dict(arms=comparisons, seeds=seeds, groups=list(GROUPS),
+                      metric=metric))
+    scores = evaluate(args, comparisons, seeds)
+    if published is not None and any(scores[key(arm)] != published[key(arm)] for arm in matches):
+        raise ValueError("The same-wheel controls do not reproduce the published scores")
+    own = scores[key(v12)]
+    summaries = {}
+    for arm in comparisons:
+        values = scores[key(arm)]
+        rows = [json.loads(receipt(args.output, "validation", *arm, seed, group).read_text())
+                for seed in seeds for group in GROUPS]
+        if any(row.get("constant_lr_verified_updates") != 1200 for row in rows):
+            raise ValueError(f"missing a full per-update learning-rate check for {key(arm)}")
+        gaps = [x - y for x, y in zip(own, values, strict=True)]
+        summaries[key(arm)] = dict(energy=mean(values), v12_minus_arm=mean(gaps),
+                                  v12_pairs_won=sum(d < 0 for d in gaps))
+    write_frozen(destination / "release_comparison.json", dict(scores=scores, summaries=summaries))
+    print("Original-release comparison", summaries, flush=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for field in ("data", "wheels", "output"):
@@ -56,7 +81,7 @@ def main():
     parser.add_argument("--rates", choices=("seed15", "empf"), default="seed15")
     parser.add_argument("--workers-per-gpu", type=int, default=2)
     parser.add_argument("--window-cells", type=int)
-    parser.add_argument("--stage", choices=("search", "confirm"), default="search")
+    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases"), default="search")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     for field in ("data", "wheels", "output"):
@@ -79,6 +104,14 @@ def main():
     run_args = copy(args)
     if args.shared_validation is not None:
         run_args.output = args.shared_validation.resolve()
+    if args.stage == "compare-releases":
+        decision = json.loads((args.output / "selection.json").read_text())
+        if decision["trial"] != trial:
+            raise ValueError("The published replication used a different candidate")
+        metric = ("Mean four-target energy after 1200 fixed-rate updates on the original nine "
+                  "training pairs at this rate setting. This release check does not select a candidate.")
+        original_release_scores(run_args, args.output, matches, SEEDS, metric, published=decision["validation"])
+        return
     scores = evaluate(run_args, arms, SEEDS)
     means = {name: mean(values) for name, values in scores.items()}
     own, v11, empf = (key(arm) for arm in matches)

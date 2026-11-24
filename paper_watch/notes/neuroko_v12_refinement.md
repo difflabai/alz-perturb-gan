@@ -219,6 +219,19 @@ At EMPF’s tuned rates, v12 averaged 0.9639 and EMPF averaged 0.9659 on the sam
 
 At noise 0.025, moving from the earlier rates of 0.020, 0.042 and 0.0203 to these rates improved v12’s mean by 0.0135 and v11’s by 0.0336 on the same seed–group pairs. This larger change in v11 reversed their ranking. The higher-noise v12 finalist at the earlier rates scored 0.9797 against this independently tuned EMPF reference of 0.9659.
 
+### Checking the original releases at both rate settings
+
+To test whether the matched comparisons also hold for EMPF from 0.10.0 and Unified v11 from 0.11.1, run these two commands after the corresponding same-wheel comparisons. Both repeat seeds 22–24 on the same three training groups. The scores of all three 0.12.0 formulations must reproduce the published values, and each original-release fit must match the corresponding initial weights, training data, minibatches, physical GPU and fixed learning rates. The biological holdout decisions above use the original qualification rules.
+
+```bash
+python paper_watch/scripts/neuroko_matched_rate_replication.py --stage compare-releases --rates seed15 \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --shared-validation "$data/v12-rate-noise" \
+  --output "$data/v12-matched-rate-replication"
+python paper_watch/scripts/neuroko_matched_rate_replication.py --stage compare-releases --rates empf \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --shared-validation "$data/v12-rate-noise" \
+  --output "$data/v12-at-empf-rates"
+```
+
 ## Prior penalty at latent noise 0.15
 
 At the release role rates, two individual changes lowered v12's mean energy on earlier training folds. Increasing latent noise to 0.15 moved the mean from 0.9782 to 0.9417. Increasing the native prior penalty weight from 0.02 to 0.1 at the original noise moved it to 0.9641. The follow-up combines those two changes at constant generator, critic and particle rates of 0.014, 0.021 and 0.0406. It tests whether the stronger penalty helps with the higher noise. A training qualification for the preceding rate-and-noise candidate gives its biological holdout priority.
@@ -325,7 +338,7 @@ Across the 72 v12 fits, increasing the prior weight from 0.02 to 0.1 raised mean
 | 0.020 / 0.042 / 0.0203 | 0.025 | 0.97744 | 0.98734 | +0.00990 |
 | 0.020 / 0.042 / 0.0203 | 0.150 | 0.97967 | 0.95381 | −0.02586 |
 
-The higher-critic candidate at noise 0.15 and weight 0.1 scored 0.95381. An EMPF reference already scored 0.94613 on these nine pairs, ruling the candidate out under the published criterion.
+At noise 0.15 and weight 0.1, the higher-critic candidate scored 0.95381, matched v11 scored 0.94923, and matched EMPF scored 0.98896. An earlier EMPF reference scored 0.94613 on the same nine pairs. V12 beat its matched EMPF control and missed the v11 and earlier EMPF controls, ending this trial at the first screen. [Full comparison and selection decision](neuroko_v12_prior_interaction_screen.json)
 
 ### Increasing noise with the stronger prior
 
@@ -424,4 +437,18 @@ python paper_watch/scripts/neuroko_particle_balance.py --original "$data/v12-par
 python paper_watch/scripts/neuroko_rate_noise.py --study balanced-particle-prior --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --gradient-result "$data/particle-balance.json" --output "$data/v12-balanced-particles" \
   --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
+```
+
+At 1,200 updates the corrected weight of 0.041 scored **0.94752** across all nine pairs. At the same critic LR of 0.0046, weight 0.1 scored 0.94547. With the original critic LR of 0.021 and weight 0.1, v12 scored 0.94231. The correction improved four of nine pairs against each reference. Its largest gain against the original configuration was on `Screen1_4` (1.06092 to 0.95675), while `Screen1_3` worsened (0.56650 to 0.66575). The overall result ends this candidate's qualification. [Paired energy scores, group means, spread and effective dimensions](neuroko_v12_particle_weight_energies.json)
+
+### Isolating the generator and particle learning rates
+
+The earlier generator-only and particle-only trials used noise 0.025 and the default v12 prior penalty. This comparison repeats a single-role search at noise 0.15, prior weight 0.1 and critic LR 0.021. The reference generator rate is 0.014 and the reference particle rate is 0.0406. Four alternatives bracket each rate by approximately a factor of √2. Two use generator rates 0.010 and 0.020 with particles fixed at 0.0406. Two use particle rates 0.0287 and 0.0574 with the generator fixed at 0.014.
+
+Rank the four alternatives by mean four-target energy across nine training pairs on seeds 22–24. Take only the lowest, breaking ties by trial name. If it fails to improve the original v12 mean, stop. Otherwise the same candidate must beat the matched v11 and EMPF arms and all established controls on each development cohort (22–24 and 251–253), then on six fresh seeds (290–295) including both original releases. A qualifying candidate goes to the biological holdout (396–411). The same two GPUs, network, 64 × 16 particle table and 1,200 constant-rate updates apply throughout.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study individual-role-rates --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-individual-role-rates" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior"
 ```

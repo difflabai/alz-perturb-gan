@@ -6,8 +6,10 @@ from math import exp, isfinite, log
 from pathlib import Path
 from statistics import mean, median
 
-from compare_neuroko_v12 import GROUPS, ROOT, receipt, write_frozen
-from neuroko_matched_rate_replication import SEEDS as REPLICATION_SEEDS, TRIAL as MATCHED_RATE_TRIAL, comparison
+from compare_neuroko_v12 import GROUPS, ROOT, write_frozen
+from neuroko_matched_rate_replication import (
+    SEEDS as REPLICATION_SEEDS, TRIAL as MATCHED_RATE_TRIAL, comparison, original_release_scores,
+)
 from neuroko_role_factorial import REFERENCES, TRIALS as RATES, paired
 from neuroko_stratified import NOISY, confirm_candidate, control_arms, evaluate, key
 from neuroko_transport_scale import TRIALS as TRANSPORT, validate_finalist
@@ -17,7 +19,9 @@ RATE_NAMES = ("g-high-d-high-p-low", "g-low-d-low-p-high")
 NOISY_PRIOR = dict(NOISY, name="noise150-prior100", d_lr_mult=1.5, prior_lr_mult=2.9, prior_reg=0.1)
 MATCHED_PRIOR = dict(MATCHED_RATE_TRIAL, name="matched-rates-prior100", prior_reg=0.1)
 MOTION_STUDIES = ("critic-motion", "matched-critic-motion", "balanced-particle-prior")
-TWO_COHORT_STUDIES = ("strong-prior-noise", *MOTION_STUDIES)
+ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
+ROLE_OUTER_SEEDS = list(range(396, 412))
+TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", *MOTION_STUDIES)
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
     for name in RATE_NAMES for sigma in (75, 150)
@@ -160,25 +164,46 @@ def compare_releases(args, trial, seeds):
     arms, labels = control_arms([trial])
     by_key = {key(arm): arm for arm in arms}
     v12, v11, empf = (by_key[labels[n]] for n in ("selected_v12", "matched_v11", "matched_empf"))
-    pinned = [["0.10.0", *empf[1:]], ["0.11.1", *v11[1:]]]
-    comparisons = [*pinned, v12, v11, empf]
-    write_frozen(args.output / "release_comparison_protocol.json",
-                 dict(arms=comparisons, seeds=seeds, groups=list(GROUPS),
-                      metric="Mean four-target energy at 1200 fixed-rate updates on the independent training folds."))
-    scores = evaluate(args, comparisons, seeds)
-    own = scores[key(v12)]
-    summaries = {}
-    for arm in comparisons:
-        values = scores[key(arm)]
-        rows = [json.loads(receipt(args.output, "validation", *arm, seed, group).read_text())
-                for seed in seeds for group in GROUPS]
-        if any(row.get("constant_lr_verified_updates") != 1200 for row in rows):
-            raise ValueError(f"missing a full per-update learning-rate check for {key(arm)}")
-        gaps = [x - y for x, y in zip(own, values, strict=True)]
-        summaries[key(arm)] = dict(energy=mean(values), v12_minus_arm=mean(gaps),
-                                  v12_pairs_won=sum(d < 0 for d in gaps))
-    write_frozen(args.output / "release_comparison.json", dict(scores=scores, summaries=summaries))
-    print("Original-release comparison", summaries, flush=True)
+    original_release_scores(args, args.output, (v12, v11, empf), seeds,
+                            "Mean four-target energy at 1200 fixed-rate updates on the independent training folds.")
+
+
+def individual_rates(args):
+    """Vary G or the particles alone around the strongest prior/noise setting."""
+    base = NOISY_PRIOR
+    trials = {}
+    for name, generator, particles in (("g010", .010, .0406), ("g020", .020, .0406),
+                                       ("p0287", .014, .0287), ("p0574", .014, .0574)):
+        trial = dict(base, name=f"noise150-prior100-{name}", lr=generator,
+                     d_lr_mult=.021 / generator, prior_lr_mult=particles / generator)
+        trials[trial["name"]] = trial
+    seeds = REPLICATION_SEEDS
+    protocol = dict(trials=list(trials.values()), baseline=base, screen_seeds=seeds, groups=list(GROUPS),
+                    second_screen_seeds=[251, 252, 253], independent_seeds=ROLE_INDEPENDENT_SEEDS,
+                    outer_seeds=ROLE_OUTER_SEEDS,
+                    rule="Change one absolute role rate per trial. Choose the lowest nine-pair v12 mean "
+                         "on seeds 22–24, breaking ties by name. Stop if the winner fails to improve the "
+                         "fixed 0.014/0.021/0.0406 v12 baseline. Otherwise test only this candidate against "
+                         "matched and established controls separately on both development cohorts. "
+                         "Test fresh seeds with the original releases before a qualifying biological holdout.")
+    write_frozen(args.output / "role_grid.json", protocol)
+    shortlist = args.output / "role_shortlist.json"
+    if args.stage == "search":
+        screen_args = copy(args)
+        if args.shared_screen is not None:
+            screen_args.output = args.shared_screen.resolve()
+        arms = [[RELEASE, V12, trial] for trial in (base, *trials.values())]
+        scores = evaluate(screen_args, arms, seeds)
+        means = {arm[2]["name"]: mean(scores[key(arm)]) for arm in arms}
+        name = min(trials, key=lambda n: (means[n], n))
+        write_frozen(shortlist, dict(scores=scores, means=means, chosen=name, passes=means[name] < means[base["name"]]))
+    selected = json.loads(shortlist.read_text())
+    if not selected["passes"]:
+        if args.stage != "search":
+            raise ValueError("No individual role rate passed the fixed v12 baseline")
+        write_frozen(args.output / "selection.json", dict(shortlist=selected, advances=False, winner=None))
+        return None
+    return trials[selected["chosen"]]
 
 
 def compare_prior_weight(args):
@@ -232,6 +257,25 @@ def compare_prior_weight(args):
             "260–265 it must beat every reference, including all three release-rate models at noise "
             "0.15 and weight 0.1. Only then score the biological holdout on seeds 316–331."
         )
+    elif args.study == "individual-role-rates":
+        trial = individual_rates(args)
+        if trial is None:
+            return
+        baseline = NOISY_PRIOR
+        references = [("original-rate-" + arm[1], arm) for arm in paired(baseline)]
+        low, _ = calibrated_critic(args.motion_result)
+        middle, _ = calibrated_critic(args.motion_result, args.motion_check)
+        balanced, _ = balanced_prior(args.gradient_result, middle)
+        for ref in (low, middle, balanced):
+            references.extend((ref["name"] + "-" + arm[1], arm) for arm in paired(ref))
+        independent_seeds = ROLE_INDEPENDENT_SEEDS
+        outer_seeds = ROLE_OUTER_SEEDS
+        rule = ("Take the single v12 configuration selected in role_shortlist.json. With critic LR 0.021, "
+                "noise 0.15 and weight 0.1, give the selected generator and particle LRs to all three "
+                "matched formulations. At 1200 updates require a lower v12 energy than all matched and "
+                "established references, including the original rate controls and the three recent "
+                "critic-rate and particle-weight configurations. Test seeds 22–24 and 251–253 separately, "
+                "then six fresh training seeds with both original releases before the biological holdout.")
     elif args.study == "strong-prior-noise":
         baseline = NOISY_PRIOR
         trial = dict(baseline, name="noise250-prior100", prior_sigma=0.25)

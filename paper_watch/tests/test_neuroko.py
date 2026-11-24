@@ -51,6 +51,40 @@ def test_prior_weight_uses_the_paired_particle_gradient_change(tmp_path, monkeyp
         balanced_prior(partial, trial)
 
 
+@pytest.mark.parametrize("wins", (True, False))
+def test_individual_role_rate_shortlist_preserves_other_rates(tmp_path, monkeypatch, wins):
+    from types import SimpleNamespace
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_rate_noise as study
+
+    def evaluate(args, arms, seeds):
+        assert seeds == [22, 23, 24]
+        rates = []
+        for _, recipe, trial in arms:
+            assert recipe == "unified_v12"
+            gen = trial["lr"]
+            rates.append((gen, gen * trial["d_lr_mult"], gen * trial["prior_lr_mult"]))
+            assert (trial["prior_sigma"], trial["prior_reg"]) == (.15, .1)
+        assert rates == [(.014, .021, .0406), (.010, .021, .0406), (.020, .021, .0406),
+                         (.014, .021, .0287), (.014, .021, .0574)]
+        values = [1.0, .9 if wins else 1.0, 1.1, 1.05, 1.02]
+        return {study.key(arm): [value] * 9 for arm, value in zip(arms, values, strict=True)}
+
+    monkeypatch.setattr(study, "evaluate", evaluate)
+    args = SimpleNamespace(output=tmp_path, shared_screen=None, stage="search")
+    chosen = study.individual_rates(args)
+    if wins:
+        assert chosen["name"] == "noise150-prior100-g010"
+        args.stage = "confirm"
+        assert study.individual_rates(args) == chosen
+    else:
+        assert chosen is None
+        args.stage = "confirm"
+        with pytest.raises(ValueError, match="No individual role rate passed"):
+            study.individual_rates(args)
+
+
 def test_test_cells_use_training_coordinates():
     train = csr_matrix(np.array([[0., 0.], [3., 1.], [2., 1.], [1., 0.], [4., 3.]]))
     test = train[[2, 0, 3]]
