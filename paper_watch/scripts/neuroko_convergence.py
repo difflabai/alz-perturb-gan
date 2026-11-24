@@ -1,9 +1,11 @@
 """Compare the calibrated v12 and original controls through 3,600 or 40,000 fixed-rate updates."""
 import argparse
 from concurrent.futures import ThreadPoolExecutor
+from copy import copy
 import json
+from math import sqrt
 from pathlib import Path
-from statistics import mean
+from statistics import mean, stdev
 
 from compare_neuroko_v12 import GROUPS, ROOT, fit, receipt, write_frozen
 
@@ -13,15 +15,19 @@ NOTES = ROOT / "paper_watch/notes"
 METRICS = ("mean_energy_distance", "spread_ratio", "effective_rank")
 
 
-def run_fold(args, arms, seed, group, original):
-    gpu = (seed + GROUPS.index(group)) % 2
+def run_fold(args, arms, seed, group, original, *, read_only=False):
+    holdout = group == "Screen1_0"
+    stage = "heldout" if holdout else "validation"
+    fit_groups = set(GROUPS) if holdout else set(GROUPS) - {group}
+    gpu = seed % 2 if holdout else (seed + GROUPS.index(group)) % 2
     steps = getattr(args, "checkpoints", STEPS)
     endpoint = steps[-1]
-    points, fingerprints = {}, {}
+    points, fingerprints, targets = {}, {}, {}
     for role in ("v12", "tuned_empf", "tuned_v11", "matched_empf", "matched_v11"):
         arm = arms[role]
-        fit(args, "validation", seed, group, gpu, [arm], options=("--updates", str(endpoint), "--trace-every", "1200"))
-        base = receipt(args.output, "validation", *arm, seed, group)
+        if not read_only:
+            fit(args, stage, seed, group, gpu, [arm], options=("--updates", str(endpoint), "--trace-every", "1200"))
+        base = receipt(args.output, stage, *arm, seed, group)
         row = json.loads(base.with_stem(base.stem + f"-u{endpoint}-trace1200").read_text())
         trace = row["trace"]
         rates = row["initial_rates"]
@@ -29,7 +35,9 @@ def run_fold(args, arms, seed, group, original):
         expected_rates = dict(generator=trial["lr"], critic=trial["lr"] * trial["d_lr_mult"],
                               particles=trial["lr"] * trial["prior_lr_mult"])
         if (rates != expected_rates or (row["particlegan"], row["recipe"]) != tuple(arm[:2])
-                or row["score_groups"] != [group] or set(row["fit_groups"]) != set(GROUPS) - {group}
+                or row["stage"] != stage or row["score_groups"] != [group] or set(row["fit_groups"]) != fit_groups
+                or row["name"] != trial["name"] or row["lr"] != trial["lr"]
+                or any(row["settings"][k] != v for k, v in trial.items() if k not in ("lr", "name"))
                 or row["seed"] != seed or not row["deterministic"]
                 or row["updates"] != endpoint or row["constant_lr_verified_updates"] != endpoint
                 or row["fixed_lr_optimizer_steps"] != {"generator_and_particles": endpoint, "critic": endpoint}
@@ -53,10 +61,46 @@ def run_fold(args, arms, seed, group, original):
             raise ValueError("Curves must use identical projected cells, initialization and training batches")
         fingerprints = hashes
         points[role] = trace
-        print(seed, group, role, [round(p["mean_energy_distance"], 5) for p in trace], flush=True)
+        if holdout:
+            targets[role] = row["targets"]
+            if (len(targets[role]) != 4 or (targets["v12"].keys() != targets[role].keys())
+                    or mean(t["energy_distance"] for t in targets[role].values()) != row["means"]["energy_distance"]):
+                raise ValueError(f"Inconsistent biological target scores for {role}, seed {seed}")
+        if not read_only:
+            print(seed, group, role, [round(p["mean_energy_distance"], 5) for p in trace], flush=True)
     result = dict(seed=seed, group=group, gpu=gpu, curves=points, fingerprints=fingerprints)
-    write_frozen(args.output / f"curves-{seed}-{group}.json", result)
+    if holdout:
+        result["endpoint_targets"] = targets
+    path = args.output / f"curves-{seed}-{group}.json"
+    if read_only:
+        if json.loads(path.read_text()) != result:
+            raise ValueError(f"Archived curves differ from the optimizer receipts for seed {seed}, {group}")
+    else:
+        write_frozen(path, result)
     return result
+
+
+def heldout_qualification(args, arms):
+    fresh = copy(args)
+    fresh.output = args.confirm_from.resolve()
+    fresh.checkpoints = STEPS
+    plan = json.loads((fresh.output / "protocol.json").read_text())
+    seeds = list(range(838, 844))
+    if (plan["seeds"] != seeds or plan["groups"] != list(GROUPS) or plan["checkpoints"] != list(STEPS)
+            or plan["arms"] != arms):
+        raise ValueError("Biological confirmation requires the frozen six-seed development comparison")
+    report = json.loads((fresh.output / "comparison.json").read_text())
+    cells = [run_fold(fresh, arms, seed, group, None, read_only=True) for seed in seeds for group in GROUPS]
+    if cells != report["cells"]:
+        raise ValueError("Fresh comparison differs from its 18 verified group–seed pairs")
+    by_seed = [{role: mean(cell["curves"][role][-1]["mean_energy_distance"] for cell in cells if cell["seed"] == seed)
+                for role in arms} for seed in seeds]
+    gaps = {role: mean(s["v12"] - s[role] for s in by_seed) for role in arms if role != "v12"}
+    passes = all(gap < 0 for gap in gaps.values())
+    if (passes != report["leads_all_controls_on_average"]
+            or any(gap != report["endpoint_comparisons"][role]["mean_v12_minus_control"] for role, gap in gaps.items())):
+        raise ValueError("Fresh endpoint ranking differs from its optimizer receipts")
+    return dict(seeds=seeds, groups=list(GROUPS), updates=STEPS[-1], v12_minus_control=gaps, qualifies=passes)
 
 
 def main():
@@ -67,6 +111,8 @@ def main():
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--fresh", action="store_true", help="replicate the fixed curves on seeds 838 through 843")
     mode.add_argument("--forty-thousand", action="store_true", help="extend all five pilot arms on Screen1_1 to 40,000 updates")
+    mode.add_argument("--confirm-from", type=Path, metavar="FRESH_DIR",
+                      help="verify the completed six-seed replication and conditionally evaluate Screen1_0")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     args.data, args.wheels, args.output = (p.resolve() for p in (args.data, args.wheels, args.output))
@@ -83,7 +129,21 @@ def main():
             anchors[seed, group] = {role: source["result"]["scores"][role][i] for role in arms}
     args.checkpoints = LONG_STEPS if args.forty_thousand else STEPS
     groups = GROUPS
-    if args.forty_thousand:
+    if args.confirm_from:
+        if args.output == args.confirm_from.resolve():
+            parser.error("use a distinct output directory for biological confirmation")
+        qualification = heldout_qualification(args, arms)
+        write_frozen(args.output / "qualification.json", qualification)
+        if not qualification["qualifies"]:
+            print("Fresh v12 did not lead all four controls at 3,600 updates.", qualification, flush=True)
+            return
+        seeds = list(range(844, 860))
+        groups = ("Screen1_0",)
+        rule = ("After v12 beats all four original controls on mean energy across the complete fresh "
+                "development comparison, train every frozen configuration on Screen1_1, Screen1_3 and "
+                "Screen1_4. Score Screen1_0 at 3,600 updates for seeds 844–859. Report all paired endpoints, "
+                "target scores and seed-level 95% t intervals. The 1,200 and 2,400 checkpoints are descriptive.")
+    elif args.forty_thousand:
         groups = GROUPS[:1]
         seeds = [22, 251]
         pilot = json.loads((NOTES / "neuroko_v12_convergence_3600_tuned_empf.json").read_text())
@@ -127,7 +187,7 @@ def main():
             comparisons.append(dict(seed=seed, updates=step, means=means, v12_minus_control=gaps))
     endpoint = [row for row in comparisons if row["updates"] == args.checkpoints[-1]]
     result = dict(cells=cells, comparisons=comparisons)
-    if args.fresh or args.forty_thousand:
+    if args.fresh or args.forty_thousand or args.confirm_from:
         result["endpoint_means"] = {role: mean(row["means"][role]["mean_energy_distance"] for row in endpoint)
                                     for role in arms}
         summary = {}
@@ -137,6 +197,10 @@ def main():
                        for cell in cells)
             summary[role] = dict(mean_v12_minus_control=mean(gaps), pairs_won=wins,
                                  seed_means_won=sum(gap < 0 for gap in gaps))
+            if args.confirm_from:
+                from scipy.stats import t
+                margin = float(t.ppf(.975, len(gaps) - 1)) * stdev(gaps) / sqrt(len(gaps))
+                summary[role]["paired_95_t_interval"] = [mean(gaps) - margin, mean(gaps) + margin]
         result["endpoint_comparisons"] = summary
         result["leads_all_controls_on_average"] = all(row["mean_v12_minus_control"] < 0 for row in summary.values())
     else:

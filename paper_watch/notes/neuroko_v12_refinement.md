@@ -100,6 +100,8 @@ Across the six pilot pairs, tuned original EMPF's mean energy rose from 0.91790 
 
 After five of the pilot pairs, six fresh training seeds (838–843) were reserved to test the same five configurations if v12 led tuned original EMPF on both complete pilot seed means at 3,600. Both seed means passed, and the fresh runs started on both GPUs. The 18 fresh pairs use the same fixed endpoint with evaluations at 1,200 and 2,400. Their primary comparison is the mean across all 18 pairs against each original control.
 
+The biological follow-up uses a single decision at 3,600 updates. If v12 has lower mean energy than all four controls across the 18 fresh pairs, train all five configurations on the three development groups and score the reserved group Screen1_0 with seeds 844–859. Record the four target scores and the paired 95% t interval across training seeds for each control. The intervals describe training-seed variation on this group. The decision was fixed after the first three fresh comparisons against the tuned controls and before the six-seed result. [Command and verification](../README.md#check-whether-v12-closes-the-gap-by-3600-updates)
+
 On the first fresh group with all five fits complete (seed 838, Screen1_3), v12 scored below all four original controls at 3,600 updates. V12’s energy fell at both checkpoints. The two v11 fits reached their lowest measured energy at 2,400. All checkpoints come from the same continuously trained models.
 
 | Updates | V12 | Matched v11 | Matched EMPF | Tuned v11 | Tuned EMPF |

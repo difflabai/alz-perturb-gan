@@ -29,7 +29,7 @@ def test_particle_search_uses_both_cohorts_and_changes_only_particle_rate(monkey
     assert not select_particle_rate(dict(first=first, second=second), ("low", "high"), ("baseline", "empf"))["passes"]
 
 
-@pytest.mark.parametrize("fault", (None, "anchor", "batches"))
+@pytest.mark.parametrize("fault", (None, "anchor", "batches", "biological", "wrong_settings"))
 def test_extended_curves_check_replayed_anchor_and_intermediate_batches(tmp_path, monkeypatch, fault):
     import json
     from types import SimpleNamespace
@@ -40,12 +40,14 @@ def test_extended_curves_check_replayed_anchor_and_intermediate_batches(tmp_path
     published = json.loads((study.NOTES / "neuroko_v12_original_control_benchmark_first.json").read_text())
     arms = published["protocol"]["arms"]
     energy = {role: values[0] for role, values in published["result"]["scores"].items()}
-    group = study.GROUPS[0]
+    group = "Screen1_0" if fault == "biological" else study.GROUPS[0]
 
     def fake_fit(args, stage, seed, group, gpu, requested, *, options):
         arm, = requested
         role = next(name for name, value in arms.items() if value == arm)
         version, recipe, trial = arm
+        assert stage == ("heldout" if group == "Screen1_0" else "validation")
+        assert gpu == 0
         rates = dict(generator=trial["lr"], critic=trial["lr"] * trial["d_lr_mult"],
                      particles=trial["lr"] * trial["prior_lr_mult"])
         trace = [dict(updates=n, mean_energy_distance=energy[role], training_batches_sha256=str(n))
@@ -54,8 +56,13 @@ def test_extended_curves_check_replayed_anchor_and_intermediate_batches(tmp_path
             trace[0]["mean_energy_distance"] += .01
         if role == "matched_v11" and fault == "batches":
             trace[1]["training_batches_sha256"] = "different"
+        settings = {k: v for k, v in trial.items() if k not in ("name", "lr")}
+        if role == "matched_v11" and fault == "wrong_settings":
+            settings["d_lr_mult"] = 0.
         row = dict(updates=3600, constant_lr_verified_updates=3600, particlegan=version, recipe=recipe,
-                   seed=seed, deterministic=True, score_groups=[group], fit_groups=study.GROUPS[1:],
+                   settings=settings, stage=stage, name=trial["name"], lr=trial["lr"],
+                   seed=seed, deterministic=True, score_groups=[group], fit_groups=[g for g in study.GROUPS if g != group],
+                   targets={str(i): dict(energy_distance=energy[role]) for i in range(4)},
                    fixed_lr_optimizer_steps=dict(generator_and_particles=3600, critic=3600),
                    initial_rates=rates, final_rates=rates, visible_devices=str(gpu), trace=trace,
                    means=dict(energy_distance=energy[role]), projected_data_sha256="cells",
@@ -66,13 +73,21 @@ def test_extended_curves_check_replayed_anchor_and_intermediate_batches(tmp_path
 
     monkeypatch.setattr(study, "fit", fake_fit)
     args = SimpleNamespace(output=tmp_path, checkpoints=study.STEPS)
-    if fault:
+    if fault not in (None, "biological"):
         with pytest.raises(ValueError, match="Invalid fixed-rate curve|identical projected cells"):
             study.run_fold(args, arms, 22, group, energy)
     else:
         cell = study.run_fold(args, arms, 22, group, energy)
         assert cell["curves"].keys() == arms.keys()
         assert cell["fingerprints"]["training_batches"] == ["1200", "2400", "3600"]
+        if group == "Screen1_0":
+            assert cell["endpoint_targets"].keys() == arms.keys()
+        monkeypatch.setattr(study, "fit", lambda *a, **k: pytest.fail("read-only verification attempted a fit"))
+        assert study.run_fold(args, arms, 22, group, energy, read_only=True) == cell
+        stored = args.output / f"curves-22-{group}.json"
+        stored.write_text("{}")
+        with pytest.raises(ValueError, match="Archived curves differ"):
+            study.run_fold(args, arms, 22, group, energy, read_only=True)
 
 
 def test_fresh_duration_reports_all_pairs_at_fixed_endpoint(tmp_path, monkeypatch):
@@ -105,6 +120,62 @@ def test_fresh_duration_reports_all_pairs_at_fixed_endpoint(tmp_path, monkeypatc
     assert not result["leads_all_controls_on_average"]
 
 
+@pytest.mark.parametrize("outcome", ("qualifies", "tie", "stale"))
+def test_biological_confirmation_depends_on_complete_fresh_result(tmp_path, monkeypatch, outcome):
+    import json
+    import sys
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_convergence as study
+
+    fresh, outer = tmp_path / "fresh", tmp_path / "heldout"
+    verified = []
+    scored = []
+
+    def example(args, arms, seed, group, original, *, read_only=False):
+        assert original is None
+        if group == "Screen1_0":
+            assert outcome == "qualifies" and not read_only
+            scored.append(seed)
+        elif read_only:
+            verified.append((seed, group))
+        curves = {}
+        for role in arms:
+            score = float(seed) / 1000 if role == "v12" or (outcome == "tie" and role == "matched_v11") else 1.
+            curves[role] = [dict(updates=n, mean_energy_distance=score, effective_rank=18., spread_ratio=1.)
+                            for n in study.STEPS]
+        return dict(seed=seed, group=group, curves=curves)
+
+    monkeypatch.setattr(study, "run_fold", example)
+    common = ["--data", str(tmp_path), "--wheels", str(tmp_path)]
+    monkeypatch.setattr(sys, "argv", ["study", "--fresh", "--output", str(fresh), *common])
+    study.main()
+    if outcome == "stale":
+        report = json.loads((fresh / "comparison.json").read_text())
+        report["endpoint_comparisons"]["tuned_v11"]["mean_v12_minus_control"] += .02
+        (fresh / "comparison.json").write_text(json.dumps(report))
+    monkeypatch.setattr(sys, "argv", ["study", "--confirm-from", str(fresh), "--output", str(outer), *common])
+    if outcome == "stale":
+        with pytest.raises(ValueError, match="ranking differs"):
+            study.main()
+    else:
+        study.main()
+        qualification = json.loads((outer / "qualification.json").read_text())
+        assert qualification["qualifies"] == (outcome == "qualifies")
+    assert verified == [(s, g) for s in range(838, 844) for g in study.GROUPS]
+    if outcome == "qualifies":
+        assert sorted(scored) == list(range(844, 860))
+        protocol = json.loads((outer / "protocol.json").read_text())
+        assert protocol["groups"] == ["Screen1_0"] and protocol["checkpoints"] == list(study.STEPS)
+        result = json.loads((outer / "comparison.json").read_text())
+        assert len(result["cells"]) == 16
+        for control in result["endpoint_comparisons"].values():
+            lo, hi = control["paired_95_t_interval"]
+            assert lo < control["mean_v12_minus_control"] < hi < 0
+    else:
+        assert scored == [] and not (outer / "comparison.json").exists()
+
+
 def test_long_duration_matches_pilot_and_integrates_uneven_final_interval(tmp_path, monkeypatch):
     import json
     import sys
@@ -130,6 +201,8 @@ def test_long_duration_matches_pilot_and_integrates_uneven_final_interval(tmp_pa
         rates = dict(generator=trial["lr"], critic=trial["lr"] * trial["d_lr_mult"],
                      particles=trial["lr"] * trial["prior_lr_mult"])
         row = dict(updates=40000, constant_lr_verified_updates=40000, particlegan=version, recipe=recipe,
+                   settings={k: v for k, v in trial.items() if k not in ("name", "lr")},
+                   stage=stage, name=trial["name"], lr=trial["lr"],
                    seed=seed, deterministic=True, score_groups=[group], fit_groups=study.GROUPS[1:],
                    fixed_lr_optimizer_steps=dict(generator_and_particles=40000, critic=40000),
                    initial_rates=rates, final_rates=rates, visible_devices=str(gpu), trace=trace,

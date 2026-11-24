@@ -152,6 +152,13 @@ python paper_watch/scripts/neuroko_convergence.py --data "$data" --window-cells 
 
 The script checks the learning rates at every optimizer step, runs all three development groups, and writes the full comparison to `comparison.json` in the output directory. The 3,600-update endpoint is fixed before training. To run the same five configurations on six fresh seeds, add `--fresh` and use a separate output directory such as `"$data/v12-convergence-3600/fresh-838-843"`. This produces 18 paired group–seed comparisons and reports the mean difference against each original control at 3,600 updates.
 
+Once the six-seed comparison finishes, use its results to decide whether to evaluate Screen1_0. The command verifies the 90 training records and checks that v12 beat every control on mean energy distance at 3,600 updates. If it did, all five configurations train on the three development groups and score Screen1_0 using seeds 844–859. The report includes each target and a paired 95% interval across training seeds for each comparison.
+
+```bash
+python paper_watch/scripts/neuroko_convergence.py --confirm-from "$data/v12-convergence-3600/fresh-838-843" \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-convergence-3600/heldout-844-859"
+```
+
 #### Follow v12 and the four original controls to 40,000 updates
 
 > Use the same checkout, NeuroKO data and pinned wheels. Run the five configurations on the first development group, Screen1_1, using pilot seeds 22 and 251 on separate GPUs. Compare energy distance at 40,000 updates and the average over the final 10,000 updates. Check whether spread and effective covariance rank move closer to the observed cells. Keep the learning rates constant and report each seed as well as the two-seed mean.

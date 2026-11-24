@@ -82,8 +82,9 @@ def fit(args, stage, seed, group, gpu, arms, *, options=()):
                                              os.environ.get("PYTHONPATH", "")])
         cmd = [sys.executable, "-Bu", "-m", "paper_watch.alztest.neuroko_tune", stage,
                "--release", release, "--recipe", recipe, "--seed", str(seed), "--data", str(args.data),
-               "--output", str(target.parent), "--deterministic", "--validation-group", group,
-               "--trial", json.dumps(trial)]
+               "--output", str(target.parent), "--deterministic", "--trial", json.dumps(trial)]
+        if stage == "validation":
+            cmd.extend(["--validation-group", group])
         if getattr(args, "require_constant_lr", False):
             cmd.append("--require-constant-lr")
         if args.window_cells:
