@@ -1,0 +1,293 @@
+{
+  "arms": {
+    "v12_smoothing_half": [
+      "0.12.0",
+      "unified_v12",
+      {
+        "name": "original-v11-critic-49-smooth-half",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1,
+        "optimizer_smoothing": 0.00305
+      }
+    ],
+    "v12_default": [
+      "0.12.0",
+      "unified_v12",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    "tuned_original_v11": [
+      "0.11.1",
+      "unified_v11",
+      {
+        "name": "motion-critic-46-prior41",
+        "lr": 0.014,
+        "d_lr_mult": 0.32857142857142857,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.041,
+        "rhbi_relativistic_weight": 2.0,
+        "rhbi_self_coupling": "hollow"
+      }
+    ],
+    "tuned_original_empf": [
+      "0.10.0",
+      "empf",
+      {
+        "name": "noise250-prior100",
+        "lr": 0.014,
+        "d_lr_mult": 1.5,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.25,
+        "prior_reg": 0.1
+      }
+    ]
+  },
+  "seeds": [
+    22,
+    23,
+    24
+  ],
+  "groups": [
+    "Screen1_1",
+    "Screen1_3",
+    "Screen1_4"
+  ],
+  "updates": 1200,
+  "verified_smoothing": 0.00305,
+  "checked_optimizer_steps_per_fit": {
+    "generator_and_particles": 1200,
+    "critic": 1200
+  },
+  "energy_means": {
+    "v12_smoothing_half": 0.9331189012910723,
+    "v12_default": 0.9284979310859204,
+    "tuned_original_v11": 0.9254714736446986,
+    "tuned_original_empf": 0.9224025817539492
+  },
+  "spread_ratio_means": {
+    "v12_smoothing_half": 1.198545560231401,
+    "v12_default": 1.2016231096272134,
+    "tuned_original_v11": 1.146147740819155,
+    "tuned_original_empf": 1.1672938586288037
+  },
+  "paired_wins": {
+    "v12_default": 3,
+    "tuned_original_v11": 4,
+    "tuned_original_empf": 3
+  },
+  "lower_than_all_references": false,
+  "cells": [
+    {
+      "seed": 22,
+      "group": "Screen1_1",
+      "energy": {
+        "v12_smoothing_half": 1.1563244782539932,
+        "v12_default": 1.1263494186235306,
+        "tuned_original_v11": 1.1660039904749095,
+        "tuned_original_empf": 1.1223464943750359
+      },
+      "spread": {
+        "v12_smoothing_half": 1.284687648421142,
+        "v12_default": 1.2574142164189075,
+        "tuned_original_v11": 1.1961299314248635,
+        "tuned_original_empf": 1.2319534275764945
+      },
+      "fingerprints": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_3",
+      "energy": {
+        "v12_smoothing_half": 0.6213559101559605,
+        "v12_default": 0.6114014145359561,
+        "tuned_original_v11": 0.5815572646608409,
+        "tuned_original_empf": 0.5731292339540484
+      },
+      "spread": {
+        "v12_smoothing_half": 1.2996612211444212,
+        "v12_default": 1.3028938668726433,
+        "tuned_original_v11": 1.2259194953725698,
+        "tuned_original_empf": 1.2283444375584893
+      },
+      "fingerprints": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_4",
+      "energy": {
+        "v12_smoothing_half": 0.9973364531227937,
+        "v12_default": 0.9871477581704231,
+        "tuned_original_v11": 1.0262047123882294,
+        "tuned_original_empf": 1.0525022939435076
+      },
+      "spread": {
+        "v12_smoothing_half": 1.0558440044066753,
+        "v12_default": 1.0576265643739278,
+        "tuned_original_v11": 1.007825610021976,
+        "tuned_original_empf": 1.0159460598569405
+      },
+      "fingerprints": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "85f4aff48cde6ba1da727b69d794e423e9f4cb879abe43d9899c96b3e19486a8",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_1",
+      "energy": {
+        "v12_smoothing_half": 1.1624296969712453,
+        "v12_default": 1.126615089377189,
+        "tuned_original_v11": 1.1302163250471386,
+        "tuned_original_empf": 1.0745143236963988
+      },
+      "spread": {
+        "v12_smoothing_half": 1.2455876319927193,
+        "v12_default": 1.2517812262520964,
+        "tuned_original_v11": 1.2085446723837319,
+        "tuned_original_empf": 1.2413890491050834
+      },
+      "fingerprints": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "c1b421e29d4d935428afccf2b52bb0b12c41f54b927d95ee3c8b4b7fcff3a3eb",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_3",
+      "energy": {
+        "v12_smoothing_half": 0.637171138297846,
+        "v12_default": 0.6207189273353579,
+        "tuned_original_v11": 0.6063413993942424,
+        "tuned_original_empf": 0.6302151424050741
+      },
+      "spread": {
+        "v12_smoothing_half": 1.2788357958187986,
+        "v12_default": 1.2660288836955078,
+        "tuned_original_v11": 1.204348835345627,
+        "tuned_original_empf": 1.254468500171857
+      },
+      "fingerprints": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "a2c81ac6a8e84563621f19a16aff3340cbf95b95bacc135c80df9b3fd42f7443",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 23,
+      "group": "Screen1_4",
+      "energy": {
+        "v12_smoothing_half": 1.0035269293149471,
+        "v12_default": 1.0181744368803536,
+        "tuned_original_v11": 0.9753285648951739,
+        "tuned_original_empf": 1.0015550178129418
+      },
+      "spread": {
+        "v12_smoothing_half": 1.0490892205436935,
+        "v12_default": 1.0570566062100002,
+        "tuned_original_v11": 1.0082259141303256,
+        "tuned_original_empf": 1.0237717665328638
+      },
+      "fingerprints": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "f0fc24166dc52bf914506e6eccc97cdb2937937bcb548c4ee7f877c9038456c6",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_1",
+      "energy": {
+        "v12_smoothing_half": 1.1895327019850386,
+        "v12_default": 1.2100226375749439,
+        "tuned_original_v11": 1.2290656243941946,
+        "tuned_original_empf": 1.1274244217063474
+      },
+      "spread": {
+        "v12_smoothing_half": 1.258001499634578,
+        "v12_default": 1.270379460073419,
+        "tuned_original_v11": 1.232684550292789,
+        "tuned_original_empf": 1.232642783059402
+      },
+      "fingerprints": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "4c0657cf4e49b6ed9e7ed8cf1529557ec56d518e7f697b464f33e263585ee5e4",
+        "visible_devices": "0"
+      }
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_3",
+      "energy": {
+        "v12_smoothing_half": 0.6258399224614173,
+        "v12_default": 0.6698091226184917,
+        "tuned_original_v11": 0.578552254257154,
+        "tuned_original_empf": 0.696174307530145
+      },
+      "spread": {
+        "v12_smoothing_half": 1.2779865103697379,
+        "v12_default": 1.2822015461895409,
+        "tuned_original_v11": 1.2270603017295612,
+        "tuned_original_empf": 1.256591309437638
+      },
+      "fingerprints": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "507c8545718ac1248d187d920f15b7d033dfc06a2e29f3ea052422cf584d5a90",
+        "visible_devices": "1"
+      }
+    },
+    {
+      "seed": 24,
+      "group": "Screen1_4",
+      "energy": {
+        "v12_smoothing_half": 1.0045528810564097,
+        "v12_default": 0.9862425746570376,
+        "tuned_original_v11": 1.0359731272904045,
+        "tuned_original_empf": 1.0237620003620436
+      },
+      "spread": {
+        "v12_smoothing_half": 1.0372165097508437,
+        "v12_default": 1.0692256165588776,
+        "tuned_original_v11": 1.0045903566709498,
+        "tuned_original_empf": 1.0205373943604648
+      },
+      "fingerprints": {
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "b3ec8669fad397caaf4deb8d3ac9c4b946534ff97ad62350d35bc754d111f1ab",
+        "visible_devices": "0"
+      }
+    }
+  ]
+}

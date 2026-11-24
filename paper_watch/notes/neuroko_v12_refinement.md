@@ -98,15 +98,15 @@ The exception at 3,600 was seed 251 on Screen1_3, where EMPF scored 0.61242 and 
 
 After five of the pilot pairs, six fresh training seeds (838–843) were reserved to test the same five configurations if v12 led tuned original EMPF on both complete pilot seed means at 3,600. Both seed means passed, and the fresh runs started on both GPUs. The 18 fresh pairs use the same fixed endpoint with evaluations at 1,200 and 2,400. Their primary comparison is the mean across all 18 pairs against each original control.
 
-On the first fresh group with all three tuned fits complete (seed 838, Screen1_3), v12 overtook both original controls. All three checkpoints score the same continuously trained models.
+On the first fresh group with all five fits complete (seed 838, Screen1_3), v12 scored below all four original controls at 3,600 updates. V12’s energy fell at both checkpoints. The two v11 fits reached their lowest measured energy at 2,400. All checkpoints come from the same continuously trained models.
 
-| Updates | V12 | Tuned original v11 | Tuned original EMPF |
-| ---: | ---: | ---: | ---: |
-| 1,200 | 0.67613 | 0.63676 | 0.59245 |
-| 2,400 | 0.62407 | 0.60779 | 0.69139 |
-| 3,600 | **0.59052** | 0.63374 | 0.74192 |
+| Updates | V12 | Matched v11 | Matched EMPF | Tuned v11 | Tuned EMPF |
+| ---: | ---: | ---: | ---: | ---: | ---: |
+| 1,200 | 0.67613 | 0.65088 | 0.68936 | 0.63676 | **0.59245** |
+| 2,400 | 0.62407 | **0.58452** | 0.71495 | 0.60779 | 0.69139 |
+| 3,600 | **0.59052** | 0.63337 | 0.69010 | 0.63374 | 0.74192 |
 
-This is one group–seed pair out of 18 in the fresh comparison. [Learning rates, paired training hashes, checkpoint curves and per-target scores](neuroko_v12_convergence_3600_first_fresh_group.json)
+V12 beat each v11 configuration on three of the four targets and each EMPF configuration on all four at 3,600. This is one group–seed pair out of 18 in the fresh comparison. The matched columns share the v12 learning rates, noise and prior weight and retain release-native optimizer smoothing. [All five configurations, paired training hashes, checkpoint curves and per-target scores](neuroko_v12_convergence_3600_first_fresh_group.json)
 
 ## Six configurations on the same nine training pairs
 
@@ -888,6 +888,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study optimizer-smoothing --d
   --wheels "$data/wheels" --output "$data/v12-optimizer-smoothing" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
+
+Halving smoothing raised v12 mean energy from **0.92850 to 0.93312**. Three of nine fits improved. The mean spread ratio moved slightly closer to the observations (1.20162 to 1.19855), while the energy remained above both tuned original v11 (0.92547) and EMPF (0.92240). [All nine paired energies and spread ratios](neuroko_v12_smoothing_half_energy.json)
 
 The original 0.10.0 EMPF optimizer defaults to smoothing **0.001**. Original v11 and v12 both default to **0.0061**. The earlier rate-matched comparison used each optimizer’s native value. A separate comparison gives all three formulations 0.0061, then gives all three 0.001. Each setting runs on both development cohorts and retains the separately tuned original controls. The runner reuses a native-default fit when its resolved setting already matches. [Implementation and comparison protocol](../scripts/neuroko_rate_noise.py)
 
