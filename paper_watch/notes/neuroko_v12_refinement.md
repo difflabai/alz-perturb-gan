@@ -138,3 +138,10 @@ The screen uses six paired training fold–seed combinations. Each of three biol
 python paper_watch/scripts/neuroko_rate_noise.py --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-rate-noise"
 ```
+
+The high-generator, high-critic, low-particle finalist also merits direct replication at its original noise 0.025. On seed 15 its mean of 0.9433 was lower than both exactly matched controls (v11 at 0.9832 and EMPF at 0.9932), while independently tuned EMPF still scored 0.9174. We froze that one configuration for an independent comparison on every training group at seeds 22–24. It shares the predeclared reference fits with the new noise comparison. The readout reports whether the original configuration beats both matched controls and whether it beats every reference. The latter is required for the separate holdout cohort on seeds 180–195. [Exact-rate replication rule](../scripts/neuroko_matched_rate_replication.py)
+
+```bash
+python paper_watch/scripts/neuroko_matched_rate_replication.py --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-matched-rate-replication" --shared-validation "$data/v12-rate-noise"
+```
