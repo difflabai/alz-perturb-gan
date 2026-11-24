@@ -173,6 +173,22 @@ def compare_releases(args, trial, seeds):
                             "Mean four-target energy at 1200 fixed-rate updates on the independent training folds.")
 
 
+def compare_prior_screen_releases(args):
+    plan = json.loads((args.output / "search.json").read_text())
+    screen = json.loads((args.output / "screen.json").read_text())
+    matches = paired(NOISY_PRIOR)
+    if plan["arms"][:3] != matches or plan["screen_seeds"] != REPLICATION_SEEDS or not screen["passes"]:
+        raise ValueError("Expected the published same-wheel prior-weight screening win")
+    destination = args.output / "original-releases-development"
+    destination.mkdir(exist_ok=True)
+    local = copy(args)
+    local.output = args.shared_screen or args.output
+    original_release_scores(local, destination, matches, REPLICATION_SEEDS,
+                            "Check the development ranking of the prior-weight setting on the original releases. "
+                            "The already completed independent comparison uses seeds 251–253.",
+                            published={key(a): screen["scores"][key(a)] for a in matches})
+
+
 def individual_rates(args):
     """Vary G or the particles alone around the strongest prior/noise setting."""
     base = NOISY_PRIOR
@@ -534,6 +550,8 @@ def compare_prior_weight(args):
             baseline = trial
             trial = centroid_weight_trial(args.centroid_result, baseline)
             if trial is None:
+                if args.stage != "search":
+                    raise ValueError("No relativistic weight passed the training gradient comparison")
                 write_frozen(args.output / "selection.json", dict(advances=False, winner=None, reason="gradient comparison"))
                 return
             references.append(("calibrated-weight2", paired(baseline)[0]))
@@ -766,7 +784,7 @@ def main():
         parser.add_argument("--" + field, type=Path, required=True)
     parser.add_argument("--workers-per-gpu", type=int, default=2)
     parser.add_argument("--window-cells", type=int)
-    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-noise-controls",
+    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-prior-screen-releases", "compare-noise-controls",
                                           "replicate-balanced-releases", "replicate-calibrated-critic"), default="search")
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
@@ -792,6 +810,11 @@ def main():
     for field in ("data", "wheels", "output"):
         setattr(args, field, getattr(args, field).resolve())
     args.output.mkdir(parents=True, exist_ok=True)
+    if args.stage == "compare-prior-screen-releases":
+        if args.study != "prior-weight":
+            parser.error("--stage compare-prior-screen-releases requires --study prior-weight")
+        compare_prior_screen_releases(args)
+        return
     replication = {"replicate-balanced-releases": "balanced-particle-prior",
                    "replicate-calibrated-critic": "original-v11-critic"}
     if args.stage in replication:

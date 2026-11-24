@@ -2,6 +2,8 @@
 
 The comparison uses the published 1,200-update neuronal benchmark with the same network, 64 × 16 learned particle table, batch size 64, training cells, 256 generated draws per target and four-target mean energy distance. The incumbent v12 uses hollow self-coupling, relativistic weight 2 and constant generator, critic and particle learning rates of 0.014, 0.021 and 0.0406. [Previous twelve-seed comparison](neuroko_v12_1200.md)
 
+Every v12 run in the fixed-rate comparison uses **no learning-rate decay**. Both schedule multipliers stayed at 1.0 through update 40,000. Two 1,200-update GPU replays of the lower-critic-rate configuration checked the actual optimizer rates on every step. ParticleGAN’s native generator gain can still adjust an individual step in response to the model. [Optimizer rates and gain traces on both cards](neuroko_v12_optimizer_step_rates.json)
+
 ## Results at 1,200 updates
 
 On 16 paired seeds (84–99), EMPF with the same latent noise and learning rates had the lowest mean held-out energy, 1.3531. Matched v11 averaged 1.3584 and the selected v12 averaged 1.3665. V12 scored lower on 6 of 16 seeds against each matched control. Its mean difference from EMPF was +0.0134 with a paired 95% interval of −0.0257 to +0.0525. This cohort leaves the direction of the formulation effect uncertain.
@@ -25,6 +27,20 @@ All 208 held-out fits passed the constant-rate and matched-input checks. The pri
 | V12, previous selection | 1.3773 | 1.029 | 123 s | -0.0108 [-0.0545, +0.0329] |
 | V12, previous v11 role rates | 1.3826 | 1.080 | 127 s | -0.0161 [-0.0469, +0.0146] |
 | V12, release defaults at fixed capacity | 1.7905 | 0.649 | 123 s | -0.4240 [-0.4594, -0.3887] |
+
+## Comparisons with the original releases
+
+Each row uses the same nine training-group and seed pairs (22–24), architecture and 1,200 updates. The three learning rates and the latent noise in a row apply to all three models. Lower mean energy is better.
+
+| Generator / critic / particle LR | Latent noise | Prior coefficient | v12 (0.12.0) | v11 (0.11.1) | EMPF (0.10.0) |
+| --- | ---: | --- | ---: | ---: | ---: |
+| 0.020 / 0.042 / 0.0203 | 0.025 | Release default | 0.97744 | **0.94688** | 0.98361 |
+| 0.020 / 0.042 / 0.0203 | 0.025 | Shared 0.02 | 0.97744 | **0.94688** | 1.00727 |
+| 0.020 / 0.030 / 0.0580 | 0.025 | Release default | 0.96390 | **0.93442** | 0.96588 |
+| 0.020 / 0.030 / 0.0580 | 0.025 | Shared 0.02 | 0.96390 | **0.93442** | 0.98369 |
+| 0.014 / 0.0046 / 0.0406 | 0.150 | Shared 0.041 | 0.94752 | **0.92547** | 0.95963 |
+
+The default prior coefficient is 0.02 for v12 and v11 and 0.01 for EMPF. Within each rate setting, the default and shared-0.02 rows use the same Unified fits. At EMPF’s tuned rates with a shared prior of 0.02, v12 beat original EMPF on six of nine pairs. Original v11 had the lowest mean. [First rate setting](neuroko_v12_matched_rates_original_releases.json) · [First setting with shared prior](neuroko_v12_matched_rates_shared_prior.json) · [EMPF’s tuned rates](neuroko_v12_empf_rates_original_releases.json) · [EMPF’s rates with shared prior](neuroko_empf_rates_originals_shared_prior_002.json) · [Shared prior 0.041](neuroko_v12_balanced_matched_releases.json)
 
 ## Six configurations on the same nine training pairs
 
@@ -280,6 +296,8 @@ The prior weight had different effects across formulations at noise 0.15. In bot
 | 251 | 0.97204 | 0.93236 | 0.93740 |
 | 252 | 0.93266 | 0.91767 | 0.97112 |
 | 253 | 0.93969 | 0.95885 | 0.90930 |
+
+The earlier seeds 22–24 at weight 0.1 also had a same-wheel v12 lead. To check that development ranking against both original releases, run the prior-weight command above with `--stage compare-prior-screen-releases`. It uses the three published same-wheel score vectors as checks and retains the independent result on seeds 251–253.
 
 The original 0.10.0 EMPF reproduced the 0.12.0 EMPF per-target measurements exactly across all nine pairs. The original 0.11.1 v11 averaged 0.93856. V12 scored lower on three of nine pairs against each original release. The median fit took 124 s for v12, 147 s for original EMPF and 155 s for original v11 under concurrent GPU workloads. Every one of the 45 fits across the five recipe and release combinations verified all 1,200 updates and matched its corresponding input, initialization and minibatch hashes. [Pinned settings, paired scores, rate checks and timings](neuroko_v12_prior_weight_original_releases.json)
 
@@ -594,7 +612,11 @@ python paper_watch/scripts/neuroko_rate_noise.py --study critic-interval --data 
   --second-screen "$data/v12-noise-prior"
 ```
 
+The calibrated 0.0049 critic improved v12 again on seeds 251–253, from **0.94813 to 0.93939**. Five of the nine pairs improved, as in the first cohort. Tuned v11 scored **0.92116** and tuned EMPF **0.90413** on those same pairs. Across the two cohorts, four of the six three-fold seed means favored 0.0049 over 0.021. [All 18 paired scores and the predefined comparison](neuroko_v12_calibrated_critic_replication.json)
+
 A separate experiment keeps the 0.0049 critic rate and tests **latent noise 0.09**. This is one multiplicative step below 0.15, using the same factor as the increase from 0.15 to 0.25. It tests whether reducing noise helps with the excess generated spread. The first nine v12 runs must beat the 0.15 reference and both tuned controls. The subsequent stages reserve fresh training seeds 552–557 and biological holdout seeds 558–573. Run the same command with `--study original-v11-critic-narrow-noise` and `--output "$data/v12-original-critic-narrow-noise"`.
+
+Reducing latent noise from 0.15 to 0.09 raised mean energy from **0.92850 to 0.94357**. Three of nine paired fits improved. Among the three noise widths tested at the 0.0049 critic rate, 0.15 had the lowest mean on this cohort. [Nine paired scores and selection rule](neuroko_v12_original_critic_narrow_noise_energy.json)
 
 ### Relativistic loss weight and conditional mean error
 
