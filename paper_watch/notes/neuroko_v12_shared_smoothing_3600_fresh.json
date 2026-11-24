@@ -1,7 +1,7 @@
 {
   "status": "partial",
   "expected_pairs": 18,
-  "completed_pairs": 14,
+  "completed_pairs": 15,
   "protocol": {
     "arms": {
       "v12": [
@@ -1598,6 +1598,156 @@
     },
     {
       "seed": 841,
+      "group": "Screen1_3",
+      "gpu": 0,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.570539059607823,
+            "spread_ratio": 1.2740435910943995,
+            "effective_rank": 22.21825482309871
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6102822224284037,
+            "spread_ratio": 1.310997648172117,
+            "effective_rank": 22.912932048079558
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.5598744477985247,
+            "spread_ratio": 1.315127073946855,
+            "effective_rank": 23.000760023363426
+          }
+        ],
+        "tuned_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.7372549914144468,
+            "spread_ratio": 1.2200838597742258,
+            "effective_rank": 16.977139080240086
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6225347037002924,
+            "spread_ratio": 1.2628010980957776,
+            "effective_rank": 17.591268781371042
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.7069138613283867,
+            "spread_ratio": 1.357871240264362,
+            "effective_rank": 17.46826914487555
+          }
+        ],
+        "tuned_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6284663563502808,
+            "spread_ratio": 1.229014341745525,
+            "effective_rank": 22.00776097523129
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.5861825360049662,
+            "spread_ratio": 1.2469263361366434,
+            "effective_rank": 22.844687048163124
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6429385835586878,
+            "spread_ratio": 1.2651373837586004,
+            "effective_rank": 20.935400617843513
+          }
+        ],
+        "matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.7503412215392615,
+            "spread_ratio": 1.114746377106191,
+            "effective_rank": 10.644349926980578
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.735872333834457,
+            "spread_ratio": 1.2904965190188937,
+            "effective_rank": 15.254841775873242
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.5981452275702039,
+            "spread_ratio": 1.2903169448662504,
+            "effective_rank": 17.982339818634127
+          }
+        ],
+        "matched_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6091079155478625,
+            "spread_ratio": 1.2135301003045929,
+            "effective_rank": 21.985577578414475
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6106529609126061,
+            "spread_ratio": 1.2620512238814474,
+            "effective_rank": 22.02861230663492
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6221318259924489,
+            "spread_ratio": 1.2650560673228561,
+            "effective_rank": 19.866432247285797
+          }
+        ],
+        "native_matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.6634408721402278,
+            "spread_ratio": 1.2680054844497477,
+            "effective_rank": 15.717516968344114
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.6799135452456413,
+            "spread_ratio": 1.2702956887009014,
+            "effective_rank": 17.082115499640135
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.769930843569693,
+            "spread_ratio": 1.3116464080725145,
+            "effective_rank": 16.458349850260074
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initialization": "2d9195f2a258a5e8d27c69777a114ab5deb0b6501e8ad6c8a3e7e24a501dc227",
+        "training_batches": [
+          "6f308d915616c69812886ccb8c1738c8baba9b2142d947bd35e8a67d56222a69",
+          "e70a84471f50dd965643c8cadee2afad05326b57fd27e0cd0f5de84abbddb5cc",
+          "00040bc82a619315bc2fdfa62592db8d939886de3bf5a72651302fea6ab7add9"
+        ]
+      },
+      "measured_empf_smoothing": {
+        "generator_and_particles": 0.0061,
+        "critic": 0.0061
+      },
+      "rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "verified_new_optimizer_steps": {
+        "generator_and_particles": 3600,
+        "critic": 3600
+      },
+      "new_fit_seconds": 719.2258188470732
+    },
+    {
+      "seed": 841,
       "group": "Screen1_4",
       "gpu": 1,
       "curves": {
@@ -2292,6 +2442,38 @@
         1.0101652746472656,
         1.0350027688285084,
         0.9657372422027676
+      ]
+    },
+    "841": {
+      "v12": [
+        0.9009538398027005,
+        0.9687723741248748,
+        0.9077442376084853
+      ],
+      "tuned_empf": [
+        0.9817315453175522,
+        0.948400309407781,
+        0.9638944692630153
+      ],
+      "tuned_v11": [
+        0.9262852334426697,
+        0.9241532626276878,
+        0.9363978569636328
+      ],
+      "matched_empf": [
+        1.0389839977384028,
+        0.9789583114246015,
+        0.9210806781814961
+      ],
+      "matched_v11": [
+        0.9180198830508532,
+        0.9511265312175342,
+        0.9351606673697993
+      ],
+      "native_matched_empf": [
+        0.9782604062306661,
+        0.9854567865057664,
+        1.030971348642618
       ]
     }
   }
