@@ -2,10 +2,13 @@
 import argparse
 from copy import copy
 import json
+import os
 from pathlib import Path
 from statistics import mean
+import subprocess
+import sys
 
-from compare_neuroko_v12 import GROUPS, receipt, write_frozen
+from compare_neuroko_v12 import GROUPS, ROOT, receipt, write_frozen
 from neuroko_role_factorial import TRIALS, paired
 from neuroko_stratified import confirm_candidate, control_arms, evaluate, key
 from neuroko_transport_scale import TRIALS as TRANSPORT
@@ -55,7 +58,7 @@ def original_release_scores(args, destination, matches, seeds, metric, *, publis
                  dict(arms=comparisons, seeds=seeds, groups=list(GROUPS),
                       metric=metric))
     scores = evaluate(args, comparisons, seeds)
-    if published is not None and any(scores[key(arm)] != published[key(arm)] for arm in matches):
+    if published is not None and any(scores[name] != values for name, values in published.items()):
         raise ValueError("The same-wheel controls do not reproduce the published scores")
     own = scores[key(v12)]
     summaries = {}
@@ -72,6 +75,57 @@ def original_release_scores(args, destination, matches, seeds, metric, *, publis
     print("Original-release comparison", summaries, flush=True)
 
 
+def prior_equivalence(release, arms):
+    """Resolve full recipes in a process importing just this ParticleGAN release."""
+    from importlib.metadata import version
+    from paper_watch.alztest.harness import TrainingSettings
+    from particlegan import get_recipe
+
+    if version("particlegan") != release:
+        raise ValueError(f"Expected ParticleGAN {release}")
+    result = {}
+    for _, recipe, trial in arms:
+        settings = TrainingSettings(**{k: v for k, v in trial.items() if k not in ("name", "lr")})
+        overrides = settings.recipe_overrides()
+        native = get_recipe(recipe, lr=trial["lr"], **overrides)
+        explicit = get_recipe(recipe, lr=trial["lr"], **(overrides | {"prior_reg": .02}))
+        same = native == explicit
+        if explicit.prior_reg != .02 or same != (recipe != "empf") or native.prior_reg != (.01 if recipe == "empf" else .02):
+            raise ValueError(f"Unexpected prior defaults for {release} {recipe}")
+        result[recipe] = dict(native_weight=native.prior_reg, shared_weight=explicit.prior_reg,
+                              identical_full_recipe=same)
+    return result
+
+
+def compare_shared_prior(run_args, destination, matches, published):
+    destination = destination / "shared-prior-002"
+    destination.mkdir(exist_ok=True)
+    v12, v11, empf = matches
+    by_release = {"0.12.0": matches, "0.11.1": [v11], "0.10.0": [empf]}
+    resolved = {}
+    for release, arms in by_release.items():
+        wheel = run_args.wheels / release
+        if not (wheel / "particlegan").is_dir():
+            raise FileNotFoundError(wheel)
+        pythonpath = os.pathsep.join([str(wheel), str(ROOT), str(ROOT / "paper_watch/scripts"),
+                                      os.environ.get("PYTHONPATH", "")])
+        cmd = [sys.executable, "-B", "-c",
+               "import json,sys; from neuroko_matched_rate_replication import prior_equivalence; "
+               "print(json.dumps(prior_equivalence(*json.load(sys.stdin))))"]
+        check = subprocess.run(cmd, input=json.dumps([release, arms]), text=True, capture_output=True,
+                               env=dict(os.environ, PYTHONPATH=pythonpath), cwd=ROOT)
+        if check.returncode:
+            raise RuntimeError(f"Could not verify {release} recipes: {check.stderr.strip()}")
+        resolved[release] = json.loads(check.stdout)
+    write_frozen(destination / "prior_equivalence.json", resolved)
+    shared_empf = [*empf[:2], dict(empf[2], name=empf[2]["name"] + "-prior020", prior_reg=.02)]
+    original_release_scores(run_args, destination, [v12, v11, shared_empf], SEEDS,
+                            "Mean four-target energy on the same nine training pairs at fixed role rates, "
+                            "latent noise 0.025 and shared prior weight 0.02. Reuse full-equivalent Unified "
+                            "recipes and refit both EMPF releases with the explicit coefficient.",
+                            published={key(a): published[key(a)] for a in (v12, v11)})
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for field in ("data", "wheels", "output"):
@@ -81,7 +135,7 @@ def main():
     parser.add_argument("--rates", choices=("seed15", "empf"), default="seed15")
     parser.add_argument("--workers-per-gpu", type=int, default=2)
     parser.add_argument("--window-cells", type=int)
-    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases"), default="search")
+    parser.add_argument("--stage", choices=("search", "confirm", "compare-releases", "compare-shared-prior"), default="search")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     for field in ("data", "wheels", "output"):
@@ -104,13 +158,17 @@ def main():
     run_args = copy(args)
     if args.shared_validation is not None:
         run_args.output = args.shared_validation.resolve()
-    if args.stage == "compare-releases":
+    if args.stage in ("compare-releases", "compare-shared-prior"):
         decision = json.loads((args.output / "selection.json").read_text())
         if decision["trial"] != trial:
             raise ValueError("The published replication used a different candidate")
+        if args.stage == "compare-shared-prior":
+            compare_shared_prior(run_args, args.output, matches, decision["validation"])
+            return
         metric = ("Mean four-target energy after 1200 fixed-rate updates on the original nine "
                   "training pairs at this rate setting. This release check does not select a candidate.")
-        original_release_scores(run_args, args.output, matches, SEEDS, metric, published=decision["validation"])
+        original_release_scores(run_args, args.output, matches, SEEDS, metric,
+                                published={key(a): decision["validation"][key(a)] for a in matches})
         return
     scores = evaluate(run_args, arms, SEEDS)
     means = {name: mean(values) for name, values in scores.items()}

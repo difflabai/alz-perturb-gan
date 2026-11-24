@@ -43,7 +43,7 @@ Every entry covers nine 1,200-update runs on the three training groups. The thre
 
 ## Selection and confirmation
 
-All eligible fits use constant generator, critic and particle learning rates throughout. The training search compares the incumbent with 16 alternatives. Six trials vary the constant rate of just one role while holding the other two fixed. Other trials vary optimizer momentum and smoothing, transport entropy and mass relaxation, active-pair critic weight, critic penalty and prior penalty. Each held-out receipt verifies the actual rates at initialization and at updates 300, 600, 900 and 1,200. The fixed-rate drivers also check the released scheduler at every update before each new fit and compare live optimizer group rates after each update. Cached receipts are checked against their recorded optimizer rates.
+All eligible fits use constant generator, critic and particle learning rates throughout. The training search compares the incumbent with 16 alternatives. Six trials vary the constant rate of just one role while holding the other two fixed. Other trials vary optimizer momentum and smoothing, transport entropy and mass relaxation, active-pair critic weight, critic penalty and prior penalty. Each held-out receipt verifies the actual rates at initialization and at updates 300, 600, 900 and 1,200. The fixed-rate drivers also check the released scheduler at every update before each new fit and compare live optimizer group rates after each update. Cached receipts are checked against their recorded optimizer rates. The fixed-rate validator also checks the end of the configured cosine schedule or the first exponential decay interval. This catches delayed decay even when a 1,200-update run would finish before it starts. In the released v12 recipe the cosine network and particle floors are both 1.0, so both multipliers stay exactly 1.0 through and beyond its 7,000-update horizon.
 
 An initial screen started before the fixed-rate requirement. Five decay configurations were removed from the protocol before finalist selection. Only fixed-rate measurements enter the results. The superseded screen has a separate output directory.
 
@@ -231,6 +231,8 @@ python paper_watch/scripts/neuroko_matched_rate_replication.py --stage compare-r
   --data "$data" --window-cells 10000 --wheels "$data/wheels" --shared-validation "$data/v12-rate-noise" \
   --output "$data/v12-at-empf-rates"
 ```
+
+The rate-matched comparison also has a shared-prior check. At each rate setting, `--stage compare-shared-prior` gives EMPF the same 0.02 prior coefficient as Unified v11 and v12. Before reusing a Unified fit, the driver resolves the complete recipe in the appropriate installed wheel and verifies that explicitly setting the coefficient gives the identical recipe. It refits EMPF from both 0.10.0 and 0.12.0, checks each of the 1,200 learning rates, and compares all five formulation–release combinations on the same nine pairs. Use the commands above with `--stage compare-shared-prior` to reproduce this comparison.
 
 ## Prior penalty at latent noise 0.15
 

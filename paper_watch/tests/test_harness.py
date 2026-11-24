@@ -115,13 +115,23 @@ def test_stratified_prior_uses_every_particle_during_training_and_preserves_eval
 
 
 @pytest.mark.parametrize("field", ["lr_floor", "network_lr_floor"])
-def test_fixed_rate_benchmark_rejects_decay_in_either_role(field):
+@pytest.mark.parametrize("horizon", [1200, 7000])
+def test_fixed_rate_benchmark_rejects_decay_in_either_role(field, horizon):
     from paper_watch.alztest.neuroko_tune import verify_fixed_schedule
 
-    fixed = {"lr_floor": 1., "network_lr_floor": 1., "total_steps": 1200}
+    fixed = {"lr_floor": 1., "network_lr_floor": 1., "total_steps": horizon}
     verify_fixed_schedule(get_recipe("empf", **fixed), 1200)
     with pytest.raises(ValueError, match="changes network or particle LR"):
         verify_fixed_schedule(get_recipe("empf", **(fixed | {field: .1})), 1200)
+
+
+def test_fixed_rate_benchmark_rejects_delayed_staircase_decay():
+    from paper_watch.alztest.neuroko_tune import verify_fixed_schedule
+
+    recipe = get_recipe("empf", lr_schedule="exponential", lr_decay_staircase=True,
+                        lr_decay_rate=0.96, lr_decay_steps=50000)
+    with pytest.raises(ValueError, match="changes network or particle LR at update 50000"):
+        verify_fixed_schedule(recipe, 1200)
 
 
 def test_v12_gain_diagnostic_reads_the_released_optimizer_state():

@@ -110,6 +110,22 @@ def test_wide_noise_rivals_can_be_measured_without_promoting_failed_candidates(t
     assert calls[-1] == ([251, 252, 253], ["noise150-prior100", "noise250-prior100", "noise250-prior100"])
 
 
+def test_shared_prior_reuses_only_identical_native_recipes(monkeypatch):
+    from importlib.metadata import version
+
+    pytest.importorskip("particlegan")
+    if version("particlegan") != "0.12.0":
+        pytest.skip("requires ParticleGAN 0.12.0")
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    from neuroko_matched_rate_replication import TRIAL, comparison, prior_equivalence
+
+    matches, _ = comparison(TRIAL, False)
+    checked = prior_equivalence("0.12.0", matches)
+    for name in ("unified_v12", "unified_v11"):
+        assert checked[name] == dict(native_weight=.02, shared_weight=.02, identical_full_recipe=True)
+    assert checked["empf"] == dict(native_weight=.01, shared_weight=.02, identical_full_recipe=False)
+
+
 def test_test_cells_use_training_coordinates():
     train = csr_matrix(np.array([[0., 0.], [3., 1.], [2., 1.], [1., 0.], [4., 3.]]))
     test = train[[2, 0, 3]]

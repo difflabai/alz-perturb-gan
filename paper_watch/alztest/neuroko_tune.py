@@ -11,6 +11,7 @@ from contextlib import ExitStack
 from dataclasses import asdict
 from hashlib import sha256
 from importlib.metadata import version
+from itertools import chain
 import json
 import os
 from pathlib import Path
@@ -29,7 +30,9 @@ from .neuroko_lr import DRAWS, score
 def verify_fixed_schedule(recipe, updates):
     from particlegan import learning_rate_scales
 
-    for step in range(updates + 1):
+    # A short benchmark can finish before cosine annealing or the first staircase step.
+    horizon = recipe.lr_decay_steps if recipe.lr_schedule == "exponential" else recipe.total_steps
+    for step in chain(range(updates + 1), (horizon,)):
         scales = learning_rate_scales(step, recipe)
         if tuple(scales) != (1.0, 1.0):
             raise ValueError(f"{recipe.name} changes network or particle LR at update {step}: {scales}")
