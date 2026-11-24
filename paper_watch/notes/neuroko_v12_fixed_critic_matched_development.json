@@ -1,0 +1,185 @@
+{
+  "protocol": {
+    "arms": [
+      [
+        "0.12.0",
+        "unified_v12",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "unified_v11",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "rhbi_self_coupling": "hollow",
+          "rhbi_relativistic_weight": 2.0,
+          "prior_sigma": 0.15,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_reg": 0.1
+        }
+      ],
+      [
+        "0.12.0",
+        "empf",
+        {
+          "name": "original-v11-critic-49",
+          "lr": 0.014,
+          "d_lr_mult": 0.35,
+          "prior_lr_mult": 2.9,
+          "prior_sigma": 0.15,
+          "prior_reg": 0.1
+        }
+      ]
+    ],
+    "original_releases": [
+      "0.10.0",
+      "0.11.1"
+    ],
+    "groups": [
+      "Screen1_1",
+      "Screen1_3",
+      "Screen1_4"
+    ],
+    "development": [
+      22,
+      23,
+      24
+    ],
+    "fresh": [
+      524,
+      525,
+      526,
+      527,
+      528,
+      529
+    ],
+    "rule": "At the fixed critic rate calibrated against original v11, check every release at identical rates, noise 0.15 and prior weight 0.1 on the nine development pairs. The preceding v12 run must have improved over its original critic rate. Replicate all five on six fresh training seeds only if v12 leads every release at these shared settings."
+  },
+  "decision": {
+    "v12_lowest_matched_mean": true,
+    "summaries": {
+      "0.10.0/empf/original-v11-critic-49": {
+        "energy": 0.9965210770068422,
+        "v12_minus_arm": -0.0680231459209218,
+        "v12_pairs_won": 6
+      },
+      "0.11.1/unified_v11/original-v11-critic-49": {
+        "energy": 0.9487836565947668,
+        "v12_minus_arm": -0.020285725508846466,
+        "v12_pairs_won": 6
+      },
+      "0.12.0/unified_v12/original-v11-critic-49": {
+        "energy": 0.9284979310859204,
+        "v12_minus_arm": 0.0,
+        "v12_pairs_won": 0
+      },
+      "0.12.0/unified_v11/original-v11-critic-49": {
+        "energy": 0.9505099690460477,
+        "v12_minus_arm": -0.022012037960127358,
+        "v12_pairs_won": 6
+      },
+      "0.12.0/empf/original-v11-critic-49": {
+        "energy": 0.9965210770068422,
+        "v12_minus_arm": -0.0680231459209218,
+        "v12_pairs_won": 6
+      }
+    }
+  },
+  "comparison": {
+    "scores": {
+      "0.10.0/empf/original-v11-critic-49": [
+        1.115794115205545,
+        0.6069872397044966,
+        1.0819989154854617,
+        1.1774788731335057,
+        0.6815404198820101,
+        1.1294651630174053,
+        1.2860412168547701,
+        0.6610876937779475,
+        1.2282960560004375
+      ],
+      "0.11.1/unified_v11/original-v11-critic-49": [
+        1.2084226033954382,
+        0.6169509422632742,
+        1.0424415711362207,
+        1.172398187896117,
+        0.5976069012868783,
+        0.985017412043034,
+        1.2590956909378466,
+        0.630987608525684,
+        1.0261319918684086
+      ],
+      "0.12.0/unified_v12/original-v11-critic-49": [
+        1.1263494186235306,
+        0.6114014145359561,
+        0.9871477581704231,
+        1.126615089377189,
+        0.6207189273353579,
+        1.0181744368803536,
+        1.2100226375749439,
+        0.6698091226184917,
+        0.9862425746570376
+      ],
+      "0.12.0/unified_v11/original-v11-critic-49": [
+        1.1972700092860642,
+        0.6417040662897946,
+        1.034343792137901,
+        1.1600713672761784,
+        0.6066101272497333,
+        0.9918865676741095,
+        1.2595318509556992,
+        0.6547820007449674,
+        1.0083899397999818
+      ],
+      "0.12.0/empf/original-v11-critic-49": [
+        1.115794115205545,
+        0.6069872397044966,
+        1.0819989154854617,
+        1.1774788731335057,
+        0.6815404198820101,
+        1.1294651630174053,
+        1.2860412168547701,
+        0.6610876937779475,
+        1.2282960560004375
+      ]
+    },
+    "summaries": {
+      "0.10.0/empf/original-v11-critic-49": {
+        "energy": 0.9965210770068422,
+        "v12_minus_arm": -0.0680231459209218,
+        "v12_pairs_won": 6
+      },
+      "0.11.1/unified_v11/original-v11-critic-49": {
+        "energy": 0.9487836565947668,
+        "v12_minus_arm": -0.020285725508846466,
+        "v12_pairs_won": 6
+      },
+      "0.12.0/unified_v12/original-v11-critic-49": {
+        "energy": 0.9284979310859204,
+        "v12_minus_arm": 0.0,
+        "v12_pairs_won": 0
+      },
+      "0.12.0/unified_v11/original-v11-critic-49": {
+        "energy": 0.9505099690460477,
+        "v12_minus_arm": -0.022012037960127358,
+        "v12_pairs_won": 6
+      },
+      "0.12.0/empf/original-v11-critic-49": {
+        "energy": 0.9965210770068422,
+        "v12_minus_arm": -0.0680231459209218,
+        "v12_pairs_won": 6
+      }
+    }
+  }
+}
