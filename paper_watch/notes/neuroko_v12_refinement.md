@@ -155,3 +155,12 @@ The high-generator, high-critic, low-particle finalist also merits direct replic
 python paper_watch/scripts/neuroko_matched_rate_replication.py --data "$data" --window-cells 10000 \
   --wheels "$data/wheels" --output "$data/v12-matched-rate-replication" --shared-validation "$data/v12-rate-noise"
 ```
+
+### All three formulations at EMPF’s tuned rates
+
+The original matched-rate finalist moved the critic rate above and the particle rate below the tuned EMPF values. A second fixed comparison assigns all three models EMPF’s previously tuned rates of 0.020, 0.030 and 0.058. The v12 and v11 arms keep hollow coupling and relativistic weight 2. All models use latent noise 0.025. This comparison shares the exact tuned EMPF receipts with the other validation on seeds 22–24. The same selection threshold applies to the nine independent fold–seed pairs, with outer seeds 196–211 reserved in advance. [Comparison arms and decision rule](../scripts/neuroko_matched_rate_replication.py)
+
+```bash
+python paper_watch/scripts/neuroko_matched_rate_replication.py --rates empf --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-at-empf-rates" --shared-validation "$data/v12-rate-noise"
+```
