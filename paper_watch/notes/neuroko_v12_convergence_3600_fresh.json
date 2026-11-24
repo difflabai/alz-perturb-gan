@@ -2,9 +2,9 @@
   "status": "partial",
   "primary_endpoint": 3600,
   "expected_fits": 90,
-  "completed_fits": 75,
+  "completed_fits": 81,
   "expected_five_way_pairs": 18,
-  "complete_five_way_pairs": 15,
+  "complete_five_way_pairs": 16,
   "protocol": {
     "arms": {
       "v12": [
@@ -202,6 +202,13 @@
         0.9817315453175522,
         0.948400309407781,
         0.9638944692630153
+      ]
+    },
+    "842": {
+      "v12": [
+        0.9670683148833805,
+        0.9313372781706916,
+        0.9195815922202165
       ]
     }
   },
@@ -453,24 +460,38 @@
           1.2526883768491999
         ]
       }
+    },
+    "842": {
+      "v12": {
+        "effective_rank": [
+          22.587472983370247,
+          22.231359871087797,
+          21.709207892311326
+        ],
+        "spread_ratio": [
+          1.1976737240010706,
+          1.2353620311379114,
+          1.2459918269078136
+        ]
+      }
     }
   },
   "available_endpoint_comparisons": {
     "matched_v11": {
-      "completed_pairs": 15,
-      "v12_wins": 9
+      "completed_pairs": 16,
+      "v12_wins": 10
     },
     "matched_empf": {
-      "completed_pairs": 15,
-      "v12_wins": 12
+      "completed_pairs": 16,
+      "v12_wins": 13
     },
     "tuned_v11": {
-      "completed_pairs": 15,
-      "v12_wins": 9
+      "completed_pairs": 16,
+      "v12_wins": 10
     },
     "tuned_empf": {
-      "completed_pairs": 15,
-      "v12_wins": 12
+      "completed_pairs": 16,
+      "v12_wins": 13
     }
   },
   "checked_cells": [
@@ -1352,6 +1373,79 @@
     },
     {
       "seed": 842,
+      "group": "Screen1_1",
+      "physical_gpu": 0,
+      "paired_fingerprints": {
+        "data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "init": "e5c9efd0e21ca1b6d74754ec7e233294f7023937d6131613cec054834bb0b1a3",
+        "batches": [
+          "d283814379a568ba70cab4dd48d29a04bb7599e1e4b809df945e363d1f27e76f",
+          "1199b7375276be93923896296765296dd9e62d4436bfb19b352939d3f131edea",
+          "c2d8ba6a06916252e2cf16621c713b4fa59a1f3d08b4f34212932ea911d25d1a"
+        ]
+      },
+      "energy_by_checkpoint": {
+        "v12": [
+          1.1736187307063717,
+          1.128997894805145,
+          1.1419870540729113
+        ],
+        "matched_v11": [
+          1.2244861588394294,
+          1.25320873654089,
+          1.2675988625872547
+        ],
+        "matched_empf": [
+          1.1493850662007599,
+          1.3715044882756142,
+          1.318083193763562
+        ],
+        "tuned_v11": [
+          1.204524103260317,
+          1.2076842281928653,
+          1.1915094270394107
+        ],
+        "tuned_empf": [
+          1.0698425405000203,
+          1.227654437475346,
+          1.17828064501343
+        ]
+      },
+      "target_energy_at_3600": {
+        "v12": {
+          "GLCCI1": 1.163754328630903,
+          "SLC2A4RG": 1.1023597784589532,
+          "PLEKHA1": 1.156588220243238,
+          "MAMSTR": 1.1452458889585513
+        },
+        "matched_v11": {
+          "GLCCI1": 1.2525576147780706,
+          "SLC2A4RG": 1.222330409128456,
+          "PLEKHA1": 1.2817204639410988,
+          "MAMSTR": 1.3137869625013936
+        },
+        "matched_empf": {
+          "GLCCI1": 1.2737129842508566,
+          "SLC2A4RG": 1.2836972455901474,
+          "PLEKHA1": 1.308512781511988,
+          "MAMSTR": 1.406409763701256
+        },
+        "tuned_v11": {
+          "GLCCI1": 1.200554519937743,
+          "SLC2A4RG": 1.0867050983011852,
+          "PLEKHA1": 1.2957947952360813,
+          "MAMSTR": 1.182983294682633
+        },
+        "tuned_empf": {
+          "GLCCI1": 1.12876341977909,
+          "SLC2A4RG": 1.0827624623080947,
+          "PLEKHA1": 1.1996011854891169,
+          "MAMSTR": 1.3019955124774185
+        }
+      }
+    },
+    {
+      "seed": 842,
       "group": "Screen1_3",
       "physical_gpu": 1,
       "paired_fingerprints": {
@@ -1420,6 +1514,35 @@
           "SLC2A4RG": 0.676815013644096,
           "PLEKHA1": 0.7149316569505944,
           "MAMSTR": 0.6130889954814194
+        }
+      }
+    },
+    {
+      "seed": 842,
+      "group": "Screen1_4",
+      "physical_gpu": 0,
+      "paired_fingerprints": {
+        "data": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "init": "e5c9efd0e21ca1b6d74754ec7e233294f7023937d6131613cec054834bb0b1a3",
+        "batches": [
+          "f04aa86adb2dbfa2621c4531aff8f447ba0776caf21bdd5b02d7870d4f727a5b",
+          "720a04ca76182d91e14ea306a845993a89d01e3ee8e99105b1ea99e2334d715a",
+          "18715cd9200e159c3633a07147b921deeaf90b899667953fce1c585b8b2a8e04"
+        ]
+      },
+      "energy_by_checkpoint": {
+        "v12": [
+          1.034405891051812,
+          1.0348386089056725,
+          1.0348893417735052
+        ]
+      },
+      "target_energy_at_3600": {
+        "v12": {
+          "GLCCI1": 1.0161834686145719,
+          "SLC2A4RG": 1.0683716712029279,
+          "PLEKHA1": 0.966398988868038,
+          "MAMSTR": 1.0886032384084832
         }
       }
     },

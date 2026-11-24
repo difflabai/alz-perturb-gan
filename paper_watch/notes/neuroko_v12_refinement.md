@@ -150,6 +150,8 @@ Across the first four fresh seeds with complete five-way results, v12 beat both 
 
 Across the twelve pairs, v12 energy moved from 0.94900 at 1,200 to 0.95816 at 2,400 and 0.93526 at 3,600. Matched v11 followed a similar course (0.94223, 0.95036, 0.94199). Tuned EMPF rose from 0.97038 to 0.97161 to 0.99602, while matched EMPF improved from 1.01642 to 0.99309 to 0.99225. On seed 841, v12 overtook tuned v11 between 2,400 and 3,600 and finished below all four controls. [Fixed-rate trajectories for seeds 838–841](neuroko_v12_convergence_3600_fresh.json)
 
+On **Screen1_1**, the group used for the 40,000-update study, all six fresh seeds also have 3,600-update results. V12 averaged **1.16345**, followed by tuned v11 (1.18287), matched v11 (1.19965), tuned EMPF (1.20176) and matched EMPF at shared smoothing 0.0061 (1.20442). V12 beat tuned v11 on five of six seeds and led all four controls on three. At EMPF’s native smoothing of 0.001 its matched mean was 1.23319, and v12 led all four controls on five seeds. The six-seed decision about the biological holdout averages all three development groups. [Matched-smoothing fresh curves](neuroko_v12_shared_smoothing_3600_fresh.json) · [Release-native fresh curves](neuroko_v12_convergence_3600_fresh.json)
+
 Averaged across those twelve group–seed pairs, v12 had lower energy than tuned EMPF on every target. The largest gain was 0.09196 on MAMSTR and the smallest was 0.02755 on GLCCI1. Against tuned v11, v12 led on SLC2A4RG by 0.00609 and MAMSTR by 0.00202. Tuned v11 led on GLCCI1 by 0.00980 and PLEKHA1 by 0.00474. The four targets carry equal weight in the endpoint. [Paired target scores](neuroko_v12_convergence_3600_fresh.json)
 
 We will also compare the v11 and v12 optimizers inside the 0.12.0 wheel at 3,600 updates. At the calibrated settings, the resolved recipes differ in name and optimizer family alone. Reuse the v12 trajectories and train same-wheel v11 on identical minibatches at fixed rates, first on all six pilot pairs and then on all 18 fresh pairs regardless of the pilot result. The primary outcome is their paired mean energy difference at 3,600 updates. [Two-GPU reproduction command](../README.md#check-whether-v12-closes-the-gap-by-3600-updates)
@@ -166,14 +168,20 @@ All nine pairs assigned to GPU 1 have finished. At 3,600 updates same-wheel v11 
 
 The longer run follows all five configurations on Screen1_1, the first development group in the protocol, with seeds 22 and 251. V12 trailed tuned original v11 on this group at 3,600 on both pilot seeds. The primary outcome is mean energy at 40,000. A secondary outcome averages energy over updates 30,000–40,000 using the number of updates between measurements. Every fit replays the published checkpoints through 3,600 and checks the generator, critic and particle rates at every optimizer step. Two additional v11 fits in release 0.12.0 isolate the optimizer difference on these same seeds, batches and checkpoints. [Two-GPU commands and checkpoint schedule](../README.md#follow-v12-and-the-four-original-controls-to-40000-updates)
 
-| Screen1_1 mean energy | V12 (0.12.0) | Matched v11 (0.11.1) | Matched EMPF (0.10.0) | Tuned v11 (0.11.1) | Tuned EMPF (0.10.0) |
-|---|---:|---:|---:|---:|---:|
-| Seed 22 at 40,000 | 1.16185 | 1.19505 | 1.20320 | 1.21487 | 1.27087 |
-| Seed 251 at 40,000 | 1.14060 | 1.20880 | 1.21103 | 1.21234 | 1.17641 |
-| Two-seed mean at 40,000 | **1.15122** | 1.20192 | 1.20712 | 1.21361 | 1.22364 |
-| Two-seed mean over 30,000–40,000 | **1.13280** | 1.20672 | 1.23375 | 1.19289 | 1.24407 |
+| Updates | Screen1_1 training seed | V12 (0.12.0) | Matched v11 (0.11.1) | Matched EMPF (0.10.0) | Tuned v11 (0.11.1) | Tuned EMPF (0.10.0) |
+|---:|---|---:|---:|---:|---:|---:|
+| 1,200 | 22 | 1.12635 | 1.20842 | 1.30644 | 1.16600 | **1.12235** |
+| 1,200 | 251 | **1.14130** | 1.21571 | 1.24290 | 1.24712 | 1.15665 |
+| 1,200 | Mean | **1.13382** | 1.21207 | 1.27467 | 1.20656 | 1.13950 |
+| 3,600 | 22 | 1.17212 | **1.16425** | 1.26864 | 1.16854 | 1.20881 |
+| 3,600 | 251 | 1.15631 | 1.15568 | 1.17583 | **1.13284** | 1.20709 |
+| 3,600 | Mean | 1.16421 | 1.15997 | 1.22223 | **1.15069** | 1.20795 |
+| 40,000 | 22 | **1.16185** | 1.19505 | 1.20320 | 1.21487 | 1.27087 |
+| 40,000 | 251 | **1.14060** | 1.20880 | 1.21103 | 1.21234 | 1.17641 |
+| 40,000 | Mean | **1.15122** | 1.20192 | 1.20712 | 1.21361 | 1.22364 |
+| 30,000–40,000 | Time-weighted mean | **1.13280** | 1.20672 | 1.23375 | 1.19289 | 1.24407 |
 
-On both seeds, tuned original v11 led v12 at 3,600 and v12 led tuned v11 at 40,000. V12 had the lowest energy of the five at 26 of 34 checkpoints on seed 22 and 32 of 34 on seed 251. Giving original EMPF its native smoothing of 0.001 raised its endpoint mean from 1.20712 to 1.23244. The other four configurations used the same fits for both comparisons. [Shared-smoothing results](neuroko_v12_shared_smoothing_40000.json) · [Release-native smoothing results](neuroko_v12_convergence_40000.json)
+From 3,600 to 40,000 updates, v12 improved by 0.01299 in mean energy while tuned v11 worsened by 0.06292. Tuned v11 led on both seeds at 3,600 and v12 led on both at 40,000. V12’s own two-seed mean was lower at 1,200 than at 40,000. V12 had the lowest energy of the five at 26 of 34 checkpoints on seed 22 and 32 of 34 on seed 251. Giving original EMPF its native smoothing of 0.001 raised its endpoint mean from 1.20712 to 1.23244. The other four configurations used the same fits for both comparisons. [Shared-smoothing results](neuroko_v12_shared_smoothing_40000.json) · [Release-native smoothing results](neuroko_v12_convergence_40000.json)
 
 As a sensitivity check, averaging the two 40,000-update seeds after dropping any one of the four targets still placed v12 first among all five configurations. Dropping SLC2A4RG gave the smallest lead over the next model, 0.01770 in energy distance. [Per-target endpoints for both seeds](neuroko_v12_shared_smoothing_40000.json)
 

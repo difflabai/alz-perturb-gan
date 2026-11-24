@@ -1,7 +1,7 @@
 {
   "status": "partial",
   "expected_pairs": 18,
-  "completed_pairs": 15,
+  "completed_pairs": 16,
   "protocol": {
     "arms": {
       "v12": [
@@ -1898,6 +1898,156 @@
     },
     {
       "seed": 842,
+      "group": "Screen1_1",
+      "gpu": 0,
+      "curves": {
+        "v12": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1736187307063717,
+            "spread_ratio": 1.2634885719270224,
+            "effective_rank": 22.75953356726334
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.128997894805145,
+            "spread_ratio": 1.2689302912875187,
+            "effective_rank": 21.79030266278022
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.1419870540729113,
+            "spread_ratio": 1.3125565610534258,
+            "effective_rank": 20.54594109387039
+          }
+        ],
+        "tuned_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.0698425405000203,
+            "spread_ratio": 1.2474706640290179,
+            "effective_rank": 16.36400719661867
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.227654437475346,
+            "spread_ratio": 1.265498479828073,
+            "effective_rank": 17.24107158529001
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.17828064501343,
+            "spread_ratio": 1.3170875928987897,
+            "effective_rank": 17.249089283904272
+          }
+        ],
+        "tuned_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.204524103260317,
+            "spread_ratio": 1.1715970417501191,
+            "effective_rank": 22.614264709557222
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.2076842281928653,
+            "spread_ratio": 1.2406190938020873,
+            "effective_rank": 21.717042270669456
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.1915094270394107,
+            "spread_ratio": 1.229326698525308,
+            "effective_rank": 21.21394690975354
+          }
+        ],
+        "matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.2245953452660943,
+            "spread_ratio": 1.2219981612509416,
+            "effective_rank": 9.575438301192996
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.1946321721233877,
+            "spread_ratio": 1.253906256193394,
+            "effective_rank": 15.774050736808912
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.2599406902694552,
+            "spread_ratio": 1.2792713873503525,
+            "effective_rank": 16.37977160177832
+          }
+        ],
+        "matched_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.2244861588394294,
+            "spread_ratio": 1.1740034530146464,
+            "effective_rank": 22.044958595914235
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.25320873654089,
+            "spread_ratio": 1.2242637848832358,
+            "effective_rank": 20.73522102908974
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.2675988625872547,
+            "spread_ratio": 1.201317216790154,
+            "effective_rank": 19.452866127486278
+          }
+        ],
+        "native_matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 1.1493850662007599,
+            "spread_ratio": 1.2416170679384808,
+            "effective_rank": 16.119328535412144
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 1.3715044882756142,
+            "spread_ratio": 1.2723927971922149,
+            "effective_rank": 16.281415422151397
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 1.318083193763562,
+            "spread_ratio": 1.3013030517724733,
+            "effective_rank": 17.43837006534739
+          }
+        ]
+      },
+      "paired_inputs": {
+        "data": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initialization": "e5c9efd0e21ca1b6d74754ec7e233294f7023937d6131613cec054834bb0b1a3",
+        "training_batches": [
+          "d283814379a568ba70cab4dd48d29a04bb7599e1e4b809df945e363d1f27e76f",
+          "1199b7375276be93923896296765296dd9e62d4436bfb19b352939d3f131edea",
+          "c2d8ba6a06916252e2cf16621c713b4fa59a1f3d08b4f34212932ea911d25d1a"
+        ]
+      },
+      "measured_empf_smoothing": {
+        "generator_and_particles": 0.0061,
+        "critic": 0.0061
+      },
+      "rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "verified_new_optimizer_steps": {
+        "generator_and_particles": 3600,
+        "critic": 3600
+      },
+      "new_fit_seconds": 530.2969342141878
+    },
+    {
+      "seed": 842,
       "group": "Screen1_3",
       "gpu": 1,
       "curves": {
@@ -2490,6 +2640,18 @@
         "tuned_v11": 472.1321297979448,
         "matched_empf": 419.9469230710529,
         "matched_v11": 493.63359913090244
+      }
+    },
+    {
+      "seed": 842,
+      "group": "Screen1_1",
+      "gpu": 0,
+      "fit_seconds": {
+        "v12": 433.825368987862,
+        "tuned_empf": 649.0101524430793,
+        "tuned_v11": 571.3218450399581,
+        "matched_empf": 530.2969342141878,
+        "matched_v11": 561.8435810068622
       }
     },
     {
