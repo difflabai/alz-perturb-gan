@@ -1,0 +1,162 @@
+{
+  "seed": 838,
+  "group": "Screen1_3",
+  "gpu": 1,
+  "planned_total_pairs": 18,
+  "arms": {
+    "v12": {
+      "release": "0.12.0",
+      "recipe": "unified_v12",
+      "trial": {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      },
+      "optimizer_rates": {
+        "generator": 0.014,
+        "critic": 0.0049,
+        "particles": 0.0406
+      },
+      "verified_steps": {
+        "generator_and_particles": 3600,
+        "critic": 3600
+      },
+      "checkpoints": [
+        {
+          "updates": 1200,
+          "mean_energy_distance": 0.676134325721607,
+          "spread_ratio": 1.3383059956969183,
+          "effective_rank": 21.432464825697593
+        },
+        {
+          "updates": 2400,
+          "mean_energy_distance": 0.6240714383494168,
+          "spread_ratio": 1.3032906324886806,
+          "effective_rank": 23.658132498778187
+        },
+        {
+          "updates": 3600,
+          "mean_energy_distance": 0.5905244374384555,
+          "spread_ratio": 1.2830687034438992,
+          "effective_rank": 23.188347577920034
+        }
+      ],
+      "target_energies": {
+        "GLCCI1": 0.5822200618138709,
+        "SLC2A4RG": 0.5425439170071753,
+        "PLEKHA1": 0.6452809270608499,
+        "MAMSTR": 0.5920528438719259
+      }
+    },
+    "tuned_v11": {
+      "release": "0.11.1",
+      "recipe": "unified_v11",
+      "trial": {
+        "name": "motion-critic-46-prior41",
+        "lr": 0.014,
+        "d_lr_mult": 0.32857142857142857,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.041,
+        "rhbi_relativistic_weight": 2.0,
+        "rhbi_self_coupling": "hollow"
+      },
+      "optimizer_rates": {
+        "generator": 0.014,
+        "critic": 0.0046,
+        "particles": 0.0406
+      },
+      "verified_steps": {
+        "generator_and_particles": 3600,
+        "critic": 3600
+      },
+      "checkpoints": [
+        {
+          "updates": 1200,
+          "mean_energy_distance": 0.6367552046859886,
+          "spread_ratio": 1.254912906310781,
+          "effective_rank": 21.59779459819702
+        },
+        {
+          "updates": 2400,
+          "mean_energy_distance": 0.6077867361524587,
+          "spread_ratio": 1.2195750621927823,
+          "effective_rank": 22.976696369112894
+        },
+        {
+          "updates": 3600,
+          "mean_energy_distance": 0.6337369923176603,
+          "spread_ratio": 1.245015790364226,
+          "effective_rank": 21.41097009537542
+        }
+      ],
+      "target_energies": {
+        "GLCCI1": 0.6847556429600328,
+        "SLC2A4RG": 0.6260620672912074,
+        "PLEKHA1": 0.6255007104700114,
+        "MAMSTR": 0.5986295485493898
+      }
+    },
+    "tuned_empf": {
+      "release": "0.10.0",
+      "recipe": "empf",
+      "trial": {
+        "name": "noise250-prior100",
+        "lr": 0.014,
+        "d_lr_mult": 1.5,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.25,
+        "prior_reg": 0.1
+      },
+      "optimizer_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      },
+      "verified_steps": {
+        "generator_and_particles": 3600,
+        "critic": 3600
+      },
+      "checkpoints": [
+        {
+          "updates": 1200,
+          "mean_energy_distance": 0.5924544674317083,
+          "spread_ratio": 1.2365662212401967,
+          "effective_rank": 16.778952041457615
+        },
+        {
+          "updates": 2400,
+          "mean_energy_distance": 0.6913881823979711,
+          "spread_ratio": 1.2944048334684917,
+          "effective_rank": 17.528556362591807
+        },
+        {
+          "updates": 3600,
+          "mean_energy_distance": 0.7419187733332582,
+          "spread_ratio": 1.3586522853181646,
+          "effective_rank": 18.334772224004297
+        }
+      ],
+      "target_energies": {
+        "GLCCI1": 0.8075592090968291,
+        "SLC2A4RG": 0.6788401420143595,
+        "PLEKHA1": 0.8194822632504914,
+        "MAMSTR": 0.6617934789713527
+      }
+    }
+  },
+  "paired_hashes": {
+    "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+    "initial_parameters_sha256": "c7b8637789f02467640f3babf4fadd71be526fcfe15bfa77ea82433dd799feaf",
+    "training_batches_sha256": [
+      "84f4170031ba10157cee271967722b62b75818ed96612ad85b7f451d1c008f22",
+      "b8650dd0660b7f6c1ec227920c48ddb85a8959d0d9c5f09d43a708aa733db078",
+      "8f8b8cd84b034012b46827b19735fc26d31473bb7a91f5d63cf60259c0894fd3"
+    ]
+  }
+}
