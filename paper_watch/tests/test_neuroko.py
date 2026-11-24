@@ -1,5 +1,6 @@
 """Regression checks for the NeuroKO evaluation and release metadata mapping."""
 from contextlib import ExitStack
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -8,6 +9,26 @@ from scipy.sparse import csr_matrix
 import torch
 
 from alztest.neuroko import LAYOUT, evaluate, normalize_counts, open_screen, project_fold, select_targets
+
+
+def test_critic_rate_interpolation_checks_the_same_v11_reference(tmp_path, monkeypatch):
+    import json
+
+    paper_watch = Path(__file__).resolve().parents[1]
+    monkeypatch.syspath_prepend(str(paper_watch / "scripts"))
+    from neuroko_rate_noise import calibrated_critic
+
+    baseline = paper_watch / "notes/neuroko_v12_critic_motion.json"
+    check = paper_watch / "notes/neuroko_v12_critic_motion_check.json"
+    trial, calibration = calibrated_critic(baseline, check)
+    assert calibration["lower_critic_lr"] == .0035
+    assert trial["lr"] * trial["d_lr_mult"] == calibration["fixed_critic_lr"] == .0046
+    different_probe = json.loads(check.read_text())
+    different_probe["cells"][0]["probe_indices_sha256"] = "different"
+    incompatible = tmp_path / "incompatible.json"
+    incompatible.write_text(json.dumps(different_probe))
+    with pytest.raises(ValueError, match="identical v11 probes"):
+        calibrated_critic(baseline, incompatible)
 
 
 def test_test_cells_use_training_coordinates():

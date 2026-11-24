@@ -2,7 +2,7 @@
 import argparse
 from copy import copy
 import json
-from math import isfinite
+from math import exp, isfinite, log
 from pathlib import Path
 from statistics import mean, median
 
@@ -16,7 +16,7 @@ from retune_neuroko_v12 import BASE, RELEASE, V12
 RATE_NAMES = ("g-high-d-high-p-low", "g-low-d-low-p-high")
 NOISY_PRIOR = dict(NOISY, name="noise150-prior100", d_lr_mult=1.5, prior_lr_mult=2.9, prior_reg=0.1)
 MATCHED_PRIOR = dict(MATCHED_RATE_TRIAL, name="matched-rates-prior100", prior_reg=0.1)
-TWO_COHORT_STUDIES = ("strong-prior-noise", "critic-motion")
+TWO_COHORT_STUDIES = ("strong-prior-noise", "critic-motion", "matched-critic-motion")
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
     for name in RATE_NAMES for sigma in (75, 150)
@@ -40,31 +40,52 @@ def original_noise(trial):
     return dict(trial, name="same-rates-sigma025", prior_sigma=0.025)
 
 
-def calibrated_critic(path):
+def critic_motion_probe(path, v12_critic_lr):
     measurement = json.loads(path.read_text())
     spec, cells = measurement["protocol"], measurement["cells"]
     expected = {(s, g) for s in REPLICATION_SEEDS for g in GROUPS}
     if (spec["release"] != RELEASE or spec["settings"] != NOISY_PRIOR or spec["steps"] != 64
-            or spec.get("v12_critic_lr", 0.021) != 0.021
+            or spec.get("v12_critic_lr", 0.021) != v12_critic_lr
             or len(cells) != len(expected) or {(r["seed"], r["group"]) for r in cells} != expected):
         raise ValueError("Critic calibration requires the nine paired 64-update probes at the release rates")
-    ratios = []
+    ratios, reference = [], {}
     for cell in cells:
-        if any(cell["rows"][role]["rates"] != dict(generator=.014, critic=.021, particles=.0406)
-               for role in ("unified_v11", V12)):
-            raise ValueError("Calibration expects both formulations at the release rates")
+        for role, lr in (("unified_v11", .021), (V12, v12_critic_lr)):
+            if cell["rows"][role]["rates"] != dict(generator=.014, critic=lr, particles=.0406):
+                raise ValueError("The training probe used unexpected role rates")
         v11, v12 = (cell["rows"][role]["centered_rms"] for role in ("unified_v11", V12))
         if len(v11) != 64 or len(v12) != 64 or not all(isfinite(x) and x > 0 for x in (*v11, *v12)):
             raise ValueError("Incomplete or zero critic displacement")
+        signatures = [tuple(cell["rows"][role][k] for k in ("initial_parameters_sha256", "training_batches_sha256"))
+                      for role in ("unified_v11", V12)]
+        if signatures[0] != signatures[1]:
+            raise ValueError("Critics used different initial parameters or training minibatches")
+        reference[cell["seed"], cell["group"]] = (cell["projected_data_sha256"], cell["probe_indices_sha256"],
+                                                   signatures[0], v11)
         ratios.append(median(v12) / median(v11))
     ratio = median(ratios)
     if ratio != measurement["summary"]["median_step_ratio"]:
         raise ValueError("The published critic ratio differs from the measured displacements")
+    return ratio, reference
+
+
+def calibrated_critic(path, check=None):
+    ratio, reference = critic_motion_probe(path, .021)
     critic = round(0.021 / ratio, 4)
     if critic <= 0:
         raise ValueError("The measured ratio gives a nonpositive critic learning rate after rounding")
+    calibration = dict(measured_median_ratio=ratio, reference_critic_lr=0.021)
+    if check is not None:
+        low_ratio, second_reference = critic_motion_probe(check, critic)
+        if reference != second_reference:
+            raise ValueError("Critic calibration requires identical v11 probes, training inputs and measurements")
+        if not (low_ratio < 1 < ratio):
+            raise ValueError("The two measured critic responses must bracket the v11 reference")
+        calibration.update(lower_critic_lr=critic, lower_median_ratio=low_ratio)
+        fraction = -log(low_ratio) / log(ratio / low_ratio)
+        critic = round(exp(log(critic) + fraction * log(0.021 / critic)), 4)
     trial = dict(NOISY_PRIOR, name=f"motion-critic-{round(critic * 10000)}", d_lr_mult=critic / NOISY_PRIOR["lr"])
-    return trial, dict(measured_median_ratio=ratio, reference_critic_lr=0.021, fixed_critic_lr=critic)
+    return trial, dict(calibration, fixed_critic_lr=critic)
 
 
 def prior_effects(arms, scores, seeds):
@@ -205,7 +226,7 @@ def compare_prior_weight(args):
             "0.10.0 EMPF. Only a win over every independent reference qualifies for the biological "
             "holdout on seeds 332–347. All decisions use energy at 1200 constant-rate updates."
         )
-    elif args.study == "critic-motion":
+    elif args.study in ("critic-motion", "matched-critic-motion"):
         baseline = NOISY_PRIOR
         trial, calibration = calibrated_critic(args.motion_result)
         references = [("release-critic-" + arm[1], arm) for arm in paired(baseline)]
@@ -220,6 +241,21 @@ def compare_prior_weight(args):
             "seeds 22–24 and 251–253, then on six fresh seeds 272–277 including the original v11 and "
             "EMPF. Only then score the frozen candidate on outer seeds 348–363."
         )
+        if args.study == "matched-critic-motion":
+            references.extend(("first-calibration-" + arm[1], arm) for arm in paired(trial))
+            trial, calibration = calibrated_critic(args.motion_result, args.motion_check)
+            independent_seeds = list(range(278, 284))
+            outer_seeds = list(range(364, 380))
+            rule = (
+                "Interpolate in log learning rate and log centered critic displacement ratio between "
+                "the original 0.021 rate and its first calibrated rate. Target the median 64-step v11 "
+                "movement at 0.021 and round the estimated v12 rate to 0.0001. Use the resulting fixed "
+                "critic rate in all three matched formulations with generator 0.014, particles 0.0406, "
+                "noise 0.15 and prior weight 0.1. On each development cohort (22–24 and 251–253), "
+                "require lower energy after 1200 updates than all matched and established references, "
+                "including all three at the original and first calibrated rates. Repeat on fresh seeds "
+                "278–283 with both original releases before the biological holdout on seeds 364–379."
+            )
     else:
         trial = NOISY_PRIOR
         baseline = NOISY
@@ -314,6 +350,8 @@ def main():
                         help="reuse seeds 251–253 from the prior-weight study in a two-cohort search")
     parser.add_argument("--motion-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_critic_motion.json",
                         help="paired critic-output measurements used by the critic-motion study")
+    parser.add_argument("--motion-check", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_critic_motion_check.json",
+                        help="measured response at the first calibrated rate for matched-critic-motion")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     if args.second_screen is not None and args.study not in TWO_COHORT_STUDIES:

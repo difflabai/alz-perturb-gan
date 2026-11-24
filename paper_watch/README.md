@@ -138,6 +138,8 @@ To continue the search from the same checkout, run the `--study prior-interactio
 
 In that comparison the stronger prior helped v12 at noise 0.15 under both rate settings. The next training command, `--study strong-prior-noise`, tests noise 0.25 against matched controls. A separate replay measures how much of the earlier improvement came from training with more noise and how much came from sampling the trained generator with more noise. [Higher-noise comparison](notes/neuroko_v12_refinement.md#increasing-noise-with-the-stronger-prior) · [Training and sampling replay](notes/neuroko_v12_refinement.md#separating-training-noise-from-sampling-noise)
 
+The `--study critic-motion` command tests a fixed critic LR of 0.0035 while keeping generator and particle rates at 0.014 and 0.0406. This rate comes from measuring the change in each critic's scores at the same starting rate. All three formulations receive the reduced critic rate in the matched comparison. [Critic measurements and two-GPU reproduction commands](notes/neuroko_v12_refinement.md#calibrating-the-critic-learning-rate-from-its-measured-updates)
+
 Two earlier replication commands compare the formulations at fixed rates of 0.020, 0.042 and 0.0203, then at EMPF’s tuned rates of 0.020, 0.030 and 0.058. [Paired results and commands](notes/neuroko_v12_refinement.md#replicated-comparison-of-learning-rates-and-latent-noise)
 
 #### Copy-paste prompt for the 1,200-update formulation comparison

@@ -362,6 +362,10 @@ The released optimizers transform dense critic gradients differently. V12's fast
 
 Dividing 0.021 by the measured ratio and rounding to four decimal places gives a critic LR of **0.0035**. The 1,200-update study gives that fixed rate to all three matched formulations, with generator 0.014, particles 0.0406, latent noise 0.15 and prior weight 0.1. It retains the original-rate controls. The candidate must beat the controls separately on development seeds 22–24 and 251–253, then on fresh seeds 272–277 including the two original releases. A qualifying result goes to the biological holdout on seeds 348–363. A short repeat measures the actual critic movement at the new rate.
 
+With the v12 critic reduced to 0.0035 and the reference v11 critic at 0.021, the first-update ratio fell to 0.865 and the median 64-update ratio fell to 0.722 (range 0.702–0.743). All nine reference v11 traces reproduced exactly. The formula slightly overcorrected the measured 64-update movement. Interpolating the two measured ratios, 0.722 and 6.060, against their respective learning rates in log space gives **0.0046** for a ratio of 1. A separate 64-step probe tests this prediction. The 1,200-update comparison above keeps its original fixed rate of 0.0035. [Paired rate-check traces](neuroko_v12_critic_motion_check.json)
+
+The repeat at 0.0046 produced a median 64-update ratio of **0.974**, with a range of 0.941–1.004 across the nine pairs. On the first step alone the ratio was 1.137. The training score comparison at 0.0046 includes v11 and EMPF at the same 0.0046 rate, and all three formulations at 0.0035 and 0.021. It uses the same two development cohorts followed by fresh qualification seeds 278–283. Only a qualifying setting goes to the biological holdout on seeds 364–379. [Per-update measurements at 0.0046](neuroko_v12_critic_motion_interpolated.json)
+
 ```bash
 PYTHONPATH="$data/wheels/0.12.0:." python paper_watch/scripts/neuroko_critic_motion.py \
   --data "$data" --window-cells 10000 --reference "$data/v12-rate-noise" --output "$data/v12-critic-motion"
@@ -372,4 +376,8 @@ python paper_watch/scripts/neuroko_rate_noise.py --study critic-motion --data "$
   --wheels "$data/wheels" --motion-result "$data/v12-critic-motion/result.json" \
   --output "$data/v12-motion-calibrated" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior"
+python paper_watch/scripts/neuroko_rate_noise.py --study matched-critic-motion --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --motion-result "$data/v12-critic-motion/result.json" \
+  --motion-check "$data/v12-critic-motion-check/result.json" --output "$data/v12-motion-matched" \
+  --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
 ```

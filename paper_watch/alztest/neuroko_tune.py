@@ -131,8 +131,8 @@ def main():
         parser.error("--trace-every must be between 1 and 1200")
     if args.evaluation_seeds and len(set(args.evaluation_seeds)) != len(args.evaluation_seeds):
         parser.error("evaluation seed bases must be distinct")
-    if args.score_noise is not None and (not np.isfinite(args.score_noise) or args.score_noise <= 0):
-        parser.error("--score-noise must be positive and finite to preserve the Gaussian noise draws")
+    if args.score_noise is not None and (not np.isfinite(args.score_noise) or args.score_noise < 0):
+        parser.error("--score-noise must be nonnegative and finite")
     release = version("particlegan")
     supported = {"unified_v12": ("0.12.0",), "unified_v11": ("0.11.1", "0.12.0"),
                  "empf": ("0.10.0", "0.11.1", "0.12.0")}
