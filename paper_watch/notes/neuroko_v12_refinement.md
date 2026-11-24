@@ -254,6 +254,13 @@ The original 0.10.0 EMPF reproduced the 0.12.0 EMPF per-target measurements exac
 
 Across all five combinations the generator, critic and particle rates held at 0.014, 0.021 and 0.0406. V12's release recipe sets both `lr_floor` and `network_lr_floor` to 1.0. We checked its schedule at every update through 40,000 and both multipliers stayed at 1.0. In the nine 1,200-update v12 runs, its generator and critic adaptive gains also read 1.0 at each of the 36 logged checkpoints per role. For fixed-rate comparisons, the runner replays older cached fits that lack the per-update verification count.
 
+To measure the learning curves and sensitivity to the 256 generated samples per target, replay the nine fixed training pairs for the three original releases. The diagnostic checks that each replay reproduces every published target score and input hash. It measures energy, spread and covariance participation ratio at 300, 600, 900 and 1,200 updates using the original draw for each fit. At 1,200 it also samples the fitted generator with eight additional seed sets shared across all folds and formulations. The average over draws gives one score per fitted model. The original benchmark scores determine holdout eligibility. [Replay and aggregation code](../scripts/neuroko_evaluation_draws.py)
+
+```bash
+python paper_watch/scripts/neuroko_evaluation_draws.py --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-evaluation-draws"
+```
+
 ### Stronger prior at the replicated matched rates
 
 At generator 0.020, critic 0.042, particles 0.0203 and latent noise 0.025, v12 had lower mean energy than both matched formulations on seed 15 and again on seeds 22–24. We froze a single change to that configuration, increasing the prior weight to 0.1 and giving both controls the same coefficient. On seeds 22–24, v12 must score below both controls and its own previous weight of 0.02. A passing setting must then beat all references on fresh seeds 254–256, including the preceding v12 settings at both noise levels, before a biological holdout comparison on seeds 228–243. All runs keep the original network, particle table, draws and 1,200 constant-rate updates.

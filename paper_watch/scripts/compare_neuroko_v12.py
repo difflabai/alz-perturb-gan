@@ -69,7 +69,7 @@ def reusable_fit(path, require_constant_lr):
     return row.get("constant_lr_verified_updates") == row.get("updates") == 1200
 
 
-def fit(args, stage, seed, group, gpu, arms):
+def fit(args, stage, seed, group, gpu, arms, *, options=()):
     for release, recipe, trial in arms:
         target = receipt(args.output, stage, release, recipe, trial, seed, group)
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -88,6 +88,7 @@ def fit(args, stage, seed, group, gpu, arms):
             cmd.append("--require-constant-lr")
         if args.window_cells:
             cmd.extend(["--window-cells", str(args.window_cells)])
+        cmd.extend(options)
         with target.with_suffix(".log").open("a") as log:
             # Replications may request the same control; the second worker validates the cached fit.
             fcntl.flock(log, fcntl.LOCK_EX)

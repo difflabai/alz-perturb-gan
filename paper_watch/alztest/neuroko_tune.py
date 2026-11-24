@@ -68,6 +68,14 @@ def diagnose_energy(samples, observed, training, labels, conditions):
     return targets
 
 
+def draw_metrics(samples, scored_targets, *, diversity=True):
+    metrics = {"mean_energy_distance": mean(row["energy_distance"] for row in scored_targets.values())}
+    if diversity:
+        metrics["spread_ratio"] = mean(row["spread_ratio"] for row in scored_targets.values())
+        metrics["effective_rank"] = mean(effective_rank(rows) for rows in samples[1:])
+    return metrics
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=("validation", "heldout"))
@@ -82,6 +90,8 @@ def main():
     parser.add_argument("--require-constant-lr", action="store_true",
                         help="require unit network and particle schedule multipliers and verify live optimizer rates")
     parser.add_argument("--trace-every", type=int, help="also score validation or holdout at this update interval")
+    parser.add_argument("--evaluation-seeds", type=int, nargs="+", metavar="BASE",
+                        help="also evaluate each fitted model with these sampling seeds plus the condition index")
     parser.add_argument("--deterministic", action="store_true",
                         help="seed PyTorch and require deterministic CUDA kernels for repeatability checks")
     parser.add_argument("--diagnose-energy", action="store_true",
@@ -97,6 +107,8 @@ def main():
         parser.error("the self-plan diagnostic requires unified_v11")
     if args.trace_every is not None and not 0 < args.trace_every <= 1200:
         parser.error("--trace-every must be between 1 and 1200")
+    if args.evaluation_seeds and len(set(args.evaluation_seeds)) != len(args.evaluation_seeds):
+        parser.error("evaluation seed bases must be distinct")
     release = version("particlegan")
     supported = {"unified_v12": ("0.12.0",), "unified_v11": ("0.11.1", "0.12.0"),
                  "empf": ("0.10.0", "0.11.1", "0.12.0")}
@@ -160,6 +172,9 @@ def main():
         if args.trace_every:
             config["trace_every"] = args.trace_every
             path = path.with_stem(f"{path.stem}-trace{args.trace_every}")
+        if args.evaluation_seeds:
+            config["evaluation_seeds"] = args.evaluation_seeds
+            path = path.with_stem(f"{path.stem}-resampled")
         if args.self_plan:
             config["diagnostic_self_plan"] = args.self_plan
             path = path.with_stem(f"{path.stem}-{args.self_plan}")
@@ -245,9 +260,8 @@ def main():
                 finally:
                     model.G.cond.copy_(condition)
                     model.D.cond.copy_(condition)
-                energy = mean(row["energy_distance"] for row in measured.values())
-                trace.append({"updates": step, "mean_energy_distance": energy})
-                print(f"{name} update {step} energy {energy:.6f}", flush=True)
+                trace.append({"updates": step, **draw_metrics(generated, measured, diversity=bool(args.evaluation_seeds))})
+                print(f"{name} update {step} energy {trace[-1]['mean_energy_distance']:.6f}", flush=True)
                 scoring_seconds += perf_counter() - tick
             if args.require_constant_lr or step % 300 == 0:
                 live_rates = optimizer_rates(model)
@@ -271,8 +285,15 @@ def main():
             config["energy_diagnosis"] = diagnose_energy(samples, observed, x, labels, conditions)
         averages = {key: mean(row[key] for row in metrics.values()) for key in next(iter(metrics.values()))}
         if args.trace_every:
-            trace.append({"updates": 1200, "mean_energy_distance": averages["energy_distance"]})
+            trace.append({"updates": 1200, **draw_metrics(samples, metrics, diversity=bool(args.evaluation_seeds))})
             config["trace"] = trace
+        if args.evaluation_seeds:
+            config["observed_effective_rank"] = mean(effective_rank(rows) for rows in observed[1:])
+            draws = {}
+            for base in args.evaluation_seeds:
+                generated = [model.sample(i, DRAWS, seed=base + i) for i in range(len(conditions))]
+                draws[str(base)] = draw_metrics(generated, score(generated, observed, conditions))
+            config["evaluation_draws"] = draws
         if args.require_constant_lr:
             config["constant_lr_verified_updates"] = model.trainer.completed_steps
         if gain_trace:
