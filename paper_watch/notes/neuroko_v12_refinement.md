@@ -269,6 +269,18 @@ python paper_watch/scripts/neuroko_evaluation_draws.py --data "$data" --window-c
   --wheels "$data/wheels" --output "$data/v12-evaluation-draws"
 ```
 
+All 27 GPU replays reproduced the original per-target scores. V12 improved between 300 and 1,200 updates on six of nine training pairs. Both v12 and EMPF had a small rebound in mean energy at update 900 and reached their lowest measured mean at 1,200. The fixed v12 learning rates held through that rebound.
+
+| Original release | Energy at 300 ↓ | 600 | 900 | 1,200 | 1,200 averaged over eight additional draw sets |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| EMPF 0.10.0 | 1.0656 | 0.9577 | 0.9694 | 0.9393 | 0.9435 |
+| Unified v11 0.11.1 | 0.9853 | 0.9737 | 0.9680 | 0.9386 | 0.9338 |
+| Unified v12 0.12.0 | 0.9958 | 0.9652 | 0.9740 | 0.9481 | 0.9466 |
+
+Averaging the eight new draw sets within each of the same nine fits per arm put v12 0.0030 above EMPF and 0.0127 above v11. V12 beat EMPF on five of the nine averaged pairs and v11 on two. The v12-minus-EMPF mean ranged from −0.0053 to +0.0128 across draw sets. These repeated draws measure sampling variation within the trained models.
+
+V12's effective covariance dimensions grew from 12.13 at update 300 to 17.80 at 1,200 on the original draws. EMPF grew from 9.65 to 16.75 and v11 from 11.07 to 17.96. The observed cells averaged 17.44. On the eight additional final draw sets, v12 averaged 17.66 dimensions with 1.130 times the observed spread, compared with 16.64 and 1.174 for EMPF and 17.86 and 1.122 for v11. [Paired learning curves, evaluation draws and diversity measurements](neuroko_v12_evaluation_draws.json)
+
 ### Stronger prior at the replicated matched rates
 
 At generator 0.020, critic 0.042, particles 0.0203 and latent noise 0.025, v12 had lower mean energy than both matched formulations on seed 15 and again on seeds 22–24. We froze a single change to that configuration, increasing the prior weight to 0.1 and giving both controls the same coefficient. On seeds 22–24, v12 must score below both controls and its own previous weight of 0.02. A passing setting must then beat all references on fresh seeds 254–256, including the preceding v12 settings at both noise levels, before a biological holdout comparison on seeds 228–243. All runs keep the original network, particle table, draws and 1,200 constant-rate updates.
@@ -291,7 +303,7 @@ python paper_watch/scripts/neuroko_rate_noise.py --study double-prior-weight --d
   --wheels "$data/wheels" --output "$data/v12-double-prior" --shared-screen "$data/v12-rate-noise"
 ```
 
-Across all nine screening pairs, doubling the weight from 0.1 to 0.2 raised v12's mean energy from 0.94231 to 0.98036. The higher weight improved one pair and increased energy in each of the three seed means. This fails the comparison with the weight-0.1 predecessor.
+Across all nine screening pairs, doubling the weight from 0.1 to 0.2 raised v12's mean energy from 0.94231 to 0.98036. The higher weight improved one pair and increased energy in each of the three seed means. At weight 0.2, EMPF scored 0.95944 and v11 scored 0.96545. V12 beat each matched control on four of nine pairs. The study ended on the training folds. [All 117 paired scores and the screening decision](neuroko_v12_double_prior_screen.json)
 
 ### Separating the effects of latent noise and role rates
 
