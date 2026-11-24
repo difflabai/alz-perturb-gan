@@ -71,7 +71,7 @@ def test_transport_metrics_exclude_slack_row_and_weight_by_matched_mass(monkeypa
     assert (slack.item(), count.item()) == (1., 0.)
 
 
-def test_published_release_comparison_needs_only_tracked_calibration(tmp_path, monkeypatch):
+def test_published_release_comparison_starts_without_prior_run_directory(tmp_path, monkeypatch):
     import json
     from types import SimpleNamespace
 
@@ -103,6 +103,28 @@ def test_published_release_comparison_needs_only_tracked_calibration(tmp_path, m
         assert t["prior_reg"] == (.041 if role == "tuned_v11" else .1)
     result = json.loads((tmp_path / "second_comparison.json").read_text())
     assert result["comparisons"]["tuned_empf"]["pairs_won"] == 9
+
+
+def test_critic_weight_interaction_requires_both_cohorts(tmp_path, monkeypatch):
+    import json
+    from types import SimpleNamespace
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_rate_noise as study
+
+    def scores(local, arms, seeds):
+        corner_scores = [1., .95, .98, .9 if seeds[0] == 22 else .99]
+        return {study.key(a): [v]*9 for a, v in zip(arms, corner_scores + [.96]*4, strict=True)}
+
+    monkeypatch.setattr(study, "evaluate", scores)
+    args = SimpleNamespace(output=tmp_path, shared_screen=None, second_screen=None, stage="search")
+    baseline = dict(study.NOISY_PRIOR, name="original-v11-critic-49", d_lr_mult=.0049/.014)
+    winner, plan = study.critic_weight_interaction(args, baseline)
+    result = json.loads((tmp_path / "critic_weight_scores.json").read_text())
+    assert winner is None and not result["passes"]
+    assert result["cohorts"]["first"]["passes"] and not result["cohorts"]["second"]["passes"]
+    assert result["cohorts"]["first"]["paired_interaction"] == pytest.approx([-.03]*9)
+    assert plan["cells"]["upper_half"][2]["d_lr_mult"] * .014 == pytest.approx(.0071)
 
 
 def test_prior_spread_target_is_shared_through_qualification(monkeypatch):

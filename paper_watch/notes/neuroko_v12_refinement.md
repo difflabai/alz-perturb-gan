@@ -777,3 +777,17 @@ PYTHONPATH="$data/wheels/0.12.0:$PWD:$PWD/paper_watch" python paper_watch/script
   --data "$data" --window-cells 10000 --grid "$data/v12-transport-grid/transport_grid.json" \
   --reference "$data/v12-original-critic-rate-check" --output "$data/v12-transport-plans"
 ```
+
+### Combining critic LR 0.0071 with relativistic weight 0.5
+
+Calibrated v12 produced variation in more covariance dimensions than tuned original EMPF on both seed cohorts. V12 averaged 22.24 and 22.51 effective dimensions, tuned EMPF averaged 16.31 and 16.43, and the observed cells averaged 17.44. Tuned EMPF had lower mean absolute rank error on all 18 pairs and lower absolute log spread error on 17. [Target-averaged rank, spread, energy and conditional shift on both cohorts](neuroko_v12_tuned_empf_geometry.json)
+
+On seeds 22–24, increasing the v12 critic LR from 0.0049 to 0.0071 at weight 2 reduced mean absolute rank error from 4.80 to 3.74 with nearly identical energy (0.92850 and 0.92853). Separately, lowering the weight to 0.5 at critic LR 0.0049 reduced energy to 0.92322 and absolute log spread error from 0.180 to 0.141. The study combines the two changes and measures their interaction on both development cohorts. It holds the generator LR at 0.014, particle LR at 0.0406, latent noise at 0.15 and prior coefficient at 0.1.
+
+The combined setting must beat the three other combinations and the controls tuned on each wheel on both cohorts. A qualifying candidate proceeds to fresh seeds 772–777 and then to biological holdout seeds 778–793 if it still leads.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study critic-weight-interaction --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-critic-weight-interaction" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
+```

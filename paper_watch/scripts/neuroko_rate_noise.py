@@ -24,6 +24,7 @@ MATCHED_PRIOR = dict(MATCHED_RATE_TRIAL, name="matched-rates-prior100", prior_re
 MOTION_STUDIES = ("critic-motion", "matched-critic-motion", "balanced-particle-prior")
 ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
 ROLE_OUTER_SEEDS = list(range(396, 412))
+ORIGINAL_CONTROL_SELECTION = "paper_watch/notes/neuroko_original_control_selection.json"
 CRITIC_NOISE_STUDIES = ("original-v11-critic-wide-noise", "original-v11-critic-narrow-noise")
 CENTROID_WEIGHTS = (.5, 1., 2., 4.)
 CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight", "critic-mid-weight",
@@ -31,7 +32,8 @@ CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight", "critic-m
 PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise",
                        "release-loss", *CENTROID_STUDIES)
 TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "critic-interval", "loss-factorial",
-                      "calibrated-particles", "transport-grid", *PRELIMINARY_STUDIES, *MOTION_STUDIES)
+                      "calibrated-particles", "transport-grid", "critic-weight-interaction",
+                      *PRELIMINARY_STUDIES, *MOTION_STUDIES)
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
     for name in RATE_NAMES for sigma in (75, 150)
@@ -334,23 +336,27 @@ def compare_original_noise_controls(args):
                                 published={key(a): scores[key(a)] for a in matches[1:]})
 
 
-def compare_published_rates(args):
-    """Reproduce the original releases at the shared and independently tuned settings from a clean checkout."""
-    trial, _ = original_v11_critic_rate(args.original_v11_motion)
-    v12, v11, empf = paired(trial)
-    selection_file = "paper_watch/notes/neuroko_original_control_selection.json"
-    selection = json.loads((ROOT / selection_file).read_text())
+def published_original_controls():
+    selection = json.loads((ROOT / ORIGINAL_CONTROL_SELECTION).read_text())
     tuned = selection["controls"]
     for recipe, candidates in selection["candidates"].items():
         best = min(candidates, key=lambda row: (mean(row["scores"]), key(row["arm"])))
         if best["arm"] != tuned[recipe]:
             raise ValueError(f"Published {recipe} control differs from the lowest measured original-release mean")
+    return tuned
+
+
+def compare_published_rates(args):
+    """Reproduce the original releases at the shared and independently tuned settings from a clean checkout."""
+    trial, _ = original_v11_critic_rate(args.original_v11_motion)
+    v12, v11, empf = paired(trial)
+    tuned = published_original_controls()
     arms = {"v12": v12, "matched_v11": ["0.11.1", *v11[1:]], "matched_empf": ["0.10.0", *empf[1:]],
             "tuned_v11": tuned["unified_v11"], "tuned_empf": tuned["empf"]}
     cohorts = {"first": REPLICATION_SEEDS, "second": [251, 252, 253]}
     write_frozen(args.output / "comparison_protocol.json", dict(arms=arms, cohorts=cohorts, groups=list(GROUPS),
                  updates=1200, evaluation_draws=256, metric="four-target mean energy distance",
-                 original_control_selection=selection_file))
+                 original_control_selection=ORIGINAL_CONTROL_SELECTION))
     for cohort, cached in (("first", args.shared_screen), ("second", args.second_screen)):
         local = copy(args)
         local.output = cached or args.output
@@ -653,6 +659,44 @@ def loss_factorial(args, hollow2):
     return None
 
 
+def critic_weight_interaction(args, baseline):
+    upper = dict(baseline, name="interval-critic-71", d_lr_mult=.0071 / baseline["lr"])
+    cells = {role: paired(trial)[0] for role, trial in (
+        ("low2", baseline), ("low_half", dict(baseline, name=baseline["name"] + "-rel5", rhbi_relativistic_weight=.5)),
+        ("upper2", upper), ("upper_half", dict(upper, name=upper["name"] + "-rel5", rhbi_relativistic_weight=.5)))}
+    controls = [*paired(WIDE_NOISY_PRIOR)[1:], *published_original_controls().values()]
+    plan = dict(cells=cells, controls=controls, groups=list(GROUPS), first=REPLICATION_SEEDS, second=[251, 252, 253],
+                fresh=list(range(772, 778)), outer=list(range(778, 794)),
+                rule="Cross critic LR 0.0049 or 0.0071 with relativistic weight 0.5 or 2. Evaluate all four "
+                     "settings on both development cohorts. Only the new 0.0071/0.5 combination can advance. "
+                     "It must beat the three other corners and both independently tuned controls on both "
+                     "the original and 0.12.0 wheels. For qualification repeat against all matched and tuned "
+                     "references including the selected original releases on six fresh seeds before the holdout.")
+    write_frozen(args.output / "critic_weight_grid.json", plan)
+    target = args.output / "critic_weight_scores.json"
+    if args.stage == "search":
+        cohorts = {}
+        for cohort, cache in (("first", args.shared_screen), ("second", args.second_screen)):
+            local = copy(args)
+            local.output = cache or args.output
+            scores = evaluate(local, [*cells.values(), *controls], plan[cohort])
+            means = {name: mean(values) for name, values in scores.items()}
+            uh, u2, lh, l2 = (scores[key(cells[label])] for label in ("upper_half", "upper2", "low_half", "low2"))
+            interaction = [(a - b) - (c - d) for a, b, c, d in zip(uh, u2, lh, l2, strict=True)]
+            chosen = key(cells["upper_half"])
+            cohorts[cohort] = dict(scores=scores, means=means, paired_interaction=interaction,
+                                   passes=all(means[chosen] < value for name, value in means.items() if name != chosen))
+            write_frozen(args.output / f"{cohort}_critic_weight.json", cohorts[cohort])
+        write_frozen(target, dict(cohorts=cohorts, passes=all(c["passes"] for c in cohorts.values())))
+    outcome = json.loads(target.read_text())
+    if outcome["passes"]:
+        return cells["upper_half"][2], plan
+    if args.stage != "search":
+        raise ValueError("The new critic-rate and loss-weight combination did not pass both cohorts")
+    write_frozen(args.output / "selection.json", dict(advances=False, winner=None, preliminary=outcome))
+    return None, plan
+
+
 def compare_prior_weight(args):
     screen_only = []
     pinned = []
@@ -721,7 +765,8 @@ def compare_prior_weight(args):
                 "If it passes, compare against all matched and previously tuned controls on 22–24 and 251–253. "
                 "Reserve fresh seeds 480–485 including original releases, then biological holdout seeds 486–501.")
     elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "release-loss",
-                        "loss-factorial", "calibrated-particles", "transport-grid", *CENTROID_STUDIES):
+                        "loss-factorial", "calibrated-particles", "transport-grid", "critic-weight-interaction",
+                        *CENTROID_STUDIES):
         baseline = NOISY_PRIOR
         trial, ratios = original_v11_critic_rate(args.original_v11_motion)
         write_frozen(args.output / "original_critic_calibration.json",
@@ -813,6 +858,17 @@ def compare_prior_weight(args):
                             "and fresh seeds 684–689 before biological holdout seeds 690–705.")
                 for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
                     references.append(("original-generator-rate-" + arm[1], [release, *arm[1:]]))
+        elif args.study == "critic-weight-interaction":
+            baseline = trial
+            trial, grid = critic_weight_interaction(args, baseline)
+            if trial is None:
+                return
+            references.extend((label, arm) for label, arm in grid["cells"].items() if label != "upper_half")
+            tuned = published_original_controls()
+            references.extend(("panel-selected-" + role, arm) for role, arm in tuned.items())
+            for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
+                references.append(("original-critic-weight-" + arm[1], [release, *arm[1:]]))
+            independent_seeds, outer_seeds, rule = grid["fresh"], grid["outer"], grid["rule"]
         elif args.study in ("calibrated-particles", "transport-grid"):
             baseline = trial
             if args.study == "transport-grid":
