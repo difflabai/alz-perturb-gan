@@ -1,5 +1,5 @@
 {
-  "method": "All currently completed pairs of calibrated v12 and separately tuned original EMPF. Each 1200-update checkpoint reproduces the published four-target mean and the original cell, initialization and minibatch fingerprints. All later minibatches, cell inputs and GPU also match across methods. Report seed averages once all three groups complete.",
+  "method": "All 30 fixed-rate fits at 3,600 updates on the six group\u2013seed pairs in the two-seed pilot. The five formulations and configurations share projected data, initialization, GPU and minibatch fingerprints. Each 1,200-update replay matches its prior published score. Endpoint comparisons use the mean energy over the four targets.",
   "arms": {
     "v12": [
       "0.12.0",
@@ -260,6 +260,13 @@
           "e85ce36b00e872c786196e3f428274c40f6c4612c7cac7fdeb35968eab8fc054",
           "4d073c3e5bf6e5b5e86103d2867f6bf4950d3b2194f1b1c9ff69ee46d0d42c96"
         ]
+      },
+      "training_seconds": {
+        "v12": 476.60507918708026,
+        "matched_v11": 588.2569882667158,
+        "matched_empf": 639.9952227480244,
+        "tuned_v11": 600.4198450648692,
+        "tuned_empf": 834.3102601049468
       }
     },
     {
@@ -437,6 +444,13 @@
           "9a34677ed5a3a7ba6f1540a9d8f091e9af6b2e829ce67521c38ef7ee3db566ba",
           "427b565d44ca7e2596ae9e4f077fb03726817021b93cf3f388e96adfd50ef268"
         ]
+      },
+      "training_seconds": {
+        "v12": 308.97567184409127,
+        "matched_v11": 258.7541803198401,
+        "matched_empf": 271.4291411950253,
+        "tuned_v11": 429.63435939815827,
+        "tuned_empf": 319.9159975128714
       }
     },
     {
@@ -614,6 +628,13 @@
           "de6c0cb657ffef4af35e970bbf910c92034c2cec8cfba8602826ce8b9aaac477",
           "3411b92bb33b01cecae27b9975821df2ff6fa623d6d063622d0dbf7681f308a5"
         ]
+      },
+      "training_seconds": {
+        "v12": 468.22423790511675,
+        "matched_v11": 690.4687435049564,
+        "matched_empf": 819.2921670977958,
+        "tuned_v11": 648.6856801351532,
+        "tuned_empf": 797.9630179631058
       }
     },
     {
@@ -791,6 +812,13 @@
           "3635babcb4a6a52a2d347d4aac288dbc4b8793488cd5dd71ec84b8135aca2e19",
           "a1d8a822fffdfe5e32cd371677f1a8b3c97298d5544fa97583a7cef37697667f"
         ]
+      },
+      "training_seconds": {
+        "v12": 205.94042022689246,
+        "matched_v11": 320.3919302432332,
+        "matched_empf": 194.05292744608596,
+        "tuned_v11": 325.6391297010705,
+        "tuned_empf": 197.95598155912012
       }
     },
     {
@@ -859,6 +887,46 @@
             "spread_ratio": 1.261914699216031,
             "effective_rank": 21.21542089450245
           }
+        ],
+        "matched_v11": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.5851068954193852,
+            "spread_ratio": 1.2105127745508626,
+            "effective_rank": 22.17233952247308
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.5840275873883998,
+            "spread_ratio": 1.2390321197186736,
+            "effective_rank": 23.11796091048379
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6498869336559976,
+            "spread_ratio": 1.2766240955125991,
+            "effective_rank": 20.402570434626067
+          }
+        ],
+        "matched_empf": [
+          {
+            "updates": 1200,
+            "mean_energy_distance": 0.753468302803721,
+            "spread_ratio": 1.2614320948445121,
+            "effective_rank": 15.751664538330617
+          },
+          {
+            "updates": 2400,
+            "mean_energy_distance": 0.606690435566352,
+            "spread_ratio": 1.2920602310033116,
+            "effective_rank": 15.81989240246374
+          },
+          {
+            "updates": 3600,
+            "mean_energy_distance": 0.6792798504936546,
+            "spread_ratio": 1.369383544799134,
+            "effective_rank": 16.5652376684935
+          }
         ]
       },
       "endpoint_geometry": {
@@ -876,6 +944,16 @@
           "observed_mean_effective_rank": 15.90207062226983,
           "generated_mean_effective_rank": 21.21542089450245,
           "mean_absolute_target_rank_error": 5.313350272232619
+        },
+        "matched_v11": {
+          "observed_mean_effective_rank": 15.90207062226983,
+          "generated_mean_effective_rank": 20.402570434626067,
+          "mean_absolute_target_rank_error": 4.500499812356237
+        },
+        "matched_empf": {
+          "observed_mean_effective_rank": 15.90207062226983,
+          "generated_mean_effective_rank": 16.5652376684935,
+          "mean_absolute_target_rank_error": 0.8327975501707066
         }
       },
       "endpoint_target_energies": {
@@ -896,6 +974,18 @@
           "SLC2A4RG": 0.6568319085212933,
           "PLEKHA1": 0.6815657835127764,
           "MAMSTR": 0.6457383081491335
+        },
+        "matched_v11": {
+          "GLCCI1": 0.6634572090953474,
+          "SLC2A4RG": 0.5952658193835756,
+          "PLEKHA1": 0.746945336449234,
+          "MAMSTR": 0.5938793696958333
+        },
+        "matched_empf": {
+          "GLCCI1": 0.7586801499022817,
+          "SLC2A4RG": 0.6368921991228147,
+          "PLEKHA1": 0.7310604783155599,
+          "MAMSTR": 0.590486574633962
         }
       },
       "fingerprints": {
@@ -906,6 +996,13 @@
           "938ad1142a8d868b49be97942189a10d363cc8c1b84495432f21bac22ce6965b",
           "b8064b9d6a9aa318d51d1e3c4d852e4d2abadd239587151cbce22b2bd252129d"
         ]
+      },
+      "training_seconds": {
+        "v12": 425.75052914000116,
+        "matched_v11": 620.3292520951945,
+        "matched_empf": 647.4182996619493,
+        "tuned_v11": 652.392937870929,
+        "tuned_empf": 667.2415828038938
       }
     },
     {
@@ -1083,6 +1180,13 @@
           "8368f1de03b534b2e3a553090b226b563e973b3d6ea335cc2fd377ba9bc5d14b",
           "19792619cc113b35d7ceb300d27fd38762415bc95ca5727169702418ee67888b"
         ]
+      },
+      "training_seconds": {
+        "v12": 329.7400802401826,
+        "matched_v11": 342.1314280380029,
+        "matched_empf": 266.9453736268915,
+        "tuned_v11": 276.522474569967,
+        "tuned_empf": 289.6226094739977
       }
     }
   ],
@@ -1203,6 +1307,240 @@
       "v12_pair_wins": {
         "tuned_v11": 2,
         "tuned_empf": 5
+      }
+    }
+  },
+  "five_way_comparison": {
+    "fits_verified": 30,
+    "fixed_lr_verified_updates_per_fit": 3600,
+    "checkpoints": {
+      "1200": {
+        "mean_energy": {
+          "v12": 0.9188340343118476,
+          "matched_v11": 0.9523250059331917,
+          "matched_empf": 0.9711619037510502,
+          "tuned_v11": 0.9266039875196898,
+          "tuned_empf": 0.9179031268626691
+        },
+        "by_seed": {
+          "22": {
+            "v12": 0.9082995304433032,
+            "matched_v11": 0.9559383722649777,
+            "matched_empf": 0.9349267567985011,
+            "tuned_v11": 0.9245886558413267,
+            "tuned_empf": 0.9159926740908639
+          },
+          "251": {
+            "v12": 0.929368538180392,
+            "matched_v11": 0.9487116396014056,
+            "matched_empf": 1.0073970507035992,
+            "tuned_v11": 0.928619319198053,
+            "tuned_empf": 0.9198135796344741
+          }
+        },
+        "v12_lower_groups": {
+          "matched_v11": 5,
+          "matched_empf": 4,
+          "tuned_v11": 3,
+          "tuned_empf": 2
+        }
+      },
+      "2400": {
+        "mean_energy": {
+          "v12": 0.9479747618675926,
+          "matched_v11": 0.9303113230294009,
+          "matched_empf": 0.9754227496266634,
+          "tuned_v11": 0.933512044801809,
+          "tuned_empf": 0.9491177356532984
+        },
+        "by_seed": {
+          "22": {
+            "v12": 0.9600630508781481,
+            "matched_v11": 0.9539341176572304,
+            "matched_empf": 1.0063943767725,
+            "tuned_v11": 0.9487061551465461,
+            "tuned_empf": 0.9698634281266197
+          },
+          "251": {
+            "v12": 0.9358864728570369,
+            "matched_v11": 0.9066885284015714,
+            "matched_empf": 0.9444511224808269,
+            "tuned_v11": 0.9183179344570719,
+            "tuned_empf": 0.9283720431799771
+          }
+        },
+        "v12_lower_groups": {
+          "matched_v11": 2,
+          "matched_empf": 3,
+          "tuned_v11": 1,
+          "tuned_empf": 4
+        }
+      },
+      "3600": {
+        "mean_energy": {
+          "v12": 0.9356414307899489,
+          "matched_v11": 0.9367492822696434,
+          "matched_empf": 1.0055197080398108,
+          "tuned_v11": 0.931395188077008,
+          "tuned_empf": 0.9714774911272562
+        },
+        "by_seed": {
+          "22": {
+            "v12": 0.9304563952742917,
+            "matched_v11": 0.9290025452322704,
+            "matched_empf": 0.9939024821415249,
+            "tuned_v11": 0.9162741087684423,
+            "tuned_empf": 0.976449377395423
+          },
+          "251": {
+            "v12": 0.9408264663056062,
+            "matched_v11": 0.9444960193070163,
+            "matched_empf": 1.0171369339380967,
+            "tuned_v11": 0.9465162673855739,
+            "tuned_empf": 0.9665056048590895
+          }
+        },
+        "v12_lower_groups": {
+          "matched_v11": 2,
+          "matched_empf": 5,
+          "tuned_v11": 2,
+          "tuned_empf": 5
+        }
+      }
+    },
+    "mean_geometry_by_arm": {
+      "v12": {
+        "observed_mean_effective_rank": 17.44242965537878,
+        "generated_mean_effective_rank": 22.00127693633077,
+        "mean_absolute_target_rank_error": 4.558847280951989
+      },
+      "matched_v11": {
+        "observed_mean_effective_rank": 17.44242965537878,
+        "generated_mean_effective_rank": 20.317868382833495,
+        "mean_absolute_target_rank_error": 2.9907893472205034
+      },
+      "matched_empf": {
+        "observed_mean_effective_rank": 17.44242965537878,
+        "generated_mean_effective_rank": 17.751785595123824,
+        "mean_absolute_target_rank_error": 0.9756260889317345
+      },
+      "tuned_v11": {
+        "observed_mean_effective_rank": 17.44242965537878,
+        "generated_mean_effective_rank": 21.202209311058855,
+        "mean_absolute_target_rank_error": 3.7597796556800764
+      },
+      "tuned_empf": {
+        "observed_mean_effective_rank": 17.44242965537878,
+        "generated_mean_effective_rank": 17.617384248624983,
+        "mean_absolute_target_rank_error": 1.2846114582000758
+      }
+    },
+    "endpoint_means_by_target": {
+      "GLCCI1": {
+        "v12": 0.991056660658462,
+        "matched_v11": 0.9446803560602516,
+        "matched_empf": 1.024341999137429,
+        "tuned_v11": 0.928977631561684,
+        "tuned_empf": 0.965288963264083
+      },
+      "SLC2A4RG": {
+        "v12": 0.878850511373762,
+        "matched_v11": 0.9112997974194191,
+        "matched_empf": 0.9753350282729643,
+        "tuned_v11": 0.9042690061545033,
+        "tuned_empf": 0.9876505139373344
+      },
+      "PLEKHA1": {
+        "v12": 0.9406678356780672,
+        "matched_v11": 0.9556896416026257,
+        "matched_empf": 1.0218604924271086,
+        "tuned_v11": 0.9365057680189182,
+        "tuned_empf": 0.9504658180162826
+      },
+      "MAMSTR": {
+        "v12": 0.9319907154495044,
+        "matched_v11": 0.935327333996277,
+        "matched_empf": 1.0005413123217413,
+        "tuned_v11": 0.9558283465729268,
+        "tuned_empf": 0.9825046692913251
+      }
+    },
+    "v12_minus_original_by_target": {
+      "matched_v11": {
+        "GLCCI1": 0.046376304598210405,
+        "SLC2A4RG": -0.03244928604565711,
+        "PLEKHA1": -0.015021805924558485,
+        "MAMSTR": -0.003336618546772585
+      },
+      "matched_empf": {
+        "GLCCI1": -0.033285338478966975,
+        "SLC2A4RG": -0.09648451689920223,
+        "PLEKHA1": -0.08119265674904141,
+        "MAMSTR": -0.06855059687223686
+      },
+      "tuned_v11": {
+        "GLCCI1": 0.06207902909677798,
+        "SLC2A4RG": -0.02541849478074132,
+        "PLEKHA1": 0.00416206765914906,
+        "MAMSTR": -0.02383763112342241
+      },
+      "tuned_empf": {
+        "GLCCI1": 0.025767697394379008,
+        "SLC2A4RG": -0.10880000256357236,
+        "PLEKHA1": -0.009797982338215383,
+        "MAMSTR": -0.05051395384182067
+      }
+    },
+    "v12_target_wins_of_24": {
+      "matched_v11": 9,
+      "matched_empf": 19,
+      "tuned_v11": 13,
+      "tuned_empf": 16
+    },
+    "v12_leads_every_control_on_both_seeds": false,
+    "training_time": {
+      "method": "CUDA-synchronized fit time, excluding data preparation, checkpoint scoring and final evaluation. Each pair used the same physical GPU, at different times under concurrent workloads.",
+      "summaries": {
+        "v12": {
+          "median_seconds": 377.74530469009187,
+          "v12_faster_pairs": 0,
+          "median_seconds_per_gpu": {
+            "0": 468.22423790511675,
+            "1": 308.97567184409127
+          }
+        },
+        "matched_v11": {
+          "median_seconds": 465.19420815235935,
+          "v12_faster_pairs": 5,
+          "median_seconds_per_gpu": {
+            "0": 620.3292520951945,
+            "1": 320.3919302432332
+          }
+        },
+        "matched_empf": {
+          "median_seconds": 455.71218197152484,
+          "v12_faster_pairs": 3,
+          "median_seconds_per_gpu": {
+            "0": 647.4182996619493,
+            "1": 266.9453736268915
+          }
+        },
+        "tuned_v11": {
+          "median_seconds": 515.0271022315137,
+          "v12_faster_pairs": 5,
+          "median_seconds_per_gpu": {
+            "0": 648.6856801351532,
+            "1": 325.6391297010705
+          }
+        },
+        "tuned_empf": {
+          "median_seconds": 493.5787901583826,
+          "v12_faster_pairs": 4,
+          "median_seconds_per_gpu": {
+            "0": 797.9630179631058,
+            "1": 289.6226094739977
+          }
+        }
       }
     }
   }

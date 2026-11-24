@@ -88,27 +88,23 @@ A clean checkout reproduced both cohort reports using the published command, the
 
 ### Following the same fits through 3,600 updates
 
-Calibrated v12 (epsilon 0.1, rho 3) scored **0.93564** against **0.97148** for independently tuned original EMPF at 3,600 fixed-rate updates. V12 won five of six paired runs, both training seed means, and 16 of 24 target-level comparisons. The six runs cover two seeds and the same three development groups. At 1,200 updates, the pooled means were 0.91883 for v12 and 0.91790 for EMPF. Both models finished above their own earlier mean energy. EMPF's increase was larger. [All six curves, target-level scores, diversity and input hashes](neuroko_v12_convergence_3600_tuned_empf.json) · [Two-GPU reproduction command](../README.md#check-whether-v12-closes-the-gap-by-3600-updates)
+All 30 pilot fits completed at fixed learning rates. At 3,600 updates v12 had the lowest four-target mean energy on seed 251 across the three development groups. Tuned original v11 had the lowest mean on seed 22 and across both seeds. V12 beat each EMPF control on five of the six group–seed pairs and both seed means. Its pooled lead over matched original v11 was 0.00111, with two of six group–seed pairs favoring v12. The calibrated v12 used epsilon 0.1 and rho 3. [Five-way comparison, target scores, diversity and paired training hashes](neuroko_v12_convergence_3600_tuned_empf.json) · [Two-GPU reproduction command](../README.md#check-whether-v12-closes-the-gap-by-3600-updates)
 
-| Updates | Seed 22 v12 | Seed 22 tuned EMPF | Seed 251 v12 | Seed 251 tuned EMPF | V12 group–seed wins |
-| ---: | ---: | ---: | ---: | ---: | ---: |
-| 1,200 | 0.90830 | 0.91599 | 0.92937 | 0.91981 | 2/6 |
-| 2,400 | 0.96006 | 0.96986 | 0.93589 | 0.92837 | 4/6 |
-| 3,600 | 0.93046 | 0.97645 | 0.94083 | 0.96651 | 5/6 |
+| Pilot mean energy | V12 | Matched v11 | Matched EMPF | Tuned v11 | Tuned EMPF |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 1,200 updates | 0.91883 | 0.95233 | 0.97116 | 0.92660 | **0.91790** |
+| 2,400 updates | 0.94797 | **0.93031** | 0.97542 | 0.93351 | 0.94912 |
+| 3,600 updates | 0.93564 | 0.93675 | 1.00552 | **0.93140** | 0.97148 |
+| 3,600 on seed 22 | 0.93046 | 0.92900 | 0.99390 | **0.91627** | 0.97645 |
+| 3,600 on seed 251 | **0.94083** | 0.94450 | 1.01714 | 0.94652 | 0.96651 |
 
-![Energy distance at the three training checkpoints for v12 and tuned original EMPF, split by seed](neuroko_v12_convergence_3600.png)
+![Energy distance through 3,600 updates, split by seed and by matched or independently tuned original controls](neuroko_v12_convergence_3600.png)
 
-The exception at 3,600 was seed 251 on Screen1_3, where EMPF scored 0.61242 and v12 scored 0.62942. V12 produced higher effective covariance rank on all six pairs. EMPF came closer to the observed cells' rank on all six when comparing within each target. On pilot seed 22, the first with all three tuned curves complete, v12 led both tuned originals at 1,200 with mean energy 0.90830, compared with 0.91599 for EMPF and 0.92459 for v11. At 3,600, original v11 led on two of the three groups and on the seed mean (0.91627 versus 0.93046 for v12). V12 beat both tuned originals on Screen1_4 at 3,600, scoring 0.99880 against 1.00439 for v11 and 1.04100 for EMPF. Rate-matched original EMPF scored 0.95541 on that pair. Over all three groups on seed 22, the 3,600-update means were 0.91627 for tuned v11, 0.92900 for matched v11, 0.93046 for v12, 0.97645 for tuned EMPF and 0.99390 for matched EMPF.
+Median training time for the six 3,600-update fits was 378 seconds for v12, 465 seconds for matched v11 and 456 seconds for matched EMPF. V12 finished sooner on five of six pairs against matched v11 and three of six against matched EMPF. Each pair ran on the same A6000 at different times under shared GPU load. [Individual timings and medians by GPU](neuroko_v12_convergence_3600_tuned_empf.json)
 
-Across the six pilot pairs, tuned original EMPF's mean energy rose from 0.91790 at 1,200 to 0.97148 at 3,600. Its generated samples also grew wider on all six pairs. Mean generated-to-observed spread rose from 1.167 to 1.248, and effective covariance rank rose on five pairs, averaging 16.35 then 17.62. V12 averaged 22.48 then 22.00 effective dimensions. [Spread, effective rank and energy on each trajectory](neuroko_v12_convergence_3600_tuned_empf.json)
+Against tuned original EMPF, v12 won two, four and five of the six pairs at 1,200, 2,400 and 3,600 respectively. At the endpoint the exception was seed 251 on Screen1_3, where EMPF scored 0.61242 and v12 scored 0.62942. V12 beat matched EMPF on 19 of 24 target scores and tuned EMPF on 16. The largest mean advantage over tuned EMPF was on SLC2A4RG (0.10880). Its largest disadvantage relative to tuned v11 was on GLCCI1 (0.06208). V12 beat tuned v11 on 13 of 24 target scores and two of six group means. Each target has equal weight in the primary outcome. [Results by target and training seed](neuroko_v12_convergence_3600_tuned_empf.json)
 
-The complete comparison with the two independently tuned original releases split by seed. At 3,600 updates, v12 beat both on seed 251 (0.94083 versus 0.94652 for v11 and 0.96651 for EMPF). Across both seeds, v11 led v12 by 0.00425 and v12 led EMPF by 0.03584. V12 beat v11 on two of six group–seed pairs and 13 of 24 target scores. [Individual runs and pooled means at each checkpoint](neuroko_v12_convergence_3600_tuned_empf.json)
-
-| Updates | V12 | Tuned original v11 | Tuned original EMPF |
-| ---: | ---: | ---: | ---: |
-| 1,200 | 0.91883 | 0.92660 | 0.91790 |
-| 2,400 | 0.94797 | 0.93351 | 0.94912 |
-| 3,600 | 0.93564 | 0.93140 | 0.97148 |
+V12 and tuned EMPF both finished above their own 1,200-update mean energy. EMPF's generated samples grew wider on all six pairs, with mean generated-to-observed spread rising from 1.167 to 1.248. Its effective covariance rank rose on five pairs, averaging 16.35 then 17.62. V12 averaged 22.48 then 22.00 effective dimensions and had higher rank on all six pairs at 3,600. Tuned EMPF was closer to the observed rank on every pair when comparing within each target. [Spread and covariance rank on each trajectory](neuroko_v12_convergence_3600_tuned_empf.json)
 
 After five of the pilot pairs, six fresh training seeds (838–843) were reserved to test the same five configurations if v12 led tuned original EMPF on both complete pilot seed means at 3,600. Both seed means passed, and the fresh runs started on both GPUs. The 18 fresh pairs use the same fixed endpoint with evaluations at 1,200 and 2,400. Their primary comparison is the mean across all 18 pairs against each original control.
 
