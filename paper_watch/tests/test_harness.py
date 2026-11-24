@@ -114,6 +114,34 @@ def test_stratified_prior_uses_every_particle_during_training_and_preserves_eval
     assert observed[-1][0:2] == (False, 256)
 
 
+def test_output_noise_changes_release_training_and_preserves_clean_sampling():
+    import torch
+    from paper_watch.alztest.neuroko_tune import receipt_settings
+
+    records = []
+    for sigma in (None, .35):
+        settings = TrainingSettings(prior_sigma=.15, output_noise_std=sigma)
+        with torch.random.fork_rng(devices=[]):
+            torch.manual_seed(7)
+            model = ConditionalPGAN(30, 5, seed=7, recipe_name="empf", settings=settings)
+        assert receipt_settings(TrainingSettings(**receipt_settings(settings))) == receipt_settings(settings)
+        assert ("output_noise_std" in receipt_settings(settings)) == (sigma is not None)
+        clean = model.sample(0, 1024, seed=151)
+        noisy = model.trainer.sample(1024, generator=torch.Generator().manual_seed(151), output_noise=True)
+        assert np.std(noisy.numpy() - clean) == pytest.approx(sigma or 0., abs=.005)
+        # The benchmark always serves the release's clean output, including after fitting.
+        real = np.random.default_rng(7).normal(size=(64, 30))
+        model.fit(real, np.zeros(64, dtype=int), steps=1)
+        assert model.trainer.output_sigma() == (sigma or 0.)
+        fitted = model.sample(0, 64, seed=152)
+        expected = model.trainer.sample(64, generator=torch.Generator().manual_seed(152), output_noise=False)
+        np.testing.assert_array_equal(fitted, expected.numpy())
+        records.append((clean, fitted, model.trainer.latent_generator.get_state()))
+    np.testing.assert_array_equal(records[0][0], records[1][0])
+    assert not np.array_equal(records[0][1], records[1][1])
+    assert torch.equal(records[0][2], records[1][2])
+
+
 @pytest.mark.parametrize("sigma", [0., .15])
 def test_particle_panel_uses_the_same_rows_with_independent_native_jitter(sigma):
     import torch

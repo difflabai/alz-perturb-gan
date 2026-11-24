@@ -2,7 +2,7 @@
 import argparse
 from copy import copy
 import json
-from math import exp, isfinite, log
+from math import exp, isfinite, log, sqrt
 from pathlib import Path
 from statistics import mean, median
 
@@ -22,7 +22,8 @@ MATCHED_PRIOR = dict(MATCHED_RATE_TRIAL, name="matched-rates-prior100", prior_re
 MOTION_STUDIES = ("critic-motion", "matched-critic-motion", "balanced-particle-prior")
 ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
 ROLE_OUTER_SEEDS = list(range(396, 412))
-TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "original-v11-critic", *MOTION_STUDIES)
+PRELIMINARY_STUDIES = ("original-v11-critic", "original-v11-critic-wide-noise", "generator-output-noise")
+TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", *PRELIMINARY_STUDIES, *MOTION_STUDIES)
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
     for name in RATE_NAMES for sigma in (75, 150)
@@ -336,6 +337,30 @@ def replicate_balanced_releases(args):
             break
 
 
+def calibrated_output_noise(path):
+    measurement = json.loads(path.read_text())
+    plan = measurement["protocol"]
+    pairs = [(22, "Screen1_1"), (24, "Screen1_3"), (23, "Screen1_4")]
+    cells = measurement["cells"]
+    if (plan["lower"] != paired(NOISY_PRIOR) or plan["updates"] != 1200 or plan["repeats"] != 32
+            or [(c["seed"], c["group"]) for c in cells] != pairs):
+        raise ValueError("Expected the three paired baseline particle panels")
+    excess = []
+    for cell in cells:
+        panel = cell["measurements"][V12]["0.15"]["panel"]
+        if panel["particles"] != 64 or panel["repeats"] != 32 or len(panel["targets"]) != 4:
+            raise ValueError("The output variance calibration needs 64 particle rows and all four targets")
+        for target in panel["targets"].values():
+            if not all(isfinite(target[k]) and target[k] > 0 for k in ("total", "observed")):
+                raise ValueError("Invalid projected variance")
+            excess.append((target["total"] - target["observed"]) / 30)
+    variance = mean(excess)
+    if variance <= 0:
+        raise ValueError("The baseline has no positive mean excess variance")
+    sigma = round(sqrt(variance), 2)
+    return dict(NOISY_PRIOR, name=f"noise150-prior100-output{round(sigma * 100)}", output_noise_std=sigma), variance
+
+
 def compare_prior_weight(args):
     screen_only = []
     pinned = []
@@ -387,7 +412,23 @@ def compare_prior_weight(args):
             "260–265 it must beat every reference, including all three release-rate models at noise "
             "0.15 and weight 0.1. Only then score the biological holdout on seeds 316–331."
         )
-    elif args.study == "original-v11-critic":
+    elif args.study == "generator-output-noise":
+        baseline = NOISY_PRIOR
+        trial, variance = calibrated_output_noise(args.particle_spread_result)
+        write_frozen(args.output / "output_noise_calibration.json",
+                     dict(mean_excess_variance_per_component=variance, fixed_output_noise_std=trial["output_noise_std"]))
+        references = [(ref["name"] + "-" + arm[1], arm)
+                      for ref in (NOISY_PRIOR, WIDE_NOISY_PRIOR) for arm in paired(ref)]
+        references.extend(critic_references(args))
+        independent_seeds = list(range(480, 486))
+        outer_seeds = list(range(486, 502))
+        rule = ("Use the square root of the mean baseline excess variance per projected coordinate, rounded "
+                "to 0.01, as the fixed training-only generator output noise. Use native clean sampling at "
+                "evaluation. Keep latent noise 0.15, prior weight 0.1 and constant role learning rates. "
+                "On seeds 22–24 first require a lower v12 mean than baseline v12 and both noise-0.25 controls. "
+                "If it passes, compare against all matched and previously tuned controls on 22–24 and 251–253. "
+                "Reserve fresh seeds 480–485 including original releases, then biological holdout seeds 486–501.")
+    elif args.study in ("original-v11-critic", "original-v11-critic-wide-noise"):
         baseline = NOISY_PRIOR
         trial, ratios = original_v11_critic_rate(args.original_v11_motion)
         write_frozen(args.output / "original_critic_calibration.json",
@@ -404,6 +445,18 @@ def compare_prior_weight(args):
                 "a lower mean than all three, fit the matched controls and test all established arms on "
                 "22–24 and 251–253 separately. Fresh seeds 458–463 include the two original releases. "
                 "Reserve biological holdout seeds 464–479 for a passing candidate.")
+        if args.study == "original-v11-critic-wide-noise":
+            baseline = trial
+            references.append(("same-critic-noise150", [RELEASE, V12, baseline]))
+            trial = dict(baseline, name=baseline["name"] + "-sigma250", prior_sigma=WIDE_NOISY_PRIOR["prior_sigma"])
+            independent_seeds = list(range(502, 508))
+            outer_seeds = list(range(508, 524))
+            rule = ("At the original-v11 calibrated fixed critic rate change latent noise from 0.15 to 0.25. "
+                    "Keep generator and particle rates, prior weight, architecture, and evaluation draws fixed. "
+                    "On seeds 22–24 require lower v12 energy than noise 0.15 at the same critic rate and both "
+                    "tuned noise-0.25 controls at the release rates. Then compare all matched and established "
+                    "arms separately on 22–24 and 251–253. If it passes, replicate on seeds 502–507 including "
+                    "both original releases before assessing biological holdout seeds 508–523.")
     elif args.study == "prior-target-spread":
         baseline = NOISY_PRIOR
         trial, spread = spread_target(args.spread_result)
@@ -544,7 +597,7 @@ def compare_prior_weight(args):
     screen_args = copy(args)
     if args.shared_screen is not None:
         screen_args.output = args.shared_screen.resolve()
-    if args.study == "original-v11-critic":
+    if args.study in PRELIMINARY_STUDIES:
         preliminary = [matches[0], [RELEASE, V12, baseline], *paired(WIDE_NOISY_PRIOR)[1:]]
         initial_scores = evaluate(screen_args, preliminary, REPLICATION_SEEDS)
         initial_means = {k: mean(v) for k, v in initial_scores.items()}
@@ -597,6 +650,7 @@ def main():
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
                         default="rates")
+    parser.add_argument("--particle-spread-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_particle_spread.json")
     parser.add_argument("--original-v11-motion", type=Path, default=ROOT / "paper_watch/notes/neuroko_original_v11_critic_motion.json")
     parser.add_argument("--spread-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_prior_weight_geometry.json")
     parser.add_argument("--shared-screen", type=Path,

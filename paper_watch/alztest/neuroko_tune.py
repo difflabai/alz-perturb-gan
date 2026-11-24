@@ -27,6 +27,14 @@ from .neuroko_duration import effective_rank, function_space_gains, optimizer_ra
 from .neuroko_lr import DRAWS, score
 
 
+def receipt_settings(settings):
+    values = asdict(settings)
+    # Older runs predate this optional training regularizer. Preserve their on-disk representation.
+    if values["output_noise_std"] is None:
+        del values["output_noise_std"]
+    return values
+
+
 def verify_fixed_schedule(recipe, updates):
     from particlegan import learning_rate_scales
 
@@ -218,7 +226,7 @@ def main():
         except (TypeError, ValueError) as exc:
             parser.error(f"invalid settings for {name}: {exc}")
         path = args.output / f"{args.stage}-{name}-s{args.seed}.json"
-        config = {"name": name, "lr": lr, "settings": asdict(settings), "recipe": args.recipe,
+        config = {"name": name, "lr": lr, "settings": receipt_settings(settings), "recipe": args.recipe,
                   "particlegan": release, "torch": str(torch.__version__), "seed": args.seed,
                   "stage": args.stage, "projected_data_sha256": digest.hexdigest(), "updates": 1200}
         if args.stage == "validation" and args.validation_group != "Screen1_1":
@@ -247,21 +255,22 @@ def main():
             path = path.with_stem(f"{path.stem}-{args.self_plan}")
         if path.exists():
             previous = json.loads(path.read_text())
-            previous["settings"] = asdict(TrainingSettings(**previous["settings"]))
+            previous["settings"] = receipt_settings(TrainingSettings(**previous["settings"]))
             if any(previous[k] != v for k, v in config.items()):
                 raise ValueError(f"incompatible cached run at {path}")
-            if not args.require_constant_lr:
-                continue
-            from particlegan import get_recipe
+            if args.require_constant_lr:
+                from particlegan import get_recipe
 
-            verify_fixed_schedule(get_recipe(args.recipe, lr=lr, **settings.recipe_overrides()), config["updates"])
-            rates = previous["initial_rates"]
-            trace = previous.get("rate_trace", [])
-            if previous["final_rates"] != rates or any(row[k] != value for row in trace for k, value in rates.items()):
-                raise ValueError(f"cached optimizer rates changed at {path}")
-            if previous.get("constant_lr_verified_updates") == config["updates"]:
+                verify_fixed_schedule(get_recipe(args.recipe, lr=lr, **settings.recipe_overrides()), config["updates"])
+                rates = previous["initial_rates"]
+                trace = previous.get("rate_trace", [])
+                if previous["final_rates"] != rates or any(row[k] != value for row in trace for k, value in rates.items()):
+                    raise ValueError(f"cached optimizer rates changed at {path}")
+            rates_verified = not args.require_constant_lr or previous.get("constant_lr_verified_updates") == config["updates"]
+            noise_verified = settings.output_noise_std is None or previous.get("fixed_output_noise_verified_updates") == config["updates"]
+            if rates_verified and noise_verified:
                 continue
-            # Replay older fits that only recorded the rates every 300 updates.
+            # Replay fits lacking the requested per-update checks.
         with torch.random.fork_rng(devices=[]):
             torch.default_generator.manual_seed(args.seed)
             model = ConditionalPGAN(x.shape[1], len(conditions), seed=args.seed, device=device,
@@ -296,6 +305,10 @@ def main():
             config["critic_penalty_threshold"] = threshold
         if args.require_constant_lr:
             verify_fixed_schedule(recipe, config["updates"])
+        if settings.output_noise_std is not None:
+            if (recipe.output_noise_mode != "fixed" or recipe.output_noise_warmup != 0
+                    or model.trainer.output_sigma() != settings.output_noise_std):
+                raise ValueError("The specified generator output noise must be fixed from the first update")
         rates = optimizer_rates(model)
         initialization = sha256()
         for module in (model.G, model.D, model.prior):
@@ -330,6 +343,8 @@ def main():
                 trace.append({"updates": step, **draw_metrics(generated, measured, diversity=bool(args.evaluation_seeds))})
                 print(f"{name} update {step} energy {trace[-1]['mean_energy_distance']:.6f}", flush=True)
                 scoring_seconds += perf_counter() - tick
+            if settings.output_noise_std is not None and model.trainer.output_sigma() != settings.output_noise_std:
+                raise RuntimeError(f"Generator output noise changed at update {step}")
             if args.require_constant_lr or step % 300 == 0:
                 live_rates = optimizer_rates(model)
                 if args.require_constant_lr and live_rates != rates:
@@ -367,6 +382,8 @@ def main():
             if not all(np.array_equal(model.sample(i, DRAWS, seed=args.seed + 100 + i), original)
                        for i, original in enumerate(samples)):
                 raise RuntimeError("Failed to reproduce the original samples after restoring the training noise")
+        if settings.output_noise_std is not None:
+            config["fixed_output_noise_verified_updates"] = model.trainer.completed_steps
         if args.require_constant_lr:
             config["constant_lr_verified_updates"] = model.trainer.completed_steps
         if gain_trace:

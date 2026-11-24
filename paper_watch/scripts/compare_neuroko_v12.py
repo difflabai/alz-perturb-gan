@@ -63,10 +63,10 @@ def receipt(output, stage, release, recipe, trial, seed, group):
 def reusable_fit(path, require_constant_lr):
     if not path.is_file():
         return False
-    if not require_constant_lr:
-        return True
     row = json.loads(path.read_text())
-    return row.get("constant_lr_verified_updates") == row.get("updates") == 1200
+    if row.get("settings", {}).get("output_noise_std") is not None and row.get("fixed_output_noise_verified_updates") != 1200:
+        return False
+    return not require_constant_lr or row.get("constant_lr_verified_updates") == row.get("updates") == 1200
 
 
 def fit(args, stage, seed, group, gpu, arms, *, options=()):

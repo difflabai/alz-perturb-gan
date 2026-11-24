@@ -36,7 +36,7 @@ RULE = (
 
 def paired(trial):
     empf = {k: trial[k] for k in ("name", "lr", "d_lr_mult", "prior_lr_mult")}
-    for name in ("prior_sigma", "prior_reg", "prior_reg_target_std"):
+    for name in ("prior_sigma", "prior_reg", "prior_reg_target_std", "output_noise_std"):
         if name in trial:
             empf[name] = trial[name]
     return [[RELEASE, V12, trial], [RELEASE, "unified_v11", trial], [RELEASE, "empf", empf]]

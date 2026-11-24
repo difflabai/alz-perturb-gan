@@ -541,3 +541,21 @@ python paper_watch/scripts/neuroko_rate_noise.py --study original-v11-critic --d
   --wheels "$data/wheels" --original-v11-motion "$data/v12-original-v11-critic-motion/result.json" \
   --output "$data/v12-original-v11-critic-rate" --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
 ```
+
+At fixed critic LR 0.0049, v12 scored **0.92850** across the nine pairs, down from **0.94231** at 0.021. Five pairs improved. Tuned noise-0.25 v11 scored **0.92511** and EMPF **0.92240**. V12 won four pairs against each. Matching the first 64 critic steps closely improved the nine-pair energy mean, but both tuned controls still led. [Results and fixed-rate calibration](neuroko_v12_original_critic_energy.json)
+
+The follow-up changes only v12 latent noise from 0.15 to 0.25 at the fixed 0.0049 critic rate. It uses the preceding 0.92850 result and both tuned controls as its first threshold. Further checks include exact matches for all three formulations on both development cohorts and the two historical releases on six fresh training seeds. The same command runs this experiment with `--study original-v11-critic-wide-noise` and `--output "$data/v12-original-critic-wide-noise"`.
+
+### Testing noise on generator outputs during training
+
+Across the 12 target-by-group measurements in the baseline v12 particle panel, the mean generated variance exceeded the observed variance by 0.12249 per projected coordinate. Taking the square root and rounding to two decimal places gives a Gaussian noise standard deviation of 0.35. The experiment adds that noise to generator outputs during training to test whether the generator learns a narrower clean distribution. Latent noise stays at 0.15, prior weight at 0.1, and generator, critic and particle learning rates stay at 0.014, 0.021 and 0.0406. Each primary score uses the usual 256 clean draws per target. [Variance measurements](neuroko_v12_particle_spread.json)
+
+We checked the released training path in all three 0.12.0 formulations and in original v11 and EMPF. Each formulation ran on both A6000s, with one training group per card. At zero output noise, all eight generator calls during four updates produced their clean forward values. With noise 0.35, all eight changed, with measured residual standard deviation 0.34868. The seed was identical in all ten pairs. Initial clean samples, initial weights, real minibatches and the final latent RNG state matched within each pair. The trained weights differed. The 1,200-update runner checks the configured noise width and all three learning rates after every update. [GPU measurements](neuroko_output_noise_release_probe.json)
+
+The first nine v12 fits must beat the fixed-rate v12 baseline and both stronger noise-0.25 controls before expanding the experiment. Further comparisons use both development cohorts, then original releases on six reserved training seeds 480–485, and finally the biological holdout on seeds 486–501 if the candidate passes.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study generator-output-noise --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-output-noise" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior"
+```

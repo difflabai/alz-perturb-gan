@@ -58,15 +58,30 @@ def test_native_release_ranking_gates_the_fresh_matched_replication(tmp_path, mo
     assert json.loads((tmp_path / "screen.json").read_text())["passes"] is False
 
 
+def test_calibrated_output_noise_reaches_all_matched_arms(monkeypatch):
+    root = Path(__file__).resolve().parents[1]
+    monkeypatch.syspath_prepend(str(root / "scripts"))
+    from neuroko_rate_noise import calibrated_output_noise, paired
+    from neuroko_stratified import control_arms, key
 
-def test_original_critic_probe_gates_expensive_controls_on_training_energy(tmp_path, monkeypatch):
+    trial, variance = calibrated_output_noise(root / "notes/neuroko_v12_particle_spread.json")
+    assert trial["output_noise_std"] == round(variance**.5, 2) == .35
+    controls, labels = control_arms([trial])
+    arms = {key(a): a for a in controls}
+    for early, label in zip(paired(trial), ("selected_v12", "matched_v11", "matched_empf"), strict=True):
+        for arm in (early, arms[labels[label]]):
+            assert (arm[2]["output_noise_std"], arm[2]["prior_sigma"], arm[2]["prior_reg"]) == (.35, .15, .1)
+
+
+@pytest.mark.parametrize("study_name", ["original-v11-critic", "original-v11-critic-wide-noise"])
+def test_original_critic_probe_gates_expensive_controls_on_training_energy(tmp_path, monkeypatch, study_name):
     import json
     from types import SimpleNamespace
     root = Path(__file__).resolve().parents[1]
     monkeypatch.syspath_prepend(str(root / "scripts"))
     import neuroko_rate_noise as study
 
-    args = SimpleNamespace(study="original-v11-critic", stage="search", output=tmp_path,
+    args = SimpleNamespace(study=study_name, stage="search", output=tmp_path,
                            shared_screen=None, original_v11_motion=root / "notes/neuroko_original_v11_critic_motion.json",
                            motion_result=root / "notes/neuroko_v12_critic_motion.json",
                            motion_check=root / "notes/neuroko_v12_critic_motion_check.json",
@@ -77,7 +92,10 @@ def test_original_critic_probe_gates_expensive_controls_on_training_energy(tmp_p
 
     def screen(config, arms, seeds):
         assert [a[1] for a in arms] == ["unified_v12", "unified_v12", "unified_v11", "empf"]
-        assert [a[2]["prior_sigma"] for a in arms] == [.15, .15, .25, .25]
+        wide = study_name == "original-v11-critic-wide-noise"
+        assert [a[2]["prior_sigma"] for a in arms] == [.25 if wide else .15, .15, .25, .25]
+        expected_critics = [.0049, .0049 if wide else .021, .021, .021]
+        assert [a[2]["lr"] * a[2]["d_lr_mult"] for a in arms] == pytest.approx(expected_critics)
         return {study.key(arm): [1.0 - i / 100] * 9 for i, arm in enumerate(arms)}
 
     monkeypatch.setattr(study, "evaluate", screen)
@@ -347,4 +365,8 @@ def test_fixed_rate_fit_reuses_only_a_fully_verified_receipt(tmp_path):
     assert not reusable_fit(path, True)
     for count in (1199, 1200):
         path.write_text(json.dumps(dict(cached, constant_lr_verified_updates=count)))
+        assert reusable_fit(path, True) == (count == 1200)
+    cached.update(settings={"output_noise_std": 0.35}, constant_lr_verified_updates=1200)
+    for count in (None, 1199, 1200):
+        path.write_text(json.dumps(dict(cached, fixed_output_noise_verified_updates=count)))
         assert reusable_fit(path, True) == (count == 1200)

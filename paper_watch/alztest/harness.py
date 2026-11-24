@@ -84,6 +84,7 @@ class TrainingSettings:
     rhbi_nn_quantile: float | None = None
     rhbi_self_coupling: str | None = None
     generator_output_init_gain: float = 1.0
+    output_noise_std: float | None = None
 
     def recipe_overrides(self):
         harness_fields = {"prior_sigma", "stratified_prior", "generator_output_init_gain"}

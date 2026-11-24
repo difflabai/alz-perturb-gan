@@ -71,6 +71,8 @@ def evaluate(args, arms, seeds, *, groups_by_seed=None):
             or not d["deterministic"]
             or (d["particlegan"], d["recipe"], d["name"]) != (version, recipe, trial["name"])
             or d["lr"] != trial["lr"]
+            or (getattr(args, "require_constant_lr", False) and d.get("constant_lr_verified_updates") != 1200)
+            or (trial.get("output_noise_std") is not None and d.get("fixed_output_noise_verified_updates") != 1200)
             or any(d["settings"][k] != v for k, v in trial.items() if k not in ("lr", "name"))
             or [row["update"] for row in d["rate_trace"]] != [300, 600, 900, 1200]
             or d["score_groups"] != [group]

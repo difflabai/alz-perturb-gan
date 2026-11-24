@@ -1,0 +1,415 @@
+{
+  "method": "Measure actual output of the released UpdatePolicy.generate minus the corresponding _clean_generate activation for all calls during four GANTrainer updates, with identical seed, input minibatches and physical GPU per pair. Clean initial evaluation uses 256 draws. Hash the native latent RNG after training. Report the population standard deviation over nonzero call residuals.",
+  "cells": [
+    {
+      "release": "0.10.0",
+      "recipe": "empf",
+      "seed": 22,
+      "group": "Screen1_1",
+      "gpu": "0",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "steps": 4,
+      "arms": {
+        "0.0": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "6464caab6113d3208318b38fd4402b9a44ab2fa61511fb556c8b7577286db429",
+          "final": "0ec81dd9fd5032043187c714a0a62fec15ed639538bb27820f55f18dc210b2ae",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 0,
+          "residual_std": 0.0,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        },
+        "0.35": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "6464caab6113d3208318b38fd4402b9a44ab2fa61511fb556c8b7577286db429",
+          "final": "dfddc13e3dc4d322c69a7e59ff91852c6a9271a985d35809e19440ee8a380084",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 8,
+          "residual_std": 0.3486836850643158,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        }
+      }
+    },
+    {
+      "release": "0.10.0",
+      "recipe": "empf",
+      "seed": 22,
+      "group": "Screen1_3",
+      "gpu": "1",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "steps": 4,
+      "arms": {
+        "0.0": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "ae763ee1fcc85d623c78ea9c1b40db8e5886c4487668d65a6f4b22a7f3ce56c6",
+          "final": "b64e6aebad7f3812f23a1bf9b6d670bf2410ba46bd6d48ff3b2427ad04dbe2c5",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 0,
+          "residual_std": 0.0,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        },
+        "0.35": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "ae763ee1fcc85d623c78ea9c1b40db8e5886c4487668d65a6f4b22a7f3ce56c6",
+          "final": "461a1d8100dff71d7480bdcd731811d4bb54a4832a8d75f566f7ad7630b485ca",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 8,
+          "residual_std": 0.3486836850643158,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        }
+      }
+    },
+    {
+      "release": "0.11.1",
+      "recipe": "unified_v11",
+      "seed": 22,
+      "group": "Screen1_1",
+      "gpu": "0",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "steps": 4,
+      "arms": {
+        "0.0": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "6464caab6113d3208318b38fd4402b9a44ab2fa61511fb556c8b7577286db429",
+          "final": "d7abb31eed88b72655dec6e6e5e9a8f1ad150a602e96c374a634f735ccdc31aa",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 0,
+          "residual_std": 0.0,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        },
+        "0.35": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "6464caab6113d3208318b38fd4402b9a44ab2fa61511fb556c8b7577286db429",
+          "final": "015370d47a3b1b5f91187ad168fc082a388fc9707cd4ade4e6bc74205614284a",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 8,
+          "residual_std": 0.3486836850643158,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        }
+      }
+    },
+    {
+      "release": "0.11.1",
+      "recipe": "unified_v11",
+      "seed": 22,
+      "group": "Screen1_3",
+      "gpu": "1",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "steps": 4,
+      "arms": {
+        "0.0": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "ae763ee1fcc85d623c78ea9c1b40db8e5886c4487668d65a6f4b22a7f3ce56c6",
+          "final": "f6e5b1ca9ca250c5572504f6cc62404e1c8954877297bb607013f1b638cee18b",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 0,
+          "residual_std": 0.0,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        },
+        "0.35": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "ae763ee1fcc85d623c78ea9c1b40db8e5886c4487668d65a6f4b22a7f3ce56c6",
+          "final": "a889518e407be99def55a2e05a21b1971872b4aaf4250e1436939090e521cf7b",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 8,
+          "residual_std": 0.3486836850643158,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        }
+      }
+    },
+    {
+      "release": "0.12.0",
+      "recipe": "empf",
+      "seed": 22,
+      "group": "Screen1_1",
+      "gpu": "0",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "steps": 4,
+      "arms": {
+        "0.0": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "6464caab6113d3208318b38fd4402b9a44ab2fa61511fb556c8b7577286db429",
+          "final": "0ec81dd9fd5032043187c714a0a62fec15ed639538bb27820f55f18dc210b2ae",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 0,
+          "residual_std": 0.0,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        },
+        "0.35": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "6464caab6113d3208318b38fd4402b9a44ab2fa61511fb556c8b7577286db429",
+          "final": "dfddc13e3dc4d322c69a7e59ff91852c6a9271a985d35809e19440ee8a380084",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 8,
+          "residual_std": 0.3486836850643158,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        }
+      }
+    },
+    {
+      "release": "0.12.0",
+      "recipe": "empf",
+      "seed": 22,
+      "group": "Screen1_3",
+      "gpu": "1",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "steps": 4,
+      "arms": {
+        "0.0": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "ae763ee1fcc85d623c78ea9c1b40db8e5886c4487668d65a6f4b22a7f3ce56c6",
+          "final": "b64e6aebad7f3812f23a1bf9b6d670bf2410ba46bd6d48ff3b2427ad04dbe2c5",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 0,
+          "residual_std": 0.0,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        },
+        "0.35": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "ae763ee1fcc85d623c78ea9c1b40db8e5886c4487668d65a6f4b22a7f3ce56c6",
+          "final": "461a1d8100dff71d7480bdcd731811d4bb54a4832a8d75f566f7ad7630b485ca",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 8,
+          "residual_std": 0.3486836850643158,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        }
+      }
+    },
+    {
+      "release": "0.12.0",
+      "recipe": "unified_v11",
+      "seed": 22,
+      "group": "Screen1_1",
+      "gpu": "0",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "steps": 4,
+      "arms": {
+        "0.0": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "6464caab6113d3208318b38fd4402b9a44ab2fa61511fb556c8b7577286db429",
+          "final": "225c28b14f8daa33e58017a93ab3ee4be1892212ba39fc85d9a0e1bb3469dad7",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 0,
+          "residual_std": 0.0,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        },
+        "0.35": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "6464caab6113d3208318b38fd4402b9a44ab2fa61511fb556c8b7577286db429",
+          "final": "fd61d79e8bea8f24a1d93d772e8d5d47b42572ebcc4d96096f03d707b3a216e3",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 8,
+          "residual_std": 0.3486836850643158,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        }
+      }
+    },
+    {
+      "release": "0.12.0",
+      "recipe": "unified_v11",
+      "seed": 22,
+      "group": "Screen1_3",
+      "gpu": "1",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "steps": 4,
+      "arms": {
+        "0.0": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "ae763ee1fcc85d623c78ea9c1b40db8e5886c4487668d65a6f4b22a7f3ce56c6",
+          "final": "0e6f9670f120f1ba9f2953579ce807f8d525381a18b84c22be552fb9563ad0ce",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 0,
+          "residual_std": 0.0,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        },
+        "0.35": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "ae763ee1fcc85d623c78ea9c1b40db8e5886c4487668d65a6f4b22a7f3ce56c6",
+          "final": "79e2bb97d7493477d7072e4f171ca2088b3c18301ad017f76e04ed37ea2c2b72",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 8,
+          "residual_std": 0.3486836850643158,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        }
+      }
+    },
+    {
+      "release": "0.12.0",
+      "recipe": "unified_v12",
+      "seed": 22,
+      "group": "Screen1_1",
+      "gpu": "0",
+      "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+      "steps": 4,
+      "arms": {
+        "0.0": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "6464caab6113d3208318b38fd4402b9a44ab2fa61511fb556c8b7577286db429",
+          "final": "88ce03a9bec427bee1771a73b2a7594e482449b502628b5980088de049e8776d",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 0,
+          "residual_std": 0.0,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        },
+        "0.35": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "6464caab6113d3208318b38fd4402b9a44ab2fa61511fb556c8b7577286db429",
+          "final": "011b90664d7405d873af255949f2fc2b2dcbab78295616a68e7dc6433e58f71e",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 8,
+          "residual_std": 0.3486836850643158,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        }
+      }
+    },
+    {
+      "release": "0.12.0",
+      "recipe": "unified_v12",
+      "seed": 22,
+      "group": "Screen1_3",
+      "gpu": "1",
+      "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+      "steps": 4,
+      "arms": {
+        "0.0": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "ae763ee1fcc85d623c78ea9c1b40db8e5886c4487668d65a6f4b22a7f3ce56c6",
+          "final": "ab8a0615a9b1bc7cec7dd1b6696006e7bf885c9c583890b709b224bc686508a9",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 0,
+          "residual_std": 0.0,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        },
+        "0.35": {
+          "initial": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+          "clean_initial_sha256": "10711dc894e6a36b25bb9b1c84ebaa00a07ae11c9b6a3873a59c630a4414796e",
+          "batches": "ae763ee1fcc85d623c78ea9c1b40db8e5886c4487668d65a6f4b22a7f3ce56c6",
+          "final": "ad82fb4558c1c57a8e6c7d6e033057d29a69ad3b24b6badb6cc01be3075c2d93",
+          "rates": {
+            "generator": 0.014,
+            "critic": 0.021,
+            "particles": 0.0406
+          },
+          "calls": 8,
+          "perturbed_calls": 8,
+          "residual_std": 0.3486836850643158,
+          "latent_stream_sha256": "ec5d659084463f2dfb3aa381dd15d3ac815e7dc93aa6b708114adb8e66e9a02c"
+        }
+      }
+    }
+  ]
+}
