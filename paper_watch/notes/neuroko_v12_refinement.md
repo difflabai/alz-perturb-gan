@@ -58,6 +58,8 @@ Original v11 reversed the ordering on the second cohort at the same fixed rates.
 
 The first cohort also qualified for the predeclared six-seed replication at the shared rates. All five release/formulation combinations completed. V11 from the 0.12.0 wheel scored 0.95051, and EMPF from that wheel reproduced the 0.10.0 energy in every pair. The replicate uses seeds 524–529 on the same three biological groups. [Five-way comparison and replication decision](neuroko_v12_fixed_critic_matched_development.json)
 
+At its independently tuned settings, original 0.10.0 EMPF also reproduced the corresponding 0.12.0 EMPF score on every first-cohort pair. Raising the critic rate from 0.0049 to 0.021 and latent noise from 0.15 to 0.25 together lowered its mean energy from 0.99652 to 0.92240. V12 at the calibrated rates averaged 0.92850 and won four of nine pairs against tuned original EMPF. [Matched inputs, energy and original wheel comparison](neuroko_v12_tuned_original_empf_first.json)
+
 ## Six configurations on the same nine training pairs
 
 The stronger-prior v12 had the lowest mean energy of all 18 entries below on screening seeds 22–24. Its 0.9423 was 0.0038 below the lowest EMPF mean and 0.0039 below the lowest v11 mean. At penalty weight 0.1 it beat matched EMPF on four of nine pairs and matched v11 on six. Only seed 22 favored v12 when the three groups were averaged within each seed against matched EMPF. The setting qualified for independent training seeds 251–253. [All six configurations, paired energies, timings and input hashes](neuroko_v12_six_settings_1200.json) · [Prior-weight screening decision](neuroko_v12_prior_weight_screen.json)

@@ -1,0 +1,198 @@
+{
+  "arms": [
+    [
+      "0.12.0",
+      "unified_v12",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "rhbi_self_coupling": "hollow",
+        "rhbi_relativistic_weight": 2.0,
+        "prior_sigma": 0.15,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_reg": 0.1
+      }
+    ],
+    [
+      "0.10.0",
+      "empf",
+      {
+        "name": "original-v11-critic-49",
+        "lr": 0.014,
+        "d_lr_mult": 0.35,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.15,
+        "prior_reg": 0.1
+      }
+    ],
+    [
+      "0.10.0",
+      "empf",
+      {
+        "name": "noise250-prior100",
+        "lr": 0.014,
+        "d_lr_mult": 1.5,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.25,
+        "prior_reg": 0.1
+      }
+    ],
+    [
+      "0.12.0",
+      "empf",
+      {
+        "name": "noise250-prior100",
+        "lr": 0.014,
+        "d_lr_mult": 1.5,
+        "prior_lr_mult": 2.9,
+        "prior_sigma": 0.25,
+        "prior_reg": 0.1
+      }
+    ]
+  ],
+  "cohort": {
+    "seeds": [
+      22,
+      23,
+      24
+    ],
+    "means": {
+      "0.12.0/unified_v12/original-v11-critic-49": 0.9284979310859204,
+      "0.10.0/empf/original-v11-critic-49": 0.9965210770068422,
+      "0.10.0/empf/noise250-prior100": 0.9224025817539492,
+      "0.12.0/empf/noise250-prior100": 0.9224025817539492
+    },
+    "v12_minus_tuned_original": 0.006095349331971213,
+    "pairs_won_over_tuned_original": 4,
+    "tuned_empf_wheels_identical": true,
+    "cells": [
+      {
+        "seed": 22,
+        "group": "Screen1_1",
+        "visible_devices": "0",
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "7ce9f84593a3581c914b0514798857144c9c01557af8651cf1a5d1b1742edc96",
+        "scores": {
+          "0.12.0/unified_v12/original-v11-critic-49": 1.1263494186235306,
+          "0.10.0/empf/original-v11-critic-49": 1.115794115205545,
+          "0.10.0/empf/noise250-prior100": 1.1223464943750359,
+          "0.12.0/empf/noise250-prior100": 1.1223464943750359
+        }
+      },
+      {
+        "seed": 22,
+        "group": "Screen1_3",
+        "visible_devices": "1",
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "2acab3d078881e56d5f632ac346cb54524ec6864b62a1aca43596e314fdd68a4",
+        "scores": {
+          "0.12.0/unified_v12/original-v11-critic-49": 0.6114014145359561,
+          "0.10.0/empf/original-v11-critic-49": 0.6069872397044966,
+          "0.10.0/empf/noise250-prior100": 0.5731292339540484,
+          "0.12.0/empf/noise250-prior100": 0.5731292339540484
+        }
+      },
+      {
+        "seed": 22,
+        "group": "Screen1_4",
+        "visible_devices": "0",
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "85f4aff48cde6ba1da727b69d794e423e9f4cb879abe43d9899c96b3e19486a8",
+        "scores": {
+          "0.12.0/unified_v12/original-v11-critic-49": 0.9871477581704231,
+          "0.10.0/empf/original-v11-critic-49": 1.0819989154854617,
+          "0.10.0/empf/noise250-prior100": 1.0525022939435076,
+          "0.12.0/empf/noise250-prior100": 1.0525022939435076
+        }
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_1",
+        "visible_devices": "1",
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "c1b421e29d4d935428afccf2b52bb0b12c41f54b927d95ee3c8b4b7fcff3a3eb",
+        "scores": {
+          "0.12.0/unified_v12/original-v11-critic-49": 1.126615089377189,
+          "0.10.0/empf/original-v11-critic-49": 1.1774788731335057,
+          "0.10.0/empf/noise250-prior100": 1.0745143236963988,
+          "0.12.0/empf/noise250-prior100": 1.0745143236963988
+        }
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_3",
+        "visible_devices": "0",
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "a2c81ac6a8e84563621f19a16aff3340cbf95b95bacc135c80df9b3fd42f7443",
+        "scores": {
+          "0.12.0/unified_v12/original-v11-critic-49": 0.6207189273353579,
+          "0.10.0/empf/original-v11-critic-49": 0.6815404198820101,
+          "0.10.0/empf/noise250-prior100": 0.6302151424050741,
+          "0.12.0/empf/noise250-prior100": 0.6302151424050741
+        }
+      },
+      {
+        "seed": 23,
+        "group": "Screen1_4",
+        "visible_devices": "1",
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "9d01ebc08116b4840ecba214b12e445d922b8a15d9fd1dcad71e973ddccfba23",
+        "training_batches_sha256": "f0fc24166dc52bf914506e6eccc97cdb2937937bcb548c4ee7f877c9038456c6",
+        "scores": {
+          "0.12.0/unified_v12/original-v11-critic-49": 1.0181744368803536,
+          "0.10.0/empf/original-v11-critic-49": 1.1294651630174053,
+          "0.10.0/empf/noise250-prior100": 1.0015550178129418,
+          "0.12.0/empf/noise250-prior100": 1.0015550178129418
+        }
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_1",
+        "visible_devices": "0",
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "4c0657cf4e49b6ed9e7ed8cf1529557ec56d518e7f697b464f33e263585ee5e4",
+        "scores": {
+          "0.12.0/unified_v12/original-v11-critic-49": 1.2100226375749439,
+          "0.10.0/empf/original-v11-critic-49": 1.2860412168547701,
+          "0.10.0/empf/noise250-prior100": 1.1274244217063474,
+          "0.12.0/empf/noise250-prior100": 1.1274244217063474
+        }
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_3",
+        "visible_devices": "1",
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "507c8545718ac1248d187d920f15b7d033dfc06a2e29f3ea052422cf584d5a90",
+        "scores": {
+          "0.12.0/unified_v12/original-v11-critic-49": 0.6698091226184917,
+          "0.10.0/empf/original-v11-critic-49": 0.6610876937779475,
+          "0.10.0/empf/noise250-prior100": 0.696174307530145,
+          "0.12.0/empf/noise250-prior100": 0.696174307530145
+        }
+      },
+      {
+        "seed": 24,
+        "group": "Screen1_4",
+        "visible_devices": "0",
+        "projected_data_sha256": "44d463a0271cd510538661fc357e36bf6a5fc15777d82ba7eef757601fa1018e",
+        "initial_parameters_sha256": "74bee39bbd4edbc021b0a51cac0153384de5497e0c397383847c234637192378",
+        "training_batches_sha256": "b3ec8669fad397caaf4deb8d3ac9c4b946534ff97ad62350d35bc754d111f1ab",
+        "scores": {
+          "0.12.0/unified_v12/original-v11-critic-49": 0.9862425746570376,
+          "0.10.0/empf/original-v11-critic-49": 1.2282960560004375,
+          "0.10.0/empf/noise250-prior100": 1.0237620003620436,
+          "0.12.0/empf/noise250-prior100": 1.0237620003620436
+        }
+      }
+    ]
+  }
+}
