@@ -949,6 +949,8 @@ At shared smoothing **0.0061** on the nine 1,200-update development pairs for se
 
 On the second nine pairs (seeds 251–253), v12 averaged **0.93939**, matched original v11 **0.92569**, and matched original EMPF **0.97937**. V12 beat matched EMPF on six of nine pairs in each cohort, for 12 of 18 overall. The mean ordering against matched v11 reversed between cohorts. Independently tuned EMPF averaged 0.90413 on the second cohort and led v12 on both cohort means. [Both cohorts at fixed rates and shared smoothing](neuroko_v12_shared_optimizer_smoothing.json)
 
+The 3,600-update follow-up gives the three matched formulations the same 0.0061 smoothing throughout training. Only the original EMPF matched fit changes. Its two optimizers must report 0.0061 and reproduce the published 1,200-update pilot energy and minibatch fingerprint. The comparison keeps both independently tuned original controls and uses the same six pilot and 18 fresh group–seed pairs. [Two-GPU reproduction command](../README.md#check-whether-v12-closes-the-gap-by-3600-updates)
+
 ### Interpolating the particle prior coefficient
 
 At critic LR 0.021, the nine-pair v12 means were 0.97344, 0.94231 and 0.98036 for prior coefficients 0.02, 0.1 and 0.2. A quadratic through those three means as a function of log coefficient has its minimum at 0.06037. The next test transfers a coefficient of **0.060** to the calibrated critic LR of 0.0049. The interpolated value is a candidate for training. Its performance at the calibrated rate requires measurement. [Original nine-pair scores at each weight](neuroko_v12_double_prior_screen.json)

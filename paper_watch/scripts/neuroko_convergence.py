@@ -13,6 +13,7 @@ STEPS = (1200, 2400, 3600)
 LONG_STEPS = (*range(1200, 40000, 1200), 40000)
 NOTES = ROOT / "paper_watch/notes"
 METRICS = ("mean_energy_distance", "spread_ratio", "effective_rank")
+SMOOTHING = 0.0061
 
 
 def optimizer_difference(wheels, trial):
@@ -38,6 +39,32 @@ def optimizer_difference(wheels, trial):
     return changes
 
 
+def shared_smoothing_pilot(arms, anchors):
+    archive = json.loads((NOTES / "neuroko_v12_shared_optimizer_smoothing.json").read_text())
+    study = archive["settings"][str(SMOOTHING)]
+    release, recipe, trial = arms["matched_empf"]
+    adjusted = dict(trial, name=trial["name"] + f"-smoothing{SMOOTHING}", optimizer_smoothing=SMOOTHING)
+    expected = dict(arms, matched_empf=[release, recipe, adjusted])
+    if study["protocol"]["arms"] != expected:
+        raise ValueError("Expected the published single change to original EMPF's optimizer smoothing")
+    factory = {role: dict(generator_and_particles=SMOOTHING, critic=SMOOTHING)
+               for role in ("v12", "matched_v11", "matched_empf")}
+    if study["matched_optimizer_smoothing_from_native_factories"] != factory:
+        raise ValueError("The matched release optimizers must share both smoothing values")
+    inputs = {}
+    for cohort in study["cohorts"].values():
+        for row in cohort["rows"]:
+            pair = row["seed"], row["group"]
+            if pair in anchors:
+                if any(row["energy"][k] != anchors[pair][k] for k in arms if k != "matched_empf"):
+                    raise ValueError("Published original-release energies differ between studies")
+                anchors[pair] = row["energy"]
+                inputs[pair] = row["hashes"]
+    if inputs.keys() != anchors.keys():
+        raise ValueError("Missing 1,200-update smoothing comparison for the pilot seeds")
+    return expected, inputs
+
+
 def run_fold(args, arms, seed, group, original, *, read_only=False):
     holdout = group == "Screen1_0"
     stage = "heldout" if holdout else "validation"
@@ -47,14 +74,19 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
     endpoint = steps[-1]
     points, fingerprints, targets = {}, {}, {}
     source = getattr(args, "same_wheel_from", None)
+    smoothing_source = getattr(args, "shared_smoothing_from", None)
     for role in ("v12", "tuned_empf", "tuned_v11", "matched_empf", "matched_v11", "same_wheel_v11"):
         if role not in arms:
             continue
         arm = arms[role]
-        reuse_v12 = source is not None and role == "v12"
-        if not read_only and not reuse_v12:
+        origin = args.output
+        if source and role == "v12":
+            origin = source
+        elif smoothing_source and role != "matched_empf":
+            origin = smoothing_source
+        if not read_only and origin == args.output:
             fit(args, stage, seed, group, gpu, [arm], options=("--updates", str(endpoint), "--trace-every", "1200"))
-        base = receipt(source if reuse_v12 else args.output, stage, *arm, seed, group)
+        base = receipt(origin, stage, *arm, seed, group)
         row = json.loads(base.with_stem(base.stem + f"-u{endpoint}-trace1200").read_text())
         trace = row["trace"]
         rates = row["initial_rates"]
@@ -79,10 +111,31 @@ def run_fold(args, arms, seed, group, original, *, read_only=False):
         if source is not None:
             if row["optimizer_family"] != args.recipe_differences["optimizer_family"][role]:
                 raise ValueError(f"Unexpected optimizer in {role}, seed {seed}, {group}")
-            if reuse_v12:
+            if role == "v12":
                 paired_settings = row["settings"]
             elif row["settings"] != paired_settings:
                 raise ValueError(f"Training settings differ between the two optimizers for seed {seed}, {group}")
+        if smoothing_source:
+            prior = args.smoothing_inputs.get((seed, group))
+            if prior and (hashes["data"], hashes["initialization"], hashes["training_batches"][0], str(gpu)) != (
+                    prior["projected_data_sha256"], prior["initial_parameters_sha256"],
+                    prior["training_batches_sha256"], prior["visible_devices"]):
+                raise ValueError(f"Inputs differ from the published smoothing comparison for seed {seed}, {group}")
+            if role in ("v12", "matched_v11", "matched_empf"):
+                settings = row["settings"]
+                expected = SMOOTHING if role == "matched_empf" else None
+                must_check_objects = expected is not None or "optimizer_smoothing" in row
+                actual = row.get("optimizer_smoothing")
+                if settings["optimizer_smoothing"] != expected or (must_check_objects and actual != {
+                        "generator_and_particles": SMOOTHING, "critic": SMOOTHING}):
+                    raise ValueError(f"Optimizer smoothing mismatch for {role}, seed {seed}, {group}")
+                # EMPF has its own objective. The two transport parameters apply only to the Unified loss.
+                shared = {k: v for k, v in settings.items()
+                          if k not in ("rhbi_relativistic_weight", "rhbi_self_coupling", "optimizer_smoothing")}
+                if role == "v12":
+                    paired_settings = shared, rates
+                elif (shared, rates) != paired_settings:
+                    raise ValueError(f"Unmatched training settings for {role}, seed {seed}, {group}")
         if endpoint == LONG_STEPS[-1]:
             anchor = args.pilot_anchors[seed, group]
             prefix = [dict(updates=p["updates"], **{m: p[m] for m in METRICS}) for p in trace[:len(STEPS)]]
@@ -149,6 +202,8 @@ def main():
                       help="verify the completed six-seed replication and conditionally evaluate Screen1_0")
     mode.add_argument("--same-wheel-from", type=Path, metavar="CONVERGENCE_DIR",
                       help="compare the v12 and v11 optimizers inside release 0.12.0 at the source run's endpoint")
+    mode.add_argument("--shared-smoothing-from", type=Path, metavar="CONVERGENCE_DIR",
+                      help="compare the original releases at 3,600 updates with matched optimizer smoothing")
     parser.set_defaults(require_constant_lr=True)
     args = parser.parse_args()
     args.data, args.wheels, args.output = (p.resolve() for p in (args.data, args.wheels, args.output))
@@ -166,13 +221,13 @@ def main():
     args.checkpoints = LONG_STEPS if args.forty_thousand else STEPS
     groups = GROUPS
     extra_protocol = {}
-    if args.same_wheel_from:
-        args.same_wheel_from = args.same_wheel_from.resolve()
-        if args.output == args.same_wheel_from:
+    comparison_source = args.same_wheel_from or args.shared_smoothing_from
+    if comparison_source:
+        if args.output == comparison_source.resolve():
             parser.error("use a distinct output directory for the optimizer comparison")
-        plan = json.loads((args.same_wheel_from / "protocol.json").read_text())
+        plan = json.loads((comparison_source / "protocol.json").read_text())
         seeds = plan["seeds"]
-        if plan["checkpoints"] == list(LONG_STEPS):
+        if args.same_wheel_from and plan["checkpoints"] == list(LONG_STEPS):
             args.checkpoints = LONG_STEPS
             groups = GROUPS[:1]
             valid_seeds = seeds == [22, 251]
@@ -181,6 +236,16 @@ def main():
         if (plan["arms"] != arms or plan["groups"] != list(groups)
                 or plan["checkpoints"] != list(args.checkpoints) or not valid_seeds):
             raise ValueError("Expected a frozen five-arm NeuroKO convergence comparison")
+    if args.shared_smoothing_from:
+        args.shared_smoothing_from = args.shared_smoothing_from.resolve()
+        arms, args.smoothing_inputs = shared_smoothing_pilot(arms, anchors)
+        extra_protocol["matched_optimizer_smoothing"] = SMOOTHING
+        rule = ("Give v12, matched original v11 and matched original EMPF optimizer smoothing 0.0061. "
+                "Reuse the four original unchanged fits and train matched EMPF on identical cells, initial "
+                "weights and minibatches with fixed learning rates. Report the paired 3,600-update "
+                "endpoint and the two earlier checkpoints on the pilot and fresh seeds.")
+    elif args.same_wheel_from:
+        args.same_wheel_from = args.same_wheel_from.resolve()
         v12 = arms["v12"]
         arms = dict(v12=v12, same_wheel_v11=[v12[0], "unified_v11", v12[2]])
         args.recipe_differences = optimizer_difference(args.wheels, v12[2])
@@ -267,7 +332,7 @@ def main():
             comparisons.append(dict(seed=seed, updates=step, means=means, v12_minus_control=gaps))
     endpoint = [row for row in comparisons if row["updates"] == args.checkpoints[-1]]
     result = dict(cells=cells, comparisons=comparisons)
-    if args.fresh or args.forty_thousand or args.confirm_from or args.same_wheel_from:
+    if args.fresh or args.forty_thousand or args.confirm_from or comparison_source:
         result["endpoint_means"] = {role: mean(row["means"][role]["mean_energy_distance"] for row in endpoint)
                                     for role in arms}
         summary = {}
@@ -279,7 +344,7 @@ def main():
                        for cell in cells)
             summary[role] = dict(mean_v12_minus_control=mean(gaps), pairs_won=wins,
                                  seed_means_won=sum(gap < 0 for gap in gaps))
-            if args.confirm_from or (args.same_wheel_from and len(seeds) > 2):
+            if args.confirm_from or (comparison_source and len(seeds) > 2):
                 from scipy.stats import t
                 margin = float(t.ppf(.975, len(gaps) - 1)) * stdev(gaps) / sqrt(len(gaps))
                 summary[role]["paired_95_t_interval"] = [mean(gaps) - margin, mean(gaps) + margin]

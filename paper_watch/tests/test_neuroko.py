@@ -120,6 +120,74 @@ def test_fresh_duration_reports_all_pairs_at_fixed_endpoint(tmp_path, monkeypatc
     assert not result["leads_all_controls_on_average"]
 
 
+def test_shared_smoothing_duration_reuses_four_arms_and_audits_new_empf(tmp_path, monkeypatch):
+    import json
+    import sys
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_convergence as study
+
+    source = tmp_path / "native"
+    output = tmp_path / "shared"
+    source.mkdir()
+    pilot = json.loads((study.NOTES / "neuroko_v12_convergence_3600_tuned_empf.json").read_text())
+    original = pilot["arms"]
+    plan = dict(arms=original, seeds=[22, 251], groups=list(study.GROUPS), checkpoints=study.STEPS)
+    (source / "protocol.json").write_text(json.dumps(plan))
+    shared = json.loads((study.NOTES / "neuroko_v12_shared_optimizer_smoothing.json").read_text())["settings"]["0.0061"]
+    arms = shared["protocol"]["arms"]
+    anchors = {(row["seed"], row["group"]): row for cohort in shared["cohorts"].values() for row in cohort["rows"]}
+    trained = []
+    wrong_smoothing = False
+
+    def write_receipt(directory, role, seed, group):
+        arm = arms[role]
+        release, recipe, trial = arm
+        row = anchors[seed, group]
+        hashes = row["hashes"]
+        energy = row["energy"][role]
+        rates = dict(generator=trial["lr"], critic=trial["lr"] * trial["d_lr_mult"], particles=trial["lr"] * trial["prior_lr_mult"])
+        settings = dict(optimizer_smoothing=None, z_dim=16)
+        settings.update({k: v for k, v in trial.items() if k not in ("name", "lr")})
+        trace = [dict(updates=u, mean_energy_distance=energy, effective_rank=18., spread_ratio=1.,
+                      training_batches_sha256=hashes["training_batches_sha256"] if u == 1200 else str(u)) for u in study.STEPS]
+        data = dict(**hashes, seed=seed, name=trial["name"], stage="validation", recipe=recipe, particlegan=release,
+                    score_groups=[group], fit_groups=[g for g in study.GROUPS if g != group], updates=3600,
+                    lr=trial["lr"], settings=settings, deterministic=True, initial_rates=rates, final_rates=rates,
+                    constant_lr_verified_updates=3600, fixed_lr_optimizer_steps=dict(generator_and_particles=3600, critic=3600),
+                    means=dict(energy_distance=energy), trace=trace)
+        data["training_batches_sha256"] = "3600"
+        if role == "matched_empf":
+            data["optimizer_smoothing"] = dict(generator_and_particles=.0061, critic=.001 if wrong_smoothing else .0061)
+        base = study.receipt(directory, "validation", *arm, seed, group)
+        base.parent.mkdir(parents=True, exist_ok=True)
+        base.with_stem(base.stem + "-u3600-trace1200").write_text(json.dumps(data))
+
+    for seed in plan["seeds"]:
+        for group in study.GROUPS:
+            for role in arms:
+                if role != "matched_empf":
+                    write_receipt(source, role, seed, group)
+
+    def fit_empf(args, stage, seed, group, gpu, requested, *, options):
+        assert requested == [arms["matched_empf"]] and args.output == output and stage == "validation"
+        assert args.require_constant_lr and options == ("--updates", "3600", "--trace-every", "1200")
+        trained.append((seed, group))
+        write_receipt(output, "matched_empf", seed, group)
+
+    monkeypatch.setattr(study, "fit", fit_empf)
+    monkeypatch.setattr(sys, "argv", ["study", "--shared-smoothing-from", str(source), "--output", str(output),
+                                      "--data", str(tmp_path), "--wheels", str(tmp_path)])
+    study.main()
+    assert sorted(trained) == [(s, g) for s in plan["seeds"] for g in study.GROUPS]
+    result = json.loads((output / "comparison.json").read_text())
+    assert set(result["endpoint_means"]) == set(arms) and len(result["cells"]) == 6
+    assert json.loads((output / "protocol.json").read_text())["matched_optimizer_smoothing"] == .0061
+    wrong_smoothing = True
+    with pytest.raises(ValueError, match="Optimizer smoothing mismatch"):
+        study.main()
+
+
 def test_same_wheel_duration_reuses_only_v12_and_checks_optimizer_and_anchors(tmp_path, monkeypatch):
     import json
     import sys

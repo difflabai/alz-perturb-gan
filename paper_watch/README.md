@@ -159,6 +159,13 @@ python paper_watch/scripts/neuroko_convergence.py --same-wheel-from "$data/v12-c
   --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-optimizer-3600/pilot"
 ```
 
+To give matched original EMPF the same optimizer smoothing (0.0061) as v12 and original v11, run the command below. It trains six EMPF fits, reuses the other four configurations, and verifies the pilot’s published 1,200-update energies and input fingerprints. The primary endpoint is the four-target mean energy distance at 3,600 updates. To repeat the comparison on the six fresh seeds, use the completed `fresh-838-843` source directory and a separate output.
+
+```bash
+python paper_watch/scripts/neuroko_convergence.py --shared-smoothing-from "$data/v12-convergence-3600" \
+  --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-smoothing-3600/pilot"
+```
+
 Once the six-seed original-release comparison finishes, use its results to decide whether to evaluate Screen1_0. The command verifies the 90 training records and checks that v12 beat every control on mean energy distance at 3,600 updates. If it did, all five configurations train on the three development groups and score Screen1_0 using seeds 844–859. The report includes each target and a paired 95% interval across training seeds for each comparison.
 
 ```bash

@@ -333,10 +333,11 @@ def main():
             config["critic_penalty_threshold"] = threshold
         if args.require_constant_lr:
             verify_fixed_schedule(recipe, config["updates"])
-        if settings.optimizer_smoothing is not None:
-            smoothing = {"generator_and_particles": model.trainer.opt_g.smoothing, "critic": model.trainer.opt_d.smoothing}
-            if any(value != settings.optimizer_smoothing for value in smoothing.values()):
-                raise ValueError(f"Optimizer smoothing differs from {settings.optimizer_smoothing}: {smoothing}")
+        smoothing = {"generator_and_particles": getattr(model.trainer.opt_g, "smoothing", None),
+                     "critic": getattr(model.trainer.opt_d, "smoothing", None)}
+        if settings.optimizer_smoothing is not None and any(value != settings.optimizer_smoothing for value in smoothing.values()):
+            raise ValueError(f"Optimizer smoothing differs from {settings.optimizer_smoothing}: {smoothing}")
+        if all(value is not None for value in smoothing.values()):
             config["optimizer_smoothing"] = smoothing
         if settings.output_noise_std is not None:
             if (recipe.output_noise_mode != "fixed" or recipe.output_noise_warmup != 0
