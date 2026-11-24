@@ -338,3 +338,14 @@ python paper_watch/scripts/neuroko_rate_noise.py --study strong-prior-noise --da
   --wheels "$data/wheels" --output "$data/v12-strong-prior-noise" \
   --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
 ```
+
+### Separating training noise from sampling noise
+
+The native Gaussian noise affects both the training updates and the generated samples used for scoring. To distinguish their contributions to the 0.97676 to 0.94231 change in v12 energy, replay the 18 fits at the release rates and prior weight 0.1. For each of the nine seed–group pairs, train once at noise 0.025 and once at 0.15. Score each fitted generator at both sampling widths with identical particle and Gaussian draws. The original samples must reproduce exactly after restoring the native width. The diagnostic checks every original target score and input hash.
+
+At a fixed sampling width, the energy difference measures the effect of training at higher noise. For a given fitted generator, it measures the effect of changing sampling noise alone. Averaging the two training differences and the two sampling differences gives contributions that sum to the change between the two original configurations. The report includes both the benchmark draws and eight additional draw sets shared across training settings. Qualification uses the original training and sampling widths.
+
+```bash
+python paper_watch/scripts/neuroko_noise_crossover.py --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --reference "$data/v12-rate-noise" --output "$data/v12-noise-crossover"
+```

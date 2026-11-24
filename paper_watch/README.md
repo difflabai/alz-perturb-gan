@@ -136,6 +136,8 @@ The stronger-prior v12 led the screen, then scored 0.9481 on fresh training seed
 
 To continue the search from the same checkout, run the `--study prior-interaction` command. It compares both latent noise levels and prior weights under each of the two fixed learning-rate settings on the same training folds. [Eight configurations and the qualification rule](notes/neuroko_v12_refinement.md#separating-the-effects-of-latent-noise-and-role-rates)
 
+In that comparison the stronger prior helped v12 at noise 0.15 under both rate settings. The next training command, `--study strong-prior-noise`, tests noise 0.25 against matched controls. A separate replay measures how much of the earlier improvement came from training with more noise and how much came from sampling the trained generator with more noise. [Higher-noise comparison](notes/neuroko_v12_refinement.md#increasing-noise-with-the-stronger-prior) · [Training and sampling replay](notes/neuroko_v12_refinement.md#separating-training-noise-from-sampling-noise)
+
 Two earlier replication commands compare the formulations at fixed rates of 0.020, 0.042 and 0.0203, then at EMPF’s tuned rates of 0.020, 0.030 and 0.058. [Paired results and commands](notes/neuroko_v12_refinement.md#replicated-comparison-of-learning-rates-and-latent-noise)
 
 #### Copy-paste prompt for the 1,200-update formulation comparison

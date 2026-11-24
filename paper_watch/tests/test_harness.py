@@ -137,3 +137,25 @@ def test_v12_gain_diagnostic_reads_the_released_optimizer_state():
         assert gains[role] == {"ema_func_gain": expected["ema_func_gain"],
                                "last_step_gain": expected["last_step_gain"],
                                "probe_consumptions": opt.probe_consumptions}
+
+
+def test_sampling_noise_diagnostic_restores_native_draws(monkeypatch):
+    from paper_watch.alztest import neuroko_tune
+
+    pytest.importorskip("particlegan._unified_v12")
+    model = ConditionalPGAN(3, 2, seed=4, recipe_name="unified_v12", settings=TrainingSettings(prior_sigma=.025))
+    observed = np.random.default_rng(22).normal(size=(2, 32, 3))
+    conditions = ["control", "target"]
+    original = model.sample(1, 64, seed=25)
+    native = neuroko_tune.score_draw(model, 24, observed, conditions)
+    alternate = neuroko_tune.score_alternate_noise(model, .025, .15, [24], observed, conditions)
+    assert alternate["24"] != native
+    np.testing.assert_array_equal(model.sample(1, 64, seed=25), original)
+
+    def interrupt(*args):
+        raise RuntimeError("sampling interrupted")
+
+    monkeypatch.setattr(neuroko_tune, "score_draw", interrupt)
+    with pytest.raises(RuntimeError, match="sampling interrupted"):
+        neuroko_tune.score_alternate_noise(model, .025, .15, [24], observed, conditions)
+    np.testing.assert_array_equal(model.sample(1, 64, seed=25), original)

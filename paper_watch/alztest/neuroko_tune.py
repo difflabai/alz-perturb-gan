@@ -76,6 +76,25 @@ def draw_metrics(samples, scored_targets, *, diversity=True):
     return metrics
 
 
+def score_draw(model, seed, observed, conditions):
+    generated = [model.sample(i, DRAWS, seed=seed + i) for i in range(len(conditions))]
+    return draw_metrics(generated, score(generated, observed, conditions))
+
+
+def score_alternate_noise(model, training_sigma, alternate_sigma, seeds, observed, conditions):
+    from particlegan.priors import NormalNoiseManipulator
+
+    noises = [m for m in model.prior.modules() if isinstance(m, NormalNoiseManipulator)]
+    if len(noises) != 1 or noises[0].sigma != training_sigma:
+        raise ValueError("Expected one native Gaussian noise manipulator with the training sigma")
+    noise = noises[0]
+    try:
+        noise.sigma = alternate_sigma
+        return {str(seed): score_draw(model, seed, observed, conditions) for seed in seeds}
+    finally:
+        noise.sigma = training_sigma
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=("validation", "heldout"))
@@ -92,6 +111,8 @@ def main():
     parser.add_argument("--trace-every", type=int, help="also score validation or holdout at this update interval")
     parser.add_argument("--evaluation-seeds", type=int, nargs="+", metavar="BASE",
                         help="also evaluate each fitted model with these sampling seeds plus the condition index")
+    parser.add_argument("--score-noise", type=float, metavar="SIGMA",
+                        help="also score the fitted generator at this Gaussian latent noise using the same draws")
     parser.add_argument("--deterministic", action="store_true",
                         help="seed PyTorch and require deterministic CUDA kernels for repeatability checks")
     parser.add_argument("--diagnose-energy", action="store_true",
@@ -110,6 +131,8 @@ def main():
         parser.error("--trace-every must be between 1 and 1200")
     if args.evaluation_seeds and len(set(args.evaluation_seeds)) != len(args.evaluation_seeds):
         parser.error("evaluation seed bases must be distinct")
+    if args.score_noise is not None and (not np.isfinite(args.score_noise) or args.score_noise <= 0):
+        parser.error("--score-noise must be positive and finite to preserve the Gaussian noise draws")
     release = version("particlegan")
     supported = {"unified_v12": ("0.12.0",), "unified_v11": ("0.11.1", "0.12.0"),
                  "empf": ("0.10.0", "0.11.1", "0.12.0")}
@@ -176,6 +199,9 @@ def main():
         if args.evaluation_seeds:
             config["evaluation_seeds"] = args.evaluation_seeds
             path = path.with_stem(f"{path.stem}-resampled")
+        if args.score_noise is not None:
+            config["score_noise"] = args.score_noise
+            path = path.with_stem(f"{path.stem}-noise{args.score_noise}")
         if args.self_plan:
             config["diagnostic_self_plan"] = args.self_plan
             path = path.with_stem(f"{path.stem}-{args.self_plan}")
@@ -290,11 +316,15 @@ def main():
             config["trace"] = trace
         if args.evaluation_seeds:
             config["observed_effective_rank"] = mean(effective_rank(rows) for rows in observed[1:])
-            draws = {}
-            for base in args.evaluation_seeds:
-                generated = [model.sample(i, DRAWS, seed=base + i) for i in range(len(conditions))]
-                draws[str(base)] = draw_metrics(generated, score(generated, observed, conditions))
-            config["evaluation_draws"] = draws
+            config["evaluation_draws"] = {str(base): score_draw(model, base, observed, conditions)
+                                          for base in args.evaluation_seeds}
+        if args.score_noise is not None:
+            bases = [args.seed + 100, *(args.evaluation_seeds or ())]
+            config["alternate_noise_draws"] = score_alternate_noise(
+                model, settings.prior_sigma, args.score_noise, bases, observed, conditions)
+            if not all(np.array_equal(model.sample(i, DRAWS, seed=args.seed + 100 + i), original)
+                       for i, original in enumerate(samples)):
+                raise RuntimeError("Failed to reproduce the original samples after restoring the training noise")
         if args.require_constant_lr:
             config["constant_lr_verified_updates"] = model.trainer.completed_steps
         if gain_trace:
