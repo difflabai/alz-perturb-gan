@@ -1,0 +1,85 @@
+"""Compare four fixed-rate v12 transport-scale settings against their matched controls."""
+import argparse
+import json
+from pathlib import Path
+from statistics import mean
+
+from compare_neuroko_v12 import GROUPS, write_frozen
+from neuroko_stratified import confirm_candidate, control_arms, evaluate, key
+from retune_neuroko_v12 import BASE, RELEASE, V12
+
+TRIALS = {
+    f"q{q}-noise{sigma}": dict(
+        name=f"q{q}-noise{sigma}", **BASE, rhbi_nn_quantile=q / 100, prior_sigma=sigma / 1000
+    )
+    for q in (75, 95) for sigma in (25, 150)
+}
+RULE = (
+    "Screen four uniform-sampling combinations on the three training groups at seed 6. "
+    "For each v12 trial, subtract the lower mean of its matched v11 and EMPF controls. "
+    "Choose the smallest negative difference, breaking ties by v12 mean then trial name. "
+    "On independent training seeds 7–9, require the chosen v12 mean to beat both matched controls, "
+    "the default-bandwidth v11/EMPF/v12 references, the 0.15-bandwidth v11/EMPF/v12 references, "
+    "and independently tuned EMPF. Only a qualifying trial is evaluated on outer seeds 116–131. "
+    "All fits use 1200 updates, constant role rates, and the same capacity and input fingerprints."
+)
+
+
+def matched(trial):
+    # EMPF uses the same Gaussian noise and absolute role rates. Its loss has no RHBI scale.
+    shared = dict(lr=trial["lr"], d_lr_mult=1.5, prior_lr_mult=2.9, prior_sigma=trial["prior_sigma"])
+    return [
+        [RELEASE, V12, trial],
+        [RELEASE, "unified_v11", trial],
+        [RELEASE, "empf", dict(name=f"noise{round(1000 * shared['prior_sigma'])}", **shared)],
+    ]
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    for field in ("data", "wheels", "output"):
+        parser.add_argument("--" + field, type=Path, required=True)
+    parser.add_argument("--workers-per-gpu", type=int, default=2)
+    parser.add_argument("--window-cells", type=int)
+    parser.add_argument("--stage", choices=["search", "confirm"], default="search")
+    args = parser.parse_args()
+    for field in ("data", "wheels", "output"):
+        setattr(args, field, getattr(args, field).resolve())
+    args.output.mkdir(parents=True, exist_ok=True)
+    if args.stage == "confirm":
+        selection = json.loads((args.output / "selection.json").read_text())
+        if not selection["advances"]:
+            raise ValueError("no transport-scale candidate passed training validation")
+        confirm_candidate(args, selection, TRIALS[selection["winner"]], list(range(116, 132)))
+        return
+
+    write_frozen(args.output / "search.json", dict(trials=TRIALS, groups=list(GROUPS), rule=RULE))
+    arms = {key(arm): arm for trial in TRIALS.values() for arm in matched(trial)}
+    screen = evaluate(args, list(arms.values()), [6])
+    gaps = {}
+    for name, trial in TRIALS.items():
+        own, v11, empf = (mean(screen[key(arm)]) for arm in matched(trial))
+        gaps[name] = (own - min(v11, empf), own)
+    finalist = min(gaps, key=lambda name: (*gaps[name], name))
+    decision = dict(screen=screen, gaps=gaps, finalist=None, validation={}, means={}, advances=False, winner=None)
+    if gaps[finalist][0] < 0:
+        trial = TRIALS[finalist]
+        comparisons, labels = control_arms([trial])
+        kept = ("selected_v12", "matched_v11", "matched_empf", "previous_best_v11", "previous_best_empf",
+                "previous_v12", "tuned_empf", "selected_v12-alternative", "matched_v11-alternative",
+                "matched_empf-alternative")
+        keys = {labels[label] for label in kept}
+        validation = evaluate(args, [arm for arm in comparisons if key(arm) in keys], [7, 8, 9])
+        means = {name: mean(values) for name, values in validation.items()}
+        chosen = labels["selected_v12"]
+        advances = all(means[chosen] < score for name, score in means.items() if name != chosen)
+        decision.update(finalist=finalist, validation=validation, means=means, labels={k: labels[k] for k in kept},
+                        advances=advances, winner=finalist if advances else None)
+    # Store lists in the JSON protocol so a deterministic rerun compares equal.
+    decision["gaps"] = {name: list(values) for name, values in gaps.items()}
+    write_frozen(args.output / "selection.json", decision)
+    print("Transport-scale training selection", decision["finalist"], decision["advances"], flush=True)
+
+
+if __name__ == "__main__":
+    main()

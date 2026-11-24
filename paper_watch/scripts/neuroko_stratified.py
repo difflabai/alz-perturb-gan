@@ -55,6 +55,11 @@ def evaluate(args, arms, seeds):
     for (name, seed, group), path in paths.items():
         d = json.loads(path.read_text())
         version, recipe, trial = requested[name]
+        expected_rates = {
+            "generator": trial["lr"],
+            "critic": trial["lr"] * trial.get("d_lr_mult", 1.5),
+            "particles": trial["lr"] * trial.get("prior_lr_mult", 2.9),
+        }
         signature = tuple(
             d[k] for k in ("projected_data_sha256", "training_batches_sha256", "initial_parameters_sha256")
         )
@@ -68,6 +73,7 @@ def evaluate(args, arms, seeds):
             or [row["update"] for row in d["rate_trace"]] != [300, 600, 900, 1200]
             or d["score_groups"] != [group]
             or set(d["fit_groups"]) != set(GROUPS) - {group}
+            or d["initial_rates"] != expected_rates
             or not constant_rates(d)
             or d["visible_devices"] != str((GROUPS.index(group) + seed) % 2)
             or fingerprints.setdefault((seed, group), signature) != signature
@@ -131,6 +137,22 @@ def validation_controls(finalists):
     return arms, references, mapping
 
 
+def confirm_candidate(args, selection, chosen, seeds):
+    arms, labels = control_arms([chosen])
+    freeze = {"selection": selection, "arms": arms, "labels": labels, "seeds": seeds}
+    write_frozen(args.output / "freeze.json", freeze)
+
+    def outer(seed):
+        k = seed % len(arms)
+        fit(args, "heldout", seed, GROUPS[0], seed % 2, arms[k:] + arms[:k])
+
+    with ThreadPoolExecutor(args.workers_per_gpu) as a, ThreadPoolExecutor(args.workers_per_gpu) as b:
+        futures = [(a, b)[s % 2].submit(outer, s) for s in seeds]
+        for future in futures:
+            future.result()
+    summarize(args, freeze)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for field in ("data", "wheels", "output"):
@@ -146,21 +168,7 @@ def main():
         selection = json.loads((args.output / "selection.json").read_text())
         if not selection["advances"]:
             raise ValueError("no candidate passed the training-group comparisons")
-        chosen = TRIALS[selection["winner"]]
-        arms, labels = control_arms([chosen])
-        seeds = list(range(100, 116))
-        freeze = {"selection": selection, "arms": arms, "labels": labels, "seeds": seeds}
-        write_frozen(args.output / "freeze.json", freeze)
-
-        def outer(seed):
-            k = seed % len(arms)
-            fit(args, "heldout", seed, GROUPS[0], seed % 2, arms[k:] + arms[:k])
-
-        with ThreadPoolExecutor(args.workers_per_gpu) as a, ThreadPoolExecutor(args.workers_per_gpu) as b:
-            futures = [(a, b)[s % 2].submit(outer, s) for s in seeds]
-            for future in futures:
-                future.result()
-        summarize(args, freeze)
+        confirm_candidate(args, selection, TRIALS[selection["winner"]], list(range(100, 116)))
         return
 
     write_frozen(

@@ -65,3 +65,14 @@ python paper_watch/scripts/neuroko_stratified.py --data "$data" --window-cells 1
 ```
 
 If `selection.json` records a qualifying candidate, add `--stage confirm` to run its paired evaluation on seeds 100–115.
+
+## Transport distance scale with uniform particle sampling
+
+In the stratified screen the higher nearest-neighbor distance quantile improved v12 across the three seed-3 folds. A separate experiment keeps uniform sampling, crosses quantile 0.75 or 0.95 with Gaussian latent noise 0.025 or 0.15, and ranks the four v12 settings by their difference from the better matched v11 or EMPF control. Each fit uses the same 1,200 updates and constant role rates. Seed 6 screens on the three training folds. The candidate with the largest advantage must then beat the matched controls and the previous uniform-sampling references on separate training seeds 7–9 before a new holdout comparison on seeds 116–131. [Selection rule and comparison arms](../scripts/neuroko_transport_scale.py)
+
+```bash
+python paper_watch/scripts/neuroko_transport_scale.py --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-transport-scale"
+```
+
+If a candidate qualifies, add `--stage confirm` to run the frozen holdout comparison.
