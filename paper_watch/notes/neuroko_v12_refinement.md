@@ -704,3 +704,17 @@ python paper_watch/scripts/neuroko_rate_noise.py --study generator-motion --data
 At generator LR 0.014, all nine v12 fits moved the generator outputs less per step than original v11. The median v12/v11 ratio was **0.93963** (range 0.92890–0.95140). The median ratio for target mean translation was 0.99660, and for movement around the target means it was 0.93036. Raising only the v12 generator LR to **0.0149** brought the overall median ratio to **1.01186**. Every observed fit reproduced the final parameter hash of its unobserved replay. The 1,200-update study tests the effect on energy. [Measurements at both generator rates and matched input hashes](neuroko_v12_generator_motion.json)
 
 Raising the fixed generator LR to 0.0149 increased nine-pair mean energy from **0.92322 to 0.93755**. Seven of nine pairs worsened. Matching early generator motion therefore did not improve the primary endpoint. The next test takes the same multiplicative step in the opposite direction, giving a fixed generator LR of **0.0132**, critic LR 0.0049 and particle LR 0.0406. It uses `--study lower-generator` and `--output "$data/v12-lower-generator"` with the same directories. Further qualification uses fresh seeds 684–689 and biological holdout seeds 690–705. [All nine 1,200-update comparisons](neuroko_v12_generator_motion_energy.json)
+
+Lowering the fixed generator LR to **0.0132** also raised mean energy, to **0.93745**. It improved three of nine paired fits. The original 0.014 had the lowest mean of the three generator rates. Tuned EMPF scored 0.92240 on these pairs. [Lower-rate scores and qualification decision](neuroko_v12_lower_generator_energy.json)
+
+### Particle learning rate at the lower critic rate
+
+With generator LR 0.014 and critic LR 0.021, particle LRs of 0.0287, 0.0406 and 0.0574 gave v12 mean energies of 0.95057, 0.94231 and 0.95789 on seeds 22–24. The new comparison tests those same particle rates with critic LR 0.0049. Each fit uses constant rates, hollow coupling, loss weight 2, latent noise 0.15 and prior coefficient 0.1.
+
+Both new particle rates run on all three training groups for seeds 22–24 and 251–253. For each candidate and cohort we subtract the lowest mean among the original 0.0406 particle rate, tuned v11 and tuned EMPF. The candidate with the smaller worst-cohort difference can advance if both differences are negative. Its subsequent comparisons include rate-matched and independently tuned controls from the original releases. Fresh seeds 728–733 precede any biological holdout evaluation.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study calibrated-particles --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-calibrated-particles" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
+```

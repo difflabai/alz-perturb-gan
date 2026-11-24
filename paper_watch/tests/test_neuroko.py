@@ -11,6 +11,24 @@ import torch
 from alztest.neuroko import LAYOUT, evaluate, normalize_counts, open_screen, project_fold, select_targets
 
 
+def test_particle_search_uses_both_cohorts_and_changes_only_particle_rate(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    from neuroko_particle_rates import particle_arms, select_particle_rate
+    from neuroko_rate_noise import NOISY_PRIOR
+
+    trials = [arm[2] for arm in particle_arms(NOISY_PRIOR)]
+    assert [t["lr"] * t["prior_lr_mult"] for t in trials] == pytest.approx([.0287, .0406, .0574])
+    for trial in trials:
+        assert all(trial[k] == v for k, v in NOISY_PRIOR.items() if k not in ("name", "prior_lr_mult"))
+    first = dict(low=[.50], high=[.89], baseline=[.95], empf=[.90])
+    second = dict(low=[.94], high=[.87], baseline=[.88], empf=[.92])
+    result = select_particle_rate(dict(first=first, second=second), ("low", "high"), ("baseline", "empf"))
+    assert result["winner"] == "high"
+    assert result["passes"]
+    second["high"] = [.88]
+    assert not select_particle_rate(dict(first=first, second=second), ("low", "high"), ("baseline", "empf"))["passes"]
+
+
 def test_prior_spread_target_is_shared_through_qualification(monkeypatch):
     root = Path(__file__).resolve().parents[1]
     monkeypatch.syspath_prepend(str(root / "scripts"))
