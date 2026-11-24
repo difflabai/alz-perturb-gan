@@ -862,3 +862,15 @@ python paper_watch/scripts/neuroko_rate_noise.py --study critic-weight-interacti
   --wheels "$data/wheels" --output "$data/v12-critic-weight-interaction" --shared-screen "$data/v12-rate-noise" \
   --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
 ```
+
+### Optimizer smoothing at the calibrated rates
+
+The original v11 and v12 optimizers use different update rules with the same coupled loss. Original v11 came closer to the measured spread on all 144 target-level comparisons at the shared rates. We are testing whether changing the smoothing used for small gradients improves v12’s energy distance. The three learning rates, network, latent noise and loss stay fixed.
+
+The 1,200-update screen compares half (0.00305) and double (0.0122) the released v12 smoothing value of 0.0061. It selects the lower mean energy over all nine development fits on seeds 22–24. To advance, it must beat the default v12 and both independently tuned original controls. All matched controls then receive the selected smoothing value. The comparison repeats on seeds 251–253 and, if it qualifies, on fresh seeds 860–865 before the biological holdout. [Matched spread measurements](neuroko_v12_matched_original_spread.json)
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study optimizer-smoothing --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-optimizer-smoothing" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior" --workers-per-gpu 1
+```

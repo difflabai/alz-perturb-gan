@@ -33,7 +33,7 @@ CENTROID_STUDIES = ("critic-centroid-weight", "critic-quarter-weight", "critic-m
 PRELIMINARY_STUDIES = ("original-v11-critic", *CRITIC_NOISE_STUDIES, "generator-output-noise",
                        "release-loss", *RHO_STUDIES, *CENTROID_STUDIES)
 TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", "critic-interval", "loss-factorial",
-                      "calibrated-particles", "transport-grid", "critic-weight-interaction",
+                      "calibrated-particles", "transport-grid", "critic-weight-interaction", "optimizer-smoothing",
                       *PRELIMINARY_STUDIES, *MOTION_STUDIES)
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
@@ -660,6 +660,37 @@ def loss_factorial(args, hollow2):
     return None
 
 
+def smoothing_screen(args, baseline):
+    candidates = [paired(dict(baseline, name=baseline["name"] + "-smooth-" + level,
+                              optimizer_smoothing=value))[0] for level, value in (("half", .00305), ("double", .0122))]
+    controls = [paired(baseline)[0], *published_original_controls().values()]
+    plan = dict(candidates=candidates, controls=controls, first=REPLICATION_SEEDS, second=[251, 252, 253],
+                groups=list(GROUPS), fresh=list(range(860, 866)), outer=list(range(866, 882)),
+                rule="Halve or double released v12 optimizer smoothing relative to 0.0061. "
+                     "Select the lower mean four-target energy at 1,200 updates across seeds 22–24 and "
+                     "all three groups, breaking ties by arm name. Advance only if it beats unmodified v12 "
+                     "and independently tuned original v11 and EMPF. Give all matched controls the winning "
+                     "smoothing. Compare all matched and tuned references separately on both development "
+                     "cohorts, then on six fresh seeds before scoring the biological holdout.")
+    write_frozen(args.output / "smoothing_protocol.json", plan)
+    target = args.output / "smoothing_screen.json"
+    if args.stage == "search":
+        local = copy(args)
+        local.output = args.shared_screen or args.output
+        scores = evaluate(local, [*candidates, *controls], plan["first"])
+        means = {name: mean(values) for name, values in scores.items()}
+        best = min(candidates, key=lambda arm: (means[key(arm)], key(arm)))
+        passes = all(means[key(best)] < means[key(arm)] for arm in controls)
+        write_frozen(target, dict(scores=scores, means=means, winner=key(best), passes=passes))
+    result = json.loads(target.read_text())
+    if result["passes"]:
+        return next(arm[2] for arm in candidates if key(arm) == result["winner"]), plan
+    if args.stage != "search":
+        raise ValueError("Neither smoothing setting qualified against the original controls")
+    write_frozen(args.output / "selection.json", dict(advances=False, winner=None, screening=result))
+    return None, plan
+
+
 def critic_weight_interaction(args, baseline):
     upper = dict(baseline, name="interval-critic-71", d_lr_mult=.0071 / baseline["lr"])
     cells = {role: paired(trial)[0] for role, trial in (
@@ -766,7 +797,7 @@ def compare_prior_weight(args):
                 "If it passes, compare against all matched and previously tuned controls on 22–24 and 251–253. "
                 "Reserve fresh seeds 480–485 including original releases, then biological holdout seeds 486–501.")
     elif args.study in ("original-v11-critic", *CRITIC_NOISE_STUDIES, "critic-interval", "release-loss",
-                        "loss-factorial", "calibrated-particles", "transport-grid", "critic-weight-interaction",
+                        "loss-factorial", "calibrated-particles", "transport-grid", "critic-weight-interaction", "optimizer-smoothing",
                         *RHO_STUDIES, *CENTROID_STUDIES):
         baseline = NOISY_PRIOR
         trial, ratios = original_v11_critic_rate(args.original_v11_motion)
@@ -876,6 +907,15 @@ def compare_prior_weight(args):
                     "Then beat every matched and tuned control, including the originals, on both development "
                     f"cohorts and six fresh seeds {independent_seeds[0]}–{independent_seeds[-1]} before biological "
                     f"holdout seeds {outer_seeds[0]}–{outer_seeds[-1]}.")
+        elif args.study == "optimizer-smoothing":
+            baseline = trial
+            trial, grid = smoothing_screen(args, baseline)
+            if trial is None:
+                return
+            references.extend((key(arm), arm) for arm in grid["controls"])
+            for arm, release in zip(paired(trial)[1:], ("0.11.1", "0.10.0"), strict=True):
+                references.append(("original-smoothed-" + arm[1], [release, *arm[1:]]))
+            independent_seeds, outer_seeds, rule = grid["fresh"], grid["outer"], grid["rule"]
         elif args.study == "critic-weight-interaction":
             baseline = trial
             trial, grid = critic_weight_interaction(args, baseline)

@@ -105,6 +105,41 @@ def test_fresh_duration_reports_all_pairs_at_fixed_endpoint(tmp_path, monkeypatc
     assert not result["leads_all_controls_on_average"]
 
 
+@pytest.mark.parametrize("beats_empf", [False, True])
+def test_smoothing_uses_original_controls_and_matches_empf(tmp_path, monkeypatch, beats_empf):
+    from types import SimpleNamespace
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_rate_noise as study
+
+    baseline = dict(study.NOISY_PRIOR, name="original-v11-critic-49", d_lr_mult=.35)
+    args = SimpleNamespace(stage="search", output=tmp_path, shared_screen=None)
+
+    def scores(args, arms, seeds):
+        half, double, default, *originals = arms
+        assert list(seeds) == [22, 23, 24]
+        assert {(arm[0], arm[1]) for arm in originals} == {("0.11.1", "unified_v11"), ("0.10.0", "empf")}
+        for arm, value in ((half, .00305), (double, .0122)):
+            matches = study.paired(arm[2])
+            assert all(a[2]["optimizer_smoothing"] == value and a[2]["d_lr_mult"] == .35 for a in matches)
+            assert "rhbi_self_coupling" not in matches[2][2]
+        assert default[2] == baseline
+        values = {study.key(arm): [.95] * 9 for arm in arms}
+        values[study.key(half)] = [.91] * 9
+        values[study.key(double)] = [.94] * 9
+        empf = next(arm for arm in originals if arm[1] == "empf")
+        values[study.key(empf)] = [.93 if beats_empf else .90] * 9
+        return values
+
+    monkeypatch.setattr(study, "evaluate", scores)
+    winner, plan = study.smoothing_screen(args, baseline)
+    assert plan["second"] == [251, 252, 253] and set(plan["fresh"]).isdisjoint(plan["outer"])
+    if beats_empf:
+        assert winner["optimizer_smoothing"] == .00305
+    else:
+        assert winner is None
+
+
 def test_transport_grid_selects_using_remaining_seeds(tmp_path, monkeypatch):
     from types import SimpleNamespace
 
