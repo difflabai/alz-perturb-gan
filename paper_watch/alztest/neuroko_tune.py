@@ -98,6 +98,36 @@ def score_alternate_noise(model, training_sigma, alternate_sigma, seeds, observe
         noise.sigma = training_sigma
 
 
+@torch.no_grad()
+def particle_panel(model, conditions, observed, repeats, seed):
+    """Split the finite generated panel's total variance by its fixed particle row."""
+    table = model.prior.z.detach().cpu().double().numpy()
+    particles, _ = table.shape
+    result = {"particles": particles, "repeats": repeats, "seed": seed,
+              "table_variance": float(table.var(axis=0).sum()), "table_effective_rank": effective_rank(table),
+              "targets": {}}
+    original = model.G.cond.clone()
+    try:
+        for i, target in enumerate(conditions[1:], 1):
+            model._set_cond(i)
+            generator = torch.Generator(device=model.device).manual_seed(seed + i)
+            draws = torch.stack([model.trainer.sample(particles, generator=generator, output_noise=False,
+                                                      fixed_first_n=True) for _ in range(repeats)])
+            values = draws.cpu().double().numpy()
+            centers = values.mean(axis=0)
+            within = float(values.var(axis=0).sum(axis=-1).mean())
+            between = float(centers.var(axis=0).sum())
+            total = float(values.reshape(-1, values.shape[-1]).var(axis=0).sum())
+            if not np.isclose(within + between, total, rtol=1e-10, atol=1e-12):
+                raise ValueError("Particle variance components do not sum to the generated variance")
+            result["targets"][target] = dict(within=within, between=between, total=total,
+                                              observed=float(observed[i].var(axis=0).sum()),
+                                              centroid_distance=float(np.linalg.norm(centers.mean(0) - observed[i].mean(0))))
+    finally:
+        model.G.cond.copy_(original)
+        model.D.cond.copy_(original)
+    return result
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("stage", choices=("validation", "heldout"))
@@ -114,6 +144,8 @@ def main():
     parser.add_argument("--trace-every", type=int, help="also score validation or holdout at this update interval")
     parser.add_argument("--evaluation-seeds", type=int, nargs="+", metavar="BASE",
                         help="also evaluate each fitted model with these sampling seeds plus the condition index")
+    parser.add_argument("--particle-panel", type=int, metavar="REPEATS",
+                        help="measure within- and between-particle variance from repeated draws of every row")
     parser.add_argument("--score-noise", type=float, metavar="SIGMA",
                         help="also score the fitted generator at this Gaussian latent noise using the same draws")
     parser.add_argument("--deterministic", action="store_true",
@@ -128,6 +160,8 @@ def main():
                         help="trace the v11 solver or run an explicit self-pairing counterfactual")
     args = parser.parse_args()
     args.require_constant_lr = args.require_constant_lr or args.recipe == "unified_v12"
+    if args.particle_panel is not None and args.particle_panel < 2:
+        parser.error("--particle-panel requires at least two draws per row")
     if args.self_plan and args.recipe != "unified_v11":
         parser.error("the self-plan diagnostic requires unified_v11")
     if args.trace_every is not None and not 0 < args.trace_every <= 1200:
@@ -202,6 +236,9 @@ def main():
         if args.evaluation_seeds:
             config["evaluation_seeds"] = args.evaluation_seeds
             path = path.with_stem(f"{path.stem}-resampled")
+        if args.particle_panel is not None:
+            config["particle_panel_repeats"] = args.particle_panel
+            path = path.with_stem(f"{path.stem}-panel{args.particle_panel}")
         if args.score_noise is not None:
             config["score_noise"] = args.score_noise
             path = path.with_stem(f"{path.stem}-noise{args.score_noise}")
@@ -311,6 +348,8 @@ def main():
             raise RuntimeError("expected exactly 1,200 completed updates")
         samples = [model.sample(i, DRAWS, seed=args.seed + 100 + i) for i in range(len(conditions))]
         metrics = score(samples, observed, conditions)
+        if args.particle_panel is not None:
+            config["particle_panel"] = particle_panel(model, conditions, observed, args.particle_panel, seed=73219)
         if args.diagnose_energy:
             config["energy_diagnosis"] = diagnose_energy(samples, observed, x, labels, conditions)
         averages = {key: mean(row[key] for row in metrics.values()) for key in next(iter(metrics.values()))}

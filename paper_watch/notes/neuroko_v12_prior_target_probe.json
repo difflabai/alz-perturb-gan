@@ -1,0 +1,65 @@
+{
+  "release": "0.12.0",
+  "recipe": "unified_v12",
+  "prior_target_std": [
+    1.0,
+    0.89
+  ],
+  "method": "Compare the native prior gradients on the learned 64 by 16 table for two deterministic fits. At each regularizer call take the gradient of the scalar regularizer output with respect to prior.z, retaining the graph for the original update, then compare the full vectors at the same step. The first step compares the identical initial state. Later steps compare the resulting two trajectories. Check live learning rates every update. Match the original target-1.0 hashes to the previously archived 64-step critic motion measurements.",
+  "cells": [
+    {
+      "seed": 22,
+      "group": "Screen1_1",
+      "gpu": "0",
+      "default": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "fa4b1c369a070f880fbd750f0483c7e0cacf863732841e8807a4b69d13761a2a",
+        "final_parameters_sha256": "f851122f99e415b5cafd86931755891ae718d1fbd36532cb4334ce9ded0486fc"
+      },
+      "proposed": {
+        "projected_data_sha256": "48921c0bddc7fa234a1f86e2fb0bb7fb189ac593c2e54cedff89cf525d49490b",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "fa4b1c369a070f880fbd750f0483c7e0cacf863732841e8807a4b69d13761a2a",
+        "final_parameters_sha256": "4036c5c8417d0dcf786bef97e7e82e433a5d95a9df06201e1ea602056312463a"
+      },
+      "first_step_prior_gradient_norm": 0.06034710294713094,
+      "first_step_difference": 0.00048431424182956024,
+      "different_gradient_steps": 64,
+      "max_difference": 0.0014230698986067228,
+      "steps": 64,
+      "fixed_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      }
+    },
+    {
+      "seed": 22,
+      "group": "Screen1_3",
+      "gpu": "1",
+      "default": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "a74bcc8ec8a72977119c23263e889a82db38a15115b54d17b525d363ec39dc4c",
+        "final_parameters_sha256": "b0b55dc5998a6b9c751baec09c1a71b2d7975de5534583429d1dbe88b991be20"
+      },
+      "proposed": {
+        "projected_data_sha256": "5ef3a0eb70af72018957fc4eac5dc9b2eb964e836a3fe270531ac9204d89328f",
+        "initial_parameters_sha256": "378353219bf0ee543dc45c4e1335ff349606d23608a7cbc80c2265445a2b2bed",
+        "training_batches_sha256": "a74bcc8ec8a72977119c23263e889a82db38a15115b54d17b525d363ec39dc4c",
+        "final_parameters_sha256": "cfe0273a7aade4f3a142f45aa4dc0894e2bd881d4b016bdbf7d3a395a7db3995"
+      },
+      "first_step_prior_gradient_norm": 0.06034710294713094,
+      "first_step_difference": 0.00048431424182956024,
+      "different_gradient_steps": 64,
+      "max_difference": 0.0009268303222964007,
+      "steps": 64,
+      "fixed_rates": {
+        "generator": 0.014,
+        "critic": 0.021,
+        "particles": 0.0406
+      }
+    }
+  ]
+}

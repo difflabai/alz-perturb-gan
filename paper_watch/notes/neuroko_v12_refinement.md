@@ -414,6 +414,8 @@ At a critic LR of 0.0035, v12's mean energy at 1,200 updates rose from 0.94231 t
 
 At 0.0046 with the same prior weight of 0.1, v12 averaged **0.94547** across the nine pairs, compared with **0.94231** at 0.021. It had lower energy at seeds 22 and 23 and higher energy at seed 24 (0.97746 versus 0.93755). Both reduced critic rates missed the original-rate v12 reference at 1,200 updates. [Nine paired scores for each fixed critic rate](neuroko_v12_critic_rate_screen.json)
 
+At a critic learning rate of **0.0046**, v12 averaged **0.94547**, v11 **0.94142** and EMPF **0.93634**. V12 scored lower than v11 on four of nine training pairs and lower than EMPF on five. Matching v11’s early critic movement did not qualify this setting on the nine-pair mean. [Complete matched scores and decision](neuroko_v12_matched_critic_screen.json)
+
 ### Passing the discrete target to the released critic
 
 The benchmark draws a single condition per minibatch and concatenates its one-hot vector to every critic input. An integration check supplied that same category as an explicit integer argument so the ParticleGAN hooks could also read it. The network received the same features and one-hot values in both cases. On seed 22, we repeated the first 64 updates for v12, v11 and EMPF on each of two training groups, one per GPU. All six comparisons produced identical final parameter hashes. The hooks captured the explicit category, and the continuous-condition path stayed inactive. Both Unified models also reproduced the previously recorded initialization, minibatch and final parameter hashes. The check covers the first 64 updates. [Per-model hashes, probe counts and condition capture](neuroko_v12_discrete_condition_check.json)
@@ -473,4 +475,27 @@ The noise-0.25 controls finished while the individual-rate trials were running. 
 python paper_watch/scripts/neuroko_rate_noise.py --stage compare-noise-controls --study individual-role-rates \
   --data "$data" --window-cells 10000 --wheels "$data/wheels" --output "$data/v12-individual-role-rates" \
   --shared-screen "$data/v12-rate-noise" --second-screen "$data/v12-noise-prior"
+```
+
+### Adjusting the prior's target standard deviation
+
+At noise 0.15, prior weight 0.1 and the release learning rates, the generated samples had 1.12523 times the observed root-total variance across nine training pairs. We rounded the reciprocal of that ratio to two decimal places and set the released particle prior's target standard deviation to **0.89**. This changes the training penalty on the particle table. All three formulations use the same coefficient, particle initialization, latent noise and scoring procedure. Each run still has 1,200 constant-rate updates. [Original nine spread measurements](neuroko_v12_prior_weight_geometry.json)
+
+Before screening, we checked the native v12 gradient of the prior penalty on both GPUs, using seed 22 and one training fold per card. At the identical initialization the norm of the gradient difference between target 1.0 and 0.89 was 0.0004843. The subsequent trajectories had different prior gradients at each of the 64 recorded updates. The target-1.0 replays reproduced the previously archived parameter hashes. [Gradient measurements and parameter hashes](neuroko_v12_prior_target_probe.json)
+
+The candidate must beat the matched v11 and EMPF controls and the established references separately on development seeds 22–24 and 251–253. These include both noise widths and the smaller critic-rate studies. Only a passing candidate goes to fresh seeds 430–435 with both original releases and then, if it qualifies, to the biological holdout on seeds 436–451.
+
+```bash
+python paper_watch/scripts/neuroko_rate_noise.py --study prior-target-spread --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --output "$data/v12-prior-target-spread" --shared-screen "$data/v12-rate-noise" \
+  --second-screen "$data/v12-noise-prior"
+```
+
+### Diversity within and between learned particles
+
+A separate replay at noise 0.15 and 0.25 measures how much generated variation comes from repeated draws around the same learned particle. We fixed one seed per training group and used the same pairs for v12, v11 and EMPF. At update 1,200 the released sampler visits all 64 rows in order 32 times per target with fresh Gaussian jitter. The per-target total variance equals the mean variance within each particle plus the variance of the 64 particle means in this finite panel. Every replay must also reproduce its benchmark scores from the original 256 draws and match its original training hashes.
+
+```bash
+python paper_watch/scripts/neuroko_particle_spread.py --data "$data" --window-cells 10000 \
+  --wheels "$data/wheels" --reference "$data/v12-rate-noise" --output "$data/v12-particle-spread"
 ```

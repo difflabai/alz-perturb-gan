@@ -11,6 +11,24 @@ import torch
 from alztest.neuroko import LAYOUT, evaluate, normalize_counts, open_screen, project_fold, select_targets
 
 
+def test_prior_spread_target_is_shared_through_qualification(monkeypatch):
+    root = Path(__file__).resolve().parents[1]
+    monkeypatch.syspath_prepend(str(root / "scripts"))
+    from neuroko_rate_noise import spread_target
+    from neuroko_role_factorial import paired
+    from neuroko_stratified import control_arms, key
+
+    trial, spread = spread_target(root / "notes/neuroko_v12_prior_weight_geometry.json")
+    assert trial["prior_reg_target_std"] == round(1 / spread, 2) == .89
+    candidates, labels = control_arms([trial])
+    final = {key(a): a for a in candidates}
+    for check, label in zip(paired(trial), ("selected_v12", "matched_v11", "matched_empf"), strict=True):
+        for arm in (check, final[labels[label]]):
+            assert arm[2]["prior_reg_target_std"] == .89
+            assert arm[2]["prior_reg"] == .1
+            assert arm[2]["prior_sigma"] == .15
+
+
 def test_critic_rate_interpolation_checks_the_same_v11_reference(tmp_path, monkeypatch):
     import json
 

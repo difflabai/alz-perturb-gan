@@ -114,6 +114,33 @@ def test_stratified_prior_uses_every_particle_during_training_and_preserves_eval
     assert observed[-1][0:2] == (False, 256)
 
 
+@pytest.mark.parametrize("sigma", [0., .15])
+def test_particle_panel_uses_the_same_rows_with_independent_native_jitter(sigma):
+    import torch
+    from paper_watch.alztest.neuroko_tune import particle_panel
+
+    model = ConditionalPGAN(3, 3, seed=7, recipe_name="empf", settings=TrainingSettings(prior_sigma=sigma))
+    observed = [np.arange(36).reshape(12, 3) / 11.] * 3
+    original = model.sample(0, 16, seed=27)
+    panel = particle_panel(model, ["ctrl", "a", "b"], observed, repeats=4, seed=73219)
+    assert model.G.cond.argmax().item() == model.D.cond.argmax().item() == 0
+    np.testing.assert_array_equal(model.sample(0, 16, seed=27), original)
+    generator = torch.Generator().manual_seed(73220)
+    model._set_cond(1)
+    outputs = []
+    with torch.no_grad():
+        for _ in range(4):
+            latent, indices = model.prior.sample(panel["particles"], fixed_first_n=True, generator=generator)
+            assert torch.equal(indices, torch.arange(panel["particles"]))
+            outputs.append(model.G(latent).double().numpy())
+    values = np.stack(outputs)
+    result = panel["targets"]["a"]
+    assert result["total"] == pytest.approx(values.reshape(-1, 3).var(0).sum())
+    assert result["between"] == pytest.approx(values.mean(0).var(0).sum())
+    assert result["within"] == pytest.approx(values.var(0).sum(-1).mean())
+    assert (result["within"] > 0) == (sigma > 0)
+
+
 @pytest.mark.parametrize("field", ["lr_floor", "network_lr_floor"])
 @pytest.mark.parametrize("horizon", [1200, 7000])
 def test_fixed_rate_benchmark_rejects_decay_in_either_role(field, horizon):

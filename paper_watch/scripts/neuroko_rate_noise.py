@@ -22,7 +22,7 @@ MATCHED_PRIOR = dict(MATCHED_RATE_TRIAL, name="matched-rates-prior100", prior_re
 MOTION_STUDIES = ("critic-motion", "matched-critic-motion", "balanced-particle-prior")
 ROLE_INDEPENDENT_SEEDS = list(range(290, 296))
 ROLE_OUTER_SEEDS = list(range(396, 412))
-TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", *MOTION_STUDIES)
+TWO_COHORT_STUDIES = ("strong-prior-noise", "individual-role-rates", "prior-target-spread", *MOTION_STUDIES)
 TRIALS = {
     f"{name}-sigma{sigma}": dict(RATES[name], name=f"{name}-sigma{sigma}", prior_sigma=sigma / 1000.)
     for name in RATE_NAMES for sigma in (75, 150)
@@ -252,6 +252,30 @@ def compare_noise_controls(args):
         write_frozen(args.output / f"wide_noise_{cohort}_rates.json", dict(scores=scores, differences=differences))
 
 
+def critic_references(args):
+    lower, _ = calibrated_critic(args.motion_result)
+    middle, _ = calibrated_critic(args.motion_result, args.motion_check)
+    balanced, _ = balanced_prior(args.gradient_result, middle)
+    return [(ref["name"] + "-" + arm[1], arm) for ref in (lower, middle, balanced) for arm in paired(ref)]
+
+
+def spread_target(path):
+    measurement = json.loads(path.read_text())
+    name = key([RELEASE, V12, NOISY_PRIOR])
+    rows = measurement["screen_pairs"]
+    if [(row["seed"], row["group"]) for row in rows] != [(s, g) for s in REPLICATION_SEEDS for g in GROUPS]:
+        raise ValueError("Expected the nine matched training pairs for the prior target")
+    spreads = [r["arms"][name]["spread"] for r in rows]
+    if not all(isfinite(v) and v > 0 for v in spreads):
+        raise ValueError("Expected finite positive spread ratios")
+    average = mean(spreads)
+    if average != measurement["screen_means"][name]["spread"]:
+        raise ValueError("The published mean spread does not match the nine pairs")
+    target = round(1. / average, 2)
+    return dict(NOISY_PRIOR, name=f"noise150-prior100-target{round(target * 100)}",
+                prior_reg_target_std=target), average
+
+
 def compare_prior_weight(args):
     screen_only = []
     pinned = []
@@ -303,17 +327,30 @@ def compare_prior_weight(args):
             "260–265 it must beat every reference, including all three release-rate models at noise "
             "0.15 and weight 0.1. Only then score the biological holdout on seeds 316–331."
         )
+    elif args.study == "prior-target-spread":
+        baseline = NOISY_PRIOR
+        trial, spread = spread_target(args.spread_result)
+        write_frozen(args.output / "spread_calibration.json",
+                     dict(mean_observed_spread_ratio=spread, prior_target_std=trial["prior_reg_target_std"]))
+        references = [(ref["name"] + "-" + arm[1], arm)
+                      for ref in (NOISY_PRIOR, WIDE_NOISY_PRIOR) for arm in paired(ref)]
+        references.extend(critic_references(args))
+        independent_seeds = list(range(430, 436))
+        outer_seeds = list(range(436, 452))
+        rule = ("Set the native particle prior's target standard deviation to the reciprocal of "
+                "the mean generated-to-observed spread ratio of the baseline v12, rounded to 0.01. "
+                "Use the same target, noise 0.15, penalty weight 0.1 and constant role rates in all "
+                "three formulations. Require lower mean four-target energy after 1200 updates than "
+                "all matched and established references on 22–24 and 251–253 separately, including "
+                "the controls at noise 0.25. Qualify on fresh seeds 430–435 with the two original "
+                "releases before evaluating biological holdout seeds 436–451.")
     elif args.study == "individual-role-rates":
         trial = individual_rates(args)
         if trial is None:
             return
         baseline = NOISY_PRIOR
         references = [("original-rate-" + arm[1], arm) for arm in paired(baseline)]
-        low, _ = calibrated_critic(args.motion_result)
-        middle, _ = calibrated_critic(args.motion_result, args.motion_check)
-        balanced, _ = balanced_prior(args.gradient_result, middle)
-        for ref in (low, middle, balanced):
-            references.extend((ref["name"] + "-" + arm[1], arm) for arm in paired(ref))
+        references.extend(critic_references(args))
         independent_seeds = ROLE_INDEPENDENT_SEEDS
         outer_seeds = ROLE_OUTER_SEEDS
         rule = ("Take the single v12 configuration selected in role_shortlist.json. With critic LR 0.021, "
@@ -471,6 +508,7 @@ def main():
     parser.add_argument("--study", choices=("rates", "prior-weight", "matched-prior-weight", "double-prior-weight",
                                             "prior-interaction", *TWO_COHORT_STUDIES),
                         default="rates")
+    parser.add_argument("--spread-result", type=Path, default=ROOT / "paper_watch/notes/neuroko_v12_prior_weight_geometry.json")
     parser.add_argument("--shared-screen", type=Path,
                         help="reuse the seed 22–24 reference receipts for the prior-weight comparison")
     parser.add_argument("--second-screen", type=Path,
