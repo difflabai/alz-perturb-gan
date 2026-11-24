@@ -1,4 +1,4 @@
-"""Compare fixed 1,200-update NeuroKO configurations on CUDA.
+"""Compare NeuroKO configurations on CUDA, using 1,200 updates by default.
 
 Hold out a training group for validation, then refit a fixed configuration for Screen1_0.
 Each configuration after --trial is a JSON object with name, base rate (lr),
@@ -170,6 +170,7 @@ def main():
                         help='JSON object, e.g. {"name":"v11","lr":0.028,"batch_size":256}')
     parser.add_argument("--require-constant-lr", action="store_true",
                         help="check network and particle learning rates on every update (automatic for v12)")
+    parser.add_argument("--updates", type=int, default=1200, help="completed optimizer updates per fit")
     parser.add_argument("--trace-every", type=int, help="also score validation or holdout at this update interval")
     parser.add_argument("--evaluation-seeds", type=int, nargs="+", metavar="BASE",
                         help="also evaluate each fitted model with these sampling seeds plus the condition index")
@@ -193,8 +194,10 @@ def main():
         parser.error("--particle-panel requires at least two draws per row")
     if args.self_plan and args.recipe != "unified_v11":
         parser.error("the self-plan diagnostic requires unified_v11")
-    if args.trace_every is not None and not 0 < args.trace_every <= 1200:
-        parser.error("--trace-every must be between 1 and 1200")
+    if args.updates < 1:
+        parser.error("--updates must be positive")
+    if args.trace_every is not None and not 0 < args.trace_every <= args.updates:
+        parser.error("--trace-every must be between 1 and the number of updates")
     if args.evaluation_seeds and len(set(args.evaluation_seeds)) != len(args.evaluation_seeds):
         parser.error("evaluation seed bases must be distinct")
     if args.score_noise is not None and (not np.isfinite(args.score_noise) or args.score_noise < 0):
@@ -212,7 +215,7 @@ def main():
         torch.use_deterministic_algorithms(True)
         torch.manual_seed(args.seed)
     if not torch.cuda.is_available():
-        parser.error("the 1,200-update benchmark requires CUDA")
+        parser.error("the benchmark requires CUDA")
     device = torch.device("cuda", torch.cuda.current_device())
     torch.set_num_threads(2)
     args.output.mkdir(parents=True, exist_ok=True)
@@ -249,13 +252,15 @@ def main():
         path = args.output / f"{args.stage}-{name}-s{args.seed}.json"
         config = {"name": name, "lr": lr, "settings": receipt_settings(settings), "recipe": args.recipe,
                   "particlegan": release, "torch": str(torch.__version__), "seed": args.seed,
-                  "stage": args.stage, "projected_data_sha256": digest.hexdigest(), "updates": 1200}
+                  "stage": args.stage, "projected_data_sha256": digest.hexdigest(), "updates": args.updates}
         if args.stage == "validation" and args.validation_group != "Screen1_1":
             path = path.with_stem(f"{path.stem}-{args.validation_group}")
         if args.deterministic:
             config["deterministic"] = True
             config["cublas_workspace_config"] = os.environ["CUBLAS_WORKSPACE_CONFIG"]
             path = path.with_stem(f"{path.stem}-deterministic")
+        if args.updates != 1200:
+            path = path.with_stem(f"{path.stem}-u{args.updates}")
         if args.diagnose_energy:
             config["diagnose_energy"] = True
             path = path.with_stem(f"{path.stem}-diagnosis")
@@ -308,6 +313,8 @@ def main():
             if not any(isinstance(module, StratifiedSamplingManipulator) for module in model.prior.modules()):
                 raise RuntimeError("the requested stratified prior must be active")
             config["prior_manipulators"] = model.prior.manipulator_spec()
+        if args.updates > model.trainer.max_steps:
+            model.trainer.extend_execution(args.updates)
         recipe = model.trainer.recipe
         formulation = "unified_v11" if args.recipe == "unified_v12" else args.recipe
         optimizer = {"unified_v12": "unified_v12_equil", "unified_v11": "unified_v11_equil", "empf": "dualnorm"}
@@ -349,19 +356,26 @@ def main():
         gain_trace = []
         scoring_seconds = 0.0
 
+        def trace_point(step, draws, scores):
+            extended = args.updates != 1200
+            row = dict(updates=step, **draw_metrics(draws, scores, diversity=extended or bool(args.evaluation_seeds)))
+            if extended:
+                row["training_batches_sha256"] = batch_digest.hexdigest()
+            return row
+
         def progress(step):
             nonlocal scoring_seconds
-            if args.trace_every and step < 1200 and step % args.trace_every == 0:
+            if args.trace_every and step < args.updates and step % args.trace_every == 0:
                 torch.cuda.synchronize(device)
                 tick = perf_counter()
-                condition = model.G.cond.clone()
+                generator_condition, critic_condition = model.G.cond.clone(), model.D.cond.clone()
                 try:
                     generated = [model.sample(i, DRAWS, seed=args.seed + 100 + i) for i in range(len(conditions))]
                     measured = score(generated, observed, conditions)
                 finally:
-                    model.G.cond.copy_(condition)
-                    model.D.cond.copy_(condition)
-                trace.append({"updates": step, **draw_metrics(generated, measured, diversity=bool(args.evaluation_seeds))})
+                    model.G.cond.copy_(generator_condition)
+                    model.D.cond.copy_(critic_condition)
+                trace.append(trace_point(step, generated, measured))
                 print(f"{name} update {step} energy {trace[-1]['mean_energy_distance']:.6f}", flush=True)
                 scoring_seconds += perf_counter() - tick
             if settings.output_noise_std is not None and model.trainer.output_sigma() != settings.output_noise_std:
@@ -375,20 +389,20 @@ def main():
                 gains = function_space_gains(model.trainer)
                 if gains:
                     gain_trace.append({"update": step, **gains})
-                print(f"{name} completed {step}/1200", flush=True)
+                print(f"{name} completed {step}/{args.updates}", flush=True)
 
         with ExitStack() as hooks:
             if args.require_constant_lr:
                 step_counts = audit_optimizer_steps(model.trainer, hooks)
-            model.fit(x, labels, steps=1200, after_step=progress, on_batch=record_batch)
+            model.fit(x, labels, steps=args.updates, after_step=progress, on_batch=record_batch)
             if args.require_constant_lr:
                 if any(n != config["updates"] for n in step_counts.values()):
                     raise RuntimeError(f"Unexpected number of optimizer steps: {step_counts}")
                 config["fixed_lr_optimizer_steps"] = step_counts
         torch.cuda.synchronize(device)
         seconds = perf_counter() - start - scoring_seconds
-        if model.trainer.completed_steps != 1200:
-            raise RuntimeError("expected exactly 1,200 completed updates")
+        if model.trainer.completed_steps != args.updates:
+            raise RuntimeError(f"expected exactly {args.updates} completed updates")
         samples = [model.sample(i, DRAWS, seed=args.seed + 100 + i) for i in range(len(conditions))]
         metrics = score(samples, observed, conditions)
         if args.particle_panel is not None:
@@ -397,7 +411,7 @@ def main():
             config["energy_diagnosis"] = diagnose_energy(samples, observed, x, labels, conditions)
         averages = {key: mean(row[key] for row in metrics.values()) for key in next(iter(metrics.values()))}
         if args.trace_every:
-            trace.append({"updates": 1200, **draw_metrics(samples, metrics, diversity=bool(args.evaluation_seeds))})
+            trace.append(trace_point(args.updates, samples, metrics))
             config["trace"] = trace
         if args.evaluation_seeds:
             config["observed_effective_rank"] = mean(effective_rank(rows) for rows in observed[1:])
@@ -419,8 +433,8 @@ def main():
         if rate_trace:
             config["rate_trace"] = rate_trace
         if args.self_plan:
-            if len(plan_trace) != 48:
-                raise RuntimeError("expected 48 observed self plans")
+            if len(plan_trace) != args.updates // 25:
+                raise RuntimeError("expected one self plan per 25 updates")
             config["training_plans"] = plan_trace
         write_receipt(path, {**config, "gpu": torch.cuda.get_device_name(device),
                              "visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),

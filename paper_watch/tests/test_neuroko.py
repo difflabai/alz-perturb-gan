@@ -29,6 +29,52 @@ def test_particle_search_uses_both_cohorts_and_changes_only_particle_rate(monkey
     assert not select_particle_rate(dict(first=first, second=second), ("low", "high"), ("baseline", "empf"))["passes"]
 
 
+@pytest.mark.parametrize("fault", (None, "anchor", "batches"))
+def test_extended_curves_check_replayed_anchor_and_intermediate_batches(tmp_path, monkeypatch, fault):
+    import json
+    from types import SimpleNamespace
+
+    monkeypatch.syspath_prepend(str(Path(__file__).resolve().parents[1] / "scripts"))
+    import neuroko_convergence as study
+
+    published = json.loads((study.NOTES / "neuroko_v12_original_control_benchmark_first.json").read_text())
+    arms = published["protocol"]["arms"]
+    energy = {role: values[0] for role, values in published["result"]["scores"].items()}
+    group = study.GROUPS[0]
+
+    def fake_fit(args, stage, seed, group, gpu, requested, *, options):
+        arm, = requested
+        role = next(name for name, value in arms.items() if value == arm)
+        version, recipe, trial = arm
+        rates = dict(generator=trial["lr"], critic=trial["lr"] * trial["d_lr_mult"],
+                     particles=trial["lr"] * trial["prior_lr_mult"])
+        trace = [dict(updates=n, mean_energy_distance=energy[role], training_batches_sha256=str(n))
+                 for n in study.STEPS]
+        if role == "matched_v11" and fault == "anchor":
+            trace[0]["mean_energy_distance"] += .01
+        if role == "matched_v11" and fault == "batches":
+            trace[1]["training_batches_sha256"] = "different"
+        row = dict(updates=3600, constant_lr_verified_updates=3600, particlegan=version, recipe=recipe,
+                   seed=seed, deterministic=True, score_groups=[group], fit_groups=study.GROUPS[1:],
+                   fixed_lr_optimizer_steps=dict(generator_and_particles=3600, critic=3600),
+                   initial_rates=rates, final_rates=rates, visible_devices=str(gpu), trace=trace,
+                   means=dict(energy_distance=energy[role]), projected_data_sha256="cells",
+                   initial_parameters_sha256="initial", training_batches_sha256="3600")
+        base = study.receipt(args.output, stage, *arm, seed, group)
+        base.parent.mkdir(parents=True, exist_ok=True)
+        base.with_stem(base.stem + "-u3600-trace1200").write_text(json.dumps(row))
+
+    monkeypatch.setattr(study, "fit", fake_fit)
+    args = SimpleNamespace(output=tmp_path)
+    if fault:
+        with pytest.raises(ValueError, match="Invalid fixed-rate curve|identical projected cells"):
+            study.run_fold(args, arms, 22, group, energy)
+    else:
+        cell = study.run_fold(args, arms, 22, group, energy)
+        assert cell["curves"].keys() == arms.keys()
+        assert cell["fingerprints"]["training_batches"] == ["1200", "2400", "3600"]
+
+
 def test_transport_grid_selects_using_remaining_seeds(tmp_path, monkeypatch):
     from types import SimpleNamespace
 
