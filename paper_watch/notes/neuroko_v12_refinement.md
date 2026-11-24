@@ -156,6 +156,16 @@ python paper_watch/scripts/neuroko_matched_rate_replication.py --data "$data" --
   --wheels "$data/wheels" --output "$data/v12-matched-rate-replication" --shared-validation "$data/v12-rate-noise"
 ```
 
+On three fresh training seeds (22–24), the original setting again had the lowest mean energy of the three exactly rate-matched formulations. V12 beat EMPF on seven of the nine fold–seed pairs and v11 on five. Averaged within each seed, v12 led both at seed 22 and both controls led at seeds 23 and 24. The biological holdout is excluded from these 27 fits. [Paired energies, target scores, rates and input hashes](neuroko_v12_matched_rates_1200.json)
+
+| Formulation at identical rates | Mean energy ↓ | Spread ratio (ideal 1) | Effective dimensions | Median fit time |
+| --- | ---: | ---: | ---: | ---: |
+| V12 | 0.9774 | 1.121 | 16.89 | 146 s |
+| V11 | 0.9867 | 1.127 | 16.39 | 164 s |
+| EMPF | 0.9836 | 1.172 | 15.42 | 304 s |
+
+The observed neurons averaged 17.44 effective dimensions on these groups, calculated from each target's covariance participation ratio. Each generated target contributed 256 draws. The fits ran concurrently on two RTX A6000 cards and timings include contention from other workloads.
+
 The nine v12 fits at the original noise on seeds 22–24 held their generator, critic and particle rates at 0.020, 0.042 and 0.0203 through every one of the 1,200 updates. The optimizer also measures each generator step and can adjust its size in response. Its recorded `last_step_gain` was 1.0 on all nine fits at updates 300 and 600, and ranged from 0.856 to 0.996 at update 1,200. This adaptive gain is part of the released optimizer. [Per-update learning-rate check](../alztest/neuroko_tune.py#L249-L253) · [Upstream gain calculation and application](https://github.com/HyperGAN/ParticleGAN/blob/3256a05867688ab7ec0e5b4f50354c14d6972e6f/particlegan/_unified_v12/optimizer.py#L1205-L1228)
 
 ### All three formulations at EMPF’s tuned rates
