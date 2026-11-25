@@ -144,6 +144,24 @@ def finer_rates(records):
     return tuple(float(f"{(center * neighbor) ** 0.5:.3g}") for neighbor in (lower, upper))
 
 
+def refined_selection(tuning, group):
+    """Return the validation choice only after the coarse grid and its refinement both finished."""
+    if tuning.get("stage") != "validation" or tuning.get("held_out_group") != group:
+        raise ValueError(f"{group} needs its own validation receipt before the held-out fit")
+    rows = tuning["rates"]
+    try:
+        bracket = finer_rates(rows)
+    except ValueError as error:
+        raise ValueError(f"{group}: {error}; run the validation stage first") from None
+    missing = sorted((set(RATES) | set(bracket)) - {row["base_rate"] for row in rows})
+    if missing:
+        raise ValueError(f"run the refine stage for {group} before the held-out fit; missing rates {missing}")
+    selected = selected_rate(rows)
+    if tuning["selected_rate"] != selected:
+        raise ValueError(f"the recorded selection for {group} differs from its rate scores")
+    return selected
+
+
 def experiment_config(args, conditions):
     config = {"particlegan": version("particlegan"), "recipe": args.recipe, "steps": args.steps,
               "targets": conditions[1:], "data": str(args.data.resolve())}
@@ -167,10 +185,11 @@ def evaluate_group(args, conditions, panel, group, device):
         prior = json.loads(validation_file.read_text()) if validation_file.exists() else None
         if args.stage == "refine" and prior is None:
             raise ValueError(f"missing coarse validation for {group}")
+        if prior is not None and (prior["config"] != config or prior["seed"] != args.seed
+                                  or prior["split"] != split):
+            raise ValueError(f"cached validation protocol differs for {group}")
         rates = finer_rates(prior["rates"]) if args.stage == "refine" else args.rates
         if prior is not None:
-            if prior["config"] != config or prior["seed"] != args.seed or prior["split"] != split:
-                raise ValueError(f"cached validation protocol differs for {group}")
             finished = {row["base_rate"] for row in prior["rates"]}
             rates = [rate for rate in rates if rate not in finished]
             if not rates:
@@ -186,7 +205,7 @@ def evaluate_group(args, conditions, panel, group, device):
         tuning = json.loads(validation_file.read_text())
         if tuning["config"] != config or tuning["held_out_group"] != group:
             raise ValueError(f"validation receipt does not match {group}")
-        selected = tuning["selected_rate"]
+        selected = refined_selection(tuning, group)
         split = {"validation_seed": tuning["seed"]}
         rates = tuple(dict.fromkeys((selected, PUBLISHED_RATE)))
         scores = compare_rates(panel, conditions, ~test, test, rates, args.steps, args.seed, device)
