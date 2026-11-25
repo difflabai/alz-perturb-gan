@@ -16,12 +16,13 @@ def decide(candidate, incumbent):
         reasons.append('incomparable calibration data or sampling contract')
     if candidate.get('metric_role') != 'calibration_selection':
         reasons.append('evaluation results cannot select a candidate')
-    endpoint=candidate.get('fixed_endpoint',20000)
-    if type(endpoint) is not int or endpoint not in (20000,40000) or candidate.get('status') != 'completed' or candidate.get('completed_updates') != endpoint:
-        reasons.append('incomplete fixed endpoint')
     keys = ['energy_score', 'cell_energy_distance', 'spread_ratio', 'generated_zero_count_rate']
-    if any(type(candidate.get(k)) not in (int, float) or not math.isfinite(candidate[k]) for k in keys):
-        reasons.append('invalid or nonfinite metric')
+    for role, row in (('', candidate), ('incumbent ', incumbent)):
+        endpoint=row.get('fixed_endpoint',20000)
+        if type(endpoint) is not int or endpoint not in (20000,40000) or row.get('status') != 'completed' or row.get('completed_updates') != endpoint:
+            reasons.append(f'{role}incomplete fixed endpoint')
+        if any(type(row.get(k)) not in (int, float) or not math.isfinite(row[k]) for k in keys):
+            reasons.append(f'{role}invalid or nonfinite metric')
     if reasons:
         return {'accept': False, 'reasons': reasons}
     if candidate['energy_score'] >= incumbent['energy_score'] - 1e-9:
