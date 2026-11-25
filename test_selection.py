@@ -65,6 +65,20 @@ class SelectionContract(unittest.TestCase):
         self.candidate['integer_count_contract_passed'] = False
         self.assertFalse(decide(self.candidate, self.incumbent)['accept'])
 
+    def test_nonfinite_incumbent_cannot_wave_a_candidate_through(self):
+        for key in ('energy_score', 'cell_energy_distance', 'spread_ratio'):
+            incumbent = copy.deepcopy(self.incumbent)
+            incumbent[key] = float('nan')
+            result = decide(self.candidate, incumbent)
+            self.assertFalse(result['accept'])
+            self.assertIn('incumbent invalid or nonfinite metric', result['reasons'])
+
+    def test_incomplete_incumbent_is_not_a_reference(self):
+        self.incumbent['completed_updates'] = 12000
+        result = decide(self.candidate, self.incumbent)
+        self.assertFalse(result['accept'])
+        self.assertIn('incumbent incomplete fixed endpoint', result['reasons'])
+
 
 if __name__ == '__main__':
     unittest.main()
