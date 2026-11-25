@@ -204,7 +204,14 @@ def fit_unconditional(X: np.ndarray, steps: int = 300, seed: int = 0) -> Conditi
 
 def energy_distance(a: np.ndarray, b: np.ndarray, max_n: int = 512,
                     seed: int = 0) -> float:
-    """Energy distance between two samples (subsampled for speed)."""
+    """Energy distance between two samples (subsampled for speed).
+
+    This is the V-statistic: the within-sample means include the zero
+    self-distances, which adds about mean(|a-a'|)/len(a) + mean(|b-b'|)/len(b).
+    With 256 draws the generated term grows with the generator's spread, so
+    arms that differ in spread_ratio carry slightly different offsets. See
+    energy_distance_unbiased for the U-statistic on the same subsample.
+    """
     rng = np.random.default_rng(seed)
     if len(a) > max_n:
         a = a[rng.choice(len(a), max_n, replace=False)]
@@ -216,6 +223,37 @@ def energy_distance(a: np.ndarray, b: np.ndarray, max_n: int = 512,
     daa = torch.cdist(a, a).mean()
     dbb = torch.cdist(b, b).mean()
     return float(2 * dab - daa - dbb)
+
+
+def energy_distance_unbiased(a: np.ndarray, b: np.ndarray, max_n: int = 512,
+                             seed: int = 0) -> float:
+    """U-statistic energy distance on the same subsample as energy_distance.
+
+    Within-sample means exclude self-pairs, so the estimate is unbiased for
+    the population energy distance and does not depend on the draw count.
+    It can be slightly negative when the two distributions match.
+    """
+    rng = np.random.default_rng(seed)
+    if len(a) > max_n:
+        a = a[rng.choice(len(a), max_n, replace=False)]
+    if len(b) > max_n:
+        b = b[rng.choice(len(b), max_n, replace=False)]
+    if min(len(a), len(b)) < 2:
+        raise ValueError("the unbiased energy distance needs at least two rows per sample")
+    a = np.asarray(a, dtype=np.float64)
+    b = np.asarray(b, dtype=np.float64)
+
+    def distances(x, y):
+        squared = (x * x).sum(1)[:, None] + (y * y).sum(1)[None, :] - 2 * x @ y.T
+        return np.sqrt(np.clip(squared, 0, None))
+
+    n, m = len(a), len(b)
+    within_a = distances(a, a)
+    within_b = distances(b, b)
+    np.fill_diagonal(within_a, 0)
+    np.fill_diagonal(within_b, 0)
+    return float(2 * distances(a, b).mean() - within_a.sum() / (n * (n - 1))
+                 - within_b.sum() / (m * (m - 1)))
 
 
 def shift_cosine(gen_cond: np.ndarray, gen_ctrl: np.ndarray,
