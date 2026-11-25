@@ -146,7 +146,10 @@ def main():
     trial = EMPF_RATES if at_empf_rates else TRIAL
     rule = EMPF_RULE if at_empf_rates else RULE
     if args.stage == "confirm":
+        search = json.loads((args.output / "search.json").read_text())
         decision = json.loads((args.output / "selection.json").read_text())
+        if search["rule"] != rule or decision["trial"] != trial or decision["winner"] != trial["name"]:
+            raise ValueError(f"selection.json in {args.output} was not made for --rates {args.rates}")
         if not decision["advances"]:
             raise ValueError("the unchanged rate configuration did not beat every reference")
         seeds = list(range(196, 212)) if at_empf_rates else list(range(180, 196))
