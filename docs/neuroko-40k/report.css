@@ -1,0 +1,82 @@
+* { box-sizing: border-box; }
+:root {
+  color-scheme: light;
+  --navy: var(--dl-color-brand-navy);
+  --paper: var(--dl-color-brand-paper);
+  --amber: var(--dl-color-brand-amber-bright);
+  --ink: #18273d;
+  --muted: #4b586c;
+  --rule: #d3dbe4;
+}
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font: 1.0625rem/1.65 Inter, Arial, sans-serif;
+}
+a { color: #21558a; text-underline-offset: .18em; }
+a:hover { text-decoration-thickness: .13em; }
+a:focus-visible, [tabindex]:focus-visible { outline: 3px solid #0072b8; outline-offset: 4px; }
+.wrap { width: min(64rem, calc(100% - 3rem)); margin-inline: auto; }
+.skip { position: absolute; z-index: 1; left: .75rem; top: -6rem; padding: .5rem 1rem; background: white; }
+.skip:focus { top: .75rem; }
+.mast, .hero, .downloads { background: var(--navy); color: var(--paper); }
+.mast { border-bottom: 1px solid #42526a; }
+.mast-inner, footer { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.mast-inner { min-height: 4.75rem; }
+.mast img { display: block; width: clamp(8rem, 18vw, 12rem); height: auto; }
+.mast nav { display: flex; align-items: center; gap: clamp(.8rem, 3vw, 2rem); font-size: .9rem; }
+.mast a, .downloads a, .hero a { color: inherit; }
+.hero { padding: clamp(2.5rem, 6vw, 5rem) 0; }
+.kicker, caption, small, .note, figcaption, th, dt, .actions, .download-links { font-size: .9rem; }
+.kicker, td, code, small { font-family: "JetBrains Mono", monospace; }
+.kicker { margin: 0 0 1.15rem; color: var(--amber); }
+h1, h2 { font-family: "Space Grotesk", Inter, sans-serif; letter-spacing: -.045em; line-height: 1.08; text-wrap: balance; }
+h1 { margin: 0; font-size: clamp(2.7rem, 7.5vw, 5.6rem); letter-spacing: -.065em; }
+h1 span { color: var(--amber); }
+h2 { font-size: clamp(1.8rem, 4vw, 3rem); margin: 0 0 1.15rem; }
+p { max-width: 76ch; margin: .85em 0; }
+.dek { max-width: 65ch; margin: 1.5rem 0; font-size: clamp(1.07rem, 2vw, 1.35rem); color: #dae2ed; }
+.actions, .download-links { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem 1.5rem; font-weight: 650; }
+a.primary { display: inline-block; padding: .65rem 1.1rem; color: var(--navy); background: var(--amber); border-radius: .32rem; text-decoration: none; }
+a.primary:hover { background: #ffd66a; }
+.section { padding-block: clamp(2.75rem, 6vw, 5rem); }
+.section > :last-child { margin-bottom: 0; }
+.note, figcaption { color: var(--muted); }
+.table-scroll { margin: 1.75rem 0 1rem; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+caption { text-align: left; color: var(--muted); padding-bottom: .7rem; }
+th, td { padding: .75rem .8rem; border-bottom: 1px solid var(--rule); }
+thead th { background: #e6ebf1; color: var(--ink); }
+th { font-weight: 650; }
+th:first-child { text-align: left; }
+th:not(:first-child), td { text-align: right; }
+td { font-size: .94rem; }
+th small { display: block; font-size: .72rem; font-weight: 400; color: var(--muted); }
+.selected { background: #fff4d5; }
+.selected th { box-shadow: inset .22rem 0 #be7d00; }
+.selected td { font-weight: 650; }
+figure { margin: 2rem 0 0; }
+figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); }
+figcaption { margin: .75rem 0 0; max-width: 86ch; }
+.band { background: #e8edf2; border-block: 1px solid var(--rule); }
+.settings { max-width: 53rem; margin: 1.6rem 0; }
+.settings div { display: grid; grid-template-columns: 13rem 1fr; gap: 1rem; padding: .7rem 0; border-top: 1px solid var(--rule); }
+.settings div:last-child { border-bottom: 1px solid var(--rule); }
+dt { font-weight: 650; }
+dd { margin: 0; }
+code { font-size: .89em; }
+.downloads p { color: #dae2ed; }
+.download-links { gap: .75rem; margin: 1.4rem 0; }
+.primary span { font: 500 .79rem "JetBrains Mono", monospace; }
+.release-links { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; font-size: .95rem; }
+footer { min-height: 5.5rem; font-size: .9rem; flex-wrap: wrap; padding-block: 1.25rem; }
+@media (max-width: 40rem) {
+  .wrap { width: calc(100% - 2rem); }
+  .mast-inner { min-height: 3.75rem; }
+  .mast nav { font-size: .78rem; }
+  .settings div { grid-template-columns: 1fr; gap: .1rem; }
+  th, td { padding: .55rem .6rem; }
+  th:first-child { min-width: 8.5rem; }
+  th:not(:first-child) { min-width: 5rem; }
+}

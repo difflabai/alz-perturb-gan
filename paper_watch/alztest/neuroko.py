@@ -179,7 +179,7 @@ def read_panel(screen, conditions, cap, min_cells, seed=0, *, use_available_cell
                  screen.adata.var_names.to_numpy(dtype=str), screen.obs["vector"].to_numpy()[positions])
 
 
-def project_fold(train, test, n_features=512, n_components=30):
+def project_fold(train, test, n_features=512, n_components=30, *, return_projection=False):
     """Fit feature selection, centering, PCA and scale on training rows once."""
     from .harness import pca_fit_transform
 
@@ -194,7 +194,11 @@ def project_fold(train, test, n_features=512, n_components=30):
     keep = scale > 1e-8
     if not keep.any():
         raise ValueError("training PCA has no variable components")
-    return fit[:, keep] / scale[keep], (b - center) @ axes[keep].T / scale[keep]
+    projected = fit[:, keep] / scale[keep], (b - center) @ axes[keep].T / scale[keep]
+    if return_projection:
+        return (*projected, {"feature_indices": features, "center": center, "axes": axes[keep],
+                             "scale": scale[keep]})
+    return projected
 
 
 def _cosine(left, right):

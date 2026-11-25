@@ -35,6 +35,21 @@ def receipt_settings(settings):
     return values
 
 
+def save_checkpoint(path, model, projection, conditions, receipt):
+    trainer_state = model.trainer.state_dict()
+    served = {"generator": model.G.state_dict(), "critic": model.D.state_dict(),
+              "prior": model.prior.state_dict()}
+    part = path.with_suffix(f".{os.getpid()}.tmp.pt")
+    try:
+        torch.save({"format_version": 1, "conditions": list(conditions), "receipt": receipt,
+                    "projection": projection, "served": served, "trainer": trainer_state}, part)
+        checksum = sha256(part.read_bytes()).hexdigest()
+        part.replace(path)
+    finally:
+        part.unlink(missing_ok=True)
+    return checksum
+
+
 def verify_fixed_schedule(recipe, updates):
     from particlegan import learning_rate_scales
 
@@ -171,6 +186,8 @@ def main():
     parser.add_argument("--require-constant-lr", action="store_true",
                         help="check network and particle learning rates on every update (automatic for v12)")
     parser.add_argument("--updates", type=int, default=1200, help="completed optimizer updates per fit")
+    parser.add_argument("--save-checkpoint", action="store_true",
+                        help="export final model weights, trainer state and the fitted PCA beside each JSON receipt")
     parser.add_argument("--trace-every", type=int, help="also score validation or holdout at this update interval")
     parser.add_argument("--evaluation-seeds", type=int, nargs="+", metavar="BASE",
                         help="also evaluate each fitted model with these sampling seeds plus the condition index")
@@ -228,7 +245,12 @@ def main():
     if args.stage == "validation":
         evaluation = panel.groups == args.validation_group
         fit &= ~evaluation
-    x, y = project_fold(panel.x[fit], panel.x[evaluation])
+    if args.save_checkpoint:
+        x, y, transform = project_fold(panel.x[fit], panel.x[evaluation], return_projection=True)
+        projection = {k: torch.from_numpy(v.copy()) for k, v in transform.items()}
+        projection["feature_names"] = panel.features[transform["feature_indices"]].tolist()
+    else:
+        x, y = project_fold(panel.x[fit], panel.x[evaluation])
     labels = panel.labels[fit]
     observed = [y[panel.labels[evaluation] == idx] for idx in range(len(conditions))]
     if min(np.bincount(labels, minlength=len(conditions))) < 32 or min(map(len, observed)) < 16:
@@ -294,9 +316,12 @@ def main():
                     raise ValueError(f"cached optimizer rates changed at {path}")
             rates_verified = not args.require_constant_lr or previous.get("constant_lr_verified_updates") == config["updates"]
             noise_verified = settings.output_noise_std is None or previous.get("fixed_output_noise_verified_updates") == config["updates"]
-            if rates_verified and noise_verified:
+            weights = path.with_suffix(".pt")
+            checkpoint_verified = (not args.save_checkpoint or
+                                   (weights.is_file() and previous.get("checkpoint_sha256") == sha256(weights.read_bytes()).hexdigest()))
+            if rates_verified and noise_verified and checkpoint_verified:
                 continue
-            # Replay fits lacking the requested per-update checks.
+            # Replay fits missing a requested check or the matching checkpoint.
         with torch.random.fork_rng(devices=[]):
             torch.default_generator.manual_seed(args.seed)
             model = ConditionalPGAN(x.shape[1], len(conditions), seed=args.seed, device=device,
@@ -442,20 +467,23 @@ def main():
             if len(plan_trace) != args.updates // 25:
                 raise RuntimeError("expected one self plan per 25 updates")
             config["training_plans"] = plan_trace
-        write_receipt(path, {**config, "gpu": torch.cuda.get_device_name(device),
-                             "visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
-                             "fit_groups": sorted(set(panel.groups[fit])),
-                             "score_groups": sorted(set(panel.groups[evaluation])),
-                             "fit_cells": dict(zip(conditions, np.bincount(labels).tolist())),
-                             "scored_cells": dict(zip(conditions, map(len, observed))),
-                             "formulation": recipe.effective_critic_formulation,
-                             "optimizer_family": recipe.optimizer_family, "prior_regularizer": recipe.prior_regularizer,
-                             "optimizer_momentum": optimizer_momentum(model.trainer),
-                             "initial_rates": rates, "final_rates": optimizer_rates(model),
-                             "initial_parameters_sha256": initialization.hexdigest(),
-                             "training_batches_sha256": batch_digest.hexdigest(),
-                             "seconds": seconds, "means": averages, "targets": metrics,
-                             "effective_rank": {k: effective_rank(s) for k, s in zip(conditions[1:], samples[1:])}})
+        receipt = {**config, "gpu": torch.cuda.get_device_name(device),
+                   "visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
+                   "fit_groups": np.unique(panel.groups[fit]).tolist(),
+                   "score_groups": np.unique(panel.groups[evaluation]).tolist(),
+                   "fit_cells": dict(zip(conditions, np.bincount(labels).tolist())),
+                   "scored_cells": dict(zip(conditions, map(len, observed))),
+                   "formulation": recipe.effective_critic_formulation,
+                   "optimizer_family": recipe.optimizer_family, "prior_regularizer": recipe.prior_regularizer,
+                   "optimizer_momentum": optimizer_momentum(model.trainer),
+                   "initial_rates": rates, "final_rates": optimizer_rates(model),
+                   "initial_parameters_sha256": initialization.hexdigest(),
+                   "training_batches_sha256": batch_digest.hexdigest(),
+                   "seconds": seconds, "means": averages, "targets": metrics,
+                   "effective_rank": {k: effective_rank(s) for k, s in zip(conditions[1:], samples[1:])}}
+        if args.save_checkpoint:
+            receipt["checkpoint_sha256"] = save_checkpoint(path.with_suffix(".pt"), model, projection, conditions, receipt)
+        write_receipt(path, receipt)
         print(f"{name} {averages} {seconds:.1f}s", flush=True)
 
 

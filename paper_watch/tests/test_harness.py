@@ -2,9 +2,34 @@
 import numpy as np
 from particlegan import get_recipe
 import pytest
+import torch
 
 from paper_watch.alztest.harness import BATCH, ConditionalPGAN, TrainingSettings
 from paper_watch.alztest.neuroko_duration import optimizer_rates
+
+
+def test_export_restores_served_conditional_samples(tmp_path):
+    from hashlib import sha256
+    from importlib.metadata import version
+
+    from paper_watch.alztest.neuroko_checkpoint import load_model
+    from paper_watch.alztest.neuroko_tune import receipt_settings, save_checkpoint
+
+    pytest.importorskip("particlegan._unified_v12")
+    settings = TrainingSettings(prior_sigma=.15)
+    model = ConditionalPGAN(3, 2, seed=4, learning_rate=.014, recipe_name="unified_v12", settings=settings)
+    model.fit(np.random.default_rng(4).normal(size=(64, 3)), np.repeat([0, 1], 32), 2)
+    expected = [model.sample(i, 16, seed=42) for i in (0, 1)]
+    receipt = dict(recipe="unified_v12", seed=4, lr=.014, settings=receipt_settings(settings),
+                   particlegan=version("particlegan"))
+    path = tmp_path / "model.pt"
+    checksum = save_checkpoint(path, model, {"scale": torch.ones(3)}, ["INT", "target"], receipt)
+    assert checksum == sha256(path.read_bytes()).hexdigest()
+    restored, checkpoint = load_model(path, "cpu")
+    assert checkpoint["trainer"]["completed_steps"] == 2
+    assert checkpoint["conditions"] == ["INT", "target"]
+    for i, draws in enumerate(expected):
+        np.testing.assert_array_equal(restored.sample(i, 16, seed=42), draws)
 
 
 @pytest.mark.parametrize("use_recipe_defaults", (False, True))

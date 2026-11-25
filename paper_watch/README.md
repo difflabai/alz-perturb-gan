@@ -68,6 +68,8 @@ processed neuronal and astrocyte count matrices. The [NeuroKO evaluation](notes/
 documents the release audit and the grouped perturbation tests that follow
 closed PR #10.
 
+Download either 40,000-update v12 checkpoint and generate a sample on CPU in the model card’s quickstart. It also covers GPU rescoring and replaying both seeds. [Model card](notes/neuroko_v12_40k_model_card.md) · [Public weights and checksums](https://github.com/difflabai/alz-perturb-gan/releases/tag/neuroko-v12-40k)
+
 ### NeuroKO GPU comparison
 
 Run from the repository root in Bash on Linux with Python 3.11, Git, curl and an NVIDIA GPU. The reference runs used an RTX A6000, a CUDA 13.0-compatible driver and PyTorch 2.14.1+cu130. Allow space for both H5ADs (13.78 GB total), the CUDA environment and the checkout. The two release wheels below use a shared Python environment and separate import directories. The top-level project's ParticleGAN pin is for a different experiment.

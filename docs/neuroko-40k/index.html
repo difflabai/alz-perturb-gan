@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ParticleGAN on NeuroKO at 40,000 updates · Differential AI Lab</title>
+  <meta name="description" content="A two-seed comparison of ParticleGAN v12, v11 and EMPF on NeuroKO neuronal knockouts, with training curves, a six-seed replication at 3,600 updates and downloadable checkpoints.">
+  <link rel="canonical" href="https://difflabai.github.io/alz-perturb-gan/neuroko-40k/">
+  <link rel="icon" type="image/png" href="../brand/favicon-32.png">
+  <link rel="stylesheet" href="../brand/tokens.css">
+  <link rel="stylesheet" href="../brand/fonts.css">
+  <link rel="stylesheet" href="report.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to results</a>
+  <header class="mast">
+    <div class="wrap mast-inner">
+      <a href="https://difflab.ai" aria-label="Differential AI Lab home"><img src="../brand/wordmark-dark.png" width="256" height="48" alt="Differential AI Lab"></a>
+      <nav aria-label="Research navigation"><a href="../">SEA-AD report</a><a href="https://github.com/difflabai/alz-perturb-gan">GitHub ↗</a></nav>
+    </div>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <div class="wrap">
+        <p class="kicker">NeuroKO / Neuronal knockout benchmark</p>
+        <h1>ParticleGAN at<br><span>40,000 updates</span></h1>
+        <p class="dek">ParticleGAN v12 produced the closest match to observed neuronal gene expression on both training seeds. The longer comparison covers one development group. At 3,600 updates across three groups and six fresh seeds, independently tuned v11 led.</p>
+        <div class="actions"><a class="primary" href="#results">Read the results ↓</a><a href="#weights">Download the weights ↓</a></div>
+      </div>
+    </section>
+
+    <section class="wrap section" id="results" aria-labelledby="results-title">
+      <h2 id="results-title">How the five configurations compared</h2>
+      <p>We trained each configuration on the same cells from two screens and evaluated on a third, <code>Screen1_1</code>. For each of four gene knockouts, we compared 256 generated profiles with observed neurons in a 30-dimensional expression space fitted on the training cells. Lower mean energy distance indicates a closer match between the distributions.</p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable energy distance results">
+        <table>
+          <caption>Mean energy distance at 40,000 updates and over the final 10,000 updates</caption>
+          <thead><tr><th scope="col">Configuration</th><th scope="col">Seed 22</th><th scope="col">Seed 251</th><th scope="col">Two-seed mean</th><th scope="col">Final 10k mean</th></tr></thead>
+          <tbody>
+            <tr class="selected"><th scope="row">v12 <small>0.12.0</small></th><td>1.16185</td><td>1.14060</td><td>1.15122</td><td>1.13280</td></tr>
+            <tr><th scope="row">Matched v11 <small>0.11.1</small></th><td>1.19505</td><td>1.20880</td><td>1.20192</td><td>1.20672</td></tr>
+            <tr><th scope="row">Matched EMPF <small>0.10.0</small></th><td>1.20320</td><td>1.21103</td><td>1.20712</td><td>1.23375</td></tr>
+            <tr><th scope="row">Independently tuned v11 <small>0.11.1</small></th><td>1.21487</td><td>1.21234</td><td>1.21361</td><td>1.19289</td></tr>
+            <tr><th scope="row">Independently tuned EMPF <small>0.10.0</small></th><td>1.27087</td><td>1.17641</td><td>1.22364</td><td>1.24407</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">The matched controls use v12’s learning rates, latent noise, prior penalty and optimizer smoothing. Each independently tuned control uses its own selected settings. The final 10k mean weights each interval by its duration. <a href="https://github.com/difflabai/alz-perturb-gan/blob/2a449b80197aaa218e4435895fe1f5c76d6a2c25/paper_watch/notes/neuroko_v12_shared_smoothing_40000.json">Per-target scores, times and trajectories ↗</a></p>
+      <figure>
+        <a href="training-curves.png" aria-label="Open the full-resolution training curves"><img src="training-curves.png" width="1802" height="1105" alt="Two-seed trajectories of mean energy distance and effective covariance rank for v12, matched v11 and matched EMPF."></a>
+        <figcaption>Energy and diversity over training. The effective covariance rank measures how many independent directions account for variation in the generated profiles. At 40,000 updates, v12 averaged 16.55 against the observed 18.23. <a href="training-curves.png">Full-size figure ↗</a></figcaption>
+      </figure>
+    </section>
+
+    <section class="band" id="replication" aria-labelledby="replication-title">
+      <div class="wrap section">
+        <h2 id="replication-title">What replicated at 3,600 updates?</h2>
+        <p>Across three development groups, v12 beat matched EMPF on all six fresh seed means, averaging <strong>0.93671</strong> against <strong>0.96530</strong>. Independently tuned v11 averaged <strong>0.93298</strong>. Its advantage over v12 was small relative to the variation across seeds.</p>
+        <p>The benchmark required v12 to beat all four controls to advance to the reserved biological holdout, <code>Screen1_0</code>. The six-seed result missed that threshold. The 40,000-update result therefore establishes a lead for two training seeds on a single development group. <a href="https://github.com/difflabai/alz-perturb-gan/blob/2a449b80197aaa218e4435895fe1f5c76d6a2c25/paper_watch/notes/neuroko_v12_shared_smoothing_3600_fresh.json">Six-seed scores and holdout decision ↗</a></p>
+      </div>
+    </section>
+
+    <section class="wrap section" id="method" aria-labelledby="method-title">
+      <h2 id="method-title">Reproduce the comparison</h2>
+      <p>The benchmark uses human induced neurons from NeuroKO and holds out each development screen in turn for the shorter replication. The long run trains on <code>Screen1_3</code> and <code>Screen1_4</code> and scores knockouts of <i>GLCCI1</i>, <i>MAMSTR</i>, <i>PLEKHA1</i> and <i>SLC2A4RG</i> in <code>Screen1_1</code>.</p>
+      <dl class="settings">
+        <div><dt>Shared architecture</dt><dd>64 learned particles, 16 latent dimensions, batch size 64</dd></div>
+        <div><dt>v12 optimizer</dt><dd><code>unified_v12</code>, smoothing 0.0061</dd></div>
+        <div><dt>Fixed learning rates</dt><dd>Generator 0.014, critic 0.0049, particles 0.0406</dd></div>
+        <div><dt>Prior parameters</dt><dd>Latent noise 0.15, prior penalty 0.1</dd></div>
+        <div><dt>Benchmark loss settings</dt><dd>Hollow self-coupling and relativistic weight 2 override the v12 preset defaults.</dd></div>
+      </dl>
+      <p>Follow the benchmark README for the two-GPU commands, release-specific installations, input checks and training checkpoints. The study notes include the optimizer-only and smoothing comparisons. <a href="https://github.com/difflabai/alz-perturb-gan/blob/main/paper_watch/README.md#follow-v12-and-the-four-original-controls-to-40000-updates">Run the benchmark ↗</a> · <a href="https://github.com/difflabai/alz-perturb-gan/blob/2a449b80197aaa218e4435895fe1f5c76d6a2c25/paper_watch/notes/neuroko_v12_refinement.md">Study notes at the benchmark commit ↗</a></p>
+      <p class="note">Sam Ogden and Geraldine Rodschinka deposited the NeuroKO neuronal and astrocyte data under Creative Commons Attribution 4.0. Both processed files establish the shared target panel. The reported fits use the neuronal data. <a href="https://zenodo.org/records/23260389">Original dataset ↗</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 ↗</a></p>
+    </section>
+    <section class="downloads" id="weights" aria-labelledby="weights-title">
+      <div class="wrap section">
+        <h2 id="weights-title">Download the v12 weights</h2>
+        <p>The original runs recorded scores and curves. These downloadable checkpoints come from deterministic GPU replays of both seeds. Each file includes the trained model, the fitted gene projection and its training record. The weights are available under CC BY 4.0.</p>
+        <div class="download-links">
+          <a class="primary" href="https://github.com/difflabai/alz-perturb-gan/releases/download/neuroko-v12-40k/neuroko-v12-40k-seed22.pt">Seed 22 <span>· PT ↓</span></a>
+          <a class="primary" href="https://github.com/difflabai/alz-perturb-gan/releases/download/neuroko-v12-40k/neuroko-v12-40k-seed251.pt">Seed 251 <span>· PT ↓</span></a>
+        </div>
+        <p class="release-links"><a href="https://github.com/difflabai/alz-perturb-gan/releases/download/neuroko-v12-40k/SHA256SUMS">SHA-256 checksums</a> · <a href="https://github.com/difflabai/alz-perturb-gan/releases/tag/neuroko-v12-40k">Release details ↗</a> · <a href="https://github.com/difflabai/alz-perturb-gan/blob/neuroko-v12-40k/paper_watch/notes/neuroko_v12_40k_model_card.md">Model card and sampling instructions ↗</a></p>
+      </div>
+    </section>
+  </main>
+  <footer class="wrap"><a href="https://difflab.ai">Differential AI Lab</a><a href="../">SEA-AD microglia report ↗</a></footer>
+</body>
+</html>

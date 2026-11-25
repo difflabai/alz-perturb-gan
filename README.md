@@ -1,6 +1,8 @@
 # ALZ: a generative model of human microglia
 
-[**Read the evidence report →**](https://difflabai.github.io/alz-perturb-gan/)
+[**SEA-AD microglia evidence report →**](https://difflabai.github.io/alz-perturb-gan/)
+
+[**NeuroKO benchmark and model downloads →**](https://difflabai.github.io/alz-perturb-gan/neuroko-40k/) — ParticleGAN v12 compared with v11 and EMPF over 40,000 updates on human neuronal gene-knockout data.
 
 The published report examines five frozen ParticleGAN 0.9.7 models of human microglial gene-expression distributions at four Alzheimer’s neuropathology stages. The current experimental CLI default uses native EMPF on ParticleGAN 0.10.0. This repository contains the research code, experiment history, aggregate results, and a shareable report examining what the trained models actually support.
 
