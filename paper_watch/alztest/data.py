@@ -102,3 +102,38 @@ def load_psychad(path: Path | None = None):
         )
     import anndata as ad
     return ad.read_h5ad(path)
+
+
+
+def hypoad_microglia_path() -> Path:
+    env = os.environ.get("HYPOAD_H5AD")
+    if env:
+        return Path(env)
+    return DATA_DIR / "hypoad_microglia.h5ad"
+
+
+def load_hypoad_microglia():
+    """HypoAD hypothalamic microglia (Yu et al., Nature 2026).
+
+    Source: GEO GSE342635 (public), processed series object
+    GSE342635_HypoAD.h5ad — 51,107,823,722 bytes for 614,403 nuclei,
+    with NO per-sample supplementary files and no per-cell-type
+    subset except a neuron-only object (9.3 GB). The microglia
+    compartment (~52k nuclei; 7 mostly early-stage AD + 7 age-matched
+    controls among the post-mortem donors, with the familial donor AD_44
+    excluded downstream by alztest.hypoad.EXCLUDE_DONORS) is produced by
+    downloading the object (scripts/parallel_download.py) and running
+    scripts/extract_hypoad_microglia.py, which writes
+    data/hypoad_microglia.h5ad with raw counts and obs columns donor,
+    condition and cell_type. Or set HYPOAD_H5AD.
+    """
+    p = hypoad_microglia_path()
+    if not p.exists():
+        raise DataUnavailable(
+            f"HypoAD microglia extract not present at {p}. GEO GSE342635 "
+            "is open but ships one 51 GB object with no per-sample files; "
+            "download GSE342635_HypoAD.h5ad with scripts/parallel_download.py, "
+            "run scripts/extract_hypoad_microglia.py, or set HYPOAD_H5AD."
+        )
+    import anndata as ad
+    return ad.read_h5ad(p)
