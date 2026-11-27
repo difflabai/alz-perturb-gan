@@ -285,3 +285,63 @@ def test_seaad_lysodam_split_delta_readout():
         assert r["rho_ad_model"] > r["rho_ad_gauss"], r
         assert r["rho_ad_model"] > r["rho_ad_lin"], r
         assert r["rho_ad_model"] > r["rho_ad_shuffled"], r
+
+
+# ------------------------------------------------------------------
+# Iteration 4 (PRE-REGISTERED 2026-11-26, see notes): the GPNMB
+# estimand. Identical pipeline to run_once (iterations 1-2) with
+# ONE change: the DAM score in the coupling is GPNMB alone (the
+# iteration-3 reported arm). Bars unchanged from iteration 1.
+# ------------------------------------------------------------------
+
+def run_gpnmb(seed: int = 0, steps: int = 300) -> dict:
+    devs = {"model": [], "gauss": [], "lin": []}
+    amps = []
+    rng = np.random.default_rng(seed)
+    for region in REGIONS:
+        X, group, donors, lyso_pos, dam_pos = _load_microglia(region)
+        coup = _coupling(X, group, donors, lyso_pos, dam_pos[-1:])
+        ctrl_coup = np.mean([c for d, c in coup.items()
+                             if group[donors == d][0] == "CTRL"])
+        ctrl_mask = group == "CTRL"
+        Xc = X[ctrl_mask]
+        if len(Xc) > 6000:
+            Xc = Xc[rng.choice(len(Xc), 6000, replace=False)]
+        Pc, (mu, comps) = pca_fit_transform(Xc, n_comp=N_COMP,
+                                            seed=seed)
+        Pc = standardize(Pc)
+        gens = [fit_unconditional(Pc, steps=steps, seed=seed + 100 * k
+                                  ).sample(0, 1024, seed=seed + 100 * k)
+                for k in range(3)]
+        gmu, gsd = Pc.mean(0), Pc.std(0) + 1e-9
+        for d, c in coup.items():
+            m = donors == d
+            Pd = standardize((X[m] - mu) @ comps.T)
+            if len(Pd) > 512:
+                Pd = Pd[rng.choice(len(Pd), 512, replace=False)]
+            devs["model"].append(float(np.mean(
+                [energy_distance(g, Pd, seed=seed) for g in gens])))
+            g = rng.normal(gmu, gsd, size=(1024, Pc.shape[1]))
+            devs["gauss"].append(energy_distance(g, Pd, seed=seed))
+            devs["lin"].append(float(np.linalg.norm(
+                Pd.mean(0) - Pc.mean(0))))
+            amps.append(c - ctrl_coup)
+    amps = np.array(amps)
+    res = {"seed": seed, "n_units": int(len(amps))}
+    for k, v in devs.items():
+        res[f"rho_{k}"] = float(spearmanr(v, amps).statistic)
+    res["rho_shuffled"] = float(
+        spearmanr(devs["model"], rng.permutation(amps)).statistic)
+    return res
+
+
+def test_seaad_lysodam_gpnmb_readout():
+    try:
+        results = [run_gpnmb(seed=s) for s in (0, 1, 2)]
+    except DataUnavailable as e:
+        pytest.skip(str(e))
+    for r in results:
+        assert r["rho_model"] > 0.3, r
+        assert r["rho_model"] > r["rho_gauss"], r
+        assert r["rho_model"] > r["rho_lin"], r
+        assert r["rho_model"] > r["rho_shuffled"], r

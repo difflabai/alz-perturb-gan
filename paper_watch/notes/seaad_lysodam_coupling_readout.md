@@ -111,3 +111,51 @@ SEA-AD/LL/resilience/GSE signals were all first-moment);
 domain-expert review per house rules (toy test, no biological
 claim rests on it alone); production-scale fits are a different
 regime the toy cannot speak to.
+
+## Iteration 4 — PRE-REGISTERED 2026-11-26 (before any run)
+Question: does the GPNMB-only DAM-proxy coupling, which tracked
+model deviation at rho {0.546, 0.510, 0.513} as a REPORTED arm in
+iteration 3, hold as an ASSERTED readout under the iteration-1
+bars? Estimand: pooled Spearman rho(control-fit model deviation,
+donor GPNMB-coupling amplification = donor coupling minus CTRL
+mean coupling), same compartment (SEA-AD Immune, AnG+LEC), same
+3-fit ensemble deviations as iterations 1-3, coupling computed
+with the DAM score replaced by GPNMB alone (the iteration-3
+reported arm, unchanged). Bars, every seed: rho_model > 0.3,
+rho_model > rho_gauss, rho_model > rho_lin, rho_model >
+rho_shuffled. External support logged before the run: the
+2026-11-20 GPNMB lysosomal-program preprint and Luquez et al.
+Nature 2026 (cycle 13) making GPNMB a cross-population signal.
+No other change from iterations 1-3. If it clears, the loop's
+verdict upgrades to PROVEN for the GPNMB estimand only; the
+full-DAM-program estimand stays at its iteration 1-3 verdicts.
+
+## Iteration 4 — RESULT 2026-11-26 (pre-registered estimand)
+Pooled GPNMB-coupling amplification, 77 donor x region units:
+seed 0: rho_model 0.152 vs gauss 0.179, lin -0.039, shuffled
+0.007 — FAILS the 0.3 bar and the Gaussian arm. Seed 1:
+rho_model 0.375 vs gauss 0.172, lin -0.039, shuffled 0.159 —
+clears every bar. Seed 2 pending at log time. Verdict: NOT
+PROVEN under the pre-registered every-seed bars; the estimand
+is seed-unstable (0.152 / 0.375). The iteration-3 reported
+0.51-0.55 was a different, weaker estimand (AD-subset RAW
+coupling, not pooled amplification) — it does not survive the
+stricter pre-registered form. Logged as the loop's iteration-4
+entry; the GPNMB question stays open, the claim does not
+advance.
+
+## Iteration 4 — seed 2 COMPLETE 2026-11-27 (cycle 14)
+Seed 2: rho_model 0.046 vs gauss 0.127, lin -0.039, shuffled
+-0.051 — fails every bar. Full pre-registered gauntlet:
+0.152 / 0.375 / 0.046. Verdict stands NOT PROVEN and is now
+complete: the pooled GPNMB-coupling-amplification estimand
+is seed-unstable (one seed in three clears), and the
+iteration-3 AD-subset raw-coupling arm (0.51-0.55) does not
+survive the stricter pre-registered form. The GPNMB question
+is closed as a pre-registered negative for THIS estimand on
+THIS compartment; the external target validation (cycle-9
+preprint, Luquez Nature 2026) is untouched — what failed is
+the toy readout's stability at n=77, not the biology. No
+further LysoDAM iterations: the loop is CLOSED (iterations
+1-4 executed; honest partial for the full-program estimand,
+honest negative for the GPNMB estimand).
