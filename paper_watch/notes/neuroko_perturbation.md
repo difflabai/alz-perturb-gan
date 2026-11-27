@@ -74,6 +74,61 @@ INT control only, ED of generated control vs held-out control —
 to split marginal-fit failure from conditioning failure before
 the hand-off is written.
 
+## Astrocyte stratum — annotation check + gauntlet launch, 2026-11-23 (cycle 12)
+iAstrocytes.h5ad md5 VERIFIED 2026-11-22 (10abe464ca16bcaab07d644
+adcaae3ff, exact match to Zenodo 23260389). Annotation check on
+open (2026-11-23): 195,306 cells x 36,601 features; obs carries
+target_gene (251 values; INT intergenic control = 6,111 cells),
+guide_vector (767), sequencing_batch (2) — NO perturbation /
+Replicate columns in this object (the iNeuron object has both);
+the test's KO_CANDIDATES picks target_gene, and the authors'
+INT3/INT30 exclusion applies on the same column. Nothing absent
+that the test needs. Gauntlet launched 2026-11-23 via
+scripts/neuroko_astro_gauntlet_driver.py (NEUROKO_H5AD override;
+astro-specific prep cache + results file
+data/neuroko_astro_gauntlet_results.jsonl; same 300-step
+company-standard config, same arms). First launch died silently
+with its parent exec session (no traceback, no prep written);
+relaunched as a tracked background job. Numbers appended on
+completion.
+Prep plumbing fix (2026-11-23, data handling only; design and
+assertions unchanged): the astro _prepare OOM-killed twice at
+~43 s as the sole heavy process — the broadcast multiply in the
+log-normalize step upcast the whole subset to float64 (astro
+subset ~46.8k cells / ~230M nnz; the iNeuron subset squeaked
+through at float64, the astro one does not on this 8 GB VM).
+_prepare now scales Xs.data in place in float32 and computes
+column mean/var by bincount over the stored entries (no squared
+copy). Equivalence check against the CACHED iNeuron seed-0 prep
+(data/neuroko_prep_seed0.npz, produced by the original code):
+shapes, condition list and train/test labels identical; 1,912
+of 2,000 columns match the cached prep exactly (median
+per-column max diff 0.0) by (mean, std) fingerprint; the
+residual is top-2000 boundary churn from float32-vs-float64
+variance arithmetic plus fingerprint collisions in the check
+itself. Peak prep RSS 5.09 GB (was: OOM). The closed iNeuron
+loop's cached preps and results are untouched — no reported
+number changes; the astro stratum runs entirely on the lean
+prep, self-consistently across its seeds and arms.
+Two further cuts followed (same day): the anndata backed row
+slice itself peaked at 4.54 GB for the 1.78 GB astro subset
+(instrumented stage-by-stage), replaced by a preallocated
+h5py block reader (_read_csr_rows), and scipy's CSR column
+slice (a whole-matrix CSC conversion copy) replaced by a
+manual top-gene gather. Both verified EXACT: 300-row slices
+of both objects byte-identical to the anndata slice
+(data/indices/indptr), gather identical to toarray() on a
+synthetic CSR; the full lean prep still reproduces the
+cached iNeuron seed-0 fingerprint result (1,912/2,000).
+FINAL GATE (cycle 12): the gauntlet still did not complete —
+host MemAvailable sat at ~1.4 GB through the cycle window
+(no local process holds the rest; the 14:28 MT simultaneous-
+fire window on a shared host) against a ~4-5 GB lean-prep
+peak. Three OOM kills total, each in prep, none in a fit.
+The stratum is NOT blocked on data, code, or design — only
+on a quieter memory window; it runs first in cycle 13, and
+the restart-resilient driver + prep caches make that cheap.
+
 ## Iteration 2 — control-condition decomposition, 2026-11-22
 Fit on INT control train cells only (5,188), sample control, ED
 vs held-out control (1,298): seed 0: 0.307; seed 1: 0.262;
@@ -94,3 +149,38 @@ bar any future fit must clear, and it is a LOW bar numerically
 watch now has two independent perturbation conversions with the
 same decomposition verdict — a fit-quality fact about the toy
 configuration, stated once, applicable to both.
+
+## Astrocyte stratum — prep unblocked 2026-11-26 (lean streaming)
+The test's own _prepare was OOM-killed twice (exit 137) on the
+iAstrocytes object inside this VM's shared memory limit.
+scripts/neuroko_astro_lean_prep.py rebuilds the identical
+prep outputs (same conds: INT + CCDC6, PLEKHA1, SLC2A4RG,
+GLCCI1, MAMSTR, CREB5, FOXF1, PLD3, CD55, RIN3, APP, RASGRF1;
+46,794 selected rows; same top-2000 genes and per-seed splits)
+by streaming the h5ad CSR arrays in row blocks — peak is the
+374 MB dense matrix, not the 1.8 GB subset. Caches:
+data/neuroko_astro_prep_seed{0,1,2}.npz (train 37,428 /
+test 9,366). The gauntlet driver consumes the caches; fits
+append to data/neuroko_astro_gauntlet_results.jsonl.
+
+## Astrocyte stratum — GAUNTLET COMPLETE 2026-11-27 (cycle 14)
+Ran from the lean prep caches (scripts/neuroko_astro_lean_
+prep.py, built 2026-11-26) via the astro gauntlet driver;
+12 KOs scored per seed, same design/arms as iNeurons.
+| seed | ED model | shuffled | mean-shift | control-only | cosine |
+| 0 | 0.266 | 0.276 | 0.030 | 0.057 | +0.075 |
+| 1 | 0.288 | 0.270 | 0.031 | 0.054 | -0.037 |
+| 2 | 0.250 | 0.282 | 0.034 | 0.060 | +0.032 |
+Verdict: NOT PROVEN — the iNeuron diagnosis repeated in the
+second stratum: the model is ~8x worse than mean-shift and
+~4.7x worse than control-only (it does not fit the control
+marginal at the company-standard budget), indistinguishable
+from its shuffled arm, cosines ~0. KO effects are again real
+and first-moment (mean-shift ~0.03). The NeuroKO conversion
+is now COMPLETE in both strata and CLOSED as an honest
+negative at the toy configuration; the marginal-fit failure
+pattern (now GSE289721 + NeuroKO neurons + NeuroKO
+astrocytes + Perez genotype) is handed to the working-GANs
+effort with all numbers, not fixed here. NeuroKO the
+DATASET remains strong: real, large, first-moment KO
+effects in two human cell types.
