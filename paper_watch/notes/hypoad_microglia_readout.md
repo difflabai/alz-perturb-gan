@@ -130,3 +130,34 @@ hypothalamic cohort, which does not exist yet.
   healthy and normal are now read as controls, and the readout stops
   with the donor counts per raw condition label when fewer than 3
   control or 2 AD donors remain. Still no fit has been run.
+## Iteration 1 — COMPLETE 2026-11-27 (cycle 14), NOT PROVEN
+Gate history: the 51,107,823,722 B object finished assembling
+2026-11-26 (48/48 parts, exact size). Obs map learned locally:
+614,403 x 36,601; Microglia 55,765 nuclei; condition AD (AD1-6)
+/ AD_44 (AD7, familial) / CTL (CTL1-7) / Young (3 donors);
+microglia per usable donor 815-7,222. Slim extract built by
+scripts/hypoad_extract_local.py (pure h5py row copy from
+layers/counts; data/hypoad_microglia.h5ad, 1,700,705,438 B,
+105,192,366 nnz, indptr + anndata backed read verified).
+Run via scripts/hypoad_fit_driver.py: the test's run_once and
+assertions unmodified; _prepare replaced by a streaming lean
+prep (float32; AD_44 excluded as in the paper — the test's
+string map would have folded it into AD; Young excluded as in
+the test). Prep: 48,591 cells x 1,509 cols (top-1500 + module).
+n_scored = 10 donors per seed (6 AD + 4 held-out CTL).
+| seed | model | gauss | linear | DAM program | shuffled |
+| 0 | 0.667 | 0.583 | 0.583 | 0.625 | 0.125 |
+| 1 | 0.625 | 0.625 | 0.625 | 0.667 | 0.417 |
+| 2 | 0.583 | 0.500 | 0.500 | 0.708 | 0.458 |
+Verdict: NOT PROVEN. Fails the >0.65 every-seed bar on seeds
+1-2; mean model 0.625 beats shuffled mean 0.333 (+0.29) and
+Gaussian mean 0.569 but NOT the DAM-program-only mean 0.667 —
+the paper's own program score is the arm to beat and it wins
+on seeds 1-2. Seed 0 is the first seed in this watch where
+the model cleared every arm. Binding limit is the one stated
+before any run: 13 usable donors (10 scored) — AUROC moves in
+1/24 steps and the readout is donor-bound from birth. Loop
+status: iteration 1 of 10; the honest next lever is none
+in-scope (remaining variance is donor count, not readout
+design). The conversion stays open at iteration 1; no
+biological claim rests on this toy test.
